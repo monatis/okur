@@ -24,6 +24,45 @@ impl SpeechFormatter {
         }
     }
 
+    /// Formats a heading announcement for quick navigation (`H` / `1`–`6`).
+    pub fn format_heading(level: u32, text: &str) -> String {
+        format!("{}\n \u{001d} heading level {} \u{001e}", text, level)
+    }
+
+    /// Formats a link announcement for quick navigation (`U` / `K`).
+    pub fn format_link(text: &str, is_same_page: bool) -> String {
+        if is_same_page {
+            format!("•  \u{001d} same page link \u{001e} {}", text)
+        } else {
+            format!(" \u{001d} link \u{001e} {}", text)
+        }
+    }
+
+    /// Formats a list container announcement (`L`).
+    pub fn format_list(item_count: usize) -> String {
+        format!("List of {} items", item_count)
+    }
+
+    /// Formats a list item announcement (`I`).
+    pub fn format_list_item(text: &str, has_link: bool) -> String {
+        if has_link {
+            format!("•  \u{001d} same page link \u{001e} {}", text)
+        } else {
+            text.to_string()
+        }
+    }
+
+    /// Formats an ARIA landmark / region announcement (`R` / `;`).
+    pub fn format_landmark(landmark_type: &str, name: Option<&str>) -> String {
+        if let Some(n) = name {
+            format!("{} {} region", n, landmark_type)
+        } else if landmark_type == "banner" {
+            "banner".to_string()
+        } else {
+            format!("{} region", landmark_type)
+        }
+    }
+
     /// Formats a single word for speech.
     pub fn format_word(word: &str) -> String {
         word.to_string()

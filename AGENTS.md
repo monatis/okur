@@ -4,6 +4,10 @@ This repository hosts an open-source, modern, cross-platform screen reader imple
 
 This is an **autonomous, agent-driven project with a "verification harness in the loop"**.
 
+> [!IMPORTANT]
+> **Development Notice – No Backward Compatibility Tricks**:
+> This project is in early and fast development. Our ultimate goal is correctness, parity with JAWS, high performance, and real-world usefulness (it should be able to be actually used on Windows and macOS for serious tasks). Until this notice is removed from `AGENTS.md`, **we do not need any backward compatibility tricks or legacy artifacts** in this project. Everything can be changed, updated, or removed cleanly without preserving legacy scaffolding or shims just for the sake of backward compatibility. Implementations must be clean, high-performance, and strictly match JAWS in functionality and behavior.
+
 ---
 
 ## 1. Mission & Engineering Principles
@@ -31,8 +35,8 @@ This is an **autonomous, agent-driven project with a "verification harness in th
 To ensure seamless context passing across autonomous sessions, all engineering work is orchestrated through the `docs/` tree:
 
 ### Active Plan for Current / Next Session
-- **Active Plan**: [`docs/plans/2026-10-13-structural-navigation-and-quick-keys.md`](file:///c:/Users/Gigabyte/screen-reader/docs/plans/2026-10-13-structural-navigation-and-quick-keys.md)
-- **Latest Handoff**: [`docs/handoff/2026-10-13-basic-document-reading-parity.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-basic-document-reading-parity.md)
+- **Active Plan**: [`docs/plans/2026-10-13-forms-and-interaction-modes.md`](file:///c:/Users/Gigabyte/screen-reader/docs/plans/2026-10-13-forms-and-interaction-modes.md)
+- **Latest Handoff**: [`docs/handoff/2026-10-13-structural-navigation-and-quick-keys.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-structural-navigation-and-quick-keys.md)
 
 
 ### Standard Session Execution Protocol

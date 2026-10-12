@@ -46,6 +46,10 @@ pub struct StepAssertions {
     pub target_name: Option<String>,
     #[serde(default)]
     pub forms_mode_active: Option<bool>,
+    #[serde(default)]
+    pub target_heading_level: Option<u32>,
+    #[serde(default)]
+    pub target_heading_name: Option<String>,
 }
 
 impl Scenario {

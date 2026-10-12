@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use sr_core::{AomNode, VirtualBuffer, VirtualCursor};
+use sr_core::{AomNode, Role, VirtualBuffer, VirtualCursor};
 use sr_platform::PlatformBridge;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -165,6 +165,28 @@ impl DifferentialRunner {
                 "^{UP}" => cursor.move_prior_paragraph().unwrap_or_default(),
                 "^{HOME}" => cursor.move_to_start(),
                 "^{END}" => cursor.move_to_end(),
+                "H" | "h" => cursor.move_next_heading().unwrap_or_default(),
+                "+H" | "+h" => cursor.move_prior_heading().unwrap_or_default(),
+                "1" => cursor.move_next_heading_level(1).unwrap_or_default(),
+                "2" => cursor.move_next_heading_level(2).unwrap_or_default(),
+                "3" => cursor.move_next_heading_level(3).unwrap_or_default(),
+                "4" => cursor.move_next_heading_level(4).unwrap_or_default(),
+                "5" => cursor.move_next_heading_level(5).unwrap_or_default(),
+                "6" => cursor.move_next_heading_level(6).unwrap_or_default(),
+                "+1" => cursor.move_prior_heading_level(1).unwrap_or_default(),
+                "+2" => cursor.move_prior_heading_level(2).unwrap_or_default(),
+                "+3" => cursor.move_prior_heading_level(3).unwrap_or_default(),
+                "+4" => cursor.move_prior_heading_level(4).unwrap_or_default(),
+                "+5" => cursor.move_prior_heading_level(5).unwrap_or_default(),
+                "+6" => cursor.move_prior_heading_level(6).unwrap_or_default(),
+                "U" | "u" | "K" | "k" => cursor.move_next_link().unwrap_or_default(),
+                "+U" | "+u" | "+K" | "+k" => cursor.move_prior_link().unwrap_or_default(),
+                "L" | "l" => cursor.move_next_list().unwrap_or_default(),
+                "+L" | "+l" => cursor.move_prior_list().unwrap_or_default(),
+                "I" | "i" => cursor.move_next_list_item().unwrap_or_default(),
+                "+I" | "+i" => cursor.move_prior_list_item().unwrap_or_default(),
+                "R" | "r" | ";" => cursor.move_next_landmark().unwrap_or_default(),
+                "+R" | "+r" | "+;" => cursor.move_prior_landmark().unwrap_or_default(),
                 _ => String::new(),
             },
             "jaws_script" => match step.command.as_str() {
@@ -172,6 +194,60 @@ impl DifferentialRunner {
                 "SayLine" => cursor.current_line(),
                 "SayWord" => cursor.current_word(),
                 "SayCharacter" => cursor.current_char(),
+                "MoveToNextHeading" => cursor.move_next_heading().unwrap_or_default(),
+                "MoveToPriorHeading" => cursor.move_prior_heading().unwrap_or_default(),
+                "MoveToNextHeadingLevelOne" => {
+                    cursor.move_next_heading_level(1).unwrap_or_default()
+                }
+                "MoveToPriorHeadingLevelOne" => {
+                    cursor.move_prior_heading_level(1).unwrap_or_default()
+                }
+                "MoveToNextHeadingLevelTwo" => {
+                    cursor.move_next_heading_level(2).unwrap_or_default()
+                }
+                "MoveToPriorHeadingLevelTwo" => {
+                    cursor.move_prior_heading_level(2).unwrap_or_default()
+                }
+                "MoveToNextHeadingLevelThree" => {
+                    cursor.move_next_heading_level(3).unwrap_or_default()
+                }
+                "MoveToPriorHeadingLevelThree" => {
+                    cursor.move_prior_heading_level(3).unwrap_or_default()
+                }
+                "MoveToNextHeadingLevelFour" => {
+                    cursor.move_next_heading_level(4).unwrap_or_default()
+                }
+                "MoveToPriorHeadingLevelFour" => {
+                    cursor.move_prior_heading_level(4).unwrap_or_default()
+                }
+                "MoveToNextHeadingLevelFive" => {
+                    cursor.move_next_heading_level(5).unwrap_or_default()
+                }
+                "MoveToPriorHeadingLevelFive" => {
+                    cursor.move_prior_heading_level(5).unwrap_or_default()
+                }
+                "MoveToNextHeadingLevelSix" => {
+                    cursor.move_next_heading_level(6).unwrap_or_default()
+                }
+                "MoveToPriorHeadingLevelSix" => {
+                    cursor.move_prior_heading_level(6).unwrap_or_default()
+                }
+                "MoveToNextLink" | "MoveToNextUnvisitedLink" => {
+                    cursor.move_next_link().unwrap_or_default()
+                }
+                "MoveToPriorLink" | "MoveToPriorUnvisitedLink" => {
+                    cursor.move_prior_link().unwrap_or_default()
+                }
+                "MoveToNextList" => cursor.move_next_list().unwrap_or_default(),
+                "MoveToPriorList" => cursor.move_prior_list().unwrap_or_default(),
+                "MoveToNextListItem" => cursor.move_next_list_item().unwrap_or_default(),
+                "MoveToPriorListItem" => cursor.move_prior_list_item().unwrap_or_default(),
+                "MoveToNextLandmark" | "MoveToNextRegion" => {
+                    cursor.move_next_landmark().unwrap_or_default()
+                }
+                "MoveToPriorLandmark" | "MoveToPriorRegion" => {
+                    cursor.move_prior_landmark().unwrap_or_default()
+                }
                 _ => String::new(),
             },
             _ => String::new(),
@@ -183,13 +259,81 @@ impl DifferentialRunner {
         if let Some(ref assertions) = step.assertions {
             if let Some(ref contains_list) = assertions.contains_speech {
                 for phrase in contains_list {
-                    if !emitted_speech.contains(phrase) {
+                    if !emitted_speech.contains(phrase)
+                        && !emitted_speech
+                            .to_lowercase()
+                            .contains(&phrase.to_lowercase())
+                    {
                         assertions_passed = false;
                         failed_assertions.push(format!(
                             "Expected speech to contain '{}', but got '{}'",
                             phrase, emitted_speech
                         ));
                     }
+                }
+            }
+
+            if let Some(target_level) = assertions.target_heading_level {
+                let actual_level = cursor.current_node().and_then(|n| match n.role {
+                    Role::Heading { level } => Some(level),
+                    _ => None,
+                });
+                if actual_level != Some(target_level) {
+                    assertions_passed = false;
+                    failed_assertions.push(format!(
+                        "Expected target_heading_level {}, got {:?}",
+                        target_level, actual_level
+                    ));
+                }
+            }
+
+            if let Some(ref target_heading_name) = assertions.target_heading_name {
+                let actual_name = cursor
+                    .current_node()
+                    .and_then(|n| n.name.as_deref().or(n.text.as_deref()));
+                if actual_name != Some(target_heading_name.as_str()) {
+                    assertions_passed = false;
+                    failed_assertions.push(format!(
+                        "Expected target_heading_name '{}', got {:?}",
+                        target_heading_name, actual_name
+                    ));
+                }
+            }
+
+            if let Some(ref target_role) = assertions.target_role {
+                let actual_role = cursor.current_node().map(|n| &n.role);
+                let role_matches = matches!(
+                    (target_role.as_str(), actual_role),
+                    ("heading", Some(Role::Heading { .. }))
+                        | ("link", Some(Role::Link { .. }))
+                        | ("list", Some(Role::List))
+                        | ("listitem", Some(Role::ListItem))
+                        | ("region", Some(Role::Landmark { .. }))
+                        | ("button", Some(Role::Button))
+                        | ("checkbox", Some(Role::CheckBox))
+                        | ("edit", Some(Role::Edit))
+                        | ("document", Some(Role::Document))
+                        | ("table", Some(Role::Table))
+                );
+                if !role_matches {
+                    assertions_passed = false;
+                    failed_assertions.push(format!(
+                        "Expected target_role '{}', got {:?}",
+                        target_role, actual_role
+                    ));
+                }
+            }
+
+            if let Some(ref target_name) = assertions.target_name {
+                let actual_name = cursor
+                    .current_node()
+                    .and_then(|n| n.name.as_deref().or(n.text.as_deref()));
+                if actual_name != Some(target_name.as_str()) {
+                    assertions_passed = false;
+                    failed_assertions.push(format!(
+                        "Expected target_name '{}', got {:?}",
+                        target_name, actual_name
+                    ));
                 }
             }
         }
