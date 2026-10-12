@@ -36,7 +36,7 @@ To ensure seamless context passing across autonomous sessions, all engineering w
 
 ### Active Plan for Current / Next Session
 - **Active Plan**: [`docs/plans/2026-10-13-boundaries-and-dynamic-updates.md`](file:///c:/Users/Gigabyte/screen-reader/docs/plans/2026-10-13-boundaries-and-dynamic-updates.md)
-- **Latest Handoff**: [`docs/handoff/2026-10-13-table-navigation-and-grid-movement.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-table-navigation-and-grid-movement.md)
+- **Latest Handoff**: [`docs/handoff/2026-10-13-tts-engine-and-sapi5-integration.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-tts-engine-and-sapi5-integration.md)
 
 
 ### Standard Session Execution Protocol

@@ -13,3 +13,6 @@ thiserror = { workspace = true }
 tracing = { workspace = true }
 xa11y = { workspace = true }
 
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.62", features = ["Win32_Media_Speech", "Win32_System_Com"] }
+
