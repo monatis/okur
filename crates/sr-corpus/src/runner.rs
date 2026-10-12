@@ -207,6 +207,8 @@ impl DifferentialRunner {
                 "^%{UP}" => cursor.move_table_cell_up().unwrap_or_default(),
                 "T" | "t" => cursor.move_next_table().unwrap_or_default(),
                 "+T" | "+t" => cursor.move_prior_table().unwrap_or_default(),
+                "{TAB}" => cursor.move_next_tab_stop().unwrap_or_default(),
+                "+{TAB}" | "+TAB" => cursor.move_prior_tab_stop().unwrap_or_default(),
                 _ => String::new(),
             },
             "jaws_script" => match step.command.as_str() {
@@ -352,6 +354,9 @@ impl DifferentialRunner {
                         | ("table", Some(Role::Table))
                         | ("cell" | "tablecell", Some(Role::TableCell))
                         | ("row" | "tablerow", Some(Role::TableRow))
+                        | ("tab", Some(Role::Tab))
+                        | ("tablist", Some(Role::TabList))
+                        | ("tabpanel", Some(Role::TabPanel))
                 );
                 if !role_matches {
                     assertions_passed = false;
@@ -393,6 +398,17 @@ impl DifferentialRunner {
                     failed_assertions.push(format!(
                         "Expected target_checked {:?}, got {:?}",
                         expected_checked, actual_checked
+                    ));
+                }
+            }
+
+            if let Some(expected_selected) = assertions.target_selected {
+                let actual_selected = cursor.current_node().and_then(|n| n.states.selected);
+                if actual_selected != Some(expected_selected) {
+                    assertions_passed = false;
+                    failed_assertions.push(format!(
+                        "Expected target_selected {:?}, got {:?}",
+                        expected_selected, actual_selected
                     ));
                 }
             }

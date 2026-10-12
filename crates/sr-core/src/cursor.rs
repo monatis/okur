@@ -203,7 +203,16 @@ impl VirtualCursor {
 
     /// Moves cursor to next heading across all levels (`H` / `MoveToNextHeading`).
     pub fn move_next_heading(&mut self) -> Option<String> {
-        let (target_offset, level) = self.buffer.next_heading_from(self.offset)?;
+        if self.buffer.headings.is_empty() {
+            return Some("There are no headings on this page.".to_string());
+        }
+        let (target_offset, level, wrapped) = match self.buffer.next_heading_from(self.offset) {
+            Some((off, lvl)) => (off, lvl, false),
+            None => {
+                let (off, lvl) = self.buffer.headings.first().copied()?;
+                (off, lvl, true)
+            }
+        };
         self.offset = target_offset;
         let node = self.buffer.find_heading_node(target_offset);
         self.current_node_id = node.map(|n| n.id);
@@ -215,12 +224,26 @@ impl VirtualCursor {
                     .map(|l| l.text.as_str())
             })
             .unwrap_or("");
-        Some(SpeechFormatter::format_heading(level, text))
+        let heading_speech = SpeechFormatter::format_heading(level, text);
+        if wrapped {
+            Some(format!("wrapping to top\n{}", heading_speech))
+        } else {
+            Some(heading_speech)
+        }
     }
 
     /// Moves cursor to prior heading across all levels (`+H` / `MoveToPriorHeading`).
     pub fn move_prior_heading(&mut self) -> Option<String> {
-        let (target_offset, level) = self.buffer.prior_heading_from(self.offset)?;
+        if self.buffer.headings.is_empty() {
+            return Some("There are no headings on this page.".to_string());
+        }
+        let (target_offset, level, wrapped) = match self.buffer.prior_heading_from(self.offset) {
+            Some((off, lvl)) => (off, lvl, false),
+            None => {
+                let (off, lvl) = self.buffer.headings.last().copied()?;
+                (off, lvl, true)
+            }
+        };
         self.offset = target_offset;
         let node = self.buffer.find_heading_node(target_offset);
         self.current_node_id = node.map(|n| n.id);
@@ -232,7 +255,12 @@ impl VirtualCursor {
                     .map(|l| l.text.as_str())
             })
             .unwrap_or("");
-        Some(SpeechFormatter::format_heading(level, text))
+        let heading_speech = SpeechFormatter::format_heading(level, text);
+        if wrapped {
+            Some(format!("wrapping to bottom\n{}", heading_speech))
+        } else {
+            Some(heading_speech)
+        }
     }
 
     /// Moves cursor to next heading of a specific level (`1`–`6` / `MoveToNextHeadingLevelX`).
@@ -546,7 +574,7 @@ impl VirtualCursor {
         Some(SpeechFormatter::format_forms_mode_exit())
     }
 
-    /// Toggles active control state (`{SPACE}` on CheckBox).
+    /// Toggles active control state (`{SPACE}` on CheckBox or Tab).
     pub fn toggle_active_control(&mut self) -> Option<String> {
         let (node_id, role, name, current_checked) = {
             let node = self.current_node()?;
@@ -577,8 +605,121 @@ impl VirtualCursor {
                     new_checked,
                 ))
             }
+            Role::Tab => {
+                for node in self.buffer.node_map.values_mut() {
+                    if node.role == Role::Tab {
+                        if node.id == node_id {
+                            node.states.selected = Some(true);
+                        } else {
+                            node.states.selected = Some(false);
+                        }
+                    }
+                }
+                Some(" \u{001d}selected\u{001e}".to_string())
+            }
             Role::Button => Some(SpeechFormatter::format_button(&name)),
             _ => None,
+        }
+    }
+
+    /// Moves cursor to next focusable control / tab stop (`{TAB}`).
+    pub fn move_next_tab_stop(&mut self) -> Option<String> {
+        if self.buffer.tab_stops.is_empty() {
+            return None;
+        }
+        let is_first_tab_from_start = self.offset == 0;
+        let prev_node_id = self.current_node_id;
+
+        let maybe_next = self.buffer.next_tab_stop_from(self.offset);
+        let target_offset = match maybe_next {
+            Some(off) => off,
+            None => *self.buffer.tab_stops.first()?,
+        };
+        self.offset = target_offset;
+        let node = self.buffer.node_at_offset(target_offset)?.clone();
+        self.current_node_id = Some(node.id);
+
+        let doc_title = if is_first_tab_from_start {
+            self.buffer.document_title()
+        } else {
+            None
+        };
+
+        Some(self.format_tab_stop_node(&node, prev_node_id, doc_title))
+    }
+
+    /// Moves cursor to prior focusable control / tab stop (`Shift+{TAB}`).
+    pub fn move_prior_tab_stop(&mut self) -> Option<String> {
+        if self.buffer.tab_stops.is_empty() {
+            return None;
+        }
+        let prev_node_id = self.current_node_id;
+
+        let maybe_prior = self.buffer.prior_tab_stop_from(self.offset);
+        let target_offset = match maybe_prior {
+            Some(off) => off,
+            None => *self.buffer.tab_stops.last()?,
+        };
+        self.offset = target_offset;
+        let node = self.buffer.node_at_offset(target_offset)?.clone();
+        self.current_node_id = Some(node.id);
+
+        Some(self.format_tab_stop_node(&node, prev_node_id, None))
+    }
+
+    fn format_tab_stop_node(
+        &self,
+        node: &AomNode,
+        prev_node_id: Option<usize>,
+        doc_title: Option<&str>,
+    ) -> String {
+        match node.role {
+            Role::Button => {
+                let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                SpeechFormatter::format_button_interactive(name, node.states.expanded, doc_title)
+            }
+            Role::Tab => {
+                let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                let selected = node.states.selected.unwrap_or(false);
+                let (index, total, group_name) =
+                    if let Some(info) = self.buffer.tab_info_for_node(node.id) {
+                        (info.index, info.total, info.group_name.as_deref())
+                    } else {
+                        (1, 1, None)
+                    };
+                let prev_was_tab = prev_node_id
+                    .and_then(|id| self.buffer.node_map.get(&id))
+                    .map(|n| n.role == Role::Tab)
+                    .unwrap_or(false);
+                let announce_group = !prev_was_tab;
+                SpeechFormatter::format_tab(
+                    name,
+                    selected,
+                    index,
+                    total,
+                    group_name,
+                    announce_group,
+                )
+            }
+            Role::Edit => {
+                let name = node.name.as_deref().unwrap_or("");
+                let value = node.value.as_deref();
+                SpeechFormatter::format_edit(name, value)
+            }
+            Role::CheckBox => {
+                let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                let checked = node.states.checked.unwrap_or(false);
+                SpeechFormatter::format_checkbox(name, checked)
+            }
+            Role::Link { .. } => {
+                let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                SpeechFormatter::format_link(name, false)
+            }
+            _ => node
+                .name
+                .clone()
+                .or_else(|| node.text.clone())
+                .unwrap_or_default(),
         }
     }
 

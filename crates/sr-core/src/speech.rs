@@ -40,6 +40,52 @@ impl SpeechFormatter {
         format!("{}  \u{001d} Button \u{001e}", name)
     }
 
+    /// Formats a push button with expansion state and optional document title.
+    pub fn format_button_interactive(
+        name: &str,
+        expanded: Option<bool>,
+        doc_title: Option<&str>,
+    ) -> String {
+        let mut parts = Vec::new();
+        if let Some(title) = doc_title {
+            if !title.is_empty() {
+                parts.push(title.to_string());
+            }
+        }
+        let exp_str = match expanded {
+            Some(true) => "   \u{001d}expanded\u{001e}  \nTo activate press Enter.",
+            Some(false) => "   \u{001d}collapsed\u{001e}  \nTo activate press Enter.",
+            None => "",
+        };
+        parts.push(format!("{}  \u{001d} Button \u{001e}{}", name, exp_str));
+        parts.join("\n")
+    }
+
+    /// Formats an ARIA tab announcement matching JAWS conventions.
+    pub fn format_tab(
+        name: &str,
+        selected: bool,
+        index: usize,
+        total: usize,
+        group_name: Option<&str>,
+        announce_group: bool,
+    ) -> String {
+        let mut parts = Vec::new();
+        if announce_group {
+            if let Some(grp) = group_name {
+                if !grp.is_empty() {
+                    parts.push(format!("{} \u{001d} group \u{001e}", grp));
+                }
+            }
+        }
+        parts.push(format!("{}  \u{001d} Tab \u{001e}", name));
+        parts.push(format!("{} of {}", index, total));
+        if selected {
+            parts.push(" \u{001d}selected\u{001e}".to_string());
+        }
+        parts.join("\n")
+    }
+
     /// Formats a checkbox announcement.
     pub fn format_checkbox(name: &str, checked: bool) -> String {
         let state_str = if checked { "checked" } else { "not checked" };

@@ -53,6 +53,8 @@ pub struct StepAssertions {
     #[serde(default)]
     pub target_checked: Option<bool>,
     #[serde(default)]
+    pub target_selected: Option<bool>,
+    #[serde(default)]
     pub target_col: Option<usize>,
     #[serde(default)]
     pub target_row: Option<usize>,

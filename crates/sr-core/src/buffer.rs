@@ -72,6 +72,16 @@ impl TableGrid {
     }
 }
 
+/// Information about an ARIA tab control within a tablist.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TabInfo {
+    pub node_id: usize,
+    pub offset: usize,
+    pub index: usize,
+    pub total: usize,
+    pub group_name: Option<String>,
+}
+
 /// The linearized Virtual Buffer maintaining document offsets, spans, lines, words,
 /// and structural indices for quick navigation keys.
 #[derive(Debug, Clone, Default)]
@@ -90,6 +100,8 @@ pub struct VirtualBuffer {
     pub buttons: Vec<usize>,
     pub edits: Vec<usize>,
     pub checkboxes: Vec<usize>,
+    pub tab_stops: Vec<usize>,
+    pub tabs: Vec<TabInfo>,
     pub tables: Vec<TableGrid>,
     pub table_offsets: Vec<usize>,
     pub node_map: HashMap<usize, AomNode>,
@@ -364,6 +376,38 @@ impl VirtualBuffer {
             .copied()
     }
 
+    /// Returns the next interactive control / tab stop offset after the given offset.
+    pub fn next_tab_stop_from(&self, offset: usize) -> Option<usize> {
+        self.tab_stops.iter().find(|&&ts| ts > offset).copied()
+    }
+
+    /// Returns the prior interactive control / tab stop offset before the given offset.
+    pub fn prior_tab_stop_from(&self, offset: usize) -> Option<usize> {
+        let current_start = self
+            .tab_stops
+            .iter()
+            .rfind(|&&ts| ts <= offset)
+            .copied()
+            .unwrap_or(offset);
+        self.tab_stops
+            .iter()
+            .rfind(|&&ts| ts < current_start)
+            .copied()
+    }
+
+    /// Resolves tab info for an AOM node.
+    pub fn tab_info_for_node(&self, node_id: usize) -> Option<&TabInfo> {
+        self.tabs.iter().find(|t| t.node_id == node_id)
+    }
+
+    /// Document title if available.
+    pub fn document_title(&self) -> Option<&str> {
+        self.lines
+            .iter()
+            .find(|l| l.role == Role::Document)
+            .map(|l| l.text.as_str())
+    }
+
     /// Resolves the node for a form control starting at `offset`.
     pub fn find_form_control_node(&self, offset: usize) -> Option<&AomNode> {
         self.spans
@@ -579,8 +623,15 @@ impl BufferBuilder {
     }
 
     fn traverse_node(&mut self, node: &AomNode, buffer: &mut VirtualBuffer) {
-        // Skip hidden nodes
-        if node.states.hidden {
+        // Skip hidden nodes (aria-hidden or hidden state/attribute)
+        if node.states.hidden
+            || node
+                .attributes
+                .get("aria-hidden")
+                .map(|v| v == "true")
+                .unwrap_or(false)
+            || node.attributes.contains_key("hidden")
+        {
             return;
         }
 
@@ -756,6 +807,7 @@ impl BufferBuilder {
             Role::Link { href: _ } => {
                 let start_offset = buffer.text.len();
                 buffer.links.push(start_offset);
+                buffer.tab_stops.push(start_offset);
 
                 if !node.children.is_empty() {
                     for child in &node.children {
@@ -782,6 +834,7 @@ impl BufferBuilder {
                 let start_offset = buffer.text.len();
                 buffer.form_controls.push(start_offset);
                 buffer.edits.push(start_offset);
+                buffer.tab_stops.push(start_offset);
 
                 let label = node.name.as_deref().unwrap_or("");
                 let val = node.value.as_deref().unwrap_or("");
@@ -832,6 +885,7 @@ impl BufferBuilder {
                 let start_offset = buffer.text.len();
                 buffer.form_controls.push(start_offset);
                 buffer.buttons.push(start_offset);
+                buffer.tab_stops.push(start_offset);
 
                 let label = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
                 buffer.text.push_str(label);
@@ -869,6 +923,7 @@ impl BufferBuilder {
                 let start_offset = buffer.text.len();
                 buffer.form_controls.push(start_offset);
                 buffer.checkboxes.push(start_offset);
+                buffer.tab_stops.push(start_offset);
 
                 let label = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
                 buffer.text.push_str(label);
@@ -1056,6 +1111,48 @@ impl BufferBuilder {
                 };
                 buffer.tables.push(grid);
             }
+            Role::TabList => {
+                let group_name = node.name.clone();
+                let tab_count = node
+                    .children
+                    .iter()
+                    .filter(|c| {
+                        c.role == Role::Tab
+                            && !c.states.hidden
+                            && !c
+                                .attributes
+                                .get("aria-hidden")
+                                .map(|v| v == "true")
+                                .unwrap_or(false)
+                    })
+                    .count();
+                let mut current_tab_idx = 1;
+                for child in &node.children {
+                    if child.role == Role::Tab {
+                        self.traverse_tab(
+                            child,
+                            current_tab_idx,
+                            tab_count,
+                            group_name.clone(),
+                            buffer,
+                        );
+                        current_tab_idx += 1;
+                    } else {
+                        self.traverse_node(child, buffer);
+                    }
+                }
+            }
+            Role::Tab => {
+                self.traverse_tab(node, 1, 1, None, buffer);
+            }
+            Role::TabPanel => {
+                if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
+                    buffer.text.push('\n');
+                }
+                for child in &node.children {
+                    self.traverse_node(child, buffer);
+                }
+            }
             _ => {
                 let is_block = node.role.is_block();
                 if is_block && !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
@@ -1123,5 +1220,69 @@ impl BufferBuilder {
                 Self::collect_table_cells(child, cells);
             }
         }
+    }
+
+    fn traverse_tab(
+        &mut self,
+        node: &AomNode,
+        index: usize,
+        total: usize,
+        group_name: Option<String>,
+        buffer: &mut VirtualBuffer,
+    ) {
+        if node.states.hidden
+            || node
+                .attributes
+                .get("aria-hidden")
+                .map(|v| v == "true")
+                .unwrap_or(false)
+            || node.attributes.contains_key("hidden")
+        {
+            return;
+        }
+
+        buffer.node_map.insert(node.id, node.clone());
+
+        if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
+            buffer.text.push('\n');
+        }
+        let start_offset = buffer.text.len();
+        buffer.tab_stops.push(start_offset);
+        buffer.tabs.push(TabInfo {
+            node_id: node.id,
+            offset: start_offset,
+            index,
+            total,
+            group_name,
+        });
+
+        let label = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+        buffer.text.push_str(label);
+
+        let end_offset = buffer.text.len();
+        let text_content = buffer.text[start_offset..end_offset].to_string();
+
+        buffer.spans.push(BufferSpan {
+            start_offset,
+            end_offset,
+            node_id: node.id,
+            role: Role::Tab,
+        });
+        buffer.lines.push(BufferLine {
+            line_index: buffer.lines.len(),
+            start_offset,
+            end_offset,
+            node_id: node.id,
+            role: Role::Tab,
+            text: text_content.clone(),
+        });
+        buffer.paragraphs.push(BufferParagraph {
+            paragraph_index: buffer.paragraphs.len(),
+            start_offset,
+            end_offset,
+            node_id: node.id,
+            role: Role::Tab,
+            text: text_content,
+        });
     }
 }

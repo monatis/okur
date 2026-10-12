@@ -35,8 +35,8 @@ This is an **autonomous, agent-driven project with a "verification harness in th
 To ensure seamless context passing across autonomous sessions, all engineering work is orchestrated through the `docs/` tree:
 
 ### Active Plan for Current / Next Session
-- **Active Plan**: [`docs/plans/2026-10-13-boundaries-and-dynamic-updates.md`](file:///c:/Users/Gigabyte/screen-reader/docs/plans/2026-10-13-boundaries-and-dynamic-updates.md)
-- **Latest Handoff**: [`docs/handoff/2026-10-13-tts-engine-and-sapi5-integration.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-tts-engine-and-sapi5-integration.md)
+- **Active Plan**: [`docs/plans/2026-10-13-live-interception-and-interactive-loop.md`](file:///c:/Users/Gigabyte/screen-reader/docs/plans/2026-10-13-live-interception-and-interactive-loop.md)
+- **Latest Handoff**: [`docs/handoff/2026-10-13-boundaries-and-dynamic-updates.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-boundaries-and-dynamic-updates.md)
 
 
 ### Standard Session Execution Protocol
