@@ -41,6 +41,37 @@ pub struct BufferParagraph {
     pub text: String,
 }
 
+/// Detailed information for a table cell in a 2D grid.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TableCellInfo {
+    pub node_id: usize,
+    pub offset: usize,
+    pub row: usize,
+    pub col: usize,
+    pub text: String,
+}
+
+/// 2D grid structure representing a data table.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TableGrid {
+    pub table_id: usize,
+    pub rows: usize,
+    pub cols: usize,
+    pub caption: Option<String>,
+    pub start_offset: usize,
+    pub end_offset: usize,
+    pub cells: Vec<Vec<TableCellInfo>>,
+}
+
+impl TableGrid {
+    pub fn cell(&self, row: usize, col: usize) -> Option<&TableCellInfo> {
+        if row == 0 || col == 0 {
+            return None;
+        }
+        self.cells.get(row - 1).and_then(|r| r.get(col - 1))
+    }
+}
+
 /// The linearized Virtual Buffer maintaining document offsets, spans, lines, words,
 /// and structural indices for quick navigation keys.
 #[derive(Debug, Clone, Default)]
@@ -59,6 +90,8 @@ pub struct VirtualBuffer {
     pub buttons: Vec<usize>,
     pub edits: Vec<usize>,
     pub checkboxes: Vec<usize>,
+    pub tables: Vec<TableGrid>,
+    pub table_offsets: Vec<usize>,
     pub node_map: HashMap<usize, AomNode>,
 }
 
@@ -403,6 +436,37 @@ impl VirtualBuffer {
         self.spans
             .iter()
             .find(|s| s.start_offset == offset && matches!(s.role, Role::Landmark { .. }))
+            .and_then(|s| self.node_map.get(&s.node_id))
+    }
+
+    /// Returns the next table starting after the given offset.
+    pub fn next_table_from(&self, offset: usize) -> Option<&TableGrid> {
+        self.tables.iter().find(|t| t.start_offset > offset)
+    }
+
+    /// Returns the prior table starting before the current table of the given offset.
+    pub fn prior_table_from(&self, offset: usize) -> Option<&TableGrid> {
+        let current_start = self
+            .tables
+            .iter()
+            .rfind(|t| t.start_offset <= offset)
+            .map(|t| t.start_offset)
+            .unwrap_or(offset);
+        self.tables.iter().rfind(|t| t.start_offset < current_start)
+    }
+
+    /// Returns the table containing the given offset.
+    pub fn table_at_offset(&self, offset: usize) -> Option<&TableGrid> {
+        self.tables
+            .iter()
+            .find(|t| offset >= t.start_offset && offset <= t.end_offset)
+    }
+
+    /// Resolves the node for a table starting at `offset`.
+    pub fn find_table_node(&self, offset: usize) -> Option<&AomNode> {
+        self.spans
+            .iter()
+            .find(|s| s.start_offset == offset && matches!(s.role, Role::Table))
             .and_then(|s| self.node_map.get(&s.node_id))
     }
 
@@ -873,6 +937,125 @@ impl BufferBuilder {
                     });
                 }
             }
+            Role::Table => {
+                if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
+                    buffer.text.push('\n');
+                }
+                let table_start = buffer.text.len();
+                buffer.table_offsets.push(table_start);
+
+                let mut row_nodes = Vec::new();
+                Self::collect_table_rows(node, &mut row_nodes);
+
+                let mut table_cells_2d: Vec<Vec<TableCellInfo>> = Vec::new();
+
+                for (r_idx, row_node) in row_nodes.iter().enumerate() {
+                    buffer.node_map.insert(row_node.id, row_node.clone());
+                    let row_start = buffer.text.len();
+
+                    let mut cell_nodes = Vec::new();
+                    Self::collect_table_cells(row_node, &mut cell_nodes);
+
+                    let mut row_cells = Vec::new();
+                    for (c_idx, cell_node) in cell_nodes.iter().enumerate() {
+                        buffer.node_map.insert(cell_node.id, cell_node.clone());
+                        if c_idx > 0 {
+                            buffer.text.push(' ');
+                        }
+                        let cell_start = buffer.text.len();
+                        let mut cell_text = cell_node
+                            .text
+                            .clone()
+                            .or_else(|| cell_node.name.clone())
+                            .unwrap_or_default();
+                        if cell_text.is_empty() {
+                            cell_text = cell_node.collect_text();
+                        }
+                        let cell_text = cell_text.trim().to_string();
+
+                        buffer.text.push_str(&cell_text);
+                        let cell_end = buffer.text.len();
+
+                        buffer.spans.push(BufferSpan {
+                            start_offset: cell_start,
+                            end_offset: cell_end,
+                            node_id: cell_node.id,
+                            role: Role::TableCell,
+                        });
+
+                        row_cells.push(TableCellInfo {
+                            node_id: cell_node.id,
+                            offset: cell_start,
+                            row: r_idx + 1,
+                            col: c_idx + 1,
+                            text: cell_text,
+                        });
+                    }
+
+                    let row_end = buffer.text.len();
+                    buffer.spans.push(BufferSpan {
+                        start_offset: row_start,
+                        end_offset: row_end,
+                        node_id: row_node.id,
+                        role: Role::TableRow,
+                    });
+                    let row_text = buffer.text[row_start..row_end].to_string();
+                    buffer.lines.push(BufferLine {
+                        line_index: buffer.lines.len(),
+                        start_offset: row_start,
+                        end_offset: row_end,
+                        node_id: row_node.id,
+                        role: Role::TableRow,
+                        text: row_text.clone(),
+                    });
+                    buffer.paragraphs.push(BufferParagraph {
+                        paragraph_index: buffer.paragraphs.len(),
+                        start_offset: row_start,
+                        end_offset: row_end,
+                        node_id: row_node.id,
+                        role: Role::TableRow,
+                        text: row_text,
+                    });
+
+                    table_cells_2d.push(row_cells);
+
+                    if !buffer.text.ends_with('\n') {
+                        buffer.text.push('\n');
+                    }
+                }
+
+                let table_end = buffer.text.len();
+                buffer.spans.push(BufferSpan {
+                    start_offset: table_start,
+                    end_offset: table_end,
+                    node_id: node.id,
+                    role: Role::Table,
+                });
+
+                let total_rows = table_cells_2d.len();
+                let total_cols = table_cells_2d.iter().map(|r| r.len()).max().unwrap_or(0);
+
+                let caption = node.name.clone().or_else(|| {
+                    node.children.iter().find_map(|child| {
+                        if child.role == Role::Generic || child.role == Role::Text {
+                            child.name.clone().or_else(|| child.text.clone())
+                        } else {
+                            None
+                        }
+                    })
+                });
+
+                let grid = TableGrid {
+                    table_id: node.id,
+                    rows: total_rows,
+                    cols: total_cols,
+                    caption,
+                    start_offset: table_start,
+                    end_offset: table_end,
+                    cells: table_cells_2d,
+                };
+                buffer.tables.push(grid);
+            }
             _ => {
                 let is_block = node.role.is_block();
                 if is_block && !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
@@ -918,6 +1101,26 @@ impl BufferBuilder {
                         });
                     }
                 }
+            }
+        }
+    }
+
+    fn collect_table_rows(node: &AomNode, rows: &mut Vec<AomNode>) {
+        if node.role == Role::TableRow {
+            rows.push(node.clone());
+        } else {
+            for child in &node.children {
+                Self::collect_table_rows(child, rows);
+            }
+        }
+    }
+
+    fn collect_table_cells(node: &AomNode, cells: &mut Vec<AomNode>) {
+        if node.role == Role::TableCell {
+            cells.push(node.clone());
+        } else {
+            for child in &node.children {
+                Self::collect_table_cells(child, cells);
             }
         }
     }

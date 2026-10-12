@@ -201,6 +201,12 @@ impl DifferentialRunner {
                 "{ENTER}" => cursor.enter_forms_mode().unwrap_or_default(),
                 "{ESC}" => cursor.exit_forms_mode().unwrap_or_default(),
                 "{SPACE}" => cursor.toggle_active_control().unwrap_or_default(),
+                "^%{RIGHT}" => cursor.move_table_cell_right().unwrap_or_default(),
+                "^%{LEFT}" => cursor.move_table_cell_left().unwrap_or_default(),
+                "^%{DOWN}" => cursor.move_table_cell_down().unwrap_or_default(),
+                "^%{UP}" => cursor.move_table_cell_up().unwrap_or_default(),
+                "T" | "t" => cursor.move_next_table().unwrap_or_default(),
+                "+T" | "+t" => cursor.move_prior_table().unwrap_or_default(),
                 _ => String::new(),
             },
             "jaws_script" => match step.command.as_str() {
@@ -272,6 +278,12 @@ impl DifferentialRunner {
                 "MoveToPriorCheckbox" => cursor.move_prior_checkbox().unwrap_or_default(),
                 "EnterFormsMode" => cursor.enter_forms_mode().unwrap_or_default(),
                 "ExitFormsMode" => cursor.exit_forms_mode().unwrap_or_default(),
+                "MoveToNextTable" => cursor.move_next_table().unwrap_or_default(),
+                "MoveToPriorTable" => cursor.move_prior_table().unwrap_or_default(),
+                "NextCell" | "TableCellRight" => cursor.move_table_cell_right().unwrap_or_default(),
+                "PriorCell" | "TableCellLeft" => cursor.move_table_cell_left().unwrap_or_default(),
+                "NextRow" | "TableCellDown" => cursor.move_table_cell_down().unwrap_or_default(),
+                "PriorRow" | "TableCellUp" => cursor.move_table_cell_up().unwrap_or_default(),
                 _ => String::new(),
             },
             _ => String::new(),
@@ -338,6 +350,8 @@ impl DifferentialRunner {
                         | ("edit", Some(Role::Edit))
                         | ("document", Some(Role::Document))
                         | ("table", Some(Role::Table))
+                        | ("cell" | "tablecell", Some(Role::TableCell))
+                        | ("row" | "tablerow", Some(Role::TableRow))
                 );
                 if !role_matches {
                     assertions_passed = false;
@@ -379,6 +393,28 @@ impl DifferentialRunner {
                     failed_assertions.push(format!(
                         "Expected target_checked {:?}, got {:?}",
                         expected_checked, actual_checked
+                    ));
+                }
+            }
+
+            if let Some(target_col) = assertions.target_col {
+                let actual_col = cursor.current_table_col();
+                if actual_col != Some(target_col) {
+                    assertions_passed = false;
+                    failed_assertions.push(format!(
+                        "Expected target_col {}, got {:?}",
+                        target_col, actual_col
+                    ));
+                }
+            }
+
+            if let Some(target_row) = assertions.target_row {
+                let actual_row = cursor.current_table_row();
+                if actual_row != Some(target_row) {
+                    assertions_passed = false;
+                    failed_assertions.push(format!(
+                        "Expected target_row {}, got {:?}",
+                        target_row, actual_row
                     ));
                 }
             }

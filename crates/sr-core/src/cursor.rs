@@ -9,6 +9,7 @@ pub struct VirtualCursor {
     pub offset: usize,
     pub current_node_id: Option<usize>,
     pub forms_mode_active: bool,
+    pub current_table_pos: Option<(usize, usize, usize)>,
 }
 
 impl VirtualCursor {
@@ -18,6 +19,7 @@ impl VirtualCursor {
             offset: 0,
             current_node_id: None,
             forms_mode_active: false,
+            current_table_pos: None,
         }
     }
 
@@ -35,6 +37,7 @@ impl VirtualCursor {
     pub fn move_to_start(&mut self) -> String {
         self.offset = 0;
         self.current_node_id = self.buffer.spans.first().map(|s| s.node_id);
+        self.current_table_pos = None;
         self.current_line()
     }
 
@@ -42,6 +45,7 @@ impl VirtualCursor {
     pub fn move_to_end(&mut self) -> String {
         self.offset = self.buffer.len();
         self.current_node_id = self.buffer.spans.last().map(|s| s.node_id);
+        self.current_table_pos = None;
         self.current_line()
     }
 
@@ -576,5 +580,205 @@ impl VirtualCursor {
             Role::Button => Some(SpeechFormatter::format_button(&name)),
             _ => None,
         }
+    }
+
+    /// Returns the active table column (1-indexed), if inside a table.
+    pub fn current_table_col(&self) -> Option<usize> {
+        self.current_table_pos.map(|(_, _, c)| c + 1)
+    }
+
+    /// Returns the active table row (1-indexed), if inside a table.
+    pub fn current_table_row(&self) -> Option<usize> {
+        self.current_table_pos.map(|(_, r, _)| r + 1)
+    }
+
+    /// Resolves the current table and cell coordinates based on `current_table_pos` or `offset`.
+    fn resolve_table_pos(&mut self) -> Option<(usize, usize, usize)> {
+        if let Some(pos) = self.current_table_pos {
+            return Some(pos);
+        }
+        for (t_idx, table) in self.buffer.tables.iter().enumerate() {
+            if self.offset >= table.start_offset && self.offset <= table.end_offset {
+                for (r_idx, row) in table.cells.iter().enumerate() {
+                    for (c_idx, cell) in row.iter().enumerate() {
+                        if self.offset >= cell.offset {
+                            self.current_table_pos = Some((t_idx, r_idx, c_idx));
+                        }
+                    }
+                }
+                if self.current_table_pos.is_none() {
+                    self.current_table_pos = Some((t_idx, 0, 0));
+                }
+                return self.current_table_pos;
+            }
+        }
+        None
+    }
+
+    /// Moves to the next data table (`T`).
+    pub fn move_next_table(&mut self) -> Option<String> {
+        if self.buffer.tables.is_empty() {
+            return Some("There are no tables on this page.".to_string());
+        }
+        let maybe_idx = self
+            .buffer
+            .tables
+            .iter()
+            .position(|t| t.start_offset > self.offset);
+        let table_idx = maybe_idx.unwrap_or(0);
+        let table = &self.buffer.tables[table_idx];
+        self.offset = table.start_offset;
+        self.current_node_id = Some(table.table_id);
+        self.current_table_pos = Some((table_idx, 0, 0));
+
+        let first_cell_text = table
+            .cells
+            .first()
+            .and_then(|r| r.first())
+            .map(|c| c.text.as_str())
+            .unwrap_or("");
+
+        let speech = SpeechFormatter::format_table_entry(
+            table.cols,
+            table.rows,
+            table.caption.as_deref(),
+            1,
+            1,
+            first_cell_text,
+        );
+        Some(speech)
+    }
+
+    /// Moves to the prior data table (`Shift+T`).
+    pub fn move_prior_table(&mut self) -> Option<String> {
+        if self.buffer.tables.is_empty() {
+            return Some("There are no tables on this page.".to_string());
+        }
+        let current_start = self
+            .buffer
+            .tables
+            .iter()
+            .rfind(|t| t.start_offset <= self.offset)
+            .map(|t| t.start_offset)
+            .unwrap_or(self.offset);
+        let maybe_idx = self
+            .buffer
+            .tables
+            .iter()
+            .rposition(|t| t.start_offset < current_start);
+        let table_idx = maybe_idx.unwrap_or(self.buffer.tables.len() - 1);
+        let table = &self.buffer.tables[table_idx];
+        self.offset = table.start_offset;
+        self.current_node_id = Some(table.table_id);
+        self.current_table_pos = Some((table_idx, 0, 0));
+
+        let first_cell_text = table
+            .cells
+            .first()
+            .and_then(|r| r.first())
+            .map(|c| c.text.as_str())
+            .unwrap_or("");
+
+        let speech = SpeechFormatter::format_table_entry(
+            table.cols,
+            table.rows,
+            table.caption.as_deref(),
+            1,
+            1,
+            first_cell_text,
+        );
+        Some(speech)
+    }
+
+    /// Moves to cell to the right within the active row (`Ctrl+Alt+RightArrow`).
+    pub fn move_table_cell_right(&mut self) -> Option<String> {
+        let (t_idx, r_idx, c_idx) = match self.resolve_table_pos() {
+            Some(pos) => pos,
+            None => return Some("Not in a table.".to_string()),
+        };
+        let table = &self.buffer.tables[t_idx];
+        if c_idx + 1 < table.cols {
+            let new_c = c_idx + 1;
+            self.current_table_pos = Some((t_idx, r_idx, new_c));
+            if let Some(cell) = table.cells.get(r_idx).and_then(|r| r.get(new_c)) {
+                self.offset = cell.offset;
+                self.current_node_id = Some(cell.node_id);
+                return Some(SpeechFormatter::format_table_cell_col(
+                    &cell.text,
+                    new_c + 1,
+                    table.cols,
+                ));
+            }
+        }
+        Some("edge of table".to_string())
+    }
+
+    /// Moves to cell to the left within the active row (`Ctrl+Alt+LeftArrow`).
+    pub fn move_table_cell_left(&mut self) -> Option<String> {
+        let (t_idx, r_idx, c_idx) = match self.resolve_table_pos() {
+            Some(pos) => pos,
+            None => return Some("Not in a table.".to_string()),
+        };
+        let table = &self.buffer.tables[t_idx];
+        if c_idx > 0 {
+            let new_c = c_idx - 1;
+            self.current_table_pos = Some((t_idx, r_idx, new_c));
+            if let Some(cell) = table.cells.get(r_idx).and_then(|r| r.get(new_c)) {
+                self.offset = cell.offset;
+                self.current_node_id = Some(cell.node_id);
+                return Some(SpeechFormatter::format_table_cell_col(
+                    &cell.text,
+                    new_c + 1,
+                    table.cols,
+                ));
+            }
+        }
+        Some("edge of table".to_string())
+    }
+
+    /// Moves to cell directly below in the active column (`Ctrl+Alt+DownArrow`).
+    pub fn move_table_cell_down(&mut self) -> Option<String> {
+        let (t_idx, r_idx, c_idx) = match self.resolve_table_pos() {
+            Some(pos) => pos,
+            None => return Some("Not in a table.".to_string()),
+        };
+        let table = &self.buffer.tables[t_idx];
+        if r_idx + 1 < table.rows {
+            let new_r = r_idx + 1;
+            self.current_table_pos = Some((t_idx, new_r, c_idx));
+            if let Some(cell) = table.cells.get(new_r).and_then(|r| r.get(c_idx)) {
+                self.offset = cell.offset;
+                self.current_node_id = Some(cell.node_id);
+                return Some(SpeechFormatter::format_table_cell_row(
+                    &cell.text,
+                    new_r + 1,
+                    table.rows,
+                ));
+            }
+        }
+        Some("edge of table".to_string())
+    }
+
+    /// Moves to cell directly above in the active column (`Ctrl+Alt+UpArrow`).
+    pub fn move_table_cell_up(&mut self) -> Option<String> {
+        let (t_idx, r_idx, c_idx) = match self.resolve_table_pos() {
+            Some(pos) => pos,
+            None => return Some("Not in a table.".to_string()),
+        };
+        let table = &self.buffer.tables[t_idx];
+        if r_idx > 0 {
+            let new_r = r_idx - 1;
+            self.current_table_pos = Some((t_idx, new_r, c_idx));
+            if let Some(cell) = table.cells.get(new_r).and_then(|r| r.get(c_idx)) {
+                self.offset = cell.offset;
+                self.current_node_id = Some(cell.node_id);
+                return Some(SpeechFormatter::format_table_cell_row(
+                    &cell.text,
+                    new_r + 1,
+                    table.rows,
+                ));
+            }
+        }
+        Some("edge of table".to_string())
     }
 }

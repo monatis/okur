@@ -488,4 +488,113 @@ mod tests {
             Some(true)
         );
     }
+
+    fn create_table_test_tree() -> AomNode {
+        AomNode::new(0, Role::Document)
+            .with_name("Tables Navigation Reference Fixture")
+            .with_children(vec![
+                AomNode::new(1, Role::Heading { level: 1 })
+                    .with_text("Quarterly Financial Summary"),
+                AomNode::new(2, Role::Table)
+                    .with_name("Q3 Financial Summary Table")
+                    .with_children(vec![
+                        AomNode::new(3, Role::TableRow).with_children(vec![
+                            AomNode::new(4, Role::TableCell).with_text("Quarter"),
+                            AomNode::new(5, Role::TableCell).with_text("Revenue"),
+                            AomNode::new(6, Role::TableCell).with_text("Expenses"),
+                            AomNode::new(7, Role::TableCell).with_text("Profit"),
+                        ]),
+                        AomNode::new(8, Role::TableRow).with_children(vec![
+                            AomNode::new(9, Role::TableCell).with_text("Q1"),
+                            AomNode::new(10, Role::TableCell).with_text("$10,000"),
+                            AomNode::new(11, Role::TableCell).with_text("$7,000"),
+                            AomNode::new(12, Role::TableCell).with_text("$3,000"),
+                        ]),
+                        AomNode::new(13, Role::TableRow).with_children(vec![
+                            AomNode::new(14, Role::TableCell).with_text("Q2"),
+                            AomNode::new(15, Role::TableCell).with_text("$14,000"),
+                            AomNode::new(16, Role::TableCell).with_text("$8,500"),
+                            AomNode::new(17, Role::TableCell).with_text("$5,500"),
+                        ]),
+                        AomNode::new(18, Role::TableRow).with_children(vec![
+                            AomNode::new(19, Role::TableCell).with_text("Q3"),
+                            AomNode::new(20, Role::TableCell).with_text("$18,000"),
+                            AomNode::new(21, Role::TableCell).with_text("$9,200"),
+                            AomNode::new(22, Role::TableCell).with_text("$8,800"),
+                        ]),
+                    ]),
+            ])
+    }
+
+    #[test]
+    fn test_scenarios_21_through_25_tables() {
+        let aom = create_table_test_tree();
+        let buffer = VirtualBuffer::from_aom(&aom);
+        assert_eq!(buffer.tables.len(), 1);
+        assert_eq!(buffer.tables[0].rows, 4);
+        assert_eq!(buffer.tables[0].cols, 4);
+
+        let mut cursor = VirtualCursor::new(buffer);
+        cursor.move_to_start();
+
+        // 21-table-next-table
+        let entry = cursor.move_next_table().expect("Should jump to table");
+        assert_eq!(
+            entry,
+            "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
+        );
+        assert_eq!(cursor.current_node().map(|n| &n.role), Some(&Role::Table));
+        assert_eq!(cursor.current_table_col(), Some(1));
+        assert_eq!(cursor.current_table_row(), Some(1));
+
+        // 22-table-cell-right
+        let right_speech = cursor
+            .move_table_cell_right()
+            .expect("Should move right in row");
+        assert_eq!(right_speech, "Revenue\nColumn 2 of 4");
+        assert_eq!(cursor.current_table_col(), Some(2));
+        assert_eq!(cursor.current_table_row(), Some(1));
+
+        // 23-table-cell-left
+        let left_speech = cursor
+            .move_table_cell_left()
+            .expect("Should move left in row");
+        assert_eq!(left_speech, "Quarter\nColumn 1 of 4");
+        assert_eq!(cursor.current_table_col(), Some(1));
+        assert_eq!(cursor.current_table_row(), Some(1));
+
+        // Edge check at col 1
+        let edge_left = cursor.move_table_cell_left().expect("Should announce edge");
+        assert_eq!(edge_left, "edge of table");
+
+        // 24-table-row-down
+        let down_speech = cursor
+            .move_table_cell_down()
+            .expect("Should move down in col");
+        assert_eq!(down_speech, "Q1\nRow 2 of 4");
+        assert_eq!(cursor.current_table_col(), Some(1));
+        assert_eq!(cursor.current_table_row(), Some(2));
+
+        // 25-table-row-up
+        let up_speech = cursor.move_table_cell_up().expect("Should move up in col");
+        assert_eq!(up_speech, "Quarter\nRow 1 of 4");
+        assert_eq!(cursor.current_table_col(), Some(1));
+        assert_eq!(cursor.current_table_row(), Some(1));
+
+        // Edge check at row 1
+        let edge_up = cursor.move_table_cell_up().expect("Should announce edge");
+        assert_eq!(edge_up, "edge of table");
+    }
+
+    #[test]
+    fn test_scenario_27_negative_table_search() {
+        let empty_doc = AomNode::new(0, Role::Document).with_name("Empty Page");
+        let buffer = VirtualBuffer::from_aom(&empty_doc);
+        let mut cursor = VirtualCursor::new(buffer);
+
+        let res = cursor
+            .move_next_table()
+            .expect("Should return speech on negative match");
+        assert_eq!(res, "There are no tables on this page.");
+    }
 }

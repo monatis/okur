@@ -52,6 +52,12 @@ pub struct StepAssertions {
     pub target_heading_name: Option<String>,
     #[serde(default)]
     pub target_checked: Option<bool>,
+    #[serde(default)]
+    pub target_col: Option<usize>,
+    #[serde(default)]
+    pub target_row: Option<usize>,
+    #[serde(default)]
+    pub negative_match: Option<bool>,
 }
 
 impl Scenario {

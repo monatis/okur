@@ -173,4 +173,40 @@ impl SpeechFormatter {
     pub fn format_char(ch: char) -> String {
         ch.to_string()
     }
+
+    /// Formats a table entry announcement (`T`).
+    /// Format: "table with {cols} columns and {rows} rows\n{caption}\nColumn 1, Row 1\n{FirstCellText}"
+    pub fn format_table_entry(
+        cols: usize,
+        rows: usize,
+        caption: Option<&str>,
+        col: usize,
+        row: usize,
+        cell_text: &str,
+    ) -> String {
+        let mut parts = Vec::new();
+        parts.push(format!("table with {} columns and {} rows", cols, rows));
+        if let Some(cap) = caption {
+            if !cap.is_empty() {
+                parts.push(cap.to_string());
+            }
+        }
+        parts.push(format!("Column {}, Row {}", col, row));
+        if !cell_text.is_empty() {
+            parts.push(cell_text.to_string());
+        }
+        parts.join("\n")
+    }
+
+    /// Formats speech when moving horizontally to a cell in the same row (`Ctrl+Alt+Left/Right`).
+    /// Format: "{CellText}\nColumn {col} of {total_cols}"
+    pub fn format_table_cell_col(text: &str, col: usize, total_cols: usize) -> String {
+        format!("{}\nColumn {} of {}", text, col, total_cols)
+    }
+
+    /// Formats speech when moving vertically to a cell in the same column (`Ctrl+Alt+Up/Down`).
+    /// Format: "{CellText}\nRow {row} of {total_rows}"
+    pub fn format_table_cell_row(text: &str, row: usize, total_rows: usize) -> String {
+        format!("{}\nRow {} of {}", text, row, total_rows)
+    }
 }
