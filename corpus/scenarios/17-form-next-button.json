@@ -1,28 +1,42 @@
-{
-  "id": "17-form-next-button",
-  "name": "Navigate Buttons via B",
-  "category": "Forms and Interaction Modes",
-  "version": "1.0.0",
-  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
-  "target_app": "chrome",
-  "reset": {
-    "keystrokes": [
-      "^{HOME}"
-    ],
-    "exit_forms_mode": true
-  },
-  "steps": [
-    {
-      "id": "s1",
-      "type": "jaws_script",
-      "command": "MoveToNextButton",
-      "settle_ms": 350
-    },
-    {
-      "id": "s2",
-      "type": "jaws_script",
-      "command": "MoveToNextButton",
-      "settle_ms": 350
-    }
-  ]
+﻿{
+    "id":  "17-form-next-button",
+    "name":  "Navigate Buttons via B",
+    "category":  "Forms and Interaction Modes",
+    "version":  "1.1.0",
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
+    "target_app":  "chrome",
+    "reset":  {
+                  "keystrokes":  [
+                                     "^{HOME}"
+                                 ],
+                  "exit_forms_mode":  true
+              },
+    "steps":  [
+                  {
+                      "id":  "s1",
+                      "type":  "jaws_script",
+                      "command":  "MoveToNextButton",
+                      "settle_ms":  350,
+                      "assertions":  {
+                                         "target_role":  "button",
+                                         "contains_speech":  [
+                                                                 "Save Preferences",
+                                                                 "Button"
+                                                             ]
+                                     }
+                  },
+                  {
+                      "id":  "s2",
+                      "type":  "jaws_script",
+                      "command":  "MoveToNextButton",
+                      "settle_ms":  350,
+                      "assertions":  {
+                                         "target_role":  "button",
+                                         "contains_speech":  [
+                                                                 "Submit Application",
+                                                                 "Button"
+                                                             ]
+                                     }
+                  }
+              ]
 }

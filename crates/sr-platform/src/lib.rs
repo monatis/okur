@@ -1,3 +1,7 @@
+pub mod bridge;
+
+pub use bridge::{PlatformBridge, PlatformError};
+
 pub fn init() {
-    println!("sr-platform initialized");
+    tracing::info!("sr-platform initialized");
 }

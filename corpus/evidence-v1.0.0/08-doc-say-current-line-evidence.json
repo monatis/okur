@@ -1,0 +1,142 @@
+﻿{
+    "scenario_id":  "08-doc-say-current-line",
+    "scenario_version":  "1.0.0",
+    "timestamp":  "2026-10-12T17:10:17.6247078+03:00",
+    "environment":  {
+                        "os_version":  "Microsoft Windows NT 10.0.19045.0",
+                        "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
+                        "target_process":  "chrome",
+                        "interactive_session":  true
+                    },
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+    "repetitions_requested":  5,
+    "trials":  [
+                   {
+                       "trial_index":  1,
+                       "timestamp":  "2026-10-12T17:10:20.1859385+03:00",
+                       "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action_type":  "keyboard",
+                                                "command":  "{DOWN}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  " \u001d heading level 1 \u001e The Accessibility Engine Specification",
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action_type":  "jaws_script",
+                                                "command":  "SayLine",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  " \u001d heading level 1 \u001e The Accessibility Engine Specification",
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true
+                   },
+                   {
+                       "trial_index":  2,
+                       "timestamp":  "2026-10-12T17:10:22.4303910+03:00",
+                       "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action_type":  "keyboard",
+                                                "command":  "{DOWN}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  " \u001d heading level 1 \u001e The Accessibility Engine Specification",
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action_type":  "jaws_script",
+                                                "command":  "SayLine",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  " \u001d heading level 1 \u001e The Accessibility Engine Specification",
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-12T17:10:24.6773438+03:00",
+                       "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action_type":  "keyboard",
+                                                "command":  "{DOWN}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  " \u001d heading level 1 \u001e The Accessibility Engine Specification",
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action_type":  "jaws_script",
+                                                "command":  "SayLine",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  " \u001d heading level 1 \u001e The Accessibility Engine Specification",
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true
+                   },
+                   {
+                       "trial_index":  4,
+                       "timestamp":  "2026-10-12T17:10:26.9341037+03:00",
+                       "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action_type":  "keyboard",
+                                                "command":  "{DOWN}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  " \u001d heading level 1 \u001e The Accessibility Engine Specification",
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action_type":  "jaws_script",
+                                                "command":  "SayLine",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  " \u001d heading level 1 \u001e The Accessibility Engine Specification",
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true
+                   },
+                   {
+                       "trial_index":  5,
+                       "timestamp":  "2026-10-12T17:10:29.1804265+03:00",
+                       "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action_type":  "keyboard",
+                                                "command":  "{DOWN}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  " \u001d heading level 1 \u001e The Accessibility Engine Specification",
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action_type":  "jaws_script",
+                                                "command":  "SayLine",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  " \u001d heading level 1 \u001e The Accessibility Engine Specification",
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true
+                   }
+               ],
+    "summary":  {
+                    "total_trials":  5,
+                    "successful_trials":  5,
+                    "deterministic_match":  true,
+                    "stability":  "deterministic",
+                    "total_elapsed_ms":  12872
+                }
+}

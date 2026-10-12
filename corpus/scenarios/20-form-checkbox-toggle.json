@@ -2,7 +2,7 @@
   "id": "20-form-checkbox-toggle",
   "name": "Checkbox Navigation and Toggle",
   "category": "Forms and Interaction Modes",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
   "target_app": "chrome",
   "reset": {
@@ -16,13 +16,29 @@
       "id": "s1",
       "type": "jaws_script",
       "command": "MoveToNextCheckbox",
-      "settle_ms": 350
+      "settle_ms": 350,
+      "assertions": {
+        "target_role": "checkbox",
+        "target_checked": false,
+        "contains_speech": [
+          "I accept terms and conditions",
+          "check box",
+          "not checked"
+        ]
+      }
     },
     {
       "id": "s2",
       "type": "keyboard",
-      "command": " ",
-      "settle_ms": 350
+      "command": "{SPACE}",
+      "settle_ms": 400,
+      "assertions": {
+        "target_role": "checkbox",
+        "target_checked": true,
+        "contains_speech": [
+          "checked"
+        ]
+      }
     }
   ]
 }

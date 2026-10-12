@@ -2,7 +2,7 @@
   "id": "26-boundary-heading-wrap",
   "name": "Heading Boundary Wrap Announcement",
   "category": "Boundaries and Dynamic Updates",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
   "target_app": "chrome",
   "reset": {
@@ -16,19 +16,40 @@
       "id": "s1",
       "type": "jaws_script",
       "command": "MoveToNextHeading",
-      "settle_ms": 350
+      "settle_ms": 350,
+      "assertions": {
+        "target_heading_level": 1,
+        "contains_speech": [
+          "First Boundary Heading",
+          "heading level 1"
+        ]
+      }
     },
     {
       "id": "s2",
       "type": "jaws_script",
       "command": "MoveToNextHeading",
-      "settle_ms": 350
+      "settle_ms": 350,
+      "assertions": {
+        "target_heading_level": 2,
+        "contains_speech": [
+          "Second Boundary Heading",
+          "heading level 2"
+        ]
+      }
     },
     {
       "id": "s3",
       "type": "jaws_script",
       "command": "MoveToNextHeading",
-      "settle_ms": 350
+      "settle_ms": 350,
+      "assertions": {
+        "target_heading_level": 1,
+        "contains_speech": [
+          "wrapping to top",
+          "First Boundary Heading"
+        ]
+      }
     }
   ]
 }

@@ -1,7 +1,7 @@
 ﻿{
     "scenario_id":  "05-doc-prior-word",
-    "scenario_version":  "1.0.0",
-    "timestamp":  "2026-10-12T17:09:42.2931804+03:00",
+    "scenario_version":  "1.1.0",
+    "timestamp":  "2026-10-12T22:22:25.2009237+03:00",
     "environment":  {
                         "os_version":  "Microsoft Windows NT 10.0.19045.0",
                         "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
@@ -13,23 +13,43 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-12T17:09:44.8669026+03:00",
+                       "timestamp":  "2026-10-12T22:22:27.8640421+03:00",
                        "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "action_type":  "keyboard",
-                                                "command":  "^{RIGHT}",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "Reading",
+                                                "action":  {
+                                                               "type":  "keyboard",
+                                                               "command":  "^{RIGHT}"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Reading",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "contains_speech":  [
+                                                                                           "Reading"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "action_type":  "keyboard",
-                                                "command":  "^{LEFT}",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "Document",
+                                                "action":  {
+                                                               "type":  "keyboard",
+                                                               "command":  "^{LEFT}"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Document",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "contains_speech":  [
+                                                                                           "Document"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
@@ -37,23 +57,43 @@
                    },
                    {
                        "trial_index":  2,
-                       "timestamp":  "2026-10-12T17:09:47.2252004+03:00",
+                       "timestamp":  "2026-10-12T22:22:31.2107058+03:00",
                        "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "action_type":  "keyboard",
-                                                "command":  "^{RIGHT}",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "Reading",
+                                                "action":  {
+                                                               "type":  "keyboard",
+                                                               "command":  "^{RIGHT}"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Reading",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "contains_speech":  [
+                                                                                           "Reading"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "action_type":  "keyboard",
-                                                "command":  "^{LEFT}",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "Document",
+                                                "action":  {
+                                                               "type":  "keyboard",
+                                                               "command":  "^{LEFT}"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Document",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "contains_speech":  [
+                                                                                           "Document"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
@@ -61,23 +101,43 @@
                    },
                    {
                        "trial_index":  3,
-                       "timestamp":  "2026-10-12T17:09:49.5706623+03:00",
+                       "timestamp":  "2026-10-12T22:22:34.5808452+03:00",
                        "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "action_type":  "keyboard",
-                                                "command":  "^{RIGHT}",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "Reading",
+                                                "action":  {
+                                                               "type":  "keyboard",
+                                                               "command":  "^{RIGHT}"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Reading",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "contains_speech":  [
+                                                                                           "Reading"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "action_type":  "keyboard",
-                                                "command":  "^{LEFT}",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "Document",
+                                                "action":  {
+                                                               "type":  "keyboard",
+                                                               "command":  "^{LEFT}"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Document",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "contains_speech":  [
+                                                                                           "Document"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
@@ -85,23 +145,43 @@
                    },
                    {
                        "trial_index":  4,
-                       "timestamp":  "2026-10-12T17:09:51.9249497+03:00",
+                       "timestamp":  "2026-10-12T22:22:37.9152111+03:00",
                        "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "action_type":  "keyboard",
-                                                "command":  "^{RIGHT}",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "Reading",
+                                                "action":  {
+                                                               "type":  "keyboard",
+                                                               "command":  "^{RIGHT}"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Reading",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "contains_speech":  [
+                                                                                           "Reading"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "action_type":  "keyboard",
-                                                "command":  "^{LEFT}",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "Document",
+                                                "action":  {
+                                                               "type":  "keyboard",
+                                                               "command":  "^{LEFT}"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Document",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "contains_speech":  [
+                                                                                           "Document"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
@@ -109,23 +189,43 @@
                    },
                    {
                        "trial_index":  5,
-                       "timestamp":  "2026-10-12T17:09:54.2623978+03:00",
+                       "timestamp":  "2026-10-12T22:22:41.2759161+03:00",
                        "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "action_type":  "keyboard",
-                                                "command":  "^{RIGHT}",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "Reading",
+                                                "action":  {
+                                                               "type":  "keyboard",
+                                                               "command":  "^{RIGHT}"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Reading",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "contains_speech":  [
+                                                                                           "Reading"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "action_type":  "keyboard",
-                                                "command":  "^{LEFT}",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "Document",
+                                                "action":  {
+                                                               "type":  "keyboard",
+                                                               "command":  "^{LEFT}"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Document",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "contains_speech":  [
+                                                                                           "Document"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
@@ -137,6 +237,6 @@
                     "successful_trials":  5,
                     "deterministic_match":  true,
                     "stability":  "deterministic",
-                    "total_elapsed_ms":  13345
+                    "total_elapsed_ms":  17453
                 }
 }

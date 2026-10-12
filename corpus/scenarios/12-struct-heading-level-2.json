@@ -2,7 +2,7 @@
   "id": "12-struct-heading-level-2",
   "name": "Navigate Level 2 Headings",
   "category": "Headings and Structure",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
   "target_app": "chrome",
   "reset": {
@@ -15,14 +15,30 @@
     {
       "id": "s1",
       "type": "jaws_script",
-      "command": "MoveToNextHeadingLevel2",
-      "settle_ms": 350
+      "command": "MoveToNextHeadingLevelTwo",
+      "settle_ms": 350,
+      "assertions": {
+        "target_heading_level": 2,
+        "target_heading_name": "Section Overview",
+        "contains_speech": [
+          "Section Overview",
+          "heading level 2"
+        ]
+      }
     },
     {
       "id": "s2",
       "type": "jaws_script",
-      "command": "MoveToNextHeadingLevel2",
-      "settle_ms": 350
+      "command": "MoveToNextHeadingLevelTwo",
+      "settle_ms": 350,
+      "assertions": {
+        "target_heading_level": 2,
+        "target_heading_name": "Architecture Guide",
+        "contains_speech": [
+          "Architecture Guide",
+          "heading level 2"
+        ]
+      }
     }
   ]
 }

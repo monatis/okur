@@ -1,8 +1,8 @@
 {
   "id": "30-dynamic-hidden-skip",
   "name": "Skipping ARIA Hidden Content",
-  "category": "Baundaries and Dynamic Updates",
-  "version": "1.0.0",
+  "category": "Boundaries and Dynamic Updates",
+  "version": "1.1.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
   "target_app": "chrome",
   "reset": {
@@ -16,25 +16,45 @@
       "id": "s1",
       "type": "keyboard",
       "command": "{DOWN}",
-      "settle_ms": 300
+      "settle_ms": 300,
+      "assertions": {
+        "contains_speech": [
+          "First Boundary Heading"
+        ]
+      }
     },
     {
       "id": "s2",
       "type": "keyboard",
       "command": "{DOWN}",
-      "settle_ms": 300
+      "settle_ms": 300,
+      "assertions": {
+        "contains_speech": [
+          "First paragraph"
+        ]
+      }
     },
     {
       "id": "s3",
       "type": "keyboard",
       "command": "{DOWN}",
-      "settle_ms": 300
+      "settle_ms": 300,
+      "assertions": {
+        "contains_speech": [
+          "Second Boundary Heading"
+        ]
+      }
     },
     {
       "id": "s4",
       "type": "keyboard",
       "command": "{DOWN}",
-      "settle_ms": 300
+      "settle_ms": 300,
+      "assertions": {
+        "contains_speech": [
+          "Final content"
+        ]
+      }
     }
   ]
 }

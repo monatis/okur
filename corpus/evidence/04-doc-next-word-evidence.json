@@ -1,7 +1,7 @@
 ﻿{
     "scenario_id":  "04-doc-next-word",
-    "scenario_version":  "1.0.0",
-    "timestamp":  "2026-10-12T17:09:32.3870740+03:00",
+    "scenario_version":  "1.1.0",
+    "timestamp":  "2026-10-12T22:22:11.1815414+03:00",
     "environment":  {
                         "os_version":  "Microsoft Windows NT 10.0.19045.0",
                         "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
@@ -13,15 +13,25 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-12T17:09:34.9496643+03:00",
+                       "timestamp":  "2026-10-12T22:22:13.8060476+03:00",
                        "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "action_type":  "keyboard",
-                                                "command":  "^{RIGHT}",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "Reading",
+                                                "action":  {
+                                                               "type":  "keyboard",
+                                                               "command":  "^{RIGHT}"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Reading",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "contains_speech":  [
+                                                                                           "Reading"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
@@ -29,15 +39,25 @@
                    },
                    {
                        "trial_index":  2,
-                       "timestamp":  "2026-10-12T17:09:36.6079412+03:00",
+                       "timestamp":  "2026-10-12T22:22:16.4725843+03:00",
                        "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "action_type":  "keyboard",
-                                                "command":  "^{RIGHT}",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "Reading",
+                                                "action":  {
+                                                               "type":  "keyboard",
+                                                               "command":  "^{RIGHT}"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Reading",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "contains_speech":  [
+                                                                                           "Reading"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
@@ -45,15 +65,25 @@
                    },
                    {
                        "trial_index":  3,
-                       "timestamp":  "2026-10-12T17:09:38.2578934+03:00",
+                       "timestamp":  "2026-10-12T22:22:19.1255564+03:00",
                        "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "action_type":  "keyboard",
-                                                "command":  "^{RIGHT}",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "Reading",
+                                                "action":  {
+                                                               "type":  "keyboard",
+                                                               "command":  "^{RIGHT}"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Reading",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "contains_speech":  [
+                                                                                           "Reading"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
@@ -61,15 +91,25 @@
                    },
                    {
                        "trial_index":  4,
-                       "timestamp":  "2026-10-12T17:09:39.9131807+03:00",
+                       "timestamp":  "2026-10-12T22:22:21.7865227+03:00",
                        "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "action_type":  "keyboard",
-                                                "command":  "^{RIGHT}",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "Reading",
+                                                "action":  {
+                                                               "type":  "keyboard",
+                                                               "command":  "^{RIGHT}"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Reading",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "contains_speech":  [
+                                                                                           "Reading"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
@@ -77,15 +117,25 @@
                    },
                    {
                        "trial_index":  5,
-                       "timestamp":  "2026-10-12T17:09:41.5811728+03:00",
+                       "timestamp":  "2026-10-12T22:22:24.4848349+03:00",
                        "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "action_type":  "keyboard",
-                                                "command":  "^{RIGHT}",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "Reading",
+                                                "action":  {
+                                                               "type":  "keyboard",
+                                                               "command":  "^{RIGHT}"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Reading",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "contains_speech":  [
+                                                                                           "Reading"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
@@ -97,6 +147,6 @@
                     "successful_trials":  5,
                     "deterministic_match":  true,
                     "stability":  "deterministic",
-                    "total_elapsed_ms":  9882
+                    "total_elapsed_ms":  13991
                 }
 }

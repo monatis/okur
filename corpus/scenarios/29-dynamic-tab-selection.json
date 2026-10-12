@@ -1,8 +1,8 @@
 {
   "id": "29-dynamic-tab-selection",
-  "name": "ARIA Tablist Item Traversal",
+  "name": "ARIA Tablist Item Traversal and Selection",
   "category": "Boundaries and Dynamic Updates",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
   "target_app": "chrome",
   "reset": {
@@ -16,19 +16,59 @@
       "id": "s1",
       "type": "keyboard",
       "command": "{TAB}",
-      "settle_ms": 350
+      "settle_ms": 400,
+      "assertions": {
+        "target_role": "button",
+        "target_name": "System Details",
+        "contains_speech": [
+          "System Details",
+          "Button"
+        ]
+      }
     },
     {
       "id": "s2",
       "type": "keyboard",
       "command": "{TAB}",
-      "settle_ms": 350
+      "settle_ms": 400,
+      "assertions": {
+        "target_role": "tab",
+        "target_name": "General",
+        "target_selected": true,
+        "contains_speech": [
+          "General",
+          "Tab",
+          "selected"
+        ]
+      }
     },
     {
       "id": "s3",
-      "type": 'keyboard',
+      "type": "keyboard",
       "command": "{TAB}",
-      "settle_ms": 350
+      "settle_ms": 400,
+      "assertions": {
+        "target_role": "tab",
+        "target_name": "Advanced",
+        "contains_speech": [
+          "Advanced",
+          "Tab"
+        ]
+      }
+    },
+    {
+      "id": "s4",
+      "type": "keyboard",
+      "command": "{SPACE}",
+      "settle_ms": 400,
+      "assertions": {
+        "target_role": "tab",
+        "target_name": "Advanced",
+        "target_selected": true,
+        "contains_speech": [
+          "selected"
+        ]
+      }
     }
   ]
 }

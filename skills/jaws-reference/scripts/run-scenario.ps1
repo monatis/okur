@@ -27,49 +27,63 @@ if (Test-Path $jfwExePath) {
     $jawsVer = "$($vi.ProductVersion) (File: $($vi.FileVersion))"
 }
 
-Add-Type @"
+if (-not ([System.Management.Automation.PSTypeName]"Win32Harness").Type) {
+    Add-Type @"
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
-public class Win32Scenario {
-    [DllImport("user32.dll")]
-    public static extern bool SetForegroundWindow(IntPtr hWnd);
-    [DllImport("user32.dll")]
-    public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-    [DllImport("user32.dll")]
-    public static extern IntPtr GetForegroundWindow();
-    [DllImport("user32.dll")]
-    public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+public class Win32Harness {
+    [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hWnd);
+    [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+    [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
+    [DllImport("user32.dll")] public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+    [DllImport("user32.dll")] public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
+
+    public static void SendKey(byte vk, byte scan) {
+        keybd_event(vk, scan, 0, 0);
+        System.Threading.Thread.Sleep(50);
+        keybd_event(vk, scan, 2, 0);
+    }
 }
 "@ -ErrorAction SilentlyContinue
+}
 
 function Focus-Target {
     param([string]$procName)
     $proc = Get-Process $procName -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero } | Select-Object -First 1
     if ($proc) {
-        [void][Win32Scenario]::ShowWindow($proc.MainWindowHandle, 9)
-        [void][Win32Scenario]::SetForegroundWindow($proc.MainWindowHandle)
-        Start-Sleep -Milliseconds 200
+        [void][Win32Harness]::ShowWindow($proc.MainWindowHandle, 9)
+        [void][Win32Harness]::SetForegroundWindow($proc.MainWindowHandle)
+        Start-Sleep -Milliseconds 250
     }
 }
 
 function Get-ForegroundTitle {
-    $hwnd = [Win32Scenario]::GetForegroundWindow()
+    $hwnd = [Win32Harness]::GetForegroundWindow()
     $sb = New-Object System.Text.StringBuilder 256
-    [void][Win32Scenario]::GetWindowText($hwnd, $sb, 256)
+    [void][Win32Harness]::GetWindowText($hwnd, $sb, 256)
     return $sb.ToString()
 }
 
 function Reset-NavigationState {
     param(
         [string]$procName,
-        [object]$resetConfig
+        [object]$resetConfig,
+        [bool]$reloadPage = $true
     )
     Focus-Target -procName $procName
-    [System.Windows.Forms.SendKeys]::SendWait("{ESC}")
+    [Win32Harness]::SendKey(0x1B, 0x01) # ESC
     Start-Sleep -Milliseconds 150
-    [System.Windows.Forms.SendKeys]::SendWait("{ESC}")
+    [Win32Harness]::SendKey(0x1B, 0x01) # ESC
     Start-Sleep -Milliseconds 150
+
+    if ($reloadPage) {
+        [System.Windows.Forms.SendKeys]::SendWait("^{r}")
+        Start-Sleep -Milliseconds 600
+        [Win32Harness]::SendKey(0x1B, 0x01) # ESC
+        Start-Sleep -Milliseconds 150
+    }
+
     if ($resetConfig -and $resetConfig.keystrokes) {
         foreach ($k in $resetConfig.keystrokes) {
             [System.Windows.Forms.SendKeys]::SendWait($k)
@@ -85,7 +99,7 @@ function Reset-NavigationState {
 
 $evidence = [ordered]@{
     scenario_id = $scenarioId
-    scenario_version = if ($scenario.version) { $scenario.version } else { "1.0.0" }
+    scenario_version = if ($scenario.version) { $scenario.version } else { "1.1.0" }
     timestamp = (Get-Date -Format "o")
     environment = [ordered]@{
         os_version = [System.Environment]::OSVersion.VersionString
@@ -108,15 +122,15 @@ $evidence = [ordered]@{
 $jaws = New-Object -ComObject "FreedomSci.JawsApi"
 Add-Type -AssemblyName System.Windows.Forms
 
-$trialTranscripts = @@()
+$trialTranscripts = @()
 
 if ($scenario.fixture) {
-    Start-Process $targetProc -ArgumentList $scenario.fixture -ErrorAction SilentlyContinue
+    [System.Diagnostics.Process]::Start($targetProc, $scenario.fixture) | Out-Null
     Start-Sleep -Milliseconds 1500
 }
 
 for ($t = 1; $t -le $Repetitions; $t++) {
-    Reset-NavigationState -procName $targetProc -resetConfig $scenario.reset
+    Reset-NavigationState -procName $targetProc -resetConfig $scenario.reset -reloadPage ($t -gt 1)
     
     $trialResult = [ordered]@{
         trial_index = $t
@@ -144,8 +158,22 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         if ($actionType -eq "jaws_script") {
             $dispatchOk = [bool]$jaws.RunScript($command)
         } elseif ($actionType -eq "keyboard") {
-            [System.Windows.Forms.SendKeys]::SendWait($command)
-            $dispatchOk = $true
+            if ($command -eq "{SPACE}" -or $command -eq " ") {
+                [Win32Harness]::SendKey(0x20, 0x39)
+                $dispatchOk = $true
+            } elseif ($command -eq "{ENTER}") {
+                [Win32Harness]::SendKey(0x0D, 0x1C)
+                $dispatchOk = $true
+            } elseif ($command -eq "{ESC}") {
+                [Win32Harness]::SendKey(0x1B, 0x01)
+                $dispatchOk = $true
+            } elseif ($command -eq "{TAB}") {
+                [Win32Harness]::SendKey(0x09, 0x0F)
+                $dispatchOk = $true
+            } else {
+                [System.Windows.Forms.SendKeys]::SendWait($command)
+                $dispatchOk = $true
+            }
         }
         
         Start-Sleep -Milliseconds $settleMs
@@ -161,8 +189,26 @@ for ($t = 1; $t -le $Repetitions; $t++) {
             }
             Start-Sleep -Milliseconds 100
         }
+
+        # Quality Gate Check 1: Explicitly reject unknown/unhandled script calls
+        if ($transcript -match "unknown script call" -or $transcript -match "unhandled script call") {
+            $dispatchOk = $false
+        }
+
+        # Quality Gate Check 2: Semantic assertions evaluation
+        $assertionPassed = $true
+        if ($step.assertions) {
+            if ($step.assertions.contains_speech) {
+                foreach ($phrase in $step.assertions.contains_speech) {
+                    if ($transcript -notmatch [regex]::Escape($phrase)) {
+                        $assertionPassed = $false
+                        break
+                    }
+                }
+            }
+        }
         
-        $stepSuccess = ($dispatchOk -and ($transcript -ne $null) -and ($transcript -ne $sentinel))
+        $stepSuccess = ($dispatchOk -and ($transcript -ne $null) -and ($transcript -ne $sentinel) -and $assertionPassed)
         if (-not $stepSuccess) {
             $trialResult.trial_success = $false
         }
@@ -170,10 +216,16 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         $trialStepTexts += $transcript
         $trialResult.step_results += [ordered]@{
             step_id = $stepId
-            action_type = $actionType
-            command = $command
-            dispatch_ok = $dispatchOk
-            raw_transcript = $transcript
+            action = [ordered]@{
+                type = $actionType
+                command = $command
+            }
+            observation = [ordered]@{
+                speech_raw = $transcript
+                dispatch_ok = $dispatchOk
+            }
+            assertions = $step.assertions
+            assertions_passed = $assertionPassed
             step_success = $stepSuccess
         }
     }

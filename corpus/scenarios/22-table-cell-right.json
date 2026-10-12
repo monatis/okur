@@ -2,7 +2,7 @@
   "id": "22-table-cell-right",
   "name": "Navigate Next Cell via Ctrl+Alt+Right",
   "category": "Tables and Cell Navigation",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
   "target_app": "chrome",
   "reset": {
@@ -16,13 +16,26 @@
       "id": "s1",
       "type": "jaws_script",
       "command": "MoveToNextTable",
-      "settle_ms": 350
+      "settle_ms": 350,
+      "assertions": {
+        "target_role": "table",
+        "contains_speech": [
+          "table with 4 columns and 4 rows"
+        ]
+      }
     },
     {
       "id": "s2",
       "type": "keyboard",
       "command": "^%{RIGHT}",
-      "settle_ms": 350
+      "settle_ms": 350,
+      "assertions": {
+        "contains_speech": [
+          "Revenue",
+          "Column 2"
+        ],
+        "target_col": 2
+      }
     }
   ]
 }

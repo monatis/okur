@@ -1,28 +1,40 @@
-{
-  "id": "14-struct-next-list",
-  "name": "Navigate Lists and Items",
-  "category": "Headings and Structure",
-  "version": "1.0.0",
-  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
-  "target_app": "chrome",
-  "reset": {
-    "keystrokes": [
-      "^{HOME}"
-    ],
-    "exit_forms_mode": true
-  },
-  "steps": [
-    {
-      "id": "s1",
-      "type": "jaws_script",
-      "command": "MoveToNextList",
-      "settle_ms": 350
-    },
-    {
-      "id": "s2",
-      "type": "jaws_script",
-      "command": "MoveToNextListItem",
-      "settle_ms": 350
-    }
-  ]
+﻿{
+    "id":  "14-struct-next-list",
+    "name":  "Navigate Lists and Items",
+    "category":  "Headings and Structure",
+    "version":  "1.1.0",
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+    "target_app":  "chrome",
+    "reset":  {
+                  "keystrokes":  [
+                                     "^{HOME}"
+                                 ],
+                  "exit_forms_mode":  true
+              },
+    "steps":  [
+                  {
+                      "id":  "s1",
+                      "type":  "jaws_script",
+                      "command":  "MoveToNextList",
+                      "settle_ms":  350,
+                      "assertions":  {
+                                         "target_role":  "list",
+                                         "contains_speech":  [
+                                                                 "List of 3 items"
+                                                             ]
+                                     }
+                  },
+                  {
+                      "id":  "s2",
+                      "type":  "jaws_script",
+                      "command":  "MoveToNextListItem",
+                      "settle_ms":  350,
+                      "assertions":  {
+                                         "target_role":  "listitem",
+                                         "contains_speech":  [
+                                                                 "Overview Link"
+                                                             ]
+                                     }
+                  }
+              ]
 }

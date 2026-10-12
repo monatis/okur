@@ -2,18 +2,20 @@
 
 This repository hosts an open-source, modern, cross-platform screen reader implemented in Rust. The screen reader's user-facing behavior, announcements, keyboard shortcuts, and document interaction patterns are designed to match **Freedom Scientific JAWS 2025**, validated through differential testing.
 
+This is an **autonomous, agent-driven project with a "verification harness in the loop"**.
+
 ---
 
 ## 1. Mission & Engineering Principles
 
-1. **Parity Through Autonomous Verification**:
+1. **Parity Through Autonomous Verification ("Verification Harness in the Loop")**:
    - Talk is cheap; demonstrable behavior verified against evidence is ground truth.
-   - Every reading command, virtual cursor movement, mode transition, and speech announcement must be verified automatically.
-   - Do not guess speech output or keyboard handling. Run tests against canonical transcripts in `corpus/evidence/`.
+   - Every reading command, virtual cursor movement, mode transition, and speech announcement must be verified automatically against canonical transcripts in [`corpus/evidence/`](file:///c:/Users/Gigabyte/screen-reader/corpus/evidence/).
+   - The agent autonomously discovers features and behavior of JAWS, chooses a task, implements it, conducts research (online, JAWS documentation, help manuals, JAWS scripts, NVDA repository, OS accessibility API documentation), records reference trials from live JAWS on `old-pc`, and implements code until full functional parity is verified.
 
 2. **User-Facing Parity Target: JAWS**:
-   - While implementation details and algorithms may borrow best practices from other tools, **user-facing behavior must match JAWS**.
-   - Keyboard navigation defaults, quick-nav keys (e.g., `H` for headings, `1` – `6` for levels, `K` for links, `C` for checkboxes, `E` for edits), announcement phrasing, and browse/forms mode switching must follow JAWS conventions.
+   - While internal architecture and algorithms may borrow best practices from other screen readers (e.g., NVDA), **all user-facing behavior must match JAWS**.
+   - Keyboard navigation defaults, quick-nav keys (e.g., `H` for headings, `1`–`6` for levels, `K` for links, `C` for checkboxes, `E` for edits), announcement phrasing, and browse/forms mode switching must follow JAWS conventions.
 
 3. **Cross-Platform Target Tiers**:
    - **First-Citizen Targets (Tier 1)**:
@@ -24,61 +26,102 @@ This repository hosts an open-source, modern, cross-platform screen reader imple
 
 ---
 
-## 2. Accessibility APIs, `xa11y`, & NVDA Cross-Reference
+## 2. Active Session Plan & Session Lifecycle
 
-- **Core Accessibility Engine (`xa11y`)**:
-  - Use `xa11y` as the primary Rust accessibility abstraction layer for platform accessibility APIs.
-  - **Self-Sufficiency**: If `xa11y` lacks an accessibility API, property, pattern, or event hook required by the screen reader, **implement and extend the missing accessibility features directly**.
-- **Learning from NVDA**:
-   - Agents are encouraged to consult and study the open-source **NVDA** codebase for accessibility APIs, complex text-range normalization, line/word boundaries, formatting runs, and virtual buffer linearization.
-  - **Crucial Distinction**: Learn architecture and API interaction from NVDA, but keep the **user-facing speech strings, announcement structures, and keyboard UX matched to JAWS**.
+To ensure seamless context passing across autonomous sessions, all engineering work is orchestrated through the `docs/` tree:
+
+### Active Plan for Current / Next Session
+- **Active Plan**: [`docs/plans/2026-10-13-structural-navigation-and-quick-keys.md`](file:///c:/Users/Gigabyte/screen-reader/docs/plans/2026-10-13-structural-navigation-and-quick-keys.md)
+- **Latest Handoff**: [`docs/handoff/2026-10-13-basic-document-reading-parity.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-basic-document-reading-parity.md)
+
+
+### Standard Session Execution Protocol
+Every agent session must follow this exact loop:
+1. **Inception & Context Ingestion**:
+   - Read this `AGENTS.md` file and inspect the **Active Plan** linked above.
+   - Review the prerequisite handoff document in [`docs/handoff/`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/).
+2. **Autonomous Research & Discovery**:
+   - Investigate JAWS behavior using documentation, scripts (`Default.jss`, `Default.jkm`), the NVDA codebase, or OS accessibility specifications.
+   - When necessary, connect to `old-pc` via OpenDesk to test commands or capture new reference evidence.
+3. **Implementation & In-Loop Verification**:
+   - Implement the planned features in the appropriate crates.
+   - Execute differential tests against the reference evidence in `corpus/evidence/`.
+4. **Code Quality Gate**:
+   - Ensure `cargo fmt --check` passes.
+   - Run `cargo clippy --all-targets --all-features -- -D warnings` and verify **0 errors and 0 warnings**.
+   - Run `cargo test` and verify all tests pass.
+   - *(Note: An automated `Stop` hook in `.agents/hooks.json` enforces formatting and clippy clean passes on loop completion).*
+5. **Documentation & Handoff**:
+   - Write a dated handoff document in [`docs/handoff/`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/) (referencing previous steps and test results).
+   - Author user-facing documentation in [`docs/references/`](file:///c:/Users/Gigabyte/screen-reader/docs/references/) when applicable.
+   - Create the next dated plan in [`docs/plans/`](file:///c:/Users/Gigabyte/screen-reader/docs/plans/).
+   - Update `AGENTS.md` to point to the newly created plan for the next session.
+
 ---
 
 ## 3. Autonomous Verification Harness: OpenDesk & `old-pc`
 
 When developing or verifying screen reader behavior against canonical JAWS execution:
 - **`old-pc` Remote Peer**:
-   - Connect to the paired remote peer `old-pc` using OpenDesk (`opendesk-use` / MCP peer routing).
-  - `old-pc` hosts a live Freedom Scientific JAWS environment with the Freedom Scientific COM API enabled.
+  - Connect to the paired remote peer `old-pc` using OpenDesk (`opendesk-use` / MCP peer routing).
+  - `old-pc` hosts a live Freedom Scientific JAWS environment (`2025.2505.43.400`) with Google Chrome.
 - **Collecting Reference Evidence**:
   - Use the `skills/jaws-reference/` automation skill to send JAWS script calls, keyboard input, query scripts, and retrieve speech history buffers.
-  - Save multi-trial evidence in `corpus/evidence/`.
+  - Multi-trial evidence is recorded in `corpus/evidence/` and cataloged in `corpus/CORPUS_MANIFEST.json`.
+- **Differential Verification**:
+  - Compare the output of the Rust engine with JAWS observations. Parity is defined as semantic equivalence in announcement tokens, state changes, and navigation boundaries.
 
 ---
 
-## 4. Corpus Lifecycle & 4-Stage Quality Gate
+## 4. Accessibility APIs, `xa11y`, & NVDA Cross-Reference
 
-All behavioral scenarios in `corpus/` must adhere to the 4-stage quality gate lifecycle outlined in `corpus/review.txt`:
-1. **Stage 1 (Generated)**: Controlled scenario specification and HTML fixture.
-2. **Stage 2 (Captured)**: Multi-trial execution against reference screen reader.
-3. **Stage 3 (Validated)**: Assertion validation; application-state transitions verified. No unhandled script calls allowed.
-4. **Stage 4 (Stability Checked)**: Characterized consistency across repeated trials.
-
-### Key Known Repairs from Auditor Review (`corpus/review.txt`):
-- `03-doc-prior-line`: `PriorLine` is not an exposed COM script. Must use `{UP}` keyboard command.
-- `07-doc-prior-char`: `PriorCharacter` is not an exposed COM script. Must use `{LEFT}` keyboard command.
-- `12-struct-heading-level-2`: `MoveToNextHeadingLevel2` failed. Must use quick key `2`.
-- `19-form-mode-entry-exit`: Must explicitly assert Forms mode entry on Enter and exit on Esc.
-- `20-form-checkbox-toggle`: Must toggle checkbox via Space and assert state transition.
-- `29-dynamic-tab-selection`: Must assert that active tab selection actually changes.
+- **Strict Production Standard**:
+  - This is a production screen reader project: **NO toy, mocked, or handcrafted custom toy parsers (e.g. ad-hoc HTML parsers) are acceptable**.
+  - A screen reader is not simply about parsing and announcing strings; it is an active medium for interacting with the operating system and running applications. All UI consumption must occur through genuine OS accessibility APIs.
+- **Core Accessibility Engine (`xa11y`)**:
+  - Repository: [`https://github.com/xa11y/xa11y`](https://github.com/xa11y/xa11y)
+  - Use `xa11y` as the primary cross-platform accessibility abstraction layer.
+  - **Delegation Principle**: If an accessibility feature, query, pattern, or action is covered in `xa11y`, **delegate that work directly to `xa11y`**.
+  - **OS-Level Self-Sufficiency**: If `xa11y` lacks an accessibility API, pattern, event hook, or complex text-range support required by the screen reader, **implement and extend it directly at the OS level** (e.g., Windows UI Automation `IUIAutomation`, IAccessible2, Win32 events, macOS `AXUIElement`, Linux AT-SPI2).
+- **Learning from NVDA**:
+  - Repository: [`https://github.com/nvaccess/nvda`](https://github.com/nvaccess/nvda)
+  - Consult the open-source **NVDA** and **`xa11y`** codebases for accessibility API patterns, complex text-range normalization, line/word boundaries, formatting runs, and virtual buffer linearization.
+  - **Crucial Distinction**: Learn architecture and OS API interaction from NVDA and `xa11y`, but keep the **user-facing speech strings, announcement structures, and keyboard UX strictly matched to JAWS**.
 
 ---
 
-## 5. Repository Structure
+## 5. Documentation Structure (`docs/`)
 
-- `crates/sr-core/`: AOM, virtual cursor, reading commands, mode transitions.
+- `docs/plans/`: Future implementation plans (dated, milestone-oriented).
+- `docs/handoff/`: Session handoff documents created after verifying implemented features against JAWS.
+- `docs/references/`: User-facing canonical documentation, architecture guides, and API specs.
+
+---
+
+## 6. Repository Structure
+
+- `crates/sr-core/`: AOM, virtual buffer, virtual cursor, reading commands, mode transitions.
 - `crates/sr-platform/`: Platform accessibility bindings (xa11y, UIA, AXUIElement).
-- `crates/sr-corpus/`: Test harness, normalizer, differential comparison.
+- `crates/sr-corpus/`: Test harness, normalizer, differential comparison engine.
 - `crates/sr-cli/`: CLI daemon and regression test binary.
-- `corpus/`: Reference speech corpus (manifest, fixtures, scenarios, evidence, auditor review).n
+- `corpus/`: Reference speech corpus (manifest, fixtures, scenarios, evidence, quality report).
 - `skills/jaws-reference/`: Reusable automation skill for JAWS COM and speech extraction.
+- `.agents/`: Project agent configurations, MCP setup (`mcp_config.json`), and lifecycle hooks (`hooks.json`).
 
 ---
 
-## 6. Build, Check, and Test Workflow
+## 7. Build, Check, and Quality Workflow
 
 ```bash
-cargo check
+# Code formatting
+cargo fmt --check
+
+# Strict lint check (must have 0 errors, 0 warnings)
+cargo clippy --all-targets --all-features -- -D warnings
+
+# Test execution
 cargo test
+
+# Run CLI
 cargo run --bin sr-cli -- --help
 ```

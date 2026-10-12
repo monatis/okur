@@ -2,7 +2,7 @@
   "id": "07-doc-prior-char",
   "name": "Navigate Prior Character via LeftArrow",
   "category": "Basic Document Reading",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
   "target_app": "chrome",
   "reset": {
@@ -16,13 +16,23 @@
       "id": "s1",
       "type": "keyboard",
       "command": "{RIGHT}",
-      "settle_ms": 300
+      "settle_ms": 300,
+      "assertions": {
+        "contains_speech": [
+          "o"
+        ]
+      }
     },
     {
       "id": "s2",
-      "type": "jaws_script",
-      "command": "PriorCharacter",
-      "settle_ms": 300
+      "type": "keyboard",
+      "command": "{LEFT}",
+      "settle_ms": 300,
+      "assertions": {
+        "contains_speech": [
+          "D"
+        ]
+      }
     }
   ]
 }

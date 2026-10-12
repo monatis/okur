@@ -2,7 +2,7 @@
   "id": "28-dynamic-tab-navigation",
   "name": "ARIA Interactive Control Tab Navigation",
   "category": "Boundaries and Dynamic Updates",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
   "target_app": "chrome",
   "reset": {
@@ -16,13 +16,30 @@
       "id": "s1",
       "type": "keyboard",
       "command": "{TAB}",
-      "settle_ms": 400
+      "settle_ms": 400,
+      "assertions": {
+        "target_role": "button",
+        "target_name": "System Details",
+        "contains_speech": [
+          "System Details",
+          "Button"
+        ]
+      }
     },
     {
       "id": "s2",
-      "type": 'keyboard',
+      "type": "keyboard",
       "command": "{TAB}",
-      "settle_ms": 400
+      "settle_ms": 400,
+      "assertions": {
+        "target_role": "tab",
+        "target_name": "General",
+        "target_selected": true,
+        "contains_speech": [
+          "General",
+          "Tab"
+        ]
+      }
     }
   ]
 }

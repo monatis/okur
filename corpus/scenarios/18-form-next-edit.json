@@ -1,28 +1,42 @@
-{
-  "id": "18-form-next-edit",
-  "name": "Navigate Edit Boxes via E",
-  "category": "Forms and Interaction Modes",
-  "version": "1.0.0",
-  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
-  "target_app": "chrome",
-  "reset": {
-    "keystrokes": [
-      "^{HOME}"
-    ],
-    "exit_forms_mode": true
-  },
-  "steps": [
-    {
-      "id": "s1",
-      "type": "jaws_script",
-      "command": "MoveToNextEdit",
-      "settle_ms": 350
-    },
-    {
-      "id": "s2",
-      "type": "jaws_script",
-      "command": "MoveToNextEdit",
-      "settle_ms": 350
-    }
-  ]
+﻿{
+    "id":  "18-form-next-edit",
+    "name":  "Navigate Edit Boxes via E",
+    "category":  "Forms and Interaction Modes",
+    "version":  "1.1.0",
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
+    "target_app":  "chrome",
+    "reset":  {
+                  "keystrokes":  [
+                                     "^{HOME}"
+                                 ],
+                  "exit_forms_mode":  true
+              },
+    "steps":  [
+                  {
+                      "id":  "s1",
+                      "type":  "jaws_script",
+                      "command":  "MoveToNextEdit",
+                      "settle_ms":  350,
+                      "assertions":  {
+                                         "target_role":  "edit",
+                                         "contains_speech":  [
+                                                                 "Full Name:",
+                                                                 "Edit"
+                                                             ]
+                                     }
+                  },
+                  {
+                      "id":  "s2",
+                      "type":  "jaws_script",
+                      "command":  "MoveToNextEdit",
+                      "settle_ms":  350,
+                      "assertions":  {
+                                         "target_role":  "edit",
+                                         "contains_speech":  [
+                                                                 "Email Address:",
+                                                                 "Edit"
+                                                             ]
+                                     }
+                  }
+              ]
 }

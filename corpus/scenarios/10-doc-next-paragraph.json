@@ -2,7 +2,7 @@
   "id": "10-doc-next-paragraph",
   "name": "Navigate Next Paragraph",
   "category": "Basic Document Reading",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
   "target_app": "chrome",
   "reset": {
@@ -16,7 +16,13 @@
       "id": "s1",
       "type": "keyboard",
       "command": "^{DOWN}",
-      "settle_ms": 400
+      "settle_ms": 400,
+      "assertions": {
+        "contains_speech": [
+          "heading level 1",
+          "The Accessibility Engine Specification"
+        ]
+      }
     }
   ]
 }

@@ -1,7 +1,7 @@
 ﻿{
     "scenario_id":  "14-struct-next-list",
-    "scenario_version":  "1.0.0",
-    "timestamp":  "2026-10-12T17:11:31.8647830+03:00",
+    "scenario_version":  "1.1.0",
+    "timestamp":  "2026-10-12T22:24:51.5718330+03:00",
     "environment":  {
                         "os_version":  "Microsoft Windows NT 10.0.19045.0",
                         "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
@@ -13,23 +13,45 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-12T17:11:34.4167520+03:00",
+                       "timestamp":  "2026-10-12T22:24:54.1829133+03:00",
                        "foreground_window_start":  "Structural Navigation Reference Fixture - Google Chrome",
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "action_type":  "jaws_script",
-                                                "command":  "MoveToNextList",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "list of 3 items",
+                                                "action":  {
+                                                               "type":  "jaws_script",
+                                                               "command":  "MoveToNextList"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "target_role":  "list",
+                                                                   "contains_speech":  [
+                                                                                           "List of 3 items"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "action_type":  "jaws_script",
-                                                "command":  "MoveToNextListItem",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "•  \u001d same page link \u001e Overview Link",
+                                                "action":  {
+                                                               "type":  "jaws_script",
+                                                               "command":  "MoveToNextListItem"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Overview Link",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "target_role":  "listitem",
+                                                                   "contains_speech":  [
+                                                                                           "Overview Link"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
@@ -37,23 +59,45 @@
                    },
                    {
                        "trial_index":  2,
-                       "timestamp":  "2026-10-12T17:11:36.6322945+03:00",
+                       "timestamp":  "2026-10-12T22:24:57.4246303+03:00",
                        "foreground_window_start":  "Structural Navigation Reference Fixture - Google Chrome",
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "action_type":  "jaws_script",
-                                                "command":  "MoveToNextList",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "list of 3 items",
+                                                "action":  {
+                                                               "type":  "jaws_script",
+                                                               "command":  "MoveToNextList"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "target_role":  "list",
+                                                                   "contains_speech":  [
+                                                                                           "List of 3 items"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "action_type":  "jaws_script",
-                                                "command":  "MoveToNextListItem",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "•  \u001d same page link \u001e Overview Link",
+                                                "action":  {
+                                                               "type":  "jaws_script",
+                                                               "command":  "MoveToNextListItem"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Overview Link",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "target_role":  "listitem",
+                                                                   "contains_speech":  [
+                                                                                           "Overview Link"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
@@ -61,23 +105,45 @@
                    },
                    {
                        "trial_index":  3,
-                       "timestamp":  "2026-10-12T17:11:38.8766560+03:00",
+                       "timestamp":  "2026-10-12T22:25:00.6751556+03:00",
                        "foreground_window_start":  "Structural Navigation Reference Fixture - Google Chrome",
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "action_type":  "jaws_script",
-                                                "command":  "MoveToNextList",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "list of 3 items",
+                                                "action":  {
+                                                               "type":  "jaws_script",
+                                                               "command":  "MoveToNextList"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "target_role":  "list",
+                                                                   "contains_speech":  [
+                                                                                           "List of 3 items"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "action_type":  "jaws_script",
-                                                "command":  "MoveToNextListItem",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "•  \u001d same page link \u001e Overview Link",
+                                                "action":  {
+                                                               "type":  "jaws_script",
+                                                               "command":  "MoveToNextListItem"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Overview Link",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "target_role":  "listitem",
+                                                                   "contains_speech":  [
+                                                                                           "Overview Link"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
@@ -85,23 +151,45 @@
                    },
                    {
                        "trial_index":  4,
-                       "timestamp":  "2026-10-12T17:11:41.1078861+03:00",
+                       "timestamp":  "2026-10-12T22:25:03.9199570+03:00",
                        "foreground_window_start":  "Structural Navigation Reference Fixture - Google Chrome",
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "action_type":  "jaws_script",
-                                                "command":  "MoveToNextList",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "list of 3 items",
+                                                "action":  {
+                                                               "type":  "jaws_script",
+                                                               "command":  "MoveToNextList"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "target_role":  "list",
+                                                                   "contains_speech":  [
+                                                                                           "List of 3 items"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "action_type":  "jaws_script",
-                                                "command":  "MoveToNextListItem",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "•  \u001d same page link \u001e Overview Link",
+                                                "action":  {
+                                                               "type":  "jaws_script",
+                                                               "command":  "MoveToNextListItem"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Overview Link",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "target_role":  "listitem",
+                                                                   "contains_speech":  [
+                                                                                           "Overview Link"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
@@ -109,23 +197,45 @@
                    },
                    {
                        "trial_index":  5,
-                       "timestamp":  "2026-10-12T17:11:43.3044252+03:00",
+                       "timestamp":  "2026-10-12T22:25:07.1512816+03:00",
                        "foreground_window_start":  "Structural Navigation Reference Fixture - Google Chrome",
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "action_type":  "jaws_script",
-                                                "command":  "MoveToNextList",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "list of 3 items",
+                                                "action":  {
+                                                               "type":  "jaws_script",
+                                                               "command":  "MoveToNextList"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "target_role":  "list",
+                                                                   "contains_speech":  [
+                                                                                           "List of 3 items"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "action_type":  "jaws_script",
-                                                "command":  "MoveToNextListItem",
-                                                "dispatch_ok":  true,
-                                                "raw_transcript":  "•  \u001d same page link \u001e Overview Link",
+                                                "action":  {
+                                                               "type":  "jaws_script",
+                                                               "command":  "MoveToNextListItem"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Overview Link",
+                                                                    "dispatch_ok":  true
+                                                                },
+                                                "assertions":  {
+                                                                   "target_role":  "listitem",
+                                                                   "contains_speech":  [
+                                                                                           "Overview Link"
+                                                                                       ]
+                                                               },
+                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
@@ -137,6 +247,6 @@
                     "successful_trials":  5,
                     "deterministic_match":  true,
                     "stability":  "deterministic",
-                    "total_elapsed_ms":  12721
+                    "total_elapsed_ms":  16834
                 }
 }

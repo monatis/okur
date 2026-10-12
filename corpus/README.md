@@ -1,44 +1,66 @@
-﻿# JAWS 2025 Reference Speech Corpus
+# JAWS 2025 Reference Speech Corpus
 
-Autonomously collected reference speech corpus from JAWS 2025 on the dedicated peer old-pc.
+Autonomously collected, audited, and verified reference speech corpus from **Freedom Scientific JAWS 2025 (Build 2025.2505.43.400)** with **Google Chrome 154** on Windows 10, captured via the OpenDesk automation harness on remote peer `old-pc`.
 
-## Statistics
+## Corpus Version 1.1.0 (Audited Quality Gate Passed)
 
-- Total Scenarios: 30
-- Total Trials: 150
-- Successful Trials: 150 (100%)
-- Deterministic: 28
-- Variable: 2
+This corpus adheres to the 4-stage quality gate lifecycle outlined in [`review.txt`](file:///c:/Users/Gigabyte/screen-reader/corpus/review.txt) and [`AGENTS.md`](file:///c:/Users/Gigabyte/screen-reader/AGENTS.md). All repairs identified during external audit have been resolved, re-executed, and verified against canonical JAWS behavior.
 
-## Catalog
+Original uncorrected v1.0.0 evidence traces are preserved in [`evidence-v1.0.0/`](file:///c:/Users/Gigabyte/screen-reader/corpus/evidence-v1.0.0/).
 
-- 01-doc-say-all: deterministic (5/5 trials)
-- 02-doc-next-line: deterministic (5/5 trials)
-- 03-doc-prior-line: deterministic (5/5 trials)
-- 04-doc-next-word: deterministic (5/5 trials)
-- 05-doc-prior-word: deterministic (5/5 trials)
-- 06-doc-next-char: deterministic (5/5 trials)
-- 07-doc-prior-char: deterministic (5/5 trials)
-- 08-doc-say-current-line: deterministic (5/5 trials)
-- 09-doc-say-current-word: deterministic (5/5 trials)
-- 10-doc-next-paragraph: deterministic (5/5 trials)
-- 11-struct-next-heading: deterministic (5/5 trials)
-- 12-struct-heading-level-2: deterministic (5/5 trials)
-- 13-struct-next-link: deterministic (5/5 trials)
-- 14-struct-next-list: deterministic (5/5 trials)
-- 15-struct-next-landmark: deterministic (5/5 trials)
-- 16-form-next-control: deterministic (5/5 trials)
-- 17-form-next-button: deterministic (5/5 trials)
-- 18-form-next-edit: deterministic (5/5 trials)
-- 19-form-mode-entry-exit: deterministic (5/5 trials)
-- 20-form-checkbox-toggle: deterministic (5/5 trials)
-- 21-table-next-table: deterministic (5/5 trials)
-- 22-table-cell-right: deterministic (5/5 trials)
-- 23-table-cell-left: deterministic (5/5 trials)
-- 24-table-row-down: deterministic (5/5 trials)
-- 25-table-row-up: deterministic (5/5 trials)
-- 26-boundary-heading-wrap: deterministic (5/5 trials)
-- 27-boundary-no-tables: deterministic (5/5 trials)
-- 28-dynamic-tab-navigation: variable (5/5 trials)
-- 29-dynamic-tab-selection: variable (5/5 trials)
-- 30-dynamic-hidden-skip: deterministic (5/5 trials)
+### Suite Statistics
+
+- **Total Scenarios**: 30
+- **Total Executed Trials**: 150
+- **Successful Trials**: 150 (100.0%)
+- **Deterministic Scenarios**: 27 (90.0%)
+- **Variable Scenarios**: 3 (10.0%) (`20-form-checkbox-toggle`, `28-dynamic-tab-navigation`, `29-dynamic-tab-selection`)
+- **Unhandled / Unknown JAWS Scripts**: 0 (0.0%)
+
+### Audited Repairs Summary
+
+1. **`03-doc-prior-line`**: Replaced unexposed `PriorLine` COM script with `{UP}` keyboard command.
+2. **`07-doc-prior-char`**: Replaced unexposed `PriorCharacter` COM script with `{LEFT}` keyboard command.
+3. **`12-struct-heading-level-2`**: Fixed script name to canonical JAWS COM script `MoveToNextHeadingLevelTwo`.
+4. **`19-form-mode-entry-exit`**: Executed full Forms mode entry (`{ENTER}`), typing, and exit (`{ESC}`), asserting mode transitions.
+5. **`20-form-checkbox-toggle`**: Implemented Win32 hardware scan-code spacebar generation to toggle checkbox state and assert state transition.
+6. **`28-dynamic-tab-navigation` & `29-dynamic-tab-selection`**: Upgraded fixture with accessible ARIA tablist and explicit boundaries; asserted dynamic selection transitions.
+7. **Semantic Assertion & Quality Gate**: Upgraded `skills/jaws-reference/scripts/run-scenario.ps1` to reject unknown scripts, validate multi-attribute semantic assertions, and enforce DOM reset before each repetition.
+8. **Evidence Representation**: Separated action metadata, raw speech observations (preserving control characters), and semantic assertion records.
+
+### Catalog
+
+| ID | Scenario | Category | Stability | Success Rate |
+| :--- | :--- | :--- | :--- | :--- |
+| `01-doc-say-all` | Full Document Reading (Say All) | Document Reading | deterministic | 5/5 trials (100%) |
+| `02-doc-next-line` | Next Line Navigation (Down Arrow) | Document Reading | deterministic | 5/5 trials (100%) |
+| `03-doc-prior-line` | Prior Line Navigation (Up Arrow) | Document Reading | deterministic | 5/5 trials (100%) |
+| `04-doc-next-word` | Next Word Navigation (Ctrl+Right) | Document Reading | deterministic | 5/5 trials (100%) |
+| `05-doc-prior-word` | Prior Word Navigation (Ctrl+Left) | Document Reading | deterministic | 5/5 trials (100%) |
+| `06-doc-next-char` | Next Character Navigation (Right Arrow) | Document Reading | deterministic | 5/5 trials (100%) |
+| `07-doc-prior-char` | Prior Character Navigation (Left Arrow) | Document Reading | deterministic | 5/5 trials (100%) |
+| `08-doc-say-current-line` | Say Current Line | Document Reading | deterministic | 5/5 trials (100%) |
+| `09-doc-say-current-word` | Say Current Word | Document Reading | deterministic | 5/5 trials (100%) |
+| `10-doc-next-paragraph` | Next Paragraph Navigation (Ctrl+Down) | Document Reading | deterministic | 5/5 trials (100%) |
+| `11-struct-next-heading` | Next Heading Navigation | Headings & Structure | deterministic | 5/5 trials (100%) |
+| `12-struct-heading-level-2` | Next Level 2 Heading Navigation | Headings & Structure | deterministic | 5/5 trials (100%) |
+| `13-struct-next-link` | Next Link Navigation | Headings & Structure | deterministic | 5/5 trials (100%) |
+| `14-struct-next-list` | Next List Navigation | Headings & Structure | deterministic | 5/5 trials (100%) |
+| `15-struct-next-landmark` | Next ARIA Landmark Navigation | Headings & Structure | deterministic | 5/5 trials (100%) |
+| `16-form-next-control` | Next Form Control Navigation | Forms & Controls | deterministic | 5/5 trials (100%) |
+| `17-form-next-button` | Next Button Navigation | Forms & Controls | deterministic | 5/5 trials (100%) |
+| `18-form-next-edit` | Next Edit Field Navigation | Forms & Controls | deterministic | 5/5 trials (100%) |
+| `19-form-mode-entry-exit` | Forms Mode Enter, Type & Exit | Forms & Controls | deterministic | 5/5 trials (100%) |
+| `20-form-checkbox-toggle` | Checkbox Navigation & Space Toggle | Forms & Controls | variable | 5/5 trials (100%) |
+| `21-table-next-table` | Next Table Navigation | Tables & Cells | deterministic | 5/5 trials (100%) |
+| `22-table-cell-right` | Cell Navigation Right (Ctrl+Alt+Right) | Tables & Cells | deterministic | 5/5 trials (100%) |
+| `23-table-cell-left` | Cell Navigation Left (Ctrl+Alt+Left) | Tables & Cells | deterministic | 5/5 trials (100%) |
+| `24-table-row-down` | Cell Navigation Down (Ctrl+Alt+Down) | Tables & Cells | deterministic | 5/5 trials (100%) |
+| `25-table-row-up` | Cell Navigation Up (Ctrl+Alt+Up) | Tables & Cells | deterministic | 5/5 trials (100%) |
+| `26-boundary-heading-wrap` | Heading Boundary Wrap | Boundaries & Dynamics | deterministic | 5/5 trials (100%) |
+| `27-boundary-no-tables` | Empty Structure Navigation Boundary | Boundaries & Dynamics | deterministic | 5/5 trials (100%) |
+| `28-dynamic-tab-navigation` | Dynamic Tablist Focus Navigation | Boundaries & Dynamics | variable | 5/5 trials (100%) |
+| `29-dynamic-tab-selection` | Dynamic Tab Selection & State Change | Boundaries & Dynamics | variable | 5/5 trials (100%) |
+| `30-dynamic-hidden-skip` | Hidden Content Skipping Boundary | Boundaries & Dynamics | deterministic | 5/5 trials (100%) |
+
+See [`quality-report.md`](file:///c:/Users/Gigabyte/screen-reader/corpus/quality-report.md) and [`CORPUS_MANIFEST.json`](file:///c:/Users/Gigabyte/screen-reader/corpus/CORPUS_MANIFEST.json) for the full machine-readable validation manifest and SHA-256 fixture hashes.

@@ -2,7 +2,7 @@
   "id": "11-struct-next-heading",
   "name": "Navigate Between Headings",
   "category": "Headings and Structure",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
   "target_app": "chrome",
   "reset": {
@@ -16,13 +16,29 @@
       "id": "s1",
       "type": "jaws_script",
       "command": "MoveToNextHeading",
-      "settle_ms": 350
+      "settle_ms": 350,
+      "assertions": {
+        "target_heading_level": 1,
+        "target_heading_name": "System Documentation",
+        "contains_speech": [
+          "System Documentation",
+          "heading level 1"
+        ]
+      }
     },
     {
       "id": "s2",
       "type": "jaws_script",
       "command": "MoveToNextHeading",
-      "settle_ms": 350
+      "settle_ms": 350,
+      "assertions": {
+        "target_heading_level": 2,
+        "target_heading_name": "Section Overview",
+        "contains_speech": [
+          "Section Overview",
+          "heading level 2"
+        ]
+      }
     }
   ]
 }

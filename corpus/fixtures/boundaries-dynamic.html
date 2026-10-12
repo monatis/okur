@@ -6,7 +6,7 @@
 </head>
 <body>
   <h1>First Boundary Heading</h1>
-  <p>Content preceding second heading.</p>
+  <p>First paragraph content.</p>
   <h2>Second Boundary Heading</h2>
   <p>Final content paragraph on this page.</p>
 
@@ -14,14 +14,50 @@
     <p>This text is hidden from screen readers and must be ignored.</p>
   </div>
 
-  <div id="polite-region" aria-live="polite" style="min-height: 20px;"></div>
-  <div id="assertive-region" aria-live="assertive" style="min-height: 20px;"></div>
+  <button type="button" id="btn-disclosure" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');">System Details</button>
 
-  <button type="button" id="btn-polite" onclick="document.getElementById('polite-region').textContent = 'Background sync completed.'">
-    Trigger Polite Update
-  </button>
-  <button type="button" id="btn-assertive" onclick="document.getElementById('assertive-region').textContent = 'Critical error alert!'">
-    Trigger Assertive Update
-  </button>
+  <div role="tablist" aria-label="Settings">
+    <button role="tab" id="tab-1" aria-selected="true" aria-controls="panel-1" onclick="selectTab('tab-1', 'panel-1')">General</button>
+    <button role="tab" id="tab-2" aria-selected="false" aria-controls="panel-2" onclick="selectTab('tab-2', 'panel-2')">Advanced</button>
+  </div>
+
+  <div role="tabpanel" id="panel-1" aria-labelledby="tab-1">
+    <p>General settings configuration content.</p>
+  </div>
+  <div role="tabpanel" id="panel-2" aria-labelledby="tab-2" style="display: none;">
+    <p>Advanced system diagnostics configuration content.</p>
+  </div>
+
+  <button type="button" id="btn-footer">Footer Action</button>
+
+  <script>
+    function selectTab(tabId, panelId) {
+      document.querySelectorAll('[role="tab"]').forEach(function(t) {
+        t.setAttribute('aria-selected', 'false');
+      });
+      document.getElementById(tabId).setAttribute('aria-selected', 'true');
+      document.querySelectorAll('[role="tabpanel"]').forEach(function(p) {
+        p.style.display = 'none';
+      });
+      document.getElementById(panelId).style.display = 'block';
+    }
+
+    document.querySelectorAll('[role="tab"]').forEach(function(tab) {
+      tab.addEventListener('keydown', function(e) {
+        if (e.key === ' ' || e.key === 'Enter') {
+          e.preventDefault();
+          selectTab(tab.id, tab.getAttribute('aria-controls'));
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          selectTab('tab-2', 'panel-2');
+          document.getElementById('tab-2').focus();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          selectTab('tab-1', 'panel-1');
+          document.getElementById('tab-1').focus();
+        }
+      });
+    });
+  </script>
 </body>
 </html>

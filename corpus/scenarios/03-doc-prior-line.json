@@ -2,7 +2,7 @@
   "id": "03-doc-prior-line",
   "name": "Navigate Prior Line via UpArrow",
   "category": "Basic Document Reading",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
   "target_app": "chrome",
   "reset": {
@@ -16,13 +16,24 @@
       "id": "s1",
       "type": "keyboard",
       "command": "{DOWN}",
-      "settle_ms": 350
+      "settle_ms": 350,
+      "assertions": {
+        "contains_speech": [
+          "heading level 1",
+          "The Accessibility Engine Specification"
+        ]
+      }
     },
     {
       "id": "s2",
-      "type": "jaws_script",
-      "command": "PriorLine",
-      "settle_ms": 350
+      "type": "keyboard",
+      "command": "{UP}",
+      "settle_ms": 350,
+      "assertions": {
+        "contains_speech": [
+          "Document Reading Reference Fixture"
+        ]
+      }
     }
   ]
 }
