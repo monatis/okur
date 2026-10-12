@@ -256,3 +256,46 @@ impl SpeechFormatter {
         format!("{}\nRow {} of {}", text, row, total_rows)
     }
 }
+
+/// Trait for routing spoken utterances from the screen reader engine to audio output.
+pub trait SpeechOutput: Send + Sync {
+    /// Speaks the given text utterance.
+    /// If `interrupt` is true, stops any ongoing speech immediately before outputting.
+    fn speak(&mut self, text: &str, interrupt: bool);
+
+    /// Immediately cancels ongoing speech.
+    fn stop(&mut self);
+
+    /// Returns whether speech output is currently active.
+    fn is_speaking(&self) -> bool {
+        false
+    }
+}
+
+/// Mock speech synthesizer output for testing and headless execution.
+#[derive(Debug, Default, Clone, PartialEq, Eq)]
+pub struct MockSpeechOutput {
+    pub utterances: Vec<String>,
+}
+
+impl MockSpeechOutput {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn last_spoken(&self) -> Option<&str> {
+        self.utterances.last().map(|s| s.as_str())
+    }
+
+    pub fn clear(&mut self) {
+        self.utterances.clear();
+    }
+}
+
+impl SpeechOutput for MockSpeechOutput {
+    fn speak(&mut self, text: &str, _interrupt: bool) {
+        self.utterances.push(text.to_string());
+    }
+
+    fn stop(&mut self) {}
+}

@@ -1,12 +1,16 @@
 pub mod aom;
 pub mod buffer;
 pub mod cursor;
+pub mod engine;
+pub mod input;
 pub mod speech;
 
 pub use aom::{AomNode, NodeStates, Role};
 pub use buffer::{BufferLine, BufferParagraph, BufferSpan, BufferWord, VirtualBuffer};
 pub use cursor::VirtualCursor;
-pub use speech::SpeechFormatter;
+pub use engine::ScreenReaderEngine;
+pub use input::{Key, KeyAction, KeyEvent, Modifiers};
+pub use speech::{MockSpeechOutput, SpeechFormatter, SpeechOutput};
 
 pub fn init() {
     tracing::info!("sr-core initialized");

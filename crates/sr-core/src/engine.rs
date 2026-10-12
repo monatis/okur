@@ -1,0 +1,259 @@
+use crate::buffer::VirtualBuffer;
+use crate::cursor::VirtualCursor;
+use crate::input::{Key, KeyAction, KeyEvent};
+use crate::speech::SpeechOutput;
+
+/// Primary runtime engine for screen reader execution, coordinating virtual cursor navigation,
+/// speech output, and interactive input event handling.
+pub struct ScreenReaderEngine {
+    pub cursor: VirtualCursor,
+    pub speech: Box<dyn SpeechOutput>,
+    pub forms_mode: bool,
+}
+
+impl ScreenReaderEngine {
+    pub fn new(cursor: VirtualCursor, speech: Box<dyn SpeechOutput>) -> Self {
+        Self {
+            cursor,
+            speech,
+            forms_mode: false,
+        }
+    }
+
+    /// Replaces the active document buffer and resets the cursor.
+    pub fn load_buffer(&mut self, buffer: VirtualBuffer) {
+        self.cursor = VirtualCursor::new(buffer);
+        self.cursor.move_to_start();
+        self.forms_mode = false;
+    }
+
+    /// Executes a screen reader navigation command string (matching JAWS script names and keystrokes).
+    /// Speaks the resulting announcement and returns the emitted speech text.
+    pub fn execute_command(&mut self, command: &str) -> Option<String> {
+        let speech = match command {
+            "{DOWN}" => self.cursor.move_next_line(),
+            "{UP}" => self.cursor.move_prior_line(),
+            "^{RIGHT}" => self.cursor.move_next_word(),
+            "^{LEFT}" => self.cursor.move_prior_word(),
+            "{RIGHT}" => self.cursor.move_next_char(),
+            "{LEFT}" => self.cursor.move_prior_char(),
+            "^{DOWN}" => self.cursor.move_next_paragraph(),
+            "^{UP}" => self.cursor.move_prior_paragraph(),
+            "^{HOME}" => Some(self.cursor.move_to_start()),
+            "^{END}" => Some(self.cursor.move_to_end()),
+
+            // Headings
+            "H" | "h" | "MoveToNextHeading" => self.cursor.move_next_heading(),
+            "+H" | "+h" | "MoveToPriorHeading" => self.cursor.move_prior_heading(),
+            "1" | "MoveToNextHeadingLevelOne" => self.cursor.move_next_heading_level(1),
+            "2" | "MoveToNextHeadingLevelTwo" => self.cursor.move_next_heading_level(2),
+            "3" | "MoveToNextHeadingLevelThree" => self.cursor.move_next_heading_level(3),
+            "4" | "MoveToNextHeadingLevelFour" => self.cursor.move_next_heading_level(4),
+            "5" | "MoveToNextHeadingLevelFive" => self.cursor.move_next_heading_level(5),
+            "6" | "MoveToNextHeadingLevelSix" => self.cursor.move_next_heading_level(6),
+            "+1" | "MoveToPriorHeadingLevelOne" => self.cursor.move_prior_heading_level(1),
+            "+2" | "MoveToPriorHeadingLevelTwo" => self.cursor.move_prior_heading_level(2),
+            "+3" | "MoveToPriorHeadingLevelThree" => self.cursor.move_prior_heading_level(3),
+            "+4" | "MoveToPriorHeadingLevelFour" => self.cursor.move_prior_heading_level(4),
+            "+5" | "MoveToPriorHeadingLevelFive" => self.cursor.move_prior_heading_level(5),
+            "+6" | "MoveToPriorHeadingLevelSix" => self.cursor.move_prior_heading_level(6),
+
+            // Links
+            "U" | "u" | "K" | "k" | "MoveToNextLink" | "MoveToNextUnvisitedLink" => {
+                self.cursor.move_next_link()
+            }
+            "+U" | "+u" | "+K" | "+k" | "MoveToPriorLink" | "MoveToPriorUnvisitedLink" => {
+                self.cursor.move_prior_link()
+            }
+
+            // Tables
+            "T" | "t" | "MoveToNextTable" => self.cursor.move_next_table(),
+            "+T" | "+t" | "MoveToPriorTable" => self.cursor.move_prior_table(),
+            "^%{RIGHT}" | "NextCell" | "TableCellRight" => self.cursor.move_table_cell_right(),
+            "^%{LEFT}" | "PriorCell" | "TableCellLeft" => self.cursor.move_table_cell_left(),
+            "^%{DOWN}" | "NextRow" | "TableCellDown" => self.cursor.move_table_cell_down(),
+            "^%{UP}" | "PriorRow" | "TableCellUp" => self.cursor.move_table_cell_up(),
+
+            // Form controls
+            "F" | "f" | "FocusToNextField" => self.cursor.move_next_form_control(),
+            "+F" | "+f" | "FocusToPriorField" => self.cursor.move_prior_form_control(),
+            "B" | "b" | "MoveToNextButton" => self.cursor.move_next_button(),
+            "+B" | "+b" | "MoveToPriorButton" => self.cursor.move_prior_button(),
+            "E" | "e" | "MoveToNextEdit" => self.cursor.move_next_edit(),
+            "+E" | "+e" | "MoveToPriorEdit" => self.cursor.move_prior_edit(),
+            "X" | "x" | "MoveToNextCheckbox" => self.cursor.move_next_checkbox(),
+            "+X" | "+x" | "MoveToPriorCheckbox" => self.cursor.move_prior_checkbox(),
+
+            // Lists & Landmarks
+            "L" | "l" | "MoveToNextList" => self.cursor.move_next_list(),
+            "+L" | "+l" | "MoveToPriorList" => self.cursor.move_prior_list(),
+            "I" | "i" | "MoveToNextListItem" => self.cursor.move_next_list_item(),
+            "+I" | "+i" | "MoveToPriorListItem" => self.cursor.move_prior_list_item(),
+            "R" | "r" | ";" | "MoveToNextLandmark" | "MoveToNextRegion" => {
+                self.cursor.move_next_landmark()
+            }
+            "+R" | "+r" | "+;" | "MoveToPriorLandmark" | "MoveToPriorRegion" => {
+                self.cursor.move_prior_landmark()
+            }
+
+            // Interactive navigation & actions
+            "{TAB}" => self.cursor.move_next_tab_stop(),
+            "+{TAB}" | "+TAB" => self.cursor.move_prior_tab_stop(),
+            "{SPACE}" => self.cursor.toggle_active_control(),
+            "{ENTER}" | "EnterFormsMode" => {
+                let res = self.cursor.enter_forms_mode();
+                if res.is_some() {
+                    self.forms_mode = true;
+                }
+                res
+            }
+            "{ESC}" | "ExitFormsMode" => {
+                let res = self.cursor.exit_forms_mode();
+                self.forms_mode = false;
+                res
+            }
+
+            // JAWS Say Scripts
+            "SayAll" => Some(self.cursor.say_all()),
+            "SayLine" => Some(self.cursor.current_line()),
+            "SayWord" => Some(self.cursor.current_word()),
+            "SayCharacter" => Some(self.cursor.current_char()),
+
+            _ => None,
+        };
+
+        if let Some(ref text) = speech {
+            if !text.is_empty() {
+                self.speech.speak(text, true);
+            }
+        }
+
+        speech
+    }
+
+    /// Handles a live keyboard event from the low-level hook.
+    /// Intercepts navigation keys, manages forms mode transitions, silences ongoing speech,
+    /// and returns whether the key was consumed or should pass through to the OS.
+    pub fn handle_key_event(&mut self, event: &KeyEvent) -> KeyAction {
+        if !event.is_down {
+            return KeyAction::PassThrough;
+        }
+
+        // 1. Any key press interrupts speech immediately (NVDA & JAWS standard behavior)
+        self.speech.stop();
+
+        // 2. Standalone Control tap is speech silence key
+        if event.key == Key::Control && event.modifiers.is_empty() {
+            return KeyAction::PassThrough;
+        }
+
+        // 3. Handle Forms Mode
+        if self.forms_mode {
+            if event.key == Key::Escape {
+                self.forms_mode = false;
+                let _ = self.cursor.exit_forms_mode();
+                self.speech.speak("Virtual PC Cursor", true);
+                return KeyAction::Consume;
+            }
+            // In forms mode, pass all typing and navigation through to the active control
+            return KeyAction::PassThrough;
+        }
+
+        // 4. In Virtual PC Cursor mode, check if keystroke translates to a command
+        if let Some(cmd) = event.to_command_string() {
+            let res = self.execute_command(&cmd);
+            if res.is_some() {
+                return KeyAction::Consume;
+            }
+            // For navigation keys, consume even if boundary reached so host window doesn't scroll
+            if matches!(
+                event.key,
+                Key::DownArrow
+                    | Key::UpArrow
+                    | Key::LeftArrow
+                    | Key::RightArrow
+                    | Key::Home
+                    | Key::End
+                    | Key::PageUp
+                    | Key::PageDown
+                    | Key::Tab
+                    | Key::Alpha(_)
+                    | Key::Digit(_)
+            ) {
+                return KeyAction::Consume;
+            }
+        }
+
+        KeyAction::PassThrough
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::aom::{AomNode, Role};
+    use crate::input::Modifiers;
+    use crate::speech::MockSpeechOutput;
+
+    fn create_test_buffer() -> VirtualBuffer {
+        let aom = AomNode::new(0, Role::Document)
+            .with_name("Interactive Test Document")
+            .with_children(vec![
+                AomNode::new(1, Role::Heading { level: 1 }).with_text("Main Title"),
+                AomNode::new(2, Role::Paragraph).with_text("This is interactive paragraph."),
+                AomNode::new(3, Role::Edit).with_name("Search Input"),
+            ]);
+        VirtualBuffer::from_aom(&aom)
+    }
+
+    #[test]
+    fn test_engine_navigation_and_speech() {
+        let buffer = create_test_buffer();
+        let cursor = VirtualCursor::new(buffer);
+        let mock_speech = Box::new(MockSpeechOutput::new());
+        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
+
+        // Down arrow navigation
+        let speech = engine.execute_command("{DOWN}");
+        assert_eq!(
+            speech,
+            Some(" \u{001d} heading level 1 \u{001e} Main Title".to_string())
+        );
+
+        // Heading navigation
+        let h_speech = engine.execute_command("H");
+        assert_eq!(
+            h_speech,
+            Some("wrapping to top\nMain Title\n \u{001d} heading level 1 \u{001e}".to_string())
+        );
+    }
+
+    #[test]
+    fn test_engine_key_event_handling_and_forms_mode() {
+        let buffer = create_test_buffer();
+        let cursor = VirtualCursor::new(buffer);
+        let mock_speech = Box::new(MockSpeechOutput::new());
+        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
+
+        // Move to edit field
+        engine.execute_command("E");
+
+        // Press Enter to enter forms mode
+        let enter_event = KeyEvent::new(Key::Enter, Modifiers::none(), true);
+        let action = engine.handle_key_event(&enter_event);
+        assert_eq!(action, KeyAction::Consume);
+        assert!(engine.forms_mode);
+
+        // In forms mode, regular keys pass through
+        let down_event = KeyEvent::new(Key::DownArrow, Modifiers::none(), true);
+        assert_eq!(engine.handle_key_event(&down_event), KeyAction::PassThrough);
+
+        // Press Escape to exit forms mode
+        let esc_event = KeyEvent::new(Key::Escape, Modifiers::none(), true);
+        assert_eq!(engine.handle_key_event(&esc_event), KeyAction::Consume);
+        assert!(!engine.forms_mode);
+
+        // Back in Virtual PC Cursor mode, Down arrow is consumed
+        assert_eq!(engine.handle_key_event(&down_event), KeyAction::Consume);
+    }
+}

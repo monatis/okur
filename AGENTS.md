@@ -21,12 +21,18 @@ This is an **autonomous, agent-driven project with a "verification harness in th
    - While internal architecture and algorithms may borrow best practices from other screen readers (e.g., NVDA), **all user-facing behavior must match JAWS**.
    - Keyboard navigation defaults, quick-nav keys (e.g., `H` for headings, `1`–`6` for levels, `K` for links, `C` for checkboxes, `E` for edits), announcement phrasing, and browse/forms mode switching must follow JAWS conventions.
 
-3. **Cross-Platform Target Tiers**:
+3. **Cross-Platform Target Tiers & Zero-Cost Trait Architecture**:
    - **First-Citizen Targets (Tier 1)**:
-     - **Windows**: Primary reference environment. Windows UI Automation (UIA) and IAccessible2.
-     - **macOS**: Native `AXUIElement` / NSAccessibility.
+     - **Windows**: Reference verification environment. Windows UI Automation (UIA), IAccessible2, Win32 hooks (`WH_KEYBOARD_LL`), and SAPI 5.
+     - **macOS**: Equal Tier 1 target. Native `AXUIElement` / NSAccessibility, `CGEventTap`, and native macOS speech synthesizers.
    - **Best-Effort / Nice-to-Have (Tier 2)**:
      - **Linux**: AT-SPI2 / D-Bus.
+   - **Portability Without Compromise (Performance & Correctness First)**:
+     - Cross-platform capability must **never** mean sacrificing native responsiveness, sub-millisecond event handling, or correctness.
+     - Subsystems with OS dependencies (keyboard hooks, TTS synthesizers, accessibility bridges, event loops) must be defined as clean, zero-overhead Rust traits in core crates (e.g., `KeyboardHook`, `SpeechOutput`, `PlatformBridge`).
+     - Concrete platform drivers reside behind conditional compilation (`#[cfg(target_os = "windows")]`, `#[cfg(target_os = "macos")]`, `#[cfg(target_os = "linux")]`).
+     - Every subsystem must provide a lightweight headless/mock implementation (`MockKeyboardHook`, `MockSpeechOutput`) ensuring complete testability in CI and headless environments.
+     - Even when testing on a Windows host, all traits and abstractions must be strictly structured and future-proofed so that native macOS implementations drop into place without refactoring core screen reader logic.
 
 ---
 
@@ -35,8 +41,8 @@ This is an **autonomous, agent-driven project with a "verification harness in th
 To ensure seamless context passing across autonomous sessions, all engineering work is orchestrated through the `docs/` tree:
 
 ### Active Plan for Current / Next Session
-- **Active Plan**: [`docs/plans/2026-10-13-live-interception-and-interactive-loop.md`](file:///c:/Users/Gigabyte/screen-reader/docs/plans/2026-10-13-live-interception-and-interactive-loop.md)
-- **Latest Handoff**: [`docs/handoff/2026-10-13-boundaries-and-dynamic-updates.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-boundaries-and-dynamic-updates.md)
+- **Active Plan**: [`docs/plans/2026-10-13-live-focus-and-aria-live.md`](file:///c:/Users/Gigabyte/screen-reader/docs/plans/2026-10-13-live-focus-and-aria-live.md)
+- **Latest Handoff**: [`docs/handoff/2026-10-13-live-interception-and-interactive-loop.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-live-interception-and-interactive-loop.md)
 
 
 ### Standard Session Execution Protocol

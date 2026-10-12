@@ -202,6 +202,20 @@ impl TtsManager {
     }
 }
 
+impl sr_core::speech::SpeechOutput for TtsManager {
+    fn speak(&mut self, text: &str, interrupt: bool) {
+        let _ = self.speak(text, interrupt);
+    }
+
+    fn stop(&mut self) {
+        let _ = self.stop();
+    }
+
+    fn is_speaking(&self) -> bool {
+        self.is_speaking()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -11,6 +11,8 @@ pub enum PlatformError {
     NoWindowFound,
     #[error("Application not found: {0}")]
     AppNotFound(String),
+    #[error("Keyboard hook error: {0}")]
+    HookError(String),
 }
 
 static NEXT_NODE_ID: AtomicUsize = AtomicUsize::new(1);

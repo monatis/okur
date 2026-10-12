@@ -1,10 +1,11 @@
 use clap::{Parser, Subcommand};
-use sr_core::{AomNode, VirtualBuffer, VirtualCursor};
+use sr_core::{AomNode, Role, ScreenReaderEngine, VirtualBuffer, VirtualCursor};
 use sr_corpus::DifferentialRunner;
-use sr_platform::{TtsEngineType, TtsManager};
+use sr_platform::{create_keyboard_hook, KeyAction, PlatformBridge, TtsEngineType, TtsManager};
 use std::fs;
 use std::path::Path;
 use std::str::FromStr;
+use std::sync::{Arc, Mutex};
 
 #[derive(Parser, Debug)]
 #[command(name = "sr", about = "Open-Source Rust Screen Reader CLI")]
@@ -15,6 +16,28 @@ struct Cli {
 
 #[derive(Subcommand, Debug)]
 enum Commands {
+    /// Run the interactive live screen reader daemon
+    Run {
+        /// TTS synthesizer engine: auto (default), sapi5, or no-speech
+        #[arg(short, long, default_value = "auto")]
+        engine: String,
+
+        /// Specific synthesizer voice name or ID
+        #[arg(long)]
+        voice: Option<String>,
+
+        /// Speech rate (-10 to 10)
+        #[arg(short, long, default_value_t = 0)]
+        rate: i32,
+
+        /// Volume (0 to 100)
+        #[arg(long, default_value_t = 100)]
+        volume: u16,
+
+        /// Path to fixture file to load (optional; if not provided, queries active application)
+        #[arg(short, long)]
+        fixture: Option<String>,
+    },
     /// Execute differential testing against Freedom Scientific JAWS transcripts
     Test {
         #[arg(short, long, default_value = "corpus")]
@@ -102,11 +125,147 @@ fn load_aom_from_path(path: &Path) -> Result<AomNode, Box<dyn std::error::Error>
     Ok(aom)
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     tracing_subscriber::fmt::init();
     let cli = Cli::parse();
 
     match cli.command {
+        Some(Commands::Run {
+            engine,
+            voice,
+            rate,
+            volume,
+            fixture,
+        }) => {
+            let engine_type = TtsEngineType::from_str(&engine).unwrap_or_else(|e| {
+                eprintln!("Error: {}", e);
+                std::process::exit(1);
+            });
+
+            let mut tts = TtsManager::new(engine_type).unwrap_or_else(|e| {
+                eprintln!("Failed to initialize TTS engine: {}", e);
+                std::process::exit(1);
+            });
+
+            let _ = tts.set_rate(rate);
+            let _ = tts.set_volume(volume);
+            if let Some(ref v) = voice {
+                if let Err(e) = tts.set_voice(v) {
+                    eprintln!("Warning: failed to set voice '{}': {}", v, e);
+                }
+            }
+
+            println!("============================================================");
+            println!("  Interactive Screen Reader Daemon (Freedom Scientific JAWS Parity)");
+            println!("  TTS Driver: {}", tts.engine_name());
+            println!("============================================================");
+
+            // Determine active buffer
+            let buffer = if let Some(ref f) = fixture {
+                let fixture_path = Path::new(f);
+                match load_aom_from_path(fixture_path) {
+                    Ok(aom) => {
+                        println!("Loaded document fixture from {:?}", fixture_path);
+                        VirtualBuffer::from_aom(&aom)
+                    }
+                    Err(e) => {
+                        eprintln!("Failed to load fixture: {}", e);
+                        std::process::exit(1);
+                    }
+                }
+            } else {
+                let bridge = PlatformBridge::new();
+                match bridge.get_active_document(None) {
+                    Ok(aom) => {
+                        println!("Attached to live active foreground document via OS accessibility APIs.");
+                        VirtualBuffer::from_aom(&aom)
+                    }
+                    Err(err) => {
+                        println!(
+                            "No active document found in foreground ({}). Loading default reading fixture...",
+                            err
+                        );
+                        let default_path = Path::new("corpus/fixtures/boundaries-dynamic.aom.json");
+                        if default_path.exists() {
+                            let aom = load_aom_from_path(default_path).unwrap();
+                            VirtualBuffer::from_aom(&aom)
+                        } else {
+                            let doc_aom = AomNode::new(0, Role::Document)
+                                .with_name("Default Screen Reader Document")
+                                .with_children(vec![
+                                    AomNode::new(1, Role::Heading { level: 1 })
+                                        .with_text("Welcome to Open-Source Screen Reader"),
+                                    AomNode::new(2, Role::Paragraph).with_text(
+                                        "Use Down Arrow and Up Arrow to read line by line. Press H for headings, T for tables, Tab for controls. Press Ctrl to silence speech, and Ctrl+C to exit.",
+                                    ),
+                                ]);
+                            VirtualBuffer::from_aom(&doc_aom)
+                        }
+                    }
+                }
+            };
+
+            let mut cursor = VirtualCursor::new(buffer);
+            cursor.move_to_start();
+
+            let engine = Arc::new(Mutex::new(ScreenReaderEngine::new(cursor, Box::new(tts))));
+
+            // Announce startup
+            {
+                let mut eng = engine.lock().unwrap();
+                let doc_name = eng.cursor.buffer.document_title().unwrap_or("Document");
+                let welcome = format!("{}  \u{001d} Virtual PC Cursor \u{001e}", doc_name);
+                println!(
+                    "[Screen Reader] {}",
+                    welcome.replace(['\u{001d}', '\u{001e}'], "")
+                );
+                eng.speech.speak(&welcome, true);
+            }
+
+            // Install low-level keyboard hook
+            let mut hook = create_keyboard_hook();
+            let engine_cb = Arc::clone(&engine);
+
+            if let Err(e) = hook.start(Box::new(move |event| {
+                if let Ok(mut eng) = engine_cb.lock() {
+                    eng.handle_key_event(&event)
+                } else {
+                    KeyAction::PassThrough
+                }
+            })) {
+                eprintln!("Failed to install keyboard hook: {}", e);
+                std::process::exit(1);
+            }
+
+            println!("\nScreen Reader daemon is running.");
+            println!("Navigation shortcuts active:");
+            println!("  - Arrow keys: Navigate lines / characters");
+            println!("  - Ctrl+Left/Right: Navigate words");
+            println!("  - Ctrl+Home / Ctrl+End: Document start / end");
+            println!("  - H / Shift+H: Next / prior heading");
+            println!("  - 1..6: Next heading by level");
+            println!("  - K / U: Next link");
+            println!("  - T / Shift+T: Next / prior table");
+            println!("  - Tab / Shift+Tab: Interactive controls");
+            println!("  - Enter: Forms mode on edits");
+            println!("  - Esc: Exit forms mode to Virtual PC Cursor");
+            println!("  - Ctrl: Silence speech");
+            println!("Press Ctrl+C to stop the daemon.\n");
+
+            // Handle clean exit via Ctrl+C
+            if let Err(e) = tokio::signal::ctrl_c().await {
+                eprintln!("Error waiting for shutdown signal: {}", e);
+            }
+
+            println!("\nShutting down screen reader daemon...");
+            let _ = hook.stop();
+            {
+                let mut eng = engine.lock().unwrap();
+                eng.speech.speak("Screen reader exiting.", true);
+            }
+            println!("Screen reader stopped cleanly.");
+        }
         Some(Commands::Speak {
             text,
             engine,

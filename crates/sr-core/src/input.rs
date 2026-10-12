@@ -1,0 +1,155 @@
+/// Normalized key representations for screen reader navigation and control.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Key {
+    UpArrow,
+    DownArrow,
+    LeftArrow,
+    RightArrow,
+
+    Home,
+    End,
+    PageUp,
+    PageDown,
+
+    Tab,
+    Enter,
+    Escape,
+    Space,
+    Backspace,
+    Delete,
+
+    Alpha(char),
+    Digit(u8),
+    Semicolon,
+
+    Control,
+    Alt,
+    Shift,
+    Windows,
+
+    Other(u32),
+}
+
+/// Modifier keys state held during a keystroke event.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub struct Modifiers {
+    pub ctrl: bool,
+    pub alt: bool,
+    pub shift: bool,
+    pub win: bool,
+}
+
+impl Modifiers {
+    pub fn none() -> Self {
+        Self::default()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        !self.ctrl && !self.alt && !self.shift && !self.win
+    }
+}
+
+/// Normalized keyboard event passed to the screen reader engine.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct KeyEvent {
+    pub key: Key,
+    pub modifiers: Modifiers,
+    pub is_down: bool,
+    pub is_repeat: bool,
+}
+
+impl KeyEvent {
+    pub fn new(key: Key, modifiers: Modifiers, is_down: bool) -> Self {
+        Self {
+            key,
+            modifiers,
+            is_down,
+            is_repeat: false,
+        }
+    }
+
+    /// Translates a key event into a canonical screen reader navigation command string
+    /// matching Freedom Scientific JAWS and scenario conventions.
+    pub fn to_command_string(&self) -> Option<String> {
+        if !self.is_down {
+            return None;
+        }
+
+        let m = &self.modifiers;
+
+        match self.key {
+            // Directional & reading navigation
+            Key::DownArrow if m.ctrl && m.alt => Some("^%{DOWN}".to_string()),
+            Key::UpArrow if m.ctrl && m.alt => Some("^%{UP}".to_string()),
+            Key::RightArrow if m.ctrl && m.alt => Some("^%{RIGHT}".to_string()),
+            Key::LeftArrow if m.ctrl && m.alt => Some("^%{LEFT}".to_string()),
+
+            Key::DownArrow if m.ctrl => Some("^{DOWN}".to_string()),
+            Key::UpArrow if m.ctrl => Some("^{UP}".to_string()),
+            Key::RightArrow if m.ctrl => Some("^{RIGHT}".to_string()),
+            Key::LeftArrow if m.ctrl => Some("^{LEFT}".to_string()),
+
+            Key::DownArrow if m.is_empty() => Some("{DOWN}".to_string()),
+            Key::UpArrow if m.is_empty() => Some("{UP}".to_string()),
+            Key::RightArrow if m.is_empty() => Some("{RIGHT}".to_string()),
+            Key::LeftArrow if m.is_empty() => Some("{LEFT}".to_string()),
+
+            // Document boundary navigation
+            Key::Home if m.ctrl => Some("^{HOME}".to_string()),
+            Key::End if m.ctrl => Some("^{END}".to_string()),
+
+            // Interactive controls and tab stops
+            Key::Tab if m.shift => Some("+{TAB}".to_string()),
+            Key::Tab if m.is_empty() => Some("{TAB}".to_string()),
+            Key::Enter if m.is_empty() => Some("{ENTER}".to_string()),
+            Key::Escape if m.is_empty() => Some("{ESC}".to_string()),
+            Key::Space if m.is_empty() => Some("{SPACE}".to_string()),
+
+            // Quick navigation keys
+            Key::Alpha(c) => {
+                let upper = c.to_ascii_uppercase();
+                match upper {
+                    'H' | 'T' | 'K' | 'U' | 'F' | 'B' | 'E' | 'X' | 'L' | 'I' | 'R' => {
+                        if m.shift && !m.ctrl && !m.alt {
+                            Some(format!("+{}", upper))
+                        } else if m.is_empty() {
+                            Some(upper.to_string())
+                        } else {
+                            None
+                        }
+                    }
+                    _ => None,
+                }
+            }
+            Key::Digit(d) if (1..=6).contains(&d) => {
+                if m.shift && !m.ctrl && !m.alt {
+                    Some(format!("+{}", d))
+                } else if m.is_empty() {
+                    Some(d.to_string())
+                } else {
+                    None
+                }
+            }
+            Key::Semicolon => {
+                if m.shift && !m.ctrl && !m.alt {
+                    Some("+;".to_string())
+                } else if m.is_empty() {
+                    Some(";".to_string())
+                } else {
+                    None
+                }
+            }
+            _ => None,
+        }
+    }
+}
+
+/// Action determining whether the intercepted key event is consumed by the screen reader
+/// or passed through to the underlying operating system and application.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum KeyAction {
+    /// Consume the key event, suppressing it from reaching other applications.
+    Consume,
+    /// Pass the key event through to the focused application.
+    PassThrough,
+}
