@@ -1,0 +1,458 @@
+﻿{
+    "corpus_name":  "JAWS 2025 Reference Speech Corpus",
+    "corpus_version":  "1.0.0",
+    "generated_at":  "2026-10-12T18:05:02.4469354+03:00",
+    "environment":  {
+                        "host":  "DESKTOP-DCNAKQQ",
+                        "os_version":  "Microsoft Windows NT 10.0.19045.0",
+                        "jaws_version":  "2025.2505.43.400",
+                        "session_id":  1
+                    },
+    "statistics":  {
+                       "total_scenarios":  30,
+                       "deterministic_scenarios":  28,
+                       "variable_scenarios":  2,
+                       "total_trials_executed":  150,
+                       "successful_trials":  150,
+                       "trial_success_rate_percent":  100
+                   },
+    "scenarios":  [
+                      {
+                          "scenario_id":  "01-doc-say-all",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  13200,
+                          "canonical_transcript":  "jaws_script:SayAll =\u003e Document Reading Reference Fixture\n \u001d heading level 1 \u001e The Accessibility Engine Specification\nThe screen reader engine parses the document object model into a clean virtual buffer."
+                      },
+                      {
+                          "scenario_id":  "02-doc-next-line",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  9758,
+                          "canonical_transcript":  "keyboard:{DOWN} =\u003e  \u001d heading level 1 \u001e The Accessibility Engine Specification"
+                      },
+                      {
+                          "scenario_id":  "03-doc-prior-line",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  12902,
+                          "canonical_transcript":  [
+                                                       "keyboard:{DOWN} =\u003e  \u001d heading level 1 \u001e The Accessibility Engine Specification",
+                                                       "jaws_script:PriorLine =\u003e unknown script call to:\npriorline\npriorline"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "04-doc-next-word",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  9882,
+                          "canonical_transcript":  "keyboard:^{RIGHT} =\u003e Reading"
+                      },
+                      {
+                          "scenario_id":  "05-doc-prior-word",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  13345,
+                          "canonical_transcript":  [
+                                                       "keyboard:^{RIGHT} =\u003e Reading",
+                                                       "keyboard:^{LEFT} =\u003e Document"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "06-doc-next-char",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  9478,
+                          "canonical_transcript":  "keyboard:{RIGHT} =\u003e o"
+                      },
+                      {
+                          "scenario_id":  "07-doc-prior-char",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  12430,
+                          "canonical_transcript":  [
+                                                       "keyboard:{RIGHT} =\u003e o",
+                                                       "jaws_script:PriorCharacter =\u003e unknown script call to:\npriorcharacter\npriorcharacter"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "08-doc-say-current-line",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  12872,
+                          "canonical_transcript":  [
+                                                       "keyboard:{DOWN} =\u003e  \u001d heading level 1 \u001e The Accessibility Engine Specification",
+                                                       "jaws_script:SayLine =\u003e  \u001d heading level 1 \u001e The Accessibility Engine Specification"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "09-doc-say-current-word",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  12889,
+                          "canonical_transcript":  [
+                                                       "keyboard:{DOWN} =\u003e  \u001d heading level 1 \u001e The Accessibility Engine Specification",
+                                                       "jaws_script:SayWord =\u003e The"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "10-doc-next-paragraph",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  10111,
+                          "canonical_transcript":  "keyboard:^{DOWN} =\u003e  \u001d heading level 1 \u001e The Accessibility Engine Specification"
+                      },
+                      {
+                          "scenario_id":  "11-struct-next-heading",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  12812,
+                          "canonical_transcript":  [
+                                                       "jaws_script:MoveToNextHeading =\u003e System Documentation\n \u001d heading level 1 \u001e",
+                                                       "jaws_script:MoveToNextHeading =\u003e Section Overview\n \u001d heading level 2 \u001e"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "12-struct-heading-level-2",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  12683,
+                          "canonical_transcript":  [
+                                                       "jaws_script:MoveToNextHeadingLevel2 =\u003e unknown script call to:\nmovetonextheadinglevel2\nmovetonextheadinglevel2",
+                                                       "jaws_script:MoveToNextHeadingLevel2 =\u003e unknown script call to:\nmovetonextheadinglevel2\nmovetonextheadinglevel2"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "13-struct-next-link",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  12715,
+                          "canonical_transcript":  [
+                                                       "jaws_script:MoveToNextUnvisitedLink =\u003e •  \u001d same page link \u001e Overview Link",
+                                                       "jaws_script:MoveToNextUnvisitedLink =\u003e •  \u001d same page link \u001e Architecture Link"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "14-struct-next-list",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  12721,
+                          "canonical_transcript":  [
+                                                       "jaws_script:MoveToNextList =\u003e list of 3 items",
+                                                       "jaws_script:MoveToNextListItem =\u003e •  \u001d same page link \u001e Overview Link"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "15-struct-next-landmark",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  12766,
+                          "canonical_transcript":  [
+                                                       "jaws_script:MoveToNextRegion =\u003e banner",
+                                                       "jaws_script:MoveToNextRegion =\u003e Main Navigation navigation region"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "16-form-next-control",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  12684,
+                          "canonical_transcript":  [
+                                                       "jaws_script:FocusToNextField =\u003e Full Name:  \u001d Edit \u001e  \nJane Doe",
+                                                       "jaws_script:FocusToNextField =\u003e Email Address:  \u001d Edit \u001e  \njane@example.com"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "17-form-next-button",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  12769,
+                          "canonical_transcript":  [
+                                                       "jaws_script:MoveToNextButton =\u003e Save Preferences  \u001d Button \u001e",
+                                                       "jaws_script:MoveToNextButton =\u003e Submit Application  \u001d Button \u001e"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "18-form-next-edit",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  12748,
+                          "canonical_transcript":  [
+                                                       "jaws_script:MoveToNextEdit =\u003e Full Name:  \u001d Edit \u001e  \nJane Doe",
+                                                       "jaws_script:MoveToNextEdit =\u003e Email Address:  \u001d Edit \u001e  \njane@example.com"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "19-form-mode-entry-exit",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  17200,
+                          "canonical_transcript":  [
+                                                       "jaws_script:MoveToNextEdit =\u003e Full Name:  \u001d Edit \u001e  \nJane Doe",
+                                                       "jaws_script:MoveToNextEdit =\u003e Email Address:  \u001d Edit \u001e  \njane@example.com",
+                                                       "jaws_script:MoveToPriorEdit =\u003e Full Name:  \u001d Edit \u001e  \nJane Doe"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "20-form-checkbox-toggle",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  17207,
+                          "canonical_transcript":  [
+                                                       "jaws_script:MoveToNextCheckbox =\u003e  I accept terms and conditions  \u001d check box \u001e   \u001dnot checked\u001e",
+                                                       "jaws_script:MoveToNextButton =\u003e Save Preferences  \u001d Button \u001e",
+                                                       "jaws_script:MoveToNextButton =\u003e Submit Application  \u001d Button \u001e"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "21-table-next-table",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  9841,
+                          "canonical_transcript":  "jaws_script:MoveToNextTable =\u003e table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
+                      },
+                      {
+                          "scenario_id":  "22-table-cell-right",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  13166,
+                          "canonical_transcript":  [
+                                                       "jaws_script:MoveToNextTable =\u003e table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter",
+                                                       "keyboard:^%{RIGHT} =\u003e Revenue\nColumn 2 of 4"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "23-table-cell-left",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  16846,
+                          "canonical_transcript":  [
+                                                       "jaws_script:MoveToNextTable =\u003e table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter",
+                                                       "keyboard:^%{RIGHT} =\u003e Revenue\nColumn 2 of 4",
+                                                       "keyboard:^%{LEFT} =\u003e Quarter\nColumn 1 of 4"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "24-table-row-down",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  13208,
+                          "canonical_transcript":  [
+                                                       "jaws_script:MoveToNextTable =\u003e table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter",
+                                                       "keyboard:^%{DOWN} =\u003e Q1\nRow 2 of 4"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "25-table-row-up",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  16786,
+                          "canonical_transcript":  [
+                                                       "jaws_script:MoveToNextTable =\u003e table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter",
+                                                       "keyboard:^%{DOWN} =\u003e Q1\nRow 2 of 4",
+                                                       "keyboard:^%{UP} =\u003e Quarter\nRow 1 of 4"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "26-boundary-heading-wrap",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  15986,
+                          "canonical_transcript":  [
+                                                       "jaws_script:MoveToNextHeading =\u003e First Boundary Heading\n \u001d heading level 1 \u001e",
+                                                       "jaws_script:MoveToNextHeading =\u003e Second Boundary Heading\n \u001d heading level 2 \u001e",
+                                                       "jaws_script:MoveToNextHeading =\u003e wrapping to top\nFirst Boundary Heading\n \u001d heading level 1 \u001e"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "27-boundary-no-tables",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  9626,
+                          "canonical_transcript":  "jaws_script:MoveToNextTable =\u003e There are no tables on this page."
+                      },
+                      {
+                          "scenario_id":  "28-dynamic-tab-navigation",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
+                          "repetitions":  5,
+                          "stability":  "variable",
+                          "deterministic_match":  false,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  14744,
+                          "canonical_transcript":  [
+                                                       "keyboard:{TAB} =\u003e System Details  \u001d Button \u001e   \u001dcollapsed\u001e  \nTo activate press Enter.",
+                                                       "keyboard:{TAB} =\u003e Settings \u001d group \u001e \n  \nGeneral  \u001d Tab \u001e  \n1 of 2\n \u001dselected\u001e"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "29-dynamic-tab-selection",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
+                          "repetitions":  5,
+                          "stability":  "variable",
+                          "deterministic_match":  false,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  17563,
+                          "canonical_transcript":  [
+                                                       "keyboard:{TAB} =\u003e System Details\n \u001d Button \u001e  \u001dcollapsed\u001e \nTo activate press Enter.",
+                                                       "keyboard:{TAB} =\u003e Settings \u001d group \u001e \n  \nGeneral  \u001d Tab \u001e  \n1 of 2\n \u001dselected\u001e",
+                                                       "keyboard:{TAB} =\u003e Advanced  \u001d Tab \u001e  \n2 of 2"
+                                                   ]
+                      },
+                      {
+                          "scenario_id":  "30-dynamic-hidden-skip",
+                          "scenario_version":  "1.0.0",
+                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
+                          "repetitions":  5,
+                          "stability":  "deterministic",
+                          "deterministic_match":  true,
+                          "successful_trials":  5,
+                          "total_trials":  5,
+                          "elapsed_ms":  18650,
+                          "canonical_transcript":  [
+                                                       "keyboard:{DOWN} =\u003e  \u001d heading level 1 \u001e First Boundary Heading",
+                                                       "keyboard:{DOWN} =\u003e Content preceding second heading.",
+                                                       "keyboard:{DOWN} =\u003e  \u001d heading level 2 \u001e Second Boundary Heading",
+                                                       "keyboard:{DOWN} =\u003e Final content paragraph on this page."
+                                                   ]
+                      }
+                  ]
+}

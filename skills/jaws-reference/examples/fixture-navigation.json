@@ -1,0 +1,45 @@
+{
+  "id": "fixture-navigation",
+  "version": "1.0.0",
+  "description": "Verified multi-step navigation",
+  "target_app": "chrome",
+  "fixture": "examples/fixture.html",
+  "steps": [
+    {
+      "id": "s1",
+      "type": "jaws_script",
+      "command": "MoveToNextHeading",
+      "settle_ms": 350
+    },
+    {
+      "id": "s2",
+      "type": "jaws_script",
+      "command": "MoveToNextHeading",
+      "settle_ms": 350
+    },
+    {
+      "id": "s3",
+      "type": "jaws_script",
+      "command": "MoveToNextUnvisitedLink",
+      "settle_ms": 350
+    },
+    {
+      "id": "s4",
+      "type": "jaws_script",
+      "command": "FocusToNextField",
+      "settle_ms": 400
+    },
+    {
+      "id": "s5",
+      "type": "jaws_script",
+      "command": "SayLine",
+      "settle_ms": 300
+    },
+    {
+      "id": "s6",
+      "type": "jaws_script",
+      "command": "MoveToNextButton",
+      "settle_ms": 350
+    }
+  ]
+}

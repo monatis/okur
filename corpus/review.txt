@@ -1,0 +1,158 @@
+This is real progress. IsanAgent has now autonomously generated 150 reference trials on the correct Windows 10 machine, with 28 scenarios producing repeatable transcripts.
+
+However, looking carefully at the manifest, I found something important:
+
+The capture infrastructure works, but the corpus isn't ready to serve as the ground truth for Rust development yet.
+
+Several scenarios consistently captured incorrect behavior. This is exactly why we need to distinguish repeatability from correctness.
+
+## 1. Three scenarios are definitely invalid
+
+| Scenario                    | Problem                                                         |
+| --------------------------- | --------------------------------------------------------------- |
+| `03-doc-prior-line`         | JAWS responds `unknown script call to: priorline`               |
+| `07-doc-prior-char`         | JAWS responds `unknown script call to: priorcharacter`          |
+| `12-struct-heading-level-2` | JAWS responds `unknown script call to: movetonextheadinglevel2` |
+
+All three are classified as deterministic.
+
+Technically, they are repeatable failures. They're not valid reference behavior.
+
+This reveals a bug in the corpus generator: an action can be marked successful even when JAWS reports that the requested script doesn't exist.
+
+For prior-line and prior-character navigation, the agent could simply use the corresponding keyboard commands.
+
+For heading-level navigation, it should verify the correct JAWS script/function invocation or use the quick-navigation key `2`.
+
+## 2. Some scenarios don't test what their names claim
+
+Three particularly obvious examples:
+
+| Scenario                   | What it claims            | What was actually executed               |
+| -------------------------- | ------------------------- | ---------------------------------------- |
+| `19-form-mode-entry-exit`  | Enter and exit forms mode | Navigate between edit fields             |
+| `20-form-checkbox-toggle`  | Toggle a checkbox         | Navigate to a checkbox, then two buttons |
+| `29-dynamic-tab-selection` | Select a tab              | Press Tab repeatedly                     |
+
+These are serious problems for differential testing.
+
+For example, if our Rust screen reader cannot toggle checkboxes, scenario 20 could still pass because it never actually tests toggling.
+
+For a proper checkbox test, we'd need:
+
+1. Navigate to the checkbox.
+2. Assert its initial unchecked state.
+3. Activate it.
+4. Assert the checked state in the application.
+5. Verify the corresponding JAWS announcement.
+
+Similarly, tab selection must verify that the selected tab actually changes, not merely that focus reaches another tab.
+
+## 3. The evidence format needs one adjustment
+
+Currently, the canonical transcript includes execution metadata:
+
+```
+jaws_script:MoveToNextHeading => Section Overview
+heading level 2
+```
+
+That combines two fundamentally different things:
+
+- The action performed.
+- The speech observed.
+
+I'd separate them:
+
+```
+{
+  "action": {
+    "type": "jaws_script",
+    "name": "MoveToNextHeading"
+  },
+  "observation": {
+    "speech_raw": "Section Overview\n \u001d heading level 2 \u001e"
+  },
+  "assertions": {
+    "target_heading_level": 2,
+    "target_heading_name": "Section Overview"
+  }
+}
+```
+
+The JAWS-specific control characters (`\u001d`, `\u001e`) should remain preserved in the raw transcript. We can develop a semantic normalization layer separately.
+
+## 4. I would add a corpus quality gate
+
+### Reference scenario lifecycle
+
+1. Generated
+
+   Scenario and fixture created.
+2. Captured
+
+   JAWS executes every action and produces evidence.
+3. Validated
+
+   The test actually exercises its stated behavior. Application-state and navigation assertions pass.
+4. Stability checked
+
+   Repetitions agree, or any differences are characterized.
+5. Approved reference
+
+   Only now can the scenario become a parity gate for the Rust implementation.
+
+The validation step should automatically reject:
+
+- Unknown or failed JAWS script invocations.
+- Missing expected state transitions.
+- Empty or stale captures when speech is expected.
+- Scenarios whose actions don't exercise the claimed behavior.
+- Missing fixtures or mismatched fixture hashes.
+
+For dynamic behavior, compare meaningful properties separately from exact speech formatting.
+
+Also, preserve the individual trial traces for the two variable scenarios (`28` and `29`). The canonical transcript alone doesn't tell us what varied or why.
+
+## 5. What I'd do next
+
+I wouldn't generate another 100 scenarios yet.
+
+I'd give IsanAgent one focused task:
+
+Audit and repair corpus v1.0.0.
+
+Specifically:
+
+1. Identify all scenarios containing invalid JAWS commands.
+2. Correct scenarios whose actions don't match their stated objectives.
+3. Implement semantic assertions for each scenario.
+4. Separate action metadata from raw speech.
+5. Investigate the two variable scenarios.
+6. Re-run affected scenarios on `old-pc`.
+7. Produce a quality report distinguishing execution success, semantic validity, and stability.
+8. Publish a corrected corpus version without silently overwriting the original evidence.
+
+The other scenarios look promising, particularly the heading navigation, lists, landmarks, form-field discovery, table navigation, and boundary cases.
+
+One additional improvement: record the Chrome version and hash of each HTML fixture in the manifest. Otherwise, future reference comparisons could silently use different browser behavior or fixture content.
+
+### My assessment
+
+Working
+
+Reference-capture infrastructure
+
+150 completed trials on the intended Windows 10 machine.
+
+Needs audit
+
+Reference corpus
+
+At least six scenarios have clear validity problems.
+
+I actually find this encouraging. The expensive part—autonomous interaction with a real JAWS installation—is working. What we're discovering now are deficiencies in the agent's verification criteria, which are much easier to address.
+
+The next milestone shouldn't be a larger corpus. It should be a corpus whose tests cannot pass without demonstrating the intended behavior.
+
+One note: the attachment `Pasted text(1).txt` wasn't accessible to me. I reviewed the complete manifest and README you pasted here, but if that attachment contains additional evidence or implementation details you'd like reviewed, please upload it again.

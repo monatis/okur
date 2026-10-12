@@ -1,0 +1,182 @@
+﻿{
+    "scenario_id":  "29-dynamic-tab-selection",
+    "scenario_version":  "1.0.0",
+    "timestamp":  "2026-10-12T17:36:56.7789805+03:00",
+    "environment":  {
+                        "os_version":  "Microsoft Windows NT 10.0.19045.0",
+                        "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
+                        "target_process":  "chrome",
+                        "interactive_session":  true
+                    },
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
+    "repetitions_requested":  5,
+    "trials":  [
+                   {
+                       "trial_index":  1,
+                       "timestamp":  "2026-10-12T17:36:59.5020093+03:00",
+                       "foreground_window_start":  "boundaries-dynamic.html - Google Chrome",
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action_type":  "keyboard",
+                                                "command":  "{TAB}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  "System Details\n \u001d Button \u001e  \u001dcollapsed\u001e \nTo activate press Enter.",
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action_type":  "keyboard",
+                                                "command":  "{TAB}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  "Settings \u001d group \u001e \n  \nGeneral  \u001d Tab \u001e  \n1 of 2\n \u001dselected\u001e",
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action_type":  "keyboard",
+                                                "command":  "{TAB}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  "Advanced  \u001d Tab \u001e  \n2 of 2",
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true
+                   },
+                   {
+                       "trial_index":  2,
+                       "timestamp":  "2026-10-12T17:37:02.5140043+03:00",
+                       "foreground_window_start":  "boundaries-dynamic.html - Google Chrome",
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action_type":  "keyboard",
+                                                "command":  "{TAB}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  "Sekme araması  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action_type":  "keyboard",
+                                                "command":  "{TAB}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  "Dosya  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action_type":  "keyboard",
+                                                "command":  "{TAB}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  "Adres ve arama çubuğu  \u001d Edit \u001e  \nC:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html\nType in text.",
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-12T17:37:05.4522280+03:00",
+                       "foreground_window_start":  "boundaries-dynamic.html - Google Chrome",
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action_type":  "keyboard",
+                                                "command":  "{TAB}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  "System Details  \u001d Button \u001e   \u001dcollapsed\u001e  \nTo activate press Enter.",
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action_type":  "keyboard",
+                                                "command":  "{TAB}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  "Settings \u001d group \u001e \n  \nGeneral  \u001d Tab \u001e  \n1 of 2\n \u001dselected\u001e",
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action_type":  "keyboard",
+                                                "command":  "{TAB}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  "Advanced  \u001d Tab \u001e  \n2 of 2",
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true
+                   },
+                   {
+                       "trial_index":  4,
+                       "timestamp":  "2026-10-12T17:37:08.3837467+03:00",
+                       "foreground_window_start":  "boundaries-dynamic.html - Google Chrome",
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action_type":  "keyboard",
+                                                "command":  "{TAB}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  "Sekme araması  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action_type":  "keyboard",
+                                                "command":  "{TAB}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  "Dosya  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action_type":  "keyboard",
+                                                "command":  "{TAB}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  "Adres ve arama çubuğu  \u001d Edit \u001e  \nC:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html\nType in text.",
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true
+                   },
+                   {
+                       "trial_index":  5,
+                       "timestamp":  "2026-10-12T17:37:11.3220439+03:00",
+                       "foreground_window_start":  "boundaries-dynamic.html - Google Chrome",
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action_type":  "keyboard",
+                                                "command":  "{TAB}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  "System Details  \u001d Button \u001e   \u001dcollapsed\u001e  \nTo activate press Enter.",
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action_type":  "keyboard",
+                                                "command":  "{TAB}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  "Settings \u001d group \u001e \n  \nGeneral  \u001d Tab \u001e  \n1 of 2\n \u001dselected\u001e",
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action_type":  "keyboard",
+                                                "command":  "{TAB}",
+                                                "dispatch_ok":  true,
+                                                "raw_transcript":  "Advanced  \u001d Tab \u001e  \n2 of 2",
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true
+                   }
+               ],
+    "summary":  {
+                    "total_trials":  5,
+                    "successful_trials":  5,
+                    "deterministic_match":  false,
+                    "stability":  "variable",
+                    "total_elapsed_ms":  17563
+                }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "05-doc-prior-word",
+  "name": "Navigate Prior Word via Ctrl+LeftArrow",
+  "category": "Basic Document Reading",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "keyboard",
+      "command": "^{RIGHT}",
+      "settle_ms": 350
+    },
+    {
+      "id": "s2",
+      "type": "keyboard",
+      "command": "^{LEFT}",
+      "settle_ms": 350
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Boundaries and Dynamic Updates Fixture</title>
+</head>
+<body>
+  <h1>First Boundary Heading</h1>
+  <p>Content preceding second heading.</p>
+  <h2>Second Boundary Heading</h2>
+  <p>Final content paragraph on this page.</p>
+
+  <div id="hidden-box" aria-hidden="true">
+    <p>This text is hidden from screen readers and must be ignored.</p>
+  </div>
+
+  <div id="polite-region" aria-live="polite" style="min-height: 20px;"></div>
+  <div id="assertive-region" aria-live="assertive" style="min-height: 20px;"></div>
+
+  <button type="button" id="btn-polite" onclick="document.getElementById('polite-region').textContent = 'Background sync completed.'">
+    Trigger Polite Update
+  </button>
+  <button type="button" id="btn-assertive" onclick="document.getElementById('assertive-region').textContent = 'Critical error alert!'">
+    Trigger Assertive Update
+  </button>
+</body>
+</html>

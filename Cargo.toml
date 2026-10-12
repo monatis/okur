@@ -1,0 +1,26 @@
+[workspace]
+resolver = "2"
+members= [
+    "crates/sr-core",
+    "crates/sr-platform",
+    "crates/sr-corpus",
+    "crates/sr-cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["ALTAI"]
+license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+sr-core = { path = "crates/sr-core" }
+sr-platform = { path = "crates/sr-platform" }
+sr-corpus = { path = "crates/sr-corpus" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "2.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tokio = { version = "1.40", features = ["full"] }
+clap = { version = "4.5", features = ["derive"] }

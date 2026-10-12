@@ -1,0 +1,28 @@
+{
+  "id": "11-struct-next-heading",
+  "name": "Navigate Between Headings",
+  "category": "Headings and Structure",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "jaws_script",
+      "command": "MoveToNextHeading",
+      "settle_ms": 350
+    },
+    {
+      "id": "s2",
+      "type": "jaws_script",
+      "command": "MoveToNextHeading",
+      "settle_ms": 350
+    }
+  ]
+}

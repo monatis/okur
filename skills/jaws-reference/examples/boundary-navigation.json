@@ -1,0 +1,16 @@
+{
+  "id": "boundary-navigation",
+  "version": "1.0.0",
+  "description": "Tests JAWS wrap-to-top and non-existent element boundary behavior.",
+  "target_app": "chrome",
+  "fixture": "examples/fixture.html",
+  "steps": [
+    { "id": "h1", "type": "jaws_script", "command": "MoveToNextHeading", "settle_ms": 350 },
+    { "id": "h2", "type": "jaws_script", "command": "MoveToNextHeading", "settle_ms": 350 },
+    { "id": "h3", "type": "jaws_script", "command": "MoveToNextHeading", "settle_ms": 350 },
+    { "id": "h4", "type": "jaws_script", "command": "MoveToNextHeading", "settle_ms": 350 },
+    { "id": "h5", "type": "jaws_script", "command": "MoveToNextHeading", "settle_ms": 350 },
+    { "id": "h_wrap", "type": "jaws_script", "command": "MoveToNextHeading", "settle_ms": 350 },
+    { "id": "no_visited", "type": "jaws_script", "command": "MoveToNextVisitedLink", "settle_ms": 350 }
+  ]
+}

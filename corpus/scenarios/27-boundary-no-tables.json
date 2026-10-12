@@ -1,0 +1,22 @@
+{
+  "id": "27-boundary-no-tables",
+  "name": "Negative Search Announcement for Tables",
+  "category": "Boundaries and Dynamic Updates",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "jaws_script",
+      "command": "MoveToNextTable",
+      "settle_ms": 350
+    }
+  ]
+}

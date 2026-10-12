@@ -1,0 +1,40 @@
+{
+  "id": "19-form-mode-entry-exit",
+  "name": "Forms Mode Entry, Typing, and Exit",
+  "category": "Forms and Interaction Modes",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "jaws_script",
+      "command": "MoveToNextEdit",
+      "settle_ms": 350
+    },
+    {
+      "id": "s2",
+      "type": "keyboard",
+      "command": "{ENTER}",
+      "settle_ms": 300
+    },
+    {
+      "id": "s3",
+      "type": "keyboard",
+      "command": "ABC",
+      "settle_ms": 300
+    },
+    {
+      "id": "s4",
+      "type": "keyboard",
+      "command": "{ESC}",
+      "settle_ms": 300
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "09-doc-say-current-word",
+  "name": "Speak Current Word",
+  "category": "Basic Document Reading",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "keyboard",
+      "command": "{DOWN}",
+      "settle_ms": 350
+    },
+    {
+      "id": "s2",
+      "type": "jaws_script",
+      "command": "SayWord",
+      "settle_ms": 350
+    }
+  ]
+}
