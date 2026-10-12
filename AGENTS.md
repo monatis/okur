@@ -35,8 +35,8 @@ This is an **autonomous, agent-driven project with a "verification harness in th
 To ensure seamless context passing across autonomous sessions, all engineering work is orchestrated through the `docs/` tree:
 
 ### Active Plan for Current / Next Session
-- **Active Plan**: [`docs/plans/2026-10-13-forms-and-interaction-modes.md`](file:///c:/Users/Gigabyte/screen-reader/docs/plans/2026-10-13-forms-and-interaction-modes.md)
-- **Latest Handoff**: [`docs/handoff/2026-10-13-structural-navigation-and-quick-keys.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-structural-navigation-and-quick-keys.md)
+- **Active Plan**: [`docs/plans/2026-10-13-table-navigation-and-grid-movement.md`](file:///c:/Users/Gigabyte/screen-reader/docs/plans/2026-10-13-table-navigation-and-grid-movement.md)
+- **Latest Handoff**: [`docs/handoff/2026-10-13-forms-and-interaction-modes.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-forms-and-interaction-modes.md)
 
 
 ### Standard Session Execution Protocol

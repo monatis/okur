@@ -55,6 +55,10 @@ pub struct VirtualBuffer {
     pub lists: Vec<usize>,
     pub list_items: Vec<usize>,
     pub landmarks: Vec<usize>,
+    pub form_controls: Vec<usize>,
+    pub buttons: Vec<usize>,
+    pub edits: Vec<usize>,
+    pub checkboxes: Vec<usize>,
     pub node_map: HashMap<usize, AomNode>,
 }
 
@@ -255,6 +259,111 @@ impl VirtualBuffer {
             .iter()
             .rfind(|&&l| l < current_start)
             .copied()
+    }
+
+    /// Returns the next form control offset after the given offset.
+    pub fn next_form_control_from(&self, offset: usize) -> Option<usize> {
+        self.form_controls.iter().find(|&&fc| fc > offset).copied()
+    }
+
+    /// Returns the prior form control offset before the given offset.
+    pub fn prior_form_control_from(&self, offset: usize) -> Option<usize> {
+        let current_start = self
+            .form_controls
+            .iter()
+            .rfind(|&&fc| fc <= offset)
+            .copied()
+            .unwrap_or(offset);
+        self.form_controls
+            .iter()
+            .rfind(|&&fc| fc < current_start)
+            .copied()
+    }
+
+    /// Returns the next button offset after the given offset.
+    pub fn next_button_from(&self, offset: usize) -> Option<usize> {
+        self.buttons.iter().find(|&&b| b > offset).copied()
+    }
+
+    /// Returns the prior button offset before the given offset.
+    pub fn prior_button_from(&self, offset: usize) -> Option<usize> {
+        let current_start = self
+            .buttons
+            .iter()
+            .rfind(|&&b| b <= offset)
+            .copied()
+            .unwrap_or(offset);
+        self.buttons.iter().rfind(|&&b| b < current_start).copied()
+    }
+
+    /// Returns the next edit offset after the given offset.
+    pub fn next_edit_from(&self, offset: usize) -> Option<usize> {
+        self.edits.iter().find(|&&e| e > offset).copied()
+    }
+
+    /// Returns the prior edit offset before the given offset.
+    pub fn prior_edit_from(&self, offset: usize) -> Option<usize> {
+        let current_start = self
+            .edits
+            .iter()
+            .rfind(|&&e| e <= offset)
+            .copied()
+            .unwrap_or(offset);
+        self.edits.iter().rfind(|&&e| e < current_start).copied()
+    }
+
+    /// Returns the next checkbox offset after the given offset.
+    pub fn next_checkbox_from(&self, offset: usize) -> Option<usize> {
+        self.checkboxes.iter().find(|&&c| c > offset).copied()
+    }
+
+    /// Returns the prior checkbox offset before the given offset.
+    pub fn prior_checkbox_from(&self, offset: usize) -> Option<usize> {
+        let current_start = self
+            .checkboxes
+            .iter()
+            .rfind(|&&c| c <= offset)
+            .copied()
+            .unwrap_or(offset);
+        self.checkboxes
+            .iter()
+            .rfind(|&&c| c < current_start)
+            .copied()
+    }
+
+    /// Resolves the node for a form control starting at `offset`.
+    pub fn find_form_control_node(&self, offset: usize) -> Option<&AomNode> {
+        self.spans
+            .iter()
+            .find(|s| {
+                s.start_offset == offset
+                    && matches!(s.role, Role::Edit | Role::Button | Role::CheckBox)
+            })
+            .and_then(|s| self.node_map.get(&s.node_id))
+    }
+
+    /// Resolves the node for a button starting at `offset`.
+    pub fn find_button_node(&self, offset: usize) -> Option<&AomNode> {
+        self.spans
+            .iter()
+            .find(|s| s.start_offset == offset && matches!(s.role, Role::Button))
+            .and_then(|s| self.node_map.get(&s.node_id))
+    }
+
+    /// Resolves the node for an edit box starting at `offset`.
+    pub fn find_edit_node(&self, offset: usize) -> Option<&AomNode> {
+        self.spans
+            .iter()
+            .find(|s| s.start_offset == offset && matches!(s.role, Role::Edit))
+            .and_then(|s| self.node_map.get(&s.node_id))
+    }
+
+    /// Resolves the node for a checkbox starting at `offset`.
+    pub fn find_checkbox_node(&self, offset: usize) -> Option<&AomNode> {
+        self.spans
+            .iter()
+            .find(|s| s.start_offset == offset && matches!(s.role, Role::CheckBox))
+            .and_then(|s| self.node_map.get(&s.node_id))
     }
 
     /// Resolves the node for a heading starting at `offset`.
@@ -600,6 +709,130 @@ impl BufferBuilder {
                     end_offset,
                     node_id: node.id,
                     role: node.role.clone(),
+                });
+            }
+            Role::Edit => {
+                if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
+                    buffer.text.push('\n');
+                }
+                let start_offset = buffer.text.len();
+                buffer.form_controls.push(start_offset);
+                buffer.edits.push(start_offset);
+
+                let label = node.name.as_deref().unwrap_or("");
+                let val = node.value.as_deref().unwrap_or("");
+                if !label.is_empty() {
+                    buffer.text.push_str(label);
+                    if !val.is_empty() {
+                        if !buffer.text.ends_with(' ') {
+                            buffer.text.push(' ');
+                        }
+                        buffer.text.push_str(val);
+                    }
+                } else if !val.is_empty() {
+                    buffer.text.push_str(val);
+                } else if let Some(ref text) = node.text {
+                    buffer.text.push_str(text);
+                }
+
+                let end_offset = buffer.text.len();
+                let text_content = buffer.text[start_offset..end_offset].to_string();
+
+                buffer.spans.push(BufferSpan {
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::Edit,
+                });
+                buffer.lines.push(BufferLine {
+                    line_index: buffer.lines.len(),
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::Edit,
+                    text: text_content.clone(),
+                });
+                buffer.paragraphs.push(BufferParagraph {
+                    paragraph_index: buffer.paragraphs.len(),
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::Edit,
+                    text: text_content,
+                });
+            }
+            Role::Button => {
+                if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
+                    buffer.text.push('\n');
+                }
+                let start_offset = buffer.text.len();
+                buffer.form_controls.push(start_offset);
+                buffer.buttons.push(start_offset);
+
+                let label = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                buffer.text.push_str(label);
+
+                let end_offset = buffer.text.len();
+                let text_content = buffer.text[start_offset..end_offset].to_string();
+
+                buffer.spans.push(BufferSpan {
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::Button,
+                });
+                buffer.lines.push(BufferLine {
+                    line_index: buffer.lines.len(),
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::Button,
+                    text: text_content.clone(),
+                });
+                buffer.paragraphs.push(BufferParagraph {
+                    paragraph_index: buffer.paragraphs.len(),
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::Button,
+                    text: text_content,
+                });
+            }
+            Role::CheckBox => {
+                if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
+                    buffer.text.push('\n');
+                }
+                let start_offset = buffer.text.len();
+                buffer.form_controls.push(start_offset);
+                buffer.checkboxes.push(start_offset);
+
+                let label = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                buffer.text.push_str(label);
+
+                let end_offset = buffer.text.len();
+                let text_content = buffer.text[start_offset..end_offset].to_string();
+
+                buffer.spans.push(BufferSpan {
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::CheckBox,
+                });
+                buffer.lines.push(BufferLine {
+                    line_index: buffer.lines.len(),
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::CheckBox,
+                    text: text_content.clone(),
+                });
+                buffer.paragraphs.push(BufferParagraph {
+                    paragraph_index: buffer.paragraphs.len(),
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::CheckBox,
+                    text: text_content,
                 });
             }
             Role::Generic => {

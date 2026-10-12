@@ -8,6 +8,7 @@ pub struct VirtualCursor {
     pub buffer: VirtualBuffer,
     pub offset: usize,
     pub current_node_id: Option<usize>,
+    pub forms_mode_active: bool,
 }
 
 impl VirtualCursor {
@@ -16,6 +17,7 @@ impl VirtualCursor {
             buffer,
             offset: 0,
             current_node_id: None,
+            forms_mode_active: false,
         }
     }
 
@@ -412,5 +414,167 @@ impl VirtualCursor {
             }
         }
         Some(SpeechFormatter::format_landmark("region", None))
+    }
+
+    /// Moves cursor to next form control (`F` / `FocusToNextField`).
+    pub fn move_next_form_control(&mut self) -> Option<String> {
+        let target_offset = self.buffer.next_form_control_from(self.offset)?;
+        self.offset = target_offset;
+        let node = self.buffer.find_form_control_node(target_offset);
+        self.current_node_id = node.map(|n| n.id);
+        node.map(SpeechFormatter::format_form_control_node)
+    }
+
+    /// Moves cursor to prior form control (`+F` / `FocusToPriorField`).
+    pub fn move_prior_form_control(&mut self) -> Option<String> {
+        let target_offset = self.buffer.prior_form_control_from(self.offset)?;
+        self.offset = target_offset;
+        let node = self.buffer.find_form_control_node(target_offset);
+        self.current_node_id = node.map(|n| n.id);
+        node.map(SpeechFormatter::format_form_control_node)
+    }
+
+    /// Moves cursor to next button (`B` / `MoveToNextButton`).
+    pub fn move_next_button(&mut self) -> Option<String> {
+        let target_offset = self.buffer.next_button_from(self.offset)?;
+        self.offset = target_offset;
+        let node = self.buffer.find_button_node(target_offset);
+        self.current_node_id = node.map(|n| n.id);
+        let name = node
+            .and_then(|n| n.name.as_deref().or(n.text.as_deref()))
+            .unwrap_or("");
+        Some(SpeechFormatter::format_button(name))
+    }
+
+    /// Moves cursor to prior button (`+B` / `MoveToPriorButton`).
+    pub fn move_prior_button(&mut self) -> Option<String> {
+        let target_offset = self.buffer.prior_button_from(self.offset)?;
+        self.offset = target_offset;
+        let node = self.buffer.find_button_node(target_offset);
+        self.current_node_id = node.map(|n| n.id);
+        let name = node
+            .and_then(|n| n.name.as_deref().or(n.text.as_deref()))
+            .unwrap_or("");
+        Some(SpeechFormatter::format_button(name))
+    }
+
+    /// Moves cursor to next edit field (`E` / `MoveToNextEdit`).
+    pub fn move_next_edit(&mut self) -> Option<String> {
+        let target_offset = self.buffer.next_edit_from(self.offset)?;
+        self.offset = target_offset;
+        let node = self.buffer.find_edit_node(target_offset);
+        self.current_node_id = node.map(|n| n.id);
+        let name = node.and_then(|n| n.name.as_deref()).unwrap_or("");
+        let value = node.and_then(|n| n.value.as_deref());
+        Some(SpeechFormatter::format_edit(name, value))
+    }
+
+    /// Moves cursor to prior edit field (`+E` / `MoveToPriorEdit`).
+    pub fn move_prior_edit(&mut self) -> Option<String> {
+        let target_offset = self.buffer.prior_edit_from(self.offset)?;
+        self.offset = target_offset;
+        let node = self.buffer.find_edit_node(target_offset);
+        self.current_node_id = node.map(|n| n.id);
+        let name = node.and_then(|n| n.name.as_deref()).unwrap_or("");
+        let value = node.and_then(|n| n.value.as_deref());
+        Some(SpeechFormatter::format_edit(name, value))
+    }
+
+    /// Moves cursor to next checkbox (`X` / `MoveToNextCheckbox`).
+    pub fn move_next_checkbox(&mut self) -> Option<String> {
+        let target_offset = self.buffer.next_checkbox_from(self.offset)?;
+        self.offset = target_offset;
+        let node = self.buffer.find_checkbox_node(target_offset);
+        self.current_node_id = node.map(|n| n.id);
+        let name = node
+            .and_then(|n| n.name.as_deref().or(n.text.as_deref()))
+            .unwrap_or("");
+        let checked = node.and_then(|n| n.states.checked).unwrap_or(false);
+        Some(SpeechFormatter::format_checkbox(name, checked))
+    }
+
+    /// Moves cursor to prior checkbox (`+X` / `MoveToPriorCheckbox`).
+    pub fn move_prior_checkbox(&mut self) -> Option<String> {
+        let target_offset = self.buffer.prior_checkbox_from(self.offset)?;
+        self.offset = target_offset;
+        let node = self.buffer.find_checkbox_node(target_offset);
+        self.current_node_id = node.map(|n| n.id);
+        let name = node
+            .and_then(|n| n.name.as_deref().or(n.text.as_deref()))
+            .unwrap_or("");
+        let checked = node.and_then(|n| n.states.checked).unwrap_or(false);
+        Some(SpeechFormatter::format_checkbox(name, checked))
+    }
+
+    /// Enters Forms Mode (`{ENTER}` on an Edit field or `EnterFormsMode`).
+    pub fn enter_forms_mode(&mut self) -> Option<String> {
+        let (role, name, value) = {
+            let node = self.current_node()?;
+            (
+                node.role.clone(),
+                node.name.clone().unwrap_or_default(),
+                node.value.clone(),
+            )
+        };
+
+        if matches!(role, Role::Edit) {
+            self.forms_mode_active = true;
+            let doc_title = self
+                .buffer
+                .node_map
+                .values()
+                .find(|n| n.role == Role::Document)
+                .and_then(|n| n.name.as_deref())
+                .unwrap_or("");
+            Some(SpeechFormatter::format_forms_mode_entry(
+                doc_title,
+                &name,
+                value.as_deref(),
+            ))
+        } else {
+            None
+        }
+    }
+
+    /// Exits Forms Mode back to Virtual PC Cursor (`{ESC}` or `ExitFormsMode`).
+    pub fn exit_forms_mode(&mut self) -> Option<String> {
+        self.forms_mode_active = false;
+        Some(SpeechFormatter::format_forms_mode_exit())
+    }
+
+    /// Toggles active control state (`{SPACE}` on CheckBox).
+    pub fn toggle_active_control(&mut self) -> Option<String> {
+        let (node_id, role, name, current_checked) = {
+            let node = self.current_node()?;
+            (
+                node.id,
+                node.role.clone(),
+                node.name.clone().unwrap_or_default(),
+                node.states.checked.unwrap_or(false),
+            )
+        };
+
+        match role {
+            Role::CheckBox => {
+                let new_checked = !current_checked;
+                if let Some(node) = self.buffer.node_map.get_mut(&node_id) {
+                    node.states.checked = Some(new_checked);
+                }
+                let doc_title = self
+                    .buffer
+                    .node_map
+                    .values()
+                    .find(|n| n.role == Role::Document)
+                    .and_then(|n| n.name.as_deref())
+                    .unwrap_or("");
+                Some(SpeechFormatter::format_checkbox_toggle(
+                    doc_title,
+                    &name,
+                    new_checked,
+                ))
+            }
+            Role::Button => Some(SpeechFormatter::format_button(&name)),
+            _ => None,
+        }
     }
 }

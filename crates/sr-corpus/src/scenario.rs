@@ -50,6 +50,8 @@ pub struct StepAssertions {
     pub target_heading_level: Option<u32>,
     #[serde(default)]
     pub target_heading_name: Option<String>,
+    #[serde(default)]
+    pub target_checked: Option<bool>,
 }
 
 impl Scenario {

@@ -119,6 +119,9 @@ impl DifferentialRunner {
                     }
                 }
             }
+            if reset.exit_forms_mode == Some(true) {
+                cursor.exit_forms_mode();
+            }
         }
 
         // Attempt loading canonical evidence for cross-validation
@@ -187,6 +190,17 @@ impl DifferentialRunner {
                 "+I" | "+i" => cursor.move_prior_list_item().unwrap_or_default(),
                 "R" | "r" | ";" => cursor.move_next_landmark().unwrap_or_default(),
                 "+R" | "+r" | "+;" => cursor.move_prior_landmark().unwrap_or_default(),
+                "F" | "f" => cursor.move_next_form_control().unwrap_or_default(),
+                "+F" | "+f" => cursor.move_prior_form_control().unwrap_or_default(),
+                "B" | "b" => cursor.move_next_button().unwrap_or_default(),
+                "+B" | "+b" => cursor.move_prior_button().unwrap_or_default(),
+                "E" | "e" => cursor.move_next_edit().unwrap_or_default(),
+                "+E" | "+e" => cursor.move_prior_edit().unwrap_or_default(),
+                "X" | "x" => cursor.move_next_checkbox().unwrap_or_default(),
+                "+X" | "+x" => cursor.move_prior_checkbox().unwrap_or_default(),
+                "{ENTER}" => cursor.enter_forms_mode().unwrap_or_default(),
+                "{ESC}" => cursor.exit_forms_mode().unwrap_or_default(),
+                "{SPACE}" => cursor.toggle_active_control().unwrap_or_default(),
                 _ => String::new(),
             },
             "jaws_script" => match step.command.as_str() {
@@ -248,6 +262,16 @@ impl DifferentialRunner {
                 "MoveToPriorLandmark" | "MoveToPriorRegion" => {
                     cursor.move_prior_landmark().unwrap_or_default()
                 }
+                "FocusToNextField" => cursor.move_next_form_control().unwrap_or_default(),
+                "FocusToPriorField" => cursor.move_prior_form_control().unwrap_or_default(),
+                "MoveToNextButton" => cursor.move_next_button().unwrap_or_default(),
+                "MoveToPriorButton" => cursor.move_prior_button().unwrap_or_default(),
+                "MoveToNextEdit" => cursor.move_next_edit().unwrap_or_default(),
+                "MoveToPriorEdit" => cursor.move_prior_edit().unwrap_or_default(),
+                "MoveToNextCheckbox" => cursor.move_next_checkbox().unwrap_or_default(),
+                "MoveToPriorCheckbox" => cursor.move_prior_checkbox().unwrap_or_default(),
+                "EnterFormsMode" => cursor.enter_forms_mode().unwrap_or_default(),
+                "ExitFormsMode" => cursor.exit_forms_mode().unwrap_or_default(),
                 _ => String::new(),
             },
             _ => String::new(),
@@ -333,6 +357,28 @@ impl DifferentialRunner {
                     failed_assertions.push(format!(
                         "Expected target_name '{}', got {:?}",
                         target_name, actual_name
+                    ));
+                }
+            }
+
+            if let Some(expected_forms_mode) = assertions.forms_mode_active {
+                let actual_forms_mode = cursor.forms_mode_active;
+                if actual_forms_mode != expected_forms_mode {
+                    assertions_passed = false;
+                    failed_assertions.push(format!(
+                        "Expected forms_mode_active {}, got {}",
+                        expected_forms_mode, actual_forms_mode
+                    ));
+                }
+            }
+
+            if let Some(expected_checked) = assertions.target_checked {
+                let actual_checked = cursor.current_node().and_then(|n| n.states.checked);
+                if actual_checked != Some(expected_checked) {
+                    assertions_passed = false;
+                    failed_assertions.push(format!(
+                        "Expected target_checked {:?}, got {:?}",
+                        expected_checked, actual_checked
                     ));
                 }
             }

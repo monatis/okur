@@ -1,4 +1,4 @@
-use crate::aom::Role;
+use crate::aom::{AomNode, Role};
 use crate::buffer::BufferLine;
 
 /// Formats virtual buffer elements and reading events into canonical JAWS speech tokens.
@@ -20,7 +20,108 @@ impl SpeechFormatter {
             Role::Link { .. } => format!("link {}", text),
             Role::Button => format!("button {}", text),
             Role::CheckBox => format!("checkbox {}", text),
+            Role::Edit => format!("edit {}", text),
             _ => text.to_string(),
+        }
+    }
+
+    /// Formats an edit control announcement.
+    pub fn format_edit(name: &str, value: Option<&str>) -> String {
+        let val_str = value.unwrap_or("");
+        if val_str.is_empty() {
+            format!("{}  \u{001d} Edit \u{001e}", name)
+        } else {
+            format!("{}  \u{001d} Edit \u{001e}  \n{}", name, val_str)
+        }
+    }
+
+    /// Formats a push button announcement.
+    pub fn format_button(name: &str) -> String {
+        format!("{}  \u{001d} Button \u{001e}", name)
+    }
+
+    /// Formats a checkbox announcement.
+    pub fn format_checkbox(name: &str, checked: bool) -> String {
+        let state_str = if checked { "checked" } else { "not checked" };
+        format!(
+            " {}  \u{001d} check box \u{001e}   \u{001d}{}\u{001e}",
+            name, state_str
+        )
+    }
+
+    /// Formats speech for a generic form control AOM node.
+    pub fn format_form_control_node(node: &AomNode) -> String {
+        match node.role {
+            Role::Edit => {
+                let name = node.name.as_deref().unwrap_or("");
+                let value = node.value.as_deref();
+                Self::format_edit(name, value)
+            }
+            Role::Button => {
+                let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                Self::format_button(name)
+            }
+            Role::CheckBox => {
+                let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                let checked = node.states.checked.unwrap_or(false);
+                Self::format_checkbox(name, checked)
+            }
+            _ => String::new(),
+        }
+    }
+
+    /// Formats announcement when entering Forms Mode on an edit field.
+    pub fn format_forms_mode_entry(
+        doc_title: &str,
+        field_name: &str,
+        value: Option<&str>,
+    ) -> String {
+        let val_str = value.unwrap_or("");
+        if doc_title.is_empty() {
+            if val_str.is_empty() {
+                format!("{}  \u{001d} Edit \u{001e}  \nType in text.", field_name)
+            } else {
+                format!(
+                    "{}  \u{001d} Edit \u{001e}   \n{}\nType in text.",
+                    field_name, val_str
+                )
+            }
+        } else if val_str.is_empty() {
+            format!(
+                "{} \n \u{001d} FormRegion \u{001e} \n{}  \u{001d} Edit \u{001e}\nType in text.",
+                doc_title, field_name
+            )
+        } else {
+            format!(
+                "{} \n \u{001d} FormRegion \u{001e} \n{}  \u{001d} Edit \u{001e}   \n{}\nType in text.",
+                doc_title, field_name, val_str
+            )
+        }
+    }
+
+    /// Formats announcement when exiting Forms Mode back to Virtual PC Cursor.
+    pub fn format_forms_mode_exit() -> String {
+        "virtual PC Cursor".to_string()
+    }
+
+    /// Formats announcement when toggling a checkbox via Spacebar.
+    pub fn format_checkbox_toggle(doc_title: &str, name: &str, checked: bool) -> String {
+        let state_str = if checked { "checked" } else { "not checked" };
+        let action_hint = if checked {
+            "To clear checkmark press Spacebar."
+        } else {
+            "To check press Spacebar."
+        };
+        if doc_title.is_empty() {
+            format!(
+                "{}  \u{001d} check box \u{001e}   \u{001d}{}\u{001e}  \n{}",
+                name, state_str, action_hint
+            )
+        } else {
+            format!(
+                "{} \n \u{001d} FormRegion \u{001e} \n{}  \u{001d} check box \u{001e}   \u{001d}{}\u{001e}  \n{}",
+                doc_title, name, state_str, action_hint
+            )
         }
     }
 

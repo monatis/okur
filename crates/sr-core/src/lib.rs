@@ -357,4 +357,135 @@ mod tests {
         let prior = cursor.move_prior_landmark().expect("Prior landmark");
         assert_eq!(prior, "banner");
     }
+
+    fn create_forms_test_tree() -> AomNode {
+        AomNode::new(0, Role::Document)
+            .with_name("Forms and Interaction Reference Fixture")
+            .with_children(vec![
+                AomNode::new(1, Role::Heading { level: 1 }).with_text("Account Registration Form"),
+                AomNode::new(2, Role::Generic).with_children(vec![
+                    AomNode::new(3, Role::Edit)
+                        .with_name("Full Name:")
+                        .with_value("Jane Doe"),
+                    AomNode::new(4, Role::Edit)
+                        .with_name("Email Address:")
+                        .with_value("jane@example.com"),
+                    {
+                        let mut cb = AomNode::new(5, Role::CheckBox)
+                            .with_name("I accept terms and conditions");
+                        cb.states.checked = Some(false);
+                        cb
+                    },
+                    AomNode::new(6, Role::Button)
+                        .with_name("Save Preferences")
+                        .with_text("Save Preferences"),
+                    AomNode::new(7, Role::Button)
+                        .with_name("Submit Application")
+                        .with_text("Submit Application"),
+                ]),
+            ])
+    }
+
+    #[test]
+    fn test_scenario_16_form_control_navigation() {
+        let aom = create_forms_test_tree();
+        let buffer = VirtualBuffer::from_aom(&aom);
+        let mut cursor = VirtualCursor::new(buffer);
+
+        cursor.move_to_start();
+
+        let s1 = cursor.move_next_form_control().expect("First form control");
+        assert_eq!(s1, "Full Name:  \u{001d} Edit \u{001e}  \nJane Doe");
+
+        let s2 = cursor
+            .move_next_form_control()
+            .expect("Second form control");
+        assert_eq!(
+            s2,
+            "Email Address:  \u{001d} Edit \u{001e}  \njane@example.com"
+        );
+
+        let s3 = cursor.move_next_form_control().expect("Third form control");
+        assert_eq!(
+            s3,
+            " I accept terms and conditions  \u{001d} check box \u{001e}   \u{001d}not checked\u{001e}"
+        );
+    }
+
+    #[test]
+    fn test_scenario_17_button_navigation() {
+        let aom = create_forms_test_tree();
+        let buffer = VirtualBuffer::from_aom(&aom);
+        let mut cursor = VirtualCursor::new(buffer);
+
+        cursor.move_to_start();
+
+        let b1 = cursor.move_next_button().expect("First button");
+        assert_eq!(b1, "Save Preferences  \u{001d} Button \u{001e}");
+
+        let b2 = cursor.move_next_button().expect("Second button");
+        assert_eq!(b2, "Submit Application  \u{001d} Button \u{001e}");
+    }
+
+    #[test]
+    fn test_scenario_18_edit_navigation() {
+        let aom = create_forms_test_tree();
+        let buffer = VirtualBuffer::from_aom(&aom);
+        let mut cursor = VirtualCursor::new(buffer);
+
+        cursor.move_to_start();
+
+        let e1 = cursor.move_next_edit().expect("First edit");
+        assert_eq!(e1, "Full Name:  \u{001d} Edit \u{001e}  \nJane Doe");
+
+        let e2 = cursor.move_next_edit().expect("Second edit");
+        assert_eq!(
+            e2,
+            "Email Address:  \u{001d} Edit \u{001e}  \njane@example.com"
+        );
+    }
+
+    #[test]
+    fn test_scenario_19_forms_mode_entry_exit() {
+        let aom = create_forms_test_tree();
+        let buffer = VirtualBuffer::from_aom(&aom);
+        let mut cursor = VirtualCursor::new(buffer);
+
+        cursor.move_to_start();
+
+        cursor.move_next_edit().expect("Move to edit");
+        assert!(!cursor.forms_mode_active);
+
+        let entry = cursor.enter_forms_mode().expect("Enter forms mode");
+        assert!(cursor.forms_mode_active);
+        assert!(entry.contains("Type in text"));
+        assert!(entry.contains("Full Name:"));
+
+        let exit = cursor.exit_forms_mode().expect("Exit forms mode");
+        assert!(!cursor.forms_mode_active);
+        assert_eq!(exit, "virtual PC Cursor");
+    }
+
+    #[test]
+    fn test_scenario_20_checkbox_navigation_and_toggle() {
+        let aom = create_forms_test_tree();
+        let buffer = VirtualBuffer::from_aom(&aom);
+        let mut cursor = VirtualCursor::new(buffer);
+
+        cursor.move_to_start();
+
+        let cb = cursor.move_next_checkbox().expect("Move to checkbox");
+        assert!(cb.contains("not checked"));
+        assert_eq!(
+            cursor.current_node().and_then(|n| n.states.checked),
+            Some(false)
+        );
+
+        let toggle = cursor.toggle_active_control().expect("Toggle checkbox");
+        assert!(toggle.contains("checked"));
+        assert_eq!(
+            cursor.current_node().and_then(|n| n.states.checked),
+            Some(true)
+        );
+    }
 }
