@@ -221,6 +221,28 @@ impl DifferentialRunner {
                     if let Some(ref v) = node.value {
                         ev = ev.with_value(v);
                     }
+                    if let Some(idx) = node
+                        .attributes
+                        .get("item_index")
+                        .and_then(|s| s.parse().ok())
+                    {
+                        ev = ev.with_item_index(idx);
+                    }
+                    if let Some(cnt) = node
+                        .attributes
+                        .get("item_count")
+                        .and_then(|s| s.parse().ok())
+                    {
+                        ev = ev.with_item_count(cnt);
+                    }
+                    if let Some(cls) = node.attributes.get("class") {
+                        ev = ev.with_window_class(cls);
+                    }
+                    if let Some(cnt) = node.attributes.get("container") {
+                        ev = ev.with_container_name(cnt);
+                    } else if engine.desktop_state.is_some() && node.role == Role::ListItem {
+                        ev = ev.with_container_name("FolderView");
+                    }
                     engine.handle_focus_event(&ev).unwrap_or_default()
                 } else if let Some(ref ds) = engine.desktop_state {
                     let matched_item = ds

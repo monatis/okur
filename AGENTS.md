@@ -48,7 +48,7 @@ To ensure seamless context passing across autonomous sessions, all engineering w
 
 ### Active Plan for Current / Next Session
 - **Active Plan**: [`docs/plans/2026-10-13-complex-web-apps-google-docs-and-sheets.md`](file:///c:/Users/Gigabyte/screen-reader/docs/plans/2026-10-13-complex-web-apps-google-docs-and-sheets.md)
-- **Latest Handoff**: [`docs/handoff/2026-10-13-native-desktop-and-shell-navigation-parity.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-native-desktop-and-shell-navigation-parity.md)
+- **Latest Handoff**: [`docs/handoff/2026-10-13-live-desktop-and-shell-navigation-parity.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-live-desktop-and-shell-navigation-parity.md)
 
 
 ### Standard Session Execution Protocol

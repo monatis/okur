@@ -1,12 +1,14 @@
 use crate::PlatformError;
 use sr_core::event::{AccessibilityEvent, FocusEvent, NodeStates, Role};
+use std::ffi::c_void;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::thread::{self, JoinHandle};
 use tokio::sync::mpsc::UnboundedSender;
 use windows::core::implement;
 use windows::Win32::System::Com::{
-    CoCreateInstance, CoInitializeEx, CoUninitialize, CLSCTX_INPROC_SERVER, COINIT_MULTITHREADED,
+    CoCreateInstance, CoInitializeEx, CoUninitialize, CLSCTX_INPROC_SERVER,
+    COINIT_APARTMENTTHREADED,
 };
 use windows::Win32::UI::Accessibility::{
     CUIAutomation, IUIAutomation, IUIAutomationElement, IUIAutomationFocusChangedEventHandler,
@@ -18,9 +20,159 @@ use windows::Win32::UI::Accessibility::{
 
 use super::AccessibilityEventListener;
 
+#[link(name = "user32")]
+extern "system" {
+    fn OpenDesktopW(
+        lpszDesktop: *const u16,
+        dwFlags: u32,
+        fInherit: i32,
+        dwDesiredAccess: u32,
+    ) -> *mut c_void;
+    fn SetThreadDesktop(hDesktop: *mut c_void) -> i32;
+}
+
 #[implement(IUIAutomationFocusChangedEventHandler)]
 struct FocusChangedHandler {
+    uia: IUIAutomation,
     sender: UnboundedSender<AccessibilityEvent>,
+}
+
+impl FocusChangedHandler {
+    fn process_element(&self, element: &IUIAutomationElement) {
+        let control_type = unsafe { element.CurrentControlType() }.unwrap_or_default();
+        let mut role = map_control_type_to_role(control_type);
+
+        let name = unsafe { element.CurrentName() }.ok().map(|s| s.to_string());
+        let class_name = unsafe { element.CurrentClassName() }
+            .map(|s| s.to_string())
+            .unwrap_or_default();
+        let help_text = unsafe { element.CurrentHelpText() }
+            .ok()
+            .map(|s| s.to_string())
+            .filter(|s| !s.is_empty());
+
+        // Extract parent hierarchy and window handles
+        let mut parent_name = String::new();
+        let mut parent_class = String::new();
+        let mut grandparent_class = String::new();
+        let mut parent_hwnd = windows::Win32::Foundation::HWND::default();
+
+        if let Ok(walker) = unsafe { self.uia.ControlViewWalker() } {
+            if let Ok(parent) = unsafe { walker.GetParentElement(element) } {
+                parent_name = unsafe { parent.CurrentName() }
+                    .map(|s| s.to_string())
+                    .unwrap_or_default();
+                parent_class = unsafe { parent.CurrentClassName() }
+                    .map(|s| s.to_string())
+                    .unwrap_or_default();
+                if let Ok(h) = unsafe { parent.CurrentNativeWindowHandle() } {
+                    parent_hwnd = h;
+                }
+                if let Ok(gp) = unsafe { walker.GetParentElement(&parent) } {
+                    grandparent_class = unsafe { gp.CurrentClassName() }
+                        .map(|s| s.to_string())
+                        .unwrap_or_default();
+                }
+            }
+        }
+
+        let mut container_name = None;
+        let mut window_class = None;
+        let mut item_index = None;
+        let mut item_count = None;
+
+        let is_desktop = parent_class == "SysListView32"
+            || parent_name == "Desktop"
+            || grandparent_class == "Progman"
+            || grandparent_class == "WorkerW";
+
+        let is_taskbar = parent_class.contains("Taskbar")
+            || grandparent_class.contains("Taskbar")
+            || parent_class == "Shell_TrayWnd"
+            || grandparent_class == "Shell_TrayWnd"
+            || parent_class == "Windows.UI.Input.InputSite.WindowClass"
+            || parent_name == "Taskbar";
+
+        if is_desktop {
+            container_name = Some("FolderView".to_string());
+            window_class = Some("SysListView32".to_string());
+            role = Role::ListItem;
+
+            if !parent_hwnd.is_invalid() {
+                let total = unsafe {
+                    windows::Win32::UI::WindowsAndMessaging::SendMessageW(
+                        parent_hwnd,
+                        0x1004, // LVM_GETITEMCOUNT
+                        Some(windows::Win32::Foundation::WPARAM(0)),
+                        Some(windows::Win32::Foundation::LPARAM(0)),
+                    )
+                }
+                .0;
+                let focused = unsafe {
+                    windows::Win32::UI::WindowsAndMessaging::SendMessageW(
+                        parent_hwnd,
+                        0x100C, // LVM_GETNEXTITEM
+                        Some(windows::Win32::Foundation::WPARAM(!0usize)),
+                        Some(windows::Win32::Foundation::LPARAM(0x0001)), // LVNI_FOCUSED
+                    )
+                }
+                .0;
+
+                if focused >= 0 {
+                    item_index = Some((focused + 1) as usize);
+                }
+                if total > 0 {
+                    item_count = Some(total as usize);
+                }
+            }
+        } else if is_taskbar {
+            container_name = Some("Taskbar".to_string());
+            window_class = Some("Shell_TrayWnd".to_string());
+            if control_type == UIA_ButtonControlTypeId
+                || class_name == "ToggleButton"
+                || class_name == "Button"
+            {
+                role = Role::Button;
+            }
+        } else {
+            if !parent_name.is_empty() {
+                container_name = Some(parent_name);
+            }
+            if !parent_class.is_empty() {
+                window_class = Some(parent_class);
+            } else if !class_name.is_empty() {
+                window_class = Some(class_name);
+            }
+        }
+
+        // Check live states
+        let states = NodeStates {
+            focused: true,
+            ..Default::default()
+        };
+
+        let mut focus = FocusEvent::new(role).with_states(states);
+        if let Some(n) = name {
+            focus = focus.with_name(n);
+        }
+        if let Some(c) = container_name {
+            focus = focus.with_container_name(c);
+        }
+        if let Some(w) = window_class {
+            focus = focus.with_window_class(w);
+        }
+        if let Some(h) = help_text {
+            focus = focus.with_help_text(h);
+        }
+        if let Some(i) = item_index {
+            focus = focus.with_item_index(i);
+        }
+        if let Some(c) = item_count {
+            focus = focus.with_item_count(c);
+        }
+
+        let _ = self.sender.send(AccessibilityEvent::Focus(focus));
+    }
 }
 
 impl IUIAutomationFocusChangedEventHandler_Impl for FocusChangedHandler_Impl {
@@ -29,29 +181,7 @@ impl IUIAutomationFocusChangedEventHandler_Impl for FocusChangedHandler_Impl {
         sender: windows::core::Ref<'_, IUIAutomationElement>,
     ) -> windows::core::Result<()> {
         if let Some(element) = sender.as_ref() {
-            let role = match unsafe { element.CurrentControlType() } {
-                Ok(ct) => map_control_type_to_role(ct),
-                Err(_) => Role::Generic,
-            };
-
-            let name = unsafe { element.CurrentName() }.ok().map(|s| s.to_string());
-            let value: Option<String> = None;
-
-            // Check live states
-            let states = NodeStates {
-                focused: true,
-                ..Default::default()
-            };
-
-            let mut focus = FocusEvent::new(role).with_states(states);
-            if let Some(n) = name {
-                focus = focus.with_name(n);
-            }
-            if let Some(v) = value {
-                focus = focus.with_value(v);
-            }
-
-            let _ = self.sender.send(AccessibilityEvent::Focus(focus));
+            self.this.process_element(element);
         }
         Ok(())
     }
@@ -89,7 +219,16 @@ impl AccessibilityEventListener for WindowsAccessibilityEventListener {
         let (init_tx, init_rx) = std::sync::mpsc::channel();
 
         let handle = thread::spawn(move || {
-            let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+            // Attach thread to interactive user desktop
+            unsafe {
+                let default_name = windows::core::w!("default");
+                let h = OpenDesktopW(default_name.as_ptr(), 0, 0, 0x01FF);
+                if !h.is_null() {
+                    let _ = SetThreadDesktop(h);
+                }
+            }
+
+            let _ = unsafe { CoInitializeEx(None, COINIT_APARTMENTTHREADED) };
 
             let uia: Result<IUIAutomation, windows::core::Error> =
                 unsafe { CoCreateInstance(&CUIAutomation, None, CLSCTX_INPROC_SERVER) };
@@ -107,19 +246,41 @@ impl AccessibilityEventListener for WindowsAccessibilityEventListener {
                 }
             };
 
-            let handler: IUIAutomationFocusChangedEventHandler =
-                FocusChangedHandler { sender }.into();
+            let raw_handler = FocusChangedHandler {
+                uia: uia.clone(),
+                sender,
+            };
+            if let Ok(focused) = unsafe { uia.GetFocusedElement() } {
+                raw_handler.process_element(&focused);
+            }
+
+            let handler: IUIAutomationFocusChangedEventHandler = raw_handler.into();
 
             let add_res = unsafe { uia.AddFocusChangedEventHandler(None, &handler) };
-            if let Err(e) = add_res {
+            if let Err(ref e) = add_res {
                 tracing::warn!("Failed to register UIA focus changed event handler: {}", e);
             } else {
                 tracing::info!("Registered UIA focus changed event handler successfully");
             }
 
-            // Keep the event listener active while running
-            while active_clone.load(Ordering::SeqCst) {
-                thread::sleep(std::time::Duration::from_millis(50));
+            // Message pump to dispatch COM STA / WinEvent / UIA cross-process messages
+            unsafe {
+                let mut msg = windows::Win32::UI::WindowsAndMessaging::MSG::default();
+                while active_clone.load(Ordering::SeqCst) {
+                    while windows::Win32::UI::WindowsAndMessaging::PeekMessageW(
+                        &mut msg,
+                        None,
+                        0,
+                        0,
+                        windows::Win32::UI::WindowsAndMessaging::PM_REMOVE,
+                    )
+                    .as_bool()
+                    {
+                        let _ = windows::Win32::UI::WindowsAndMessaging::TranslateMessage(&msg);
+                        windows::Win32::UI::WindowsAndMessaging::DispatchMessageW(&msg);
+                    }
+                    thread::sleep(std::time::Duration::from_millis(15));
+                }
             }
 
             unsafe {

@@ -165,12 +165,12 @@ async fn main() {
             println!("============================================================");
 
             // Determine active buffer
-            let buffer = if let Some(ref f) = fixture {
+            let (buffer, is_fixture) = if let Some(ref f) = fixture {
                 let fixture_path = Path::new(f);
                 match load_aom_from_path(fixture_path) {
                     Ok(aom) => {
                         println!("Loaded document fixture from {:?}", fixture_path);
-                        VirtualBuffer::from_aom(&aom)
+                        (VirtualBuffer::from_aom(&aom), true)
                     }
                     Err(e) => {
                         eprintln!("Failed to load fixture: {}", e);
@@ -182,42 +182,12 @@ async fn main() {
                 match bridge.get_active_document(None) {
                     Ok(aom) => {
                         println!("Attached to live active foreground document via OS accessibility APIs.");
-                        VirtualBuffer::from_aom(&aom)
+                        (VirtualBuffer::from_aom(&aom), true)
                     }
-                    Err(err) => {
-                        println!(
-                            "No active document found in foreground ({}). Loading default reading fixture...",
-                            err
-                        );
-                        let default_path = Path::new("corpus/fixtures/boundaries-dynamic.aom.json");
-                        if default_path.exists() {
-                            match load_aom_from_path(default_path) {
-                                Ok(aom) => VirtualBuffer::from_aom(&aom),
-                                Err(_) => {
-                                    let doc_aom = AomNode::new(0, Role::Document)
-                                        .with_name("Default Screen Reader Document")
-                                        .with_children(vec![
-                                            AomNode::new(1, Role::Heading { level: 1 })
-                                                .with_text("Welcome to Open-Source Screen Reader"),
-                                            AomNode::new(2, Role::Paragraph).with_text(
-                                                "Use Down Arrow and Up Arrow to read line by line. Press H for headings, T for tables, Tab for controls. Press Ctrl to silence speech, and Ctrl+C to exit.",
-                                            ),
-                                        ]);
-                                    VirtualBuffer::from_aom(&doc_aom)
-                                }
-                            }
-                        } else {
-                            let doc_aom = AomNode::new(0, Role::Document)
-                                .with_name("Default Screen Reader Document")
-                                .with_children(vec![
-                                    AomNode::new(1, Role::Heading { level: 1 })
-                                        .with_text("Welcome to Open-Source Screen Reader"),
-                                    AomNode::new(2, Role::Paragraph).with_text(
-                                        "Use Down Arrow and Up Arrow to read line by line. Press H for headings, T for tables, Tab for controls. Press Ctrl to silence speech, and Ctrl+C to exit.",
-                                    ),
-                                ]);
-                            VirtualBuffer::from_aom(&doc_aom)
-                        }
+                    Err(_) => {
+                        println!("Operating in live native Windows desktop/shell navigation mode.");
+                        let empty_doc = AomNode::new(0, Role::Document);
+                        (VirtualBuffer::from_aom(&empty_doc), false)
                     }
                 }
             };
@@ -229,13 +199,19 @@ async fn main() {
 
             // Announce startup
             if let Ok(mut eng) = engine.lock() {
-                let doc_name = eng.cursor.buffer.document_title().unwrap_or("Document");
-                let welcome = format!("{}  \u{001d} Virtual PC Cursor \u{001e}", doc_name);
-                println!(
-                    "[Screen Reader] {}",
-                    welcome.replace(['\u{001d}', '\u{001e}'], "")
-                );
-                eng.speech.speak(&welcome, true);
+                if is_fixture {
+                    eng.app_mode = sr_core::engine::AppMode::VirtualBuffer;
+                    let doc_name = eng.cursor.buffer.document_title().unwrap_or("Document");
+                    let welcome = format!("{}  \u{001d} Virtual PC Cursor \u{001e}", doc_name);
+                    println!(
+                        "[Screen Reader] {}",
+                        welcome.replace(['\u{001d}', '\u{001e}'], "")
+                    );
+                    eng.speech.speak(&welcome, true);
+                } else {
+                    eng.app_mode = sr_core::engine::AppMode::NativeDesktop;
+                    println!("[Screen Reader] Ready in native desktop/shell navigation mode.");
+                }
             }
 
             // Install low-level keyboard hook
@@ -263,7 +239,12 @@ async fn main() {
                 tokio::spawn(async move {
                     while let Some(event) = event_rx.recv().await {
                         if let Ok(mut eng) = engine_events.lock() {
-                            eng.handle_accessibility_event(&event);
+                            if let Some(msg) = eng.handle_accessibility_event(&event) {
+                                println!(
+                                    "[Event Spoken] {}",
+                                    msg.replace(['\u{001d}', '\u{001e}'], "")
+                                );
+                            }
                         }
                     }
                 });

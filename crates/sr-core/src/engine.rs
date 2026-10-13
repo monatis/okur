@@ -204,6 +204,7 @@ pub struct NativeDesktopState {
     pub container_name: String,
     pub items: Vec<DesktopItem>,
     pub current_index: usize,
+    pub entered: bool,
 }
 
 impl NativeDesktopState {
@@ -391,6 +392,7 @@ impl ScreenReaderEngine {
                     container_name,
                     items,
                     current_index: 0,
+                    entered: false,
                 });
             }
         }
@@ -489,6 +491,7 @@ impl ScreenReaderEngine {
                     }
                 }
             }
+            return None;
         } else if self.app_mode == AppMode::NativeShell {
             match command {
                 "{TAB}" | "ShellNextElement" => {
@@ -559,6 +562,7 @@ impl ScreenReaderEngine {
                 }
                 _ => {}
             }
+            return None;
         }
 
         // 0. Active element list navigation takes precedence for {DOWN}, {UP}, {ENTER}, {ESC}
@@ -960,29 +964,41 @@ impl ScreenReaderEngine {
             }
         }
 
-        // 4. In Virtual PC Cursor mode, check if keystroke translates to a command
+        // 5. In non-VirtualBuffer modes (Desktop, Shell, native controls),
+        // navigation and typing keys MUST pass through to the OS so Windows
+        // handles arrow navigation, Tab cycling, and initial-letter jumps natively!
+        if self.app_mode != AppMode::VirtualBuffer {
+            if event.modifiers.insert {
+                if let Some(cmd) = event.to_command_string() {
+                    if let Some(_res) = self.execute_command(&cmd) {
+                        return KeyAction::Consume;
+                    }
+                }
+            }
+            return KeyAction::PassThrough;
+        }
+
+        // 6. In Virtual PC Cursor mode, check if keystroke translates to a command
         if let Some(cmd) = event.to_command_string() {
             let res = self.execute_command(&cmd);
             if res.is_some() {
                 return KeyAction::Consume;
             }
             // For navigation keys, consume even if boundary reached so host window doesn't scroll
-            if self.app_mode == AppMode::VirtualBuffer
-                && matches!(
-                    event.key,
-                    Key::DownArrow
-                        | Key::UpArrow
-                        | Key::LeftArrow
-                        | Key::RightArrow
-                        | Key::Home
-                        | Key::End
-                        | Key::PageUp
-                        | Key::PageDown
-                        | Key::Tab
-                        | Key::Alpha(_)
-                        | Key::Digit(_)
-                )
-            {
+            if matches!(
+                event.key,
+                Key::DownArrow
+                    | Key::UpArrow
+                    | Key::LeftArrow
+                    | Key::RightArrow
+                    | Key::Home
+                    | Key::End
+                    | Key::PageUp
+                    | Key::PageDown
+                    | Key::Tab
+                    | Key::Alpha(_)
+                    | Key::Digit(_)
+            ) {
                 return KeyAction::Consume;
             }
         }
@@ -1037,10 +1053,18 @@ impl ScreenReaderEngine {
         if focus.container_name.as_deref() == Some("FolderView")
             || focus.window_class.as_deref() == Some("Progman")
             || focus.window_class.as_deref() == Some("WorkerW")
-            || (focus.role == Role::ListItem && self.desktop_state.is_some())
+            || focus.window_class.as_deref() == Some("SysListView32")
+            || (focus.role == Role::ListItem
+                && (self.desktop_state.is_some() || self.app_mode == AppMode::NativeDesktop))
         {
+            let prev_mode = self.app_mode;
+            let is_first_entry = prev_mode != AppMode::NativeDesktop
+                || self.desktop_state.as_ref().is_none_or(|ds| !ds.entered);
+
             self.app_mode = AppMode::NativeDesktop;
+
             if let Some(ref mut ds) = self.desktop_state {
+                ds.entered = true;
                 if let Some(ref name) = focus.name {
                     if let Some(pos) = ds
                         .items
@@ -1050,24 +1074,47 @@ impl ScreenReaderEngine {
                         ds.current_index = pos;
                     }
                 }
-                if let Some(item) = ds.current_item() {
-                    let speech = SpeechFormatter::format_desktop_entry(
-                        &ds.container_name,
-                        &item.name,
-                        item.index,
-                        item.total,
-                    );
-                    self.speech.speak(&speech, true);
-                    return Some(speech);
-                }
             }
+
+            let name = focus.name.as_deref().unwrap_or("Desktop");
+            let index = focus.item_index.unwrap_or_else(|| {
+                self.desktop_state
+                    .as_ref()
+                    .and_then(|ds| ds.current_item())
+                    .map(|it| it.index)
+                    .unwrap_or(1)
+            });
+            let total = focus.item_count.unwrap_or_else(|| {
+                self.desktop_state
+                    .as_ref()
+                    .and_then(|ds| ds.current_item())
+                    .map(|it| it.total)
+                    .unwrap_or(1)
+            });
+
+            let speech = if is_first_entry {
+                SpeechFormatter::format_desktop_entry("FolderView", name, index, total)
+            } else {
+                SpeechFormatter::format_desktop_item(name, index, total)
+            };
+            self.speech.speak(&speech, true);
+            return Some(speech);
         } else if focus.window_class.as_deref() == Some("Shell_TrayWnd")
             || focus.container_name.as_deref() == Some("Taskbar")
         {
+            if let Some(ref mut ds) = self.desktop_state {
+                ds.entered = false;
+            }
+            let prev_mode = self.app_mode;
             self.app_mode = AppMode::NativeShell;
             let name = focus.name.as_deref().unwrap_or("Start Button");
+            let container = if prev_mode != AppMode::NativeShell {
+                focus.container_name.as_deref().or(Some("Taskbar"))
+            } else {
+                None
+            };
             let speech = SpeechFormatter::format_shell_element(
-                focus.container_name.as_deref(),
+                container,
                 name,
                 "Button",
                 focus.help_text.as_deref(),
