@@ -1,0 +1,88 @@
+{
+  "id": "58-table-column-header-boundary",
+  "name": "Direct Column Header Query and Column Boundaries",
+  "category": "Complex Table Headers and Coordinates",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "jaws_script",
+      "command": "MoveToNextTable",
+      "settle_ms": 300,
+      "assertions": {
+        "target_role": "table",
+        "contains_speech": [
+          "table with 4 columns and 4 rows"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "type": "keyboard",
+      "command": "^%{RIGHT}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Revenue",
+          "Column 2 of 4"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "type": "keyboard",
+      "command": "^%{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Q1",
+          "$10,000",
+          "Row 2 of 4"
+        ]
+      }
+    },
+    {
+      "id": "s4",
+      "type": "keyboard",
+      "command": "^%+H",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Revenue"
+        ]
+      }
+    },
+    {
+      "id": "s5",
+      "type": "keyboard",
+      "command": "^%+UP",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "top of column",
+          "Revenue"
+        ]
+      }
+    },
+    {
+      "id": "s6",
+      "type": "keyboard",
+      "command": "^%+DOWN",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "bottom of column",
+          "$18,000"
+        ]
+      }
+    }
+  ]
+}

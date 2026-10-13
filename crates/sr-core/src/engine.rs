@@ -369,6 +369,30 @@ impl ScreenReaderEngine {
             "^%{LEFT}" | "PriorCell" | "TableCellLeft" => self.cursor.move_table_cell_left(),
             "^%{DOWN}" | "NextRow" | "TableCellDown" => self.cursor.move_table_cell_down(),
             "^%{UP}" | "PriorRow" | "TableCellUp" => self.cursor.move_table_cell_up(),
+            "^%{HOME}" | "FirstCell" | "TableFirstCell" => self.cursor.move_table_first_cell(),
+            "^%{END}" | "LastCell" | "TableLastCell" => self.cursor.move_table_last_cell(),
+            "^%+LEFT" | "^%+{LEFT}" | "MoveToStartOfRow" | "RowStart" => {
+                self.cursor.move_table_row_start()
+            }
+            "^%+RIGHT" | "^%+{RIGHT}" | "MoveToEndOfRow" | "RowEnd" => {
+                self.cursor.move_table_row_end()
+            }
+            "^%+UP" | "^%+{UP}" | "MoveToTopOfColumn" | "ColumnTop" => {
+                self.cursor.move_table_col_top()
+            }
+            "^%+DOWN" | "^%+{DOWN}" | "MoveToBottomOfColumn" | "ColumnBottom" => {
+                self.cursor.move_table_col_bottom()
+            }
+            "^%{NUMPAD5}" | "^%5" | "SayCurrentCell" | "CurrentCell" => {
+                self.cursor.read_current_cell()
+            }
+            "^%+H" | "^%+h" | "SayColumnHeader" => self.cursor.read_current_col_header(),
+            "^%+R" | "^%+r" | "SayRowHeader" => self.cursor.read_current_row_header(),
+
+            // MathML
+            "O" | "o" | "MoveToNextMath" => self.cursor.move_next_math(),
+            "+O" | "+o" | "MoveToPriorMath" => self.cursor.move_prior_math(),
+            "EnterMathViewer" | "ShowMathEditor" => self.cursor.enter_math_viewer(),
 
             // Form controls
             "F" | "f" | "FocusToNextField" => self.cursor.move_next_form_control(),
@@ -411,6 +435,8 @@ impl ScreenReaderEngine {
             "{ENTER}" | "EnterFormsMode" | "ActivateLink" => {
                 if let Some(link_speech) = self.cursor.activate_current_link() {
                     Some(link_speech)
+                } else if let Some(math_speech) = self.cursor.enter_math_viewer() {
+                    Some(math_speech)
                 } else {
                     let res = self.cursor.enter_forms_mode();
                     if res.is_some() {
@@ -423,6 +449,7 @@ impl ScreenReaderEngine {
                 if self.cursor.is_combobox_expanded() {
                     self.cursor.collapse_combobox()
                 } else if self.forms_mode {
+
                     let res = self.cursor.exit_forms_mode();
                     self.forms_mode = false;
                     res

@@ -29,6 +29,7 @@ pub enum Role {
     Slider,
     ProgressBar,
     IFrame,
+    Math,
     Generic,
 }
 
@@ -51,6 +52,7 @@ impl Role {
                 | Role::Tree
                 | Role::TreeItem
                 | Role::IFrame
+                | Role::Math
         )
     }
 }

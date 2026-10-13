@@ -1,0 +1,774 @@
+{
+  "id": 0,
+  "role": "Document",
+  "name": "Spans and Math Reference Fixture",
+  "value": null,
+  "text": null,
+  "children": [
+    {
+      "id": 1,
+      "role": {
+        "Heading": {
+          "level": 1
+        }
+      },
+      "name": "Complex Table with Spans",
+      "value": null,
+      "text": "Complex Table with Spans",
+      "children": [],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false
+      },
+      "attributes": {}
+    },
+    {
+      "id": 2,
+      "role": "Table",
+      "name": "Financial Spans Table",
+      "value": null,
+      "text": null,
+      "children": [
+        {
+          "id": 3,
+          "role": "TableRow",
+          "name": null,
+          "value": null,
+          "text": null,
+          "children": [
+            {
+              "id": 4,
+              "role": "TableCell",
+              "name": "Item",
+              "value": null,
+              "text": "Item",
+              "children": [],
+              "states": {
+                "checked": null,
+                "selected": null,
+                "expanded": null,
+                "focused": false,
+                "disabled": false,
+                "hidden": false
+              },
+              "attributes": {
+                "row_index": "1",
+                "col_index": "1",
+                "rowspan": "2",
+                "header": "col"
+              }
+            },
+            {
+              "id": 5,
+              "role": "TableCell",
+              "name": "2025",
+              "value": null,
+              "text": "2025",
+              "children": [],
+              "states": {
+                "checked": null,
+                "selected": null,
+                "expanded": null,
+                "focused": false,
+                "disabled": false,
+                "hidden": false
+              },
+              "attributes": {
+                "row_index": "1",
+                "col_index": "2",
+                "colspan": "2",
+                "header": "col"
+              }
+            },
+            {
+              "id": 6,
+              "role": "TableCell",
+              "name": "2026",
+              "value": null,
+              "text": "2026",
+              "children": [],
+              "states": {
+                "checked": null,
+                "selected": null,
+                "expanded": null,
+                "focused": false,
+                "disabled": false,
+                "hidden": false
+              },
+              "attributes": {
+                "row_index": "1",
+                "col_index": "4",
+                "colspan": "2",
+                "header": "col"
+              }
+            }
+          ],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false
+          },
+          "attributes": {
+            "row_index": "1"
+          }
+        },
+        {
+          "id": 7,
+          "role": "TableRow",
+          "name": null,
+          "value": null,
+          "text": null,
+          "children": [
+            {
+              "id": 8,
+              "role": "TableCell",
+              "name": "Q1",
+              "value": null,
+              "text": "Q1",
+              "children": [],
+              "states": {
+                "checked": null,
+                "selected": null,
+                "expanded": null,
+                "focused": false,
+                "disabled": false,
+                "hidden": false
+              },
+              "attributes": {
+                "row_index": "2",
+                "col_index": "2",
+                "header": "col"
+              }
+            },
+            {
+              "id": 9,
+              "role": "TableCell",
+              "name": "Q2",
+              "value": null,
+              "text": "Q2",
+              "children": [],
+              "states": {
+                "checked": null,
+                "selected": null,
+                "expanded": null,
+                "focused": false,
+                "disabled": false,
+                "hidden": false
+              },
+              "attributes": {
+                "row_index": "2",
+                "col_index": "3",
+                "header": "col"
+              }
+            },
+            {
+              "id": 10,
+              "role": "TableCell",
+              "name": "Q3",
+              "value": null,
+              "text": "Q3",
+              "children": [],
+              "states": {
+                "checked": null,
+                "selected": null,
+                "expanded": null,
+                "focused": false,
+                "disabled": false,
+                "hidden": false
+              },
+              "attributes": {
+                "row_index": "2",
+                "col_index": "4",
+                "header": "col"
+              }
+            },
+            {
+              "id": 11,
+              "role": "TableCell",
+              "name": "Q4",
+              "value": null,
+              "text": "Q4",
+              "children": [],
+              "states": {
+                "checked": null,
+                "selected": null,
+                "expanded": null,
+                "focused": false,
+                "disabled": false,
+                "hidden": false
+              },
+              "attributes": {
+                "row_index": "2",
+                "col_index": "5",
+                "header": "col"
+              }
+            }
+          ],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false
+          },
+          "attributes": {
+            "row_index": "2"
+          }
+        },
+        {
+          "id": 12,
+          "role": "TableRow",
+          "name": null,
+          "value": null,
+          "text": null,
+          "children": [
+            {
+              "id": 13,
+              "role": "TableCell",
+              "name": "Product A",
+              "value": null,
+              "text": "Product A",
+              "children": [],
+              "states": {
+                "checked": null,
+                "selected": null,
+                "expanded": null,
+                "focused": false,
+                "disabled": false,
+                "hidden": false
+              },
+              "attributes": {
+                "row_index": "3",
+                "col_index": "1",
+                "header": "row"
+              }
+            },
+            {
+              "id": 14,
+              "role": "TableCell",
+              "name": "$100",
+              "value": null,
+              "text": "$100",
+              "children": [],
+              "states": {
+                "checked": null,
+                "selected": null,
+                "expanded": null,
+                "focused": false,
+                "disabled": false,
+                "hidden": false
+              },
+              "attributes": {
+                "row_index": "3",
+                "col_index": "2"
+              }
+            },
+            {
+              "id": 15,
+              "role": "TableCell",
+              "name": "$250",
+              "value": null,
+              "text": "$250",
+              "children": [],
+              "states": {
+                "checked": null,
+                "selected": null,
+                "expanded": null,
+                "focused": false,
+                "disabled": false,
+                "hidden": false
+              },
+              "attributes": {
+                "row_index": "3",
+                "col_index": "3",
+                "colspan": "2"
+              }
+            },
+            {
+              "id": 16,
+              "role": "TableCell",
+              "name": "$400",
+              "value": null,
+              "text": "$400",
+              "children": [],
+              "states": {
+                "checked": null,
+                "selected": null,
+                "expanded": null,
+                "focused": false,
+                "disabled": false,
+                "hidden": false
+              },
+              "attributes": {
+                "row_index": "3",
+                "col_index": "5"
+              }
+            }
+          ],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false
+          },
+          "attributes": {
+            "row_index": "3"
+          }
+        }
+      ],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false
+      },
+      "attributes": {}
+    },
+    {
+      "id": 17,
+      "role": {
+        "Heading": {
+          "level": 2
+        }
+      },
+      "name": "Mathematical Expression",
+      "value": null,
+      "text": "Mathematical Expression",
+      "children": [],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false
+      },
+      "attributes": {}
+    },
+    {
+      "id": 18,
+      "role": "Paragraph",
+      "name": null,
+      "value": null,
+      "text": "Here is an equation:",
+      "children": [],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false
+      },
+      "attributes": {}
+    },
+    {
+      "id": 19,
+      "role": "Math",
+      "name": "Quadratic formula",
+      "value": null,
+      "text": null,
+      "children": [
+        {
+          "id": 20,
+          "role": "Generic",
+          "name": null,
+          "value": null,
+          "text": null,
+          "children": [
+            {
+              "id": 21,
+              "role": "Generic",
+              "name": null,
+              "value": null,
+              "text": "x",
+              "children": [],
+              "states": {
+                "checked": null,
+                "selected": null,
+                "expanded": null,
+                "focused": false,
+                "disabled": false,
+                "hidden": false
+              },
+              "attributes": {
+                "tag": "mi"
+              }
+            },
+            {
+              "id": 22,
+              "role": "Generic",
+              "name": null,
+              "value": null,
+              "text": "=",
+              "children": [],
+              "states": {
+                "checked": null,
+                "selected": null,
+                "expanded": null,
+                "focused": false,
+                "disabled": false,
+                "hidden": false
+              },
+              "attributes": {
+                "tag": "mo"
+              }
+            },
+            {
+              "id": 23,
+              "role": "Generic",
+              "name": null,
+              "value": null,
+              "text": null,
+              "children": [
+                {
+                  "id": 24,
+                  "role": "Generic",
+                  "name": null,
+                  "value": null,
+                  "text": null,
+                  "children": [
+                    {
+                      "id": 25,
+                      "role": "Generic",
+                      "name": null,
+                      "value": null,
+                      "text": "-",
+                      "children": [],
+                      "states": {
+                        "checked": null,
+                        "selected": null,
+                        "expanded": null,
+                        "focused": false,
+                        "disabled": false,
+                        "hidden": false
+                      },
+                      "attributes": {
+                        "tag": "mo"
+                      }
+                    },
+                    {
+                      "id": 26,
+                      "role": "Generic",
+                      "name": null,
+                      "value": null,
+                      "text": "b",
+                      "children": [],
+                      "states": {
+                        "checked": null,
+                        "selected": null,
+                        "expanded": null,
+                        "focused": false,
+                        "disabled": false,
+                        "hidden": false
+                      },
+                      "attributes": {
+                        "tag": "mi"
+                      }
+                    },
+                    {
+                      "id": 27,
+                      "role": "Generic",
+                      "name": null,
+                      "value": null,
+                      "text": "±",
+                      "children": [],
+                      "states": {
+                        "checked": null,
+                        "selected": null,
+                        "expanded": null,
+                        "focused": false,
+                        "disabled": false,
+                        "hidden": false
+                      },
+                      "attributes": {
+                        "tag": "mo"
+                      }
+                    },
+                    {
+                      "id": 28,
+                      "role": "Generic",
+                      "name": null,
+                      "value": null,
+                      "text": null,
+                      "children": [
+                        {
+                          "id": 29,
+                          "role": "Generic",
+                          "name": null,
+                          "value": null,
+                          "text": null,
+                          "children": [
+                            {
+                              "id": 30,
+                              "role": "Generic",
+                              "name": null,
+                              "value": null,
+                              "text": "b",
+                              "children": [],
+                              "states": {
+                                "checked": null,
+                                "selected": null,
+                                "expanded": null,
+                                "focused": false,
+                                "disabled": false,
+                                "hidden": false
+                              },
+                              "attributes": {
+                                "tag": "mi"
+                              }
+                            },
+                            {
+                              "id": 31,
+                              "role": "Generic",
+                              "name": null,
+                              "value": null,
+                              "text": "2",
+                              "children": [],
+                              "states": {
+                                "checked": null,
+                                "selected": null,
+                                "expanded": null,
+                                "focused": false,
+                                "disabled": false,
+                                "hidden": false
+                              },
+                              "attributes": {
+                                "tag": "mn"
+                              }
+                            }
+                          ],
+                          "states": {
+                            "checked": null,
+                            "selected": null,
+                            "expanded": null,
+                            "focused": false,
+                            "disabled": false,
+                            "hidden": false
+                          },
+                          "attributes": {
+                            "tag": "msup"
+                          }
+                        },
+                        {
+                          "id": 32,
+                          "role": "Generic",
+                          "name": null,
+                          "value": null,
+                          "text": "-",
+                          "children": [],
+                          "states": {
+                            "checked": null,
+                            "selected": null,
+                            "expanded": null,
+                            "focused": false,
+                            "disabled": false,
+                            "hidden": false
+                          },
+                          "attributes": {
+                            "tag": "mo"
+                          }
+                        },
+                        {
+                          "id": 33,
+                          "role": "Generic",
+                          "name": null,
+                          "value": null,
+                          "text": "4",
+                          "children": [],
+                          "states": {
+                            "checked": null,
+                            "selected": null,
+                            "expanded": null,
+                            "focused": false,
+                            "disabled": false,
+                            "hidden": false
+                          },
+                          "attributes": {
+                            "tag": "mn"
+                          }
+                        },
+                        {
+                          "id": 34,
+                          "role": "Generic",
+                          "name": null,
+                          "value": null,
+                          "text": "a",
+                          "children": [],
+                          "states": {
+                            "checked": null,
+                            "selected": null,
+                            "expanded": null,
+                            "focused": false,
+                            "disabled": false,
+                            "hidden": false
+                          },
+                          "attributes": {
+                            "tag": "mi"
+                          }
+                        },
+                        {
+                          "id": 35,
+                          "role": "Generic",
+                          "name": null,
+                          "value": null,
+                          "text": "c",
+                          "children": [],
+                          "states": {
+                            "checked": null,
+                            "selected": null,
+                            "expanded": null,
+                            "focused": false,
+                            "disabled": false,
+                            "hidden": false
+                          },
+                          "attributes": {
+                            "tag": "mi"
+                          }
+                        }
+                      ],
+                      "states": {
+                        "checked": null,
+                        "selected": null,
+                        "expanded": null,
+                        "focused": false,
+                        "disabled": false,
+                        "hidden": false
+                      },
+                      "attributes": {
+                        "tag": "msqrt"
+                      }
+                    }
+                  ],
+                  "states": {
+                    "checked": null,
+                    "selected": null,
+                    "expanded": null,
+                    "focused": false,
+                    "disabled": false,
+                    "hidden": false
+                  },
+                  "attributes": {
+                    "tag": "mrow"
+                  }
+                },
+                {
+                  "id": 36,
+                  "role": "Generic",
+                  "name": null,
+                  "value": null,
+                  "text": null,
+                  "children": [
+                    {
+                      "id": 37,
+                      "role": "Generic",
+                      "name": null,
+                      "value": null,
+                      "text": "2",
+                      "children": [],
+                      "states": {
+                        "checked": null,
+                        "selected": null,
+                        "expanded": null,
+                        "focused": false,
+                        "disabled": false,
+                        "hidden": false
+                      },
+                      "attributes": {
+                        "tag": "mn"
+                      }
+                    },
+                    {
+                      "id": 38,
+                      "role": "Generic",
+                      "name": null,
+                      "value": null,
+                      "text": "a",
+                      "children": [],
+                      "states": {
+                        "checked": null,
+                        "selected": null,
+                        "expanded": null,
+                        "focused": false,
+                        "disabled": false,
+                        "hidden": false
+                      },
+                      "attributes": {
+                        "tag": "mi"
+                      }
+                    }
+                  ],
+                  "states": {
+                    "checked": null,
+                    "selected": null,
+                    "expanded": null,
+                    "focused": false,
+                    "disabled": false,
+                    "hidden": false
+                  },
+                  "attributes": {
+                    "tag": "mrow"
+                  }
+                }
+              ],
+              "states": {
+                "checked": null,
+                "selected": null,
+                "expanded": null,
+                "focused": false,
+                "disabled": false,
+                "hidden": false
+              },
+              "attributes": {
+                "tag": "mfrac"
+              }
+            }
+          ],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false
+          },
+          "attributes": {
+            "tag": "mrow"
+          }
+        }
+      ],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false
+      },
+      "attributes": {
+        "tag": "math"
+      }
+    }
+  ],
+  "states": {
+    "checked": null,
+    "selected": null,
+    "expanded": null,
+    "focused": false,
+    "disabled": false,
+    "hidden": false
+  },
+  "attributes": {}
+}

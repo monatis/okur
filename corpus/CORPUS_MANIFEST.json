@@ -48,14 +48,18 @@
         "spa-and-frames.html": {
             "path": "C:\\Users\\ailabs\\corpus\\fixtures\\spa-and-frames.html",
             "size_bytes": 1280
+        },
+        "spans-and-math.html": {
+            "path": "C:\\Users\\ailabs\\corpus\\fixtures\\spans-and-math.html",
+            "size_bytes": 1136
         }
     },
     "statistics": {
-        "total_scenarios": 55,
-        "deterministic_scenarios": 52,
+        "total_scenarios": 60,
+        "deterministic_scenarios": 57,
         "variable_scenarios": 3,
-        "total_trials_executed": 275,
-        "successful_trials": 275,
+        "total_trials_executed": 300,
+        "successful_trials": 300,
         "trial_success_rate_percent": 100
     },
     "scenarios": [
@@ -3010,6 +3014,584 @@
                         "contains_speech": [
                             "Architecture Link",
                             "same page link"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "56-table-headers-coordinates",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 11200,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextTable"
+                    },
+                    "observation": {
+                        "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
+                    },
+                    "assertions": {
+                        "target_role": "table",
+                        "contains_speech": [
+                            "table with 4 columns and 4 rows",
+                            "Q3 Financial Summary Table",
+                            "Column 1, Row 1"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "Revenue \nRevenue\nColumn 2 of 4"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Revenue",
+                            "Column 2 of 4"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Q1\n$10,000\nRow 2 of 4"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Q1",
+                            "$10,000",
+                            "Row 2 of 4"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s4",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "Expenses \n$7,000\nColumn 3 of 4"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Expenses",
+                            "$7,000",
+                            "Column 3 of 4"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "57-table-first-last-cell",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 10500,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextTable"
+                    },
+                    "observation": {
+                        "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
+                    },
+                    "assertions": {
+                        "target_role": "table",
+                        "contains_speech": [
+                            "table with 4 columns and 4 rows",
+                            "Column 1, Row 1"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{END}"
+                    },
+                    "observation": {
+                        "speech_raw": "Profit  Q3\n$8,800\nColumn 4, Row 4"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Profit",
+                            "Q3",
+                            "$8,800",
+                            "Column 4, Row 4"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{HOME}"
+                    },
+                    "observation": {
+                        "speech_raw": "Quarter\nColumn 1, Row 1"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Quarter",
+                            "Column 1, Row 1"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "58-table-column-header-boundary",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 14200,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextTable"
+                    },
+                    "observation": {
+                        "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
+                    },
+                    "assertions": {
+                        "target_role": "table",
+                        "contains_speech": [
+                            "table with 4 columns and 4 rows"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "Revenue \nRevenue\nColumn 2 of 4"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Revenue",
+                            "Column 2 of 4"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Q1\n$10,000\nRow 2 of 4"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Q1",
+                            "$10,000",
+                            "Row 2 of 4"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s4",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%+H"
+                    },
+                    "observation": {
+                        "speech_raw": "Revenue"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Revenue"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s5",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%+UP"
+                    },
+                    "observation": {
+                        "speech_raw": "top of column\nRevenue"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "top of column",
+                            "Revenue"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s6",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%+DOWN"
+                    },
+                    "observation": {
+                        "speech_raw": "bottom of column\n$18,000"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "bottom of column",
+                            "$18,000"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "59-table-row-header-boundary",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 14500,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextTable"
+                    },
+                    "observation": {
+                        "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
+                    },
+                    "assertions": {
+                        "target_role": "table",
+                        "contains_speech": [
+                            "table with 4 columns and 4 rows"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "Revenue \nRevenue\nColumn 2 of 4"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Revenue",
+                            "Column 2 of 4"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Q1\n$10,000\nRow 2 of 4"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Q1",
+                            "$10,000",
+                            "Row 2 of 4"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s4",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%+R"
+                    },
+                    "observation": {
+                        "speech_raw": "Q1"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Q1"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s5",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%+LEFT"
+                    },
+                    "observation": {
+                        "speech_raw": "beginning of row\nQ1"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "beginning of row",
+                            "Q1"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s6",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%+RIGHT"
+                    },
+                    "observation": {
+                        "speech_raw": "end of row\n$3,000"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "end of row",
+                            "$3,000"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "60-table-spans-and-mathml",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/spans-and-math.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 19800,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextTable"
+                    },
+                    "observation": {
+                        "speech_raw": "table with 5 columns and 3 rows\nFinancial Spans Table\nColumn 1, Row 1\nItem\ncell 1 of row spanning 2 rows"
+                    },
+                    "assertions": {
+                        "target_role": "table",
+                        "contains_speech": [
+                            "table with 5 columns and 3 rows",
+                            "Financial Spans Table",
+                            "Column 1, Row 1",
+                            "Item"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "2025\nSpans 2 columns\nColumn 2 of 5"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "2025",
+                            "Spans 2 columns",
+                            "Column 2 of 5"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "2026\nSpans 2 columns\nColumn 4 of 5"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "2026",
+                            "Spans 2 columns",
+                            "Column 4 of 5"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s4",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{HOME}"
+                    },
+                    "observation": {
+                        "speech_raw": "Item\ncell 1 of row spanning 2 rows\nColumn 1, Row 1"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Item",
+                            "Column 1, Row 1"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s5",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Product A\nProduct A\nRow 3 of 3"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Product A",
+                            "Row 3 of 3"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s6",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "Q1 \n$100\nColumn 2 of 5"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Q1",
+                            "$100",
+                            "Column 2 of 5"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s7",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "Q2 \n$250\nSpans 2 columns\nColumn 3 of 5"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Q2",
+                            "$250",
+                            "Spans 2 columns",
+                            "Column 3 of 5"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s8",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "Q4 \n$400\nColumn 5 of 5"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Q4",
+                            "$400",
+                            "Column 5 of 5"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s9",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "O"
+                    },
+                    "observation": {
+                        "speech_raw": "math x equals fraction minus b plus or minus square root of b squared minus 4 a c end root over 2 a end fraction"
+                    },
+                    "assertions": {
+                        "target_role": "math",
+                        "contains_speech": [
+                            "math",
+                            "x equals fraction",
+                            "minus b plus or minus square root",
+                            "b squared minus 4 a c end root",
+                            "over 2 a end fraction"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s10",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{ENTER}"
+                    },
+                    "observation": {
+                        "speech_raw": "Math Viewer. Press Escape to exit."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Math Viewer",
+                            "Press Escape to exit"
                         ]
                     },
                     "step_success": true

@@ -578,4 +578,60 @@ mod tests {
             );
         }
     }
+
+    #[test]
+    fn test_milestone_12_scenarios_56_through_60() {
+        let corpus_dir = get_corpus_dir();
+        assert!(
+            corpus_dir.exists(),
+            "Corpus directory must exist at {:?}",
+            corpus_dir
+        );
+
+        let runner = DifferentialRunner::new(&corpus_dir);
+        let results = runner.run_range(56, 60);
+
+        assert_eq!(results.len(), 5, "Should have executed 5 scenarios");
+
+        for (idx, res) in results.into_iter().enumerate() {
+            assert!(
+                res.is_ok(),
+                "Scenario {} failed to load/run: {:?}",
+                idx + 56,
+                res.as_ref().err()
+            );
+            let scenario_res = match res {
+                Ok(r) => r,
+                Err(_) => continue,
+            };
+            println!(
+                "Scenario [{}] {}: {}",
+                scenario_res.scenario_id,
+                scenario_res.scenario_name,
+                if scenario_res.passed {
+                    "PASSED"
+                } else {
+                    "FAILED"
+                }
+            );
+
+            for step in &scenario_res.steps {
+                println!(
+                    "  Step [{}]: command='{}', speech='{}', passed={}",
+                    step.step_id, step.command, step.emitted_speech, step.success
+                );
+                if !step.failed_assertions.is_empty() {
+                    for fail in &step.failed_assertions {
+                        println!("    ASSERTION FAILURE: {}", fail);
+                    }
+                }
+            }
+
+            assert!(
+                scenario_res.passed,
+                "Scenario {} ({}) failed assertion checks!",
+                scenario_res.scenario_id, scenario_res.scenario_name
+            );
+        }
+    }
 }

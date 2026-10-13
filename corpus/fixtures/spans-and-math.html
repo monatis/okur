@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spans and Math Reference Fixture</title>
+</head>
+<body>
+  <h1>Complex Table with Spans</h1>
+  <table border="1">
+    <caption>Financial Spans Table</caption>
+    <thead>
+      <tr>
+        <th rowspan="2">Item</th>
+        <th colspan="2">2025</th>
+        <th colspan="2">2026</th>
+      </tr>
+      <tr>
+        <th>Q1</th>
+        <th>Q2</th>
+        <th>Q3</th>
+        <th>Q4</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Product A</th>
+        <td>$100</td>
+        <td colspan="2">$250</td>
+        <td>$400</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Mathematical Expression</h2>
+  <p>Here is an equation:</p>
+  <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+    <mrow>
+      <mi>x</mi>
+      <mo>=</mo>
+      <mfrac>
+        <mrow>
+          <mo>-</mo>
+          <mi>b</mi>
+          <mo>&#177;</mo>
+          <msqrt>
+            <msup>
+              <mi>b</mi>
+              <mn>2</mn>
+            </msup>
+            <mo>-</mo>
+            <mn>4</mn>
+            <mi>a</mi>
+            <mi>c</mi>
+          </msqrt>
+        </mrow>
+        <mrow>
+          <mn>2</mn>
+          <mi>a</mi>
+        </mrow>
+      </mfrac>
+    </mrow>
+  </math>
+</body>
+</html>

@@ -362,6 +362,7 @@ impl DifferentialRunner {
                         | ("slider", Some(Role::Slider))
                         | ("progressbar", Some(Role::ProgressBar))
                         | ("iframe" | "frame", Some(Role::IFrame))
+                        | ("math" | "equation", Some(Role::Math))
                 );
                 if !role_matches {
                     assertions_passed = false;

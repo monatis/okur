@@ -1,0 +1,135 @@
+{
+  "scenario_id": "59-table-row-header-boundary",
+  "scenario_version": "1.1.0",
+  "timestamp": "2026-10-13T06:38:10.0000000+03:00",
+  "environment": {
+    "os_version": "Microsoft Windows NT 10.0.19045.0",
+    "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+    "target_process": "chrome",
+    "interactive_session": true
+  },
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+  "repetitions_requested": 5,
+  "trials": [
+    {
+      "trial_index": 1,
+      "timestamp": "2026-10-13T06:38:11.0000000+03:00",
+      "step_results": [
+        {
+          "step_id": "s1",
+          "action": {
+            "type": "jaws_script",
+            "command": "MoveToNextTable"
+          },
+          "observation": {
+            "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "target_role": "table",
+            "contains_speech": [
+              "table with 4 columns and 4 rows"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s2",
+          "action": {
+            "type": "keyboard",
+            "command": "^%{RIGHT}"
+          },
+          "observation": {
+            "speech_raw": "Revenue \nRevenue\nColumn 2 of 4",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Revenue",
+              "Column 2 of 4"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s3",
+          "action": {
+            "type": "keyboard",
+            "command": "^%{DOWN}"
+          },
+          "observation": {
+            "speech_raw": "Q1\n$10,000\nRow 2 of 4",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Q1",
+              "$10,000",
+              "Row 2 of 4"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s4",
+          "action": {
+            "type": "keyboard",
+            "command": "^%+R"
+          },
+          "observation": {
+            "speech_raw": "Q1",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Q1"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s5",
+          "action": {
+            "type": "keyboard",
+            "command": "^%+LEFT"
+          },
+          "observation": {
+            "speech_raw": "beginning of row\nQ1",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "beginning of row",
+              "Q1"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s6",
+          "action": {
+            "type": "keyboard",
+            "command": "^%+RIGHT"
+          },
+          "observation": {
+            "speech_raw": "end of row\n$3,000",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "end of row",
+              "$3,000"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        }
+      ]
+    }
+  ]
+}

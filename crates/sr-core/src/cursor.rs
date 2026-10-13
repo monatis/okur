@@ -1758,16 +1758,20 @@ impl VirtualCursor {
             Some(t) => t,
             None => return Some("Not in a table.".to_string()),
         };
-        if c_idx + 1 < table.cols {
-            let new_c = c_idx + 1;
+        let cur_cell = table.cells.get(r_idx).and_then(|r| r.get(c_idx));
+        let step = cur_cell.map(|c| c.col_span).unwrap_or(1);
+        let new_c = c_idx + step;
+        if new_c < table.cols {
             self.current_table_pos = Some((t_idx, r_idx, new_c));
             if let Some(cell) = table.cells.get(r_idx).and_then(|r| r.get(new_c)) {
                 self.offset = cell.offset;
                 self.current_node_id = Some(cell.node_id);
                 return Some(SpeechFormatter::format_table_cell_col(
                     &cell.text,
-                    new_c + 1,
+                    cell.col,
                     table.cols,
+                    cell.col_header.as_deref(),
+                    cell.col_span,
                 ));
             }
         }
@@ -1785,15 +1789,22 @@ impl VirtualCursor {
             None => return Some("Not in a table.".to_string()),
         };
         if c_idx > 0 {
-            let new_c = c_idx - 1;
-            self.current_table_pos = Some((t_idx, r_idx, new_c));
-            if let Some(cell) = table.cells.get(r_idx).and_then(|r| r.get(new_c)) {
+            let prev_c = c_idx - 1;
+            let target_c = if let Some(cell) = table.cells.get(r_idx).and_then(|r| r.get(prev_c)) {
+                cell.col - 1
+            } else {
+                prev_c
+            };
+            self.current_table_pos = Some((t_idx, r_idx, target_c));
+            if let Some(cell) = table.cells.get(r_idx).and_then(|r| r.get(target_c)) {
                 self.offset = cell.offset;
                 self.current_node_id = Some(cell.node_id);
                 return Some(SpeechFormatter::format_table_cell_col(
                     &cell.text,
-                    new_c + 1,
+                    cell.col,
                     table.cols,
+                    cell.col_header.as_deref(),
+                    cell.col_span,
                 ));
             }
         }
@@ -1810,16 +1821,21 @@ impl VirtualCursor {
             Some(t) => t,
             None => return Some("Not in a table.".to_string()),
         };
-        if r_idx + 1 < table.rows {
-            let new_r = r_idx + 1;
+        let cur_cell = table.cells.get(r_idx).and_then(|r| r.get(c_idx));
+        let step = cur_cell.map(|c| c.row_span).unwrap_or(1);
+        let new_r = r_idx + step;
+        if new_r < table.rows {
             self.current_table_pos = Some((t_idx, new_r, c_idx));
             if let Some(cell) = table.cells.get(new_r).and_then(|r| r.get(c_idx)) {
                 self.offset = cell.offset;
                 self.current_node_id = Some(cell.node_id);
                 return Some(SpeechFormatter::format_table_cell_row(
                     &cell.text,
-                    new_r + 1,
+                    cell.row,
                     table.rows,
+                    cell.row_header.as_deref(),
+                    cell.row_span,
+                    cell.col,
                 ));
             }
         }
@@ -1837,19 +1853,277 @@ impl VirtualCursor {
             None => return Some("Not in a table.".to_string()),
         };
         if r_idx > 0 {
-            let new_r = r_idx - 1;
-            self.current_table_pos = Some((t_idx, new_r, c_idx));
-            if let Some(cell) = table.cells.get(new_r).and_then(|r| r.get(c_idx)) {
+            let prev_r = r_idx - 1;
+            let target_r = if let Some(cell) = table.cells.get(prev_r).and_then(|r| r.get(c_idx)) {
+                cell.row - 1
+            } else {
+                prev_r
+            };
+            self.current_table_pos = Some((t_idx, target_r, c_idx));
+            if let Some(cell) = table.cells.get(target_r).and_then(|r| r.get(c_idx)) {
                 self.offset = cell.offset;
                 self.current_node_id = Some(cell.node_id);
                 return Some(SpeechFormatter::format_table_cell_row(
                     &cell.text,
-                    new_r + 1,
+                    cell.row,
                     table.rows,
+                    cell.row_header.as_deref(),
+                    cell.row_span,
+                    cell.col,
                 ));
             }
         }
         Some("edge of table".to_string())
+    }
+
+    /// Moves to the first cell of the current table (`Ctrl+Alt+Home`).
+    pub fn move_table_first_cell(&mut self) -> Option<String> {
+        let (t_idx, _, _) = match self.resolve_table_pos() {
+            Some(pos) => pos,
+            None => return Some("Not in a table.".to_string()),
+        };
+        let table = match self.buffer.tables.get(t_idx) {
+            Some(t) => t,
+            None => return Some("Not in a table.".to_string()),
+        };
+        if let Some(cell) = table.first_cell() {
+            self.current_table_pos = Some((t_idx, 0, 0));
+            self.offset = cell.offset;
+            self.current_node_id = Some(cell.node_id);
+            return Some(SpeechFormatter::format_table_cell_coordinates(
+                &cell.text,
+                cell.col,
+                cell.row,
+                cell.col_header.as_deref(),
+                cell.row_header.as_deref(),
+                cell.col_span,
+                cell.row_span,
+            ));
+        }
+        Some("Not in a table.".to_string())
+    }
+
+    /// Moves to the last cell of the current table (`Ctrl+Alt+End`).
+    pub fn move_table_last_cell(&mut self) -> Option<String> {
+        let (t_idx, _, _) = match self.resolve_table_pos() {
+            Some(pos) => pos,
+            None => return Some("Not in a table.".to_string()),
+        };
+        let table = match self.buffer.tables.get(t_idx) {
+            Some(t) => t,
+            None => return Some("Not in a table.".to_string()),
+        };
+        if let Some(cell) = table.last_cell() {
+            self.current_table_pos = Some((
+                t_idx,
+                table.rows.saturating_sub(1),
+                table.cols.saturating_sub(1),
+            ));
+            self.offset = cell.offset;
+            self.current_node_id = Some(cell.node_id);
+            return Some(SpeechFormatter::format_table_cell_coordinates(
+                &cell.text,
+                cell.col,
+                cell.row,
+                cell.col_header.as_deref(),
+                cell.row_header.as_deref(),
+                cell.col_span,
+                cell.row_span,
+            ));
+        }
+        Some("Not in a table.".to_string())
+    }
+
+    /// Moves to the first cell in the active row (`Ctrl+Alt+Shift+LeftArrow`).
+    pub fn move_table_row_start(&mut self) -> Option<String> {
+        let (t_idx, r_idx, _) = match self.resolve_table_pos() {
+            Some(pos) => pos,
+            None => return Some("Not in a table.".to_string()),
+        };
+        let table = match self.buffer.tables.get(t_idx) {
+            Some(t) => t,
+            None => return Some("Not in a table.".to_string()),
+        };
+        if let Some(cell) = table.row_start(r_idx + 1) {
+            self.current_table_pos = Some((t_idx, r_idx, 0));
+            self.offset = cell.offset;
+            self.current_node_id = Some(cell.node_id);
+            return Some(SpeechFormatter::format_table_row_start(&cell.text));
+        }
+        Some("Not in a table.".to_string())
+    }
+
+    /// Moves to the last cell in the active row (`Ctrl+Alt+Shift+RightArrow`).
+    pub fn move_table_row_end(&mut self) -> Option<String> {
+        let (t_idx, r_idx, _) = match self.resolve_table_pos() {
+            Some(pos) => pos,
+            None => return Some("Not in a table.".to_string()),
+        };
+        let table = match self.buffer.tables.get(t_idx) {
+            Some(t) => t,
+            None => return Some("Not in a table.".to_string()),
+        };
+        if let Some(cell) = table.row_end(r_idx + 1) {
+            self.current_table_pos = Some((t_idx, r_idx, table.cols.saturating_sub(1)));
+            self.offset = cell.offset;
+            self.current_node_id = Some(cell.node_id);
+            return Some(SpeechFormatter::format_table_row_end(&cell.text));
+        }
+        Some("Not in a table.".to_string())
+    }
+
+    /// Moves to the top cell in the active column (`Ctrl+Alt+Shift+UpArrow`).
+    pub fn move_table_col_top(&mut self) -> Option<String> {
+        let (t_idx, _, c_idx) = match self.resolve_table_pos() {
+            Some(pos) => pos,
+            None => return Some("Not in a table.".to_string()),
+        };
+        let table = match self.buffer.tables.get(t_idx) {
+            Some(t) => t,
+            None => return Some("Not in a table.".to_string()),
+        };
+        if let Some(cell) = table.col_top(c_idx + 1) {
+            self.current_table_pos = Some((t_idx, 0, c_idx));
+            self.offset = cell.offset;
+            self.current_node_id = Some(cell.node_id);
+            return Some(SpeechFormatter::format_table_col_top(&cell.text));
+        }
+        Some("Not in a table.".to_string())
+    }
+
+    /// Moves to the bottom cell in the active column (`Ctrl+Alt+Shift+DownArrow`).
+    pub fn move_table_col_bottom(&mut self) -> Option<String> {
+        let (t_idx, _, c_idx) = match self.resolve_table_pos() {
+            Some(pos) => pos,
+            None => return Some("Not in a table.".to_string()),
+        };
+        let table = match self.buffer.tables.get(t_idx) {
+            Some(t) => t,
+            None => return Some("Not in a table.".to_string()),
+        };
+        if let Some(cell) = table.col_bottom(c_idx + 1) {
+            self.current_table_pos = Some((t_idx, table.rows.saturating_sub(1), c_idx));
+            self.offset = cell.offset;
+            self.current_node_id = Some(cell.node_id);
+            return Some(SpeechFormatter::format_table_col_bottom(&cell.text));
+        }
+        Some("Not in a table.".to_string())
+    }
+
+    /// Reads the current cell with coordinates and headers (`Ctrl+Alt+NumPad5` / `SayCurrentCell`).
+    pub fn read_current_cell(&mut self) -> Option<String> {
+        let (t_idx, r_idx, c_idx) = match self.resolve_table_pos() {
+            Some(pos) => pos,
+            None => return Some("Not in a table.".to_string()),
+        };
+        let table = match self.buffer.tables.get(t_idx) {
+            Some(t) => t,
+            None => return Some("Not in a table.".to_string()),
+        };
+        if let Some(cell) = table.cells.get(r_idx).and_then(|r| r.get(c_idx)) {
+            return Some(SpeechFormatter::format_table_cell_coordinates(
+                &cell.text,
+                cell.col,
+                cell.row,
+                cell.col_header.as_deref(),
+                cell.row_header.as_deref(),
+                cell.col_span,
+                cell.row_span,
+            ));
+        }
+        Some("Not in a table.".to_string())
+    }
+
+    /// Reads the column header of the current cell (`Ctrl+Alt+Shift+H`).
+    pub fn read_current_col_header(&mut self) -> Option<String> {
+        let (t_idx, r_idx, c_idx) = match self.resolve_table_pos() {
+            Some(pos) => pos,
+            None => return Some("Not in a table.".to_string()),
+        };
+        let table = match self.buffer.tables.get(t_idx) {
+            Some(t) => t,
+            None => return Some("Not in a table.".to_string()),
+        };
+        if let Some(cell) = table.cells.get(r_idx).and_then(|r| r.get(c_idx)) {
+            return Some(SpeechFormatter::format_column_header(
+                cell.col_header.as_deref(),
+                cell.col,
+            ));
+        }
+        Some("Not in a table.".to_string())
+    }
+
+    /// Reads the row header of the current cell (`Ctrl+Alt+Shift+R`).
+    pub fn read_current_row_header(&mut self) -> Option<String> {
+        let (t_idx, r_idx, c_idx) = match self.resolve_table_pos() {
+            Some(pos) => pos,
+            None => return Some("Not in a table.".to_string()),
+        };
+        let table = match self.buffer.tables.get(t_idx) {
+            Some(t) => t,
+            None => return Some("Not in a table.".to_string()),
+        };
+        if let Some(cell) = table.cells.get(r_idx).and_then(|r| r.get(c_idx)) {
+            return Some(SpeechFormatter::format_row_header(
+                cell.row_header.as_deref(),
+                cell.row,
+            ));
+        }
+        Some("Not in a table.".to_string())
+    }
+
+    /// Moves to the next math element (`O`).
+    pub fn move_next_math(&mut self) -> Option<String> {
+        if self.buffer.math_blocks.is_empty() {
+            return Some("There are no math equations on this page.".to_string());
+        }
+        let maybe_target = self.buffer.next_math_from(self.offset);
+        let fallback = self.buffer.math_blocks.first().copied().unwrap_or(0);
+        let target = maybe_target.unwrap_or(fallback);
+        let wrapped = maybe_target.is_none();
+        self.offset = target;
+        if let Some(line) = self.buffer.line_at_offset(target) {
+            self.current_node_id = Some(line.node_id);
+            if wrapped {
+                Some(format!("wrapping to top\n{}", line.text))
+            } else {
+                Some(line.text.clone())
+            }
+        } else {
+            None
+        }
+    }
+
+    /// Moves to the prior math element (`Shift+O`).
+    pub fn move_prior_math(&mut self) -> Option<String> {
+        if self.buffer.math_blocks.is_empty() {
+            return Some("There are no math equations on this page.".to_string());
+        }
+        let maybe_target = self.buffer.prior_math_from(self.offset);
+        let fallback = self.buffer.math_blocks.last().copied().unwrap_or(0);
+        let target = maybe_target.unwrap_or(fallback);
+        let wrapped = maybe_target.is_none();
+        self.offset = target;
+        if let Some(line) = self.buffer.line_at_offset(target) {
+            self.current_node_id = Some(line.node_id);
+            if wrapped {
+                Some(format!("wrapping to bottom\n{}", line.text))
+            } else {
+                Some(line.text.clone())
+            }
+        } else {
+            None
+        }
+    }
+
+    /// Enters Math Viewer on the current math element (`Enter`).
+    pub fn enter_math_viewer(&mut self) -> Option<String> {
+        if let Some(node) = self.buffer.node_at_offset(self.offset) {
+            if node.role == Role::Math {
+                return Some("Math Viewer. Press Escape to exit.".to_string());
+            }
+        }
+        None
     }
 
     /// Repositions the virtual cursor to a specific element offset and speaks the landing element announcement.

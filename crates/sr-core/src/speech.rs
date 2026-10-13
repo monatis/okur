@@ -364,15 +364,133 @@ impl SpeechFormatter {
     }
 
     /// Formats speech when moving horizontally to a cell in the same row (`Ctrl+Alt+Left/Right`).
-    /// Format: "{CellText}\nColumn {col} of {total_cols}"
-    pub fn format_table_cell_col(text: &str, col: usize, total_cols: usize) -> String {
-        format!("{}\nColumn {} of {}", text, col, total_cols)
+    /// Matches JAWS format: "{ColHdr} \n{CellText}\nColumn {col} of {total_cols}" or with span announcements.
+    pub fn format_table_cell_col(
+        text: &str,
+        col: usize,
+        total_cols: usize,
+        col_header: Option<&str>,
+        col_span: usize,
+    ) -> String {
+        let mut parts = Vec::new();
+        if let Some(hdr) = col_header {
+            if !hdr.is_empty() {
+                parts.push(format!("{} ", hdr));
+            }
+        }
+        if !text.is_empty() {
+            parts.push(text.to_string());
+        }
+        if col_span > 1 {
+            parts.push(format!("Spans {} columns", col_span));
+        }
+        parts.push(format!("Column {} of {}", col, total_cols));
+        parts.join("\n")
     }
 
     /// Formats speech when moving vertically to a cell in the same column (`Ctrl+Alt+Up/Down`).
-    /// Format: "{CellText}\nRow {row} of {total_rows}"
-    pub fn format_table_cell_row(text: &str, row: usize, total_rows: usize) -> String {
-        format!("{}\nRow {} of {}", text, row, total_rows)
+    /// Matches JAWS format: "{RowHdr}\n{CellText}\nRow {row} of {total_rows}" or with span announcements.
+    pub fn format_table_cell_row(
+        text: &str,
+        row: usize,
+        total_rows: usize,
+        row_header: Option<&str>,
+        row_span: usize,
+        col: usize,
+    ) -> String {
+        let mut parts = Vec::new();
+        if let Some(hdr) = row_header {
+            if !hdr.is_empty() {
+                parts.push(hdr.to_string());
+            }
+        }
+        if !text.is_empty() {
+            parts.push(text.to_string());
+        }
+        if row_span > 1 {
+            parts.push(format!("cell {} of row spanning {} rows", col, row_span));
+        }
+        parts.push(format!("Row {} of {}", row, total_rows));
+        parts.join("\n")
+    }
+
+    /// Formats full cell coordinates and headers when jumping to a cell or querying it (`Ctrl+Alt+Home`, `Ctrl+Alt+End`, `Ctrl+Alt+NumPad5`).
+    /// Matches JAWS format: "{ColHdr}  {RowHdr}\n{CellText}\nColumn {col}, Row {row}".
+    pub fn format_table_cell_coordinates(
+        text: &str,
+        col: usize,
+        row: usize,
+        col_header: Option<&str>,
+        row_header: Option<&str>,
+        col_span: usize,
+        row_span: usize,
+    ) -> String {
+        let mut parts = Vec::new();
+        match (
+            col_header.filter(|h| !h.is_empty()),
+            row_header.filter(|h| !h.is_empty()),
+        ) {
+            (Some(ch), Some(rh)) => parts.push(format!("{}  {}", ch, rh)),
+            (Some(ch), None) => parts.push(ch.to_string()),
+            (None, Some(rh)) => parts.push(rh.to_string()),
+            (None, None) => {}
+        }
+        if !text.is_empty() {
+            parts.push(text.to_string());
+        }
+        if row_span > 1 {
+            parts.push(format!("cell {} of row spanning {} rows", col, row_span));
+        }
+        if col_span > 1 {
+            parts.push(format!("Spans {} columns", col_span));
+        }
+        parts.push(format!("Column {}, Row {}", col, row));
+        parts.join("\n")
+    }
+
+    /// Formats beginning of row announcement (`Ctrl+Alt+Shift+LeftArrow`).
+    pub fn format_table_row_start(text: &str) -> String {
+        format!("beginning of row\n{}", text)
+    }
+
+    /// Formats end of row announcement (`Ctrl+Alt+Shift+RightArrow`).
+    pub fn format_table_row_end(text: &str) -> String {
+        format!("end of row\n{}", text)
+    }
+
+    /// Formats top of column announcement (`Ctrl+Alt+Shift+UpArrow`).
+    pub fn format_table_col_top(text: &str) -> String {
+        format!("top of column\n{}", text)
+    }
+
+    /// Formats bottom of column announcement (`Ctrl+Alt+Shift+DownArrow`).
+    pub fn format_table_col_bottom(text: &str) -> String {
+        format!("bottom of column\n{}", text)
+    }
+
+    /// Formats column header direct query (`Ctrl+Alt+Shift+H`).
+    pub fn format_column_header(col_hdr: Option<&str>, col: usize) -> String {
+        if let Some(hdr) = col_hdr {
+            if !hdr.is_empty() {
+                return hdr.to_string();
+            }
+        }
+        format!("Column {}", col)
+    }
+
+    /// Formats row header direct query (`Ctrl+Alt+Shift+R`).
+    pub fn format_row_header(row_hdr: Option<&str>, row: usize) -> String {
+        if let Some(hdr) = row_hdr {
+            if !hdr.is_empty() {
+                return hdr.to_string();
+            }
+        }
+        format!("Row {}", row)
+    }
+
+    /// Formats mathematical equation announcement matching JAWS conventions.
+    pub fn format_math(math_text: &str) -> String {
+        format!("math {}", math_text)
     }
 
     /// Formats font formatting attributes into canonical JAWS description string.

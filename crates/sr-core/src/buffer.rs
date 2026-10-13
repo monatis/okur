@@ -95,8 +95,15 @@ pub struct BufferParagraph {
 pub struct TableCellInfo {
     pub node_id: usize,
     pub offset: usize,
-    pub row: usize,
-    pub col: usize,
+    pub row: usize,      // 1-indexed row position
+    pub col: usize,      // 1-indexed col position
+    pub row_span: usize, // number of rows spanned (default 1)
+    pub col_span: usize, // number of columns spanned (default 1)
+    pub is_header: bool,
+    pub is_col_header: bool,
+    pub is_row_header: bool,
+    pub col_header: Option<String>,
+    pub row_header: Option<String>,
     pub text: String,
 }
 
@@ -118,6 +125,33 @@ impl TableGrid {
             return None;
         }
         self.cells.get(row - 1).and_then(|r| r.get(col - 1))
+    }
+
+    pub fn first_cell(&self) -> Option<&TableCellInfo> {
+        self.cell(1, 1)
+    }
+
+    pub fn last_cell(&self) -> Option<&TableCellInfo> {
+        if self.rows == 0 || self.cols == 0 {
+            return None;
+        }
+        self.cell(self.rows, self.cols)
+    }
+
+    pub fn row_start(&self, row: usize) -> Option<&TableCellInfo> {
+        self.cell(row, 1)
+    }
+
+    pub fn row_end(&self, row: usize) -> Option<&TableCellInfo> {
+        self.cell(row, self.cols)
+    }
+
+    pub fn col_top(&self, col: usize) -> Option<&TableCellInfo> {
+        self.cell(1, col)
+    }
+
+    pub fn col_bottom(&self, col: usize) -> Option<&TableCellInfo> {
+        self.cell(self.rows, col)
     }
 }
 
@@ -162,6 +196,7 @@ pub struct VirtualBuffer {
     pub dialogs: Vec<DialogInfo>,
     pub frames: Vec<FrameInfo>,
     pub frame_offsets: Vec<usize>,
+    pub math_blocks: Vec<usize>,
     pub target_anchors: HashMap<String, usize>,
     pub node_map: HashMap<usize, AomNode>,
 }
@@ -657,6 +692,25 @@ impl VirtualBuffer {
             .iter()
             .find(|s| s.start_offset == offset && matches!(s.role, Role::Table))
             .and_then(|s| self.node_map.get(&s.node_id))
+    }
+
+    /// Returns the next math block starting after the given offset.
+    pub fn next_math_from(&self, offset: usize) -> Option<usize> {
+        self.math_blocks.iter().copied().find(|&o| o > offset)
+    }
+
+    /// Returns the prior math block starting before the current math block of the given offset.
+    pub fn prior_math_from(&self, offset: usize) -> Option<usize> {
+        let current_start = self
+            .math_blocks
+            .iter()
+            .copied()
+            .rfind(|&o| o <= offset)
+            .unwrap_or(offset);
+        self.math_blocks
+            .iter()
+            .copied()
+            .rfind(|&o| o < current_start)
     }
 
     /// Returns the text slice of a span covering `offset`.
@@ -1587,86 +1641,363 @@ impl BufferBuilder {
                 }
                 let table_start = buffer.text.len();
                 buffer.table_offsets.push(table_start);
+                buffer.node_map.insert(node.id, node.clone());
 
                 let mut row_nodes = Vec::new();
                 Self::collect_table_rows(node, &mut row_nodes);
 
-                let mut table_cells_2d: Vec<Vec<TableCellInfo>> = Vec::new();
+                // Pass 1: Build grid layout, tracking rowspan and colspan
+                let mut raw_cells: Vec<(usize, usize, usize, usize, AomNode)> = Vec::new();
+                let mut occupied: Vec<Vec<bool>> = Vec::new();
+                let mut max_cols = 0;
 
                 for (r_idx, row_node) in row_nodes.iter().enumerate() {
                     buffer.node_map.insert(row_node.id, row_node.clone());
-                    let row_start = buffer.text.len();
+                    let r = r_idx + 1;
+                    while occupied.len() < r {
+                        occupied.push(Vec::new());
+                    }
 
                     let mut cell_nodes = Vec::new();
                     Self::collect_table_cells(row_node, &mut cell_nodes);
 
-                    let mut row_cells = Vec::new();
-                    for (c_idx, cell_node) in cell_nodes.iter().enumerate() {
+                    let mut c = 1;
+                    for cell_node in cell_nodes {
                         buffer.node_map.insert(cell_node.id, cell_node.clone());
-                        if c_idx > 0 {
-                            buffer.text.push(' ');
+                        if let Some(r_occ) = occupied.get(r - 1) {
+                            while c <= r_occ.len() && r_occ.get(c - 1).copied().unwrap_or(false) {
+                                c += 1;
+                            }
                         }
-                        let cell_start = buffer.text.len();
-                        let mut cell_text = cell_node
+
+                        let col_span: usize = cell_node
+                            .attributes
+                            .get("colspan")
+                            .or_else(|| cell_node.attributes.get("col_span"))
+                            .and_then(|v| v.parse().ok())
+                            .unwrap_or(1)
+                            .max(1);
+
+                        let row_span: usize = cell_node
+                            .attributes
+                            .get("rowspan")
+                            .or_else(|| cell_node.attributes.get("row_span"))
+                            .and_then(|v| v.parse().ok())
+                            .unwrap_or(1)
+                            .max(1);
+
+                        for dr in 0..row_span {
+                            let target_r = r + dr;
+                            while occupied.len() < target_r {
+                                occupied.push(Vec::new());
+                            }
+                            if let Some(row_occ) = occupied.get_mut(target_r - 1) {
+                                while row_occ.len() < c + col_span - 1 {
+                                    row_occ.push(false);
+                                }
+                                for dc in 0..col_span {
+                                    if let Some(slot) = row_occ.get_mut(c + dc - 1) {
+                                        *slot = true;
+                                    }
+                                }
+                            }
+                        }
+
+                        max_cols = max_cols.max(c + col_span - 1);
+                        raw_cells.push((r, c, row_span, col_span, cell_node));
+                        c += col_span;
+                    }
+                }
+
+                let total_rows = row_nodes.len().max(occupied.len());
+                let total_cols = max_cols.max(1);
+
+                // Map element ID -> text for explicit `headers` resolution
+                let mut id_to_text: HashMap<String, String> = HashMap::new();
+                for (_, _, _, _, cell_node) in &raw_cells {
+                    if let Some(id) = cell_node.attributes.get("id") {
+                        let txt = cell_node
                             .text
                             .clone()
                             .or_else(|| cell_node.name.clone())
-                            .unwrap_or_default();
-                        if cell_text.is_empty() {
-                            cell_text = cell_node.collect_text();
+                            .unwrap_or_else(|| cell_node.collect_text());
+                        id_to_text.insert(id.clone(), txt.trim().to_string());
+                    }
+                }
+
+                // Pass 2: Write cell text to buffer and build TableCellInfo items
+                let mut built_cells: Vec<TableCellInfo> = Vec::new();
+                let mut current_row = 0;
+                let mut current_row_start = buffer.text.len();
+                let mut current_row_node_id = 0;
+
+                for (r, c, r_span, c_span, cell_node) in raw_cells {
+                    if r != current_row {
+                        if current_row > 0 {
+                            let row_end = buffer.text.len();
+                            buffer.spans.push(BufferSpan {
+                                start_offset: current_row_start,
+                                end_offset: row_end,
+                                node_id: current_row_node_id,
+                                role: Role::TableRow,
+                            });
+                            let row_text = buffer.text[current_row_start..row_end].to_string();
+                            buffer.lines.push(BufferLine {
+                                line_index: buffer.lines.len(),
+                                start_offset: current_row_start,
+                                end_offset: row_end,
+                                node_id: current_row_node_id,
+                                role: Role::TableRow,
+                                text: row_text.clone(),
+                            });
+                            buffer.paragraphs.push(BufferParagraph {
+                                paragraph_index: buffer.paragraphs.len(),
+                                start_offset: current_row_start,
+                                end_offset: row_end,
+                                node_id: current_row_node_id,
+                                role: Role::TableRow,
+                                text: row_text,
+                            });
+                            if !buffer.text.ends_with('\n') {
+                                buffer.text.push('\n');
+                            }
                         }
-                        let cell_text = cell_text.trim().to_string();
-
-                        buffer.text.push_str(&cell_text);
-                        let cell_end = buffer.text.len();
-
-                        buffer.spans.push(BufferSpan {
-                            start_offset: cell_start,
-                            end_offset: cell_end,
-                            node_id: cell_node.id,
-                            role: Role::TableCell,
-                        });
-
-                        row_cells.push(TableCellInfo {
-                            node_id: cell_node.id,
-                            offset: cell_start,
-                            row: r_idx + 1,
-                            col: c_idx + 1,
-                            text: cell_text,
-                        });
+                        current_row = r;
+                        current_row_start = buffer.text.len();
+                        current_row_node_id = row_nodes.get(r - 1).map(|n| n.id).unwrap_or(0);
+                    } else if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
+                        buffer.text.push(' ');
                     }
 
+                    let cell_start = buffer.text.len();
+                    let mut cell_text = cell_node
+                        .text
+                        .clone()
+                        .or_else(|| cell_node.name.clone())
+                        .unwrap_or_default();
+                    if cell_text.is_empty() {
+                        cell_text = cell_node.collect_text();
+                    }
+                    let cell_text = cell_text.trim().to_string();
+
+                    buffer.text.push_str(&cell_text);
+                    let cell_end = buffer.text.len();
+
+                    buffer.spans.push(BufferSpan {
+                        start_offset: cell_start,
+                        end_offset: cell_end,
+                        node_id: cell_node.id,
+                        role: Role::TableCell,
+                    });
+
+                    let scope = cell_node.attributes.get("scope").map(|s| s.to_lowercase());
+                    let header_attr = cell_node.attributes.get("header").map(|s| s.to_lowercase());
+                    let tag = cell_node.attributes.get("tag").map(|s| s.to_lowercase());
+                    let role_attr = cell_node.attributes.get("role").map(|s| s.to_lowercase());
+
+                    let is_col_hdr = scope.as_deref() == Some("col")
+                        || scope.as_deref() == Some("colgroup")
+                        || header_attr.as_deref() == Some("col")
+                        || role_attr.as_deref() == Some("columnheader")
+                        || (tag.as_deref() == Some("th")
+                            && r == 1
+                            && scope.as_deref() != Some("row"));
+
+                    let is_row_hdr = scope.as_deref() == Some("row")
+                        || scope.as_deref() == Some("rowgroup")
+                        || header_attr.as_deref() == Some("row")
+                        || role_attr.as_deref() == Some("rowheader")
+                        || (tag.as_deref() == Some("th") && c == 1 && r > 1);
+
+                    let is_hdr = is_col_hdr || is_row_hdr || tag.as_deref() == Some("th");
+
+                    built_cells.push(TableCellInfo {
+                        node_id: cell_node.id,
+                        offset: cell_start,
+                        row: r,
+                        col: c,
+                        row_span: r_span,
+                        col_span: c_span,
+                        is_header: is_hdr,
+                        is_col_header: is_col_hdr,
+                        is_row_header: is_row_hdr,
+                        col_header: None,
+                        row_header: None,
+                        text: cell_text,
+                    });
+                }
+
+                if current_row > 0 {
                     let row_end = buffer.text.len();
                     buffer.spans.push(BufferSpan {
-                        start_offset: row_start,
+                        start_offset: current_row_start,
                         end_offset: row_end,
-                        node_id: row_node.id,
+                        node_id: current_row_node_id,
                         role: Role::TableRow,
                     });
-                    let row_text = buffer.text[row_start..row_end].to_string();
+                    let row_text = buffer.text[current_row_start..row_end].to_string();
                     buffer.lines.push(BufferLine {
                         line_index: buffer.lines.len(),
-                        start_offset: row_start,
+                        start_offset: current_row_start,
                         end_offset: row_end,
-                        node_id: row_node.id,
+                        node_id: current_row_node_id,
                         role: Role::TableRow,
                         text: row_text.clone(),
                     });
                     buffer.paragraphs.push(BufferParagraph {
                         paragraph_index: buffer.paragraphs.len(),
-                        start_offset: row_start,
+                        start_offset: current_row_start,
                         end_offset: row_end,
-                        node_id: row_node.id,
+                        node_id: current_row_node_id,
                         role: Role::TableRow,
                         text: row_text,
                     });
-
-                    table_cells_2d.push(row_cells);
-
                     if !buffer.text.ends_with('\n') {
                         buffer.text.push('\n');
                     }
                 }
+
+                // Pass 3: Populate 2D grid matrix of shape [total_rows][total_cols]
+                let mut grid_matrix: Vec<Vec<Option<TableCellInfo>>> =
+                    vec![vec![None; total_cols]; total_rows];
+                for cell_info in &built_cells {
+                    for dr in 0..cell_info.row_span {
+                        for dc in 0..cell_info.col_span {
+                            let gr = cell_info.row + dr - 1;
+                            let gc = cell_info.col + dc - 1;
+                            if gr < total_rows && gc < total_cols {
+                                if let Some(target_slot) =
+                                    grid_matrix.get_mut(gr).and_then(|row| row.get_mut(gc))
+                                {
+                                    *target_slot = Some(cell_info.clone());
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Pass 4: Resolve column and row headers for each cell
+                let mut resolved_headers: Vec<Vec<(Option<String>, Option<String>)>> =
+                    vec![vec![(None, None); total_cols]; total_rows];
+                for (r, row_cells) in grid_matrix.iter().enumerate() {
+                    for (c, cell_opt) in row_cells.iter().enumerate() {
+                        if let Some(cell) = cell_opt {
+                            let mut col_h = None;
+                            let mut row_h = None;
+
+                            // Check explicit `headers` attribute
+                            let mut explicit_hdrs = Vec::new();
+                            if let Some(node_attrs) =
+                                buffer.node_map.get(&cell.node_id).map(|n| &n.attributes)
+                            {
+                                if let Some(headers_str) = node_attrs.get("headers") {
+                                    for h_id in headers_str.split_whitespace() {
+                                        if let Some(h_text) = id_to_text.get(h_id) {
+                                            explicit_hdrs.push(h_text.clone());
+                                        }
+                                    }
+                                }
+                            }
+
+                            if !explicit_hdrs.is_empty() {
+                                col_h = Some(explicit_hdrs.join(" "));
+                            } else {
+                                // Inferred Column Header (scan upwards in column c, picking most specific header)
+                                if !cell.is_col_header && r > 0 {
+                                    let mut col_hdrs = Vec::new();
+                                    for (scan_r, row_slice) in
+                                        grid_matrix.iter().enumerate().take(r)
+                                    {
+                                        if let Some(candidate) =
+                                            row_slice.get(c).and_then(|opt| opt.as_ref())
+                                        {
+                                            if (candidate.is_col_header
+                                                || (candidate.is_header && scan_r == 0))
+                                                && !candidate.text.is_empty()
+                                                && !col_hdrs.contains(&candidate.text)
+                                            {
+                                                col_hdrs.push(candidate.text.clone());
+                                            }
+                                        }
+                                    }
+                                    if !col_hdrs.is_empty() {
+                                        col_h = col_hdrs.last().cloned();
+                                    }
+                                }
+
+                                // Inferred Row Header (scan leftwards in row r, picking most specific header)
+                                if !cell.is_row_header && c > 0 {
+                                    let mut row_hdrs = Vec::new();
+                                    for (scan_c, candidate_cell) in
+                                        row_cells.iter().enumerate().take(c)
+                                    {
+                                        if let Some(candidate) = candidate_cell {
+                                            if (candidate.is_row_header
+                                                || (candidate.is_header && scan_c == 0))
+                                                && !candidate.text.is_empty()
+                                                && !row_hdrs.contains(&candidate.text)
+                                            {
+                                                row_hdrs.push(candidate.text.clone());
+                                            }
+                                        }
+                                    }
+                                    if !row_hdrs.is_empty() {
+                                        row_h = row_hdrs.last().cloned();
+                                    }
+                                }
+                            }
+                            if let Some(slot) =
+                                resolved_headers.get_mut(r).and_then(|row| row.get_mut(c))
+                            {
+                                *slot = (col_h, row_h);
+                            }
+                        }
+                    }
+                }
+
+                for (r, row_cells) in grid_matrix.iter_mut().enumerate() {
+                    for (c, cell_opt) in row_cells.iter_mut().enumerate() {
+                        if let Some(cell) = cell_opt {
+                            if let Some((ch, rh)) =
+                                resolved_headers.get(r).and_then(|row| row.get(c))
+                            {
+                                if ch.is_some() {
+                                    cell.col_header = ch.clone();
+                                }
+                                if rh.is_some() {
+                                    cell.row_header = rh.clone();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                let final_cells: Vec<Vec<TableCellInfo>> = grid_matrix
+                    .into_iter()
+                    .enumerate()
+                    .map(|(r_idx, row_vec)| {
+                        row_vec
+                            .into_iter()
+                            .enumerate()
+                            .map(|(c_idx, maybe_cell)| {
+                                maybe_cell.unwrap_or(TableCellInfo {
+                                    node_id: 0,
+                                    offset: table_start,
+                                    row: r_idx + 1,
+                                    col: c_idx + 1,
+                                    row_span: 1,
+                                    col_span: 1,
+                                    is_header: false,
+                                    is_col_header: false,
+                                    is_row_header: false,
+                                    col_header: None,
+                                    row_header: None,
+                                    text: String::new(),
+                                })
+                            })
+                            .collect()
+                    })
+                    .collect();
 
                 let table_end = buffer.text.len();
                 buffer.spans.push(BufferSpan {
@@ -1675,9 +2006,6 @@ impl BufferBuilder {
                     node_id: node.id,
                     role: Role::Table,
                 });
-
-                let total_rows = table_cells_2d.len();
-                let total_cols = table_cells_2d.iter().map(|r| r.len()).max().unwrap_or(0);
 
                 let caption = node.name.clone().or_else(|| {
                     node.children.iter().find_map(|child| {
@@ -1696,9 +2024,52 @@ impl BufferBuilder {
                     caption,
                     start_offset: table_start,
                     end_offset: table_end,
-                    cells: table_cells_2d,
+                    cells: final_cells,
                 };
                 buffer.tables.push(grid);
+            }
+            Role::Math => {
+                if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
+                    buffer.text.push('\n');
+                }
+                let math_start = buffer.text.len();
+                buffer.node_map.insert(node.id, node.clone());
+                let math_text = Self::linearize_math(node);
+                let math_speech = SpeechFormatter::format_math(&math_text);
+
+                buffer.text.push_str(&math_speech);
+                let math_end = buffer.text.len();
+
+                buffer.spans.push(BufferSpan {
+                    start_offset: math_start,
+                    end_offset: math_end,
+                    node_id: node.id,
+                    role: Role::Math,
+                });
+
+                buffer.lines.push(BufferLine {
+                    line_index: buffer.lines.len(),
+                    start_offset: math_start,
+                    end_offset: math_end,
+                    node_id: node.id,
+                    role: Role::Math,
+                    text: math_speech.clone(),
+                });
+
+                buffer.paragraphs.push(BufferParagraph {
+                    paragraph_index: buffer.paragraphs.len(),
+                    start_offset: math_start,
+                    end_offset: math_end,
+                    node_id: node.id,
+                    role: Role::Math,
+                    text: math_speech,
+                });
+
+                buffer.math_blocks.push(math_start);
+
+                if !buffer.text.ends_with('\n') {
+                    buffer.text.push('\n');
+                }
             }
             Role::TabList => {
                 let group_name = node.name.clone();
@@ -2000,6 +2371,143 @@ impl BufferBuilder {
                 self.traverse_tree_item(child, level + 1, Some(node.id), buffer);
             } else {
                 self.traverse_node(child, buffer);
+            }
+        }
+    }
+
+    /// Linearizes a MathML / Math expression into spoken words matching JAWS conventions.
+    pub fn linearize_math(node: &AomNode) -> String {
+        let mut tokens = Vec::new();
+        Self::collect_math_tokens(node, &mut tokens);
+        if tokens.is_empty() {
+            if let Some(ref text) = node.text {
+                return text.clone();
+            }
+            if let Some(ref name) = node.name {
+                return name.clone();
+            }
+        }
+        tokens.join(" ")
+    }
+
+    fn collect_math_tokens(node: &AomNode, tokens: &mut Vec<String>) {
+        let tag = node
+            .attributes
+            .get("tag")
+            .or_else(|| node.attributes.get("mathml_tag"))
+            .map(|s| s.to_lowercase());
+
+        match tag.as_deref() {
+            Some("mfrac") => {
+                let num = node
+                    .children
+                    .first()
+                    .map(Self::linearize_math)
+                    .unwrap_or_default();
+                let den = node
+                    .children
+                    .get(1)
+                    .map(Self::linearize_math)
+                    .unwrap_or_default();
+                tokens.push(format!("fraction {} over {} end fraction", num, den));
+            }
+            Some("msqrt") => {
+                let inner = if !node.children.is_empty() {
+                    let mut subtokens = Vec::new();
+                    for child in &node.children {
+                        Self::collect_math_tokens(child, &mut subtokens);
+                    }
+                    subtokens.join(" ")
+                } else {
+                    node.text.clone().unwrap_or_default()
+                };
+                tokens.push(format!("square root of {} end root", inner));
+            }
+            Some("mroot") => {
+                let rad = node
+                    .children
+                    .first()
+                    .map(Self::linearize_math)
+                    .unwrap_or_default();
+                let idx = node
+                    .children
+                    .get(1)
+                    .map(Self::linearize_math)
+                    .unwrap_or_default();
+                tokens.push(format!("{} root of {} end root", idx, rad));
+            }
+            Some("msup") => {
+                let base = node
+                    .children
+                    .first()
+                    .map(Self::linearize_math)
+                    .unwrap_or_default();
+                let exp = node
+                    .children
+                    .get(1)
+                    .map(Self::linearize_math)
+                    .unwrap_or_default();
+                if exp == "2" {
+                    tokens.push(format!("{} squared", base));
+                } else if exp == "3" {
+                    tokens.push(format!("{} cubed", base));
+                } else {
+                    tokens.push(format!("{} to the power of {}", base, exp));
+                }
+            }
+            Some("msub") => {
+                let base = node
+                    .children
+                    .first()
+                    .map(Self::linearize_math)
+                    .unwrap_or_default();
+                let sub = node
+                    .children
+                    .get(1)
+                    .map(Self::linearize_math)
+                    .unwrap_or_default();
+                tokens.push(format!("{} sub {}", base, sub));
+            }
+            Some("mo") => {
+                let raw_op = node
+                    .text
+                    .as_deref()
+                    .or(node.name.as_deref())
+                    .unwrap_or("")
+                    .trim();
+                let spoken_op = match raw_op {
+                    "+" => "plus",
+                    "-" | "−" => "minus",
+                    "=" => "equals",
+                    "±" | "&#177;" => "plus or minus",
+                    "*" | "×" => "times",
+                    "/" | "÷" => "divided by",
+                    "<" => "less than",
+                    ">" => "greater than",
+                    "≤" => "less than or equal to",
+                    "≥" => "greater than or equal to",
+                    other => other,
+                };
+                if !spoken_op.is_empty() {
+                    tokens.push(spoken_op.to_string());
+                }
+            }
+            _ => {
+                if !node.children.is_empty() {
+                    for child in &node.children {
+                        Self::collect_math_tokens(child, tokens);
+                    }
+                } else {
+                    let text = node
+                        .text
+                        .as_deref()
+                        .or(node.name.as_deref())
+                        .unwrap_or("")
+                        .trim();
+                    if !text.is_empty() {
+                        tokens.push(text.to_string());
+                    }
+                }
             }
         }
     }

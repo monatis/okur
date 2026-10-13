@@ -99,6 +99,11 @@ impl KeyEvent {
             }
 
             // Directional & reading navigation
+            Key::DownArrow if m.ctrl && m.alt && m.shift => Some("^%+DOWN".to_string()),
+            Key::UpArrow if m.ctrl && m.alt && m.shift => Some("^%+UP".to_string()),
+            Key::RightArrow if m.ctrl && m.alt && m.shift => Some("^%+RIGHT".to_string()),
+            Key::LeftArrow if m.ctrl && m.alt && m.shift => Some("^%+LEFT".to_string()),
+
             Key::DownArrow if m.ctrl && m.alt => Some("^%{DOWN}".to_string()),
             Key::UpArrow if m.ctrl && m.alt => Some("^%{UP}".to_string()),
             Key::RightArrow if m.ctrl && m.alt => Some("^%{RIGHT}".to_string()),
@@ -117,7 +122,9 @@ impl KeyEvent {
             Key::RightArrow if m.is_empty() => Some("{RIGHT}".to_string()),
             Key::LeftArrow if m.is_empty() => Some("{LEFT}".to_string()),
 
-            // Document boundary navigation
+            // Document & Table boundary navigation
+            Key::Home if m.ctrl && m.alt => Some("^%{HOME}".to_string()),
+            Key::End if m.ctrl && m.alt => Some("^%{END}".to_string()),
             Key::Home if m.ctrl => Some("^{HOME}".to_string()),
             Key::End if m.ctrl => Some("^{END}".to_string()),
 
@@ -149,6 +156,14 @@ impl KeyEvent {
                 Some("Insert+Ctrl+F".to_string())
             }
 
+            // Table headers direct query (Ctrl+Alt+Shift+H and Ctrl+Alt+Shift+R)
+            Key::Alpha(c) if c.eq_ignore_ascii_case(&'H') && m.ctrl && m.alt && m.shift => {
+                Some("^%+H".to_string())
+            }
+            Key::Alpha(c) if c.eq_ignore_ascii_case(&'R') && m.ctrl && m.alt && m.shift => {
+                Some("^%+R".to_string())
+            }
+
             // Function keys (FindNext, FindPrior, Element Lists)
             Key::F(3) if m.shift && !m.ctrl && !m.alt && !m.insert => Some("+{F3}".to_string()),
             Key::F(3) if m.is_empty() => Some("{F3}".to_string()),
@@ -157,11 +172,15 @@ impl KeyEvent {
             Key::F(6) if m.insert && !m.ctrl && !m.alt && !m.shift => Some("Insert+F6".to_string()),
             Key::F(7) if m.insert && !m.ctrl && !m.alt && !m.shift => Some("Insert+F7".to_string()),
 
+            // Current table cell query (Ctrl+Alt+5 / Ctrl+Alt+NumPad5)
+            Key::Digit(5) if m.ctrl && m.alt => Some("^%5".to_string()),
+
             // Quick navigation keys
             Key::Alpha(c) => {
                 let upper = c.to_ascii_uppercase();
                 match upper {
-                    'H' | 'T' | 'K' | 'U' | 'F' | 'B' | 'E' | 'X' | 'L' | 'I' | 'R' | 'C' | 'M' => {
+                    'H' | 'T' | 'K' | 'U' | 'F' | 'B' | 'E' | 'X' | 'L' | 'I' | 'R' | 'C' | 'M'
+                    | 'O' => {
                         if m.shift && !m.ctrl && !m.alt {
                             Some(format!("+{}", upper))
                         } else if m.is_empty() {
@@ -173,6 +192,7 @@ impl KeyEvent {
                     _ => None,
                 }
             }
+
             Key::Digit(d) if (1..=6).contains(&d) => {
                 if m.shift && !m.ctrl && !m.alt {
                     Some(format!("+{}", d))

@@ -1,0 +1,149 @@
+{
+  "id": "60-table-spans-and-mathml",
+  "name": "Spanning Table Cells and MathML Linearization",
+  "category": "Complex Table Headers and Coordinates",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/spans-and-math.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "jaws_script",
+      "command": "MoveToNextTable",
+      "settle_ms": 300,
+      "assertions": {
+        "target_role": "table",
+        "contains_speech": [
+          "table with 5 columns and 3 rows",
+          "Financial Spans Table",
+          "Column 1, Row 1",
+          "Item"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "type": "keyboard",
+      "command": "^%{RIGHT}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "2025",
+          "Spans 2 columns",
+          "Column 2 of 5"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "type": "keyboard",
+      "command": "^%{RIGHT}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "2026",
+          "Spans 2 columns",
+          "Column 4 of 5"
+        ]
+      }
+    },
+    {
+      "id": "s4",
+      "type": "keyboard",
+      "command": "^%{HOME}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Item",
+          "Column 1, Row 1"
+        ]
+      }
+    },
+    {
+      "id": "s5",
+      "type": "keyboard",
+      "command": "^%{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Product A",
+          "Row 3 of 3"
+        ]
+      }
+    },
+    {
+      "id": "s6",
+      "type": "keyboard",
+      "command": "^%{RIGHT}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Q1",
+          "$100",
+          "Column 2 of 5"
+        ]
+      }
+    },
+    {
+      "id": "s7",
+      "type": "keyboard",
+      "command": "^%{RIGHT}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Q2",
+          "$250",
+          "Spans 2 columns",
+          "Column 3 of 5"
+        ]
+      }
+    },
+    {
+      "id": "s8",
+      "type": "keyboard",
+      "command": "^%{RIGHT}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Q4",
+          "$400",
+          "Column 5 of 5"
+        ]
+      }
+    },
+    {
+      "id": "s9",
+      "type": "keyboard",
+      "command": "O",
+      "settle_ms": 200,
+      "assertions": {
+        "target_role": "math",
+        "contains_speech": [
+          "math",
+          "x equals fraction",
+          "minus b plus or minus square root",
+          "b squared minus 4 a c end root",
+          "over 2 a end fraction"
+        ]
+      }
+    },
+    {
+      "id": "s10",
+      "type": "keyboard",
+      "command": "{ENTER}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Math Viewer",
+          "Press Escape to exit"
+        ]
+      }
+    }
+  ]
+}
