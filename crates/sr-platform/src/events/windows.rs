@@ -121,14 +121,15 @@ impl FocusChangedHandler {
         let mut item_count = None;
 
         let is_desktop = parent_name == "Desktop"
+            || parent_name == "FolderView"
+            || grandparent_class == "SHELLDLL_DefView"
             || grandparent_class == "Progman"
             || grandparent_class == "WorkerW"
             || top_class == "Progman"
             || top_class == "WorkerW"
             || (parent_class == "SysListView32"
-                && (grandparent_class == "Progman"
-                    || grandparent_class == "WorkerW"
-                    || parent_name == "FolderView"));
+                && !top_class.contains("CabinetWClass")
+                && !top_title.contains("File Explorer"));
 
         let is_explorer = top_class == "CabinetWClass"
             || top_class == "ExploreWClass"
@@ -153,6 +154,14 @@ impl FocusChangedHandler {
             role = Role::ListItem;
 
             if !parent_hwnd.is_invalid() {
+                unsafe {
+                    let fg = windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow();
+                    if fg != parent_hwnd {
+                        let _ = windows::Win32::UI::WindowsAndMessaging::SetForegroundWindow(
+                            parent_hwnd,
+                        );
+                    }
+                }
                 let total = unsafe {
                     windows::Win32::UI::WindowsAndMessaging::SendMessageW(
                         parent_hwnd,

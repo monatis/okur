@@ -1060,24 +1060,6 @@ impl ScreenReaderEngine {
     /// Synchronizes cursor position, activates/deactivates forms mode,
     /// and emits canonical JAWS speech announcements.
     pub fn handle_focus_event(&mut self, focus: &FocusEvent) -> Option<String> {
-        // 0. Check if focus landed on native desktop
-        let is_desktop_event = focus.container_name.as_deref() == Some("FolderView")
-            || focus.window_class.as_deref() == Some("Progman")
-            || focus.window_class.as_deref() == Some("WorkerW")
-            || (focus.window_class.as_deref() == Some("SysListView32")
-                && focus.container_name.as_deref() != Some("Items View")
-                && focus.container_name.as_deref() != Some("Items view")
-                && focus
-                    .window_title
-                    .as_deref()
-                    .is_none_or(|t| !t.contains("File Explorer")))
-            || (focus.role == Role::ListItem
-                && self
-                    .desktop_state
-                    .as_ref()
-                    .is_some_and(|ds| !ds.items.is_empty())
-                && self.app_mode == AppMode::NativeDesktop);
-
         let is_explorer_event = focus.window_class.as_deref() == Some("CabinetWClass")
             || focus.window_class.as_deref() == Some("ShellTabWindowClass")
             || focus.window_class.as_deref() == Some("UIItemsView")
@@ -1088,6 +1070,16 @@ impl ScreenReaderEngine {
                 .window_title
                 .as_deref()
                 .is_some_and(|t| t.contains("File Explorer"));
+
+        // 0. Check if focus landed on native desktop
+        let is_desktop_event = !is_explorer_event
+            && (focus.container_name.as_deref() == Some("FolderView")
+                || focus.window_class.as_deref() == Some("Progman")
+                || focus.window_class.as_deref() == Some("WorkerW")
+                || (focus.window_class.as_deref() == Some("SysListView32")
+                    && focus.container_name.as_deref() != Some("Items View")
+                    && focus.container_name.as_deref() != Some("Items view"))
+                || (focus.role == Role::ListItem && self.app_mode == AppMode::NativeDesktop));
 
         if is_desktop_event {
             let prev_mode = self.app_mode;
@@ -1182,9 +1174,6 @@ impl ScreenReaderEngine {
         } else if focus.window_class.as_deref() == Some("Shell_TrayWnd")
             || focus.container_name.as_deref() == Some("Taskbar")
         {
-            if let Some(ref mut ds) = self.desktop_state {
-                ds.entered = false;
-            }
             if let Some(ref mut es) = self.explorer_state {
                 es.entered = false;
             }
@@ -1628,6 +1617,18 @@ mod tests {
             .with_item_count(11);
         let s3 = engine.handle_focus_event(&focus_letter).unwrap_or_default();
         assert_eq!(s3, "JAWS 2025\n4 of 11");
+
+        // Moving to another item directly on desktop speaks item-only
+        let focus_recycle = FocusEvent::new(Role::ListItem)
+            .with_container_name("FolderView")
+            .with_window_class("SysListView32")
+            .with_name("Recycle Bin")
+            .with_item_index(1)
+            .with_item_count(11);
+        let s4 = engine
+            .handle_focus_event(&focus_recycle)
+            .unwrap_or_default();
+        assert_eq!(s4, "Recycle Bin\n1 of 11");
     }
 
     #[test]

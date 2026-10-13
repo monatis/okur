@@ -63,7 +63,27 @@ impl KeyboardHook for WindowsKeyboardHook {
 
         let (init_tx, init_rx) = std::sync::mpsc::channel();
 
+        #[link(name = "user32")]
+        extern "system" {
+            fn OpenDesktopW(
+                lpszDesktop: *const u16,
+                dwFlags: u32,
+                fInherit: i32,
+                dwDesiredAccess: u32,
+            ) -> *mut std::ffi::c_void;
+            fn SetThreadDesktop(hDesktop: *mut std::ffi::c_void) -> i32;
+        }
+
         let handle = thread::spawn(move || {
+            // Attach thread to interactive user desktop
+            unsafe {
+                let default_name = windows::core::w!("default");
+                let h = OpenDesktopW(default_name.as_ptr(), 0, 0, 0x01FF);
+                if !h.is_null() {
+                    let _ = SetThreadDesktop(h);
+                }
+            }
+
             let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
 
             let hook = unsafe {
