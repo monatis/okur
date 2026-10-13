@@ -191,8 +191,21 @@ async fn main() {
                         );
                         let default_path = Path::new("corpus/fixtures/boundaries-dynamic.aom.json");
                         if default_path.exists() {
-                            let aom = load_aom_from_path(default_path).unwrap();
-                            VirtualBuffer::from_aom(&aom)
+                            match load_aom_from_path(default_path) {
+                                Ok(aom) => VirtualBuffer::from_aom(&aom),
+                                Err(_) => {
+                                    let doc_aom = AomNode::new(0, Role::Document)
+                                        .with_name("Default Screen Reader Document")
+                                        .with_children(vec![
+                                            AomNode::new(1, Role::Heading { level: 1 })
+                                                .with_text("Welcome to Open-Source Screen Reader"),
+                                            AomNode::new(2, Role::Paragraph).with_text(
+                                                "Use Down Arrow and Up Arrow to read line by line. Press H for headings, T for tables, Tab for controls. Press Ctrl to silence speech, and Ctrl+C to exit.",
+                                            ),
+                                        ]);
+                                    VirtualBuffer::from_aom(&doc_aom)
+                                }
+                            }
                         } else {
                             let doc_aom = AomNode::new(0, Role::Document)
                                 .with_name("Default Screen Reader Document")
@@ -215,8 +228,7 @@ async fn main() {
             let engine = Arc::new(Mutex::new(ScreenReaderEngine::new(cursor, Box::new(tts))));
 
             // Announce startup
-            {
-                let mut eng = engine.lock().unwrap();
+            if let Ok(mut eng) = engine.lock() {
                 let doc_name = eng.cursor.buffer.document_title().unwrap_or("Document");
                 let welcome = format!("{}  \u{001d} Virtual PC Cursor \u{001e}", doc_name);
                 println!(
@@ -280,8 +292,7 @@ async fn main() {
             println!("\nShutting down screen reader daemon...");
             let _ = hook.stop();
             let _ = event_listener.stop();
-            {
-                let mut eng = engine.lock().unwrap();
+            if let Ok(mut eng) = engine.lock() {
                 eng.speech.speak("Screen reader exiting.", true);
             }
             println!("Screen reader stopped cleanly.");

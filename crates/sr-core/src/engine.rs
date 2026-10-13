@@ -867,9 +867,7 @@ mod tests {
         let focus_ev = FocusEvent::new(Role::Edit)
             .with_node_id(3)
             .with_name("Search Input");
-        let speech = engine
-            .handle_focus_event(&focus_ev)
-            .expect("Should produce speech");
+        let speech = engine.handle_focus_event(&focus_ev).unwrap_or_default();
 
         // Engine should automatically enter Forms Mode and emit canonical JAWS prompt
         assert!(engine.forms_mode);
@@ -882,9 +880,7 @@ mod tests {
         let btn_focus = FocusEvent::new(Role::Button)
             .with_node_id(4)
             .with_name("Submit Button");
-        let btn_speech = engine
-            .handle_focus_event(&btn_focus)
-            .expect("Should produce exit speech");
+        let btn_speech = engine.handle_focus_event(&btn_focus).unwrap_or_default();
 
         assert!(!engine.forms_mode);
         assert!(!engine.cursor.forms_mode_active);
@@ -902,16 +898,12 @@ mod tests {
 
         // Assertive live region
         let alert = LiveRegionEvent::new("Security update installed.", Politeness::Assertive);
-        let alert_speech = engine
-            .handle_live_region_event(&alert)
-            .expect("Assertive alert speech");
+        let alert_speech = engine.handle_live_region_event(&alert).unwrap_or_default();
         assert_eq!(alert_speech, "Security update installed.");
 
         // Polite live region
         let status = LiveRegionEvent::new("Download finished.", Politeness::Polite);
-        let status_speech = engine
-            .handle_live_region_event(&status)
-            .expect("Polite status speech");
+        let status_speech = engine.handle_live_region_event(&status).unwrap_or_default();
         assert_eq!(status_speech, "Download finished.");
 
         // Politeness::Off
@@ -990,28 +982,25 @@ mod tests {
         let focus_dlg = FocusEvent::new(Role::Dialog)
             .with_node_id(10)
             .with_name("Confirm Deletion");
-        let speech = engine
-            .handle_focus_event(&focus_dlg)
-            .expect("Should announce dialog entry");
+        let speech = engine.handle_focus_event(&focus_dlg).unwrap_or_default();
         assert_eq!(speech, "Dialog Confirm Deletion");
         assert!(engine.cursor.is_in_modal());
 
         // Quick navigation 'H' inside modal wraps within modal and finds level 2 heading
-        let h_speech = engine.execute_command("H");
-        assert!(h_speech.is_some());
-        assert!(h_speech.unwrap().contains("Are you sure?"));
+        let h_speech = engine.execute_command("H").unwrap_or_default();
+        assert!(h_speech.contains("Are you sure?"));
 
         // Tab moves to Confirm button
-        let tab1 = engine.execute_command("{TAB}");
-        assert!(tab1.unwrap().contains("Confirm"));
+        let tab1 = engine.execute_command("{TAB}").unwrap_or_default();
+        assert!(tab1.contains("Confirm"));
 
         // Tab moves to Cancel button
-        let tab2 = engine.execute_command("{TAB}");
-        assert!(tab2.unwrap().contains("Cancel"));
+        let tab2 = engine.execute_command("{TAB}").unwrap_or_default();
+        assert!(tab2.contains("Cancel"));
 
         // Tab wraps back to Confirm button inside dialog (cannot escape to backdrop!)
-        let tab3 = engine.execute_command("{TAB}");
-        assert!(tab3.unwrap().contains("Confirm"));
+        let tab3 = engine.execute_command("{TAB}").unwrap_or_default();
+        assert!(tab3.contains("Confirm"));
 
         // Escape exits modal dialog
         let esc_event = KeyEvent::new(Key::Escape, Modifiers::none(), true);

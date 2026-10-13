@@ -96,14 +96,14 @@ mod tests {
         cursor.move_to_start();
 
         // 02-doc-next-line: Down arrow
-        let down_speech = cursor.move_next_line().expect("Should move down");
+        let down_speech = cursor.move_next_line().unwrap_or_default();
         assert_eq!(
             down_speech,
             " \u{001d} heading level 1 \u{001e} The Accessibility Engine Specification"
         );
 
         // 03-doc-prior-line: Up arrow
-        let up_speech = cursor.move_prior_line().expect("Should move up");
+        let up_speech = cursor.move_prior_line().unwrap_or_default();
         assert_eq!(up_speech, "Document Reading Reference Fixture");
     }
 
@@ -116,11 +116,11 @@ mod tests {
         cursor.move_to_start();
 
         // 04-doc-next-word: Ctrl+Right
-        let next_word = cursor.move_next_word().expect("Should move next word");
+        let next_word = cursor.move_next_word().unwrap_or_default();
         assert_eq!(next_word, "Reading");
 
         // 05-doc-prior-word: Ctrl+Left
-        let prior_word = cursor.move_prior_word().expect("Should move prior word");
+        let prior_word = cursor.move_prior_word().unwrap_or_default();
         assert_eq!(prior_word, "Document");
     }
 
@@ -133,11 +133,11 @@ mod tests {
         cursor.move_to_start();
 
         // 06-doc-next-char: Right Arrow
-        let next_char = cursor.move_next_char().expect("Should move next char");
+        let next_char = cursor.move_next_char().unwrap_or_default();
         assert_eq!(next_char, "o");
 
         // 07-doc-prior-char: Left Arrow
-        let prior_char = cursor.move_prior_char().expect("Should move prior char");
+        let prior_char = cursor.move_prior_char().unwrap_or_default();
         assert_eq!(prior_char, "D");
     }
 
@@ -178,9 +178,7 @@ mod tests {
 
         cursor.move_to_start();
 
-        let next_p = cursor
-            .move_next_paragraph()
-            .expect("Should move to next paragraph");
+        let next_p = cursor.move_next_paragraph().unwrap_or_default();
         assert_eq!(
             next_p,
             " \u{001d} heading level 1 \u{001e} The Accessibility Engine Specification"
@@ -276,16 +274,16 @@ mod tests {
 
         cursor.move_to_start();
 
-        let s1 = cursor.move_next_heading().expect("Heading 1");
+        let s1 = cursor.move_next_heading().unwrap_or_default();
         assert_eq!(
             s1,
             "System Documentation\n \u{001d} heading level 1 \u{001e}"
         );
 
-        let s2 = cursor.move_next_heading().expect("Heading 2");
+        let s2 = cursor.move_next_heading().unwrap_or_default();
         assert_eq!(s2, "Section Overview\n \u{001d} heading level 2 \u{001e}");
 
-        let prior = cursor.move_prior_heading().expect("Prior heading");
+        let prior = cursor.move_prior_heading().unwrap_or_default();
         assert_eq!(
             prior,
             "System Documentation\n \u{001d} heading level 1 \u{001e}"
@@ -300,13 +298,13 @@ mod tests {
 
         cursor.move_to_start();
 
-        let s1 = cursor.move_next_heading_level(2).expect("First level 2");
+        let s1 = cursor.move_next_heading_level(2).unwrap_or_default();
         assert_eq!(s1, "Section Overview\n \u{001d} heading level 2 \u{001e}");
 
-        let s2 = cursor.move_next_heading_level(2).expect("Second level 2");
+        let s2 = cursor.move_next_heading_level(2).unwrap_or_default();
         assert_eq!(s2, "Architecture Guide\n \u{001d} heading level 2 \u{001e}");
 
-        let prior = cursor.move_prior_heading_level(2).expect("Prior level 2");
+        let prior = cursor.move_prior_heading_level(2).unwrap_or_default();
         assert_eq!(
             prior,
             "Section Overview\n \u{001d} heading level 2 \u{001e}"
@@ -321,13 +319,13 @@ mod tests {
 
         cursor.move_to_start();
 
-        let s1 = cursor.move_next_link().expect("Link 1");
+        let s1 = cursor.move_next_link().unwrap_or_default();
         assert_eq!(s1, "•  \u{001d} same page link \u{001e} Overview Link");
 
-        let s2 = cursor.move_next_link().expect("Link 2");
+        let s2 = cursor.move_next_link().unwrap_or_default();
         assert_eq!(s2, "•  \u{001d} same page link \u{001e} Architecture Link");
 
-        let prior = cursor.move_prior_link().expect("Prior link");
+        let prior = cursor.move_prior_link().unwrap_or_default();
         assert_eq!(prior, "•  \u{001d} same page link \u{001e} Overview Link");
     }
 
@@ -339,13 +337,13 @@ mod tests {
 
         cursor.move_to_start();
 
-        let s1 = cursor.move_next_list().expect("List 1");
+        let s1 = cursor.move_next_list().unwrap_or_default();
         assert_eq!(s1, "List of 3 items");
 
-        let s2 = cursor.move_next_list_item().expect("List item 1");
+        let s2 = cursor.move_next_list_item().unwrap_or_default();
         assert_eq!(s2, "•  \u{001d} same page link \u{001e} Overview Link");
 
-        let s3 = cursor.move_next_list_item().expect("List item 2");
+        let s3 = cursor.move_next_list_item().unwrap_or_default();
         assert_eq!(s3, "•  \u{001d} same page link \u{001e} Architecture Link");
     }
 
@@ -357,13 +355,13 @@ mod tests {
 
         cursor.move_to_start();
 
-        let s1 = cursor.move_next_landmark().expect("Landmark 1");
+        let s1 = cursor.move_next_landmark().unwrap_or_default();
         assert_eq!(s1, "banner");
 
-        let s2 = cursor.move_next_landmark().expect("Landmark 2");
+        let s2 = cursor.move_next_landmark().unwrap_or_default();
         assert_eq!(s2, "Main Navigation navigation region");
 
-        let prior = cursor.move_prior_landmark().expect("Prior landmark");
+        let prior = cursor.move_prior_landmark().unwrap_or_default();
         assert_eq!(prior, "banner");
     }
 
@@ -403,18 +401,16 @@ mod tests {
 
         cursor.move_to_start();
 
-        let s1 = cursor.move_next_form_control().expect("First form control");
+        let s1 = cursor.move_next_form_control().unwrap_or_default();
         assert_eq!(s1, "Full Name:  \u{001d} Edit \u{001e}  \nJane Doe");
 
-        let s2 = cursor
-            .move_next_form_control()
-            .expect("Second form control");
+        let s2 = cursor.move_next_form_control().unwrap_or_default();
         assert_eq!(
             s2,
             "Email Address:  \u{001d} Edit \u{001e}  \njane@example.com"
         );
 
-        let s3 = cursor.move_next_form_control().expect("Third form control");
+        let s3 = cursor.move_next_form_control().unwrap_or_default();
         assert_eq!(
             s3,
             " I accept terms and conditions  \u{001d} check box \u{001e}   \u{001d}not checked\u{001e}"
@@ -429,10 +425,10 @@ mod tests {
 
         cursor.move_to_start();
 
-        let b1 = cursor.move_next_button().expect("First button");
+        let b1 = cursor.move_next_button().unwrap_or_default();
         assert_eq!(b1, "Save Preferences  \u{001d} Button \u{001e}");
 
-        let b2 = cursor.move_next_button().expect("Second button");
+        let b2 = cursor.move_next_button().unwrap_or_default();
         assert_eq!(b2, "Submit Application  \u{001d} Button \u{001e}");
     }
 
@@ -444,10 +440,10 @@ mod tests {
 
         cursor.move_to_start();
 
-        let e1 = cursor.move_next_edit().expect("First edit");
+        let e1 = cursor.move_next_edit().unwrap_or_default();
         assert_eq!(e1, "Full Name:  \u{001d} Edit \u{001e}  \nJane Doe");
 
-        let e2 = cursor.move_next_edit().expect("Second edit");
+        let e2 = cursor.move_next_edit().unwrap_or_default();
         assert_eq!(
             e2,
             "Email Address:  \u{001d} Edit \u{001e}  \njane@example.com"
@@ -462,15 +458,15 @@ mod tests {
 
         cursor.move_to_start();
 
-        cursor.move_next_edit().expect("Move to edit");
+        let _ = cursor.move_next_edit();
         assert!(!cursor.forms_mode_active);
 
-        let entry = cursor.enter_forms_mode().expect("Enter forms mode");
+        let entry = cursor.enter_forms_mode().unwrap_or_default();
         assert!(cursor.forms_mode_active);
         assert!(entry.contains("Type in text"));
         assert!(entry.contains("Full Name:"));
 
-        let exit = cursor.exit_forms_mode().expect("Exit forms mode");
+        let exit = cursor.exit_forms_mode().unwrap_or_default();
         assert!(!cursor.forms_mode_active);
         assert_eq!(exit, "virtual PC Cursor");
     }
@@ -483,14 +479,14 @@ mod tests {
 
         cursor.move_to_start();
 
-        let cb = cursor.move_next_checkbox().expect("Move to checkbox");
+        let cb = cursor.move_next_checkbox().unwrap_or_default();
         assert!(cb.contains("not checked"));
         assert_eq!(
             cursor.current_node().and_then(|n| n.states.checked),
             Some(false)
         );
 
-        let toggle = cursor.toggle_active_control().expect("Toggle checkbox");
+        let toggle = cursor.toggle_active_control().unwrap_or_default();
         assert!(toggle.contains("checked"));
         assert_eq!(
             cursor.current_node().and_then(|n| n.states.checked),
@@ -547,7 +543,7 @@ mod tests {
         cursor.move_to_start();
 
         // 21-table-next-table
-        let entry = cursor.move_next_table().expect("Should jump to table");
+        let entry = cursor.move_next_table().unwrap_or_default();
         assert_eq!(
             entry,
             "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
@@ -557,41 +553,35 @@ mod tests {
         assert_eq!(cursor.current_table_row(), Some(1));
 
         // 22-table-cell-right
-        let right_speech = cursor
-            .move_table_cell_right()
-            .expect("Should move right in row");
+        let right_speech = cursor.move_table_cell_right().unwrap_or_default();
         assert_eq!(right_speech, "Revenue\nColumn 2 of 4");
         assert_eq!(cursor.current_table_col(), Some(2));
         assert_eq!(cursor.current_table_row(), Some(1));
 
         // 23-table-cell-left
-        let left_speech = cursor
-            .move_table_cell_left()
-            .expect("Should move left in row");
+        let left_speech = cursor.move_table_cell_left().unwrap_or_default();
         assert_eq!(left_speech, "Quarter\nColumn 1 of 4");
         assert_eq!(cursor.current_table_col(), Some(1));
         assert_eq!(cursor.current_table_row(), Some(1));
 
         // Edge check at col 1
-        let edge_left = cursor.move_table_cell_left().expect("Should announce edge");
+        let edge_left = cursor.move_table_cell_left().unwrap_or_default();
         assert_eq!(edge_left, "edge of table");
 
         // 24-table-row-down
-        let down_speech = cursor
-            .move_table_cell_down()
-            .expect("Should move down in col");
+        let down_speech = cursor.move_table_cell_down().unwrap_or_default();
         assert_eq!(down_speech, "Q1\nRow 2 of 4");
         assert_eq!(cursor.current_table_col(), Some(1));
         assert_eq!(cursor.current_table_row(), Some(2));
 
         // 25-table-row-up
-        let up_speech = cursor.move_table_cell_up().expect("Should move up in col");
+        let up_speech = cursor.move_table_cell_up().unwrap_or_default();
         assert_eq!(up_speech, "Quarter\nRow 1 of 4");
         assert_eq!(cursor.current_table_col(), Some(1));
         assert_eq!(cursor.current_table_row(), Some(1));
 
         // Edge check at row 1
-        let edge_up = cursor.move_table_cell_up().expect("Should announce edge");
+        let edge_up = cursor.move_table_cell_up().unwrap_or_default();
         assert_eq!(edge_up, "edge of table");
     }
 
@@ -601,9 +591,7 @@ mod tests {
         let buffer = VirtualBuffer::from_aom(&empty_doc);
         let mut cursor = VirtualCursor::new(buffer);
 
-        let res = cursor
-            .move_next_table()
-            .expect("Should return speech on negative match");
+        let res = cursor.move_next_table().unwrap_or_default();
         assert_eq!(res, "There are no tables on this page.");
     }
 
@@ -616,9 +604,7 @@ mod tests {
         cursor.move_to_start();
 
         // 1. Forward search for "Architecture"
-        let match1 = cursor
-            .find_text("Architecture", false)
-            .expect("Should find Architecture");
+        let match1 = cursor.find_text("Architecture", false).unwrap_or_default();
         assert!(
             match1.contains("Architecture Link"),
             "Expected match1 to contain Architecture Link, got {}",
@@ -626,7 +612,7 @@ mod tests {
         );
 
         // 2. Advance via find_next to "Architecture Guide"
-        let match2 = cursor.find_next().expect("Should advance to next match");
+        let match2 = cursor.find_next().unwrap_or_default();
         assert!(
             match2.contains("Architecture Guide"),
             "Expected match2 to contain Architecture Guide, got {}",
@@ -634,7 +620,7 @@ mod tests {
         );
 
         // 3. Advance to "Architecture description..."
-        let match3 = cursor.find_next().expect("Should advance to third match");
+        let match3 = cursor.find_next().unwrap_or_default();
         assert!(
             match3.contains("Architecture description with ordered components:"),
             "Expected match3 to contain paragraph, got {}",
@@ -642,7 +628,7 @@ mod tests {
         );
 
         // 4. Advance past last match -> wrap around to top!
-        let wrap_top = cursor.find_next().expect("Should wrap around to top");
+        let wrap_top = cursor.find_next().unwrap_or_default();
         assert!(
             wrap_top.starts_with("wrapping to top"),
             "Expected wrapping to top, got {}",
@@ -651,7 +637,7 @@ mod tests {
         assert!(wrap_top.contains("Architecture Link"));
 
         // 5. Prior match from top -> wrap around to bottom!
-        let wrap_bottom = cursor.find_prior().expect("Should wrap around to bottom");
+        let wrap_bottom = cursor.find_prior().unwrap_or_default();
         assert!(
             wrap_bottom.starts_with("wrapping to bottom"),
             "Expected wrapping to bottom, got {}",
@@ -671,7 +657,7 @@ mod tests {
 
         let res = cursor
             .find_text("nonexistent-term", false)
-            .expect("Should return negative search result");
+            .unwrap_or_default();
         assert_eq!(res, "Text not found: nonexistent-term");
         assert_eq!(
             cursor.offset, initial_offset,
@@ -688,30 +674,26 @@ mod tests {
         let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
 
         // Open Headings List dialog
-        let dialog_speech = engine
-            .execute_command("SelectAHeading")
-            .expect("Should open headings list");
+        let dialog_speech = engine.execute_command("SelectAHeading").unwrap_or_default();
         assert!(dialog_speech.contains("Heading List"));
         assert!(dialog_speech.contains("headings  \u{001d} List view \u{001e}"));
         assert!(dialog_speech.contains("System Documentation : 1"));
         assert!(dialog_speech.contains("1 of 5"));
 
         // Navigate down to item 2 ("Section Overview : 2")
-        let down_speech = engine
-            .execute_command("{DOWN}")
-            .expect("Should move down in list");
+        let down_speech = engine.execute_command("{DOWN}").unwrap_or_default();
         assert!(down_speech.contains("Section Overview : 2"));
         assert!(down_speech.contains("2 of 5"));
 
         // Press Enter to jump to target heading
-        let landing_speech = engine
-            .execute_command("{ENTER}")
-            .expect("Should jump to heading");
+        let landing_speech = engine.execute_command("{ENTER}").unwrap_or_default();
         assert!(landing_speech.contains("Section Overview"));
         assert!(landing_speech.contains("heading level 2"));
 
-        let current_node = engine.cursor.current_node().expect("Should have node");
-        assert_eq!(current_node.role, Role::Heading { level: 2 });
+        assert!(engine.cursor.current_node().is_some());
+        if let Some(current_node) = engine.cursor.current_node() {
+            assert_eq!(current_node.role, Role::Heading { level: 2 });
+        }
     }
 
     #[test]
@@ -723,30 +705,26 @@ mod tests {
         let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
 
         // Open Links List dialog
-        let dialog_speech = engine
-            .execute_command("SelectALink")
-            .expect("Should open links list");
+        let dialog_speech = engine.execute_command("SelectALink").unwrap_or_default();
         assert!(dialog_speech.contains("Links List"));
         assert!(dialog_speech.contains("links  \u{001d} List view \u{001e}"));
         assert!(dialog_speech.contains("Overview Link"));
         assert!(dialog_speech.contains("1 of 3"));
 
         // Navigate down to item 2 ("Architecture Link")
-        let down_speech = engine
-            .execute_command("{DOWN}")
-            .expect("Should move down in list");
+        let down_speech = engine.execute_command("{DOWN}").unwrap_or_default();
         assert!(down_speech.contains("Architecture Link"));
         assert!(down_speech.contains("2 of 3"));
 
         // Press Enter to jump to link
-        let landing_speech = engine
-            .execute_command("{ENTER}")
-            .expect("Should jump to link");
+        let landing_speech = engine.execute_command("{ENTER}").unwrap_or_default();
         assert!(landing_speech.contains("Architecture Link"));
         assert!(landing_speech.contains("same page link"));
 
-        let current_node = engine.cursor.current_node().expect("Should have node");
-        assert!(matches!(current_node.role, Role::Link { .. }));
+        assert!(engine.cursor.current_node().is_some());
+        if let Some(current_node) = engine.cursor.current_node() {
+            assert!(matches!(current_node.role, Role::Link { .. }));
+        }
     }
 
     #[test]
@@ -760,15 +738,13 @@ mod tests {
         // Open Form Fields List dialog
         let dialog_speech = engine
             .execute_command("SelectAFormField")
-            .expect("Should open form fields list");
+            .unwrap_or_default();
         assert!(dialog_speech.contains("Select a Form Field"));
         assert!(dialog_speech.contains("List1  \u{001d} List view \u{001e}"));
         assert!(dialog_speech.contains("Full Name: Edit"));
 
         // Dismiss dialog via Escape
-        let exit_speech = engine
-            .execute_command("{ESC}")
-            .expect("Should exit dialog via Escape");
+        let exit_speech = engine.execute_command("{ESC}").unwrap_or_default();
         assert_eq!(exit_speech, "virtual PC Cursor");
         assert!(engine.active_element_list.is_none());
     }

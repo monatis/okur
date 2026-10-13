@@ -58,11 +58,13 @@ mod tests {
         let received_clone = Arc::new(Mutex::new(Vec::new()));
         let r_clone = Arc::clone(&received_clone);
 
-        hook.start(Box::new(move |event| {
-            r_clone.lock().unwrap().push(event.clone());
+        let start_res = hook.start(Box::new(move |event| {
+            if let Ok(mut list) = r_clone.lock() {
+                list.push(event.clone());
+            }
             KeyAction::Consume
-        }))
-        .expect("Hook start");
+        }));
+        assert!(start_res.is_ok(), "Hook start should succeed");
 
         assert!(hook.is_active());
 
@@ -70,11 +72,12 @@ mod tests {
         let action = hook.inject(event.clone());
         assert_eq!(action, Some(KeyAction::Consume));
 
-        let events = received_clone.lock().unwrap().clone();
+        let events = received_clone.lock().map(|g| g.clone()).unwrap_or_default();
         assert_eq!(events.len(), 1);
         assert_eq!(events[0].key, Key::DownArrow);
 
-        hook.stop().expect("Hook stop");
+        let stop_res = hook.stop();
+        assert!(stop_res.is_ok(), "Hook stop should succeed");
         assert!(!hook.is_active());
     }
 }

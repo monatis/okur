@@ -51,12 +51,10 @@ impl KeyboardHook for WindowsKeyboardHook {
             return Ok(());
         }
 
-        {
-            let mut cb = ACTIVE_CALLBACK.lock().unwrap();
+        if let Ok(mut cb) = ACTIVE_CALLBACK.lock() {
             *cb = Some(callback);
         }
-        {
-            let mut consumed = CONSUMED_KEYS.lock().unwrap();
+        if let Ok(mut consumed) = CONSUMED_KEYS.lock() {
             *consumed = Some(HashSet::new());
         }
 
@@ -134,12 +132,10 @@ impl KeyboardHook for WindowsKeyboardHook {
             let _ = handle.join();
         }
 
-        {
-            let mut cb = ACTIVE_CALLBACK.lock().unwrap();
+        if let Ok(mut cb) = ACTIVE_CALLBACK.lock() {
             *cb = None;
         }
-        {
-            let mut consumed = CONSUMED_KEYS.lock().unwrap();
+        if let Ok(mut consumed) = CONSUMED_KEYS.lock() {
             *consumed = None;
         }
 
@@ -181,10 +177,11 @@ unsafe extern "system" fn low_level_keyboard_proc(
 
     // If key up was previously consumed on key down, consume key up too
     if is_up {
-        let mut consumed_guard = CONSUMED_KEYS.lock().unwrap();
-        if let Some(ref mut set) = *consumed_guard {
-            if set.remove(&vk_code) {
-                return LRESULT(1);
+        if let Ok(mut consumed_guard) = CONSUMED_KEYS.lock() {
+            if let Some(ref mut set) = *consumed_guard {
+                if set.remove(&vk_code) {
+                    return LRESULT(1);
+                }
             }
         }
         return CallNextHookEx(None, ncode, wparam, lparam);
@@ -210,17 +207,17 @@ unsafe extern "system" fn low_level_keyboard_proc(
     let event = KeyEvent::new(key, modifiers, is_down);
 
     let mut action = KeyAction::PassThrough;
-    {
-        let mut cb_guard = ACTIVE_CALLBACK.lock().unwrap();
+    if let Ok(mut cb_guard) = ACTIVE_CALLBACK.lock() {
         if let Some(ref mut cb) = *cb_guard {
             action = cb(event);
         }
     }
 
     if action == KeyAction::Consume {
-        let mut consumed_guard = CONSUMED_KEYS.lock().unwrap();
-        if let Some(ref mut set) = *consumed_guard {
-            set.insert(vk_code);
+        if let Ok(mut consumed_guard) = CONSUMED_KEYS.lock() {
+            if let Some(ref mut set) = *consumed_guard {
+                set.insert(vk_code);
+            }
         }
         LRESULT(1)
     } else {

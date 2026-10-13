@@ -25,7 +25,10 @@ impl MockAccessibilityEventListener {
                 "Listener is not active".into(),
             ));
         }
-        let guard = self.sender.lock().unwrap();
+        let guard = match self.sender.lock() {
+            Ok(g) => g,
+            Err(p) => p.into_inner(),
+        };
         if let Some(ref tx) = *guard {
             let _ = tx.send(event);
             Ok(())
@@ -40,14 +43,20 @@ impl MockAccessibilityEventListener {
 impl AccessibilityEventListener for MockAccessibilityEventListener {
     fn start(&mut self, sender: UnboundedSender<AccessibilityEvent>) -> Result<(), PlatformError> {
         self.active.store(true, Ordering::SeqCst);
-        let mut guard = self.sender.lock().unwrap();
+        let mut guard = match self.sender.lock() {
+            Ok(g) => g,
+            Err(p) => p.into_inner(),
+        };
         *guard = Some(sender);
         Ok(())
     }
 
     fn stop(&mut self) -> Result<(), PlatformError> {
         self.active.store(false, Ordering::SeqCst);
-        let mut guard = self.sender.lock().unwrap();
+        let mut guard = match self.sender.lock() {
+            Ok(g) => g,
+            Err(p) => p.into_inner(),
+        };
         *guard = None;
         Ok(())
     }
@@ -68,17 +77,17 @@ mod tests {
         assert!(!listener.is_active());
 
         let (tx, mut rx) = tokio::sync::mpsc::unbounded_channel();
-        listener.start(tx).expect("Start listener");
+        assert!(listener.start(tx).is_ok(), "Start listener");
         assert!(listener.is_active());
 
         // Inject focus event
         let ev = AccessibilityEvent::Focus(FocusEvent::new(Role::Edit).with_name("Test Input"));
-        listener.inject_event(ev.clone()).expect("Inject event");
+        assert!(listener.inject_event(ev.clone()).is_ok(), "Inject event");
 
-        let received = rx.recv().await.expect("Receive event");
-        assert_eq!(received, ev);
+        let received = rx.recv().await;
+        assert_eq!(received, Some(ev));
 
-        listener.stop().expect("Stop listener");
+        assert!(listener.stop().is_ok(), "Stop listener");
         assert!(!listener.is_active());
     }
 }

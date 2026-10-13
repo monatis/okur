@@ -227,9 +227,9 @@ mod tests {
         assert_eq!(engine.last_spoken(), None);
 
         // Speak utterance with JAWS control formatting tokens
-        engine
+        assert!(engine
             .speak(" \u{001d} heading level 1 \u{001e} System Overview", false)
-            .expect("Speak should succeed");
+            .is_ok());
         assert_eq!(
             engine.last_spoken(),
             Some("  heading level 1  System Overview")
@@ -237,19 +237,17 @@ mod tests {
         assert_eq!(engine.history().len(), 1);
 
         // Second utterance with interruption
-        engine
-            .speak("Second Line", true)
-            .expect("Speak should succeed");
+        assert!(engine.speak("Second Line", true).is_ok());
         assert_eq!(engine.last_spoken(), Some("Second Line"));
         assert_eq!(engine.history().len(), 2);
 
         // Rate and volume clamping
-        engine.set_rate(15).expect("Set rate");
+        assert!(engine.set_rate(15).is_ok());
         assert_eq!(engine.get_rate(), 10);
-        engine.set_rate(-20).expect("Set rate");
+        assert!(engine.set_rate(-20).is_ok());
         assert_eq!(engine.get_rate(), -10);
 
-        engine.set_volume(150).expect("Set volume");
+        assert!(engine.set_volume(150).is_ok());
         assert_eq!(engine.get_volume(), 100);
 
         // Clear history
@@ -262,52 +260,53 @@ mod tests {
     fn test_tts_engine_type_parsing() {
         use std::str::FromStr;
 
+        assert_eq!(TtsEngineType::from_str("auto"), Ok(TtsEngineType::Auto));
         assert_eq!(
-            TtsEngineType::from_str("auto").unwrap(),
-            TtsEngineType::Auto
+            TtsEngineType::from_str("no-speech"),
+            Ok(TtsEngineType::NoSpeech)
         );
         assert_eq!(
-            TtsEngineType::from_str("no-speech").unwrap(),
-            TtsEngineType::NoSpeech
+            TtsEngineType::from_str("silent"),
+            Ok(TtsEngineType::NoSpeech)
         );
-        assert_eq!(
-            TtsEngineType::from_str("silent").unwrap(),
-            TtsEngineType::NoSpeech
-        );
-        assert_eq!(
-            TtsEngineType::from_str("sapi5").unwrap(),
-            TtsEngineType::Sapi5
-        );
+        assert_eq!(TtsEngineType::from_str("sapi5"), Ok(TtsEngineType::Sapi5));
         assert!(TtsEngineType::from_str("nonexistent").is_err());
     }
 
     #[test]
     fn test_tts_manager_with_no_speech() {
-        let mut mgr = TtsManager::new(TtsEngineType::NoSpeech).expect("Manager creation");
-        assert_eq!(mgr.engine_name(), "No Speech");
+        let mgr = TtsManager::new(TtsEngineType::NoSpeech);
+        assert!(mgr.is_ok(), "Manager creation should succeed");
+        if let Ok(mut mgr) = mgr {
+            assert_eq!(mgr.engine_name(), "No Speech");
 
-        mgr.speak("Hello world", false).expect("Speak");
-        mgr.stop().expect("Stop");
-        mgr.pause().expect("Pause");
-        mgr.resume().expect("Resume");
+            assert!(mgr.speak("Hello world", false).is_ok());
+            assert!(mgr.stop().is_ok());
+            assert!(mgr.pause().is_ok());
+            assert!(mgr.resume().is_ok());
+        }
     }
 
     #[test]
     #[cfg(windows)]
     fn test_sapi5_engine_initialization_and_speech() {
-        let mut sapi = Sapi5Engine::new().expect("SAPI 5 should initialize on Windows");
-        assert_eq!(sapi.name(), "SAPI 5");
+        let sapi = Sapi5Engine::new();
+        assert!(sapi.is_ok(), "SAPI 5 should initialize on Windows");
+        if let Ok(mut sapi) = sapi {
+            assert_eq!(sapi.name(), "SAPI 5");
 
-        // Speak a test sentence (asynchronous non-blocking)
-        sapi.speak("Screen reader SAPI 5 test speech output.", true)
-            .expect("SAPI 5 speak should succeed");
+            // Speak a test sentence (asynchronous non-blocking)
+            assert!(sapi
+                .speak("Screen reader SAPI 5 test speech output.", true)
+                .is_ok());
 
-        // Immediate stop to test purging
-        sapi.stop().expect("SAPI 5 stop should succeed");
+            // Immediate stop to test purging
+            assert!(sapi.stop().is_ok());
 
-        // Volume and rate
-        sapi.set_rate(0).expect("Set rate");
-        sapi.set_volume(80).expect("Set volume");
-        assert_eq!(sapi.get_volume(), 80);
+            // Volume and rate
+            assert!(sapi.set_rate(0).is_ok());
+            assert!(sapi.set_volume(80).is_ok());
+            assert_eq!(sapi.get_volume(), 80);
+        }
     }
 }
