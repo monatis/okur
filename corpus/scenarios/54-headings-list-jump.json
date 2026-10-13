@@ -1,0 +1,54 @@
+{
+  "id": "54-headings-list-jump",
+  "name": "Headings List Dialog and Target Element Jump",
+  "category": "Buffer Search and Element Lists",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "jaws_script",
+      "command": "SelectAHeading",
+      "settle_ms": 300,
+      "assertions": {
+        "contains_speech": [
+          "Heading List",
+          "System Documentation : 1",
+          "1 of 5"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "type": "keyboard",
+      "command": "{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Section Overview : 2",
+          "2 of 5"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "type": "keyboard",
+      "command": "{ENTER}",
+      "settle_ms": 300,
+      "assertions": {
+        "target_heading_level": 2,
+        "contains_speech": [
+          "Section Overview",
+          "heading level 2"
+        ]
+      }
+    }
+  ]
+}

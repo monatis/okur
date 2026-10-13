@@ -1,0 +1,80 @@
+{
+  "scenario_id": "55-links-list-jump",
+  "scenario_version": "1.1.0",
+  "timestamp": "2026-10-13T05:25:40.0000000+03:00",
+  "environment": {
+    "os_version": "Microsoft Windows NT 10.0.19045.0",
+    "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+    "target_process": "chrome",
+    "interactive_session": true
+  },
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+  "repetitions_requested": 5,
+  "trials": [
+    {
+      "trial_index": 1,
+      "timestamp": "2026-10-13T05:25:41.0000000+03:00",
+      "step_results": [
+        {
+          "step_id": "s1",
+          "action": {
+            "type": "jaws_script",
+            "command": "SelectALink"
+          },
+          "observation": {
+            "speech_raw": "Links List  \u001d dialog \u001e \nlinks  \u001d List view \u001e \nOverview Link\n1 of 3\nTo move to items use the Arrow keys.",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Links List",
+              "Overview Link",
+              "1 of 3"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s2",
+          "action": {
+            "type": "keyboard",
+            "command": "{DOWN}"
+          },
+          "observation": {
+            "speech_raw": "Architecture Link\n2 of 3\nTo move to items use the Arrow keys.",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Architecture Link",
+              "2 of 3"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s3",
+          "action": {
+            "type": "keyboard",
+            "command": "{ENTER}"
+          },
+          "observation": {
+            "speech_raw": "•  \u001d same page link \u001e Architecture Link",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "target_role": "link",
+            "contains_speech": [
+              "Architecture Link",
+              "same page link"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        }
+      ]
+    }
+  ]
+}

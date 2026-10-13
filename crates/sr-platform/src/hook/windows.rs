@@ -255,8 +255,12 @@ fn translate_vk_code(vk: u32) -> Key {
         VK_SHIFT => Key::Shift,
 
         _ => {
+            // Check F1..F24 (0x70..=0x87)
+            if (0x70..=0x87).contains(&vk) {
+                Key::F((vk - 0x70 + 1) as u8)
+            }
             // Check '0'..='9'
-            if (0x30..=0x39).contains(&vk) {
+            else if (0x30..=0x39).contains(&vk) {
                 Key::Digit((vk - 0x30) as u8)
             }
             // Check 'A'..='Z'

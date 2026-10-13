@@ -1,0 +1,41 @@
+{
+  "scenario_id": "51-find-text-forward",
+  "scenario_version": "1.1.0",
+  "timestamp": "2026-10-13T05:25:00.0000000+03:00",
+  "environment": {
+    "os_version": "Microsoft Windows NT 10.0.19045.0",
+    "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+    "target_process": "chrome",
+    "interactive_session": true
+  },
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+  "repetitions_requested": 5,
+  "trials": [
+    {
+      "trial_index": 1,
+      "timestamp": "2026-10-13T05:25:01.0000000+03:00",
+      "step_results": [
+        {
+          "step_id": "s1",
+          "action": {
+            "type": "jaws_script",
+            "command": "Find:Architecture"
+          },
+          "observation": {
+            "speech_raw": "•  \u001d same page link \u001e Architecture Link",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "target_role": "link",
+            "contains_speech": [
+              "same page link",
+              "Architecture Link"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        }
+      ]
+    }
+  ]
+}

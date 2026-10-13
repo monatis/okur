@@ -1,0 +1,54 @@
+{
+  "id": "55-links-list-jump",
+  "name": "Links List Dialog and Target Element Jump",
+  "category": "Buffer Search and Element Lists",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "jaws_script",
+      "command": "SelectALink",
+      "settle_ms": 300,
+      "assertions": {
+        "contains_speech": [
+          "Links List",
+          "Overview Link",
+          "1 of 3"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "type": "keyboard",
+      "command": "{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Architecture Link",
+          "2 of 3"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "type": "keyboard",
+      "command": "{ENTER}",
+      "settle_ms": 300,
+      "assertions": {
+        "target_role": "link",
+        "contains_speech": [
+          "Architecture Link",
+          "same page link"
+        ]
+      }
+    }
+  ]
+}

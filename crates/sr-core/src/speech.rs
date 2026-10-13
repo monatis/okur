@@ -436,6 +436,57 @@ impl SpeechFormatter {
     pub fn format_dialog_exit() -> String {
         "Leaving Dialog".to_string()
     }
+
+    /// Formats the opening announcement of a Links List dialog matching JAWS.
+    pub fn format_links_list_dialog(items: &[crate::buffer::LinkListItem]) -> String {
+        let first_text = items.first().map(|i| i.text.as_str()).unwrap_or("");
+        format!(
+            "Links List  \u{001d} dialog \u{001e} \nlinks  \u{001d} List view \u{001e} \n{}\n1 of {}\nTo move to items use the Arrow keys.",
+            first_text,
+            items.len()
+        )
+    }
+
+    /// Formats the opening announcement of a Headings List dialog matching JAWS.
+    pub fn format_headings_list_dialog(items: &[crate::buffer::HeadingListItem]) -> String {
+        let first_text = items
+            .first()
+            .map(|i| format!("{} : {}", i.text, i.level))
+            .unwrap_or_default();
+        format!(
+            "Heading List  \u{001d} dialog \u{001e} \nheadings  \u{001d} List view \u{001e} \n{}\n1 of {}\nTo move to items use the Arrow keys.",
+            first_text,
+            items.len()
+        )
+    }
+
+    /// Formats the opening announcement of a Form Fields List dialog matching JAWS.
+    pub fn format_form_fields_list_dialog(items: &[crate::buffer::FormFieldListItem]) -> String {
+        let first_text = items
+            .first()
+            .map(|i| {
+                let role_label = match i.role {
+                    Role::Button => "Button",
+                    Role::Edit => "Edit",
+                    Role::CheckBox => "check box",
+                    Role::ComboBox => "combo box",
+                    Role::Slider => "slider",
+                    _ => "Field",
+                };
+                format!("{} {}", i.name, role_label)
+            })
+            .unwrap_or_default();
+        format!(
+            "Select a Form Field  \u{001d} dialog \u{001e} \nList1  \u{001d} List view \u{001e} \n{}\n1 of {}\nTo move to items use the Arrow keys.",
+            first_text,
+            items.len()
+        )
+    }
+
+    /// Formats negative text search feedback matching JAWS.
+    pub fn format_text_not_found(query: &str) -> String {
+        format!("Text not found: {}", query)
+    }
 }
 
 /// Trait for routing spoken utterances from the screen reader engine to audio output.

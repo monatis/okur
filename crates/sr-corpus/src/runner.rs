@@ -267,7 +267,21 @@ impl DifferentialRunner {
                     engine.handle_route_transition(step.command.as_str(), None)
                 }
             }
-            "keyboard" | "jaws_script" => engine.execute_command(&step.command).unwrap_or_default(),
+            "find" | "virtual_find" => engine
+                .execute_command(&format!("Find:{}", step.command))
+                .unwrap_or_default(),
+            "select_heading" => engine
+                .execute_command(&format!("SelectHeading:{}", step.command))
+                .unwrap_or_default(),
+            "select_link" => engine
+                .execute_command(&format!("SelectLink:{}", step.command))
+                .unwrap_or_default(),
+            "select_form_field" => engine
+                .execute_command(&format!("SelectFormField:{}", step.command))
+                .unwrap_or_default(),
+            "keyboard" | "jaws_script" | "element_list" => {
+                engine.execute_command(&step.command).unwrap_or_default()
+            }
             _ => String::new(),
         };
 

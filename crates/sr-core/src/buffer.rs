@@ -21,6 +21,35 @@ pub struct DialogInfo {
     pub end_offset: usize,
 }
 
+/// Item in a Links list dialog.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct LinkListItem {
+    pub node_id: usize,
+    pub text: String,
+    pub href: Option<String>,
+    pub is_same_page: bool,
+    pub offset: usize,
+}
+
+/// Item in a Headings list dialog.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct HeadingListItem {
+    pub node_id: usize,
+    pub text: String,
+    pub level: u32,
+    pub offset: usize,
+}
+
+/// Item in a Form Fields list dialog.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct FormFieldListItem {
+    pub node_id: usize,
+    pub name: String,
+    pub role: Role,
+    pub value: Option<String>,
+    pub offset: usize,
+}
+
 /// A continuous span of text mapped to an AOM node.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BufferSpan {
@@ -705,6 +734,77 @@ impl VirtualBuffer {
                 self.node_at_offset(offset)
                     .and_then(|n| n.formatting.clone())
             })
+    }
+
+    /// Returns the list of all links in the document for the Links List dialog.
+    pub fn get_links_list(&self) -> Vec<LinkListItem> {
+        let mut items = Vec::new();
+        for &offset in &self.links {
+            if let Some(node) = self.find_link_node(offset) {
+                let text = node
+                    .name
+                    .clone()
+                    .or_else(|| node.text.clone())
+                    .or_else(|| self.span_text_at_offset(offset).map(|s| s.to_string()))
+                    .unwrap_or_default();
+                let href = match node.role {
+                    Role::Link { ref href } => href.clone(),
+                    _ => None,
+                };
+                let is_same_page = href.as_deref().map(|h| h.starts_with('#')).unwrap_or(false);
+                items.push(LinkListItem {
+                    node_id: node.id,
+                    text,
+                    href,
+                    is_same_page,
+                    offset,
+                });
+            }
+        }
+        items
+    }
+
+    /// Returns the list of all headings in the document for the Headings List dialog.
+    pub fn get_headings_list(&self) -> Vec<HeadingListItem> {
+        let mut items = Vec::new();
+        for &(offset, level) in &self.headings {
+            let node = self.find_heading_node(offset);
+            let text = node
+                .and_then(|n| n.text.as_deref().or(n.name.as_deref()))
+                .or_else(|| self.line_at_offset(offset).map(|l| l.text.as_str()))
+                .unwrap_or("")
+                .to_string();
+            let node_id = node.map(|n| n.id).unwrap_or(0);
+            items.push(HeadingListItem {
+                node_id,
+                text,
+                level,
+                offset,
+            });
+        }
+        items
+    }
+
+    /// Returns the list of all interactive form controls in the document for Form Fields List.
+    pub fn get_form_fields_list(&self) -> Vec<FormFieldListItem> {
+        let mut items = Vec::new();
+        for &offset in &self.form_controls {
+            if let Some(node) = self.find_form_control_node(offset) {
+                let name = node
+                    .name
+                    .clone()
+                    .or_else(|| node.text.clone())
+                    .unwrap_or_default();
+                items.push(FormFieldListItem {
+                    node_id: node.id,
+                    name,
+                    role: node.role.clone(),
+                    value: node.value.clone(),
+                    offset,
+                });
+            }
+        }
+        items
     }
 
     /// Tokenizes words from the buffer text.

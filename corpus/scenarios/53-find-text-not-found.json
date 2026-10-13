@@ -1,0 +1,27 @@
+{
+  "id": "53-find-text-not-found",
+  "name": "In-Buffer Search Negative Feedback Text Not Found",
+  "category": "Buffer Search and Element Lists",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "jaws_script",
+      "command": "Find:nonexistent-term",
+      "settle_ms": 300,
+      "assertions": {
+        "contains_speech": [
+          "Text not found: nonexistent-term"
+        ]
+      }
+    }
+  ]
+}

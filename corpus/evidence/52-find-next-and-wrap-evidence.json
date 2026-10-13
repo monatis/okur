@@ -1,0 +1,96 @@
+{
+  "scenario_id": "52-find-next-and-wrap",
+  "scenario_version": "1.1.0",
+  "timestamp": "2026-10-13T05:25:10.0000000+03:00",
+  "environment": {
+    "os_version": "Microsoft Windows NT 10.0.19045.0",
+    "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+    "target_process": "chrome",
+    "interactive_session": true
+  },
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+  "repetitions_requested": 5,
+  "trials": [
+    {
+      "trial_index": 1,
+      "timestamp": "2026-10-13T05:25:11.0000000+03:00",
+      "step_results": [
+        {
+          "step_id": "s1",
+          "action": {
+            "type": "jaws_script",
+            "command": "Find:Architecture"
+          },
+          "observation": {
+            "speech_raw": "•  \u001d same page link \u001e Architecture Link",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Architecture Link"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s2",
+          "action": {
+            "type": "keyboard",
+            "command": "{F3}"
+          },
+          "observation": {
+            "speech_raw": "Architecture Guide\n \u001d heading level 2 \u001e",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "target_heading_level": 2,
+            "contains_speech": [
+              "Architecture Guide",
+              "heading level 2"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s3",
+          "action": {
+            "type": "keyboard",
+            "command": "{F3}"
+          },
+          "observation": {
+            "speech_raw": "Architecture description with ordered components:",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Architecture description with ordered components:"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s4",
+          "action": {
+            "type": "keyboard",
+            "command": "{F3}"
+          },
+          "observation": {
+            "speech_raw": "wrapping to top\n•  \u001d same page link \u001e Architecture Link",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "wrapping to top",
+              "Architecture Link"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        }
+      ]
+    }
+  ]
+}

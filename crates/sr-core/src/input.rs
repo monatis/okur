@@ -21,6 +21,7 @@ pub enum Key {
 
     Alpha(char),
     Digit(u8),
+    F(u8),
     Semicolon,
 
     Control,
@@ -133,6 +134,28 @@ impl KeyEvent {
             {
                 Some("Insert+F".to_string())
             }
+
+            // In-buffer search dialog (Ctrl+F)
+            Key::Alpha(c)
+                if c.eq_ignore_ascii_case(&'F') && m.ctrl && !m.insert && !m.alt && !m.shift =>
+            {
+                Some("^f".to_string())
+            }
+
+            // Form fields list (Insert+Ctrl+F or JAWSKey+Ctrl+F)
+            Key::Alpha(c)
+                if c.eq_ignore_ascii_case(&'F') && m.ctrl && m.insert && !m.alt && !m.shift =>
+            {
+                Some("Insert+Ctrl+F".to_string())
+            }
+
+            // Function keys (FindNext, FindPrior, Element Lists)
+            Key::F(3) if m.shift && !m.ctrl && !m.alt && !m.insert => Some("+{F3}".to_string()),
+            Key::F(3) if m.is_empty() => Some("{F3}".to_string()),
+            Key::F(3) if m.insert && !m.ctrl && !m.alt && !m.shift => Some("Insert+F3".to_string()),
+            Key::F(5) if m.insert && !m.ctrl && !m.alt && !m.shift => Some("Insert+F5".to_string()),
+            Key::F(6) if m.insert && !m.ctrl && !m.alt && !m.shift => Some("Insert+F6".to_string()),
+            Key::F(7) if m.insert && !m.ctrl && !m.alt && !m.shift => Some("Insert+F7".to_string()),
 
             // Quick navigation keys
             Key::Alpha(c) => {

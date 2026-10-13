@@ -1,0 +1,80 @@
+{
+  "scenario_id": "54-headings-list-jump",
+  "scenario_version": "1.1.0",
+  "timestamp": "2026-10-13T05:25:30.0000000+03:00",
+  "environment": {
+    "os_version": "Microsoft Windows NT 10.0.19045.0",
+    "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+    "target_process": "chrome",
+    "interactive_session": true
+  },
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+  "repetitions_requested": 5,
+  "trials": [
+    {
+      "trial_index": 1,
+      "timestamp": "2026-10-13T05:25:31.0000000+03:00",
+      "step_results": [
+        {
+          "step_id": "s1",
+          "action": {
+            "type": "jaws_script",
+            "command": "SelectAHeading"
+          },
+          "observation": {
+            "speech_raw": "Heading List  \u001d dialog \u001e \nheadings  \u001d List view \u001e \nSystem Documentation : 1\n1 of 5\nTo move to items use the Arrow keys.",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Heading List",
+              "System Documentation : 1",
+              "1 of 5"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s2",
+          "action": {
+            "type": "keyboard",
+            "command": "{DOWN}"
+          },
+          "observation": {
+            "speech_raw": "Section Overview : 2\n2 of 5\nTo move to items use the Arrow keys.",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Section Overview : 2",
+              "2 of 5"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s3",
+          "action": {
+            "type": "keyboard",
+            "command": "{ENTER}"
+          },
+          "observation": {
+            "speech_raw": "Section Overview\n \u001d heading level 2 \u001e",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "target_heading_level": 2,
+            "contains_speech": [
+              "Section Overview",
+              "heading level 2"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        }
+      ]
+    }
+  ]
+}

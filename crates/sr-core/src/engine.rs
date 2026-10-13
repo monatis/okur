@@ -5,12 +5,169 @@ use crate::event::{AccessibilityEvent, FocusEvent, LiveRegionEvent, Politeness};
 use crate::input::{Key, KeyAction, KeyEvent};
 use crate::speech::{SpeechFormatter, SpeechOutput};
 
+/// Active element list dialog state.
+#[derive(Debug, Clone)]
+pub enum ActiveElementList {
+    Links {
+        items: Vec<crate::buffer::LinkListItem>,
+        selected_index: usize,
+    },
+    Headings {
+        items: Vec<crate::buffer::HeadingListItem>,
+        selected_index: usize,
+    },
+    FormFields {
+        items: Vec<crate::buffer::FormFieldListItem>,
+        selected_index: usize,
+    },
+}
+
+impl ActiveElementList {
+    pub fn move_next(&mut self) -> String {
+        match self {
+            ActiveElementList::Links {
+                items,
+                selected_index,
+            } => {
+                if *selected_index + 1 < items.len() {
+                    *selected_index += 1;
+                }
+                let item = &items[*selected_index];
+                format!(
+                    "{}\n{} of {}\nTo move to items use the Arrow keys.",
+                    item.text,
+                    *selected_index + 1,
+                    items.len()
+                )
+            }
+            ActiveElementList::Headings {
+                items,
+                selected_index,
+            } => {
+                if *selected_index + 1 < items.len() {
+                    *selected_index += 1;
+                }
+                let item = &items[*selected_index];
+                format!(
+                    "{} : {}\n{} of {}\nTo move to items use the Arrow keys.",
+                    item.text,
+                    item.level,
+                    *selected_index + 1,
+                    items.len()
+                )
+            }
+            ActiveElementList::FormFields {
+                items,
+                selected_index,
+            } => {
+                if *selected_index + 1 < items.len() {
+                    *selected_index += 1;
+                }
+                let item = &items[*selected_index];
+                let role_label = match item.role {
+                    Role::Button => "Button",
+                    Role::Edit => "Edit",
+                    Role::CheckBox => "check box",
+                    Role::ComboBox => "combo box",
+                    Role::Slider => "slider",
+                    _ => "Field",
+                };
+                format!(
+                    "{} {}\n{} of {}\nTo move to items use the Arrow keys.",
+                    item.name,
+                    role_label,
+                    *selected_index + 1,
+                    items.len()
+                )
+            }
+        }
+    }
+
+    pub fn move_prior(&mut self) -> String {
+        match self {
+            ActiveElementList::Links {
+                items,
+                selected_index,
+            } => {
+                if *selected_index > 0 {
+                    *selected_index -= 1;
+                }
+                let item = &items[*selected_index];
+                format!(
+                    "{}\n{} of {}\nTo move to items use the Arrow keys.",
+                    item.text,
+                    *selected_index + 1,
+                    items.len()
+                )
+            }
+            ActiveElementList::Headings {
+                items,
+                selected_index,
+            } => {
+                if *selected_index > 0 {
+                    *selected_index -= 1;
+                }
+                let item = &items[*selected_index];
+                format!(
+                    "{} : {}\n{} of {}\nTo move to items use the Arrow keys.",
+                    item.text,
+                    item.level,
+                    *selected_index + 1,
+                    items.len()
+                )
+            }
+            ActiveElementList::FormFields {
+                items,
+                selected_index,
+            } => {
+                if *selected_index > 0 {
+                    *selected_index -= 1;
+                }
+                let item = &items[*selected_index];
+                let role_label = match item.role {
+                    Role::Button => "Button",
+                    Role::Edit => "Edit",
+                    Role::CheckBox => "check box",
+                    Role::ComboBox => "combo box",
+                    Role::Slider => "slider",
+                    _ => "Field",
+                };
+                format!(
+                    "{} {}\n{} of {}\nTo move to items use the Arrow keys.",
+                    item.name,
+                    role_label,
+                    *selected_index + 1,
+                    items.len()
+                )
+            }
+        }
+    }
+
+    pub fn selected_offset(&self) -> usize {
+        match self {
+            ActiveElementList::Links {
+                items,
+                selected_index,
+            } => items.get(*selected_index).map(|i| i.offset).unwrap_or(0),
+            ActiveElementList::Headings {
+                items,
+                selected_index,
+            } => items.get(*selected_index).map(|i| i.offset).unwrap_or(0),
+            ActiveElementList::FormFields {
+                items,
+                selected_index,
+            } => items.get(*selected_index).map(|i| i.offset).unwrap_or(0),
+        }
+    }
+}
+
 /// Primary runtime engine for screen reader execution, coordinating virtual cursor navigation,
 /// speech output, and interactive input event handling.
 pub struct ScreenReaderEngine {
     pub cursor: VirtualCursor,
     pub speech: Box<dyn SpeechOutput>,
     pub forms_mode: bool,
+    pub active_element_list: Option<ActiveElementList>,
 }
 
 impl ScreenReaderEngine {
@@ -19,6 +176,7 @@ impl ScreenReaderEngine {
             cursor,
             speech,
             forms_mode: false,
+            active_element_list: None,
         }
     }
 
@@ -27,11 +185,103 @@ impl ScreenReaderEngine {
         self.cursor = VirtualCursor::new(buffer);
         self.cursor.move_to_start();
         self.forms_mode = false;
+        self.active_element_list = None;
     }
 
     /// Executes a screen reader navigation command string (matching JAWS script names and keystrokes).
     /// Speaks the resulting announcement and returns the emitted speech text.
     pub fn execute_command(&mut self, command: &str) -> Option<String> {
+        // 0. Active element list navigation takes precedence for {DOWN}, {UP}, {ENTER}, {ESC}
+        if let Some(ref mut list) = self.active_element_list {
+            match command {
+                "{DOWN}" => {
+                    let speech = list.move_next();
+                    self.speech.speak(&speech, true);
+                    return Some(speech);
+                }
+                "{UP}" => {
+                    let speech = list.move_prior();
+                    self.speech.speak(&speech, true);
+                    return Some(speech);
+                }
+                "{ENTER}" => {
+                    let target_offset = list.selected_offset();
+                    self.active_element_list = None;
+                    let speech = self.cursor.jump_to_element_offset(target_offset);
+                    self.speech.speak(&speech, true);
+                    return Some(speech);
+                }
+                "{ESC}" => {
+                    self.active_element_list = None;
+                    let speech = "virtual PC Cursor".to_string();
+                    self.speech.speak(&speech, true);
+                    return Some(speech);
+                }
+                _ => {}
+            }
+        }
+
+        // Parameterized search commands
+        if let Some(query) = command
+            .strip_prefix("Find:")
+            .or_else(|| command.strip_prefix("find:"))
+            .or_else(|| command.strip_prefix("VirtualFind:"))
+            .or_else(|| command.strip_prefix("JAWSFind:"))
+            .or_else(|| command.strip_prefix("^f:"))
+        {
+            let speech = self.cursor.find_text(query, false);
+            if let Some(ref text) = speech {
+                self.speech.speak(text, true);
+            }
+            return speech;
+        }
+
+        // Parameterized element list selection
+        if let Some(target) = command
+            .strip_prefix("SelectHeading:")
+            .or_else(|| command.strip_prefix("JumpToHeading:"))
+        {
+            let list = self.cursor.buffer.get_headings_list();
+            if let Some(item) = list
+                .iter()
+                .find(|h| h.text.eq_ignore_ascii_case(target) || h.text.contains(target))
+            {
+                let speech = self.cursor.jump_to_element_offset(item.offset);
+                self.speech.speak(&speech, true);
+                return Some(speech);
+            }
+        }
+
+        if let Some(target) = command
+            .strip_prefix("SelectLink:")
+            .or_else(|| command.strip_prefix("JumpToLink:"))
+        {
+            let list = self.cursor.buffer.get_links_list();
+            if let Some(item) = list
+                .iter()
+                .find(|l| l.text.eq_ignore_ascii_case(target) || l.text.contains(target))
+            {
+                let speech = self.cursor.jump_to_element_offset(item.offset);
+                self.speech.speak(&speech, true);
+                return Some(speech);
+            }
+        }
+
+        if let Some(target) = command
+            .strip_prefix("SelectFormField:")
+            .or_else(|| command.strip_prefix("JumpToFormField:"))
+        {
+            let list = self.cursor.buffer.get_form_fields_list();
+            if let Some(item) = list
+                .iter()
+                .find(|f| f.name.eq_ignore_ascii_case(target) || f.name.contains(target))
+            {
+                let speech = self.cursor.jump_to_element_offset(item.offset);
+                self.speech.speak(&speech, true);
+                return Some(speech);
+            }
+        }
+
         let speech = match command {
             "{DOWN}" => {
                 if self.cursor.is_combobox_expanded() {
@@ -198,6 +448,60 @@ impl ScreenReaderEngine {
             "SayWord" => Some(self.cursor.current_word()),
             "SayCharacter" => Some(self.cursor.current_char()),
 
+            // In-buffer find commands
+            "^f" | "Ctrl+F" | "VirtualFind" | "JAWSFind" => {
+                Some("JAWS Find  \u{001d} dialog \u{001e} \nFind what:  \u{001d} edit combo \u{001e} \nTo set the value use the Arrow keys or type the value.".to_string())
+            }
+            "{F3}" | "F3" | "JAWSFindNext" | "FindNext" => self.cursor.find_next(),
+            "+{F3}" | "+F3" | "Shift+F3" | "JAWSFindPrior" | "FindPrior" => self.cursor.find_prior(),
+
+            // Element list dialogs
+            "SelectAHeading" | "HeadingList" | "HeadingsList" | "Insert+F6" | "JAWSKey+F6" => {
+                let items = self.cursor.buffer.get_headings_list();
+                if items.is_empty() {
+                    Some("There are no headings on this page.".to_string())
+                } else {
+                    let speech = SpeechFormatter::format_headings_list_dialog(&items);
+                    self.active_element_list = Some(ActiveElementList::Headings {
+                        items,
+                        selected_index: 0,
+                    });
+                    Some(speech)
+                }
+            }
+            "SelectALink" | "LinkList" | "LinksList" | "Insert+F7" | "JAWSKey+F7" => {
+                let items = self.cursor.buffer.get_links_list();
+                if items.is_empty() {
+                    Some("There are no links on this page.".to_string())
+                } else {
+                    let speech = SpeechFormatter::format_links_list_dialog(&items);
+                    self.active_element_list = Some(ActiveElementList::Links {
+                        items,
+                        selected_index: 0,
+                    });
+                    Some(speech)
+                }
+            }
+            "SelectAFormField"
+            | "FormFieldList"
+            | "FormFieldsList"
+            | "Insert+F5"
+            | "JAWSKey+F5"
+            | "Insert+Ctrl+F"
+            | "JAWSKey+Ctrl+F" => {
+                let items = self.cursor.buffer.get_form_fields_list();
+                if items.is_empty() {
+                    Some("There are no form fields on this page.".to_string())
+                } else {
+                    let speech = SpeechFormatter::format_form_fields_list_dialog(&items);
+                    self.active_element_list = Some(ActiveElementList::FormFields {
+                        items,
+                        selected_index: 0,
+                    });
+                    Some(speech)
+                }
+            }
+
             _ => None,
         };
 
@@ -238,8 +542,13 @@ impl ScreenReaderEngine {
             return KeyAction::PassThrough;
         }
 
-        // 4. Handle Escape when inside an expanded combobox or modal dialog
+        // 4. Handle Escape when inside an active element list, expanded combobox or modal dialog
         if event.key == Key::Escape && event.modifiers.is_empty() {
+            if self.active_element_list.is_some() {
+                self.active_element_list = None;
+                self.speech.speak("virtual PC Cursor", true);
+                return KeyAction::Consume;
+            }
             if self.cursor.is_combobox_expanded() {
                 if let Some(msg) = self.cursor.collapse_combobox() {
                     self.speech.speak(&msg, true);

@@ -51,11 +51,11 @@
         }
     },
     "statistics": {
-        "total_scenarios": 50,
-        "deterministic_scenarios": 47,
+        "total_scenarios": 55,
+        "deterministic_scenarios": 52,
         "variable_scenarios": 3,
-        "total_trials_executed": 250,
-        "successful_trials": 250,
+        "total_trials_executed": 275,
+        "successful_trials": 275,
         "trial_success_rate_percent": 100
     },
     "scenarios": [
@@ -2738,6 +2738,278 @@
                         "contains_speech": [
                             "Dashboard - Single Page App",
                             "Main Content Area"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "51-find-text-forward",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 12500,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "Find:Architecture"
+                    },
+                    "observation": {
+                        "speech_raw": "•  \u001d same page link \u001e Architecture Link"
+                    },
+                    "assertions": {
+                        "target_role": "link",
+                        "contains_speech": [
+                            "same page link",
+                            "Architecture Link"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "52-find-next-and-wrap",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 14200,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "Find:Architecture"
+                    },
+                    "observation": {
+                        "speech_raw": "•  \u001d same page link \u001e Architecture Link"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Architecture Link"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{F3}"
+                    },
+                    "observation": {
+                        "speech_raw": "Architecture Guide\n \u001d heading level 2 \u001e"
+                    },
+                    "assertions": {
+                        "target_heading_level": 2,
+                        "contains_speech": [
+                            "Architecture Guide",
+                            "heading level 2"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{F3}"
+                    },
+                    "observation": {
+                        "speech_raw": "Architecture description with ordered components:"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Architecture description with ordered components:"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s4",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{F3}"
+                    },
+                    "observation": {
+                        "speech_raw": "wrapping to top\n•  \u001d same page link \u001e Architecture Link"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "wrapping to top",
+                            "Architecture Link"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "53-find-text-not-found",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 8200,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "Find:nonexistent-term"
+                    },
+                    "observation": {
+                        "speech_raw": "Text not found: nonexistent-term"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Text not found: nonexistent-term"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "54-headings-list-jump",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 13800,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "SelectAHeading"
+                    },
+                    "observation": {
+                        "speech_raw": "Heading List  \u001d dialog \u001e \nheadings  \u001d List view \u001e \nSystem Documentation : 1\n1 of 5\nTo move to items use the Arrow keys."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Heading List",
+                            "System Documentation : 1",
+                            "1 of 5"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Section Overview : 2\n2 of 5\nTo move to items use the Arrow keys."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Section Overview : 2",
+                            "2 of 5"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{ENTER}"
+                    },
+                    "observation": {
+                        "speech_raw": "Section Overview\n \u001d heading level 2 \u001e"
+                    },
+                    "assertions": {
+                        "target_heading_level": 2,
+                        "contains_speech": [
+                            "Section Overview",
+                            "heading level 2"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "55-links-list-jump",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 13400,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "SelectALink"
+                    },
+                    "observation": {
+                        "speech_raw": "Links List  \u001d dialog \u001e \nlinks  \u001d List view \u001e \nOverview Link\n1 of 3\nTo move to items use the Arrow keys."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Links List",
+                            "Overview Link",
+                            "1 of 3"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Architecture Link\n2 of 3\nTo move to items use the Arrow keys."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Architecture Link",
+                            "2 of 3"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{ENTER}"
+                    },
+                    "observation": {
+                        "speech_raw": "•  \u001d same page link \u001e Architecture Link"
+                    },
+                    "assertions": {
+                        "target_role": "link",
+                        "contains_speech": [
+                            "Architecture Link",
+                            "same page link"
                         ]
                     },
                     "step_success": true

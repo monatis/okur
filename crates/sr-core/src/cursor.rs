@@ -27,6 +27,13 @@ impl TextSelection {
     }
 }
 
+/// Active in-buffer search state.
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+pub struct SearchState {
+    pub query: Option<String>,
+    pub case_sensitive: bool,
+}
+
 /// The Virtual Cursor providing reading navigation and quick key primitives over a VirtualBuffer.
 #[derive(Debug, Clone)]
 pub struct VirtualCursor {
@@ -37,6 +44,7 @@ pub struct VirtualCursor {
     pub current_table_pos: Option<(usize, usize, usize)>,
     pub selection: Option<TextSelection>,
     pub active_modal_root: Option<usize>,
+    pub search: SearchState,
 }
 
 impl VirtualCursor {
@@ -49,6 +57,7 @@ impl VirtualCursor {
             current_table_pos: None,
             selection: None,
             active_modal_root: None,
+            search: SearchState::default(),
         }
     }
 
@@ -1829,5 +1838,133 @@ impl VirtualCursor {
             }
         }
         Some("edge of table".to_string())
+    }
+
+    /// Repositions the virtual cursor to a specific element offset and speaks the landing element announcement.
+    pub fn jump_to_element_offset(&mut self, offset: usize) -> String {
+        self.selection = None;
+        self.offset = offset;
+        if let Some(heading) = self.buffer.find_heading_node(offset) {
+            self.current_node_id = Some(heading.id);
+            let level = match heading.role {
+                Role::Heading { level } => level,
+                _ => 1,
+            };
+            let text = heading
+                .name
+                .as_deref()
+                .or(heading.text.as_deref())
+                .unwrap_or("");
+            return SpeechFormatter::format_heading(level, text);
+        }
+        if let Some(link) = self.buffer.find_link_node(offset) {
+            self.current_node_id = Some(link.id);
+            let is_same_page = match link.role {
+                Role::Link {
+                    href: Some(ref h), ..
+                } => h.starts_with('#'),
+                _ => false,
+            };
+            let text = link.name.as_deref().or(link.text.as_deref()).unwrap_or("");
+            return SpeechFormatter::format_link(text, is_same_page);
+        }
+        if let Some(fc) = self.buffer.find_form_control_node(offset) {
+            self.current_node_id = Some(fc.id);
+            return SpeechFormatter::format_form_control_node(fc);
+        }
+        self.current_node_id = self.buffer.node_at_offset(offset).map(|n| n.id);
+        self.current_line()
+    }
+
+    /// Returns the byte start offsets of all lines matching `query`.
+    pub fn find_matching_offsets(&self, query: &str, case_sensitive: bool) -> Vec<usize> {
+        let trimmed = query.trim();
+        if trimmed.is_empty() {
+            return Vec::new();
+        }
+        if case_sensitive {
+            self.buffer
+                .lines
+                .iter()
+                .filter(|l| l.text.contains(trimmed))
+                .map(|l| l.start_offset)
+                .collect()
+        } else {
+            let q_lower = trimmed.to_lowercase();
+            self.buffer
+                .lines
+                .iter()
+                .filter(|l| l.text.to_lowercase().contains(&q_lower))
+                .map(|l| l.start_offset)
+                .collect()
+        }
+    }
+
+    /// Searches forward in the virtual buffer for `query` and positions the cursor at the match.
+    pub fn find_text(&mut self, query: &str, case_sensitive: bool) -> Option<String> {
+        self.selection = None;
+        let matches = self.find_matching_offsets(query, case_sensitive);
+        if matches.is_empty() {
+            return Some(SpeechFormatter::format_text_not_found(query));
+        }
+
+        self.search = SearchState {
+            query: Some(query.to_string()),
+            case_sensitive,
+        };
+
+        // Find first match at or after current offset
+        let target_offset = if let Some(&off) = matches.iter().find(|&&off| off >= self.offset) {
+            off
+        } else {
+            // Wrap to first match from top
+            matches[0]
+        };
+
+        Some(self.jump_to_element_offset(target_offset))
+    }
+
+    /// Advances forward to the next match of the active search query (`F3`).
+    pub fn find_next(&mut self) -> Option<String> {
+        self.selection = None;
+        let query = match self.search.query.as_deref() {
+            Some(q) if !q.is_empty() => q,
+            _ => return None,
+        };
+        let matches = self.find_matching_offsets(query, self.search.case_sensitive);
+        if matches.is_empty() {
+            return Some(SpeechFormatter::format_text_not_found(query));
+        }
+
+        if let Some(&target_offset) = matches.iter().find(|&&off| off > self.offset) {
+            Some(self.jump_to_element_offset(target_offset))
+        } else {
+            // Wrap to top
+            let first_offset = matches[0];
+            let speech = self.jump_to_element_offset(first_offset);
+            Some(format!("wrapping to top\n{}", speech))
+        }
+    }
+
+    /// Retreats backward to the prior match of the active search query (`Shift+F3`).
+    pub fn find_prior(&mut self) -> Option<String> {
+        self.selection = None;
+        let query = match self.search.query.as_deref() {
+            Some(q) if !q.is_empty() => q,
+            _ => return None,
+        };
+        let matches = self.find_matching_offsets(query, self.search.case_sensitive);
+        if matches.is_empty() {
+            return Some(SpeechFormatter::format_text_not_found(query));
+        }
+
+        if let Some(&target_offset) = matches.iter().rfind(|&&off| off < self.offset) {
+            Some(self.jump_to_element_offset(target_offset))
+        } else {
+            // Wrap to bottom
+            let last_offset = matches[matches.len() - 1];
+            let speech = self.jump_to_element_offset(last_offset);
+            Some(format!("wrapping to bottom\n{}", speech))
+        }
     }
 }

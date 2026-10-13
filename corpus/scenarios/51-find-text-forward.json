@@ -1,0 +1,29 @@
+{
+  "id": "51-find-text-forward",
+  "name": "In-Buffer Text Search Forward Navigation",
+  "category": "Buffer Search and Element Lists",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "jaws_script",
+      "command": "Find:Architecture",
+      "settle_ms": 300,
+      "assertions": {
+        "target_role": "link",
+        "contains_speech": [
+          "same page link",
+          "Architecture Link"
+        ]
+      }
+    }
+  ]
+}

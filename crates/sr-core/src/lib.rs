@@ -7,9 +7,12 @@ pub mod input;
 pub mod speech;
 
 pub use aom::{AomNode, NodeStates, Role};
-pub use buffer::{BufferLine, BufferParagraph, BufferSpan, BufferWord, VirtualBuffer};
-pub use cursor::VirtualCursor;
-pub use engine::ScreenReaderEngine;
+pub use buffer::{
+    BufferLine, BufferParagraph, BufferSpan, BufferWord, FormFieldListItem, HeadingListItem,
+    LinkListItem, VirtualBuffer,
+};
+pub use cursor::{SearchState, VirtualCursor};
+pub use engine::{ActiveElementList, ScreenReaderEngine};
 pub use event::{AccessibilityEvent, FocusEvent, LiveRegionEvent, Politeness};
 pub use input::{Key, KeyAction, KeyEvent, Modifiers};
 pub use speech::{MockSpeechOutput, SpeechFormatter, SpeechOutput};
@@ -602,5 +605,171 @@ mod tests {
             .move_next_table()
             .expect("Should return speech on negative match");
         assert_eq!(res, "There are no tables on this page.");
+    }
+
+    #[test]
+    fn test_milestone_11_in_buffer_search_forward_and_wrap() {
+        let aom = create_structural_test_tree();
+        let buffer = VirtualBuffer::from_aom(&aom);
+        let mut cursor = VirtualCursor::new(buffer);
+
+        cursor.move_to_start();
+
+        // 1. Forward search for "Architecture"
+        let match1 = cursor
+            .find_text("Architecture", false)
+            .expect("Should find Architecture");
+        assert!(
+            match1.contains("Architecture Link"),
+            "Expected match1 to contain Architecture Link, got {}",
+            match1
+        );
+
+        // 2. Advance via find_next to "Architecture Guide"
+        let match2 = cursor.find_next().expect("Should advance to next match");
+        assert!(
+            match2.contains("Architecture Guide"),
+            "Expected match2 to contain Architecture Guide, got {}",
+            match2
+        );
+
+        // 3. Advance to "Architecture description..."
+        let match3 = cursor.find_next().expect("Should advance to third match");
+        assert!(
+            match3.contains("Architecture description with ordered components:"),
+            "Expected match3 to contain paragraph, got {}",
+            match3
+        );
+
+        // 4. Advance past last match -> wrap around to top!
+        let wrap_top = cursor.find_next().expect("Should wrap around to top");
+        assert!(
+            wrap_top.starts_with("wrapping to top"),
+            "Expected wrapping to top, got {}",
+            wrap_top
+        );
+        assert!(wrap_top.contains("Architecture Link"));
+
+        // 5. Prior match from top -> wrap around to bottom!
+        let wrap_bottom = cursor.find_prior().expect("Should wrap around to bottom");
+        assert!(
+            wrap_bottom.starts_with("wrapping to bottom"),
+            "Expected wrapping to bottom, got {}",
+            wrap_bottom
+        );
+        assert!(wrap_bottom.contains("Architecture description"));
+    }
+
+    #[test]
+    fn test_milestone_11_negative_search() {
+        let aom = create_structural_test_tree();
+        let buffer = VirtualBuffer::from_aom(&aom);
+        let mut cursor = VirtualCursor::new(buffer);
+
+        cursor.move_to_start();
+        let initial_offset = cursor.offset;
+
+        let res = cursor
+            .find_text("nonexistent-term", false)
+            .expect("Should return negative search result");
+        assert_eq!(res, "Text not found: nonexistent-term");
+        assert_eq!(
+            cursor.offset, initial_offset,
+            "Cursor offset must not change on negative search"
+        );
+    }
+
+    #[test]
+    fn test_milestone_11_headings_list_and_jump() {
+        let aom = create_structural_test_tree();
+        let buffer = VirtualBuffer::from_aom(&aom);
+        let cursor = VirtualCursor::new(buffer);
+        let mock_speech = Box::new(MockSpeechOutput::new());
+        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
+
+        // Open Headings List dialog
+        let dialog_speech = engine
+            .execute_command("SelectAHeading")
+            .expect("Should open headings list");
+        assert!(dialog_speech.contains("Heading List"));
+        assert!(dialog_speech.contains("headings  \u{001d} List view \u{001e}"));
+        assert!(dialog_speech.contains("System Documentation : 1"));
+        assert!(dialog_speech.contains("1 of 5"));
+
+        // Navigate down to item 2 ("Section Overview : 2")
+        let down_speech = engine
+            .execute_command("{DOWN}")
+            .expect("Should move down in list");
+        assert!(down_speech.contains("Section Overview : 2"));
+        assert!(down_speech.contains("2 of 5"));
+
+        // Press Enter to jump to target heading
+        let landing_speech = engine
+            .execute_command("{ENTER}")
+            .expect("Should jump to heading");
+        assert!(landing_speech.contains("Section Overview"));
+        assert!(landing_speech.contains("heading level 2"));
+
+        let current_node = engine.cursor.current_node().expect("Should have node");
+        assert_eq!(current_node.role, Role::Heading { level: 2 });
+    }
+
+    #[test]
+    fn test_milestone_11_links_list_and_jump() {
+        let aom = create_structural_test_tree();
+        let buffer = VirtualBuffer::from_aom(&aom);
+        let cursor = VirtualCursor::new(buffer);
+        let mock_speech = Box::new(MockSpeechOutput::new());
+        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
+
+        // Open Links List dialog
+        let dialog_speech = engine
+            .execute_command("SelectALink")
+            .expect("Should open links list");
+        assert!(dialog_speech.contains("Links List"));
+        assert!(dialog_speech.contains("links  \u{001d} List view \u{001e}"));
+        assert!(dialog_speech.contains("Overview Link"));
+        assert!(dialog_speech.contains("1 of 3"));
+
+        // Navigate down to item 2 ("Architecture Link")
+        let down_speech = engine
+            .execute_command("{DOWN}")
+            .expect("Should move down in list");
+        assert!(down_speech.contains("Architecture Link"));
+        assert!(down_speech.contains("2 of 3"));
+
+        // Press Enter to jump to link
+        let landing_speech = engine
+            .execute_command("{ENTER}")
+            .expect("Should jump to link");
+        assert!(landing_speech.contains("Architecture Link"));
+        assert!(landing_speech.contains("same page link"));
+
+        let current_node = engine.cursor.current_node().expect("Should have node");
+        assert!(matches!(current_node.role, Role::Link { .. }));
+    }
+
+    #[test]
+    fn test_milestone_11_form_fields_list_and_escape() {
+        let aom = create_forms_test_tree();
+        let buffer = VirtualBuffer::from_aom(&aom);
+        let cursor = VirtualCursor::new(buffer);
+        let mock_speech = Box::new(MockSpeechOutput::new());
+        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
+
+        // Open Form Fields List dialog
+        let dialog_speech = engine
+            .execute_command("SelectAFormField")
+            .expect("Should open form fields list");
+        assert!(dialog_speech.contains("Select a Form Field"));
+        assert!(dialog_speech.contains("List1  \u{001d} List view \u{001e}"));
+        assert!(dialog_speech.contains("Full Name: Edit"));
+
+        // Dismiss dialog via Escape
+        let exit_speech = engine
+            .execute_command("{ESC}")
+            .expect("Should exit dialog via Escape");
+        assert_eq!(exit_speech, "virtual PC Cursor");
+        assert!(engine.active_element_list.is_none());
     }
 }
