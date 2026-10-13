@@ -19,6 +19,12 @@ pub struct FocusEvent {
     pub name: Option<String>,
     pub value: Option<String>,
     pub states: NodeStates,
+    pub item_index: Option<usize>,
+    pub item_count: Option<usize>,
+    pub container_role: Option<Role>,
+    pub container_name: Option<String>,
+    pub window_class: Option<String>,
+    pub help_text: Option<String>,
 }
 
 impl FocusEvent {
@@ -29,6 +35,12 @@ impl FocusEvent {
             name: None,
             value: None,
             states: NodeStates::default(),
+            item_index: None,
+            item_count: None,
+            container_role: None,
+            container_name: None,
+            window_class: None,
+            help_text: None,
         }
     }
 
@@ -49,6 +61,36 @@ impl FocusEvent {
 
     pub fn with_states(mut self, states: NodeStates) -> Self {
         self.states = states;
+        self
+    }
+
+    pub fn with_item_index(mut self, index: usize) -> Self {
+        self.item_index = Some(index);
+        self
+    }
+
+    pub fn with_item_count(mut self, count: usize) -> Self {
+        self.item_count = Some(count);
+        self
+    }
+
+    pub fn with_container_role(mut self, role: Role) -> Self {
+        self.container_role = Some(role);
+        self
+    }
+
+    pub fn with_container_name(mut self, name: impl Into<String>) -> Self {
+        self.container_name = Some(name.into());
+        self
+    }
+
+    pub fn with_window_class(mut self, class: impl Into<String>) -> Self {
+        self.window_class = Some(class.into());
+        self
+    }
+
+    pub fn with_help_text(mut self, help: impl Into<String>) -> Self {
+        self.help_text = Some(help.into());
         self
     }
 }

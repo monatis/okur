@@ -605,6 +605,48 @@ impl SpeechFormatter {
     pub fn format_text_not_found(query: &str) -> String {
         format!("Text not found: {}", query)
     }
+
+    /// Formats desktop folder view entry announcement matching JAWS.
+    pub fn format_desktop_entry(
+        container_name: &str,
+        item_name: &str,
+        index: usize,
+        total: usize,
+    ) -> String {
+        format!(
+            "  List box    \n{}    List view   \n{}\n{} of {}\nTo move to items use the Arrow keys.\nTo edit the selected item press f2.",
+            container_name, item_name, index, total
+        )
+    }
+
+    /// Formats desktop grid item announcement matching JAWS.
+    pub fn format_desktop_item(item_name: &str, index: usize, total: usize) -> String {
+        format!("{}\n{} of {}", item_name, index, total)
+    }
+
+    /// Formats shell bar element announcement matching JAWS.
+    pub fn format_shell_element(
+        container: Option<&str>,
+        name: &str,
+        role: &str,
+        help: Option<&str>,
+    ) -> String {
+        let mut lines = Vec::new();
+        if container == Some("Taskbar") && name == "Start Button" {
+            lines.push("Taskbar \n   Start Button   ".to_string());
+        } else if let Some(c) = container {
+            lines.push(format!("  {}    {}    Button   ", c, name));
+        } else if role == "Button" {
+            lines.push(format!("{}    Button   ", name));
+        } else {
+            lines.push(format!("{}    {}", name, role));
+        }
+
+        if let Some(h) = help {
+            lines.push(h.to_string());
+        }
+        lines.join("\n")
+    }
 }
 
 /// Trait for routing spoken utterances from the screen reader engine to audio output.

@@ -52,14 +52,18 @@
         "spans-and-math.html": {
             "path": "C:\\Users\\ailabs\\corpus\\fixtures\\spans-and-math.html",
             "size_bytes": 1136
+        },
+        "windows-desktop.html": {
+            "path": "C:\\Users\\ailabs\\corpus\\fixtures\\windows-desktop.html",
+            "size_bytes": 605
         }
     },
     "statistics": {
-        "total_scenarios": 60,
-        "deterministic_scenarios": 57,
+        "total_scenarios": 65,
+        "deterministic_scenarios": 62,
         "variable_scenarios": 3,
-        "total_trials_executed": 300,
-        "successful_trials": 300,
+        "total_trials_executed": 325,
+        "successful_trials": 325,
         "trial_success_rate_percent": 100
     },
     "scenarios": [
@@ -3592,6 +3596,552 @@
                         "contains_speech": [
                             "Math Viewer",
                             "Press Escape to exit"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "61-desktop-initial-match",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/windows-desktop.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 1250,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "focus",
+                        "command": "This PC"
+                    },
+                    "observation": {
+                        "speech_raw": "  List box    \nFolderView    List view   \nThis PC\n1 of 6\nTo move to items use the Arrow keys.\nTo edit the selected item press f2."
+                    },
+                    "assertions": {
+                        "target_role": "listitem",
+                        "contains_speech": [
+                            "FolderView    List view",
+                            "This PC",
+                            "1 of 6"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "t"
+                    },
+                    "observation": {
+                        "speech_raw": "Task Manager\n3 of 6"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Task Manager",
+                            "3 of 6"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "62-desktop-initial-wrap",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/windows-desktop.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 1420,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "focus",
+                        "command": "This PC"
+                    },
+                    "observation": {
+                        "speech_raw": "  List box    \nFolderView    List view   \nThis PC\n1 of 6\nTo move to items use the Arrow keys.\nTo edit the selected item press f2."
+                    },
+                    "assertions": {
+                        "target_role": "listitem",
+                        "contains_speech": [
+                            "FolderView    List view",
+                            "This PC",
+                            "1 of 6"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "t"
+                    },
+                    "observation": {
+                        "speech_raw": "Task Manager\n3 of 6"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Task Manager",
+                            "3 of 6"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "t"
+                    },
+                    "observation": {
+                        "speech_raw": "Terminal\n5 of 6"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Terminal",
+                            "5 of 6"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s4",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "t"
+                    },
+                    "observation": {
+                        "speech_raw": "This PC\n1 of 6"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "This PC",
+                            "1 of 6"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "63-desktop-arrow-navigation",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/windows-desktop.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 1650,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "focus",
+                        "command": "This PC"
+                    },
+                    "observation": {
+                        "speech_raw": "  List box    \nFolderView    List view   \nThis PC\n1 of 6\nTo move to items use the Arrow keys.\nTo edit the selected item press f2."
+                    },
+                    "assertions": {
+                        "target_role": "listitem",
+                        "contains_speech": [
+                            "FolderView    List view",
+                            "This PC",
+                            "1 of 6"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Recycle Bin\n2 of 6"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Recycle Bin",
+                            "2 of 6"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Task Manager\n3 of 6"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Task Manager",
+                            "3 of 6"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s4",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{UP}"
+                    },
+                    "observation": {
+                        "speech_raw": "Recycle Bin\n2 of 6"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Recycle Bin",
+                            "2 of 6"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s5",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "Task Manager\n3 of 6"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Task Manager",
+                            "3 of 6"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s6",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{LEFT}"
+                    },
+                    "observation": {
+                        "speech_raw": "Recycle Bin\n2 of 6"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Recycle Bin",
+                            "2 of 6"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "64-desktop-nonmatching-key-suppression",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/windows-desktop.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 1150,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "focus",
+                        "command": "This PC"
+                    },
+                    "observation": {
+                        "speech_raw": "  List box    \nFolderView    List view   \nThis PC\n1 of 6\nTo move to items use the Arrow keys.\nTo edit the selected item press f2."
+                    },
+                    "assertions": {
+                        "target_role": "listitem",
+                        "contains_speech": [
+                            "FolderView    List view",
+                            "This PC",
+                            "1 of 6"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "h"
+                    },
+                    "observation": {
+                        "speech_raw": ""
+                    },
+                    "assertions": {
+                        "prohibited_speech": [
+                            "heading",
+                            "no headings",
+                            "There are no"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "q"
+                    },
+                    "observation": {
+                        "speech_raw": ""
+                    },
+                    "assertions": {
+                        "prohibited_speech": [
+                            "table",
+                            "no tables",
+                            "button",
+                            "link"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s4",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "t"
+                    },
+                    "observation": {
+                        "speech_raw": "Task Manager\n3 of 6"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Task Manager",
+                            "3 of 6"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "65-shell-tab-cycling",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/windows-desktop.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 2850,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "focus",
+                        "command": "This PC"
+                    },
+                    "observation": {
+                        "speech_raw": "  List box    \nFolderView    List view   \nThis PC\n1 of 6\nTo move to items use the Arrow keys.\nTo edit the selected item press f2."
+                    },
+                    "assertions": {
+                        "target_role": "listitem",
+                        "contains_speech": [
+                            "FolderView    List view",
+                            "This PC",
+                            "1 of 6"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "Taskbar \n   Start Button   \nTo open press Enter."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Taskbar",
+                            "Start Button",
+                            "To open press Enter."
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "Type here to search    Button   \nTo activate press spacebar."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Type here to search",
+                            "Button",
+                            "To activate press spacebar."
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s4",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "Task View    Button   \nTo activate press spacebar."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Task View",
+                            "Button",
+                            "To activate press spacebar."
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s5",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "  Task bar    Microsoft Edge    Button   \nTo activate press spacebar."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Task bar",
+                            "Microsoft Edge",
+                            "Button",
+                            "To activate press spacebar."
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s6",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "  List box    \nFolderView    List view   \nThis PC\n1 of 6\nTo move to items use the Arrow keys.\nTo edit the selected item press f2."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "FolderView    List view",
+                            "This PC",
+                            "1 of 6"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s7",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "+{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "  Task bar    Microsoft Edge    Button   \nTo activate press spacebar."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Task bar",
+                            "Microsoft Edge",
+                            "Button",
+                            "To activate press spacebar."
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s8",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "+{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "Task View    Button   \nTo activate press spacebar."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Task View",
+                            "Button"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s9",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "+{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "Type here to search    Button   \nTo activate press spacebar."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Type here to search",
+                            "Button"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s10",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "+{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "Taskbar \n   Start Button   \nTo open press Enter."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Start Button",
+                            "To open press Enter."
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s11",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "+{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "  List box    \nFolderView    List view   \nThis PC\n1 of 6\nTo move to items use the Arrow keys.\nTo edit the selected item press f2."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "FolderView    List view",
+                            "This PC",
+                            "1 of 6"
                         ]
                     },
                     "step_success": true

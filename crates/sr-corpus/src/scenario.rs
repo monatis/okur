@@ -60,6 +60,8 @@ pub struct StepAssertions {
     pub target_row: Option<usize>,
     #[serde(default)]
     pub negative_match: Option<bool>,
+    #[serde(default)]
+    pub prohibited_speech: Option<Vec<String>>,
 }
 
 impl Scenario {

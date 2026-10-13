@@ -1,4 +1,4 @@
-use crate::aom::Role;
+use crate::aom::{AomNode, Role};
 use crate::buffer::VirtualBuffer;
 use crate::cursor::VirtualCursor;
 use crate::event::{AccessibilityEvent, FocusEvent, LiveRegionEvent, Politeness};
@@ -179,6 +179,102 @@ impl ActiveElementList {
     }
 }
 
+/// Operating mode of the screen reader based on foreground application/container context.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum AppMode {
+    #[default]
+    VirtualBuffer,
+    NativeDesktop,
+    NativeShell,
+    NativeControl,
+}
+
+/// Represents an item on the native Windows desktop.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct DesktopItem {
+    pub node_id: usize,
+    pub name: String,
+    pub index: usize,
+    pub total: usize,
+}
+
+/// State tracking for native Windows desktop folder view navigation.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct NativeDesktopState {
+    pub container_name: String,
+    pub items: Vec<DesktopItem>,
+    pub current_index: usize,
+}
+
+impl NativeDesktopState {
+    pub fn current_item(&self) -> Option<&DesktopItem> {
+        self.items.get(self.current_index)
+    }
+
+    pub fn move_next(&mut self) -> Option<&DesktopItem> {
+        if self.items.is_empty() {
+            return None;
+        }
+        if self.current_index + 1 < self.items.len() {
+            self.current_index += 1;
+        }
+        self.items.get(self.current_index)
+    }
+
+    pub fn move_prior(&mut self) -> Option<&DesktopItem> {
+        if self.items.is_empty() {
+            return None;
+        }
+        if self.current_index > 0 {
+            self.current_index -= 1;
+        }
+        self.items.get(self.current_index)
+    }
+
+    pub fn match_initial(&mut self, initial: char) -> Option<&DesktopItem> {
+        if self.items.is_empty() {
+            return None;
+        }
+        let total = self.items.len();
+        let target_char = initial.to_ascii_lowercase();
+
+        // Search starting from next item, with wrap-around
+        for offset in 1..=total {
+            let idx = (self.current_index + offset) % total;
+            if let Some(item) = self.items.get(idx) {
+                if item.name.to_lowercase().starts_with(target_char) {
+                    self.current_index = idx;
+                    return self.items.get(self.current_index);
+                }
+            }
+        }
+        None
+    }
+}
+
+/// Represents an element in the Windows shell bar cycle (Start, Search, Task View, Taskbar).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ShellElement {
+    pub node_id: usize,
+    pub name: String,
+    pub role: Role,
+    pub container: Option<String>,
+    pub help: Option<String>,
+}
+
+/// State tracking for Tab/Shift+Tab navigation across Windows shell surfaces.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ShellNavState {
+    pub elements: Vec<ShellElement>,
+    pub current_index: usize,
+}
+
+impl ShellNavState {
+    pub fn current_element(&self) -> Option<&ShellElement> {
+        self.elements.get(self.current_index)
+    }
+}
+
 /// Primary runtime engine for screen reader execution, coordinating virtual cursor navigation,
 /// speech output, and interactive input event handling.
 pub struct ScreenReaderEngine {
@@ -186,6 +282,9 @@ pub struct ScreenReaderEngine {
     pub speech: Box<dyn SpeechOutput>,
     pub forms_mode: bool,
     pub active_element_list: Option<ActiveElementList>,
+    pub app_mode: AppMode,
+    pub desktop_state: Option<NativeDesktopState>,
+    pub shell_nav_state: Option<ShellNavState>,
 }
 
 impl ScreenReaderEngine {
@@ -195,6 +294,9 @@ impl ScreenReaderEngine {
             speech,
             forms_mode: false,
             active_element_list: None,
+            app_mode: AppMode::VirtualBuffer,
+            desktop_state: None,
+            shell_nav_state: None,
         }
     }
 
@@ -204,11 +306,261 @@ impl ScreenReaderEngine {
         self.cursor.move_to_start();
         self.forms_mode = false;
         self.active_element_list = None;
+        self.app_mode = AppMode::VirtualBuffer;
+    }
+
+    /// Inspects an AOM tree and loads native desktop and shell navigation state if present.
+    pub fn load_desktop_from_aom(&mut self, root: &AomNode) {
+        fn find_desktop_list(node: &AomNode) -> Option<&AomNode> {
+            if node.role == Role::List
+                && (node.name.as_deref() == Some("FolderView")
+                    || node.attributes.get("class").map(|s| s.as_str()) == Some("SysListView32")
+                    || node.attributes.get("window_type").map(|s| s.as_str()) == Some("desktop"))
+            {
+                return Some(node);
+            }
+            for child in &node.children {
+                if let Some(found) = find_desktop_list(child) {
+                    return Some(found);
+                }
+            }
+            None
+        }
+
+        fn find_taskbar_buttons(node: &AomNode, out: &mut Vec<ShellElement>) {
+            if node.role == Role::Button {
+                out.push(ShellElement {
+                    node_id: node.id,
+                    name: node.name.clone().unwrap_or_default(),
+                    role: node.role.clone(),
+                    container: node.attributes.get("container").cloned(),
+                    help: node.attributes.get("help").cloned(),
+                });
+            }
+            for child in &node.children {
+                find_taskbar_buttons(child, out);
+            }
+        }
+
+        fn find_taskbar_window(node: &AomNode) -> Option<&AomNode> {
+            if node.role == Role::Window
+                && (node.name.as_deref() == Some("Taskbar")
+                    || node.attributes.get("class").map(|s| s.as_str()) == Some("Shell_TrayWnd"))
+            {
+                return Some(node);
+            }
+            for child in &node.children {
+                if let Some(found) = find_taskbar_window(child) {
+                    return Some(found);
+                }
+            }
+            None
+        }
+
+        if let Some(list_node) = find_desktop_list(root) {
+            let container_name = list_node
+                .name
+                .clone()
+                .unwrap_or_else(|| "FolderView".to_string());
+            let mut items = Vec::new();
+            let total_count = list_node.children.len();
+            for (idx, child) in list_node.children.iter().enumerate() {
+                if child.role == Role::ListItem {
+                    let index = child
+                        .attributes
+                        .get("item_index")
+                        .and_then(|s| s.parse().ok())
+                        .unwrap_or(idx + 1);
+                    let total = child
+                        .attributes
+                        .get("item_count")
+                        .and_then(|s| s.parse().ok())
+                        .unwrap_or(total_count);
+                    items.push(DesktopItem {
+                        node_id: child.id,
+                        name: child.name.clone().unwrap_or_default(),
+                        index,
+                        total,
+                    });
+                }
+            }
+
+            if !items.is_empty() {
+                self.app_mode = AppMode::NativeDesktop;
+                self.desktop_state = Some(NativeDesktopState {
+                    container_name,
+                    items,
+                    current_index: 0,
+                });
+            }
+        }
+
+        let mut shell_elements = Vec::new();
+        if let Some(tb) = find_taskbar_window(root) {
+            find_taskbar_buttons(tb, &mut shell_elements);
+        }
+        if !shell_elements.is_empty() {
+            self.shell_nav_state = Some(ShellNavState {
+                elements: shell_elements,
+                current_index: 0,
+            });
+        }
     }
 
     /// Executes a screen reader navigation command string (matching JAWS script names and keystrokes).
     /// Speaks the resulting announcement and returns the emitted speech text.
     pub fn execute_command(&mut self, command: &str) -> Option<String> {
+        // Native desktop navigation mode handling
+        if self.app_mode == AppMode::NativeDesktop {
+            match command {
+                "{DOWN}" | "{RIGHT}" | "DesktopNextItem" => {
+                    if let Some(ref mut ds) = self.desktop_state {
+                        if let Some(item) = ds.move_next() {
+                            let speech = SpeechFormatter::format_desktop_item(
+                                &item.name, item.index, item.total,
+                            );
+                            self.speech.speak(&speech, true);
+                            return Some(speech);
+                        }
+                    }
+                    return None;
+                }
+                "{UP}" | "{LEFT}" | "DesktopPriorItem" => {
+                    if let Some(ref mut ds) = self.desktop_state {
+                        if let Some(item) = ds.move_prior() {
+                            let speech = SpeechFormatter::format_desktop_item(
+                                &item.name, item.index, item.total,
+                            );
+                            self.speech.speak(&speech, true);
+                            return Some(speech);
+                        }
+                    }
+                    return None;
+                }
+                "{TAB}" | "ShellNextElement" => {
+                    self.app_mode = AppMode::NativeShell;
+                    if let Some(ref mut sn) = self.shell_nav_state {
+                        sn.current_index = 0;
+                        if let Some(el) = sn.current_element() {
+                            let speech = SpeechFormatter::format_shell_element(
+                                el.container.as_deref(),
+                                &el.name,
+                                "Button",
+                                el.help.as_deref(),
+                            );
+                            self.speech.speak(&speech, true);
+                            return Some(speech);
+                        }
+                    }
+                    return None;
+                }
+                "+{TAB}" | "ShellPriorElement" => {
+                    self.app_mode = AppMode::NativeShell;
+                    if let Some(ref mut sn) = self.shell_nav_state {
+                        sn.current_index = sn.elements.len().saturating_sub(1);
+                        if let Some(el) = sn.current_element() {
+                            let speech = SpeechFormatter::format_shell_element(
+                                el.container.as_deref(),
+                                &el.name,
+                                "Button",
+                                el.help.as_deref(),
+                            );
+                            self.speech.speak(&speech, true);
+                            return Some(speech);
+                        }
+                    }
+                    return None;
+                }
+                _ => {
+                    // Check if it's a single alphanumeric key for desktop first-letter navigation
+                    if command.len() == 1 {
+                        if let Some(c) = command.chars().next() {
+                            if c.is_alphanumeric() {
+                                if let Some(ref mut ds) = self.desktop_state {
+                                    let item = ds.match_initial(c)?;
+                                    let speech = SpeechFormatter::format_desktop_item(
+                                        &item.name, item.index, item.total,
+                                    );
+                                    self.speech.speak(&speech, true);
+                                    return Some(speech);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else if self.app_mode == AppMode::NativeShell {
+            match command {
+                "{TAB}" | "ShellNextElement" => {
+                    if let Some(ref mut sn) = self.shell_nav_state {
+                        if sn.current_index + 1 >= sn.elements.len() {
+                            // Cycle back to Desktop
+                            self.app_mode = AppMode::NativeDesktop;
+                            if let Some(ref ds) = self.desktop_state {
+                                if let Some(item) = ds.current_item() {
+                                    let speech = SpeechFormatter::format_desktop_entry(
+                                        &ds.container_name,
+                                        &item.name,
+                                        item.index,
+                                        item.total,
+                                    );
+                                    self.speech.speak(&speech, true);
+                                    return Some(speech);
+                                }
+                            }
+                        } else {
+                            sn.current_index += 1;
+                            if let Some(el) = sn.current_element() {
+                                let speech = SpeechFormatter::format_shell_element(
+                                    el.container.as_deref(),
+                                    &el.name,
+                                    "Button",
+                                    el.help.as_deref(),
+                                );
+                                self.speech.speak(&speech, true);
+                                return Some(speech);
+                            }
+                        }
+                    }
+                    return None;
+                }
+                "+{TAB}" | "ShellPriorElement" => {
+                    if let Some(ref mut sn) = self.shell_nav_state {
+                        if sn.current_index == 0 {
+                            // Step back to Desktop
+                            self.app_mode = AppMode::NativeDesktop;
+                            if let Some(ref ds) = self.desktop_state {
+                                if let Some(item) = ds.current_item() {
+                                    let speech = SpeechFormatter::format_desktop_entry(
+                                        &ds.container_name,
+                                        &item.name,
+                                        item.index,
+                                        item.total,
+                                    );
+                                    self.speech.speak(&speech, true);
+                                    return Some(speech);
+                                }
+                            }
+                        } else {
+                            sn.current_index -= 1;
+                            if let Some(el) = sn.current_element() {
+                                let speech = SpeechFormatter::format_shell_element(
+                                    el.container.as_deref(),
+                                    &el.name,
+                                    "Button",
+                                    el.help.as_deref(),
+                                );
+                                self.speech.speak(&speech, true);
+                                return Some(speech);
+                            }
+                        }
+                    }
+                    return None;
+                }
+                _ => {}
+            }
+        }
+
         // 0. Active element list navigation takes precedence for {DOWN}, {UP}, {ENTER}, {ESC}
         if let Some(ref mut list) = self.active_element_list {
             match command {
@@ -615,20 +967,22 @@ impl ScreenReaderEngine {
                 return KeyAction::Consume;
             }
             // For navigation keys, consume even if boundary reached so host window doesn't scroll
-            if matches!(
-                event.key,
-                Key::DownArrow
-                    | Key::UpArrow
-                    | Key::LeftArrow
-                    | Key::RightArrow
-                    | Key::Home
-                    | Key::End
-                    | Key::PageUp
-                    | Key::PageDown
-                    | Key::Tab
-                    | Key::Alpha(_)
-                    | Key::Digit(_)
-            ) {
+            if self.app_mode == AppMode::VirtualBuffer
+                && matches!(
+                    event.key,
+                    Key::DownArrow
+                        | Key::UpArrow
+                        | Key::LeftArrow
+                        | Key::RightArrow
+                        | Key::Home
+                        | Key::End
+                        | Key::PageUp
+                        | Key::PageDown
+                        | Key::Tab
+                        | Key::Alpha(_)
+                        | Key::Digit(_)
+                )
+            {
                 return KeyAction::Consume;
             }
         }
@@ -679,6 +1033,49 @@ impl ScreenReaderEngine {
     /// Synchronizes cursor position, activates/deactivates forms mode,
     /// and emits canonical JAWS speech announcements.
     pub fn handle_focus_event(&mut self, focus: &FocusEvent) -> Option<String> {
+        // 0. Check if focus landed on native desktop or shell bar
+        if focus.container_name.as_deref() == Some("FolderView")
+            || focus.window_class.as_deref() == Some("Progman")
+            || focus.window_class.as_deref() == Some("WorkerW")
+            || (focus.role == Role::ListItem && self.desktop_state.is_some())
+        {
+            self.app_mode = AppMode::NativeDesktop;
+            if let Some(ref mut ds) = self.desktop_state {
+                if let Some(ref name) = focus.name {
+                    if let Some(pos) = ds
+                        .items
+                        .iter()
+                        .position(|it| it.name.eq_ignore_ascii_case(name))
+                    {
+                        ds.current_index = pos;
+                    }
+                }
+                if let Some(item) = ds.current_item() {
+                    let speech = SpeechFormatter::format_desktop_entry(
+                        &ds.container_name,
+                        &item.name,
+                        item.index,
+                        item.total,
+                    );
+                    self.speech.speak(&speech, true);
+                    return Some(speech);
+                }
+            }
+        } else if focus.window_class.as_deref() == Some("Shell_TrayWnd")
+            || focus.container_name.as_deref() == Some("Taskbar")
+        {
+            self.app_mode = AppMode::NativeShell;
+            let name = focus.name.as_deref().unwrap_or("Start Button");
+            let speech = SpeechFormatter::format_shell_element(
+                focus.container_name.as_deref(),
+                name,
+                "Button",
+                focus.help_text.as_deref(),
+            );
+            self.speech.speak(&speech, true);
+            return Some(speech);
+        }
+
         // Try matching node in buffer
         let matched_node_id = focus
             .node_id

@@ -1,76 +1,75 @@
-# Implementation Plan: Milestone 13 – Native Desktop & Windows OS Application Navigation Parity
+# Implementation Plan: Milestone 13 – Windows Desktop & Shell Surface Navigation Parity
 
 **Plan Date**: 2026-10-13  
 **Target Milestone**: Milestone 13  
 **Prerequisite Handoff**: [`docs/handoff/2026-10-13-table-headers-coordinates-and-mathml.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-table-headers-coordinates-and-mathml.md)  
+**Deferred Backlog**: [`docs/backlog/individual-windows-applications-navigation.md`](file:///c:/Users/Gigabyte/screen-reader/docs/backlog/individual-windows-applications-navigation.md) (File Explorer, Notepad, dialogs deferred)  
 **Parity Target**: Freedom Scientific JAWS 2025 Differential Behavior  
 
 ---
 
-## 1. Overview & Problem Statement
+## 1. Overview & Objective
 
-Currently, when the screen reader is active and a user navigates to the Windows desktop (e.g. via `Win+M` or `Win+D`) and presses alphanumeric keys such as `T`, the virtual buffer interceptor treats the key as a quick-navigation shortcut and speaks:
-`"There are no tables on this page."`
-
-In Freedom Scientific JAWS (and NVDA):
-1. **Desktop / Shell Context Differentiation**:
-   - The desktop (`Progman` / `WorkerW` hosting `SHELLDLL_DefView` and `SysListView32`) and Windows shell surfaces are recognized as native UI controls rather than web virtual buffers.
-2. **Web Quick-Nav Suppression**:
-   - When focus is in a native desktop, File Explorer (`CabinetWClass`), taskbar (`Shell_TrayWnd`), or native dialog, Web Quick Navigation keys (`T`, `H`, `K`, `C`, `E`, `1`-`6`) are suppressed so they do not trigger web document search or error messages.
-3. **First-Letter Item Navigation (Alphanumeric Initial Matching)**:
-   - Alphanumeric keystrokes are passed directly to the native control (or handled by the screen reader's list tracker) to jump between items starting with that character (e.g., pressing `T` jumps to "This PC" or "Task Manager").
-4. **Native Focus & Arrow Tracking**:
-   - Navigating with Arrow keys, Tab, or initial letters announces:
-     `"{Name} {Role} {Index} of {Total}"` (e.g. `"This PC 1 of 12"`, `"Recycle Bin 2 of 12"`).
-
----
-
-## 2. Technical Architecture & Component Changes
-
-### 2.1 Platform Subsystem (`crates/sr-platform`)
-- **Window Class & Host Detection (`bridge.rs`, `events/`)**:
-  - Implement window handle query to classify window hierarchy:
-    - Shell Desktop: `Progman`, `WorkerW`, `SHELLDLL_DefView`.
-    - File Explorer: `CabinetWClass`.
-    - Taskbar & Start Menu: `Shell_TrayWnd`, `Windows.UI.Core.CoreWindow`.
-    - Native Dialogs: Win32 `#32770`.
-  - Expose `AppWindowContext` to inform the core engine whether the active focus belongs to a web virtual buffer host (Chrome/Edge/Firefox document) or a native desktop/shell application.
-- **Native Focus Event Dispatching**:
-  - Ensure UIA / Win32 focus change events on native list items transmit element name, role, selection state, and item index (`ItemIndex`, `ItemCount`).
-
-### 2.2 Core Engine Subsystem (`crates/sr-core`)
-- **Engine Mode & Virtual Buffer Intercept State (`engine.rs`, `cursor.rs`)**:
-  - Introduce `DocumentMode`:
-    - `VirtualBuffer`: Active for web pages and PDF documents where quick navigation keys are intercepted.
-    - `NativeDesktop`: Active when focused on desktop list views and Windows shell components.
-    - `NativeControl`: Active for standard native application dialogs and forms.
-  - When in `NativeDesktop` or `NativeControl` mode:
-    - Quick-navigation keys (`T`, `H`, `K`, etc.) are **not** captured by `VirtualBuffer::find_next_*()`.
-    - Unhandled alphanumeric keys pass through to native input or trigger first-letter list item navigation.
-- **First-Letter List Item Navigation**:
-  - When a list view has focus, pressing a character key jumps to the next item matching that initial letter, announcing item name, selection, and position.
-- **Speech Formatting (`speech.rs`)**:
-  - Format native desktop item announcements matching JAWS 2025:
-    `format_desktop_item(name, index, total)` -> `"{Name} {index} of {total}"`.
+When the screen reader is active and the user is on the Windows desktop or navigating Windows shell surfaces (e.g., via `Win+M`, `Win+D`, `Tab`, or arrow keys):
+1. **Web Quick-Nav Suppression**:
+   - Single alphanumeric keys (`T`, `H`, `K`, `C`, `E`, `1`–`6`, etc.) must **never** trigger web virtual buffer search or emit `"There are no tables on this page."`
+2. **Desktop First-Letter Item Navigation (Initial Matching)**:
+   - Typing character keys jumps between desktop items starting with that character (e.g. pressing `T` moves between items starting with T, such as `"This PC"` and `"Task Manager"`).
+3. **Desktop Arrow Navigation**:
+   - Up, Down, Left, and Right arrow keys move across desktop grid items, announcing name, index, and total count:
+     `"{Name} {Index} of {Total}"` (matching JAWS 2025).
+4. **Shell Surface Cycling (Tab / Shift+Tab)**:
+   - Navigating via `Tab` and `Shift+Tab` cycles between core Windows shell surfaces:
+     - Desktop Folder View (`SysListView32`)
+     - Start Button (`Button`)
+     - Search Button / Box (`Button` / `Edit`)
+     - Taskbar / Task View (`ToolBar` / `List`)
+     - System Tray / Notification Area chevron & clock
+   - Each transition announces the element name, role, and states.
 
 ---
 
-## 3. Autonomous Verification Plan (`old-pc` & Corpus)
+## 2. Autonomous Investigation Plan (`old-pc` Ground Truth)
 
-1. **Remote Research & Reference Capture**:
-   - Connect to `old-pc` via OpenDesk.
-   - Send `Win+M` to minimize all windows and focus the Windows desktop.
-   - Capture live JAWS 2025 speech transcripts when pressing:
-     - `T` (jumping to items like "This PC").
-     - Arrow keys (Up, Down, Left, Right).
-     - Enter / Space on desktop items.
-   - Contrast behavior when Chrome has focus vs when desktop has focus.
-2. **Corpus Scenarios & Evidence (61–65)**:
-   - Scenario 61: Desktop focus detection and suppression of table quick-nav `T`.
-   - Scenario 62: Desktop first-letter navigation (`T` jumping to "This PC").
-   - Scenario 63: Desktop arrow navigation and index announcement (`"{Name} {Index} of {Total}"`).
-   - Scenario 64: Mode switching from web browser (`VirtualBuffer`) to desktop (`Win+M`) and back (`Alt+Tab`).
-   - Scenario 65: File Explorer list view first-letter and arrow navigation.
-3. **Execution & Regression Testing**:
-   - Run `cargo test` across all scenarios.
-   - Verify `cargo fmt --check` and `cargo clippy --all-targets --all-features -- -D warnings`.
+Before authoring fixtures and scenarios:
+1. Drive live JAWS 2025 on `old-pc` across the desktop surface:
+   - Send `Win+M` and capture what JAWS announces upon landing on the desktop.
+   - Record exact JAWS speech when pressing initial letter keys (`T`, `R`, etc.).
+   - Record exact JAWS speech when pressing arrow keys across desktop items.
+   - Record exact JAWS speech when pressing `H` (a key with no matching item) to observe silent pass-through vs audio cue.
+   - Record exact JAWS speech when pressing `Tab` through Start, Search, Taskbar, System Tray, and `Shift+Tab` back to Desktop.
+2. Dump the actual `xa11y` / UIA accessibility tree of the Windows desktop and shell bar from `old-pc` to extract precise roles, control types, class names, and attributes.
+
+---
+
+## 3. Technical Architecture & Component Changes
+
+### 3.1 Platform & Event Model (`crates/sr-platform`)
+- **Control Classification**:
+  - Distinguish desktop list view (`SysListView32` in `Progman`/`WorkerW`) and shell bar (`Shell_TrayWnd`) from web documents.
+- **Enhanced FocusEvent**:
+  - Include `item_index: Option<usize>`, `item_count: Option<usize>`, `container_role: Option<Role>`, `container_name: Option<String>`.
+
+### 3.2 Core Engine Subsystem (`crates/sr-core`)
+- **`AppMode` State Machine**:
+  - `VirtualBuffer`: Web documents (quick-nav active).
+  - `NativeDesktop`: Desktop list view (quick-nav suppressed; first-letter item matching active).
+  - `NativeShell`: Taskbar, Start button, System Tray.
+- **First-Letter Item Navigation**:
+  - Maintain active container item list and index.
+  - Alphanumeric key press searches for next item whose name starts with that character (case-insensitive wrap-around).
+- **Speech Formatting**:
+  - `format_desktop_item(name, index, total)` matching JAWS transcript: `"{Name} {index} of {total}"`.
+
+---
+
+## 4. Differential Corpus Fixtures & Scenarios (61–65)
+
+1. **`xa11y` Fixtures**:
+   - `corpus/fixtures/windows-desktop.aom.json`: Serialized `xa11y` tree representing desktop items and shell bar components captured from `old-pc`.
+2. **Scenarios**:
+   - Scenario 61: Desktop initial matching (`T` jumping to item, suppressing table quick-nav).
+   - Scenario 62: Desktop initial wrap-around (`T` jumping to next matching item).
+   - Scenario 63: Desktop arrow navigation (Up/Down/Left/Right speaking item name and index).
+   - Scenario 64: Non-matching initial key suppression (`H` on desktop does not trigger web heading search).
+   - Scenario 65: Shell surface Tab/Shift+Tab cycling (Desktop $\rightarrow$ Start Button $\rightarrow$ Search $\rightarrow$ Taskbar $\rightarrow$ System Tray $\rightarrow$ Desktop).

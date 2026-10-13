@@ -1,0 +1,272 @@
+{
+  "id": 1,
+  "role": "Window",
+  "name": "Program Manager",
+  "value": null,
+  "text": null,
+  "states": {
+    "checked": null,
+    "selected": null,
+    "expanded": null,
+    "focused": false,
+    "disabled": false,
+    "hidden": false,
+    "modal": false
+  },
+  "attributes": {
+    "class": "Progman"
+  },
+  "children": [
+    {
+      "id": 2,
+      "role": "List",
+      "name": "FolderView",
+      "value": null,
+      "text": null,
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": true,
+        "disabled": false,
+        "hidden": false,
+        "modal": false
+      },
+      "attributes": {
+        "class": "SysListView32",
+        "window_type": "desktop"
+      },
+      "children": [
+        {
+          "id": 10,
+          "role": "ListItem",
+          "name": "This PC",
+          "value": null,
+          "text": null,
+          "states": {
+            "checked": null,
+            "selected": true,
+            "expanded": null,
+            "focused": true,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {
+            "item_index": "1",
+            "item_count": "6"
+          },
+          "children": []
+        },
+        {
+          "id": 11,
+          "role": "ListItem",
+          "name": "Recycle Bin",
+          "value": null,
+          "text": null,
+          "states": {
+            "checked": null,
+            "selected": false,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {
+            "item_index": "2",
+            "item_count": "6"
+          },
+          "children": []
+        },
+        {
+          "id": 12,
+          "role": "ListItem",
+          "name": "Task Manager",
+          "value": null,
+          "text": null,
+          "states": {
+            "checked": null,
+            "selected": false,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {
+            "item_index": "3",
+            "item_count": "6"
+          },
+          "children": []
+        },
+        {
+          "id": 13,
+          "role": "ListItem",
+          "name": "Google Chrome",
+          "value": null,
+          "text": null,
+          "states": {
+            "checked": null,
+            "selected": false,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {
+            "item_index": "4",
+            "item_count": "6"
+          },
+          "children": []
+        },
+        {
+          "id": 14,
+          "role": "ListItem",
+          "name": "Terminal",
+          "value": null,
+          "text": null,
+          "states": {
+            "checked": null,
+            "selected": false,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {
+            "item_index": "5",
+            "item_count": "6"
+          },
+          "children": []
+        },
+        {
+          "id": 15,
+          "role": "ListItem",
+          "name": "Word",
+          "value": null,
+          "text": null,
+          "states": {
+            "checked": null,
+            "selected": false,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {
+            "item_index": "6",
+            "item_count": "6"
+          },
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "role": "Window",
+      "name": "Taskbar",
+      "value": null,
+      "text": null,
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false,
+        "modal": false
+      },
+      "attributes": {
+        "class": "Shell_TrayWnd"
+      },
+      "children": [
+        {
+          "id": 20,
+          "role": "Button",
+          "name": "Start Button",
+          "value": null,
+          "text": null,
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {
+            "container": "Taskbar",
+            "help": "To open press Enter."
+          },
+          "children": []
+        },
+        {
+          "id": 21,
+          "role": "Button",
+          "name": "Type here to search",
+          "value": null,
+          "text": null,
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {
+            "help": "To activate press spacebar."
+          },
+          "children": []
+        },
+        {
+          "id": 22,
+          "role": "Button",
+          "name": "Task View",
+          "value": null,
+          "text": null,
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {
+            "help": "To activate press spacebar."
+          },
+          "children": []
+        },
+        {
+          "id": 23,
+          "role": "Button",
+          "name": "Microsoft Edge",
+          "value": null,
+          "text": null,
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {
+            "container": "Task bar",
+            "help": "To activate press spacebar."
+          },
+          "children": []
+        }
+      ]
+    }
+  ]
+}

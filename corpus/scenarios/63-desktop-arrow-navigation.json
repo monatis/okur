@@ -1,0 +1,88 @@
+{
+  "id": "63-desktop-arrow-navigation",
+  "name": "Desktop Grid Item Arrow Key Navigation",
+  "category": "Native Desktop and Shell Navigation",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/windows-desktop.html",
+  "target_app": "explorer",
+  "reset": {
+    "keystrokes": [],
+    "exit_forms_mode": false
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "focus",
+      "command": "This PC",
+      "settle_ms": 300,
+      "assertions": {
+        "target_role": "listitem",
+        "contains_speech": [
+          "FolderView    List view",
+          "This PC",
+          "1 of 6"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "type": "keyboard",
+      "command": "{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Recycle Bin",
+          "2 of 6"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "type": "keyboard",
+      "command": "{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Task Manager",
+          "3 of 6"
+        ]
+      }
+    },
+    {
+      "id": "s4",
+      "type": "keyboard",
+      "command": "{UP}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Recycle Bin",
+          "2 of 6"
+        ]
+      }
+    },
+    {
+      "id": "s5",
+      "type": "keyboard",
+      "command": "{RIGHT}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Task Manager",
+          "3 of 6"
+        ]
+      }
+    },
+    {
+      "id": "s6",
+      "type": "keyboard",
+      "command": "{LEFT}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Recycle Bin",
+          "2 of 6"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,241 @@
+{
+  "scenario_id": "65-shell-tab-cycling",
+  "scenario_version": "1.1.0",
+  "timestamp": "2026-10-13T09:19:00.0000000+03:00",
+  "environment": {
+    "os_version": "Microsoft Windows NT 10.0.19045.0",
+    "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+    "target_process": "explorer",
+    "interactive_session": true
+  },
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/windows-desktop.html",
+  "repetitions_requested": 5,
+  "trials": [
+    {
+      "trial_index": 1,
+      "timestamp": "2026-10-13T09:19:01.0000000+03:00",
+      "step_results": [
+        {
+          "step_id": "s1",
+          "action": {
+            "type": "focus",
+            "command": "This PC"
+          },
+          "observation": {
+            "speech_raw": "  List box    \nFolderView    List view   \nThis PC\n1 of 6\nTo move to items use the Arrow keys.\nTo edit the selected item press f2.",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "target_role": "listitem",
+            "contains_speech": [
+              "FolderView    List view",
+              "This PC",
+              "1 of 6"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s2",
+          "action": {
+            "type": "keyboard",
+            "command": "{TAB}"
+          },
+          "observation": {
+            "speech_raw": "Taskbar \n   Start Button   \nTo open press Enter.",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Taskbar",
+              "Start Button",
+              "To open press Enter."
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s3",
+          "action": {
+            "type": "keyboard",
+            "command": "{TAB}"
+          },
+          "observation": {
+            "speech_raw": "Type here to search    Button   \nTo activate press spacebar.",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Type here to search",
+              "Button",
+              "To activate press spacebar."
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s4",
+          "action": {
+            "type": "keyboard",
+            "command": "{TAB}"
+          },
+          "observation": {
+            "speech_raw": "Task View    Button   \nTo activate press spacebar.",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Task View",
+              "Button",
+              "To activate press spacebar."
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s5",
+          "action": {
+            "type": "keyboard",
+            "command": "{TAB}"
+          },
+          "observation": {
+            "speech_raw": "  Task bar    Microsoft Edge    Button   \nTo activate press spacebar.",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Task bar",
+              "Microsoft Edge",
+              "Button",
+              "To activate press spacebar."
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s6",
+          "action": {
+            "type": "keyboard",
+            "command": "{TAB}"
+          },
+          "observation": {
+            "speech_raw": "  List box    \nFolderView    List view   \nThis PC\n1 of 6\nTo move to items use the Arrow keys.\nTo edit the selected item press f2.",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "FolderView    List view",
+              "This PC",
+              "1 of 6"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s7",
+          "action": {
+            "type": "keyboard",
+            "command": "+{TAB}"
+          },
+          "observation": {
+            "speech_raw": "  Task bar    Microsoft Edge    Button   \nTo activate press spacebar.",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Task bar",
+              "Microsoft Edge",
+              "Button",
+              "To activate press spacebar."
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s8",
+          "action": {
+            "type": "keyboard",
+            "command": "+{TAB}"
+          },
+          "observation": {
+            "speech_raw": "Task View    Button   \nTo activate press spacebar.",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Task View",
+              "Button"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s9",
+          "action": {
+            "type": "keyboard",
+            "command": "+{TAB}"
+          },
+          "observation": {
+            "speech_raw": "Type here to search    Button   \nTo activate press spacebar.",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Type here to search",
+              "Button"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s10",
+          "action": {
+            "type": "keyboard",
+            "command": "+{TAB}"
+          },
+          "observation": {
+            "speech_raw": "Taskbar \n   Start Button   \nTo open press Enter.",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Start Button",
+              "To open press Enter."
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s11",
+          "action": {
+            "type": "keyboard",
+            "command": "+{TAB}"
+          },
+          "observation": {
+            "speech_raw": "  List box    \nFolderView    List view   \nThis PC\n1 of 6\nTo move to items use the Arrow keys.\nTo edit the selected item press f2.",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "FolderView    List view",
+              "This PC",
+              "1 of 6"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        }
+      ]
+    }
+  ]
+}

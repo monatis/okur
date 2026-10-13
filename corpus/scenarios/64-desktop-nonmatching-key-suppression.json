@@ -1,0 +1,67 @@
+{
+  "id": "64-desktop-nonmatching-key-suppression",
+  "name": "Desktop Web Quick-Nav Suppression and Silent Non-Matching Pass-Through",
+  "category": "Native Desktop and Shell Navigation",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/windows-desktop.html",
+  "target_app": "explorer",
+  "reset": {
+    "keystrokes": [],
+    "exit_forms_mode": false
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "focus",
+      "command": "This PC",
+      "settle_ms": 300,
+      "assertions": {
+        "target_role": "listitem",
+        "contains_speech": [
+          "FolderView    List view",
+          "This PC",
+          "1 of 6"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "type": "keyboard",
+      "command": "h",
+      "settle_ms": 200,
+      "assertions": {
+        "prohibited_speech": [
+          "heading",
+          "no headings",
+          "There are no"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "type": "keyboard",
+      "command": "q",
+      "settle_ms": 200,
+      "assertions": {
+        "prohibited_speech": [
+          "table",
+          "no tables",
+          "button",
+          "link"
+        ]
+      }
+    },
+    {
+      "id": "s4",
+      "type": "keyboard",
+      "command": "t",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Task Manager",
+          "3 of 6"
+        ]
+      }
+    }
+  ]
+}

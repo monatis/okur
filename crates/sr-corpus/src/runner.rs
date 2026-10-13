@@ -129,6 +129,7 @@ impl DifferentialRunner {
 
         let mock_speech = Box::new(MockSpeechOutput::new());
         let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
+        engine.load_desktop_from_aom(&aom);
 
         // Attempt loading canonical evidence for cross-validation
         let evidence_path = self
@@ -221,6 +222,32 @@ impl DifferentialRunner {
                         ev = ev.with_value(v);
                     }
                     engine.handle_focus_event(&ev).unwrap_or_default()
+                } else if let Some(ref ds) = engine.desktop_state {
+                    let matched_item = ds
+                        .items
+                        .iter()
+                        .find(|it| {
+                            it.name.eq_ignore_ascii_case(cmd)
+                                || cmd.eq_ignore_ascii_case("desktop")
+                                || cmd.eq_ignore_ascii_case("folderview")
+                        })
+                        .or_else(|| ds.items.first());
+                    if let Some(item) = matched_item {
+                        let ev = FocusEvent::new(Role::ListItem)
+                            .with_node_id(item.node_id)
+                            .with_name(&item.name)
+                            .with_container_name(&ds.container_name)
+                            .with_window_class("Progman")
+                            .with_item_index(item.index)
+                            .with_item_count(item.total);
+                        engine.handle_focus_event(&ev).unwrap_or_default()
+                    } else {
+                        let ev = FocusEvent::new(Role::List)
+                            .with_name(cmd)
+                            .with_container_name("FolderView")
+                            .with_window_class("Progman");
+                        engine.handle_focus_event(&ev).unwrap_or_default()
+                    }
                 } else {
                     let role = if cmd.to_lowercase().contains("edit")
                         || cmd.to_lowercase().contains("input")
@@ -279,7 +306,7 @@ impl DifferentialRunner {
             "select_form_field" => engine
                 .execute_command(&format!("SelectFormField:{}", step.command))
                 .unwrap_or_default(),
-            "keyboard" | "jaws_script" | "element_list" => {
+            "keyboard" | "jaws_script" | "element_list" | "key" => {
                 engine.execute_command(&step.command).unwrap_or_default()
             }
             _ => String::new(),
@@ -299,6 +326,22 @@ impl DifferentialRunner {
                         assertions_passed = false;
                         failed_assertions.push(format!(
                             "Expected speech to contain '{}', but got '{}'",
+                            phrase, emitted_speech
+                        ));
+                    }
+                }
+            }
+
+            if let Some(ref prohibited_list) = assertions.prohibited_speech {
+                for phrase in prohibited_list {
+                    if emitted_speech.contains(phrase)
+                        || emitted_speech
+                            .to_lowercase()
+                            .contains(&phrase.to_lowercase())
+                    {
+                        assertions_passed = false;
+                        failed_assertions.push(format!(
+                            "Expected speech NOT to contain '{}', but got '{}'",
                             phrase, emitted_speech
                         ));
                     }
@@ -465,9 +508,30 @@ impl DifferentialRunner {
         let scenario_file = if scenario_id.ends_with(".json") {
             self.corpus_dir.join("scenarios").join(scenario_id)
         } else {
-            self.corpus_dir
+            let direct = self
+                .corpus_dir
                 .join("scenarios")
-                .join(format!("{}.json", scenario_id))
+                .join(format!("{}.json", scenario_id));
+            if direct.exists() {
+                direct
+            } else {
+                // Try finding by prefix (e.g. "61" matches "61-desktop-initial-match.json")
+                let scenarios_dir = self.corpus_dir.join("scenarios");
+                let mut matched = None;
+                if let Ok(entries) = fs::read_dir(scenarios_dir) {
+                    for entry in entries.flatten() {
+                        let name = entry.file_name().to_string_lossy().to_string();
+                        if (name.starts_with(scenario_id)
+                            || name.starts_with(&format!("{}-", scenario_id)))
+                            && name.ends_with(".json")
+                        {
+                            matched = Some(entry.path());
+                            break;
+                        }
+                    }
+                }
+                matched.unwrap_or(direct)
+            }
         };
 
         let scenario = Scenario::load_from_file(&scenario_file)?;

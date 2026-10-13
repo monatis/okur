@@ -30,6 +30,7 @@ pub enum Role {
     ProgressBar,
     IFrame,
     Math,
+    Window,
     Generic,
 }
 
@@ -53,6 +54,7 @@ impl Role {
                 | Role::TreeItem
                 | Role::IFrame
                 | Role::Math
+                | Role::Window
         )
     }
 }

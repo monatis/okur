@@ -1,0 +1,157 @@
+{
+  "id": "65-shell-tab-cycling",
+  "name": "Shell Surface Tab and Shift+Tab Cycling Between Desktop, Start, and Taskbar",
+  "category": "Native Desktop and Shell Navigation",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/windows-desktop.html",
+  "target_app": "explorer",
+  "reset": {
+    "keystrokes": [],
+    "exit_forms_mode": false
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "focus",
+      "command": "This PC",
+      "settle_ms": 300,
+      "assertions": {
+        "target_role": "listitem",
+        "contains_speech": [
+          "FolderView    List view",
+          "This PC",
+          "1 of 6"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "type": "keyboard",
+      "command": "{TAB}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Taskbar",
+          "Start Button",
+          "To open press Enter."
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "type": "keyboard",
+      "command": "{TAB}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Type here to search",
+          "Button",
+          "To activate press spacebar."
+        ]
+      }
+    },
+    {
+      "id": "s4",
+      "type": "keyboard",
+      "command": "{TAB}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Task View",
+          "Button",
+          "To activate press spacebar."
+        ]
+      }
+    },
+    {
+      "id": "s5",
+      "type": "keyboard",
+      "command": "{TAB}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Task bar",
+          "Microsoft Edge",
+          "Button",
+          "To activate press spacebar."
+        ]
+      }
+    },
+    {
+      "id": "s6",
+      "type": "keyboard",
+      "command": "{TAB}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "FolderView    List view",
+          "This PC",
+          "1 of 6"
+        ]
+      }
+    },
+    {
+      "id": "s7",
+      "type": "keyboard",
+      "command": "+{TAB}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Task bar",
+          "Microsoft Edge",
+          "Button",
+          "To activate press spacebar."
+        ]
+      }
+    },
+    {
+      "id": "s8",
+      "type": "keyboard",
+      "command": "+{TAB}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Task View",
+          "Button"
+        ]
+      }
+    },
+    {
+      "id": "s9",
+      "type": "keyboard",
+      "command": "+{TAB}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Type here to search",
+          "Button"
+        ]
+      }
+    },
+    {
+      "id": "s10",
+      "type": "keyboard",
+      "command": "+{TAB}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Start Button",
+          "To open press Enter."
+        ]
+      }
+    },
+    {
+      "id": "s11",
+      "type": "keyboard",
+      "command": "+{TAB}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "FolderView    List view",
+          "This PC",
+          "1 of 6"
+        ]
+      }
+    }
+  ]
+}
