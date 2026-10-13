@@ -133,11 +133,13 @@ impl TtsManager {
 
     /// Speaks text using the active synthesizer.
     pub fn speak(&mut self, text: &str, interrupt: bool) -> Result<(), TtsError> {
+        log_speech_utterance(text, interrupt, self.engine.name());
         self.engine.speak(text, interrupt)
     }
 
     /// Immediately stops speech.
     pub fn stop(&mut self) -> Result<(), TtsError> {
+        log_speech_utterance("[SPEECH_STOPPED]", false, self.engine.name());
         self.engine.stop()
     }
 
@@ -214,6 +216,47 @@ impl sr_core::speech::SpeechOutput for TtsManager {
     fn is_speaking(&self) -> bool {
         self.is_speaking()
     }
+}
+
+/// Appends a speech utterance to the programmatic speech history log (`target/speech_history.log`).
+pub fn log_speech_utterance(text: &str, interrupt: bool, engine_name: &str) {
+    let clean = text.replace(['\u{001d}', '\u{001e}'], "");
+    let millis = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_millis())
+        .unwrap_or(0);
+
+    let line = format!(
+        "[{} ms] [{}] [interrupt: {}] {}\n",
+        millis,
+        engine_name,
+        interrupt,
+        clean.trim()
+    );
+
+    let _ = std::fs::create_dir_all("target");
+    if let Ok(mut f) = std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open("target/speech_history.log")
+    {
+        use std::io::Write;
+        let _ = f.write_all(line.as_bytes());
+    }
+}
+
+/// Reads all recorded utterances from the programmatic speech history log.
+pub fn read_speech_history() -> Vec<String> {
+    if let Ok(content) = std::fs::read_to_string("target/speech_history.log") {
+        content.lines().map(|s| s.to_string()).collect()
+    } else {
+        Vec::new()
+    }
+}
+
+/// Clears the programmatic speech history log.
+pub fn clear_speech_history() {
+    let _ = std::fs::remove_file("target/speech_history.log");
 }
 
 #[cfg(test)]

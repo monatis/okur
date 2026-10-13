@@ -95,6 +95,18 @@ enum Commands {
         #[arg(short, long, default_value = "auto")]
         engine: String,
     },
+    /// View or clear programmatic speech history log
+    History {
+        /// Clear the history log
+        #[arg(long)]
+        clear: bool,
+    },
+    /// Query hardware soundcard / default playback audio meter
+    Meter {
+        /// Monitor duration in milliseconds (default 500ms)
+        #[arg(long, default_value_t = 500)]
+        duration_ms: u64,
+    },
 }
 
 fn parse_range(range_str: &str) -> Option<(u32, u32)> {
@@ -472,6 +484,53 @@ async fn main() {
 
             if failed > 0 {
                 std::process::exit(1);
+            }
+        }
+        Some(Commands::History { clear }) => {
+            if clear {
+                sr_platform::clear_speech_history();
+                println!("Programmatic speech history log cleared.");
+            } else {
+                let history = sr_platform::read_speech_history();
+                if history.is_empty() {
+                    println!("Speech history is empty.");
+                } else {
+                    println!(
+                        "=== Programmatic Speech History ({} entries) ===",
+                        history.len()
+                    );
+                    for line in history {
+                        println!("{}", line);
+                    }
+                    println!("===============================================");
+                }
+            }
+        }
+        Some(Commands::Meter { duration_ms }) => {
+            println!(
+                "Sampling hardware soundcard / default playback endpoint for {} ms...",
+                duration_ms
+            );
+            let report = sr_platform::AudioEndpointMeter::monitor_activity(
+                std::time::Duration::from_millis(duration_ms),
+                std::time::Duration::from_millis(25),
+                0.001,
+            );
+            match report {
+                Ok(rep) => {
+                    println!("Audio Output Report:");
+                    println!("  - Detected Sound: {}", rep.detected_audio);
+                    println!("  - Max Peak Amplitude: {:.4}", rep.max_peak);
+                    println!("  - Average Active Peak: {:.4}", rep.average_peak);
+                    println!(
+                        "  - Active Audio Samples: {} / {}",
+                        rep.active_samples, rep.total_samples
+                    );
+                }
+                Err(e) => {
+                    eprintln!("Failed to query audio endpoint: {}", e);
+                    std::process::exit(1);
+                }
             }
         }
         Some(Commands::Validate { corpus_dir }) => {

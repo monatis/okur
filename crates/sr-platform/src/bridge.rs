@@ -15,6 +15,10 @@ pub enum PlatformError {
     HookError(String),
     #[error("Event listener error: {0}")]
     EventListenerError(String),
+    #[error("Audio error: {0}")]
+    AudioError(String),
+    #[error("Unsupported platform: {0}")]
+    Unsupported(String),
 }
 
 static NEXT_NODE_ID: AtomicUsize = AtomicUsize::new(1);

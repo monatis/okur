@@ -17,6 +17,8 @@ xa11y = { workspace = true }
 [target.'cfg(windows)'.dependencies]
 windows = { version = "0.62", features = [
     "Win32_Media_Speech",
+    "Win32_Media_Audio",
+    "Win32_Media_Audio_Endpoints",
     "Win32_System_Com",
     "Win32_UI_WindowsAndMessaging",
     "Win32_UI_Input_KeyboardAndMouse",

@@ -12,12 +12,19 @@ use windows::Win32::System::Com::{
 };
 use windows::Win32::UI::Accessibility::{
     CUIAutomation, IUIAutomation, IUIAutomationElement, IUIAutomationFocusChangedEventHandler,
-    IUIAutomationFocusChangedEventHandler_Impl, UIA_ButtonControlTypeId, UIA_CheckBoxControlTypeId,
-    UIA_DocumentControlTypeId, UIA_EditControlTypeId, UIA_HyperlinkControlTypeId,
-    UIA_ListControlTypeId, UIA_ListItemControlTypeId, UIA_PositionInSetPropertyId,
-    UIA_SizeOfSetPropertyId, UIA_TabControlTypeId, UIA_TabItemControlTypeId,
-    UIA_TableControlTypeId, UIA_TextControlTypeId,
+    IUIAutomationFocusChangedEventHandler_Impl, SetWinEventHook, TreeScope_Children,
+    UIA_ButtonControlTypeId, UIA_CheckBoxControlTypeId, UIA_DocumentControlTypeId,
+    UIA_EditControlTypeId, UIA_HyperlinkControlTypeId, UIA_ListControlTypeId,
+    UIA_ListItemControlTypeId, UIA_PositionInSetPropertyId, UIA_SizeOfSetPropertyId,
+    UIA_TabControlTypeId, UIA_TabItemControlTypeId, UIA_TableControlTypeId, UIA_TextControlTypeId,
+    UnhookWinEvent, HWINEVENTHOOK,
 };
+
+const WINEVENT_OUTOFCONTEXT: u32 = 0;
+const WINEVENT_SKIPOWNPROCESS: u32 = 2;
+const EVENT_OBJECT_FOCUS: u32 = 0x8005;
+const EVENT_OBJECT_SELECTION: u32 = 0x8006;
+const OBJID_CLIENT: i32 = -4;
 
 use super::AccessibilityEventListener;
 
@@ -284,6 +291,115 @@ impl IUIAutomationFocusChangedEventHandler_Impl for FocusChangedHandler_Impl {
     }
 }
 
+struct WinEventDesktopState {
+    sender: UnboundedSender<AccessibilityEvent>,
+    uia: IUIAutomation,
+    items_cache: Vec<String>,
+    cached_hwnd: windows::Win32::Foundation::HWND,
+}
+
+unsafe impl Send for WinEventDesktopState {}
+unsafe impl Sync for WinEventDesktopState {}
+
+impl WinEventDesktopState {
+    fn handle_desktop_event(&mut self, hwnd: windows::Win32::Foundation::HWND, child_index: usize) {
+        let total_count = unsafe {
+            windows::Win32::UI::WindowsAndMessaging::SendMessageW(
+                hwnd,
+                0x1004, // LVM_GETITEMCOUNT
+                Some(windows::Win32::Foundation::WPARAM(0)),
+                Some(windows::Win32::Foundation::LPARAM(0)),
+            )
+        }
+        .0 as usize;
+
+        if total_count == 0 {
+            return;
+        }
+
+        if self.cached_hwnd != hwnd
+            || self.items_cache.len() != total_count
+            || self.items_cache.is_empty()
+        {
+            if let Ok(element) = unsafe { self.uia.ElementFromHandle(hwnd) } {
+                if let Ok(cond) = unsafe { self.uia.CreateTrueCondition() } {
+                    if let Ok(children) = unsafe { element.FindAll(TreeScope_Children, &cond) } {
+                        if let Ok(count) = unsafe { children.Length() } {
+                            let mut new_cache = Vec::with_capacity(count as usize);
+                            for i in 0..count {
+                                if let Ok(item) = unsafe { children.GetElement(i) } {
+                                    if let Ok(name) = unsafe { item.CurrentName() } {
+                                        new_cache.push(name.to_string());
+                                    }
+                                }
+                            }
+                            if !new_cache.is_empty() {
+                                self.items_cache = new_cache;
+                                self.cached_hwnd = hwnd;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        let item_name = self
+            .items_cache
+            .get(child_index.saturating_sub(1))
+            .cloned()
+            .unwrap_or_else(|| format!("Item {}", child_index));
+
+        let states = NodeStates {
+            focused: true,
+            selected: Some(true),
+            ..Default::default()
+        };
+
+        let focus = FocusEvent::new(Role::ListItem)
+            .with_name(item_name)
+            .with_container_name("FolderView".to_string())
+            .with_window_class("SysListView32".to_string())
+            .with_item_index(child_index)
+            .with_item_count(total_count)
+            .with_states(states);
+
+        let _ = self.sender.send(AccessibilityEvent::Focus(focus));
+    }
+}
+
+static WIN_EVENT_STATE: std::sync::Mutex<Option<WinEventDesktopState>> =
+    std::sync::Mutex::new(None);
+
+unsafe extern "system" fn winevent_desktop_proc(
+    _hook: HWINEVENTHOOK,
+    _event: u32,
+    hwnd: windows::Win32::Foundation::HWND,
+    id_object: i32,
+    id_child: i32,
+    _event_thread: u32,
+    _event_time: u32,
+) {
+    if id_object != OBJID_CLIENT || id_child <= 0 {
+        return;
+    }
+
+    let mut class_buf = [0u16; 64];
+    let len = windows::Win32::UI::WindowsAndMessaging::GetClassNameW(hwnd, &mut class_buf);
+    if len <= 0 {
+        return;
+    }
+    let class_name = String::from_utf16_lossy(class_buf.get(..len as usize).unwrap_or(&[]));
+    if class_name != "SysListView32" {
+        return;
+    }
+
+    if let Ok(mut guard) = WIN_EVENT_STATE.try_lock() {
+        if let Some(ref mut state) = *guard {
+            state.handle_desktop_event(hwnd, id_child as usize);
+        }
+    }
+}
+
 pub struct WindowsAccessibilityEventListener {
     active: Arc<AtomicBool>,
     thread_handle: Option<JoinHandle<()>>,
@@ -345,7 +461,7 @@ impl AccessibilityEventListener for WindowsAccessibilityEventListener {
 
             let raw_handler = FocusChangedHandler {
                 uia: uia.clone(),
-                sender,
+                sender: sender.clone(),
             };
             if let Ok(focused) = unsafe { uia.GetFocusedElement() } {
                 raw_handler.process_element(&focused);
@@ -359,6 +475,27 @@ impl AccessibilityEventListener for WindowsAccessibilityEventListener {
             } else {
                 tracing::info!("Registered UIA focus changed event handler successfully");
             }
+
+            if let Ok(mut guard) = WIN_EVENT_STATE.lock() {
+                *guard = Some(WinEventDesktopState {
+                    sender,
+                    uia: uia.clone(),
+                    items_cache: Vec::new(),
+                    cached_hwnd: windows::Win32::Foundation::HWND::default(),
+                });
+            }
+
+            let win_event_hook = unsafe {
+                SetWinEventHook(
+                    EVENT_OBJECT_FOCUS,
+                    EVENT_OBJECT_SELECTION,
+                    None,
+                    Some(winevent_desktop_proc),
+                    0,
+                    0,
+                    WINEVENT_OUTOFCONTEXT | WINEVENT_SKIPOWNPROCESS,
+                )
+            };
 
             // Message pump to dispatch COM STA / WinEvent / UIA cross-process messages
             unsafe {
@@ -381,10 +518,16 @@ impl AccessibilityEventListener for WindowsAccessibilityEventListener {
             }
 
             unsafe {
+                if !win_event_hook.is_invalid() {
+                    let _ = UnhookWinEvent(win_event_hook);
+                }
                 let _ = uia.RemoveFocusChangedEventHandler(&handler);
                 CoUninitialize();
             }
-            tracing::info!("UIA focus changed event handler uninstalled");
+            if let Ok(mut guard) = WIN_EVENT_STATE.lock() {
+                *guard = None;
+            }
+            tracing::info!("UIA and WinEvent focus handlers uninstalled");
         });
 
         match init_rx.recv() {

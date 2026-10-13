@@ -196,6 +196,8 @@ pub struct NativeExplorerState {
     pub window_title: Option<String>,
     pub folder_name: Option<String>,
     pub entered: bool,
+    pub last_index: Option<usize>,
+    pub last_name: Option<String>,
 }
 
 /// Represents an item on the native Windows desktop.
@@ -1109,16 +1111,6 @@ impl ScreenReaderEngine {
                 es.entered = false;
             }
 
-            if let Some(ref name) = focus.name {
-                if let Some(pos) = ds
-                    .items
-                    .iter()
-                    .position(|it| it.name.eq_ignore_ascii_case(name))
-                {
-                    ds.current_index = pos;
-                }
-            }
-
             let name = focus.name.as_deref().unwrap_or("Desktop");
             let index = focus
                 .item_index
@@ -1126,6 +1118,34 @@ impl ScreenReaderEngine {
             let total = focus
                 .item_count
                 .unwrap_or_else(|| ds.current_item().map(|it| it.total).unwrap_or(1));
+
+            // Sync ds.items and check for deduplication
+            if ds.items.is_empty() {
+                ds.items.push(DesktopItem {
+                    node_id: index,
+                    name: name.to_string(),
+                    index,
+                    total,
+                });
+                ds.current_index = 0;
+            } else if let Some(pos) = ds
+                .items
+                .iter()
+                .position(|it| it.name.eq_ignore_ascii_case(name) || it.index == index)
+            {
+                if !is_first_entry && ds.current_index == pos {
+                    return None;
+                }
+                ds.current_index = pos;
+            } else {
+                ds.items.push(DesktopItem {
+                    node_id: index,
+                    name: name.to_string(),
+                    index,
+                    total,
+                });
+                ds.current_index = ds.items.len().saturating_sub(1);
+            }
 
             let speech = if is_first_entry {
                 SpeechFormatter::format_desktop_entry("FolderView", name, index, total)
@@ -1159,6 +1179,15 @@ impl ScreenReaderEngine {
             let index = focus.item_index.unwrap_or(1);
             let total = focus.item_count.unwrap_or(1);
             let selected = focus.states.selected;
+
+            if !is_first_entry
+                && es.last_index == Some(index)
+                && es.last_name.as_deref() == Some(name)
+            {
+                return None;
+            }
+            es.last_index = Some(index);
+            es.last_name = Some(name.to_string());
 
             let speech = if is_first_entry {
                 let window_title = focus

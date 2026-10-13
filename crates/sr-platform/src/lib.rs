@@ -1,7 +1,10 @@
+pub mod audio;
 pub mod bridge;
 pub mod events;
 pub mod hook;
 pub mod tts;
+
+pub use audio::{AudioActivityReport, AudioEndpointMeter};
 
 pub use bridge::{PlatformBridge, PlatformError};
 pub use events::{
@@ -10,7 +13,8 @@ pub use events::{
 };
 pub use hook::{create_keyboard_hook, Key, KeyAction, KeyEvent, KeyboardHook, Modifiers};
 pub use tts::{
-    NoSpeechEngine, Sapi5Engine, TtsEngine, TtsEngineType, TtsError, TtsManager, VoiceInfo,
+    clear_speech_history, log_speech_utterance, read_speech_history, NoSpeechEngine, Sapi5Engine,
+    TtsEngine, TtsEngineType, TtsError, TtsManager, VoiceInfo,
 };
 
 pub fn init() {
