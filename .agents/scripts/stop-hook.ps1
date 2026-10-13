@@ -1,14 +1,27 @@
 $inputJson = [Console]::In.ReadToEnd()
 
-# Set working directory to workspace root
-$workspaceRoot = (Resolve-Path "$PSScriptRoot\..").Path
+# Set working directory to workspace root (walk up until Cargo.toml is found)
+$workspaceRoot = $null
+$candidate = $PSScriptRoot
+while ($candidate -and (Test-Path $candidate)) {
+    if (Test-Path (Join-Path $candidate "Cargo.toml")) {
+        $workspaceRoot = $candidate
+        break
+    }
+    $parent = Split-Path -Parent $candidate
+    if ($parent -eq $candidate) { break }
+    $candidate = $parent
+}
+if (-not $workspaceRoot) {
+    $workspaceRoot = (Get-Location).Path
+}
 Set-Location $workspaceRoot
 
 # Auto-format with cargo fmt
 & cargo fmt 2>&1 | Out-Null
 
-# Run clippy with warnings denied
-$clippyOutput = & cargo clippy --all-targets --all-features -- -D warnings 2>&1
+# Run clippy with warnings denied and indexing_slicing denied
+$clippyOutput = & cargo clippy --all-targets --all-features -- -D warnings -D clippy::indexing_slicing 2>&1
 $clippyExitCode = $LASTEXITCODE
 
 if ($clippyExitCode -ne 0) {

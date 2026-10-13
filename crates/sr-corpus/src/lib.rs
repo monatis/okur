@@ -34,8 +34,16 @@ mod tests {
         assert_eq!(results.len(), 10, "Should have executed 10 scenarios");
 
         for (idx, res) in results.into_iter().enumerate() {
-            let scenario_res =
-                res.unwrap_or_else(|e| panic!("Scenario {} failed to load/run: {}", idx + 1, e));
+            assert!(
+                res.is_ok(),
+                "Scenario {} failed to load/run: {:?}",
+                idx + 1,
+                res.as_ref().err()
+            );
+            let scenario_res = match res {
+                Ok(r) => r,
+                Err(_) => continue,
+            };
             println!(
                 "Scenario [{}] {}: {}",
                 scenario_res.scenario_id,
@@ -82,8 +90,16 @@ mod tests {
         assert_eq!(results.len(), 5, "Should have executed 5 scenarios");
 
         for (idx, res) in results.into_iter().enumerate() {
-            let scenario_res =
-                res.unwrap_or_else(|e| panic!("Scenario {} failed to load/run: {}", idx + 11, e));
+            assert!(
+                res.is_ok(),
+                "Scenario {} failed to load/run: {:?}",
+                idx + 11,
+                res.as_ref().err()
+            );
+            let scenario_res = match res {
+                Ok(r) => r,
+                Err(_) => continue,
+            };
             println!(
                 "Scenario [{}] {}: {}",
                 scenario_res.scenario_id,
@@ -130,8 +146,16 @@ mod tests {
         assert_eq!(results.len(), 5, "Should have executed 5 scenarios");
 
         for (idx, res) in results.into_iter().enumerate() {
-            let scenario_res =
-                res.unwrap_or_else(|e| panic!("Scenario {} failed to load/run: {}", idx + 16, e));
+            assert!(
+                res.is_ok(),
+                "Scenario {} failed to load/run: {:?}",
+                idx + 16,
+                res.as_ref().err()
+            );
+            let scenario_res = match res {
+                Ok(r) => r,
+                Err(_) => continue,
+            };
             println!(
                 "Scenario [{}] {}: {}",
                 scenario_res.scenario_id,
@@ -178,8 +202,16 @@ mod tests {
         assert_eq!(results.len(), 5, "Should have executed 5 scenarios");
 
         for (idx, res) in results.into_iter().enumerate() {
-            let scenario_res =
-                res.unwrap_or_else(|e| panic!("Scenario {} failed to load/run: {}", idx + 21, e));
+            assert!(
+                res.is_ok(),
+                "Scenario {} failed to load/run: {:?}",
+                idx + 21,
+                res.as_ref().err()
+            );
+            let scenario_res = match res {
+                Ok(r) => r,
+                Err(_) => continue,
+            };
             println!(
                 "Scenario [{}] {}: {}",
                 scenario_res.scenario_id,
@@ -226,8 +258,16 @@ mod tests {
         assert_eq!(results.len(), 5, "Should have executed 5 scenarios");
 
         for (idx, res) in results.into_iter().enumerate() {
-            let scenario_res =
-                res.unwrap_or_else(|e| panic!("Scenario {} failed to load/run: {}", idx + 26, e));
+            assert!(
+                res.is_ok(),
+                "Scenario {} failed to load/run: {:?}",
+                idx + 26,
+                res.as_ref().err()
+            );
+            let scenario_res = match res {
+                Ok(r) => r,
+                Err(_) => continue,
+            };
             println!(
                 "Scenario [{}] {}: {}",
                 scenario_res.scenario_id,
@@ -274,8 +314,16 @@ mod tests {
         assert_eq!(results.len(), 5, "Should have executed 5 scenarios");
 
         for (idx, res) in results.into_iter().enumerate() {
-            let scenario_res =
-                res.unwrap_or_else(|e| panic!("Scenario {} failed to load/run: {}", idx + 31, e));
+            assert!(
+                res.is_ok(),
+                "Scenario {} failed to load/run: {:?}",
+                idx + 31,
+                res.as_ref().err()
+            );
+            let scenario_res = match res {
+                Ok(r) => r,
+                Err(_) => continue,
+            };
             println!(
                 "Scenario [{}] {}: {}",
                 scenario_res.scenario_id,
@@ -322,8 +370,16 @@ mod tests {
         assert_eq!(results.len(), 5, "Should have executed 5 scenarios");
 
         for (idx, res) in results.into_iter().enumerate() {
-            let scenario_res =
-                res.unwrap_or_else(|e| panic!("Scenario {} failed to load/run: {}", idx + 36, e));
+            assert!(
+                res.is_ok(),
+                "Scenario {} failed to load/run: {:?}",
+                idx + 36,
+                res.as_ref().err()
+            );
+            let scenario_res = match res {
+                Ok(r) => r,
+                Err(_) => continue,
+            };
             println!(
                 "Scenario [{}] {}: {}",
                 scenario_res.scenario_id,
@@ -370,8 +426,16 @@ mod tests {
         assert_eq!(results.len(), 5, "Should have executed 5 scenarios");
 
         for (idx, res) in results.into_iter().enumerate() {
-            let scenario_res =
-                res.unwrap_or_else(|e| panic!("Scenario {} failed to load/run: {}", idx + 41, e));
+            assert!(
+                res.is_ok(),
+                "Scenario {} failed to load/run: {:?}",
+                idx + 41,
+                res.as_ref().err()
+            );
+            let scenario_res = match res {
+                Ok(r) => r,
+                Err(_) => continue,
+            };
             println!(
                 "Scenario [{}] {}: {}",
                 scenario_res.scenario_id,
@@ -418,8 +482,16 @@ mod tests {
         assert_eq!(results.len(), 5, "Should have executed 5 scenarios");
 
         for (idx, res) in results.into_iter().enumerate() {
-            let scenario_res =
-                res.unwrap_or_else(|e| panic!("Scenario {} failed to load/run: {}", idx + 46, e));
+            assert!(
+                res.is_ok(),
+                "Scenario {} failed to load/run: {:?}",
+                idx + 46,
+                res.as_ref().err()
+            );
+            let scenario_res = match res {
+                Ok(r) => r,
+                Err(_) => continue,
+            };
             println!(
                 "Scenario [{}] {}: {}",
                 scenario_res.scenario_id,
@@ -466,8 +538,16 @@ mod tests {
         assert_eq!(results.len(), 5, "Should have executed 5 scenarios");
 
         for (idx, res) in results.into_iter().enumerate() {
-            let scenario_res =
-                res.unwrap_or_else(|e| panic!("Scenario {} failed to load/run: {}", idx + 51, e));
+            assert!(
+                res.is_ok(),
+                "Scenario {} failed to load/run: {:?}",
+                idx + 51,
+                res.as_ref().err()
+            );
+            let scenario_res = match res {
+                Ok(r) => r,
+                Err(_) => continue,
+            };
             println!(
                 "Scenario [{}] {}: {}",
                 scenario_res.scenario_id,

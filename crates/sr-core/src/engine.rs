@@ -32,7 +32,10 @@ impl ActiveElementList {
                 if *selected_index + 1 < items.len() {
                     *selected_index += 1;
                 }
-                let item = &items[*selected_index];
+                let item = match items.get(*selected_index) {
+                    Some(it) => it,
+                    None => return String::new(),
+                };
                 format!(
                     "{}\n{} of {}\nTo move to items use the Arrow keys.",
                     item.text,
@@ -47,7 +50,10 @@ impl ActiveElementList {
                 if *selected_index + 1 < items.len() {
                     *selected_index += 1;
                 }
-                let item = &items[*selected_index];
+                let item = match items.get(*selected_index) {
+                    Some(it) => it,
+                    None => return String::new(),
+                };
                 format!(
                     "{} : {}\n{} of {}\nTo move to items use the Arrow keys.",
                     item.text,
@@ -63,7 +69,10 @@ impl ActiveElementList {
                 if *selected_index + 1 < items.len() {
                     *selected_index += 1;
                 }
-                let item = &items[*selected_index];
+                let item = match items.get(*selected_index) {
+                    Some(it) => it,
+                    None => return String::new(),
+                };
                 let role_label = match item.role {
                     Role::Button => "Button",
                     Role::Edit => "Edit",
@@ -92,7 +101,10 @@ impl ActiveElementList {
                 if *selected_index > 0 {
                     *selected_index -= 1;
                 }
-                let item = &items[*selected_index];
+                let item = match items.get(*selected_index) {
+                    Some(it) => it,
+                    None => return String::new(),
+                };
                 format!(
                     "{}\n{} of {}\nTo move to items use the Arrow keys.",
                     item.text,
@@ -107,7 +119,10 @@ impl ActiveElementList {
                 if *selected_index > 0 {
                     *selected_index -= 1;
                 }
-                let item = &items[*selected_index];
+                let item = match items.get(*selected_index) {
+                    Some(it) => it,
+                    None => return String::new(),
+                };
                 format!(
                     "{} : {}\n{} of {}\nTo move to items use the Arrow keys.",
                     item.text,
@@ -123,7 +138,10 @@ impl ActiveElementList {
                 if *selected_index > 0 {
                     *selected_index -= 1;
                 }
-                let item = &items[*selected_index];
+                let item = match items.get(*selected_index) {
+                    Some(it) => it,
+                    None => return String::new(),
+                };
                 let role_label = match item.role {
                     Role::Button => "Button",
                     Role::Edit => "Edit",

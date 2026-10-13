@@ -56,22 +56,34 @@ mod tests {
         assert_eq!(buffer.lines.len(), 5);
 
         // Line 0: Title
-        assert_eq!(buffer.lines[0].text, "Document Reading Reference Fixture");
-        assert_eq!(buffer.lines[0].role, Role::Document);
+        assert_eq!(
+            buffer.lines.first().map(|l| l.text.as_str()),
+            Some("Document Reading Reference Fixture")
+        );
+        assert_eq!(
+            buffer.lines.first().map(|l| l.role.clone()),
+            Some(Role::Document)
+        );
 
         // Line 1: Heading
         assert_eq!(
-            buffer.lines[1].text,
-            "The Accessibility Engine Specification"
+            buffer.lines.get(1).map(|l| l.text.as_str()),
+            Some("The Accessibility Engine Specification")
         );
-        assert_eq!(buffer.lines[1].role, Role::Heading { level: 1 });
+        assert_eq!(
+            buffer.lines.get(1).map(|l| l.role.clone()),
+            Some(Role::Heading { level: 1 })
+        );
 
         // Line 2: Paragraph 1
         assert_eq!(
-            buffer.lines[2].text,
-            "The screen reader engine parses the document object model into a clean virtual buffer."
+            buffer.lines.get(2).map(|l| l.text.as_str()),
+            Some("The screen reader engine parses the document object model into a clean virtual buffer.")
         );
-        assert_eq!(buffer.lines[2].role, Role::Paragraph);
+        assert_eq!(
+            buffer.lines.get(2).map(|l| l.role.clone()),
+            Some(Role::Paragraph)
+        );
     }
 
     #[test]
@@ -536,8 +548,8 @@ mod tests {
         let aom = create_table_test_tree();
         let buffer = VirtualBuffer::from_aom(&aom);
         assert_eq!(buffer.tables.len(), 1);
-        assert_eq!(buffer.tables[0].rows, 4);
-        assert_eq!(buffer.tables[0].cols, 4);
+        assert_eq!(buffer.tables.first().map(|t| t.rows), Some(4));
+        assert_eq!(buffer.tables.first().map(|t| t.cols), Some(4));
 
         let mut cursor = VirtualCursor::new(buffer);
         cursor.move_to_start();

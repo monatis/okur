@@ -74,7 +74,7 @@ mod tests {
 
         let events = received_clone.lock().map(|g| g.clone()).unwrap_or_default();
         assert_eq!(events.len(), 1);
-        assert_eq!(events[0].key, Key::DownArrow);
+        assert_eq!(events.first().map(|e| e.key), Some(Key::DownArrow));
 
         let stop_res = hook.stop();
         assert!(stop_res.is_ok(), "Hook stop should succeed");

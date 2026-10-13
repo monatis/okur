@@ -98,10 +98,10 @@ enum Commands {
 }
 
 fn parse_range(range_str: &str) -> Option<(u32, u32)> {
-    let parts: Vec<&str> = range_str.split("..").collect();
-    if parts.len() == 2 {
-        let start = parts[0].trim().parse::<u32>().ok()?;
-        let end = parts[1].trim().parse::<u32>().ok()?;
+    let mut parts = range_str.split("..");
+    let start = parts.next()?.trim().parse::<u32>().ok()?;
+    let end = parts.next()?.trim().parse::<u32>().ok()?;
+    if parts.next().is_none() {
         Some((start, end))
     } else {
         None

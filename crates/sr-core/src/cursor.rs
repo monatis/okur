@@ -1309,8 +1309,8 @@ impl VirtualCursor {
             })
             .unwrap_or(0);
 
-        let next_idx = (current_idx + 1).min(node.children.len() - 1);
-        let next_child = &node.children[next_idx];
+        let next_idx = (current_idx + 1).min(node.children.len().saturating_sub(1));
+        let next_child = node.children.get(next_idx)?;
         let next_val = next_child
             .name
             .clone()
@@ -1343,7 +1343,7 @@ impl VirtualCursor {
             .unwrap_or(0);
 
         let prior_idx = current_idx.saturating_sub(1);
-        let prior_child = &node.children[prior_idx];
+        let prior_child = node.children.get(prior_idx)?;
         let prior_val = prior_child
             .name
             .clone()
@@ -1684,7 +1684,7 @@ impl VirtualCursor {
             .iter()
             .position(|t| t.start_offset > self.offset);
         let table_idx = maybe_idx.unwrap_or(0);
-        let table = &self.buffer.tables[table_idx];
+        let table = self.buffer.tables.get(table_idx)?;
         self.offset = table.start_offset;
         self.current_node_id = Some(table.table_id);
         self.current_table_pos = Some((table_idx, 0, 0));
@@ -1724,8 +1724,8 @@ impl VirtualCursor {
             .tables
             .iter()
             .rposition(|t| t.start_offset < current_start);
-        let table_idx = maybe_idx.unwrap_or(self.buffer.tables.len() - 1);
-        let table = &self.buffer.tables[table_idx];
+        let table_idx = maybe_idx.unwrap_or(self.buffer.tables.len().saturating_sub(1));
+        let table = self.buffer.tables.get(table_idx)?;
         self.offset = table.start_offset;
         self.current_node_id = Some(table.table_id);
         self.current_table_pos = Some((table_idx, 0, 0));
@@ -1754,7 +1754,10 @@ impl VirtualCursor {
             Some(pos) => pos,
             None => return Some("Not in a table.".to_string()),
         };
-        let table = &self.buffer.tables[t_idx];
+        let table = match self.buffer.tables.get(t_idx) {
+            Some(t) => t,
+            None => return Some("Not in a table.".to_string()),
+        };
         if c_idx + 1 < table.cols {
             let new_c = c_idx + 1;
             self.current_table_pos = Some((t_idx, r_idx, new_c));
@@ -1777,7 +1780,10 @@ impl VirtualCursor {
             Some(pos) => pos,
             None => return Some("Not in a table.".to_string()),
         };
-        let table = &self.buffer.tables[t_idx];
+        let table = match self.buffer.tables.get(t_idx) {
+            Some(t) => t,
+            None => return Some("Not in a table.".to_string()),
+        };
         if c_idx > 0 {
             let new_c = c_idx - 1;
             self.current_table_pos = Some((t_idx, r_idx, new_c));
@@ -1800,7 +1806,10 @@ impl VirtualCursor {
             Some(pos) => pos,
             None => return Some("Not in a table.".to_string()),
         };
-        let table = &self.buffer.tables[t_idx];
+        let table = match self.buffer.tables.get(t_idx) {
+            Some(t) => t,
+            None => return Some("Not in a table.".to_string()),
+        };
         if r_idx + 1 < table.rows {
             let new_r = r_idx + 1;
             self.current_table_pos = Some((t_idx, new_r, c_idx));
@@ -1823,7 +1832,10 @@ impl VirtualCursor {
             Some(pos) => pos,
             None => return Some("Not in a table.".to_string()),
         };
-        let table = &self.buffer.tables[t_idx];
+        let table = match self.buffer.tables.get(t_idx) {
+            Some(t) => t,
+            None => return Some("Not in a table.".to_string()),
+        };
         if r_idx > 0 {
             let new_r = r_idx - 1;
             self.current_table_pos = Some((t_idx, new_r, c_idx));
@@ -1918,7 +1930,7 @@ impl VirtualCursor {
             off
         } else {
             // Wrap to first match from top
-            matches[0]
+            matches.first().copied().unwrap_or(0)
         };
 
         Some(self.jump_to_element_offset(target_offset))
@@ -1940,7 +1952,7 @@ impl VirtualCursor {
             Some(self.jump_to_element_offset(target_offset))
         } else {
             // Wrap to top
-            let first_offset = matches[0];
+            let first_offset = matches.first().copied().unwrap_or(0);
             let speech = self.jump_to_element_offset(first_offset);
             Some(format!("wrapping to top\n{}", speech))
         }
@@ -1962,7 +1974,7 @@ impl VirtualCursor {
             Some(self.jump_to_element_offset(target_offset))
         } else {
             // Wrap to bottom
-            let last_offset = matches[matches.len() - 1];
+            let last_offset = matches.last().copied().unwrap_or(0);
             let speech = self.jump_to_element_offset(last_offset);
             Some(format!("wrapping to bottom\n{}", speech))
         }
