@@ -1060,6 +1060,15 @@ impl ScreenReaderEngine {
     /// Synchronizes cursor position, activates/deactivates forms mode,
     /// and emits canonical JAWS speech announcements.
     pub fn handle_focus_event(&mut self, focus: &FocusEvent) -> Option<String> {
+        // Ignore spontaneous background tile updates from Windows 11 Widgets applet
+        if focus
+            .name
+            .as_deref()
+            .is_some_and(|n| n.starts_with("Widgets"))
+        {
+            return None;
+        }
+
         let is_explorer_event = focus.window_class.as_deref() == Some("CabinetWClass")
             || focus.window_class.as_deref() == Some("ShellTabWindowClass")
             || focus.window_class.as_deref() == Some("UIItemsView")

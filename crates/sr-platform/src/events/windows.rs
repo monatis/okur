@@ -154,14 +154,6 @@ impl FocusChangedHandler {
             role = Role::ListItem;
 
             if !parent_hwnd.is_invalid() {
-                unsafe {
-                    let fg = windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow();
-                    if fg != parent_hwnd {
-                        let _ = windows::Win32::UI::WindowsAndMessaging::SetForegroundWindow(
-                            parent_hwnd,
-                        );
-                    }
-                }
                 let total = unsafe {
                     windows::Win32::UI::WindowsAndMessaging::SendMessageW(
                         parent_hwnd,
