@@ -1,0 +1,42 @@
+{
+  "id": "45-progressbar-status",
+  "name": "ARIA Progress Bar State and Status Monitoring",
+  "category": "Complex ARIA Widgets",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-widgets.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "focus",
+      "command": "Upload Progress",
+      "settle_ms": 300,
+      "assertions": {
+        "target_role": "progressbar",
+        "target_name": "Upload Progress",
+        "contains_speech": [
+          "Upload Progress",
+          "progress bar",
+          "75%"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "type": "aria_live",
+      "command": "polite: 80%",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "80%"
+        ]
+      }
+    }
+  ]
+}

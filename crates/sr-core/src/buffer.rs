@@ -1,5 +1,15 @@
-use crate::aom::{AomNode, Role};
+use crate::aom::{AomNode, Role, TextFormatting};
 use std::collections::HashMap;
+
+/// Information about an ARIA or web dialog container.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct DialogInfo {
+    pub node_id: usize,
+    pub name: String,
+    pub is_modal: bool,
+    pub start_offset: usize,
+    pub end_offset: usize,
+}
 
 /// A continuous span of text mapped to an AOM node.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -100,10 +110,17 @@ pub struct VirtualBuffer {
     pub buttons: Vec<usize>,
     pub edits: Vec<usize>,
     pub checkboxes: Vec<usize>,
+    pub comboboxes: Vec<usize>,
+    pub trees: Vec<usize>,
+    pub tree_items: Vec<usize>,
+    pub sliders: Vec<usize>,
+    pub progress_bars: Vec<usize>,
+    pub tree_parents: HashMap<usize, usize>,
     pub tab_stops: Vec<usize>,
     pub tabs: Vec<TabInfo>,
     pub tables: Vec<TableGrid>,
     pub table_offsets: Vec<usize>,
+    pub dialogs: Vec<DialogInfo>,
     pub node_map: HashMap<usize, AomNode>,
 }
 
@@ -408,13 +425,99 @@ impl VirtualBuffer {
             .map(|l| l.text.as_str())
     }
 
+    /// Returns the next combobox offset after the given offset.
+    pub fn next_combobox_from(&self, offset: usize) -> Option<usize> {
+        self.comboboxes.iter().find(|&&c| c > offset).copied()
+    }
+
+    /// Returns the prior combobox offset before the given offset.
+    pub fn prior_combobox_from(&self, offset: usize) -> Option<usize> {
+        let current_start = self
+            .comboboxes
+            .iter()
+            .rfind(|&&c| c <= offset)
+            .copied()
+            .unwrap_or(offset);
+        self.comboboxes
+            .iter()
+            .rfind(|&&c| c < current_start)
+            .copied()
+    }
+
+    /// Resolves the node for a combobox starting at `offset`.
+    pub fn find_combobox_node(&self, offset: usize) -> Option<&AomNode> {
+        self.spans
+            .iter()
+            .find(|s| s.start_offset == offset && matches!(s.role, Role::ComboBox))
+            .and_then(|s| self.node_map.get(&s.node_id))
+    }
+
+    /// Returns the next slider offset after the given offset.
+    pub fn next_slider_from(&self, offset: usize) -> Option<usize> {
+        self.sliders.iter().find(|&&s| s > offset).copied()
+    }
+
+    /// Returns the prior slider offset before the given offset.
+    pub fn prior_slider_from(&self, offset: usize) -> Option<usize> {
+        let current_start = self
+            .sliders
+            .iter()
+            .rfind(|&&s| s <= offset)
+            .copied()
+            .unwrap_or(offset);
+        self.sliders.iter().rfind(|&&s| s < current_start).copied()
+    }
+
+    /// Resolves the node for a slider starting at `offset`.
+    pub fn find_slider_node(&self, offset: usize) -> Option<&AomNode> {
+        self.spans
+            .iter()
+            .find(|s| s.start_offset == offset && matches!(s.role, Role::Slider))
+            .and_then(|s| self.node_map.get(&s.node_id))
+    }
+
+    /// Returns the next tree item offset after the given offset.
+    pub fn next_tree_item_from(&self, offset: usize) -> Option<usize> {
+        self.tree_items.iter().find(|&&t| t > offset).copied()
+    }
+
+    /// Returns the prior tree item offset before the given offset.
+    pub fn prior_tree_item_from(&self, offset: usize) -> Option<usize> {
+        let current_start = self
+            .tree_items
+            .iter()
+            .rfind(|&&t| t <= offset)
+            .copied()
+            .unwrap_or(offset);
+        self.tree_items
+            .iter()
+            .rfind(|&&t| t < current_start)
+            .copied()
+    }
+
+    /// Resolves the node for a tree item starting at `offset`.
+    pub fn find_tree_item_node(&self, offset: usize) -> Option<&AomNode> {
+        self.spans
+            .iter()
+            .find(|s| s.start_offset == offset && matches!(s.role, Role::TreeItem))
+            .and_then(|s| self.node_map.get(&s.node_id))
+    }
+
     /// Resolves the node for a form control starting at `offset`.
     pub fn find_form_control_node(&self, offset: usize) -> Option<&AomNode> {
         self.spans
             .iter()
             .find(|s| {
                 s.start_offset == offset
-                    && matches!(s.role, Role::Edit | Role::Button | Role::CheckBox)
+                    && matches!(
+                        s.role,
+                        Role::Edit
+                            | Role::Button
+                            | Role::CheckBox
+                            | Role::ComboBox
+                            | Role::Slider
+                            | Role::ProgressBar
+                    )
             })
             .and_then(|s| self.node_map.get(&s.node_id))
     }
@@ -531,6 +634,32 @@ impl VirtualBuffer {
             .and_then(|s| self.node_map.get(&s.node_id))
     }
 
+    /// Returns the dialog covering the given offset, if any.
+    pub fn dialog_at_offset(&self, offset: usize) -> Option<&DialogInfo> {
+        self.dialogs
+            .iter()
+            .find(|d| offset >= d.start_offset && offset <= d.end_offset)
+    }
+
+    /// Returns dialog information for a specific node ID.
+    pub fn dialog_for_node(&self, node_id: usize) -> Option<&DialogInfo> {
+        self.dialogs.iter().find(|d| d.node_id == node_id)
+    }
+
+    /// Resolves font formatting attributes at the given buffer offset.
+    pub fn formatting_at_offset(&self, offset: usize) -> Option<TextFormatting> {
+        self.spans
+            .iter()
+            .filter(|s| offset >= s.start_offset && offset <= s.end_offset)
+            .min_by_key(|s| s.end_offset - s.start_offset)
+            .and_then(|s| self.node_map.get(&s.node_id))
+            .and_then(|n| n.formatting.clone())
+            .or_else(|| {
+                self.node_at_offset(offset)
+                    .and_then(|n| n.formatting.clone())
+            })
+    }
+
     /// Tokenizes words from the buffer text.
     fn tokenize_words(&mut self) {
         let mut words = Vec::new();
@@ -568,14 +697,21 @@ impl VirtualBuffer {
     }
 }
 
-struct BufferBuilder;
+struct BufferBuilder {
+    formatting_stack: Vec<TextFormatting>,
+}
 
 impl BufferBuilder {
     fn new() -> Self {
-        Self
+        Self {
+            formatting_stack: Vec::new(),
+        }
     }
 
     fn build(&mut self, root: &AomNode, buffer: &mut VirtualBuffer) {
+        if let Some(ref fmt) = root.formatting {
+            self.formatting_stack.push(fmt.clone());
+        }
         buffer.node_map.insert(root.id, root.clone());
 
         // If document node has a name (e.g. document title), add it as the first line
@@ -635,7 +771,25 @@ impl BufferBuilder {
             return;
         }
 
-        buffer.node_map.insert(node.id, node.clone());
+        let effective_formatting = match (&node.formatting, self.formatting_stack.last()) {
+            (Some(node_fmt), Some(parent_fmt)) => Some(parent_fmt.merge(node_fmt)),
+            (Some(node_fmt), None) => Some(node_fmt.clone()),
+            (None, Some(parent_fmt)) => Some(parent_fmt.clone()),
+            (None, None) => None,
+        };
+
+        let mut node_with_effective = node.clone();
+        if let Some(ref eff) = effective_formatting {
+            node_with_effective.formatting = Some(eff.clone());
+        }
+        buffer.node_map.insert(node.id, node_with_effective);
+
+        let pushed_fmt = if let Some(ref eff) = effective_formatting {
+            self.formatting_stack.push(eff.clone());
+            true
+        } else {
+            false
+        };
 
         match &node.role {
             Role::Landmark { landmark_type: _ } => {
@@ -954,6 +1108,166 @@ impl BufferBuilder {
                     text: text_content,
                 });
             }
+            Role::ComboBox => {
+                if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
+                    buffer.text.push('\n');
+                }
+                let start_offset = buffer.text.len();
+                buffer.form_controls.push(start_offset);
+                buffer.comboboxes.push(start_offset);
+                buffer.tab_stops.push(start_offset);
+
+                let label = node.name.as_deref().unwrap_or("");
+                let val = node.value.as_deref().unwrap_or("");
+                if !label.is_empty() {
+                    buffer.text.push_str(label);
+                    if !val.is_empty() {
+                        if !buffer.text.ends_with(' ') {
+                            buffer.text.push(' ');
+                        }
+                        buffer.text.push_str(val);
+                    }
+                } else if !val.is_empty() {
+                    buffer.text.push_str(val);
+                } else if let Some(ref text) = node.text {
+                    buffer.text.push_str(text);
+                }
+
+                // Register options/children into buffer.node_map
+                for child in &node.children {
+                    buffer.node_map.insert(child.id, child.clone());
+                }
+
+                let end_offset = buffer.text.len();
+                let text_content = buffer.text[start_offset..end_offset].to_string();
+
+                buffer.spans.push(BufferSpan {
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::ComboBox,
+                });
+                buffer.lines.push(BufferLine {
+                    line_index: buffer.lines.len(),
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::ComboBox,
+                    text: text_content.clone(),
+                });
+                buffer.paragraphs.push(BufferParagraph {
+                    paragraph_index: buffer.paragraphs.len(),
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::ComboBox,
+                    text: text_content,
+                });
+            }
+            Role::Slider => {
+                if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
+                    buffer.text.push('\n');
+                }
+                let start_offset = buffer.text.len();
+                buffer.form_controls.push(start_offset);
+                buffer.sliders.push(start_offset);
+                buffer.tab_stops.push(start_offset);
+
+                let label = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                buffer.text.push_str(label);
+                if let Some(val) = node.value_now {
+                    buffer.text.push(' ');
+                    buffer.text.push_str(&format!("{:.0}", val));
+                }
+
+                let end_offset = buffer.text.len();
+                let text_content = buffer.text[start_offset..end_offset].to_string();
+
+                buffer.spans.push(BufferSpan {
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::Slider,
+                });
+                buffer.lines.push(BufferLine {
+                    line_index: buffer.lines.len(),
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::Slider,
+                    text: text_content.clone(),
+                });
+                buffer.paragraphs.push(BufferParagraph {
+                    paragraph_index: buffer.paragraphs.len(),
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::Slider,
+                    text: text_content,
+                });
+            }
+            Role::ProgressBar => {
+                if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
+                    buffer.text.push('\n');
+                }
+                let start_offset = buffer.text.len();
+                buffer.progress_bars.push(start_offset);
+
+                let label = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                buffer.text.push_str(label);
+                if let Some(val) = node.value_now {
+                    buffer.text.push(' ');
+                    buffer.text.push_str(&format!("{:.0}%", val));
+                }
+
+                let end_offset = buffer.text.len();
+                let text_content = buffer.text[start_offset..end_offset].to_string();
+
+                buffer.spans.push(BufferSpan {
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::ProgressBar,
+                });
+                buffer.lines.push(BufferLine {
+                    line_index: buffer.lines.len(),
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::ProgressBar,
+                    text: text_content.clone(),
+                });
+                buffer.paragraphs.push(BufferParagraph {
+                    paragraph_index: buffer.paragraphs.len(),
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::ProgressBar,
+                    text: text_content,
+                });
+            }
+            Role::Tree => {
+                if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
+                    buffer.text.push('\n');
+                }
+                let start_offset = buffer.text.len();
+                buffer.trees.push(start_offset);
+
+                for child in &node.children {
+                    self.traverse_tree_item(child, 1, None, buffer);
+                }
+
+                let end_offset = buffer.text.len();
+                buffer.spans.push(BufferSpan {
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: Role::Tree,
+                });
+            }
+            Role::TreeItem => {
+                self.traverse_tree_item(node, 1, None, buffer);
+            }
             Role::Generic => {
                 if !node.children.is_empty() {
                     for child in &node.children {
@@ -1153,6 +1467,42 @@ impl BufferBuilder {
                     self.traverse_node(child, buffer);
                 }
             }
+            Role::Dialog | Role::AlertDialog => {
+                if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
+                    buffer.text.push('\n');
+                }
+                let start_offset = buffer.text.len();
+
+                let is_modal = node.states.modal
+                    || node
+                        .attributes
+                        .get("aria-modal")
+                        .map(|v| v == "true")
+                        .unwrap_or(true);
+
+                let dialog_name = node.name.clone().unwrap_or_else(|| "Dialog".to_string());
+
+                for child in &node.children {
+                    self.traverse_node(child, buffer);
+                }
+
+                let end_offset = buffer.text.len();
+
+                buffer.spans.push(BufferSpan {
+                    start_offset,
+                    end_offset,
+                    node_id: node.id,
+                    role: node.role.clone(),
+                });
+
+                buffer.dialogs.push(DialogInfo {
+                    node_id: node.id,
+                    name: dialog_name,
+                    is_modal,
+                    start_offset,
+                    end_offset,
+                });
+            }
             _ => {
                 let is_block = node.role.is_block();
                 if is_block && !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
@@ -1197,8 +1547,29 @@ impl BufferBuilder {
                             text: text_content,
                         });
                     }
+
+                    if node.states.modal
+                        || node
+                            .attributes
+                            .get("aria-modal")
+                            .map(|v| v == "true")
+                            .unwrap_or(false)
+                    {
+                        let dialog_name = node.name.clone().unwrap_or_else(|| "Dialog".to_string());
+                        buffer.dialogs.push(DialogInfo {
+                            node_id: node.id,
+                            name: dialog_name,
+                            is_modal: true,
+                            start_offset,
+                            end_offset,
+                        });
+                    }
                 }
             }
+        }
+
+        if pushed_fmt {
+            self.formatting_stack.pop();
         }
     }
 
@@ -1284,5 +1655,77 @@ impl BufferBuilder {
             role: Role::Tab,
             text: text_content,
         });
+    }
+
+    fn traverse_tree_item(
+        &mut self,
+        node: &AomNode,
+        default_level: u32,
+        parent_id: Option<usize>,
+        buffer: &mut VirtualBuffer,
+    ) {
+        if node.states.hidden
+            || node
+                .attributes
+                .get("aria-hidden")
+                .map(|v| v == "true")
+                .unwrap_or(false)
+            || node.attributes.contains_key("hidden")
+        {
+            return;
+        }
+
+        let level = node.level.unwrap_or(default_level);
+        let mut node_with_level = node.clone();
+        node_with_level.level = Some(level);
+        buffer.node_map.insert(node.id, node_with_level);
+
+        if let Some(pid) = parent_id {
+            buffer.tree_parents.insert(node.id, pid);
+        }
+
+        if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
+            buffer.text.push('\n');
+        }
+        let start_offset = buffer.text.len();
+        buffer.tree_items.push(start_offset);
+        buffer.tab_stops.push(start_offset);
+
+        let label = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+        buffer.text.push_str(label);
+
+        let end_offset = buffer.text.len();
+        let text_content = buffer.text[start_offset..end_offset].to_string();
+
+        buffer.spans.push(BufferSpan {
+            start_offset,
+            end_offset,
+            node_id: node.id,
+            role: Role::TreeItem,
+        });
+        buffer.lines.push(BufferLine {
+            line_index: buffer.lines.len(),
+            start_offset,
+            end_offset,
+            node_id: node.id,
+            role: Role::TreeItem,
+            text: text_content.clone(),
+        });
+        buffer.paragraphs.push(BufferParagraph {
+            paragraph_index: buffer.paragraphs.len(),
+            start_offset,
+            end_offset,
+            node_id: node.id,
+            role: Role::TreeItem,
+            text: text_content,
+        });
+
+        for child in &node.children {
+            if child.role == Role::TreeItem {
+                self.traverse_tree_item(child, level + 1, Some(node.id), buffer);
+            } else {
+                self.traverse_node(child, buffer);
+            }
+        }
     }
 }

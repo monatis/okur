@@ -1,0 +1,53 @@
+{
+  "id": "44-slider-value-change",
+  "name": "ARIA Slider Focus and Arrow Key Value Adjustment",
+  "category": "Complex ARIA Widgets",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-widgets.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "focus",
+      "command": "Volume",
+      "settle_ms": 300,
+      "assertions": {
+        "target_role": "slider",
+        "target_name": "Volume",
+        "contains_speech": [
+          "Volume",
+          "slider",
+          "50"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "type": "keyboard",
+      "command": "{RIGHT}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "55"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "type": "keyboard",
+      "command": "{LEFT}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "50"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "id": "41-combobox-interaction",
+  "name": "ARIA ComboBox Focus, Expansion Toggle and Option Selection",
+  "category": "Complex ARIA Widgets",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-widgets.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "focus",
+      "command": "State",
+      "settle_ms": 300,
+      "assertions": {
+        "target_role": "combobox",
+        "target_name": "State",
+        "contains_speech": [
+          "State",
+          "combo box",
+          "California",
+          "collapsed"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "type": "keyboard",
+      "command": "!{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "expanded"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "type": "keyboard",
+      "command": "{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Colorado"
+        ]
+      }
+    },
+    {
+      "id": "s4",
+      "type": "keyboard",
+      "command": "{ESC}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "collapsed"
+        ]
+      }
+    }
+  ]
+}

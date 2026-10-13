@@ -17,6 +17,7 @@ pub enum Key {
     Space,
     Backspace,
     Delete,
+    Insert,
 
     Alpha(char),
     Digit(u8),
@@ -37,6 +38,7 @@ pub struct Modifiers {
     pub alt: bool,
     pub shift: bool,
     pub win: bool,
+    pub insert: bool,
 }
 
 impl Modifiers {
@@ -45,7 +47,7 @@ impl Modifiers {
     }
 
     pub fn is_empty(&self) -> bool {
-        !self.ctrl && !self.alt && !self.shift && !self.win
+        !self.ctrl && !self.alt && !self.shift && !self.win && !self.insert
     }
 }
 
@@ -78,11 +80,31 @@ impl KeyEvent {
         let m = &self.modifiers;
 
         match self.key {
+            // Text selection commands (Shift + Arrows)
+            Key::RightArrow if m.shift && !m.ctrl && !m.alt && !m.insert => {
+                Some("+{RIGHT}".to_string())
+            }
+            Key::LeftArrow if m.shift && !m.ctrl && !m.alt && !m.insert => {
+                Some("+{LEFT}".to_string())
+            }
+            Key::DownArrow if m.shift && !m.ctrl && !m.alt && !m.insert => {
+                Some("+{DOWN}".to_string())
+            }
+            Key::UpArrow if m.shift && !m.ctrl && !m.alt && !m.insert => Some("+{UP}".to_string()),
+
+            // Say selected text (JAWSKey+Shift+DownArrow or Shift+Alt+DownArrow)
+            Key::DownArrow if (m.insert || m.alt) && m.shift && !m.ctrl => {
+                Some("+!{DOWN}".to_string())
+            }
+
             // Directional & reading navigation
             Key::DownArrow if m.ctrl && m.alt => Some("^%{DOWN}".to_string()),
             Key::UpArrow if m.ctrl && m.alt => Some("^%{UP}".to_string()),
             Key::RightArrow if m.ctrl && m.alt => Some("^%{RIGHT}".to_string()),
             Key::LeftArrow if m.ctrl && m.alt => Some("^%{LEFT}".to_string()),
+
+            Key::DownArrow if m.alt && !m.ctrl && !m.shift => Some("!{DOWN}".to_string()),
+            Key::UpArrow if m.alt && !m.ctrl && !m.shift => Some("!{UP}".to_string()),
 
             Key::DownArrow if m.ctrl => Some("^{DOWN}".to_string()),
             Key::UpArrow if m.ctrl => Some("^{UP}".to_string()),
@@ -105,11 +127,18 @@ impl KeyEvent {
             Key::Escape if m.is_empty() => Some("{ESC}".to_string()),
             Key::Space if m.is_empty() => Some("{SPACE}".to_string()),
 
+            // Font formatting query (Insert+F)
+            Key::Alpha(c)
+                if c.eq_ignore_ascii_case(&'F') && m.insert && !m.ctrl && !m.alt && !m.shift =>
+            {
+                Some("Insert+F".to_string())
+            }
+
             // Quick navigation keys
             Key::Alpha(c) => {
                 let upper = c.to_ascii_uppercase();
                 match upper {
-                    'H' | 'T' | 'K' | 'U' | 'F' | 'B' | 'E' | 'X' | 'L' | 'I' | 'R' => {
+                    'H' | 'T' | 'K' | 'U' | 'F' | 'B' | 'E' | 'X' | 'L' | 'I' | 'R' | 'C' => {
                         if m.shift && !m.ctrl && !m.alt {
                             Some(format!("+{}", upper))
                         } else if m.is_empty() {

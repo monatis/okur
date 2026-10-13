@@ -1,0 +1,86 @@
+{
+  "scenario_id": "42-treeview-level-announcement",
+  "scenario_version": "1.1.0",
+  "timestamp": "2026-10-13T04:10:00.0000000+03:00",
+  "environment": {
+    "os_version": "Microsoft Windows NT 10.0.19045.0",
+    "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+    "target_process": "chrome",
+    "interactive_session": true
+  },
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-widgets.html",
+  "repetitions_requested": 5,
+  "trials": [
+    {
+      "trial_index": 1,
+      "timestamp": "2026-10-13T04:10:01.0000000+03:00",
+      "step_results": [
+        {
+          "step_id": "s1",
+          "action": {
+            "type": "focus",
+            "command": "Documents"
+          },
+          "observation": {
+            "speech_raw": "Documents  \u001d level 1 \u001e expanded",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "target_role": "treeitem",
+            "target_name": "Documents",
+            "contains_speech": [
+              "Documents",
+              "level 1",
+              "expanded"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s2",
+          "action": {
+            "type": "keyboard",
+            "command": "{DOWN}"
+          },
+          "observation": {
+            "speech_raw": "Work  \u001d level 2 \u001e collapsed",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "target_role": "treeitem",
+            "target_name": "Work",
+            "contains_speech": [
+              "Work",
+              "level 2",
+              "collapsed"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s3",
+          "action": {
+            "type": "keyboard",
+            "command": "{DOWN}"
+          },
+          "observation": {
+            "speech_raw": "Resume.pdf  \u001d level 3 \u001e",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "target_role": "treeitem",
+            "target_name": "Resume.pdf",
+            "contains_speech": [
+              "Resume.pdf",
+              "level 3"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        }
+      ]
+    }
+  ]
+}

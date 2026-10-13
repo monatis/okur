@@ -10,8 +10,8 @@ use windows::Win32::System::Com::{CoInitializeEx, CoUninitialize, COINIT_MULTITH
 use windows::Win32::System::Threading::GetCurrentThreadId;
 use windows::Win32::UI::Input::KeyboardAndMouse::{
     GetAsyncKeyState, VIRTUAL_KEY, VK_BACK, VK_CONTROL, VK_DELETE, VK_DOWN, VK_END, VK_ESCAPE,
-    VK_HOME, VK_LEFT, VK_MENU, VK_NEXT, VK_OEM_1, VK_PRIOR, VK_RETURN, VK_RIGHT, VK_SHIFT,
-    VK_SPACE, VK_TAB, VK_UP,
+    VK_HOME, VK_INSERT, VK_LEFT, VK_MENU, VK_NEXT, VK_OEM_1, VK_PRIOR, VK_RETURN, VK_RIGHT,
+    VK_SHIFT, VK_SPACE, VK_TAB, VK_UP,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
     CallNextHookEx, DispatchMessageW, GetMessageW, PostThreadMessageW, SetWindowsHookExW,
@@ -196,12 +196,14 @@ unsafe extern "system" fn low_level_keyboard_proc(
     let shift = (GetAsyncKeyState(VK_SHIFT.0 as i32) as u16 & 0x8000) != 0;
     let win = ((GetAsyncKeyState(0x5B) as u16 & 0x8000) != 0) // VK_LWIN
         || ((GetAsyncKeyState(0x5C) as u16 & 0x8000) != 0); // VK_RWIN
+    let insert = (GetAsyncKeyState(VK_INSERT.0 as i32) as u16 & 0x8000) != 0;
 
     let modifiers = Modifiers {
         ctrl,
         alt,
         shift,
         win,
+        insert,
     };
 
     let key = translate_vk_code(vk_code);
@@ -244,6 +246,7 @@ fn translate_vk_code(vk: u32) -> Key {
         VK_SPACE => Key::Space,
         VK_BACK => Key::Backspace,
         VK_DELETE => Key::Delete,
+        VK_INSERT => Key::Insert,
 
         VK_OEM_1 => Key::Semicolon,
 

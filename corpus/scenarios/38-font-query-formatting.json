@@ -1,0 +1,52 @@
+{
+  "id": "38-font-query-formatting",
+  "name": "Font Formatting Inspection Run Query",
+  "category": "Complex Text Selection and Formatting",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/dialog-and-formatting.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "keyboard",
+      "command": "{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "System Overview"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "type": "keyboard",
+      "command": "{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Screen reader accessibility engine."
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "type": "keyboard",
+      "command": "Insert+F",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "16 pt",
+          "bold",
+          "Arial on default background",
+          "left aligned"
+        ]
+      }
+    }
+  ]
+}

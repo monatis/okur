@@ -1,4 +1,4 @@
-use crate::aom::{AomNode, Role};
+use crate::aom::{AomNode, Role, TextFormatting};
 use crate::buffer::BufferLine;
 
 /// Formats virtual buffer elements and reading events into canonical JAWS speech tokens.
@@ -21,8 +21,68 @@ impl SpeechFormatter {
             Role::Button => format!("button {}", text),
             Role::CheckBox => format!("checkbox {}", text),
             Role::Edit => format!("edit {}", text),
+            Role::ComboBox => format!("combo box {}", text),
+            Role::TreeItem => format!("tree item {}", text),
+            Role::Slider => format!("slider {}", text),
+            Role::ProgressBar => format!("progress bar {}", text),
             _ => text.to_string(),
         }
+    }
+
+    fn format_number(val: f64) -> String {
+        if val.fract() == 0.0 {
+            format!("{:.0}", val)
+        } else {
+            format!("{}", val)
+        }
+    }
+
+    /// Formats an ARIA combobox announcement matching JAWS conventions.
+    /// Canonical JAWS pattern: "<Label>  \u{001d} combo box \u{001e} <Value> \u{001d} <collapsed|expanded> \u{001e}"
+    pub fn format_combobox(name: &str, value: Option<&str>, expanded: bool) -> String {
+        let state_str = if expanded { "expanded" } else { "collapsed" };
+        let val_str = value.unwrap_or("").trim();
+        if val_str.is_empty() {
+            format!(
+                "{}  \u{001d} combo box \u{001e} \u{001d} {} \u{001e}",
+                name, state_str
+            )
+        } else {
+            format!(
+                "{}  \u{001d} combo box \u{001e} {} \u{001d} {} \u{001e}",
+                name, val_str, state_str
+            )
+        }
+    }
+
+    /// Formats an ARIA treeitem announcement matching JAWS conventions.
+    /// Canonical JAWS pattern: "<Name>  \u{001d} level <N> \u{001e} <collapsed|expanded>"
+    pub fn format_tree_item(name: &str, level: u32, expanded: Option<bool>) -> String {
+        match expanded {
+            Some(true) => format!("{}  \u{001d} level {} \u{001e} expanded", name, level),
+            Some(false) => format!("{}  \u{001d} level {} \u{001e} collapsed", name, level),
+            None => format!("{}  \u{001d} level {} \u{001e}", name, level),
+        }
+    }
+
+    /// Formats an ARIA slider announcement matching JAWS conventions.
+    /// Canonical JAWS pattern: "<Name>  \u{001d} slider \u{001e} <value>"
+    pub fn format_slider(name: &str, value: f64) -> String {
+        format!(
+            "{}  \u{001d} slider \u{001e} {}",
+            name,
+            Self::format_number(value)
+        )
+    }
+
+    /// Formats an ARIA progress bar announcement matching JAWS conventions.
+    /// Canonical JAWS pattern: "<Name>  \u{001d} progress bar \u{001e} <value>%"
+    pub fn format_progressbar(name: &str, value: f64) -> String {
+        format!(
+            "{}  \u{001d} progress bar \u{001e} {}%",
+            name,
+            Self::format_number(value)
+        )
     }
 
     /// Formats an edit control announcement.
@@ -111,6 +171,27 @@ impl SpeechFormatter {
                 let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
                 let checked = node.states.checked.unwrap_or(false);
                 Self::format_checkbox(name, checked)
+            }
+            Role::ComboBox => {
+                let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                let value = node.value.as_deref();
+                let expanded = node.states.expanded.unwrap_or(false);
+                Self::format_combobox(name, value, expanded)
+            }
+            Role::Slider => {
+                let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                let value = node.value_now.unwrap_or(0.0);
+                Self::format_slider(name, value)
+            }
+            Role::ProgressBar => {
+                let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                let value = node.value_now.unwrap_or(0.0);
+                Self::format_progressbar(name, value)
+            }
+            Role::TreeItem => {
+                let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                let level = node.level.unwrap_or(1);
+                Self::format_tree_item(name, level, node.states.expanded)
             }
             _ => String::new(),
         }
@@ -254,6 +335,68 @@ impl SpeechFormatter {
     /// Format: "{CellText}\nRow {row} of {total_rows}"
     pub fn format_table_cell_row(text: &str, row: usize, total_rows: usize) -> String {
         format!("{}\nRow {} of {}", text, row, total_rows)
+    }
+
+    /// Formats font formatting attributes into canonical JAWS description string.
+    /// Format: "{size} pt, {styles}, {family} on default background, {alignment} aligned"
+    pub fn format_font(formatting: &TextFormatting) -> String {
+        let mut parts = Vec::new();
+
+        if let Some(size) = formatting.font_size_pt {
+            parts.push(format!("{:.0} pt", size));
+        }
+
+        if formatting.bold {
+            parts.push("bold".to_string());
+        }
+        if formatting.italic {
+            parts.push("italic".to_string());
+        }
+        if formatting.underline {
+            parts.push("underline".to_string());
+        }
+
+        if let Some(ref family) = formatting.font_family {
+            parts.push(format!("{} on default background", family));
+        }
+
+        if let Some(ref align) = formatting.alignment {
+            let align_str = if align.to_lowercase().contains("align") {
+                align.clone()
+            } else {
+                format!("{} aligned", align)
+            };
+            parts.push(align_str);
+        }
+
+        if parts.is_empty() {
+            "No font".to_string()
+        } else {
+            parts.join(", ")
+        }
+    }
+
+    /// Formats selection action announcement matching JAWS conventions.
+    pub fn format_selection(selected: bool, text: &str) -> String {
+        if selected {
+            format!("selected {}", text)
+        } else {
+            format!("unselected {}", text)
+        }
+    }
+
+    /// Formats modal dialog entry announcement.
+    pub fn format_dialog_entry(title: &str) -> String {
+        if title.is_empty() {
+            "Dialog".to_string()
+        } else {
+            format!("Dialog {}", title)
+        }
+    }
+
+    /// Formats modal dialog exit announcement.
+    pub fn format_dialog_exit() -> String {
+        "Leaving Dialog".to_string()
     }
 }
 

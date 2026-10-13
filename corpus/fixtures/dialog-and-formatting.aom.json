@@ -1,0 +1,200 @@
+{
+  "id": 0,
+  "role": "Document",
+  "name": "Dialog and Formatting Reference Fixture",
+  "value": null,
+  "text": null,
+  "children": [
+    {
+      "id": 1,
+      "role": {
+        "Heading": {
+          "level": 1
+        }
+      },
+      "name": "System Overview",
+      "value": null,
+      "text": "System Overview",
+      "children": [],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false,
+        "modal": false
+      },
+      "attributes": {}
+    },
+    {
+      "id": 2,
+      "role": "Paragraph",
+      "name": null,
+      "value": null,
+      "text": "Screen reader accessibility engine.",
+      "children": [],
+      "formatting": {
+        "font_family": "Arial",
+        "font_size_pt": 16.0,
+        "bold": true,
+        "italic": false,
+        "underline": false,
+        "alignment": "left"
+      },
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false,
+        "modal": false
+      },
+      "attributes": {}
+    },
+    {
+      "id": 3,
+      "role": "Paragraph",
+      "name": null,
+      "value": null,
+      "text": "Standard document paragraph for text selection and cursor inspection.",
+      "children": [],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false,
+        "modal": false
+      },
+      "attributes": {}
+    },
+    {
+      "id": 10,
+      "role": "Dialog",
+      "name": "Confirm Account Deletion",
+      "value": null,
+      "text": null,
+      "children": [
+        {
+          "id": 11,
+          "role": {
+            "Heading": {
+              "level": 2
+            }
+          },
+          "name": "Confirm Account Deletion",
+          "value": null,
+          "text": "Confirm Account Deletion",
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {}
+        },
+        {
+          "id": 12,
+          "role": "Paragraph",
+          "name": null,
+          "value": null,
+          "text": "Are you sure you want to permanently delete your account?",
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {}
+        },
+        {
+          "id": 13,
+          "role": "Button",
+          "name": "Delete Account",
+          "value": null,
+          "text": "Delete Account",
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {}
+        },
+        {
+          "id": 14,
+          "role": "Button",
+          "name": "Cancel",
+          "value": null,
+          "text": "Cancel",
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {}
+        }
+      ],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false,
+        "modal": true
+      },
+      "attributes": {
+        "aria-modal": "true"
+      }
+    },
+    {
+      "id": 20,
+      "role": "Paragraph",
+      "name": null,
+      "value": null,
+      "text": "Backdrop footer text outside the modal dialog.",
+      "children": [],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false,
+        "modal": false
+      },
+      "attributes": {}
+    }
+  ],
+  "states": {
+    "checked": null,
+    "selected": null,
+    "expanded": null,
+    "focused": false,
+    "disabled": false,
+    "hidden": false,
+    "modal": false
+  },
+  "attributes": {}
+}

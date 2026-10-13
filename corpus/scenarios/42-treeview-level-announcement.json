@@ -1,0 +1,60 @@
+{
+  "id": "42-treeview-level-announcement",
+  "name": "ARIA TreeView Hierarchical Navigation and Level Announcement",
+  "category": "Complex ARIA Widgets",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-widgets.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "focus",
+      "command": "Documents",
+      "settle_ms": 300,
+      "assertions": {
+        "target_role": "treeitem",
+        "target_name": "Documents",
+        "contains_speech": [
+          "Documents",
+          "level 1",
+          "expanded"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "type": "keyboard",
+      "command": "{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "target_role": "treeitem",
+        "target_name": "Work",
+        "contains_speech": [
+          "Work",
+          "level 2",
+          "collapsed"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "type": "keyboard",
+      "command": "{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "target_role": "treeitem",
+        "target_name": "Resume.pdf",
+        "contains_speech": [
+          "Resume.pdf",
+          "level 3"
+        ]
+      }
+    }
+  ]
+}

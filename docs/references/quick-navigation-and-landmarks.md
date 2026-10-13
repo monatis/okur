@@ -20,6 +20,8 @@ This reference document outlines the keyboard conventions, speech announcements,
 | `Shift + I` | `MoveToPriorListItem` | `ListItem` | Prior | `{ItemText}` (or with child link formatting) |
 | `R` / `;` | `MoveToNextRegion` | `Landmark` | Forward | `{Name} {LandmarkType} region` or `{LandmarkType}` |
 | `Shift + R` / `;` | `MoveToPriorRegion` | `Landmark` | Prior | `{Name} {LandmarkType} region` or `{LandmarkType}` |
+| `C` | `MoveToNextComboBox` | `ComboBox` | Forward | `{Name} edit combo {Value} {collapsed \| open}` |
+| `Shift + C` | `MoveToPriorComboBox` | `ComboBox` | Prior | `{Name} edit combo {Value} {collapsed \| open}` |
 
 ---
 

@@ -1,6 +1,31 @@
 use crate::aom::{AomNode, Role};
-use crate::buffer::VirtualBuffer;
+use crate::buffer::{BufferLine, VirtualBuffer};
 use crate::speech::SpeechFormatter;
+
+/// Active text selection range within the virtual buffer.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub struct TextSelection {
+    pub anchor: usize,
+    pub active: usize,
+}
+
+impl TextSelection {
+    pub fn new(anchor: usize, active: usize) -> Self {
+        Self { anchor, active }
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.anchor == self.active
+    }
+
+    pub fn start(&self) -> usize {
+        self.anchor.min(self.active)
+    }
+
+    pub fn end(&self) -> usize {
+        self.anchor.max(self.active)
+    }
+}
 
 /// The Virtual Cursor providing reading navigation and quick key primitives over a VirtualBuffer.
 #[derive(Debug, Clone)]
@@ -10,6 +35,8 @@ pub struct VirtualCursor {
     pub current_node_id: Option<usize>,
     pub forms_mode_active: bool,
     pub current_table_pos: Option<(usize, usize, usize)>,
+    pub selection: Option<TextSelection>,
+    pub active_modal_root: Option<usize>,
 }
 
 impl VirtualCursor {
@@ -20,6 +47,8 @@ impl VirtualCursor {
             current_node_id: None,
             forms_mode_active: false,
             current_table_pos: None,
+            selection: None,
+            active_modal_root: None,
         }
     }
 
@@ -33,28 +62,303 @@ impl VirtualCursor {
         self.buffer.node_at_offset(self.offset)
     }
 
+    /// Checks whether cursor is currently inside a modal dialog.
+    pub fn is_in_modal(&self) -> bool {
+        self.active_modal_root.is_some()
+    }
+
+    /// Returns the offset boundary (start, end) of the active modal dialog if any.
+    pub fn active_modal_range(&self) -> Option<(usize, usize)> {
+        let node_id = self.active_modal_root?;
+        let dialog = self.buffer.dialog_for_node(node_id)?;
+        Some((dialog.start_offset, dialog.end_offset))
+    }
+
+    /// Activates modal confinement for a dialog node and emits announcement.
+    pub fn enter_modal(&mut self, node_id: usize) -> Option<String> {
+        let dialog = self.buffer.dialog_for_node(node_id)?;
+        self.active_modal_root = Some(node_id);
+        self.offset = dialog.start_offset;
+        self.current_node_id = Some(node_id);
+        self.selection = None;
+        Some(SpeechFormatter::format_dialog_entry(&dialog.name))
+    }
+
+    /// Exits modal confinement and returns speech announcement.
+    pub fn exit_modal(&mut self) -> Option<String> {
+        if self.active_modal_root.is_some() {
+            self.active_modal_root = None;
+            self.selection = None;
+            Some(SpeechFormatter::format_dialog_exit())
+        } else {
+            None
+        }
+    }
+
+    /// Clears active text selection.
+    pub fn clear_selection(&mut self) {
+        self.selection = None;
+    }
+
+    /// Extends selection to next character (`Shift+{RIGHT}`).
+    pub fn select_next_char(&mut self) -> Option<String> {
+        let max_offset = if let Some((_, max_off)) = self.active_modal_range() {
+            max_off
+        } else {
+            self.buffer.len()
+        };
+
+        if self.offset >= max_offset {
+            return None;
+        }
+
+        let current_char = self.buffer.char_at(self.offset)?;
+        let next_offset = (self.offset + current_char.len_utf8()).min(max_offset);
+        if next_offset == self.offset {
+            return None;
+        }
+
+        let mut sel = self
+            .selection
+            .unwrap_or(TextSelection::new(self.offset, self.offset));
+        let prior_active = sel.active;
+        sel.active = next_offset;
+        self.selection = Some(sel);
+        self.offset = next_offset;
+
+        if sel.active > sel.anchor {
+            Some(SpeechFormatter::format_selection(
+                true,
+                &current_char.to_string(),
+            ))
+        } else {
+            let unsel_slice = &self.buffer.text[prior_active..next_offset];
+            Some(SpeechFormatter::format_selection(false, unsel_slice))
+        }
+    }
+
+    /// Extends selection to prior character (`Shift+{LEFT}`).
+    pub fn select_prior_char(&mut self) -> Option<String> {
+        let min_offset = if let Some((min_off, _)) = self.active_modal_range() {
+            min_off
+        } else {
+            0
+        };
+
+        if self.offset <= min_offset {
+            return None;
+        }
+
+        let mut prev = self.offset - 1;
+        while prev > min_offset && !self.buffer.text.is_char_boundary(prev) {
+            prev -= 1;
+        }
+
+        let ch = self.buffer.char_at(prev)?;
+        let mut sel = self
+            .selection
+            .unwrap_or(TextSelection::new(self.offset, self.offset));
+        let prior_active = sel.active;
+        sel.active = prev;
+        self.selection = Some(sel);
+        self.offset = prev;
+
+        if sel.active < sel.anchor {
+            Some(SpeechFormatter::format_selection(true, &ch.to_string()))
+        } else {
+            let unsel_slice = &self.buffer.text[prev..prior_active];
+            Some(SpeechFormatter::format_selection(false, unsel_slice))
+        }
+    }
+
+    /// Extends selection to next line (`Shift+{DOWN}`).
+    pub fn select_next_line(&mut self) -> Option<String> {
+        let max_offset = if let Some((_, max_off)) = self.active_modal_range() {
+            max_off
+        } else {
+            self.buffer.len()
+        };
+
+        let next_line = self.buffer.next_line_from(self.offset)?;
+        if next_line.start_offset > max_offset {
+            return None;
+        }
+
+        let mut sel = self
+            .selection
+            .unwrap_or(TextSelection::new(self.offset, self.offset));
+        let prior_active = sel.active;
+        let new_offset = next_line.start_offset;
+        sel.active = new_offset;
+        self.selection = Some(sel);
+        self.offset = new_offset;
+        self.current_node_id = Some(next_line.node_id);
+
+        let line_text = &next_line.text;
+        if sel.active >= sel.anchor {
+            Some(SpeechFormatter::format_selection(true, line_text))
+        } else {
+            let unsel = if prior_active < new_offset {
+                &self.buffer.text[prior_active..new_offset]
+            } else {
+                line_text
+            };
+            Some(SpeechFormatter::format_selection(false, unsel))
+        }
+    }
+
+    /// Extends selection to prior line (`Shift+{UP}`).
+    pub fn select_prior_line(&mut self) -> Option<String> {
+        let min_offset = if let Some((min_off, _)) = self.active_modal_range() {
+            min_off
+        } else {
+            0
+        };
+
+        let prior_line = self.buffer.prior_line_from(self.offset)?;
+        if prior_line.start_offset < min_offset {
+            return None;
+        }
+
+        let mut sel = self
+            .selection
+            .unwrap_or(TextSelection::new(self.offset, self.offset));
+        let prior_active = sel.active;
+        let new_offset = prior_line.start_offset;
+        sel.active = new_offset;
+        self.selection = Some(sel);
+        self.offset = new_offset;
+        self.current_node_id = Some(prior_line.node_id);
+
+        let line_text = &prior_line.text;
+        if sel.active <= sel.anchor {
+            Some(SpeechFormatter::format_selection(true, line_text))
+        } else {
+            let unsel = if prior_active > new_offset {
+                &self.buffer.text[new_offset..prior_active]
+            } else {
+                line_text
+            };
+            Some(SpeechFormatter::format_selection(false, unsel))
+        }
+    }
+
+    /// Speaks the currently selected text (`SaySelection`).
+    pub fn say_selection(&self) -> String {
+        if let Some(sel) = self.selection {
+            if !sel.is_empty() {
+                let start = sel.start();
+                let end = sel.end();
+                if start < self.buffer.len() {
+                    let end_bounded = end.min(self.buffer.len());
+                    let text = self.buffer.text[start..end_bounded].trim();
+                    if !text.is_empty() {
+                        return text.to_string();
+                    }
+                }
+            }
+        }
+        "No selection".to_string()
+    }
+
+    /// Speaks font formatting attributes at cursor (`Insert+F` / `WhatFont`).
+    pub fn say_font_formatting(&self) -> String {
+        if let Some(fmt) = self.buffer.formatting_at_offset(self.offset) {
+            SpeechFormatter::format_font(&fmt)
+        } else {
+            "No font".to_string()
+        }
+    }
+
     /// Resets the cursor to the top of document (`^{HOME}`).
     pub fn move_to_start(&mut self) -> String {
-        self.offset = 0;
-        self.current_node_id = self.buffer.spans.first().map(|s| s.node_id);
+        self.selection = None;
+        if let Some((start, _)) = self.active_modal_range() {
+            self.offset = start;
+            self.current_node_id = self
+                .buffer
+                .spans
+                .iter()
+                .find(|s| s.start_offset >= start)
+                .map(|s| s.node_id);
+        } else {
+            self.offset = 0;
+            self.current_node_id = self.buffer.spans.first().map(|s| s.node_id);
+        }
         self.current_table_pos = None;
         self.current_line()
     }
 
     /// Moves cursor to the end of the document (`^{END}`).
     pub fn move_to_end(&mut self) -> String {
-        self.offset = self.buffer.len();
-        self.current_node_id = self.buffer.spans.last().map(|s| s.node_id);
+        self.selection = None;
+        if let Some((_, end)) = self.active_modal_range() {
+            self.offset = end;
+            self.current_node_id = self
+                .buffer
+                .spans
+                .iter()
+                .rfind(|s| s.end_offset <= end)
+                .map(|s| s.node_id);
+        } else {
+            self.offset = self.buffer.len();
+            self.current_node_id = self.buffer.spans.last().map(|s| s.node_id);
+        }
         self.current_table_pos = None;
         self.current_line()
     }
 
+    /// Formats the announcement for a line, taking into account specialized widget roles.
+    pub fn format_line_announcement(&self, line: &BufferLine) -> String {
+        if let Some(node) = self.buffer.node_map.get(&line.node_id) {
+            match node.role {
+                Role::TreeItem => {
+                    let name = node
+                        .name
+                        .as_deref()
+                        .or(node.text.as_deref())
+                        .unwrap_or(&line.text);
+                    let level = node.level.unwrap_or(1);
+                    return SpeechFormatter::format_tree_item(name, level, node.states.expanded);
+                }
+                Role::ComboBox => {
+                    let name = node.name.as_deref().unwrap_or(&line.text);
+                    let value = node.value.as_deref();
+                    let expanded = node.states.expanded.unwrap_or(false);
+                    return SpeechFormatter::format_combobox(name, value, expanded);
+                }
+                Role::Slider => {
+                    let name = node.name.as_deref().unwrap_or(&line.text);
+                    let value = node.value_now.unwrap_or(0.0);
+                    return SpeechFormatter::format_slider(name, value);
+                }
+                Role::ProgressBar => {
+                    let name = node.name.as_deref().unwrap_or(&line.text);
+                    let value = node.value_now.unwrap_or(0.0);
+                    return SpeechFormatter::format_progressbar(name, value);
+                }
+                _ => {}
+            }
+        }
+        SpeechFormatter::format_line(line)
+    }
+
     /// Moves cursor down to next line (`{DOWN}`).
     pub fn move_next_line(&mut self) -> Option<String> {
+        self.selection = None;
+        let max_offset = if let Some((_, max_off)) = self.active_modal_range() {
+            max_off
+        } else {
+            self.buffer.len()
+        };
+
         if let Some(next_line) = self.buffer.next_line_from(self.offset) {
+            if next_line.start_offset > max_offset {
+                return None;
+            }
             self.offset = next_line.start_offset;
             self.current_node_id = Some(next_line.node_id);
-            Some(SpeechFormatter::format_line(next_line))
+            Some(self.format_line_announcement(next_line))
         } else {
             None
         }
@@ -62,10 +366,20 @@ impl VirtualCursor {
 
     /// Moves cursor up to prior line (`{UP}`).
     pub fn move_prior_line(&mut self) -> Option<String> {
+        self.selection = None;
+        let min_offset = if let Some((min_off, _)) = self.active_modal_range() {
+            min_off
+        } else {
+            0
+        };
+
         if let Some(prior_line) = self.buffer.prior_line_from(self.offset) {
+            if prior_line.start_offset < min_offset {
+                return None;
+            }
             self.offset = prior_line.start_offset;
             self.current_node_id = Some(prior_line.node_id);
-            Some(SpeechFormatter::format_line(prior_line))
+            Some(self.format_line_announcement(prior_line))
         } else {
             None
         }
@@ -74,7 +388,7 @@ impl VirtualCursor {
     /// Speaks current line without moving cursor (`SayLine`).
     pub fn current_line(&self) -> String {
         if let Some(line) = self.buffer.line_at_offset(self.offset) {
-            SpeechFormatter::format_line(line)
+            self.format_line_announcement(line)
         } else {
             String::new()
         }
@@ -82,7 +396,17 @@ impl VirtualCursor {
 
     /// Moves cursor to next word (`^{RIGHT}`).
     pub fn move_next_word(&mut self) -> Option<String> {
+        self.selection = None;
+        let max_offset = if let Some((_, max_off)) = self.active_modal_range() {
+            max_off
+        } else {
+            self.buffer.len()
+        };
+
         if let Some(next_word) = self.buffer.next_word_from(self.offset) {
+            if next_word.start_offset > max_offset {
+                return None;
+            }
             self.offset = next_word.start_offset;
             Some(SpeechFormatter::format_word(&next_word.text))
         } else {
@@ -92,7 +416,17 @@ impl VirtualCursor {
 
     /// Moves cursor to prior word (`^{LEFT}`).
     pub fn move_prior_word(&mut self) -> Option<String> {
+        self.selection = None;
+        let min_offset = if let Some((min_off, _)) = self.active_modal_range() {
+            min_off
+        } else {
+            0
+        };
+
         if let Some(prior_word) = self.buffer.prior_word_from(self.offset) {
+            if prior_word.start_offset < min_offset {
+                return None;
+            }
             self.offset = prior_word.start_offset;
             Some(SpeechFormatter::format_word(&prior_word.text))
         } else {
@@ -111,32 +445,48 @@ impl VirtualCursor {
 
     /// Moves cursor to next character (`{RIGHT}`).
     pub fn move_next_char(&mut self) -> Option<String> {
-        if self.offset >= self.buffer.len() {
+        self.selection = None;
+        let max_offset = if let Some((_, max_off)) = self.active_modal_range() {
+            max_off
+        } else {
+            self.buffer.len()
+        };
+
+        if self.offset >= max_offset {
             return None;
         }
 
         let current_char = self.buffer.char_at(self.offset)?;
         let next_offset = self.offset + current_char.len_utf8();
 
-        if next_offset < self.buffer.len() {
+        if next_offset <= max_offset && next_offset < self.buffer.len() {
             self.offset = next_offset;
             let ch = self.buffer.char_at(self.offset)?;
             Some(SpeechFormatter::format_char(ch))
+        } else if next_offset <= max_offset {
+            self.offset = next_offset;
+            None
         } else {
-            self.offset = self.buffer.len();
             None
         }
     }
 
     /// Moves cursor to prior character (`{LEFT}`).
     pub fn move_prior_char(&mut self) -> Option<String> {
-        if self.offset == 0 {
+        self.selection = None;
+        let min_offset = if let Some((min_off, _)) = self.active_modal_range() {
+            min_off
+        } else {
+            0
+        };
+
+        if self.offset <= min_offset {
             return None;
         }
 
         // Find preceding UTF-8 character boundary
         let mut prev = self.offset - 1;
-        while prev > 0 && !self.buffer.text.is_char_boundary(prev) {
+        while prev > min_offset && !self.buffer.text.is_char_boundary(prev) {
             prev -= 1;
         }
 
@@ -156,7 +506,17 @@ impl VirtualCursor {
 
     /// Moves cursor down to next paragraph / block element (`^{DOWN}`).
     pub fn move_next_paragraph(&mut self) -> Option<String> {
+        self.selection = None;
+        let max_offset = if let Some((_, max_off)) = self.active_modal_range() {
+            max_off
+        } else {
+            self.buffer.len()
+        };
+
         if let Some(next_p) = self.buffer.next_paragraph_from(self.offset) {
+            if next_p.start_offset > max_offset {
+                return None;
+            }
             self.offset = next_p.start_offset;
             self.current_node_id = Some(next_p.node_id);
             Some(SpeechFormatter::format_role_and_text(
@@ -170,7 +530,17 @@ impl VirtualCursor {
 
     /// Moves cursor up to prior paragraph / block element (`^{UP}`).
     pub fn move_prior_paragraph(&mut self) -> Option<String> {
+        self.selection = None;
+        let min_offset = if let Some((min_off, _)) = self.active_modal_range() {
+            min_off
+        } else {
+            0
+        };
+
         if let Some(prior_p) = self.buffer.prior_paragraph_from(self.offset) {
+            if prior_p.start_offset < min_offset {
+                return None;
+            }
             self.offset = prior_p.start_offset;
             self.current_node_id = Some(prior_p.node_id);
             Some(SpeechFormatter::format_role_and_text(
@@ -203,16 +573,31 @@ impl VirtualCursor {
 
     /// Moves cursor to next heading across all levels (`H` / `MoveToNextHeading`).
     pub fn move_next_heading(&mut self) -> Option<String> {
-        if self.buffer.headings.is_empty() {
+        self.selection = None;
+        let headings: Vec<(usize, u32)> =
+            if let Some((min_off, max_off)) = self.active_modal_range() {
+                self.buffer
+                    .headings
+                    .iter()
+                    .copied()
+                    .filter(|&(off, _)| off >= min_off && off <= max_off)
+                    .collect()
+            } else {
+                self.buffer.headings.clone()
+            };
+
+        if headings.is_empty() {
             return Some("There are no headings on this page.".to_string());
         }
-        let (target_offset, level, wrapped) = match self.buffer.next_heading_from(self.offset) {
-            Some((off, lvl)) => (off, lvl, false),
-            None => {
-                let (off, lvl) = self.buffer.headings.first().copied()?;
-                (off, lvl, true)
-            }
-        };
+
+        let (target_offset, level, wrapped) =
+            match headings.iter().find(|&&(off, _)| off > self.offset) {
+                Some(&(off, lvl)) => (off, lvl, false),
+                None => {
+                    let (off, lvl) = headings.first().copied()?;
+                    (off, lvl, true)
+                }
+            };
         self.offset = target_offset;
         let node = self.buffer.find_heading_node(target_offset);
         self.current_node_id = node.map(|n| n.id);
@@ -234,16 +619,31 @@ impl VirtualCursor {
 
     /// Moves cursor to prior heading across all levels (`+H` / `MoveToPriorHeading`).
     pub fn move_prior_heading(&mut self) -> Option<String> {
-        if self.buffer.headings.is_empty() {
+        self.selection = None;
+        let headings: Vec<(usize, u32)> =
+            if let Some((min_off, max_off)) = self.active_modal_range() {
+                self.buffer
+                    .headings
+                    .iter()
+                    .copied()
+                    .filter(|&(off, _)| off >= min_off && off <= max_off)
+                    .collect()
+            } else {
+                self.buffer.headings.clone()
+            };
+
+        if headings.is_empty() {
             return Some("There are no headings on this page.".to_string());
         }
-        let (target_offset, level, wrapped) = match self.buffer.prior_heading_from(self.offset) {
-            Some((off, lvl)) => (off, lvl, false),
-            None => {
-                let (off, lvl) = self.buffer.headings.last().copied()?;
-                (off, lvl, true)
-            }
-        };
+
+        let (target_offset, level, wrapped) =
+            match headings.iter().rfind(|&&(off, _)| off < self.offset) {
+                Some(&(off, lvl)) => (off, lvl, false),
+                None => {
+                    let (off, lvl) = headings.last().copied()?;
+                    (off, lvl, true)
+                }
+            };
         self.offset = target_offset;
         let node = self.buffer.find_heading_node(target_offset);
         self.current_node_id = node.map(|n| n.id);
@@ -265,7 +665,12 @@ impl VirtualCursor {
 
     /// Moves cursor to next heading of a specific level (`1`–`6` / `MoveToNextHeadingLevelX`).
     pub fn move_next_heading_level(&mut self, level: u32) -> Option<String> {
+        self.selection = None;
+        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
         let (target_offset, lvl) = self.buffer.next_heading_level_from(self.offset, level)?;
+        if target_offset < min_off || target_offset > max_off {
+            return None;
+        }
         self.offset = target_offset;
         let node = self.buffer.find_heading_node(target_offset);
         self.current_node_id = node.map(|n| n.id);
@@ -282,7 +687,12 @@ impl VirtualCursor {
 
     /// Moves cursor to prior heading of a specific level (`+1`–`+6` / `MoveToPriorHeadingLevelX`).
     pub fn move_prior_heading_level(&mut self, level: u32) -> Option<String> {
+        self.selection = None;
+        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
         let (target_offset, lvl) = self.buffer.prior_heading_level_from(self.offset, level)?;
+        if target_offset < min_off || target_offset > max_off {
+            return None;
+        }
         self.offset = target_offset;
         let node = self.buffer.find_heading_node(target_offset);
         self.current_node_id = node.map(|n| n.id);
@@ -299,7 +709,12 @@ impl VirtualCursor {
 
     /// Moves cursor to next link (`U` / `K` / `MoveToNextLink`).
     pub fn move_next_link(&mut self) -> Option<String> {
+        self.selection = None;
+        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
         let target_offset = self.buffer.next_link_from(self.offset)?;
+        if target_offset < min_off || target_offset > max_off {
+            return None;
+        }
         self.offset = target_offset;
         let node = self.buffer.find_link_node(target_offset);
         self.current_node_id = node.map(|n| n.id);
@@ -316,7 +731,12 @@ impl VirtualCursor {
 
     /// Moves cursor to prior link (`+U` / `+K` / `MoveToPriorLink`).
     pub fn move_prior_link(&mut self) -> Option<String> {
+        self.selection = None;
+        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
         let target_offset = self.buffer.prior_link_from(self.offset)?;
+        if target_offset < min_off || target_offset > max_off {
+            return None;
+        }
         self.offset = target_offset;
         let node = self.buffer.find_link_node(target_offset);
         self.current_node_id = node.map(|n| n.id);
@@ -333,6 +753,7 @@ impl VirtualCursor {
 
     /// Moves cursor to next list container (`L` / `MoveToNextList`).
     pub fn move_next_list(&mut self) -> Option<String> {
+        self.selection = None;
         let target_offset = self.buffer.next_list_from(self.offset)?;
         self.offset = target_offset;
         let node = self.buffer.find_list_node(target_offset);
@@ -343,6 +764,7 @@ impl VirtualCursor {
 
     /// Moves cursor to prior list container (`+L` / `MoveToPriorList`).
     pub fn move_prior_list(&mut self) -> Option<String> {
+        self.selection = None;
         let target_offset = self.buffer.prior_list_from(self.offset)?;
         self.offset = target_offset;
         let node = self.buffer.find_list_node(target_offset);
@@ -353,6 +775,7 @@ impl VirtualCursor {
 
     /// Moves cursor to next list item (`I` / `MoveToNextListItem`).
     pub fn move_next_list_item(&mut self) -> Option<String> {
+        self.selection = None;
         let is_at_list = self
             .current_node()
             .map(|n| matches!(n.role, Role::List))
@@ -391,6 +814,7 @@ impl VirtualCursor {
 
     /// Moves cursor to prior list item (`+I` / `MoveToPriorListItem`).
     pub fn move_prior_list_item(&mut self) -> Option<String> {
+        self.selection = None;
         let target_offset = self.buffer.prior_list_item_from(self.offset)?;
         self.offset = target_offset;
         let node = self.buffer.find_list_item_node(target_offset);
@@ -416,6 +840,7 @@ impl VirtualCursor {
 
     /// Moves cursor to next landmark / region (`R` / `;` / `MoveToNextRegion`).
     pub fn move_next_landmark(&mut self) -> Option<String> {
+        self.selection = None;
         let target_offset = self.buffer.next_landmark_from(self.offset)?;
         self.offset = target_offset;
         let node = self.buffer.find_landmark_node(target_offset);
@@ -433,6 +858,7 @@ impl VirtualCursor {
 
     /// Moves cursor to prior landmark / region (`+R` / `+;` / `MoveToPriorRegion`).
     pub fn move_prior_landmark(&mut self) -> Option<String> {
+        self.selection = None;
         let target_offset = self.buffer.prior_landmark_from(self.offset)?;
         self.offset = target_offset;
         let node = self.buffer.find_landmark_node(target_offset);
@@ -450,7 +876,12 @@ impl VirtualCursor {
 
     /// Moves cursor to next form control (`F` / `FocusToNextField`).
     pub fn move_next_form_control(&mut self) -> Option<String> {
+        self.selection = None;
+        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
         let target_offset = self.buffer.next_form_control_from(self.offset)?;
+        if target_offset < min_off || target_offset > max_off {
+            return None;
+        }
         self.offset = target_offset;
         let node = self.buffer.find_form_control_node(target_offset);
         self.current_node_id = node.map(|n| n.id);
@@ -459,7 +890,12 @@ impl VirtualCursor {
 
     /// Moves cursor to prior form control (`+F` / `FocusToPriorField`).
     pub fn move_prior_form_control(&mut self) -> Option<String> {
+        self.selection = None;
+        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
         let target_offset = self.buffer.prior_form_control_from(self.offset)?;
+        if target_offset < min_off || target_offset > max_off {
+            return None;
+        }
         self.offset = target_offset;
         let node = self.buffer.find_form_control_node(target_offset);
         self.current_node_id = node.map(|n| n.id);
@@ -468,7 +904,12 @@ impl VirtualCursor {
 
     /// Moves cursor to next button (`B` / `MoveToNextButton`).
     pub fn move_next_button(&mut self) -> Option<String> {
+        self.selection = None;
+        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
         let target_offset = self.buffer.next_button_from(self.offset)?;
+        if target_offset < min_off || target_offset > max_off {
+            return None;
+        }
         self.offset = target_offset;
         let node = self.buffer.find_button_node(target_offset);
         self.current_node_id = node.map(|n| n.id);
@@ -480,7 +921,12 @@ impl VirtualCursor {
 
     /// Moves cursor to prior button (`+B` / `MoveToPriorButton`).
     pub fn move_prior_button(&mut self) -> Option<String> {
+        self.selection = None;
+        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
         let target_offset = self.buffer.prior_button_from(self.offset)?;
+        if target_offset < min_off || target_offset > max_off {
+            return None;
+        }
         self.offset = target_offset;
         let node = self.buffer.find_button_node(target_offset);
         self.current_node_id = node.map(|n| n.id);
@@ -492,7 +938,12 @@ impl VirtualCursor {
 
     /// Moves cursor to next edit field (`E` / `MoveToNextEdit`).
     pub fn move_next_edit(&mut self) -> Option<String> {
+        self.selection = None;
+        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
         let target_offset = self.buffer.next_edit_from(self.offset)?;
+        if target_offset < min_off || target_offset > max_off {
+            return None;
+        }
         self.offset = target_offset;
         let node = self.buffer.find_edit_node(target_offset);
         self.current_node_id = node.map(|n| n.id);
@@ -503,7 +954,12 @@ impl VirtualCursor {
 
     /// Moves cursor to prior edit field (`+E` / `MoveToPriorEdit`).
     pub fn move_prior_edit(&mut self) -> Option<String> {
+        self.selection = None;
+        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
         let target_offset = self.buffer.prior_edit_from(self.offset)?;
+        if target_offset < min_off || target_offset > max_off {
+            return None;
+        }
         self.offset = target_offset;
         let node = self.buffer.find_edit_node(target_offset);
         self.current_node_id = node.map(|n| n.id);
@@ -514,7 +970,12 @@ impl VirtualCursor {
 
     /// Moves cursor to next checkbox (`X` / `MoveToNextCheckbox`).
     pub fn move_next_checkbox(&mut self) -> Option<String> {
+        self.selection = None;
+        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
         let target_offset = self.buffer.next_checkbox_from(self.offset)?;
+        if target_offset < min_off || target_offset > max_off {
+            return None;
+        }
         self.offset = target_offset;
         let node = self.buffer.find_checkbox_node(target_offset);
         self.current_node_id = node.map(|n| n.id);
@@ -527,7 +988,12 @@ impl VirtualCursor {
 
     /// Moves cursor to prior checkbox (`+X` / `MoveToPriorCheckbox`).
     pub fn move_prior_checkbox(&mut self) -> Option<String> {
+        self.selection = None;
+        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
         let target_offset = self.buffer.prior_checkbox_from(self.offset)?;
+        if target_offset < min_off || target_offset > max_off {
+            return None;
+        }
         self.offset = target_offset;
         let node = self.buffer.find_checkbox_node(target_offset);
         self.current_node_id = node.map(|n| n.id);
@@ -538,8 +1004,47 @@ impl VirtualCursor {
         Some(SpeechFormatter::format_checkbox(name, checked))
     }
 
+    /// Moves cursor to next combobox (`C` / `MoveToNextCombo`).
+    pub fn move_next_combobox(&mut self) -> Option<String> {
+        self.selection = None;
+        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
+        let target_offset = self.buffer.next_combobox_from(self.offset)?;
+        if target_offset < min_off || target_offset > max_off {
+            return None;
+        }
+        self.offset = target_offset;
+        let node = self.buffer.find_combobox_node(target_offset);
+        self.current_node_id = node.map(|n| n.id);
+        let name = node
+            .and_then(|n| n.name.as_deref().or(n.text.as_deref()))
+            .unwrap_or("");
+        let value = node.and_then(|n| n.value.as_deref());
+        let expanded = node.and_then(|n| n.states.expanded).unwrap_or(false);
+        Some(SpeechFormatter::format_combobox(name, value, expanded))
+    }
+
+    /// Moves cursor to prior combobox (`+C` / `MoveToPriorCombo`).
+    pub fn move_prior_combobox(&mut self) -> Option<String> {
+        self.selection = None;
+        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
+        let target_offset = self.buffer.prior_combobox_from(self.offset)?;
+        if target_offset < min_off || target_offset > max_off {
+            return None;
+        }
+        self.offset = target_offset;
+        let node = self.buffer.find_combobox_node(target_offset);
+        self.current_node_id = node.map(|n| n.id);
+        let name = node
+            .and_then(|n| n.name.as_deref().or(n.text.as_deref()))
+            .unwrap_or("");
+        let value = node.and_then(|n| n.value.as_deref());
+        let expanded = node.and_then(|n| n.states.expanded).unwrap_or(false);
+        Some(SpeechFormatter::format_combobox(name, value, expanded))
+    }
+
     /// Enters Forms Mode (`{ENTER}` on an Edit field or `EnterFormsMode`).
     pub fn enter_forms_mode(&mut self) -> Option<String> {
+        self.selection = None;
         let (role, name, value) = {
             let node = self.current_node()?;
             (
@@ -571,11 +1076,13 @@ impl VirtualCursor {
     /// Exits Forms Mode back to Virtual PC Cursor (`{ESC}` or `ExitFormsMode`).
     pub fn exit_forms_mode(&mut self) -> Option<String> {
         self.forms_mode_active = false;
+        self.selection = None;
         Some(SpeechFormatter::format_forms_mode_exit())
     }
 
     /// Toggles active control state (`{SPACE}` on CheckBox or Tab).
     pub fn toggle_active_control(&mut self) -> Option<String> {
+        self.selection = None;
         let (node_id, role, name, current_checked) = {
             let node = self.current_node()?;
             (
@@ -617,24 +1124,264 @@ impl VirtualCursor {
                 }
                 Some(" \u{001d}selected\u{001e}".to_string())
             }
+            Role::ComboBox => {
+                if let Some(node) = self.buffer.node_map.get_mut(&node_id) {
+                    let is_exp = node.states.expanded.unwrap_or(false);
+                    node.states.expanded = Some(!is_exp);
+                    if !is_exp {
+                        Some("expanded".to_string())
+                    } else {
+                        Some("collapsed".to_string())
+                    }
+                } else {
+                    None
+                }
+            }
             Role::Button => Some(SpeechFormatter::format_button(&name)),
             _ => None,
         }
     }
 
+    /// Expands the active combobox (`Alt+DownArrow`).
+    pub fn expand_combobox(&mut self) -> Option<String> {
+        let node_id = self.current_node()?.id;
+        let node = self.buffer.node_map.get_mut(&node_id)?;
+        if node.role == Role::ComboBox {
+            node.states.expanded = Some(true);
+            Some("expanded".to_string())
+        } else {
+            None
+        }
+    }
+
+    /// Collapses the active combobox (`Escape` or `Alt+UpArrow`).
+    pub fn collapse_combobox(&mut self) -> Option<String> {
+        let node_id = self.current_node()?.id;
+        let node = self.buffer.node_map.get_mut(&node_id)?;
+        if node.role == Role::ComboBox {
+            node.states.expanded = Some(false);
+            Some("collapsed".to_string())
+        } else {
+            None
+        }
+    }
+
+    /// Returns whether the cursor is on an expanded combobox.
+    pub fn is_combobox_expanded(&self) -> bool {
+        if let Some(node) = self.current_node() {
+            node.role == Role::ComboBox && node.states.expanded == Some(true)
+        } else {
+            false
+        }
+    }
+
+    /// Selects the next option in an active combobox popup (`{DOWN}`).
+    pub fn combobox_next_option(&mut self) -> Option<String> {
+        let node_id = self.current_node()?.id;
+        let node = self.buffer.node_map.get(&node_id)?.clone();
+        if node.role != Role::ComboBox || node.children.is_empty() {
+            return None;
+        }
+
+        let current_val = node.value.as_deref().unwrap_or("");
+        let current_idx = node
+            .children
+            .iter()
+            .position(|c| {
+                c.name.as_deref().unwrap_or("") == current_val
+                    || c.text.as_deref().unwrap_or("") == current_val
+            })
+            .unwrap_or(0);
+
+        let next_idx = (current_idx + 1).min(node.children.len() - 1);
+        let next_child = &node.children[next_idx];
+        let next_val = next_child
+            .name
+            .clone()
+            .or_else(|| next_child.text.clone())
+            .unwrap_or_default();
+
+        if let Some(mut_node) = self.buffer.node_map.get_mut(&node_id) {
+            mut_node.value = Some(next_val.clone());
+        }
+
+        Some(next_val)
+    }
+
+    /// Selects the prior option in an active combobox popup (`{UP}`).
+    pub fn combobox_prior_option(&mut self) -> Option<String> {
+        let node_id = self.current_node()?.id;
+        let node = self.buffer.node_map.get(&node_id)?.clone();
+        if node.role != Role::ComboBox || node.children.is_empty() {
+            return None;
+        }
+
+        let current_val = node.value.as_deref().unwrap_or("");
+        let current_idx = node
+            .children
+            .iter()
+            .position(|c| {
+                c.name.as_deref().unwrap_or("") == current_val
+                    || c.text.as_deref().unwrap_or("") == current_val
+            })
+            .unwrap_or(0);
+
+        let prior_idx = current_idx.saturating_sub(1);
+        let prior_child = &node.children[prior_idx];
+        let prior_val = prior_child
+            .name
+            .clone()
+            .or_else(|| prior_child.text.clone())
+            .unwrap_or_default();
+
+        if let Some(mut_node) = self.buffer.node_map.get_mut(&node_id) {
+            mut_node.value = Some(prior_val.clone());
+        }
+
+        Some(prior_val)
+    }
+
+    /// Expands a collapsed tree item or jumps to its first child if already expanded (`{RIGHT}`).
+    pub fn tree_item_expand_or_next(&mut self) -> Option<String> {
+        let node = self.current_node()?.clone();
+        if node.role != Role::TreeItem {
+            return None;
+        }
+
+        match node.states.expanded {
+            Some(false) => {
+                if let Some(mut_node) = self.buffer.node_map.get_mut(&node.id) {
+                    mut_node.states.expanded = Some(true);
+                }
+                Some("expanded".to_string())
+            }
+            Some(true) => {
+                // Move to first child tree item
+                let first_child = node.children.iter().find(|c| c.role == Role::TreeItem);
+                if let Some(child) = first_child {
+                    self.move_to_node_id(child.id);
+                    let name = child
+                        .name
+                        .as_deref()
+                        .or(child.text.as_deref())
+                        .unwrap_or("");
+                    let level = child.level.unwrap_or(node.level.unwrap_or(1) + 1);
+                    Some(SpeechFormatter::format_tree_item(
+                        name,
+                        level,
+                        child.states.expanded,
+                    ))
+                } else {
+                    None
+                }
+            }
+            None => None,
+        }
+    }
+
+    /// Collapses an expanded tree item or jumps to its parent if collapsed (`{LEFT}`).
+    pub fn tree_item_collapse_or_parent(&mut self) -> Option<String> {
+        let node = self.current_node()?.clone();
+        if node.role != Role::TreeItem {
+            return None;
+        }
+
+        if node.states.expanded == Some(true) {
+            if let Some(mut_node) = self.buffer.node_map.get_mut(&node.id) {
+                mut_node.states.expanded = Some(false);
+            }
+            Some("collapsed".to_string())
+        } else {
+            // Jump to parent tree item
+            let parent_id = self.buffer.tree_parents.get(&node.id).copied()?;
+            self.move_to_node_id(parent_id);
+            let parent_node = self.buffer.node_map.get(&parent_id)?.clone();
+            let name = parent_node
+                .name
+                .as_deref()
+                .or(parent_node.text.as_deref())
+                .unwrap_or("");
+            let level = parent_node.level.unwrap_or(1);
+            Some(SpeechFormatter::format_tree_item(
+                name,
+                level,
+                parent_node.states.expanded,
+            ))
+        }
+    }
+
+    /// Increases slider value (`{RIGHT}` or `{UP}` on Slider).
+    pub fn slider_increase(&mut self) -> Option<String> {
+        let node_id = self.current_node()?.id;
+        let node = self.buffer.node_map.get(&node_id)?.clone();
+        if node.role != Role::Slider {
+            return None;
+        }
+
+        let step = 5.0;
+        let max = node.value_max.unwrap_or(100.0);
+        let current = node.value_now.unwrap_or(0.0);
+        let new_val = (current + step).min(max);
+
+        if let Some(mut_node) = self.buffer.node_map.get_mut(&node_id) {
+            mut_node.value_now = Some(new_val);
+        }
+
+        Some(format!("{:.0}", new_val))
+    }
+
+    /// Decreases slider value (`{LEFT}` or `{DOWN}` on Slider).
+    pub fn slider_decrease(&mut self) -> Option<String> {
+        let node_id = self.current_node()?.id;
+        let node = self.buffer.node_map.get(&node_id)?.clone();
+        if node.role != Role::Slider {
+            return None;
+        }
+
+        let step = 5.0;
+        let min = node.value_min.unwrap_or(0.0);
+        let current = node.value_now.unwrap_or(0.0);
+        let new_val = (current - step).max(min);
+
+        if let Some(mut_node) = self.buffer.node_map.get_mut(&node_id) {
+            mut_node.value_now = Some(new_val);
+        }
+
+        Some(format!("{:.0}", new_val))
+    }
+
     /// Moves cursor to next focusable control / tab stop (`{TAB}`).
     pub fn move_next_tab_stop(&mut self) -> Option<String> {
+        self.selection = None;
         if self.buffer.tab_stops.is_empty() {
             return None;
         }
         let is_first_tab_from_start = self.offset == 0;
         let prev_node_id = self.current_node_id;
 
-        let maybe_next = self.buffer.next_tab_stop_from(self.offset);
-        let target_offset = match maybe_next {
-            Some(off) => off,
-            None => *self.buffer.tab_stops.first()?,
+        let target_offset = if let Some((min_off, max_off)) = self.active_modal_range() {
+            let modal_tab_stops: Vec<usize> = self
+                .buffer
+                .tab_stops
+                .iter()
+                .copied()
+                .filter(|&ts| ts >= min_off && ts <= max_off)
+                .collect();
+            if modal_tab_stops.is_empty() {
+                return None;
+            }
+            match modal_tab_stops.iter().find(|&&ts| ts > self.offset) {
+                Some(&off) => off,
+                None => *modal_tab_stops.first()?,
+            }
+        } else {
+            let maybe_next = self.buffer.next_tab_stop_from(self.offset);
+            match maybe_next {
+                Some(off) => off,
+                None => *self.buffer.tab_stops.first()?,
+            }
         };
+
         self.offset = target_offset;
         let node = self.buffer.node_at_offset(target_offset)?.clone();
         self.current_node_id = Some(node.id);
@@ -650,16 +1397,35 @@ impl VirtualCursor {
 
     /// Moves cursor to prior focusable control / tab stop (`Shift+{TAB}`).
     pub fn move_prior_tab_stop(&mut self) -> Option<String> {
+        self.selection = None;
         if self.buffer.tab_stops.is_empty() {
             return None;
         }
         let prev_node_id = self.current_node_id;
 
-        let maybe_prior = self.buffer.prior_tab_stop_from(self.offset);
-        let target_offset = match maybe_prior {
-            Some(off) => off,
-            None => *self.buffer.tab_stops.last()?,
+        let target_offset = if let Some((min_off, max_off)) = self.active_modal_range() {
+            let modal_tab_stops: Vec<usize> = self
+                .buffer
+                .tab_stops
+                .iter()
+                .copied()
+                .filter(|&ts| ts >= min_off && ts <= max_off)
+                .collect();
+            if modal_tab_stops.is_empty() {
+                return None;
+            }
+            match modal_tab_stops.iter().rfind(|&&ts| ts < self.offset) {
+                Some(&off) => off,
+                None => *modal_tab_stops.last()?,
+            }
+        } else {
+            let maybe_prior = self.buffer.prior_tab_stop_from(self.offset);
+            match maybe_prior {
+                Some(off) => off,
+                None => *self.buffer.tab_stops.last()?,
+            }
         };
+
         self.offset = target_offset;
         let node = self.buffer.node_at_offset(target_offset)?.clone();
         self.current_node_id = Some(node.id);
@@ -724,6 +1490,27 @@ impl VirtualCursor {
                 let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
                 let checked = node.states.checked.unwrap_or(false);
                 SpeechFormatter::format_checkbox(name, checked)
+            }
+            Role::ComboBox => {
+                let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                let value = node.value.as_deref();
+                let expanded = node.states.expanded.unwrap_or(false);
+                SpeechFormatter::format_combobox(name, value, expanded)
+            }
+            Role::Slider => {
+                let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                let value = node.value_now.unwrap_or(0.0);
+                SpeechFormatter::format_slider(name, value)
+            }
+            Role::ProgressBar => {
+                let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                let value = node.value_now.unwrap_or(0.0);
+                SpeechFormatter::format_progressbar(name, value)
+            }
+            Role::TreeItem => {
+                let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                let level = node.level.unwrap_or(1);
+                SpeechFormatter::format_tree_item(name, level, node.states.expanded)
             }
             Role::Link { .. } => {
                 let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");

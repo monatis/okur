@@ -1,0 +1,86 @@
+{
+  "scenario_id": "38-font-query-formatting",
+  "scenario_version": "1.1.0",
+  "timestamp": "2026-10-13T03:30:00.0000000+03:00",
+  "environment": {
+    "os_version": "Microsoft Windows NT 10.0.19045.0",
+    "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+    "target_process": "chrome",
+    "interactive_session": true
+  },
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/dialog-and-formatting.html",
+  "repetitions_requested": 5,
+  "trials": [
+    {
+      "trial_index": 1,
+      "timestamp": "2026-10-13T03:30:01.0000000+03:00",
+      "step_results": [
+        {
+          "step_id": "s1",
+          "action": {
+            "type": "keyboard",
+            "command": "{DOWN}"
+          },
+          "observation": {
+            "speech_raw": " \u001d heading level 1 \u001e System Overview",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "System Overview"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s2",
+          "action": {
+            "type": "keyboard",
+            "command": "{DOWN}"
+          },
+          "observation": {
+            "speech_raw": "Screen reader accessibility engine.",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Screen reader accessibility engine."
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s3",
+          "action": {
+            "type": "keyboard",
+            "command": "Insert+F"
+          },
+          "observation": {
+            "speech_raw": "16 pt, bold, Arial on default background, left aligned",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "16 pt",
+              "bold",
+              "Arial on default background",
+              "left aligned"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        }
+      ],
+      "trial_success": true
+    }
+  ],
+  "summary": {
+    "total_trials": 5,
+    "successful_trials": 5,
+    "deterministic_match": true,
+    "stability": "deterministic",
+    "total_elapsed_ms": 9800
+  }
+}

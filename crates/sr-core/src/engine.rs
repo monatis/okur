@@ -33,12 +33,38 @@ impl ScreenReaderEngine {
     /// Speaks the resulting announcement and returns the emitted speech text.
     pub fn execute_command(&mut self, command: &str) -> Option<String> {
         let speech = match command {
-            "{DOWN}" => self.cursor.move_next_line(),
-            "{UP}" => self.cursor.move_prior_line(),
+            "{DOWN}" => {
+                if self.cursor.is_combobox_expanded() {
+                    self.cursor.combobox_next_option()
+                } else {
+                    self.cursor.move_next_line()
+                }
+            }
+            "{UP}" => {
+                if self.cursor.is_combobox_expanded() {
+                    self.cursor.combobox_prior_option()
+                } else {
+                    self.cursor.move_prior_line()
+                }
+            }
             "^{RIGHT}" => self.cursor.move_next_word(),
             "^{LEFT}" => self.cursor.move_prior_word(),
-            "{RIGHT}" => self.cursor.move_next_char(),
-            "{LEFT}" => self.cursor.move_prior_char(),
+            "{RIGHT}" => {
+                let role = self.cursor.current_node().map(|n| n.role.clone());
+                match role {
+                    Some(Role::TreeItem) => self.cursor.tree_item_expand_or_next(),
+                    Some(Role::Slider) => self.cursor.slider_increase(),
+                    _ => self.cursor.move_next_char(),
+                }
+            }
+            "{LEFT}" => {
+                let role = self.cursor.current_node().map(|n| n.role.clone());
+                match role {
+                    Some(Role::TreeItem) => self.cursor.tree_item_collapse_or_parent(),
+                    Some(Role::Slider) => self.cursor.slider_decrease(),
+                    _ => self.cursor.move_prior_char(),
+                }
+            }
             "^{DOWN}" => self.cursor.move_next_paragraph(),
             "^{UP}" => self.cursor.move_prior_paragraph(),
             "^{HOME}" => Some(self.cursor.move_to_start()),
@@ -85,6 +111,14 @@ impl ScreenReaderEngine {
             "+E" | "+e" | "MoveToPriorEdit" => self.cursor.move_prior_edit(),
             "X" | "x" | "MoveToNextCheckbox" => self.cursor.move_next_checkbox(),
             "+X" | "+x" | "MoveToPriorCheckbox" => self.cursor.move_prior_checkbox(),
+            "C" | "c" | "MoveToNextCombo" | "MoveToNextComboBox" => {
+                self.cursor.move_next_combobox()
+            }
+            "+C" | "+c" | "MoveToPriorCombo" | "MoveToPriorComboBox" => {
+                self.cursor.move_prior_combobox()
+            }
+            "!{DOWN}" | "ExpandComboBox" => self.cursor.expand_combobox(),
+            "!{UP}" | "CollapseComboBox" => self.cursor.collapse_combobox(),
 
             // Lists & Landmarks
             "L" | "l" | "MoveToNextList" => self.cursor.move_next_list(),
@@ -110,10 +144,45 @@ impl ScreenReaderEngine {
                 res
             }
             "{ESC}" | "ExitFormsMode" => {
-                let res = self.cursor.exit_forms_mode();
-                self.forms_mode = false;
-                res
+                if self.cursor.is_combobox_expanded() {
+                    self.cursor.collapse_combobox()
+                } else if self.forms_mode {
+                    let res = self.cursor.exit_forms_mode();
+                    self.forms_mode = false;
+                    res
+                } else if self.cursor.is_in_modal() {
+                    self.cursor.exit_modal()
+                } else {
+                    None
+                }
             }
+
+            // Text selection commands
+            "+{RIGHT}" | "SelectNextCharacter" => self.cursor.select_next_char(),
+            "+{LEFT}" | "SelectPriorCharacter" => self.cursor.select_prior_char(),
+            "+{DOWN}" | "SelectNextLine" => self.cursor.select_next_line(),
+            "+{UP}" | "SelectPriorLine" => self.cursor.select_prior_line(),
+            "+!{DOWN}" | "SaySelection" | "SaySelectedText" => Some(self.cursor.say_selection()),
+
+            // Font formatting query
+            "Insert+F" | "WhatFont" | "SayFont" => Some(self.cursor.say_font_formatting()),
+
+            // Modal dialog commands
+            "EnterModal" => {
+                let target_dlg = if let Some(node_id) = self.cursor.current_node_id {
+                    self.cursor.buffer.dialog_for_node(node_id)
+                } else {
+                    None
+                }
+                .or_else(|| self.cursor.buffer.dialogs.first());
+
+                if let Some(dlg) = target_dlg {
+                    self.cursor.enter_modal(dlg.node_id)
+                } else {
+                    None
+                }
+            }
+            "ExitModal" => self.cursor.exit_modal(),
 
             // JAWS Say Scripts
             "SayAll" => Some(self.cursor.say_all()),
@@ -159,6 +228,22 @@ impl ScreenReaderEngine {
             }
             // In forms mode, pass all typing and navigation through to the active control
             return KeyAction::PassThrough;
+        }
+
+        // 4. Handle Escape when inside an expanded combobox or modal dialog
+        if event.key == Key::Escape && event.modifiers.is_empty() {
+            if self.cursor.is_combobox_expanded() {
+                if let Some(msg) = self.cursor.collapse_combobox() {
+                    self.speech.speak(&msg, true);
+                }
+                return KeyAction::Consume;
+            }
+            if self.cursor.is_in_modal() {
+                if let Some(msg) = self.cursor.exit_modal() {
+                    self.speech.speak(&msg, true);
+                }
+                return KeyAction::Consume;
+            }
         }
 
         // 4. In Virtual PC Cursor mode, check if keystroke translates to a command
@@ -223,6 +308,33 @@ impl ScreenReaderEngine {
 
         if let Some(id) = target_id {
             self.cursor.move_to_node_id(id);
+        }
+
+        // If focus target is a dialog, enter modal confinement and announce Dialog <Title>
+        if matches!(focus.role, Role::Dialog | Role::AlertDialog) {
+            let title = focus.name.as_deref().unwrap_or("");
+            let msg = if let Some(id) = target_id {
+                self.cursor
+                    .enter_modal(id)
+                    .unwrap_or_else(|| SpeechFormatter::format_dialog_entry(title))
+            } else {
+                SpeechFormatter::format_dialog_entry(title)
+            };
+            if !msg.is_empty() {
+                self.speech.speak(&msg, true);
+            }
+            return Some(msg);
+        }
+
+        // If target is inside a modal dialog, ensure modal confinement is active
+        if let Some(id) = target_id {
+            if let Some(dlg) = self.cursor.buffer.dialog_for_node(id) {
+                if dlg.is_modal && self.cursor.active_modal_root != Some(dlg.node_id) {
+                    let _ = self.cursor.enter_modal(dlg.node_id);
+                }
+            } else if self.cursor.is_in_modal() {
+                let _ = self.cursor.exit_modal();
+            }
         }
 
         let is_edit = matches!(focus.role, Role::Edit);
@@ -457,5 +569,106 @@ mod tests {
         // Politeness::Off
         let off = LiveRegionEvent::new("Ignored mutation.", Politeness::Off);
         assert_eq!(engine.handle_live_region_event(&off), None);
+    }
+
+    #[test]
+    fn test_engine_text_selection_and_font_query() {
+        let aom =
+            AomNode::new(0, Role::Document).with_children(vec![AomNode::new(1, Role::Paragraph)
+                .with_text("Hello World")
+                .with_formatting(
+                    crate::aom::TextFormatting::new()
+                        .with_size(16.0)
+                        .with_bold(true)
+                        .with_family("Arial")
+                        .with_alignment("left"),
+                )]);
+        let buffer = VirtualBuffer::from_aom(&aom);
+        let cursor = VirtualCursor::new(buffer);
+        let mock_speech = Box::new(MockSpeechOutput::new());
+        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
+
+        // Font query
+        let font_speech = engine.execute_command("Insert+F");
+        assert_eq!(
+            font_speech,
+            Some("16 pt, bold, Arial on default background, left aligned".to_string())
+        );
+
+        // Select next character
+        let sel1 = engine.execute_command("+{RIGHT}");
+        assert_eq!(sel1, Some("selected H".to_string()));
+
+        let sel2 = engine.execute_command("+{RIGHT}");
+        assert_eq!(sel2, Some("selected e".to_string()));
+
+        // Unselect prior character
+        let unsel = engine.execute_command("+{LEFT}");
+        assert_eq!(unsel, Some("unselected e".to_string()));
+
+        // Query active selection
+        let say_sel = engine.execute_command("SaySelection");
+        assert_eq!(say_sel, Some("H".to_string()));
+
+        // Moving cursor clears selection
+        engine.execute_command("{RIGHT}");
+        let no_sel = engine.execute_command("SaySelection");
+        assert_eq!(no_sel, Some("No selection".to_string()));
+    }
+
+    #[test]
+    fn test_engine_modal_dialog_confinement_and_escape() {
+        let mut dlg = AomNode::new(10, Role::Dialog)
+            .with_name("Confirm Deletion")
+            .with_children(vec![
+                AomNode::new(11, Role::Heading { level: 2 }).with_text("Are you sure?"),
+                AomNode::new(12, Role::Button).with_name("Confirm"),
+                AomNode::new(13, Role::Button).with_name("Cancel"),
+            ]);
+        dlg.states.modal = true;
+
+        let aom = AomNode::new(0, Role::Document).with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Dashboard"),
+            dlg,
+            AomNode::new(20, Role::Paragraph).with_text("Backdrop footer text"),
+        ]);
+
+        let buffer = VirtualBuffer::from_aom(&aom);
+        let cursor = VirtualCursor::new(buffer);
+        let mock_speech = Box::new(MockSpeechOutput::new());
+        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
+
+        // Focus event moving into dialog
+        let focus_dlg = FocusEvent::new(Role::Dialog)
+            .with_node_id(10)
+            .with_name("Confirm Deletion");
+        let speech = engine
+            .handle_focus_event(&focus_dlg)
+            .expect("Should announce dialog entry");
+        assert_eq!(speech, "Dialog Confirm Deletion");
+        assert!(engine.cursor.is_in_modal());
+
+        // Quick navigation 'H' inside modal wraps within modal and finds level 2 heading
+        let h_speech = engine.execute_command("H");
+        assert!(h_speech.is_some());
+        assert!(h_speech.unwrap().contains("Are you sure?"));
+
+        // Tab moves to Confirm button
+        let tab1 = engine.execute_command("{TAB}");
+        assert!(tab1.unwrap().contains("Confirm"));
+
+        // Tab moves to Cancel button
+        let tab2 = engine.execute_command("{TAB}");
+        assert!(tab2.unwrap().contains("Cancel"));
+
+        // Tab wraps back to Confirm button inside dialog (cannot escape to backdrop!)
+        let tab3 = engine.execute_command("{TAB}");
+        assert!(tab3.unwrap().contains("Confirm"));
+
+        // Escape exits modal dialog
+        let esc_event = KeyEvent::new(Key::Escape, Modifiers::none(), true);
+        let action = engine.handle_key_event(&esc_event);
+        assert_eq!(action, KeyAction::Consume);
+        assert!(!engine.cursor.is_in_modal());
     }
 }

@@ -1,0 +1,88 @@
+{
+  "scenario_id": "40-dialog-exit-restore",
+  "scenario_version": "1.1.0",
+  "timestamp": "2026-10-13T03:30:00.0000000+03:00",
+  "environment": {
+    "os_version": "Microsoft Windows NT 10.0.19045.0",
+    "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+    "target_process": "chrome",
+    "interactive_session": true
+  },
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/dialog-and-formatting.html",
+  "repetitions_requested": 5,
+  "trials": [
+    {
+      "trial_index": 1,
+      "timestamp": "2026-10-13T03:30:01.0000000+03:00",
+      "step_results": [
+        {
+          "step_id": "s1",
+          "action": {
+            "type": "focus",
+            "command": "Confirm Account Deletion"
+          },
+          "observation": {
+            "speech_raw": "Dialog Confirm Account Deletion",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "target_role": "dialog",
+            "target_name": "Confirm Account Deletion",
+            "contains_speech": [
+              "Dialog Confirm Account Deletion"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s2",
+          "action": {
+            "type": "keyboard",
+            "command": "{ESC}"
+          },
+          "observation": {
+            "speech_raw": "Leaving Dialog",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Leaving Dialog"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        },
+        {
+          "step_id": "s3",
+          "action": {
+            "type": "keyboard",
+            "command": "H"
+          },
+          "observation": {
+            "speech_raw": "wrapping to top\nSystem Overview\n \u001d heading level 1 \u001e",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "target_role": "heading",
+            "target_name": "System Overview",
+            "contains_speech": [
+              "System Overview",
+              "heading level 1"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        }
+      ],
+      "trial_success": true
+    }
+  ],
+  "summary": {
+    "total_trials": 5,
+    "successful_trials": 5,
+    "deterministic_match": true,
+    "stability": "deterministic",
+    "total_elapsed_ms": 10900
+  }
+}

@@ -1,0 +1,288 @@
+{
+  "id": 0,
+  "role": "Document",
+  "name": "ARIA Widgets Reference Fixture",
+  "value": null,
+  "text": null,
+  "children": [
+    {
+      "id": 1,
+      "role": {
+        "Heading": {
+          "level": 1
+        }
+      },
+      "name": "ARIA Widgets and Hierarchical Navigation",
+      "value": null,
+      "text": "ARIA Widgets and Hierarchical Navigation",
+      "children": [],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false,
+        "modal": false
+      },
+      "attributes": {}
+    },
+    {
+      "id": 10,
+      "role": "ComboBox",
+      "name": "State",
+      "value": "California",
+      "text": "State California",
+      "children": [
+        {
+          "id": 11,
+          "role": "Generic",
+          "name": "Alabama",
+          "value": null,
+          "text": "Alabama",
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": false,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {}
+        },
+        {
+          "id": 12,
+          "role": "Generic",
+          "name": "California",
+          "value": null,
+          "text": "California",
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": true,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {}
+        },
+        {
+          "id": 13,
+          "role": "Generic",
+          "name": "Colorado",
+          "value": null,
+          "text": "Colorado",
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": false,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {}
+        }
+      ],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": false,
+        "focused": false,
+        "disabled": false,
+        "hidden": false,
+        "modal": false
+      },
+      "attributes": {
+        "role": "combobox",
+        "aria-haspopup": "listbox",
+        "aria-expanded": "false"
+      }
+    },
+    {
+      "id": 20,
+      "role": "Tree",
+      "name": "Files",
+      "value": null,
+      "text": null,
+      "children": [
+        {
+          "id": 21,
+          "role": "TreeItem",
+          "name": "Documents",
+          "value": null,
+          "text": "Documents",
+          "level": 1,
+          "children": [
+            {
+              "id": 22,
+              "role": "TreeItem",
+              "name": "Work",
+              "value": null,
+              "text": "Work",
+              "level": 2,
+              "children": [
+                {
+                  "id": 23,
+                  "role": "TreeItem",
+                  "name": "Resume.pdf",
+                  "value": null,
+                  "text": "Resume.pdf",
+                  "level": 3,
+                  "children": [],
+                  "states": {
+                    "checked": null,
+                    "selected": null,
+                    "expanded": null,
+                    "focused": false,
+                    "disabled": false,
+                    "hidden": false,
+                    "modal": false
+                  },
+                  "attributes": {
+                    "role": "treeitem",
+                    "aria-level": "3"
+                  }
+                }
+              ],
+              "states": {
+                "checked": null,
+                "selected": null,
+                "expanded": false,
+                "focused": false,
+                "disabled": false,
+                "hidden": false,
+                "modal": false
+              },
+              "attributes": {
+                "role": "treeitem",
+                "aria-level": "2",
+                "aria-expanded": "false"
+              }
+            }
+          ],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": true,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {
+            "role": "treeitem",
+            "aria-level": "1",
+            "aria-expanded": "true"
+          }
+        },
+        {
+          "id": 24,
+          "role": "TreeItem",
+          "name": "Projects",
+          "value": null,
+          "text": "Projects",
+          "level": 1,
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": false,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {
+            "role": "treeitem",
+            "aria-level": "1",
+            "aria-expanded": "false"
+          }
+        }
+      ],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false,
+        "modal": false
+      },
+      "attributes": {
+        "role": "tree",
+        "aria-label": "Files"
+      }
+    },
+    {
+      "id": 30,
+      "role": "Slider",
+      "name": "Volume",
+      "value": "50",
+      "text": "50",
+      "value_min": 0.0,
+      "value_max": 100.0,
+      "value_now": 50.0,
+      "children": [],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false,
+        "modal": false
+      },
+      "attributes": {
+        "role": "slider",
+        "aria-label": "Volume",
+        "aria-valuemin": "0",
+        "aria-valuemax": "100",
+        "aria-valuenow": "50"
+      }
+    },
+    {
+      "id": 40,
+      "role": "ProgressBar",
+      "name": "Upload Progress",
+      "value": "75%",
+      "text": "75%",
+      "value_min": 0.0,
+      "value_max": 100.0,
+      "value_now": 75.0,
+      "children": [],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false,
+        "modal": false
+      },
+      "attributes": {
+        "role": "progressbar",
+        "aria-label": "Upload Progress",
+        "aria-valuemin": "0",
+        "aria-valuemax": "100",
+        "aria-valuenow": "75"
+      }
+    }
+  ],
+  "formatting": null,
+  "states": {
+    "checked": null,
+    "selected": null,
+    "expanded": null,
+    "focused": false,
+    "disabled": false,
+    "hidden": false,
+    "modal": false
+  },
+  "attributes": {}
+}

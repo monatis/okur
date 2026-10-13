@@ -39,14 +39,19 @@
             "sha256": "FCE6F53269625E3B9871FD1E6835E878D1C6EB3F966511E68C914D9C4B3482D5",
             "path": "C:\\Users\\ailabs\\corpus\\fixtures\\live-focus.html",
             "size_bytes": 886
+        },
+        "dialog-and-formatting.html": {
+            "sha256": "FA69AE2308A449A33037CAB16B065AFA5ECA0210717CA72B3857CC411CFE7796",
+            "path": "C:\\Users\\ailabs\\corpus\\fixtures\\dialog-and-formatting.html",
+            "size_bytes": 817
         }
     },
     "statistics": {
-        "total_scenarios": 35,
-        "deterministic_scenarios": 32,
+        "total_scenarios": 40,
+        "deterministic_scenarios": 37,
         "variable_scenarios": 3,
-        "total_trials_executed": 175,
-        "successful_trials": 175,
+        "total_trials_executed": 200,
+        "successful_trials": 200,
         "trial_success_rate_percent": 100
     },
     "scenarios": [
@@ -1678,6 +1683,815 @@
                     "assertions": {
                         "contains_speech": [
                             "File upload completed successfully"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "36-text-select-char",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/dialog-and-formatting.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 11200,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": " \u001d heading level 1 \u001e System Overview"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "heading level 1",
+                            "System Overview"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Screen reader accessibility engine."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Screen reader accessibility engine."
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "+{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "selected S"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "selected S"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s4",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "+{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "selected c"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "selected c"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s5",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "+{LEFT}"
+                    },
+                    "observation": {
+                        "speech_raw": "unselected c"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "unselected c"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "37-text-say-selection",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/dialog-and-formatting.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 13400,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": " \u001d heading level 1 \u001e System Overview"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "System Overview"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Screen reader accessibility engine."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Screen reader accessibility engine."
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "+{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "selected S"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "selected S"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s4",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "+{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "selected c"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "selected c"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s5",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "SaySelection"
+                    },
+                    "observation": {
+                        "speech_raw": "Sc"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Sc"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s6",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "e"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "e"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s7",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "SaySelection"
+                    },
+                    "observation": {
+                        "speech_raw": "No selection"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "No selection"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "38-font-query-formatting",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/dialog-and-formatting.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 9800,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": " \u001d heading level 1 \u001e System Overview"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "System Overview"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Screen reader accessibility engine."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Screen reader accessibility engine."
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "Insert+F"
+                    },
+                    "observation": {
+                        "speech_raw": "16 pt, bold, Arial on default background, left aligned"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "16 pt",
+                            "bold",
+                            "Arial on default background",
+                            "left aligned"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "39-dialog-entry-modal-trap",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/dialog-and-formatting.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 11500,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "focus",
+                        "command": "Confirm Account Deletion"
+                    },
+                    "observation": {
+                        "speech_raw": "Dialog Confirm Account Deletion"
+                    },
+                    "assertions": {
+                        "target_role": "dialog",
+                        "target_name": "Confirm Account Deletion",
+                        "contains_speech": [
+                            "Dialog Confirm Account Deletion"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "Delete Account  \u001d Button \u001e"
+                    },
+                    "assertions": {
+                        "target_role": "button",
+                        "target_name": "Delete Account",
+                        "contains_speech": [
+                            "Delete Account",
+                            "Button"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "Cancel  \u001d Button \u001e"
+                    },
+                    "assertions": {
+                        "target_role": "button",
+                        "target_name": "Cancel",
+                        "contains_speech": [
+                            "Cancel",
+                            "Button"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s4",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "Delete Account  \u001d Button \u001e"
+                    },
+                    "assertions": {
+                        "target_role": "button",
+                        "target_name": "Delete Account",
+                        "contains_speech": [
+                            "Delete Account",
+                            "Button"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "40-dialog-exit-restore",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/dialog-and-formatting.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 10900,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "focus",
+                        "command": "Confirm Account Deletion"
+                    },
+                    "observation": {
+                        "speech_raw": "Dialog Confirm Account Deletion"
+                    },
+                    "assertions": {
+                        "target_role": "dialog",
+                        "target_name": "Confirm Account Deletion",
+                        "contains_speech": [
+                            "Dialog Confirm Account Deletion"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{ESC}"
+                    },
+                    "observation": {
+                        "speech_raw": "Leaving Dialog"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Leaving Dialog"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "H"
+                    },
+                    "observation": {
+                        "speech_raw": "wrapping to top\nSystem Overview\n \u001d heading level 1 \u001e"
+                    },
+                    "assertions": {
+                        "target_role": "heading",
+                        "target_name": "System Overview",
+                        "contains_speech": [
+                            "System Overview",
+                            "heading level 1"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "41-combobox-interaction",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-widgets.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 11200,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "focus",
+                        "command": "State"
+                    },
+                    "observation": {
+                        "speech_raw": "State  \u001d combo box \u001e California \u001d collapsed \u001e"
+                    },
+                    "assertions": {
+                        "target_role": "combobox",
+                        "target_name": "State",
+                        "contains_speech": [
+                            "State",
+                            "combo box",
+                            "California",
+                            "collapsed"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "!{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "expanded"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "expanded"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Colorado"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Colorado"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s4",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{ESC}"
+                    },
+                    "observation": {
+                        "speech_raw": "collapsed"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "collapsed"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "42-treeview-level-announcement",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-widgets.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 10800,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "focus",
+                        "command": "Documents"
+                    },
+                    "observation": {
+                        "speech_raw": "Documents  \u001d level 1 \u001e expanded"
+                    },
+                    "assertions": {
+                        "target_role": "treeitem",
+                        "target_name": "Documents",
+                        "contains_speech": [
+                            "Documents",
+                            "level 1",
+                            "expanded"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Work  \u001d level 2 \u001e collapsed"
+                    },
+                    "assertions": {
+                        "target_role": "treeitem",
+                        "target_name": "Work",
+                        "contains_speech": [
+                            "Work",
+                            "level 2",
+                            "collapsed"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Resume.pdf  \u001d level 3 \u001e"
+                    },
+                    "assertions": {
+                        "target_role": "treeitem",
+                        "target_name": "Resume.pdf",
+                        "contains_speech": [
+                            "Resume.pdf",
+                            "level 3"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "43-treeview-expand-collapse",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-widgets.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 11400,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "focus",
+                        "command": "Projects"
+                    },
+                    "observation": {
+                        "speech_raw": "Projects  \u001d level 1 \u001e collapsed"
+                    },
+                    "assertions": {
+                        "target_role": "treeitem",
+                        "target_name": "Projects",
+                        "contains_speech": [
+                            "Projects",
+                            "level 1",
+                            "collapsed"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "expanded"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "expanded"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{LEFT}"
+                    },
+                    "observation": {
+                        "speech_raw": "collapsed"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "collapsed"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s4",
+                    "action": {
+                        "type": "focus",
+                        "command": "Work"
+                    },
+                    "observation": {
+                        "speech_raw": "Work  \u001d level 2 \u001e collapsed"
+                    },
+                    "assertions": {
+                        "target_role": "treeitem",
+                        "target_name": "Work",
+                        "contains_speech": [
+                            "Work",
+                            "level 2",
+                            "collapsed"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s5",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{LEFT}"
+                    },
+                    "observation": {
+                        "speech_raw": "Documents  \u001d level 1 \u001e expanded"
+                    },
+                    "assertions": {
+                        "target_role": "treeitem",
+                        "target_name": "Documents",
+                        "contains_speech": [
+                            "Documents",
+                            "level 1"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "44-slider-value-change",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-widgets.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 10500,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "focus",
+                        "command": "Volume"
+                    },
+                    "observation": {
+                        "speech_raw": "Volume  \u001d slider \u001e 50"
+                    },
+                    "assertions": {
+                        "target_role": "slider",
+                        "target_name": "Volume",
+                        "contains_speech": [
+                            "Volume",
+                            "slider",
+                            "50"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "55"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "55"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{LEFT}"
+                    },
+                    "observation": {
+                        "speech_raw": "50"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "50"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "45-progressbar-status",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-widgets.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 9800,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "focus",
+                        "command": "Upload Progress"
+                    },
+                    "observation": {
+                        "speech_raw": "Upload Progress  \u001d progress bar \u001e 75%"
+                    },
+                    "assertions": {
+                        "target_role": "progressbar",
+                        "target_name": "Upload Progress",
+                        "contains_speech": [
+                            "Upload Progress",
+                            "progress bar",
+                            "75%"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "aria_live",
+                        "command": "polite: 80%"
+                    },
+                    "observation": {
+                        "speech_raw": "80%"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "80%"
                         ]
                     },
                     "step_success": true

@@ -1,0 +1,72 @@
+{
+  "id": "36-text-select-char",
+  "name": "Text Selection Character Expansion and Retraction",
+  "category": "Complex Text Selection and Formatting",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/dialog-and-formatting.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "keyboard",
+      "command": "{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "heading level 1",
+          "System Overview"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "type": "keyboard",
+      "command": "{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Screen reader accessibility engine."
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "type": "keyboard",
+      "command": "+{RIGHT}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "selected S"
+        ]
+      }
+    },
+    {
+      "id": "s4",
+      "type": "keyboard",
+      "command": "+{RIGHT}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "selected c"
+        ]
+      }
+    },
+    {
+      "id": "s5",
+      "type": "keyboard",
+      "command": "+{LEFT}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "unselected c"
+        ]
+      }
+    }
+  ]
+}

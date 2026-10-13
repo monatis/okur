@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ARIA Widgets Reference Fixture</title>
+</head>
+<body>
+  <h1>ARIA Widgets and Hierarchical Navigation</h1>
+
+  <section aria-labelledby="combo-label">
+    <label id="combo-label" for="state-combo">State</label>
+    <div id="state-combo" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="combo-label" tabindex="0">
+      <span>California</span>
+      <ul id="state-listbox" role="listbox" style="display:none;">
+        <li id="opt-al" role="option">Alabama</li>
+        <li id="opt-ca" role="option" aria-selected="true">California</li>
+        <li id="opt-co" role="option">Colorado</li>
+      </ul>
+    </div>
+  </section>
+
+  <section aria-label="File Manager">
+    <div id="file-tree" role="tree" aria-label="Files">
+      <div id="tree-docs" role="treeitem" aria-expanded="true" aria-level="1" tabindex="0">
+        Documents
+        <div id="tree-work" role="treeitem" aria-expanded="false" aria-level="2" tabindex="-1">
+          Work
+          <div id="tree-resume" role="treeitem" aria-level="3" tabindex="-1">Resume.pdf</div>
+        </div>
+      </div>
+      <div id="tree-projects" role="treeitem" aria-expanded="false" aria-level="1" tabindex="-1">Projects</div>
+    </div>
+  </section>
+
+  <section aria-label="Audio Settings">
+    <div id="volume-slider" role="slider" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" tabindex="0">50</div>
+  </section>
+
+  <section aria-label="Transfer Status">
+    <div id="upload-progress" role="progressbar" aria-label="Upload Progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75">75%</div>
+  </section>
+</body>
+</html>

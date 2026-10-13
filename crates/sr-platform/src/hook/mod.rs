@@ -169,6 +169,45 @@ mod tests {
             Some("{SPACE}".to_string())
         );
 
+        // Selection & Font Query
+        assert_eq!(
+            KeyEvent::new(
+                Key::RightArrow,
+                Modifiers {
+                    shift: true,
+                    ..Default::default()
+                },
+                true
+            )
+            .to_command_string(),
+            Some("+{RIGHT}".to_string())
+        );
+        assert_eq!(
+            KeyEvent::new(
+                Key::DownArrow,
+                Modifiers {
+                    insert: true,
+                    shift: true,
+                    ..Default::default()
+                },
+                true
+            )
+            .to_command_string(),
+            Some("+!{DOWN}".to_string())
+        );
+        assert_eq!(
+            KeyEvent::new(
+                Key::Alpha('f'),
+                Modifiers {
+                    insert: true,
+                    ..Default::default()
+                },
+                true
+            )
+            .to_command_string(),
+            Some("Insert+F".to_string())
+        );
+
         // Key up produces no command
         assert_eq!(
             KeyEvent::new(Key::DownArrow, Modifiers::none(), false).to_command_string(),

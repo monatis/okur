@@ -93,6 +93,7 @@ impl PlatformBridge {
             focused: element.states.focused,
             disabled: !element.states.enabled,
             hidden: false,
+            modal: false,
         };
 
         // StaticText nodes surface text in their name property

@@ -1,0 +1,71 @@
+{
+  "id": "39-dialog-entry-modal-trap",
+  "name": "Web Modal Dialog Entry and Boundary Containment",
+  "category": "Web Dialogs and Modal Traps",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/dialog-and-formatting.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "focus",
+      "command": "Confirm Account Deletion",
+      "settle_ms": 300,
+      "assertions": {
+        "target_role": "dialog",
+        "target_name": "Confirm Account Deletion",
+        "contains_speech": [
+          "Dialog Confirm Account Deletion"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "type": "keyboard",
+      "command": "{TAB}",
+      "settle_ms": 200,
+      "assertions": {
+        "target_role": "button",
+        "target_name": "Delete Account",
+        "contains_speech": [
+          "Delete Account",
+          "Button"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "type": "keyboard",
+      "command": "{TAB}",
+      "settle_ms": 200,
+      "assertions": {
+        "target_role": "button",
+        "target_name": "Cancel",
+        "contains_speech": [
+          "Cancel",
+          "Button"
+        ]
+      }
+    },
+    {
+      "id": "s4",
+      "type": "keyboard",
+      "command": "{TAB}",
+      "settle_ms": 200,
+      "assertions": {
+        "target_role": "button",
+        "target_name": "Delete Account",
+        "contains_speech": [
+          "Delete Account",
+          "Button"
+        ]
+      }
+    }
+  ]
+}

@@ -306,4 +306,100 @@ mod tests {
             );
         }
     }
+
+    #[test]
+    fn test_milestone_8_scenarios_36_through_40() {
+        let corpus_dir = get_corpus_dir();
+        assert!(
+            corpus_dir.exists(),
+            "Corpus directory must exist at {:?}",
+            corpus_dir
+        );
+
+        let runner = DifferentialRunner::new(&corpus_dir);
+        let results = runner.run_range(36, 40);
+
+        assert_eq!(results.len(), 5, "Should have executed 5 scenarios");
+
+        for (idx, res) in results.into_iter().enumerate() {
+            let scenario_res =
+                res.unwrap_or_else(|e| panic!("Scenario {} failed to load/run: {}", idx + 36, e));
+            println!(
+                "Scenario [{}] {}: {}",
+                scenario_res.scenario_id,
+                scenario_res.scenario_name,
+                if scenario_res.passed {
+                    "PASSED"
+                } else {
+                    "FAILED"
+                }
+            );
+
+            for step in &scenario_res.steps {
+                println!(
+                    "  Step [{}]: command='{}', speech='{}', passed={}",
+                    step.step_id, step.command, step.emitted_speech, step.success
+                );
+                if !step.failed_assertions.is_empty() {
+                    for fail in &step.failed_assertions {
+                        println!("    ASSERTION FAILURE: {}", fail);
+                    }
+                }
+            }
+
+            assert!(
+                scenario_res.passed,
+                "Scenario {} ({}) failed assertion checks!",
+                scenario_res.scenario_id, scenario_res.scenario_name
+            );
+        }
+    }
+
+    #[test]
+    fn test_milestone_9_scenarios_41_through_45() {
+        let corpus_dir = get_corpus_dir();
+        assert!(
+            corpus_dir.exists(),
+            "Corpus directory must exist at {:?}",
+            corpus_dir
+        );
+
+        let runner = DifferentialRunner::new(&corpus_dir);
+        let results = runner.run_range(41, 45);
+
+        assert_eq!(results.len(), 5, "Should have executed 5 scenarios");
+
+        for (idx, res) in results.into_iter().enumerate() {
+            let scenario_res =
+                res.unwrap_or_else(|e| panic!("Scenario {} failed to load/run: {}", idx + 41, e));
+            println!(
+                "Scenario [{}] {}: {}",
+                scenario_res.scenario_id,
+                scenario_res.scenario_name,
+                if scenario_res.passed {
+                    "PASSED"
+                } else {
+                    "FAILED"
+                }
+            );
+
+            for step in &scenario_res.steps {
+                println!(
+                    "  Step [{}]: command='{}', speech='{}', passed={}",
+                    step.step_id, step.command, step.emitted_speech, step.success
+                );
+                if !step.failed_assertions.is_empty() {
+                    for fail in &step.failed_assertions {
+                        println!("    ASSERTION FAILURE: {}", fail);
+                    }
+                }
+            }
+
+            assert!(
+                scenario_res.passed,
+                "Scenario {} ({}) failed assertion checks!",
+                scenario_res.scenario_id, scenario_res.scenario_name
+            );
+        }
+    }
 }

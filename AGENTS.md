@@ -41,8 +41,8 @@ This is an **autonomous, agent-driven project with a "verification harness in th
 To ensure seamless context passing across autonomous sessions, all engineering work is orchestrated through the `docs/` tree:
 
 ### Active Plan for Current / Next Session
-- **Active Plan**: [`docs/plans/2026-10-13-complex-text-and-web-dialogs.md`](file:///c:/Users/Gigabyte/screen-reader/docs/plans/2026-10-13-complex-text-and-web-dialogs.md)
-- **Latest Handoff**: [`docs/handoff/2026-10-13-live-focus-and-aria-live.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-live-focus-and-aria-live.md)
+- **Active Plan**: [`docs/plans/2026-10-13-multi-page-spa-routing-and-iframes.md`](file:///c:/Users/Gigabyte/screen-reader/docs/plans/2026-10-13-multi-page-spa-routing-and-iframes.md)
+- **Latest Handoff**: [`docs/handoff/2026-10-13-complex-aria-widgets-combobox-treeview.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-complex-aria-widgets-combobox-treeview.md)
 
 
 ### Standard Session Execution Protocol

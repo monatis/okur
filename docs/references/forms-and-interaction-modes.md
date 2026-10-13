@@ -16,6 +16,8 @@ This reference document outlines the keyboard conventions, forms mode state mach
 | `Shift + B` | `MoveToPriorButton` | Push Button (`Role::Button`) | Prior | `{Label}  \u001d Button \u001e` |
 | `X` | `MoveToNextCheckbox` | Check Box (`Role::CheckBox`) | Forward | ` {Label}  \u001d check box \u001e   \u001d{checked \| not checked}\u001e` |
 | `Shift + X` | `MoveToPriorCheckbox` | Check Box (`Role::CheckBox`) | Prior | ` {Label}  \u001d check box \u001e   \u001d{checked \| not checked}\u001e` |
+| `C` | `MoveToNextComboBox` | Combo Box (`Role::ComboBox`) | Forward | `{Label} edit combo {Value} {collapsed \| open}` |
+| `Shift + C` | `MoveToPriorComboBox` | Combo Box (`Role::ComboBox`) | Prior | `{Label} edit combo {Value} {collapsed \| open}` |
 
 ---
 
@@ -61,3 +63,45 @@ In screen readers (following JAWS 2025 standards and cross-referenced with NVDA 
     {Label}  \u001d check box \u001e   \u001dnot checked\u001e  
     To check press Spacebar.
     ```
+
+---
+
+## 4. ARIA ComboBox Interaction (`Alt+DownArrow`, `Alt+UpArrow`, `Escape`)
+
+- **Role**: `Role::ComboBox`
+- **Announcement Pattern**:
+  - Closed: `{Label} edit combo {Value} collapsed`
+  - Open: `{Label} edit combo {Value} open`
+- **Keys**:
+  - `Alt + DownArrow`: Expands combobox listbox and announces newly expanded state with active option.
+  - `Alt + UpArrow` / `Escape`: Collapses the combobox listbox and announces `collapsed`.
+  - `DownArrow` / `UpArrow` (while expanded): Cycles options in the combobox popup, updating value and announcing the selected option name.
+
+---
+
+## 5. Hierarchical TreeViews (`Role::TreeItem`)
+
+- **Role**: `Role::TreeItem` (`Role::Tree`)
+- **Announcement Pattern**:
+  - Closed node: `{Label} closed level {N}`
+  - Open node: `{Label} open level {N}`
+  - Leaf node: `{Label} level {N}`
+- **Keys**:
+  - `RightArrow`:
+    - On closed expandable item: Expands item and announces `open {Label} level {N}`.
+    - On open expandable item: Navigates cursor to first child tree item.
+  - `LeftArrow`:
+    - On open expandable item: Collapses item and announces `closed {Label} level {N}`.
+    - On leaf item or closed item: Navigates cursor up to parent tree item.
+
+---
+
+## 6. Range Widgets (Sliders & ProgressBars)
+
+- **Slider (`Role::Slider`)**:
+  - Announcement: `{Label} slider {Value}`
+  - `RightArrow`: Increments slider value by step (or 1.0) and announces new numeric value.
+  - `LeftArrow`: Decrements slider value by step (or 1.0) and announces new numeric value.
+- **ProgressBar (`Role::ProgressBar`)**:
+  - Announcement: `{Label} progress bar {Value}%`
+

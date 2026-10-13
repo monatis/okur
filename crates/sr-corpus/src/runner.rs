@@ -165,12 +165,35 @@ impl DifferentialRunner {
         let emitted_speech = match step.step_type.as_str() {
             "focus" => {
                 let cmd = step.command.as_str();
-                let matched_node = engine
+                let mut candidates: Vec<_> = engine
                     .cursor
                     .buffer
                     .node_map
                     .values()
-                    .find(|n| {
+                    .filter(|n| {
+                        if let Some(target_role) = step
+                            .assertions
+                            .as_ref()
+                            .and_then(|a| a.target_role.as_ref())
+                        {
+                            let role_matches = matches!(
+                                (target_role.as_str(), &n.role),
+                                ("dialog" | "alertdialog", Role::Dialog | Role::AlertDialog)
+                                    | ("button", Role::Button)
+                                    | ("edit", Role::Edit)
+                                    | ("checkbox", Role::CheckBox)
+                                    | ("combobox" | "combo", Role::ComboBox)
+                                    | ("tree", Role::Tree)
+                                    | ("treeitem", Role::TreeItem)
+                                    | ("slider", Role::Slider)
+                                    | ("progressbar", Role::ProgressBar)
+                                    | ("heading", Role::Heading { .. })
+                                    | ("link", Role::Link { .. })
+                            );
+                            if !role_matches {
+                                return false;
+                            }
+                        }
                         if let Some(ref name) = n.name {
                             if name.eq_ignore_ascii_case(cmd) || name.contains(cmd) {
                                 return true;
@@ -183,7 +206,10 @@ impl DifferentialRunner {
                         }
                         false
                     })
-                    .cloned();
+                    .cloned()
+                    .collect();
+                candidates.sort_by_key(|n| n.id);
+                let matched_node = candidates.into_iter().next();
 
                 if let Some(node) = matched_node {
                     let mut ev = FocusEvent::new(node.role.clone())
@@ -203,6 +229,14 @@ impl DifferentialRunner {
                         Role::Button
                     } else if cmd.to_lowercase().contains("check") {
                         Role::CheckBox
+                    } else if cmd.to_lowercase().contains("combo") {
+                        Role::ComboBox
+                    } else if cmd.to_lowercase().contains("tree") {
+                        Role::TreeItem
+                    } else if cmd.to_lowercase().contains("slider") {
+                        Role::Slider
+                    } else if cmd.to_lowercase().contains("progress") {
+                        Role::ProgressBar
                     } else {
                         Role::Generic
                     };
@@ -294,6 +328,15 @@ impl DifferentialRunner {
                         | ("tab", Some(Role::Tab))
                         | ("tablist", Some(Role::TabList))
                         | ("tabpanel", Some(Role::TabPanel))
+                        | (
+                            "dialog" | "alertdialog",
+                            Some(Role::Dialog | Role::AlertDialog),
+                        )
+                        | ("combobox" | "combo", Some(Role::ComboBox))
+                        | ("tree", Some(Role::Tree))
+                        | ("treeitem", Some(Role::TreeItem))
+                        | ("slider", Some(Role::Slider))
+                        | ("progressbar", Some(Role::ProgressBar))
                 );
                 if !role_matches {
                     assertions_passed = false;
