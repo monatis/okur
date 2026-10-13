@@ -9,6 +9,8 @@ pub enum PlatformError {
     Xa11y(#[from] xa11y::Error),
     #[error("No accessible window found")]
     NoWindowFound,
+    #[error("No accessible document found in application")]
+    NoDocumentFound,
     #[error("Application not found: {0}")]
     AppNotFound(String),
     #[error("Keyboard hook error: {0}")]
@@ -46,7 +48,7 @@ impl PlatformBridge {
         App::by_name(name, timeout).map_err(PlatformError::Xa11y)
     }
 
-    /// Retrieves the active document or top-level window as an AOM node tree from a running application.
+    /// Retrieves the active document as an AOM node tree from a running application.
     pub fn get_active_document(&self, app_name: Option<&str>) -> Result<AomNode, PlatformError> {
         let timeout = Duration::from_millis(1500);
         let app = if let Some(name) = app_name {
@@ -59,14 +61,7 @@ impl PlatformBridge {
         let web_area = app.locator(r#"web_area"#).first().element();
         let target_element = match web_area {
             Ok(el) => el,
-            Err(_) => {
-                // Fallback to the first window
-                let windows = app.windows()?;
-                windows
-                    .into_iter()
-                    .next()
-                    .ok_or(PlatformError::NoWindowFound)?
-            }
+            Err(_) => return Err(PlatformError::NoDocumentFound),
         };
 
         self.element_to_aom(&target_element)

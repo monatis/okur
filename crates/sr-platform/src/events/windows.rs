@@ -13,11 +13,13 @@ use windows::Win32::System::Com::{
 use windows::Win32::UI::Accessibility::{
     CUIAutomation, IUIAutomation, IUIAutomationElement, IUIAutomationFocusChangedEventHandler,
     IUIAutomationFocusChangedEventHandler_Impl, SetWinEventHook, TreeScope_Children,
-    UIA_ButtonControlTypeId, UIA_CheckBoxControlTypeId, UIA_DocumentControlTypeId,
-    UIA_EditControlTypeId, UIA_HyperlinkControlTypeId, UIA_ListControlTypeId,
-    UIA_ListItemControlTypeId, UIA_PositionInSetPropertyId, UIA_SizeOfSetPropertyId,
+    UIA_ButtonControlTypeId, UIA_CheckBoxControlTypeId, UIA_ComboBoxControlTypeId,
+    UIA_DocumentControlTypeId, UIA_EditControlTypeId, UIA_HeaderControlTypeId,
+    UIA_HeaderItemControlTypeId, UIA_HyperlinkControlTypeId, UIA_ListControlTypeId,
+    UIA_ListItemControlTypeId, UIA_PositionInSetPropertyId, UIA_ProgressBarControlTypeId,
+    UIA_RadioButtonControlTypeId, UIA_SizeOfSetPropertyId, UIA_SliderControlTypeId,
     UIA_TabControlTypeId, UIA_TabItemControlTypeId, UIA_TableControlTypeId, UIA_TextControlTypeId,
-    UnhookWinEvent, HWINEVENTHOOK,
+    UIA_TreeControlTypeId, UIA_TreeItemControlTypeId, UnhookWinEvent, HWINEVENTHOOK,
 };
 
 const WINEVENT_OUTOFCONTEXT: u32 = 0;
@@ -43,6 +45,63 @@ extern "system" {
 struct FocusChangedHandler {
     uia: IUIAutomation,
     sender: UnboundedSender<AccessibilityEvent>,
+    last_loaded_document: std::sync::Mutex<Option<String>>,
+}
+
+fn extract_uia_document_tree(
+    uia: &IUIAutomation,
+    element: &IUIAutomationElement,
+    doc_title: &str,
+) -> sr_core::AomNode {
+    let mut next_id = 1;
+    let mut root = sr_core::AomNode::new(0, Role::Document);
+    root.name = Some(doc_title.to_string());
+
+    fn populate_children(
+        uia: &IUIAutomation,
+        element: &IUIAutomationElement,
+        parent_node: &mut sr_core::AomNode,
+        next_id: &mut usize,
+        depth: usize,
+    ) {
+        if depth == 0 || *next_id > 5000 {
+            return;
+        }
+        let cond = match unsafe { uia.CreateTrueCondition() } {
+            Ok(c) => c,
+            Err(_) => return,
+        };
+        let children = match unsafe { element.FindAll(TreeScope_Children, &cond) } {
+            Ok(c) => c,
+            Err(_) => return,
+        };
+        let count = unsafe { children.Length() }.unwrap_or(0);
+        for i in 0..count {
+            if let Ok(child) = unsafe { children.GetElement(i) } {
+                let ct = unsafe { child.CurrentControlType() }.unwrap_or_default();
+                let role = detect_element_role(&child, ct);
+
+                let name = unsafe { child.CurrentName() }
+                    .ok()
+                    .map(|s| s.to_string())
+                    .filter(|s| !s.is_empty());
+
+                *next_id += 1;
+                let id = *next_id;
+                let mut child_node = sr_core::AomNode::new(id, role.clone());
+                if role == Role::Text || role == Role::Generic {
+                    child_node.text = name.clone();
+                }
+                child_node.name = name;
+
+                populate_children(uia, &child, &mut child_node, next_id, depth - 1);
+                parent_node.add_child(child_node);
+            }
+        }
+    }
+
+    populate_children(uia, element, &mut root, &mut next_id, 32);
+    root
 }
 
 impl FocusChangedHandler {
@@ -211,13 +270,132 @@ impl FocusChangedHandler {
                 role = Role::Button;
             }
         } else {
-            if !parent_name.is_empty() {
-                container_name = Some(parent_name);
+            let is_browser = top_class == "Chrome_WidgetWin_1"
+                || top_class.contains("Chrome")
+                || top_class.contains("Mozilla")
+                || top_title.contains("Chrome")
+                || top_title.contains("Edge")
+                || top_title.contains("Firefox");
+
+            let mut doc_element: Option<IUIAutomationElement> = None;
+
+            if control_type == UIA_DocumentControlTypeId {
+                doc_element = Some(element.clone());
+            } else if let Ok(walker) = unsafe { self.uia.ControlViewWalker() } {
+                let mut curr = element.clone();
+                for _ in 0..6 {
+                    if let Ok(p) = unsafe { walker.GetParentElement(&curr) } {
+                        let p_ct = unsafe { p.CurrentControlType() }.unwrap_or_default();
+                        let p_cls = unsafe { p.CurrentClassName() }
+                            .map(|s| s.to_string())
+                            .unwrap_or_default();
+                        if p_ct == UIA_DocumentControlTypeId {
+                            doc_element = Some(p);
+                            break;
+                        } else if p_cls == "Chrome_RenderWidgetHostHWND"
+                            || p_cls == "MozillaContentWindowClass"
+                        {
+                            if let Ok(cond) = unsafe { self.uia.CreateTrueCondition() } {
+                                if let Ok(children) =
+                                    unsafe { p.FindAll(TreeScope_Children, &cond) }
+                                {
+                                    let clen = unsafe { children.Length() }.unwrap_or(0);
+                                    for i in 0..clen {
+                                        if let Ok(ch) = unsafe { children.GetElement(i) } {
+                                            if unsafe { ch.CurrentControlType() }
+                                                .unwrap_or_default()
+                                                == UIA_DocumentControlTypeId
+                                            {
+                                                doc_element = Some(ch);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                        curr = p;
+                    } else {
+                        break;
+                    }
+                }
             }
-            if !parent_class.is_empty() {
-                window_class = Some(parent_class);
-            } else if !class_name.is_empty() {
-                window_class = Some(class_name);
+
+            // If in a browser window and not address bar, check if children contain a document
+            if doc_element.is_none()
+                && is_browser
+                && name.as_deref() != Some("Address and search bar")
+            {
+                if let Ok(cond) = unsafe { self.uia.CreateTrueCondition() } {
+                    if let Ok(children) = unsafe { element.FindAll(TreeScope_Children, &cond) } {
+                        let clen = unsafe { children.Length() }.unwrap_or(0);
+                        for i in 0..clen {
+                            if let Ok(ch) = unsafe { children.GetElement(i) } {
+                                if unsafe { ch.CurrentControlType() }.unwrap_or_default()
+                                    == UIA_DocumentControlTypeId
+                                {
+                                    doc_element = Some(ch);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if let Some(ref doc) = doc_element {
+                let doc_name = unsafe { doc.CurrentName() }
+                    .ok()
+                    .map(|s| s.to_string())
+                    .unwrap_or_default();
+                let doc_title = if !doc_name.is_empty() {
+                    doc_name
+                } else {
+                    top_title
+                        .strip_suffix(" - Google Chrome")
+                        .or_else(|| top_title.strip_suffix(" - Microsoft Edge"))
+                        .or_else(|| top_title.strip_suffix(" - Mozilla Firefox"))
+                        .unwrap_or(&top_title)
+                        .trim()
+                        .to_string()
+                };
+
+                if !doc_title.is_empty() {
+                    if let Ok(mut last_doc) = self.last_loaded_document.lock() {
+                        let should_load = match &*last_doc {
+                            Some(prev) => prev != &doc_title,
+                            None => true,
+                        };
+                        if should_load {
+                            *last_doc = Some(doc_title.clone());
+                            let aom = extract_uia_document_tree(&self.uia, doc, &doc_title);
+                            let _ = self.sender.send(AccessibilityEvent::DocumentLoaded {
+                                title: doc_title.clone(),
+                                root: aom,
+                            });
+                        }
+                    }
+                    container_name = Some("Document".to_string());
+                    if !top_title.is_empty() {
+                        window_title = Some(top_title.clone());
+                    }
+                }
+            } else {
+                if let Ok(mut last_doc) = self.last_loaded_document.lock() {
+                    *last_doc = None;
+                }
+                if !top_title.is_empty() {
+                    window_title = Some(top_title);
+                }
+                if !top_class.is_empty() {
+                    window_class = Some(top_class);
+                } else if !class_name.is_empty() {
+                    window_class = Some(class_name);
+                }
+                if !parent_name.is_empty() {
+                    container_name = Some(parent_name);
+                }
             }
         }
 
@@ -462,6 +640,7 @@ impl AccessibilityEventListener for WindowsAccessibilityEventListener {
             let raw_handler = FocusChangedHandler {
                 uia: uia.clone(),
                 sender: sender.clone(),
+                last_loaded_document: std::sync::Mutex::new(None),
             };
             if let Ok(focused) = unsafe { uia.GetFocusedElement() } {
                 raw_handler.process_element(&focused);
@@ -566,6 +745,137 @@ impl Drop for WindowsAccessibilityEventListener {
     }
 }
 
+fn detect_element_role(
+    child: &IUIAutomationElement,
+    ct: windows::Win32::UI::Accessibility::UIA_CONTROLTYPE_ID,
+) -> Role {
+    // 1. Check UIA_HeadingLevelPropertyId (30173)
+    let heading_lvl = get_int_property(
+        child,
+        windows::Win32::UI::Accessibility::UIA_PROPERTY_ID(30173),
+    )
+    .and_then(decode_uia_heading_level);
+
+    if let Some(level) = heading_lvl {
+        return Role::Heading { level };
+    }
+
+    // 2. Check UIA_AriaRolePropertyId (30101)
+    let aria_role = get_string_property(
+        child,
+        windows::Win32::UI::Accessibility::UIA_PROPERTY_ID(30101),
+    );
+    if let Some(ref ar) = aria_role {
+        let ar_lower = ar.to_lowercase();
+        match ar_lower.as_str() {
+            "heading" => {
+                let aria_props = get_string_property(
+                    child,
+                    windows::Win32::UI::Accessibility::UIA_PROPERTY_ID(30102),
+                );
+                let level = aria_props
+                    .as_deref()
+                    .and_then(parse_aria_level)
+                    .unwrap_or(2);
+                return Role::Heading { level };
+            }
+            "link" => return Role::Link { href: None },
+            "button" => return Role::Button,
+            "checkbox" => return Role::CheckBox,
+            "radio" => return Role::CheckBox,
+            "textbox" | "searchbox" => return Role::Edit,
+            "combobox" => return Role::ComboBox,
+            "list" => return Role::List,
+            "listitem" => return Role::ListItem,
+            "table" | "grid" => return Role::Table,
+            "row" => return Role::TableRow,
+            "cell" | "gridcell" | "columnheader" | "rowheader" => return Role::TableCell,
+            "main" => {
+                return Role::Landmark {
+                    landmark_type: "main".to_string(),
+                }
+            }
+            "navigation" => {
+                return Role::Landmark {
+                    landmark_type: "navigation".to_string(),
+                }
+            }
+            "banner" => {
+                return Role::Landmark {
+                    landmark_type: "banner".to_string(),
+                }
+            }
+            "contentinfo" => {
+                return Role::Landmark {
+                    landmark_type: "contentinfo".to_string(),
+                }
+            }
+            "complementary" => {
+                return Role::Landmark {
+                    landmark_type: "complementary".to_string(),
+                }
+            }
+            "search" => {
+                return Role::Landmark {
+                    landmark_type: "search".to_string(),
+                }
+            }
+            "region" => {
+                return Role::Landmark {
+                    landmark_type: "region".to_string(),
+                }
+            }
+            "form" => {
+                return Role::Landmark {
+                    landmark_type: "form".to_string(),
+                }
+            }
+            _ => {}
+        }
+    }
+
+    // 3. Check LocalizedControlType (30004) for headings
+    if let Ok(lct) = unsafe { child.CurrentLocalizedControlType() } {
+        let lct_str = lct.to_string().to_lowercase();
+        if lct_str.contains("heading")
+            || lct_str.contains("başlık")
+            || lct_str.contains("überschrift")
+        {
+            let level = lct_str
+                .chars()
+                .find(|c| c.is_ascii_digit())
+                .and_then(|c| c.to_digit(10))
+                .unwrap_or(2);
+            return Role::Heading { level };
+        }
+    }
+
+    // 4. Map standard ControlType
+    map_control_type_to_role(ct)
+}
+
+pub(crate) fn decode_uia_heading_level(lvl: i32) -> Option<u32> {
+    match lvl {
+        1..=9 => Some(lvl as u32),
+        80051..=80059 => Some((lvl - 80050) as u32),
+        _ => None,
+    }
+}
+
+pub(crate) fn parse_aria_level(props: &str) -> Option<u32> {
+    for part in props.split(';') {
+        let part = part.trim();
+        if let Some(val) = part.strip_prefix("level=") {
+            if let Ok(num) = val.trim().parse::<u32>() {
+                if (1..=9).contains(&num) {
+                    return Some(num);
+                }
+            }
+        }
+    }
+    None
+}
+
 fn map_control_type_to_role(ct: windows::Win32::UI::Accessibility::UIA_CONTROLTYPE_ID) -> Role {
     if ct == UIA_ButtonControlTypeId {
         Role::Button
@@ -589,6 +899,20 @@ fn map_control_type_to_role(ct: windows::Win32::UI::Accessibility::UIA_CONTROLTY
         Role::Document
     } else if ct == UIA_TextControlTypeId {
         Role::Text
+    } else if ct == UIA_HeaderControlTypeId || ct == UIA_HeaderItemControlTypeId {
+        Role::Heading { level: 1 }
+    } else if ct == UIA_ComboBoxControlTypeId {
+        Role::ComboBox
+    } else if ct == UIA_ProgressBarControlTypeId {
+        Role::ProgressBar
+    } else if ct == UIA_SliderControlTypeId {
+        Role::Slider
+    } else if ct == UIA_TreeControlTypeId {
+        Role::Tree
+    } else if ct == UIA_TreeItemControlTypeId {
+        Role::TreeItem
+    } else if ct == UIA_RadioButtonControlTypeId {
+        Role::CheckBox
     } else {
         Role::Generic
     }
@@ -625,5 +949,128 @@ fn get_bool_property(
             return Some(b != 0);
         }
         None
+    }
+}
+
+fn get_string_property(
+    element: &IUIAutomationElement,
+    prop_id: windows::Win32::UI::Accessibility::UIA_PROPERTY_ID,
+) -> Option<String> {
+    unsafe {
+        let val = element.GetCurrentPropertyValue(prop_id).ok()?;
+        let vt = val.Anonymous.Anonymous.vt.0;
+        // VT_BSTR = 8
+        if vt == 8 {
+            let bstr = &val.Anonymous.Anonymous.Anonymous.bstrVal;
+            let s = bstr.to_string();
+            let trimmed = s.trim();
+            if !trimmed.is_empty() {
+                return Some(trimmed.to_string());
+            }
+        }
+        None
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_decode_uia_heading_levels() {
+        assert_eq!(decode_uia_heading_level(1), Some(1));
+        assert_eq!(decode_uia_heading_level(6), Some(6));
+        assert_eq!(decode_uia_heading_level(9), Some(9));
+        assert_eq!(decode_uia_heading_level(80051), Some(1));
+        assert_eq!(decode_uia_heading_level(80052), Some(2));
+        assert_eq!(decode_uia_heading_level(80053), Some(3));
+        assert_eq!(decode_uia_heading_level(80054), Some(4));
+        assert_eq!(decode_uia_heading_level(80055), Some(5));
+        assert_eq!(decode_uia_heading_level(80056), Some(6));
+        assert_eq!(decode_uia_heading_level(80050), None); // HeadingLevel_None
+        assert_eq!(decode_uia_heading_level(0), None);
+        assert_eq!(decode_uia_heading_level(-1), None);
+    }
+
+    #[test]
+    fn test_parse_aria_level() {
+        assert_eq!(parse_aria_level("level=1"), Some(1));
+        assert_eq!(parse_aria_level("level=2;posinset=1"), Some(2));
+        assert_eq!(parse_aria_level("setsize=5; level=3 ; other=x"), Some(3));
+        assert_eq!(parse_aria_level("none"), None);
+        assert_eq!(parse_aria_level("level=0"), None);
+        assert_eq!(parse_aria_level("level=10"), None);
+    }
+
+    #[test]
+    fn test_virtual_buffer_extracted_headings_and_navigation() {
+        use sr_core::buffer::VirtualBuffer;
+        use sr_core::cursor::VirtualCursor;
+
+        // Construct an AOM tree simulating live Chrome extraction
+        let mut root = sr_core::AomNode::new(0, Role::Document);
+        root.name = Some("ALTAI — Kurumlar için yapay zekâ".to_string());
+
+        let mut h1 = sr_core::AomNode::new(1, Role::Heading { level: 1 });
+        h1.name = Some("ALTAI Home".to_string());
+        h1.text = Some("ALTAI Home".to_string());
+
+        let mut link = sr_core::AomNode::new(2, Role::Link { href: None });
+        link.name = Some("Explore Yada".to_string());
+        link.text = Some("Explore Yada".to_string());
+
+        let mut h2 = sr_core::AomNode::new(3, Role::Heading { level: 2 });
+        h2.name = Some("Products & services".to_string());
+        h2.text = Some("Products & services".to_string());
+
+        let mut h3 = sr_core::AomNode::new(4, Role::Heading { level: 3 });
+        h3.name = Some("Data handling rules".to_string());
+        h3.text = Some("Data handling rules".to_string());
+
+        root.add_child(h1);
+        root.add_child(link);
+        root.add_child(h2);
+        root.add_child(h3);
+
+        let vbuf = VirtualBuffer::from_aom(&root);
+        assert_eq!(vbuf.headings.len(), 3);
+        assert_eq!(vbuf.links.len(), 1);
+
+        let mut cursor = VirtualCursor::new(vbuf.clone());
+        let first_h = cursor.move_next_heading();
+        assert!(
+            first_h.is_some(),
+            "Should move to first heading: {:?}",
+            first_h
+        );
+        let first_text = first_h.unwrap();
+        assert!(
+            first_text.contains("ALTAI Home") && first_text.contains("heading level 1"),
+            "Unexpected heading announcement: {}",
+            first_text
+        );
+
+        let next_h = cursor.move_next_heading();
+        assert!(next_h.is_some());
+        let next_text = next_h.unwrap();
+        assert!(
+            next_text.contains("Products & services") && next_text.contains("heading level 2"),
+            "Unexpected heading announcement: {}",
+            next_text
+        );
+
+        let h3_jump = cursor.move_next_heading_level(3);
+        assert!(h3_jump.is_some());
+        let h3_text = h3_jump.unwrap();
+        assert!(
+            h3_text.contains("Data handling rules") && h3_text.contains("heading level 3"),
+            "Unexpected heading announcement: {}",
+            h3_text
+        );
+
+        let prior_l = cursor.move_prior_link();
+        assert!(prior_l.is_some());
+        let l_text = prior_l.unwrap();
+        assert!(l_text.contains("Explore Yada") && l_text.contains("link"));
     }
 }

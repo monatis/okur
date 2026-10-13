@@ -20,3 +20,6 @@ pub use tts::{
 pub fn init() {
     tracing::info!("sr-platform initialized");
 }
+
+#[cfg(test)]
+pub(crate) static TEST_AUDIO_LOCK: std::sync::Mutex<()> = std::sync::Mutex::new(());

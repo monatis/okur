@@ -138,4 +138,8 @@ impl LiveRegionEvent {
 pub enum AccessibilityEvent {
     Focus(FocusEvent),
     LiveRegion(LiveRegionEvent),
+    DocumentLoaded {
+        title: String,
+        root: crate::aom::AomNode,
+    },
 }

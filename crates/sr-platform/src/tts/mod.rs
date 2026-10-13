@@ -333,6 +333,7 @@ mod tests {
     #[test]
     #[cfg(windows)]
     fn test_sapi5_engine_initialization_and_speech() {
+        let _lock = crate::TEST_AUDIO_LOCK.lock().unwrap();
         let sapi = Sapi5Engine::new();
         assert!(sapi.is_ok(), "SAPI 5 should initialize on Windows");
         if let Ok(mut sapi) = sapi {

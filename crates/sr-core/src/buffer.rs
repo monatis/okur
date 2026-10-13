@@ -337,13 +337,20 @@ impl VirtualBuffer {
 
     /// Returns the prior link offset before the given offset.
     pub fn prior_link_from(&self, offset: usize) -> Option<usize> {
-        let current_start = self
-            .links
-            .iter()
-            .rfind(|&&l| l <= offset)
-            .copied()
-            .unwrap_or(offset);
-        self.links.iter().rfind(|&&l| l < current_start).copied()
+        let is_on_link = self.spans.iter().any(|s| {
+            s.start_offset <= offset && offset < s.end_offset && matches!(s.role, Role::Link { .. })
+        });
+        if is_on_link {
+            let current_start = self
+                .links
+                .iter()
+                .rfind(|&&l| l <= offset)
+                .copied()
+                .unwrap_or(offset);
+            self.links.iter().rfind(|&&l| l < current_start).copied()
+        } else {
+            self.links.iter().rfind(|&&l| l <= offset).copied()
+        }
     }
 
     /// Returns the next list offset after the given offset.
@@ -1104,6 +1111,15 @@ impl BufferBuilder {
                     for child in &node.children {
                         self.traverse_node(child, buffer);
                     }
+                    if buffer.text[start_offset..].trim().is_empty() {
+                        if let Some(ref text) = node.text {
+                            buffer.text.truncate(start_offset);
+                            buffer.text.push_str(text);
+                        } else if let Some(ref name) = node.name {
+                            buffer.text.truncate(start_offset);
+                            buffer.text.push_str(name);
+                        }
+                    }
                 } else if let Some(ref text) = node.text {
                     buffer.text.push_str(text);
                 } else if let Some(ref name) = node.name {
@@ -1520,7 +1536,7 @@ impl BufferBuilder {
                     for child in &node.children {
                         self.traverse_node(child, buffer);
                     }
-                } else if let Some(ref text) = node.text {
+                } else if let Some(text) = node.text.as_ref().or(node.name.as_ref()) {
                     if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
                         buffer.text.push('\n');
                     }

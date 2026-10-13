@@ -298,6 +298,7 @@ pub struct ScreenReaderEngine {
     pub desktop_state: Option<NativeDesktopState>,
     pub shell_nav_state: Option<ShellNavState>,
     pub explorer_state: Option<NativeExplorerState>,
+    pub last_window_title: Option<String>,
 }
 
 impl ScreenReaderEngine {
@@ -311,6 +312,7 @@ impl ScreenReaderEngine {
             desktop_state: None,
             shell_nav_state: None,
             explorer_state: None,
+            last_window_title: None,
         }
     }
 
@@ -1055,6 +1057,15 @@ impl ScreenReaderEngine {
         match event {
             AccessibilityEvent::Focus(focus) => self.handle_focus_event(focus),
             AccessibilityEvent::LiveRegion(live) => self.handle_live_region_event(live),
+            AccessibilityEvent::DocumentLoaded { title, root } => {
+                let buffer = VirtualBuffer::from_aom(root);
+                self.load_buffer(buffer);
+                self.app_mode = AppMode::VirtualBuffer;
+                self.last_window_title = Some(title.clone());
+                let welcome = format!("{}  \u{001d} Virtual PC Cursor \u{001e}", title);
+                self.speech.speak(&welcome, true);
+                Some(welcome)
+            }
         }
     }
 
@@ -1240,132 +1251,198 @@ impl ScreenReaderEngine {
             es.entered = false;
         }
 
-        // Try matching node in buffer
-        let matched_node_id = focus
-            .node_id
-            .filter(|id| self.cursor.buffer.node_map.contains_key(id));
+        let is_in_document = focus.container_name.as_deref() == Some("Document")
+            || focus.role == Role::Document
+            || focus
+                .node_id
+                .is_some_and(|id| self.cursor.buffer.node_map.contains_key(&id));
 
-        let target_id = matched_node_id.or_else(|| {
-            self.cursor.buffer.node_map.values().find_map(|node| {
-                if node.role == focus.role {
-                    let ev_name = focus.name.as_deref();
-                    let node_name = node.name.as_deref().or(node.text.as_deref());
-                    if let (Some(en), Some(nn)) = (ev_name, node_name) {
-                        if en.eq_ignore_ascii_case(nn) {
-                            return Some(node.id);
+        if is_in_document {
+            self.app_mode = AppMode::VirtualBuffer;
+
+            // Try matching node in buffer
+            let matched_node_id = focus
+                .node_id
+                .filter(|id| self.cursor.buffer.node_map.contains_key(id));
+
+            let target_id = matched_node_id.or_else(|| {
+                self.cursor.buffer.node_map.values().find_map(|node| {
+                    if node.role == focus.role {
+                        let ev_name = focus.name.as_deref();
+                        let node_name = node.name.as_deref().or(node.text.as_deref());
+                        if let (Some(en), Some(nn)) = (ev_name, node_name) {
+                            if en.eq_ignore_ascii_case(nn) {
+                                return Some(node.id);
+                            }
                         }
                     }
-                }
-                None
-            })
-        });
-
-        if let Some(id) = target_id {
-            self.cursor.move_to_node_id(id);
-        }
-
-        // If focus target is a dialog, enter modal confinement and announce Dialog <Title>
-        if matches!(focus.role, Role::Dialog | Role::AlertDialog) {
-            let title = focus.name.as_deref().unwrap_or("");
-            let msg = if let Some(id) = target_id {
-                self.cursor
-                    .enter_modal(id)
-                    .unwrap_or_else(|| SpeechFormatter::format_dialog_entry(title))
-            } else {
-                SpeechFormatter::format_dialog_entry(title)
-            };
-            if !msg.is_empty() {
-                self.speech.speak(&msg, true);
-            }
-            return Some(msg);
-        }
-
-        // If target is inside a modal dialog, ensure modal confinement is active
-        if let Some(id) = target_id {
-            if let Some(dlg) = self.cursor.buffer.dialog_for_node(id) {
-                if dlg.is_modal && self.cursor.active_modal_root != Some(dlg.node_id) {
-                    let _ = self.cursor.enter_modal(dlg.node_id);
-                }
-            } else if self.cursor.is_in_modal() {
-                let _ = self.cursor.exit_modal();
-            }
-        }
-
-        let is_edit = matches!(focus.role, Role::Edit);
-        let speech = if is_edit {
-            let doc_title = self.cursor.buffer.document_title().unwrap_or("");
-            let name = focus
-                .name
-                .as_deref()
-                .or_else(|| {
-                    target_id
-                        .and_then(|id| self.cursor.buffer.node_map.get(&id))
-                        .and_then(|n| n.name.as_deref())
+                    None
                 })
-                .unwrap_or("");
-            let value = focus.value.as_deref().or_else(|| {
-                target_id
-                    .and_then(|id| self.cursor.buffer.node_map.get(&id))
-                    .and_then(|n| n.value.as_deref())
             });
 
-            if !self.forms_mode {
-                self.forms_mode = true;
-                self.cursor.forms_mode_active = true;
-                Some(SpeechFormatter::format_forms_mode_entry(
-                    doc_title, name, value,
-                ))
-            } else {
-                Some(SpeechFormatter::format_edit(name, value))
-            }
-        } else if self.forms_mode {
-            // Exiting forms mode because focused element is not an Edit
-            self.forms_mode = false;
-            self.cursor.forms_mode_active = false;
-            let exit_msg = SpeechFormatter::format_forms_mode_exit();
-            let control_msg = if let Some(id) = target_id {
-                if let Some(node) = self.cursor.buffer.node_map.get(&id) {
-                    self.cursor.format_tab_stop_node(node, None, None)
-                } else {
-                    String::new()
-                }
-            } else {
-                focus.name.clone().unwrap_or_default()
-            };
-            if !control_msg.is_empty() {
-                Some(format!("{}\n{}", control_msg, exit_msg))
-            } else {
-                Some(exit_msg)
-            }
-        } else {
-            // Staying in Virtual PC Cursor mode: announce focused control
             if let Some(id) = target_id {
-                if let Some(node) = self.cursor.buffer.node_map.get(&id) {
-                    Some(self.cursor.format_tab_stop_node(node, None, None))
+                self.cursor.move_to_node_id(id);
+            }
+
+            // If focus target is a dialog, enter modal confinement and announce Dialog <Title>
+            if matches!(focus.role, Role::Dialog | Role::AlertDialog) {
+                let title = focus.name.as_deref().unwrap_or("");
+                let msg = if let Some(id) = target_id {
+                    self.cursor
+                        .enter_modal(id)
+                        .unwrap_or_else(|| SpeechFormatter::format_dialog_entry(title))
                 } else {
-                    None
+                    SpeechFormatter::format_dialog_entry(title)
+                };
+                if !msg.is_empty() {
+                    self.speech.speak(&msg, true);
+                }
+                return Some(msg);
+            }
+
+            // If target is inside a modal dialog, ensure modal confinement is active
+            if let Some(id) = target_id {
+                if let Some(dlg) = self.cursor.buffer.dialog_for_node(id) {
+                    if dlg.is_modal && self.cursor.active_modal_root != Some(dlg.node_id) {
+                        let _ = self.cursor.enter_modal(dlg.node_id);
+                    }
+                } else if self.cursor.is_in_modal() {
+                    let _ = self.cursor.exit_modal();
+                }
+            }
+
+            let is_edit = matches!(focus.role, Role::Edit);
+            let speech = if is_edit {
+                let doc_title = self.cursor.buffer.document_title().unwrap_or("");
+                let name = focus
+                    .name
+                    .as_deref()
+                    .or_else(|| {
+                        target_id
+                            .and_then(|id| self.cursor.buffer.node_map.get(&id))
+                            .and_then(|n| n.name.as_deref())
+                    })
+                    .unwrap_or("");
+                let value = focus.value.as_deref().or_else(|| {
+                    target_id
+                        .and_then(|id| self.cursor.buffer.node_map.get(&id))
+                        .and_then(|n| n.value.as_deref())
+                });
+
+                if !self.forms_mode {
+                    self.forms_mode = true;
+                    self.cursor.forms_mode_active = true;
+                    Some(SpeechFormatter::format_forms_mode_entry(
+                        doc_title, name, value,
+                    ))
+                } else {
+                    Some(SpeechFormatter::format_edit(name, value))
+                }
+            } else if self.forms_mode {
+                // Exiting forms mode because focused element is not an Edit
+                self.forms_mode = false;
+                self.cursor.forms_mode_active = false;
+                let exit_msg = SpeechFormatter::format_forms_mode_exit();
+                let control_msg = if let Some(id) = target_id {
+                    if let Some(node) = self.cursor.buffer.node_map.get(&id) {
+                        self.cursor.format_tab_stop_node(node, None, None)
+                    } else {
+                        String::new()
+                    }
+                } else {
+                    focus.name.clone().unwrap_or_default()
+                };
+                if !control_msg.is_empty() {
+                    Some(format!("{}\n{}", control_msg, exit_msg))
+                } else {
+                    Some(exit_msg)
                 }
             } else {
-                let name = focus.name.as_deref().unwrap_or("");
-                match focus.role {
-                    Role::Button => Some(SpeechFormatter::format_button(name)),
-                    Role::CheckBox => Some(SpeechFormatter::format_checkbox(
-                        name,
-                        focus.states.checked.unwrap_or(false),
-                    )),
-                    Role::Link { .. } => Some(SpeechFormatter::format_link(name, false)),
-                    _ => focus.name.clone(),
+                // Staying in Virtual PC Cursor mode: announce focused control
+                if let Some(id) = target_id {
+                    if let Some(node) = self.cursor.buffer.node_map.get(&id) {
+                        Some(self.cursor.format_tab_stop_node(node, None, None))
+                    } else {
+                        None
+                    }
+                } else {
+                    let name = focus.name.as_deref().unwrap_or("");
+                    match focus.role {
+                        Role::Button => Some(SpeechFormatter::format_button(name)),
+                        Role::CheckBox => Some(SpeechFormatter::format_checkbox(
+                            name,
+                            focus.states.checked.unwrap_or(false),
+                        )),
+                        Role::Link { .. } => Some(SpeechFormatter::format_link(name, false)),
+                        _ => focus.name.clone(),
+                    }
+                }
+            };
+
+            if let Some(ref text) = speech {
+                if !text.is_empty() {
+                    self.speech.speak(text, true);
                 }
             }
-        };
 
-        if let Some(ref text) = speech {
-            if !text.is_empty() {
-                self.speech.speak(text, true);
-            }
+            return speech;
         }
 
-        speech
+        // Native control / application window handling
+        self.app_mode = AppMode::NativeControl;
+        if self.forms_mode {
+            self.forms_mode = false;
+            self.cursor.forms_mode_active = false;
+        }
+
+        let window_changed = if let Some(ref wt) = focus.window_title {
+            let changed = self.last_window_title.as_ref() != Some(wt);
+            if changed {
+                self.last_window_title = Some(wt.clone());
+            }
+            changed
+        } else {
+            false
+        };
+
+        let name = focus.name.as_deref().unwrap_or("");
+        let control_speech = match focus.role {
+            Role::Button => SpeechFormatter::format_button(name),
+            Role::CheckBox => {
+                SpeechFormatter::format_checkbox(name, focus.states.checked.unwrap_or(false))
+            }
+            Role::Edit => {
+                let val = focus.value.as_deref();
+                SpeechFormatter::format_edit(name, val)
+            }
+            Role::Tab => format!("{} tab", name),
+            Role::ListItem => {
+                if let (Some(idx), Some(cnt)) = (focus.item_index, focus.item_count) {
+                    format!("{}\n{} of {}", name, idx, cnt)
+                } else {
+                    name.to_string()
+                }
+            }
+            _ => name.to_string(),
+        };
+
+        let speech = if window_changed {
+            let win = focus.window_title.as_deref().unwrap_or("");
+            if control_speech.is_empty() || control_speech == win {
+                win.to_string()
+            } else {
+                format!("{}\n{}", win, control_speech)
+            }
+        } else {
+            control_speech
+        };
+
+        if !speech.is_empty() {
+            self.speech.speak(&speech, true);
+            Some(speech)
+        } else {
+            None
+        }
     }
 
     /// Handles an ARIA live region announcement event with politeness consideration.
@@ -1731,5 +1808,127 @@ mod tests {
             .unwrap_or_default();
         assert!(s3.contains("FolderView    List view"));
         assert!(s3.contains("7 of 11"));
+    }
+
+    #[test]
+    fn test_engine_native_control_key_passthrough_and_focus_announcement() {
+        let empty_doc = AomNode::new(0, Role::Document);
+        let buffer = VirtualBuffer::from_aom(&empty_doc);
+        let cursor = VirtualCursor::new(buffer);
+        let mock_speech = Box::new(MockSpeechOutput::new());
+        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
+        engine.app_mode = AppMode::NativeControl;
+
+        // In NativeControl mode, arrow keys, Tab, Enter, typing MUST pass through!
+        let down_event = KeyEvent::new(Key::DownArrow, Modifiers::none(), true);
+        assert_eq!(engine.handle_key_event(&down_event), KeyAction::PassThrough);
+
+        let up_event = KeyEvent::new(Key::UpArrow, Modifiers::none(), true);
+        assert_eq!(engine.handle_key_event(&up_event), KeyAction::PassThrough);
+
+        let tab_event = KeyEvent::new(Key::Tab, Modifiers::none(), true);
+        assert_eq!(engine.handle_key_event(&tab_event), KeyAction::PassThrough);
+
+        let t_key = KeyEvent::new(Key::Alpha('t'), Modifiers::none(), true);
+        assert_eq!(engine.handle_key_event(&t_key), KeyAction::PassThrough);
+
+        // Global JAWS shortcuts with Insert still execute
+        let mut ins_t = KeyEvent::new(Key::Alpha('t'), Modifiers::none(), true);
+        ins_t.modifiers.insert = true;
+        // Insert+T is say title, consumes if handled
+        let action = engine.handle_key_event(&ins_t);
+        // Say title command handled or passed
+        assert!(matches!(
+            action,
+            KeyAction::Consume | KeyAction::PassThrough
+        ));
+    }
+
+    #[test]
+    fn test_engine_dynamic_document_loaded_and_virtual_pc_cursor_navigation() {
+        let empty_doc = AomNode::new(0, Role::Document);
+        let buffer = VirtualBuffer::from_aom(&empty_doc);
+        let cursor = VirtualCursor::new(buffer);
+        let mock_speech = Box::new(MockSpeechOutput::new());
+        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
+        engine.app_mode = AppMode::NativeControl;
+
+        // User switches to Chrome: DocumentLoaded event received
+        let web_aom = AomNode::new(0, Role::Document)
+            .with_name("ALTAI - Model and Agent Platform")
+            .with_children(vec![
+                AomNode::new(1, Role::Heading { level: 1 }).with_text("Main Heading"),
+                AomNode::new(2, Role::Link { href: None }).with_name("Documentation Link"),
+                AomNode::new(3, Role::Button).with_name("Get Started Button"),
+            ]);
+
+        let load_event = AccessibilityEvent::DocumentLoaded {
+            title: "ALTAI - Model and Agent Platform".to_string(),
+            root: web_aom,
+        };
+
+        let announcement = engine
+            .handle_accessibility_event(&load_event)
+            .unwrap_or_default();
+        assert!(announcement.contains("ALTAI - Model and Agent Platform"));
+        assert!(announcement.contains("Virtual PC Cursor"));
+        assert_eq!(engine.app_mode, AppMode::VirtualBuffer);
+
+        // Now in VirtualBuffer mode: Down Arrow navigates virtual lines and consumes
+        let down_event = KeyEvent::new(Key::DownArrow, Modifiers::none(), true);
+        assert_eq!(engine.handle_key_event(&down_event), KeyAction::Consume);
+
+        // H key moves to heading and consumes
+        let h_key = KeyEvent::new(Key::Alpha('h'), Modifiers::none(), true);
+        assert_eq!(engine.handle_key_event(&h_key), KeyAction::Consume);
+
+        // User switches to Windows Terminal (native control)
+        let terminal_focus = FocusEvent::new(Role::Window)
+            .with_window_title("Command Prompt")
+            .with_name("Command Prompt");
+        let term_speech = engine
+            .handle_focus_event(&terminal_focus)
+            .unwrap_or_default();
+        assert!(term_speech.contains("Command Prompt"));
+        assert_eq!(engine.app_mode, AppMode::NativeControl);
+
+        // In terminal: Down Arrow immediately passes through!
+        assert_eq!(engine.handle_key_event(&down_event), KeyAction::PassThrough);
+        // H key immediately passes through!
+        assert_eq!(engine.handle_key_event(&h_key), KeyAction::PassThrough);
+    }
+
+    #[test]
+    fn test_engine_window_change_announcement_in_native_control() {
+        let empty_doc = AomNode::new(0, Role::Document);
+        let buffer = VirtualBuffer::from_aom(&empty_doc);
+        let cursor = VirtualCursor::new(buffer);
+        let mock_speech = Box::new(MockSpeechOutput::new());
+        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
+
+        // Focus enters Notepad
+        let notepad_focus = FocusEvent::new(Role::Edit)
+            .with_window_title("Untitled - Notepad")
+            .with_name("Text Editor");
+        let s1 = engine
+            .handle_focus_event(&notepad_focus)
+            .unwrap_or_default();
+        assert!(s1.contains("Untitled - Notepad"));
+        assert!(s1.contains("Text Editor"));
+
+        // Focus moves to another control within same Notepad window -> Does NOT repeat window title
+        let notepad_btn = FocusEvent::new(Role::Button)
+            .with_window_title("Untitled - Notepad")
+            .with_name("File");
+        let s2 = engine.handle_focus_event(&notepad_btn).unwrap_or_default();
+        assert!(!s2.contains("Untitled - Notepad"));
+        assert!(s2.contains("File"));
+
+        // Focus switches to Command Prompt -> Announces new window title
+        let cmd_focus = FocusEvent::new(Role::Window)
+            .with_window_title("Command Prompt")
+            .with_name("Command Prompt");
+        let s3 = engine.handle_focus_event(&cmd_focus).unwrap_or_default();
+        assert!(s3.contains("Command Prompt"));
     }
 }

@@ -82,38 +82,85 @@ impl AudioEndpointMeter {
         sample_interval: Duration,
         silence_threshold: f32,
     ) -> Result<AudioActivityReport, PlatformError> {
-        let start = Instant::now();
-        let mut max_peak = 0.0f32;
-        let mut peak_sum = 0.0f32;
-        let mut active_samples = 0;
-        let mut total_samples = 0;
+        #[cfg(windows)]
+        {
+            use windows::Win32::Media::Audio::Endpoints::IAudioMeterInformation;
+            use windows::Win32::Media::Audio::{
+                eConsole, eRender, IMMDeviceEnumerator, MMDeviceEnumerator,
+            };
+            use windows::Win32::System::Com::{
+                CoCreateInstance, CoInitializeEx, CLSCTX_ALL, COINIT_MULTITHREADED,
+            };
 
-        while start.elapsed() < duration {
-            let peak = Self::get_peak_amplitude()?;
-            total_samples += 1;
-            if peak > max_peak {
-                max_peak = peak;
+            unsafe {
+                let _ = CoInitializeEx(None, COINIT_MULTITHREADED);
+                let enumerator: IMMDeviceEnumerator =
+                    CoCreateInstance(&MMDeviceEnumerator, None, CLSCTX_ALL).map_err(|e| {
+                        PlatformError::AudioError(format!(
+                            "Failed to create MMDeviceEnumerator: {}",
+                            e
+                        ))
+                    })?;
+
+                let device = enumerator
+                    .GetDefaultAudioEndpoint(eRender, eConsole)
+                    .map_err(|e| {
+                        PlatformError::AudioError(format!(
+                            "Failed to get default audio endpoint: {}",
+                            e
+                        ))
+                    })?;
+
+                let meter: IAudioMeterInformation =
+                    device.Activate(CLSCTX_ALL, None).map_err(|e| {
+                        PlatformError::AudioError(format!(
+                            "Failed to activate IAudioMeterInformation: {}",
+                            e
+                        ))
+                    })?;
+
+                let start = Instant::now();
+                let mut max_peak = 0.0f32;
+                let mut peak_sum = 0.0f32;
+                let mut active_samples = 0;
+                let mut total_samples = 0;
+
+                while start.elapsed() < duration {
+                    let peak = meter.GetPeakValue().unwrap_or(0.0);
+                    total_samples += 1;
+                    if peak > max_peak {
+                        max_peak = peak;
+                    }
+                    if peak > silence_threshold {
+                        active_samples += 1;
+                        peak_sum += peak;
+                    }
+                    std::thread::sleep(sample_interval);
+                }
+
+                let average_peak = if active_samples > 0 {
+                    peak_sum / (active_samples as f32)
+                } else {
+                    0.0
+                };
+
+                Ok(AudioActivityReport {
+                    max_peak,
+                    average_peak,
+                    active_samples,
+                    total_samples,
+                    detected_audio: active_samples > 0,
+                })
             }
-            if peak > silence_threshold {
-                active_samples += 1;
-                peak_sum += peak;
-            }
-            std::thread::sleep(sample_interval);
         }
 
-        let average_peak = if active_samples > 0 {
-            peak_sum / (active_samples as f32)
-        } else {
-            0.0
-        };
-
-        Ok(AudioActivityReport {
-            max_peak,
-            average_peak,
-            active_samples,
-            total_samples,
-            detected_audio: active_samples > 0,
-        })
+        #[cfg(not(windows))]
+        {
+            let _ = (duration, sample_interval, silence_threshold);
+            Err(PlatformError::Unsupported(
+                "Audio endpoint metering only supported on Windows.".to_string(),
+            ))
+        }
     }
 }
 
@@ -124,6 +171,7 @@ mod tests {
     #[test]
     #[cfg(windows)]
     fn test_audio_endpoint_meter_query() {
+        let _lock = crate::TEST_AUDIO_LOCK.lock().unwrap();
         let peak = AudioEndpointMeter::get_peak_amplitude();
         assert!(
             peak.is_ok(),
@@ -142,6 +190,7 @@ mod tests {
     #[test]
     #[cfg(windows)]
     fn test_audio_endpoint_meter_detects_speech() {
+        let _lock = crate::TEST_AUDIO_LOCK.lock().unwrap();
         use crate::tts::{Sapi5Engine, TtsEngine};
 
         if let Ok(mut sapi) = Sapi5Engine::new() {

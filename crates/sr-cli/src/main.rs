@@ -197,7 +197,7 @@ async fn main() {
                         (VirtualBuffer::from_aom(&aom), true)
                     }
                     Err(_) => {
-                        println!("Operating in live native Windows desktop/shell navigation mode.");
+                        println!("Operating in live native Windows navigation mode.");
                         let empty_doc = AomNode::new(0, Role::Document);
                         (VirtualBuffer::from_aom(&empty_doc), false)
                     }
@@ -221,8 +221,8 @@ async fn main() {
                     );
                     eng.speech.speak(&welcome, true);
                 } else {
-                    eng.app_mode = sr_core::engine::AppMode::NativeDesktop;
-                    println!("[Screen Reader] Ready in native desktop/shell navigation mode.");
+                    eng.app_mode = sr_core::engine::AppMode::NativeControl;
+                    println!("[Screen Reader] Ready in live native Windows navigation mode.");
                 }
             }
 
