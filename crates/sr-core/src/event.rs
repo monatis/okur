@@ -24,6 +24,8 @@ pub struct FocusEvent {
     pub container_role: Option<Role>,
     pub container_name: Option<String>,
     pub window_class: Option<String>,
+    pub window_title: Option<String>,
+    pub folder_name: Option<String>,
     pub help_text: Option<String>,
 }
 
@@ -40,6 +42,8 @@ impl FocusEvent {
             container_role: None,
             container_name: None,
             window_class: None,
+            window_title: None,
+            folder_name: None,
             help_text: None,
         }
     }
@@ -89,6 +93,16 @@ impl FocusEvent {
         self
     }
 
+    pub fn with_window_title(mut self, title: impl Into<String>) -> Self {
+        self.window_title = Some(title.into());
+        self
+    }
+
+    pub fn with_folder_name(mut self, folder: impl Into<String>) -> Self {
+        self.folder_name = Some(folder.into());
+        self
+    }
+
     pub fn with_help_text(mut self, help: impl Into<String>) -> Self {
         self.help_text = Some(help.into());
         self
@@ -120,6 +134,7 @@ impl LiveRegionEvent {
 
 /// Primary accessibility event enum passed from platform bridges to the engine.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[allow(clippy::large_enum_variant)]
 pub enum AccessibilityEvent {
     Focus(FocusEvent),
     LiveRegion(LiveRegionEvent),

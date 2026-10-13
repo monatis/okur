@@ -14,8 +14,9 @@ use windows::Win32::UI::Accessibility::{
     CUIAutomation, IUIAutomation, IUIAutomationElement, IUIAutomationFocusChangedEventHandler,
     IUIAutomationFocusChangedEventHandler_Impl, UIA_ButtonControlTypeId, UIA_CheckBoxControlTypeId,
     UIA_DocumentControlTypeId, UIA_EditControlTypeId, UIA_HyperlinkControlTypeId,
-    UIA_ListControlTypeId, UIA_ListItemControlTypeId, UIA_TabControlTypeId,
-    UIA_TabItemControlTypeId, UIA_TableControlTypeId, UIA_TextControlTypeId,
+    UIA_ListControlTypeId, UIA_ListItemControlTypeId, UIA_PositionInSetPropertyId,
+    UIA_SizeOfSetPropertyId, UIA_TabControlTypeId, UIA_TabItemControlTypeId,
+    UIA_TableControlTypeId, UIA_TextControlTypeId,
 };
 
 use super::AccessibilityEventListener;
@@ -76,15 +77,68 @@ impl FocusChangedHandler {
             }
         }
 
+        let mut top_hwnd = if !parent_hwnd.is_invalid() {
+            unsafe {
+                windows::Win32::UI::WindowsAndMessaging::GetAncestor(
+                    parent_hwnd,
+                    windows::Win32::UI::WindowsAndMessaging::GA_ROOT,
+                )
+            }
+        } else {
+            windows::Win32::Foundation::HWND::default()
+        };
+        if top_hwnd.is_invalid() {
+            top_hwnd = unsafe { windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow() };
+        }
+
+        let mut top_class = String::new();
+        let mut top_title = String::new();
+        if !top_hwnd.is_invalid() {
+            let mut title_buf = [0u16; 512];
+            let len = unsafe {
+                windows::Win32::UI::WindowsAndMessaging::GetWindowTextW(top_hwnd, &mut title_buf)
+            };
+            if len > 0 {
+                let slice = title_buf.get(..len as usize).unwrap_or(&[]);
+                top_title = String::from_utf16_lossy(slice);
+            }
+
+            let mut class_buf = [0u16; 256];
+            let clen = unsafe {
+                windows::Win32::UI::WindowsAndMessaging::GetClassNameW(top_hwnd, &mut class_buf)
+            };
+            if clen > 0 {
+                let slice = class_buf.get(..clen as usize).unwrap_or(&[]);
+                top_class = String::from_utf16_lossy(slice);
+            }
+        }
+
         let mut container_name = None;
         let mut window_class = None;
+        let mut window_title = None;
+        let mut folder_name = None;
         let mut item_index = None;
         let mut item_count = None;
 
-        let is_desktop = parent_class == "SysListView32"
-            || parent_name == "Desktop"
+        let is_desktop = parent_name == "Desktop"
             || grandparent_class == "Progman"
-            || grandparent_class == "WorkerW";
+            || grandparent_class == "WorkerW"
+            || top_class == "Progman"
+            || top_class == "WorkerW"
+            || (parent_class == "SysListView32"
+                && (grandparent_class == "Progman"
+                    || grandparent_class == "WorkerW"
+                    || parent_name == "FolderView"));
+
+        let is_explorer = top_class == "CabinetWClass"
+            || top_class == "ExploreWClass"
+            || parent_name == "Items View"
+            || parent_name == "Items view"
+            || parent_class == "UIItemsView"
+            || grandparent_class == "DUIListView"
+            || grandparent_class == "CabinetWClass"
+            || grandparent_class == "ShellTabWindowClass"
+            || top_title.contains("File Explorer");
 
         let is_taskbar = parent_class.contains("Taskbar")
             || grandparent_class.contains("Taskbar")
@@ -125,6 +179,20 @@ impl FocusChangedHandler {
                     item_count = Some(total as usize);
                 }
             }
+        } else if is_explorer {
+            container_name = Some("Items View".to_string());
+            window_class = Some("CabinetWClass".to_string());
+            role = Role::ListItem;
+
+            if !top_title.is_empty() {
+                window_title = Some(top_title.clone());
+                let folder = top_title
+                    .strip_suffix(" - File Explorer")
+                    .or_else(|| top_title.strip_suffix(" - Dosya Gezgini"))
+                    .unwrap_or(&top_title)
+                    .trim();
+                folder_name = Some(folder.to_string());
+            }
         } else if is_taskbar {
             container_name = Some("Taskbar".to_string());
             window_class = Some("Shell_TrayWnd".to_string());
@@ -145,9 +213,31 @@ impl FocusChangedHandler {
             }
         }
 
+        // Query UIA PositionInSet and SizeOfSet for any list item
+        if item_index.is_none() {
+            if let Some(idx) = get_int_property(element, UIA_PositionInSetPropertyId) {
+                if idx > 0 {
+                    item_index = Some(idx as usize);
+                }
+            }
+        }
+        if item_count.is_none() {
+            if let Some(cnt) = get_int_property(element, UIA_SizeOfSetPropertyId) {
+                if cnt > 0 {
+                    item_count = Some(cnt as usize);
+                }
+            }
+        }
+
+        let is_selected = get_bool_property(
+            element,
+            windows::Win32::UI::Accessibility::UIA_PROPERTY_ID(30079),
+        );
+
         // Check live states
         let states = NodeStates {
             focused: true,
+            selected: is_selected,
             ..Default::default()
         };
 
@@ -160,6 +250,12 @@ impl FocusChangedHandler {
         }
         if let Some(w) = window_class {
             focus = focus.with_window_class(w);
+        }
+        if let Some(t) = window_title {
+            focus = focus.with_window_title(t);
+        }
+        if let Some(f) = folder_name {
+            focus = focus.with_folder_name(f);
         }
         if let Some(h) = help_text {
             focus = focus.with_help_text(h);
@@ -351,5 +447,39 @@ fn map_control_type_to_role(ct: windows::Win32::UI::Accessibility::UIA_CONTROLTY
         Role::Text
     } else {
         Role::Generic
+    }
+}
+
+fn get_int_property(
+    element: &IUIAutomationElement,
+    prop_id: windows::Win32::UI::Accessibility::UIA_PROPERTY_ID,
+) -> Option<i32> {
+    unsafe {
+        let val = element.GetCurrentPropertyValue(prop_id).ok()?;
+        let vt = val.Anonymous.Anonymous.vt.0;
+        // VT_I4 = 3, VT_INT = 22, VT_UI4 = 19
+        if vt == 3 || vt == 22 || vt == 19 {
+            let num = val.Anonymous.Anonymous.Anonymous.lVal;
+            if num > 0 {
+                return Some(num);
+            }
+        }
+        None
+    }
+}
+
+fn get_bool_property(
+    element: &IUIAutomationElement,
+    prop_id: windows::Win32::UI::Accessibility::UIA_PROPERTY_ID,
+) -> Option<bool> {
+    unsafe {
+        let val = element.GetCurrentPropertyValue(prop_id).ok()?;
+        let vt = val.Anonymous.Anonymous.vt.0;
+        // VT_BOOL = 11
+        if vt == 11 {
+            let b = val.Anonymous.Anonymous.Anonymous.boolVal.0;
+            return Some(b != 0);
+        }
+        None
     }
 }

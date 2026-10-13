@@ -186,7 +186,16 @@ pub enum AppMode {
     VirtualBuffer,
     NativeDesktop,
     NativeShell,
+    NativeExplorer,
     NativeControl,
+}
+
+/// State tracking for File Explorer list view navigation.
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+pub struct NativeExplorerState {
+    pub window_title: Option<String>,
+    pub folder_name: Option<String>,
+    pub entered: bool,
 }
 
 /// Represents an item on the native Windows desktop.
@@ -286,6 +295,7 @@ pub struct ScreenReaderEngine {
     pub app_mode: AppMode,
     pub desktop_state: Option<NativeDesktopState>,
     pub shell_nav_state: Option<ShellNavState>,
+    pub explorer_state: Option<NativeExplorerState>,
 }
 
 impl ScreenReaderEngine {
@@ -298,6 +308,7 @@ impl ScreenReaderEngine {
             app_mode: AppMode::VirtualBuffer,
             desktop_state: None,
             shell_nav_state: None,
+            explorer_state: None,
         }
     }
 
@@ -1049,48 +1060,71 @@ impl ScreenReaderEngine {
     /// Synchronizes cursor position, activates/deactivates forms mode,
     /// and emits canonical JAWS speech announcements.
     pub fn handle_focus_event(&mut self, focus: &FocusEvent) -> Option<String> {
-        // 0. Check if focus landed on native desktop or shell bar
-        if focus.container_name.as_deref() == Some("FolderView")
+        // 0. Check if focus landed on native desktop
+        let is_desktop_event = focus.container_name.as_deref() == Some("FolderView")
             || focus.window_class.as_deref() == Some("Progman")
             || focus.window_class.as_deref() == Some("WorkerW")
-            || focus.window_class.as_deref() == Some("SysListView32")
+            || (focus.window_class.as_deref() == Some("SysListView32")
+                && focus.container_name.as_deref() != Some("Items View")
+                && focus.container_name.as_deref() != Some("Items view")
+                && focus
+                    .window_title
+                    .as_deref()
+                    .is_none_or(|t| !t.contains("File Explorer")))
             || (focus.role == Role::ListItem
-                && (self.desktop_state.is_some() || self.app_mode == AppMode::NativeDesktop))
-        {
-            let prev_mode = self.app_mode;
-            let is_first_entry = prev_mode != AppMode::NativeDesktop
-                || self.desktop_state.as_ref().is_none_or(|ds| !ds.entered);
+                && self
+                    .desktop_state
+                    .as_ref()
+                    .is_some_and(|ds| !ds.items.is_empty())
+                && self.app_mode == AppMode::NativeDesktop);
 
+        let is_explorer_event = focus.window_class.as_deref() == Some("CabinetWClass")
+            || focus.window_class.as_deref() == Some("ShellTabWindowClass")
+            || focus.window_class.as_deref() == Some("UIItemsView")
+            || focus.container_name.as_deref() == Some("Items View")
+            || focus.container_name.as_deref() == Some("Items view")
+            || focus.container_name.as_deref() == Some("Shell Folder View")
+            || focus
+                .window_title
+                .as_deref()
+                .is_some_and(|t| t.contains("File Explorer"));
+
+        if is_desktop_event {
+            let prev_mode = self.app_mode;
+            let ds = self
+                .desktop_state
+                .get_or_insert_with(|| NativeDesktopState {
+                    container_name: "FolderView".to_string(),
+                    items: Vec::new(),
+                    current_index: 0,
+                    entered: false,
+                });
+
+            let is_first_entry = prev_mode != AppMode::NativeDesktop || !ds.entered;
+            ds.entered = true;
             self.app_mode = AppMode::NativeDesktop;
 
-            if let Some(ref mut ds) = self.desktop_state {
-                ds.entered = true;
-                if let Some(ref name) = focus.name {
-                    if let Some(pos) = ds
-                        .items
-                        .iter()
-                        .position(|it| it.name.eq_ignore_ascii_case(name))
-                    {
-                        ds.current_index = pos;
-                    }
+            if let Some(ref mut es) = self.explorer_state {
+                es.entered = false;
+            }
+
+            if let Some(ref name) = focus.name {
+                if let Some(pos) = ds
+                    .items
+                    .iter()
+                    .position(|it| it.name.eq_ignore_ascii_case(name))
+                {
+                    ds.current_index = pos;
                 }
             }
 
             let name = focus.name.as_deref().unwrap_or("Desktop");
-            let index = focus.item_index.unwrap_or_else(|| {
-                self.desktop_state
-                    .as_ref()
-                    .and_then(|ds| ds.current_item())
-                    .map(|it| it.index)
-                    .unwrap_or(1)
-            });
-            let total = focus.item_count.unwrap_or_else(|| {
-                self.desktop_state
-                    .as_ref()
-                    .and_then(|ds| ds.current_item())
-                    .map(|it| it.total)
-                    .unwrap_or(1)
-            });
+            let index = focus
+                .item_index
+                .unwrap_or_else(|| ds.current_item().map(|it| it.index).unwrap_or(1));
+            let total = focus
+                .item_count
+                .unwrap_or_else(|| ds.current_item().map(|it| it.total).unwrap_or(1));
 
             let speech = if is_first_entry {
                 SpeechFormatter::format_desktop_entry("FolderView", name, index, total)
@@ -1099,11 +1133,60 @@ impl ScreenReaderEngine {
             };
             self.speech.speak(&speech, true);
             return Some(speech);
+        } else if is_explorer_event && (focus.role == Role::ListItem || focus.role == Role::List) {
+            let prev_mode = self.app_mode;
+            let es = self
+                .explorer_state
+                .get_or_insert_with(NativeExplorerState::default);
+
+            let is_first_entry = prev_mode != AppMode::NativeExplorer || !es.entered;
+            es.entered = true;
+            self.app_mode = AppMode::NativeExplorer;
+
+            if let Some(ref mut ds) = self.desktop_state {
+                ds.entered = false;
+            }
+
+            if let Some(ref title) = focus.window_title {
+                es.window_title = Some(title.clone());
+            }
+            if let Some(ref folder) = focus.folder_name {
+                es.folder_name = Some(folder.clone());
+            }
+
+            let name = focus.name.as_deref().unwrap_or("Item");
+            let index = focus.item_index.unwrap_or(1);
+            let total = focus.item_count.unwrap_or(1);
+            let selected = focus.states.selected;
+
+            let speech = if is_first_entry {
+                let window_title = focus
+                    .window_title
+                    .as_deref()
+                    .or(es.window_title.as_deref())
+                    .or(Some("File Explorer"));
+                let folder_name = focus.folder_name.as_deref().or(es.folder_name.as_deref());
+                SpeechFormatter::format_explorer_entry(
+                    window_title,
+                    folder_name,
+                    selected,
+                    name,
+                    index,
+                    total,
+                )
+            } else {
+                SpeechFormatter::format_explorer_item(name, index, total)
+            };
+            self.speech.speak(&speech, true);
+            return Some(speech);
         } else if focus.window_class.as_deref() == Some("Shell_TrayWnd")
             || focus.container_name.as_deref() == Some("Taskbar")
         {
             if let Some(ref mut ds) = self.desktop_state {
                 ds.entered = false;
+            }
+            if let Some(ref mut es) = self.explorer_state {
+                es.entered = false;
             }
             let prev_mode = self.app_mode;
             self.app_mode = AppMode::NativeShell;
@@ -1121,6 +1204,13 @@ impl ScreenReaderEngine {
             );
             self.speech.speak(&speech, true);
             return Some(speech);
+        }
+
+        if let Some(ref mut ds) = self.desktop_state {
+            ds.entered = false;
+        }
+        if let Some(ref mut es) = self.explorer_state {
+            es.entered = false;
         }
 
         // Try matching node in buffer
@@ -1496,5 +1586,111 @@ mod tests {
         let action = engine.handle_key_event(&esc_event);
         assert_eq!(action, KeyAction::Consume);
         assert!(!engine.cursor.is_in_modal());
+    }
+
+    #[test]
+    fn test_engine_desktop_entry_vs_subsequent_item_navigation() {
+        let aom = AomNode::new(0, Role::Document);
+        let buffer = VirtualBuffer::from_aom(&aom);
+        let cursor = VirtualCursor::new(buffer);
+        let mock_speech = Box::new(MockSpeechOutput::new());
+        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
+
+        // First entry to Desktop (e.g. Win+M / Win+D)
+        let focus_entry = FocusEvent::new(Role::ListItem)
+            .with_container_name("FolderView")
+            .with_window_class("Progman")
+            .with_name("Dropbox")
+            .with_item_index(7)
+            .with_item_count(11);
+        let s1 = engine.handle_focus_event(&focus_entry).unwrap_or_default();
+        assert!(s1.contains("FolderView    List view"));
+        assert!(s1.contains("Dropbox"));
+        assert!(s1.contains("7 of 11"));
+        assert!(s1.contains("To move to items use the Arrow keys."));
+
+        // Subsequent item navigation (e.g. Down Arrow to Microsoft Edge)
+        let focus_down = FocusEvent::new(Role::ListItem)
+            .with_container_name("FolderView")
+            .with_window_class("Progman")
+            .with_name("Microsoft Edge")
+            .with_item_index(9)
+            .with_item_count(11);
+        let s2 = engine.handle_focus_event(&focus_down).unwrap_or_default();
+        assert_eq!(s2, "Microsoft Edge\n9 of 11");
+
+        // Initial letter jump (e.g. 'j' to JAWS 2025)
+        let focus_letter = FocusEvent::new(Role::ListItem)
+            .with_container_name("FolderView")
+            .with_window_class("Progman")
+            .with_name("JAWS 2025")
+            .with_item_index(4)
+            .with_item_count(11);
+        let s3 = engine.handle_focus_event(&focus_letter).unwrap_or_default();
+        assert_eq!(s3, "JAWS 2025\n4 of 11");
+    }
+
+    #[test]
+    fn test_engine_file_explorer_entry_and_item_navigation() {
+        let aom = AomNode::new(0, Role::Document);
+        let buffer = VirtualBuffer::from_aom(&aom);
+        let cursor = VirtualCursor::new(buffer);
+        let mock_speech = Box::new(MockSpeechOutput::new());
+        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
+
+        // Desktop item
+        let desktop_focus = FocusEvent::new(Role::ListItem)
+            .with_container_name("FolderView")
+            .with_window_class("Progman")
+            .with_name("Dropbox")
+            .with_item_index(7)
+            .with_item_count(11);
+        let _ = engine.handle_focus_event(&desktop_focus);
+
+        // User presses Enter on Dropbox -> Opens File Explorer window
+        let mut explorer_entry = FocusEvent::new(Role::ListItem)
+            .with_window_title("Dropbox - File Explorer")
+            .with_folder_name("Dropbox")
+            .with_container_name("Items View")
+            .with_window_class("CabinetWClass")
+            .with_name(".cache")
+            .with_item_index(1)
+            .with_item_count(143);
+        explorer_entry.states.selected = Some(false);
+
+        let s1 = engine
+            .handle_focus_event(&explorer_entry)
+            .unwrap_or_default();
+        assert_eq!(
+            s1,
+            "Dropbox - File Explorer\nDropbox\nItems view multi select box\nNot selected\n.cache\n1 of 143"
+        );
+
+        // Press 'a' inside File Explorer -> ailabs
+        let explorer_item = FocusEvent::new(Role::ListItem)
+            .with_window_title("Dropbox - File Explorer")
+            .with_folder_name("Dropbox")
+            .with_container_name("Items View")
+            .with_window_class("CabinetWClass")
+            .with_name("ailabs")
+            .with_item_index(3)
+            .with_item_count(143);
+        let s2 = engine
+            .handle_focus_event(&explorer_item)
+            .unwrap_or_default();
+        assert_eq!(s2, "ailabs\n3 of 143");
+
+        // Focus shifts back to Desktop -> Full entry announcement re-triggers
+        let back_to_desktop = FocusEvent::new(Role::ListItem)
+            .with_container_name("FolderView")
+            .with_window_class("Progman")
+            .with_name("Dropbox")
+            .with_item_index(7)
+            .with_item_count(11);
+        let s3 = engine
+            .handle_focus_event(&back_to_desktop)
+            .unwrap_or_default();
+        assert!(s3.contains("FolderView    List view"));
+        assert!(s3.contains("7 of 11"));
     }
 }

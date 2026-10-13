@@ -624,6 +624,40 @@ impl SpeechFormatter {
         format!("{}\n{} of {}", item_name, index, total)
     }
 
+    /// Formats File Explorer list view entry announcement matching JAWS verbatim.
+    pub fn format_explorer_entry(
+        window_title: Option<&str>,
+        folder_name: Option<&str>,
+        selected: Option<bool>,
+        item_name: &str,
+        index: usize,
+        total: usize,
+    ) -> String {
+        let mut lines = Vec::new();
+        if let Some(title) = window_title {
+            lines.push(title.to_string());
+        }
+        if let Some(folder) = folder_name {
+            lines.push(folder.to_string());
+        }
+        lines.push("Items view multi select box".to_string());
+        if let Some(sel) = selected {
+            if !sel {
+                lines.push("Not selected".to_string());
+            } else {
+                lines.push("selected".to_string());
+            }
+        }
+        lines.push(item_name.to_string());
+        lines.push(format!("{} of {}", index, total));
+        lines.join("\n")
+    }
+
+    /// Formats File Explorer item navigation announcement matching JAWS.
+    pub fn format_explorer_item(item_name: &str, index: usize, total: usize) -> String {
+        format!("{}\n{} of {}", item_name, index, total)
+    }
+
     /// Formats shell bar element announcement matching JAWS.
     pub fn format_shell_element(
         container: Option<&str>,
