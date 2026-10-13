@@ -1,0 +1,79 @@
+{
+  "id": "47-iframe-boundary-exit",
+  "name": "Inline Frame Traversal and Boundary Exit Announcement",
+  "category": "Frame Navigation and SPA Routing",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/spa-and-frames.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "keyboard",
+      "command": "M",
+      "settle_ms": 200,
+      "assertions": {
+        "target_role": "iframe",
+        "target_name": "Widget Frame",
+        "contains_speech": [
+          "Widget Frame",
+          "frame"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "type": "keyboard",
+      "command": "{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "target_role": "heading",
+        "target_heading_level": 3,
+        "target_name": "Widget Header",
+        "contains_speech": [
+          "Widget Header",
+          "heading level 3"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "type": "keyboard",
+      "command": "{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Inside iframe content"
+        ]
+      }
+    },
+    {
+      "id": "s4",
+      "type": "keyboard",
+      "command": "{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "contains_speech": [
+          "Widget Frame frame end"
+        ]
+      }
+    },
+    {
+      "id": "s5",
+      "type": "keyboard",
+      "command": "{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "target_name": "Main Content Area",
+        "contains_speech": [
+          "Main Content Area"
+        ]
+      }
+    }
+  ]
+}

@@ -28,6 +28,7 @@ pub enum Role {
     TreeItem,
     Slider,
     ProgressBar,
+    IFrame,
     Generic,
 }
 
@@ -49,6 +50,7 @@ impl Role {
                 | Role::AlertDialog
                 | Role::Tree
                 | Role::TreeItem
+                | Role::IFrame
         )
     }
 }

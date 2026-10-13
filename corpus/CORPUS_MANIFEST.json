@@ -44,14 +44,18 @@
             "sha256": "FA69AE2308A449A33037CAB16B065AFA5ECA0210717CA72B3857CC411CFE7796",
             "path": "C:\\Users\\ailabs\\corpus\\fixtures\\dialog-and-formatting.html",
             "size_bytes": 817
+        },
+        "spa-and-frames.html": {
+            "path": "C:\\Users\\ailabs\\corpus\\fixtures\\spa-and-frames.html",
+            "size_bytes": 1280
         }
     },
     "statistics": {
-        "total_scenarios": 40,
-        "deterministic_scenarios": 37,
+        "total_scenarios": 50,
+        "deterministic_scenarios": 47,
         "variable_scenarios": 3,
-        "total_trials_executed": 200,
-        "successful_trials": 200,
+        "total_trials_executed": 250,
+        "successful_trials": 250,
         "trial_success_rate_percent": 100
     },
     "scenarios": [
@@ -2492,6 +2496,248 @@
                     "assertions": {
                         "contains_speech": [
                             "80%"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "46-iframe-quicknav",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/spa-and-frames.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 10500,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "M"
+                    },
+                    "observation": {
+                        "speech_raw": "Widget Frame frame"
+                    },
+                    "assertions": {
+                        "target_role": "iframe",
+                        "target_name": "Widget Frame",
+                        "contains_speech": [
+                            "Widget Frame",
+                            "frame"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "47-iframe-boundary-exit",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/spa-and-frames.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 11000,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "M"
+                    },
+                    "observation": {
+                        "speech_raw": "Widget Frame frame"
+                    },
+                    "assertions": {
+                        "target_role": "iframe",
+                        "target_name": "Widget Frame",
+                        "contains_speech": [
+                            "Widget Frame",
+                            "frame"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": " \u001d heading level 3 \u001e Widget Header Widget Frame"
+                    },
+                    "assertions": {
+                        "target_role": "heading",
+                        "target_heading_level": 3,
+                        "target_name": "Widget Header",
+                        "contains_speech": [
+                            "Widget Header",
+                            "heading level 3"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Inside iframe content"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Inside iframe content"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s4",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Widget Frame frame end"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Widget Frame frame end"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s5",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": " \u001d heading level 2 \u001e Main Content Area"
+                    },
+                    "assertions": {
+                        "target_name": "Main Content Area",
+                        "contains_speech": [
+                            "Main Content Area"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "48-inpage-skip-link-jump",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/spa-and-frames.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 10200,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": " \u001d same page link \u001e Skip to content"
+                    },
+                    "assertions": {
+                        "target_role": "link",
+                        "target_name": "Skip to content",
+                        "contains_speech": [
+                            "same page link",
+                            "Skip to content"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{ENTER}"
+                    },
+                    "observation": {
+                        "speech_raw": " \u001d heading level 2 \u001e Main Content Area"
+                    },
+                    "assertions": {
+                        "target_name": "Main Content Area",
+                        "contains_speech": [
+                            "Main Content Area"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "49-spa-route-title-change",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/spa-and-frames.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 9500,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "spa_route",
+                        "command": "Dashboard - Single Page App"
+                    },
+                    "observation": {
+                        "speech_raw": "Page has loaded: Dashboard - Single Page App"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Dashboard - Single Page App"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "50-spa-focus-shift-main",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/spa-and-frames.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 9900,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "spa_route",
+                        "command": "Dashboard - Single Page App:main-content"
+                    },
+                    "observation": {
+                        "speech_raw": "Page has loaded: Dashboard - Single Page App\n \u001d heading level 2 \u001e Main Content Area"
+                    },
+                    "assertions": {
+                        "target_name": "Main Content Area",
+                        "contains_speech": [
+                            "Dashboard - Single Page App",
+                            "Main Content Area"
                         ]
                     },
                     "step_success": true

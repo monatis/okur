@@ -1,0 +1,42 @@
+{
+  "id": "48-inpage-skip-link-jump",
+  "name": "In-Page Skip Link Identification and Target Anchor Jump",
+  "category": "Frame Navigation and SPA Routing",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/spa-and-frames.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "keyboard",
+      "command": "{DOWN}",
+      "settle_ms": 200,
+      "assertions": {
+        "target_role": "link",
+        "target_name": "Skip to content",
+        "contains_speech": [
+          "same page link",
+          "Skip to content"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "type": "keyboard",
+      "command": "{ENTER}",
+      "settle_ms": 300,
+      "assertions": {
+        "target_name": "Main Content Area",
+        "contains_speech": [
+          "Main Content Area"
+        ]
+      }
+    }
+  ]
+}

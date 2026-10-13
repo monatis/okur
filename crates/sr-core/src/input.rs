@@ -138,7 +138,7 @@ impl KeyEvent {
             Key::Alpha(c) => {
                 let upper = c.to_ascii_uppercase();
                 match upper {
-                    'H' | 'T' | 'K' | 'U' | 'F' | 'B' | 'E' | 'X' | 'L' | 'I' | 'R' | 'C' => {
+                    'H' | 'T' | 'K' | 'U' | 'F' | 'B' | 'E' | 'X' | 'L' | 'I' | 'R' | 'C' | 'M' => {
                         if m.shift && !m.ctrl && !m.alt {
                             Some(format!("+{}", upper))
                         } else if m.is_empty() {

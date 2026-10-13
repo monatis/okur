@@ -189,6 +189,7 @@ impl DifferentialRunner {
                                     | ("progressbar", Role::ProgressBar)
                                     | ("heading", Role::Heading { .. })
                                     | ("link", Role::Link { .. })
+                                    | ("iframe" | "frame", Role::IFrame)
                             );
                             if !role_matches {
                                 return false;
@@ -237,6 +238,8 @@ impl DifferentialRunner {
                         Role::Slider
                     } else if cmd.to_lowercase().contains("progress") {
                         Role::ProgressBar
+                    } else if cmd.to_lowercase().contains("frame") {
+                        Role::IFrame
                     } else {
                         Role::Generic
                     };
@@ -256,6 +259,13 @@ impl DifferentialRunner {
                 };
                 let ev = LiveRegionEvent::new(text, politeness);
                 engine.handle_live_region_event(&ev).unwrap_or_default()
+            }
+            "route_transition" | "spa_route" => {
+                if let Some((title, target)) = step.command.split_once(':') {
+                    engine.handle_route_transition(title.trim(), Some(target.trim()))
+                } else {
+                    engine.handle_route_transition(step.command.as_str(), None)
+                }
             }
             "keyboard" | "jaws_script" => engine.execute_command(&step.command).unwrap_or_default(),
             _ => String::new(),
@@ -337,6 +347,7 @@ impl DifferentialRunner {
                         | ("treeitem", Some(Role::TreeItem))
                         | ("slider", Some(Role::Slider))
                         | ("progressbar", Some(Role::ProgressBar))
+                        | ("iframe" | "frame", Some(Role::IFrame))
                 );
                 if !role_matches {
                     assertions_passed = false;

@@ -1,5 +1,15 @@
 use crate::aom::{AomNode, Role, TextFormatting};
+use crate::speech::SpeechFormatter;
 use std::collections::HashMap;
+
+/// Information about an inline frame or embedded frame container.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct FrameInfo {
+    pub node_id: usize,
+    pub name: String,
+    pub start_offset: usize,
+    pub end_offset: usize,
+}
 
 /// Information about an ARIA or web dialog container.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -121,6 +131,9 @@ pub struct VirtualBuffer {
     pub tables: Vec<TableGrid>,
     pub table_offsets: Vec<usize>,
     pub dialogs: Vec<DialogInfo>,
+    pub frames: Vec<FrameInfo>,
+    pub frame_offsets: Vec<usize>,
+    pub target_anchors: HashMap<String, usize>,
     pub node_map: HashMap<usize, AomNode>,
 }
 
@@ -646,6 +659,40 @@ impl VirtualBuffer {
         self.dialogs.iter().find(|d| d.node_id == node_id)
     }
 
+    /// Returns the next frame starting after the given offset.
+    pub fn next_frame_from(&self, offset: usize) -> Option<&FrameInfo> {
+        self.frames.iter().find(|f| f.start_offset > offset)
+    }
+
+    /// Returns the prior frame starting before the current frame of the given offset.
+    pub fn prior_frame_from(&self, offset: usize) -> Option<&FrameInfo> {
+        let current_start = self
+            .frames
+            .iter()
+            .rfind(|f| f.start_offset <= offset)
+            .map(|f| f.start_offset)
+            .unwrap_or(offset);
+        self.frames.iter().rfind(|f| f.start_offset < current_start)
+    }
+
+    /// Returns the first frame in the buffer.
+    pub fn first_frame(&self) -> Option<&FrameInfo> {
+        self.frames.first()
+    }
+
+    /// Returns the last frame in the buffer.
+    pub fn last_frame(&self) -> Option<&FrameInfo> {
+        self.frames.last()
+    }
+
+    /// Resolves the node for a frame starting at `offset`.
+    pub fn find_frame_node(&self, offset: usize) -> Option<&AomNode> {
+        self.spans
+            .iter()
+            .find(|s| s.start_offset == offset && matches!(s.role, Role::IFrame))
+            .and_then(|s| self.node_map.get(&s.node_id))
+    }
+
     /// Resolves font formatting attributes at the given buffer offset.
     pub fn formatting_at_offset(&self, offset: usize) -> Option<TextFormatting> {
         self.spans
@@ -699,12 +746,14 @@ impl VirtualBuffer {
 
 struct BufferBuilder {
     formatting_stack: Vec<TextFormatting>,
+    block_depth: usize,
 }
 
 impl BufferBuilder {
     fn new() -> Self {
         Self {
             formatting_stack: Vec::new(),
+            block_depth: 0,
         }
     }
 
@@ -790,6 +839,20 @@ impl BufferBuilder {
         } else {
             false
         };
+        let anchor_offset =
+            if node.role.is_block() && !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
+                buffer.text.len() + 1
+            } else {
+                buffer.text.len()
+            };
+        if let Some(id_attr) = node.attributes.get("id") {
+            buffer.target_anchors.insert(id_attr.clone(), anchor_offset);
+        }
+        if let Some(name_attr) = node.attributes.get("name") {
+            buffer
+                .target_anchors
+                .insert(name_attr.clone(), anchor_offset);
+        }
 
         match &node.role {
             Role::Landmark { landmark_type: _ } => {
@@ -837,6 +900,7 @@ impl BufferBuilder {
                 let start_offset = buffer.text.len();
                 buffer.list_items.push(start_offset);
 
+                self.block_depth += 1;
                 if !node.children.is_empty() {
                     for child in &node.children {
                         self.traverse_node(child, buffer);
@@ -846,6 +910,7 @@ impl BufferBuilder {
                 } else if let Some(ref name) = node.name {
                     buffer.text.push_str(name);
                 }
+                self.block_depth -= 1;
 
                 let end_offset = buffer.text.len();
                 let text_content = buffer.text[start_offset..end_offset].to_string();
@@ -880,6 +945,7 @@ impl BufferBuilder {
                 let start_offset = buffer.text.len();
                 buffer.headings.push((start_offset, *level));
 
+                self.block_depth += 1;
                 if !node.children.is_empty() {
                     for child in &node.children {
                         self.traverse_node(child, buffer);
@@ -889,6 +955,7 @@ impl BufferBuilder {
                 } else if let Some(ref name) = node.name {
                     buffer.text.push_str(name);
                 }
+                self.block_depth -= 1;
 
                 let end_offset = buffer.text.len();
                 let text_content = buffer.text[start_offset..end_offset].to_string();
@@ -922,6 +989,7 @@ impl BufferBuilder {
                 }
                 let start_offset = buffer.text.len();
 
+                self.block_depth += 1;
                 if !node.children.is_empty() {
                     for child in &node.children {
                         self.traverse_node(child, buffer);
@@ -931,6 +999,7 @@ impl BufferBuilder {
                 } else if let Some(ref name) = node.name {
                     buffer.text.push_str(name);
                 }
+                self.block_depth -= 1;
 
                 let end_offset = buffer.text.len();
                 let text_content = buffer.text[start_offset..end_offset].to_string();
@@ -959,6 +1028,10 @@ impl BufferBuilder {
                 });
             }
             Role::Link { href: _ } => {
+                if self.block_depth == 0 && !buffer.text.is_empty() && !buffer.text.ends_with('\n')
+                {
+                    buffer.text.push('\n');
+                }
                 let start_offset = buffer.text.len();
                 buffer.links.push(start_offset);
                 buffer.tab_stops.push(start_offset);
@@ -980,6 +1053,26 @@ impl BufferBuilder {
                     node_id: node.id,
                     role: node.role.clone(),
                 });
+
+                if self.block_depth == 0 {
+                    let text_content = buffer.text[start_offset..end_offset].to_string();
+                    buffer.lines.push(BufferLine {
+                        line_index: buffer.lines.len(),
+                        start_offset,
+                        end_offset,
+                        node_id: node.id,
+                        role: node.role.clone(),
+                        text: text_content.clone(),
+                    });
+                    buffer.paragraphs.push(BufferParagraph {
+                        paragraph_index: buffer.paragraphs.len(),
+                        start_offset,
+                        end_offset,
+                        node_id: node.id,
+                        role: node.role.clone(),
+                        text: text_content,
+                    });
+                }
             }
             Role::Edit => {
                 if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
@@ -1305,6 +1398,88 @@ impl BufferBuilder {
                         text: text_content,
                     });
                 }
+            }
+            Role::IFrame => {
+                if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
+                    buffer.text.push('\n');
+                }
+                let start_offset = buffer.text.len();
+                buffer.frame_offsets.push(start_offset);
+
+                let frame_name = node
+                    .name
+                    .as_deref()
+                    .or_else(|| node.attributes.get("title").map(|s| s.as_str()))
+                    .unwrap_or("Inline Frame");
+                let entry_text = SpeechFormatter::format_frame(frame_name);
+
+                buffer.text.push_str(&entry_text);
+                let entry_end = buffer.text.len();
+
+                buffer.spans.push(BufferSpan {
+                    start_offset,
+                    end_offset: entry_end,
+                    node_id: node.id,
+                    role: Role::IFrame,
+                });
+                buffer.lines.push(BufferLine {
+                    line_index: buffer.lines.len(),
+                    start_offset,
+                    end_offset: entry_end,
+                    node_id: node.id,
+                    role: Role::IFrame,
+                    text: entry_text.clone(),
+                });
+                buffer.paragraphs.push(BufferParagraph {
+                    paragraph_index: buffer.paragraphs.len(),
+                    start_offset,
+                    end_offset: entry_end,
+                    node_id: node.id,
+                    role: Role::IFrame,
+                    text: entry_text,
+                });
+
+                for child in &node.children {
+                    self.traverse_node(child, buffer);
+                }
+
+                if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {
+                    buffer.text.push('\n');
+                }
+                let exit_start = buffer.text.len();
+                let exit_text = SpeechFormatter::format_frame_end(frame_name);
+                buffer.text.push_str(&exit_text);
+                let exit_end = buffer.text.len();
+
+                buffer.spans.push(BufferSpan {
+                    start_offset: exit_start,
+                    end_offset: exit_end,
+                    node_id: node.id,
+                    role: Role::Generic,
+                });
+                buffer.lines.push(BufferLine {
+                    line_index: buffer.lines.len(),
+                    start_offset: exit_start,
+                    end_offset: exit_end,
+                    node_id: node.id,
+                    role: Role::Generic,
+                    text: exit_text.clone(),
+                });
+                buffer.paragraphs.push(BufferParagraph {
+                    paragraph_index: buffer.paragraphs.len(),
+                    start_offset: exit_start,
+                    end_offset: exit_end,
+                    node_id: node.id,
+                    role: Role::Generic,
+                    text: exit_text,
+                });
+
+                buffer.frames.push(FrameInfo {
+                    node_id: node.id,
+                    name: frame_name.to_string(),
+                    start_offset,
+                    end_offset: exit_end,
+                });
             }
             Role::Table => {
                 if !buffer.text.is_empty() && !buffer.text.ends_with('\n') {

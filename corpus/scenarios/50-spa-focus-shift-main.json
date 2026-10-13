@@ -1,0 +1,29 @@
+{
+  "id": "50-spa-focus-shift-main",
+  "name": "SPA Route Change with Virtual Focus Retargeting to Primary View Content",
+  "category": "Frame Navigation and SPA Routing",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/spa-and-frames.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "spa_route",
+      "command": "Dashboard - Single Page App:main-content",
+      "settle_ms": 300,
+      "assertions": {
+        "target_name": "Main Content Area",
+        "contains_speech": [
+          "Dashboard - Single Page App",
+          "Main Content Area"
+        ]
+      }
+    }
+  ]
+}

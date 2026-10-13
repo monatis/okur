@@ -17,16 +17,54 @@ impl SpeechFormatter {
                 // JAWS format: " \u001d heading level {level} \u001e {text}"
                 format!(" \u{001d} heading level {} \u{001e} {}", level, text)
             }
-            Role::Link { .. } => format!("link {}", text),
+            Role::Link { href } => {
+                let is_same_page = href.as_deref().map(|h| h.starts_with('#')).unwrap_or(false);
+                if is_same_page {
+                    format!(" \u{001d} same page link \u{001e} {}", text)
+                } else {
+                    format!("link {}", text)
+                }
+            }
             Role::Button => format!("button {}", text),
             Role::CheckBox => format!("checkbox {}", text),
             Role::Edit => format!("edit {}", text),
             Role::ComboBox => format!("combo box {}", text),
             Role::TreeItem => format!("tree item {}", text),
             Role::Slider => format!("slider {}", text),
-            Role::ProgressBar => format!("progress bar {}", text),
+            Role::IFrame => {
+                if text.ends_with("frame end") || text.ends_with("frame") {
+                    text.to_string()
+                } else {
+                    Self::format_frame(text)
+                }
+            }
             _ => text.to_string(),
         }
+    }
+
+    /// Formats an inline frame entry announcement matching JAWS conventions: "<Name> frame".
+    pub fn format_frame(name: &str) -> String {
+        let trimmed = name.trim();
+        if trimmed.is_empty() {
+            "frame".to_string()
+        } else {
+            format!("{} frame", trimmed)
+        }
+    }
+
+    /// Formats an inline frame exit announcement matching JAWS conventions: "<Name> frame end".
+    pub fn format_frame_end(name: &str) -> String {
+        let trimmed = name.trim();
+        if trimmed.is_empty() {
+            "frame end".to_string()
+        } else {
+            format!("{} frame end", trimmed)
+        }
+    }
+
+    /// Formats page title update or SPA route transition matching JAWS.
+    pub fn format_page_title_change(title: &str) -> String {
+        format!("Page has loaded: {}", title.trim())
     }
 
     fn format_number(val: f64) -> String {

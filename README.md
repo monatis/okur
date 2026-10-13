@@ -2,7 +2,16 @@
 
 A lightweight, modern, open-source, and cross-platform screen reader implemented in Rust, designed for behavioral parity with **Freedom Scientific JAWS 2025**.
 
-This is an autonomous, agent-driven project with an automated **verification harness in the loop**, validated against differential speech and interaction recordings from live JAWS on Windows 10.
+This is an autonomous, agent-driven project using **[clean-room software engineering](https://en.wikipedia.org/wiki/Cleanroom_software_engineering)** and **[clean-room design](https://en.wikipedia.org/wiki/Clean-room_design)**, verified through a closed-loop automated harness against external speech and interaction observations from live JAWS on Windows 10.
+
+---
+
+## Clean-Room Software Engineering & Legal Interoperability
+
+This project adheres strictly to **clean-room software engineering** principles:
+- **No Proprietary Code or Binaries**: No source code from Freedom Scientific JAWS is ever copied, decompiled, disassembled, or reverse-engineered. The codebase is implemented entirely from scratch in modern, memory-safe, cross-platform Rust.
+- **Black-Box Functional Observation**: The verification harness observes JAWS strictly as a black box (keystroke inputs in, speech/braille announcements out) across synthetic HTML and application fixtures on an external reference machine.
+- **Interoperability & Fair Use**: Observing software behavior to create an interoperable, compatible implementation is protected fair use. Decades of user muscle memory—keystrokes, navigation shortcuts, announcement phrasing, and functional interaction patterns—constitute functional methods of operation and operational interfaces designed for the convenience and accessibility of screen reader users.
 
 ---
 

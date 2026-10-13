@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Single Page App and Frame Fixture</title>
+</head>
+<body>
+  <header>
+    <a href="#main-content">Skip to content</a>
+    <h1>Portal Home</h1>
+    <nav aria-label="Main Navigation">
+      <button id="btn-dash" onclick="loadDashboard()">Go to Dashboard</button>
+      <button id="btn-settings" onclick="loadSettings()">Go to Settings</button>
+    </nav>
+  </header>
+
+  <iframe id="widget-frame" title="Widget Frame" srcdoc="<h3>Widget Header</h3><p>Inside iframe content</p>"></iframe>
+
+  <main id="main-content" tabindex="-1">
+    <h2>Main Content Area</h2>
+    <p>This is the primary destination article.</p>
+  </main>
+
+  <script>
+    function loadDashboard() {
+      document.title = "Dashboard - Single Page App";
+      var main = document.getElementById("main-content");
+      main.innerHTML = "<h2>Dashboard View</h2><p>Welcome to your dashboard overview.</p>";
+      main.focus();
+    }
+    function loadSettings() {
+      document.title = "Settings - Single Page App";
+      var main = document.getElementById("main-content");
+      main.innerHTML = "<h2>Settings View</h2><p>Account and profile preferences.</p>";
+      main.focus();
+    }
+  </script>
+</body>
+</html>

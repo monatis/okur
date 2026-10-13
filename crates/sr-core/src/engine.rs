@@ -132,16 +132,24 @@ impl ScreenReaderEngine {
                 self.cursor.move_prior_landmark()
             }
 
+            // Frames
+            "M" | "m" | "MoveToNextFrame" => self.cursor.move_next_frame(),
+            "+M" | "+m" | "MoveToPriorFrame" => self.cursor.move_prior_frame(),
+
             // Interactive navigation & actions
             "{TAB}" => self.cursor.move_next_tab_stop(),
             "+{TAB}" | "+TAB" => self.cursor.move_prior_tab_stop(),
             "{SPACE}" => self.cursor.toggle_active_control(),
-            "{ENTER}" | "EnterFormsMode" => {
-                let res = self.cursor.enter_forms_mode();
-                if res.is_some() {
-                    self.forms_mode = true;
+            "{ENTER}" | "EnterFormsMode" | "ActivateLink" => {
+                if let Some(link_speech) = self.cursor.activate_current_link() {
+                    Some(link_speech)
+                } else {
+                    let res = self.cursor.enter_forms_mode();
+                    if res.is_some() {
+                        self.forms_mode = true;
+                    }
+                    res
                 }
-                res
             }
             "{ESC}" | "ExitFormsMode" => {
                 if self.cursor.is_combobox_expanded() {
@@ -272,6 +280,37 @@ impl ScreenReaderEngine {
         }
 
         KeyAction::PassThrough
+    }
+
+    /// Handles client-side SPA routing transitions: announces new page title and retargets cursor.
+    pub fn handle_route_transition(&mut self, new_title: &str, target_id: Option<&str>) -> String {
+        let title_announcement = SpeechFormatter::format_page_title_change(new_title);
+        let mut announcements = vec![title_announcement];
+
+        if let Some(target) = target_id {
+            let resolved_offset = if let Ok(num_id) = target.parse::<usize>() {
+                self.cursor.move_to_node_id(num_id);
+                Some(self.cursor.offset)
+            } else if let Some(&offset) = self.cursor.buffer.target_anchors.get(target) {
+                self.cursor.offset = offset;
+                self.cursor.current_node_id =
+                    self.cursor.buffer.node_at_offset(offset).map(|n| n.id);
+                Some(offset)
+            } else {
+                None
+            };
+
+            if resolved_offset.is_some() {
+                let line = self.cursor.current_line();
+                if !line.is_empty() {
+                    announcements.push(line);
+                }
+            }
+        }
+
+        let full_text = announcements.join("\n");
+        self.speech.speak(&full_text, true);
+        full_text
     }
 
     /// Handles an incoming accessibility event from the OS event listener.

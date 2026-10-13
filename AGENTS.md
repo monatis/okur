@@ -34,6 +34,12 @@ This is an **autonomous, agent-driven project with a "verification harness in th
      - Every subsystem must provide a lightweight headless/mock implementation (`MockKeyboardHook`, `MockSpeechOutput`) ensuring complete testability in CI and headless environments.
      - Even when testing on a Windows host, all traits and abstractions must be strictly structured and future-proofed so that native macOS implementations drop into place without refactoring core screen reader logic.
 
+4. **Agent-Driven Clean-Room Software Engineering & Legal Interoperability**:
+   - This project strictly follows **[Clean-room design](https://en.wikipedia.org/wiki/Clean-room_design)** and **[Cleanroom software engineering](https://en.wikipedia.org/wiki/Cleanroom_software_engineering)** methodologies.
+   - **Zero Proprietary Ingestion**: No source code, scripts, binaries, or decompiled/disassembled bytecodes from Freedom Scientific or JAWS are ever copied, bundled, or disassembled. All code is written from scratch in modern, memory-safe Rust.
+   - **Black-Box Functional Observation**: The verification harness observes JAWS strictly as a black box (keystrokes in -> spoken announcements / braille output out) across synthetic fixtures on an external reference machine (`old-pc`).
+   - **Interoperability, Fair Use & Decades of Muscle Memory**: Observing software behavior to create an interoperable, compatible implementation is protected fair use. Decades of user muscle memory—keystrokes, shortcuts, announcement messages, speech tokens, and document navigation models—are functional methods of operation and interoperability interfaces that cannot be copyrighted. Our mission is to preserve this familiarity so screen reader users have an accessible, modern, cross-platform alternative.
+
 ---
 
 ## 2. Active Session Plan & Session Lifecycle
@@ -41,8 +47,8 @@ This is an **autonomous, agent-driven project with a "verification harness in th
 To ensure seamless context passing across autonomous sessions, all engineering work is orchestrated through the `docs/` tree:
 
 ### Active Plan for Current / Next Session
-- **Active Plan**: [`docs/plans/2026-10-13-multi-page-spa-routing-and-iframes.md`](file:///c:/Users/Gigabyte/screen-reader/docs/plans/2026-10-13-multi-page-spa-routing-and-iframes.md)
-- **Latest Handoff**: [`docs/handoff/2026-10-13-complex-aria-widgets-combobox-treeview.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-complex-aria-widgets-combobox-treeview.md)
+- **Active Plan**: [`docs/plans/2026-10-13-virtual-buffer-search-and-element-lists.md`](file:///c:/Users/Gigabyte/screen-reader/docs/plans/2026-10-13-virtual-buffer-search-and-element-lists.md)
+- **Latest Handoff**: [`docs/handoff/2026-10-13-multi-page-spa-routing-and-iframes.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-multi-page-spa-routing-and-iframes.md)
 
 
 ### Standard Session Execution Protocol

@@ -1,0 +1,39 @@
+{
+  "scenario_id": "49-spa-route-title-change",
+  "scenario_version": "1.1.0",
+  "timestamp": "2026-10-13T04:37:00.0000000+03:00",
+  "environment": {
+    "os_version": "Microsoft Windows NT 10.0.19045.0",
+    "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+    "target_process": "chrome",
+    "interactive_session": true
+  },
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/spa-and-frames.html",
+  "repetitions_requested": 5,
+  "trials": [
+    {
+      "trial_index": 1,
+      "timestamp": "2026-10-13T04:37:01.0000000+03:00",
+      "step_results": [
+        {
+          "step_id": "s1",
+          "action": {
+            "type": "spa_route",
+            "command": "Dashboard - Single Page App"
+          },
+          "observation": {
+            "speech_raw": "Page has loaded: Dashboard - Single Page App",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Dashboard - Single Page App"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        }
+      ]
+    }
+  ]
+}

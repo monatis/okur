@@ -1,0 +1,30 @@
+{
+  "id": "46-iframe-quicknav",
+  "name": "Navigate to Inline Frame via M Quick Navigation",
+  "category": "Frame Navigation and SPA Routing",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/spa-and-frames.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "keyboard",
+      "command": "M",
+      "settle_ms": 300,
+      "assertions": {
+        "target_role": "iframe",
+        "target_name": "Widget Frame",
+        "contains_speech": [
+          "Widget Frame",
+          "frame"
+        ]
+      }
+    }
+  ]
+}

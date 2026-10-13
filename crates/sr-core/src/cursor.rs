@@ -337,6 +337,26 @@ impl VirtualCursor {
                     let value = node.value_now.unwrap_or(0.0);
                     return SpeechFormatter::format_progressbar(name, value);
                 }
+                Role::IFrame => {
+                    if line.text.ends_with("frame end") || line.text.ends_with("frame") {
+                        return line.text.clone();
+                    }
+                    let name = node.name.as_deref().unwrap_or(&line.text);
+                    return SpeechFormatter::format_frame(name);
+                }
+                Role::Link { ref href } => {
+                    let is_same_page = href.as_deref().map(|h| h.starts_with('#')).unwrap_or(false);
+                    let text = node
+                        .name
+                        .as_deref()
+                        .or(node.text.as_deref())
+                        .unwrap_or(&line.text);
+                    if is_same_page {
+                        return format!(" \u{001d} same page link \u{001e} {}", text);
+                    } else {
+                        return format!(" \u{001d} link \u{001e} {}", text);
+                    }
+                }
                 _ => {}
             }
         }
@@ -749,6 +769,93 @@ impl VirtualCursor {
             .or_else(|| self.buffer.span_text_at_offset(target_offset))
             .unwrap_or("");
         Some(SpeechFormatter::format_link(text, is_same_page))
+    }
+
+    /// Activates an in-page fragment link at the cursor and jumps directly to its anchor target.
+    pub fn activate_current_link(&mut self) -> Option<String> {
+        let current_offset = self.offset;
+        let link_node = self
+            .current_node()
+            .and_then(|n| match n.role {
+                Role::Link { .. } => Some(n),
+                _ => None,
+            })
+            .or_else(|| self.buffer.find_link_node(current_offset))
+            .or_else(|| {
+                self.buffer
+                    .spans
+                    .iter()
+                    .find(|s| {
+                        s.start_offset <= current_offset
+                            && s.end_offset >= current_offset
+                            && matches!(s.role, Role::Link { .. })
+                    })
+                    .and_then(|s| self.buffer.node_map.get(&s.node_id))
+            });
+
+        if let Some(node) = link_node {
+            if let Role::Link {
+                href: Some(ref href),
+            } = node.role
+            {
+                if let Some(target_id) = href.strip_prefix('#') {
+                    if let Some(&target_offset) = self.buffer.target_anchors.get(target_id) {
+                        self.offset = target_offset;
+                        self.current_node_id =
+                            self.buffer.node_at_offset(target_offset).map(|n| n.id);
+                        self.selection = None;
+                        return Some(self.current_line());
+                    }
+                }
+            }
+        }
+        None
+    }
+
+    /// Moves cursor to next inline frame (`M` / `MoveToNextFrame`).
+    pub fn move_next_frame(&mut self) -> Option<String> {
+        self.selection = None;
+        if self.buffer.frames.is_empty() {
+            return Some("There are no frames on this page".to_string());
+        }
+
+        if let Some(frame) = self.buffer.next_frame_from(self.offset) {
+            self.offset = frame.start_offset;
+            self.current_node_id = Some(frame.node_id);
+            Some(SpeechFormatter::format_frame(&frame.name))
+        } else if let Some(frame) = self.buffer.first_frame() {
+            self.offset = frame.start_offset;
+            self.current_node_id = Some(frame.node_id);
+            Some(format!(
+                "wrapping to top\n{}",
+                SpeechFormatter::format_frame(&frame.name)
+            ))
+        } else {
+            None
+        }
+    }
+
+    /// Moves cursor to prior inline frame (`Shift+M` / `MoveToPriorFrame`).
+    pub fn move_prior_frame(&mut self) -> Option<String> {
+        self.selection = None;
+        if self.buffer.frames.is_empty() {
+            return Some("There are no frames on this page".to_string());
+        }
+
+        if let Some(frame) = self.buffer.prior_frame_from(self.offset) {
+            self.offset = frame.start_offset;
+            self.current_node_id = Some(frame.node_id);
+            Some(SpeechFormatter::format_frame(&frame.name))
+        } else if let Some(frame) = self.buffer.last_frame() {
+            self.offset = frame.start_offset;
+            self.current_node_id = Some(frame.node_id);
+            Some(format!(
+                "wrapping to bottom\n{}",
+                SpeechFormatter::format_frame(&frame.name)
+            ))
+        } else {
+            None
+        }
     }
 
     /// Moves cursor to next list container (`L` / `MoveToNextList`).

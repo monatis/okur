@@ -1,0 +1,280 @@
+{
+  "id": 0,
+  "role": "Document",
+  "name": "Single Page App and Frame Fixture",
+  "value": null,
+  "text": null,
+  "children": [
+    {
+      "id": 1,
+      "role": {
+        "Landmark": {
+          "landmark_type": "banner"
+        }
+      },
+      "name": "banner",
+      "value": null,
+      "text": null,
+      "children": [
+        {
+          "id": 2,
+          "role": {
+            "Link": {
+              "href": "#main-content"
+            }
+          },
+          "name": "Skip to content",
+          "value": null,
+          "text": "Skip to content",
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {
+            "href": "#main-content"
+          }
+        },
+        {
+          "id": 3,
+          "role": {
+            "Heading": {
+              "level": 1
+            }
+          },
+          "name": "Portal Home",
+          "value": null,
+          "text": "Portal Home",
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {}
+        },
+        {
+          "id": 4,
+          "role": {
+            "Landmark": {
+              "landmark_type": "navigation"
+            }
+          },
+          "name": "Main Navigation",
+          "value": null,
+          "text": null,
+          "children": [
+            {
+              "id": 5,
+              "role": "Button",
+              "name": "Go to Dashboard",
+              "value": null,
+              "text": "Go to Dashboard",
+              "children": [],
+              "states": {
+                "checked": null,
+                "selected": null,
+                "expanded": null,
+                "focused": false,
+                "disabled": false,
+                "hidden": false,
+                "modal": false
+              },
+              "attributes": {
+                "id": "btn-dash"
+              }
+            },
+            {
+              "id": 6,
+              "role": "Button",
+              "name": "Go to Settings",
+              "value": null,
+              "text": "Go to Settings",
+              "children": [],
+              "states": {
+                "checked": null,
+                "selected": null,
+                "expanded": null,
+                "focused": false,
+                "disabled": false,
+                "hidden": false,
+                "modal": false
+              },
+              "attributes": {
+                "id": "btn-settings"
+              }
+            }
+          ],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {}
+        }
+      ],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false,
+        "modal": false
+      },
+      "attributes": {}
+    },
+    {
+      "id": 10,
+      "role": "IFrame",
+      "name": "Widget Frame",
+      "value": null,
+      "text": "Widget Frame",
+      "children": [
+        {
+          "id": 11,
+          "role": {
+            "Heading": {
+              "level": 3
+            }
+          },
+          "name": "Widget Header",
+          "value": null,
+          "text": "Widget Header",
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {}
+        },
+        {
+          "id": 12,
+          "role": "Paragraph",
+          "name": "Inside iframe content",
+          "value": null,
+          "text": "Inside iframe content",
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {}
+        }
+      ],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false,
+        "modal": false
+      },
+      "attributes": {
+        "id": "widget-frame",
+        "title": "Widget Frame"
+      }
+    },
+    {
+      "id": 20,
+      "role": {
+        "Landmark": {
+          "landmark_type": "main"
+        }
+      },
+      "name": "main",
+      "value": null,
+      "text": null,
+      "children": [
+        {
+          "id": 21,
+          "role": {
+            "Heading": {
+              "level": 2
+            }
+          },
+          "name": "Main Content Area",
+          "value": null,
+          "text": "Main Content Area",
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {
+            "id": "main-content"
+          }
+        },
+        {
+          "id": 22,
+          "role": "Paragraph",
+          "name": "This is the primary destination article.",
+          "value": null,
+          "text": "This is the primary destination article.",
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false,
+            "modal": false
+          },
+          "attributes": {}
+        }
+      ],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false,
+        "modal": false
+      },
+      "attributes": {
+        "id": "main-content"
+      }
+    }
+  ],
+  "states": {
+    "checked": null,
+    "selected": null,
+    "expanded": null,
+    "focused": false,
+    "disabled": false,
+    "hidden": false,
+    "modal": false
+  },
+  "attributes": {}
+}

@@ -1,0 +1,27 @@
+{
+  "id": "49-spa-route-title-change",
+  "name": "SPA Client-Side Route Transition and Title Update Announcement",
+  "category": "Frame Navigation and SPA Routing",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/spa-and-frames.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "spa_route",
+      "command": "Dashboard - Single Page App",
+      "settle_ms": 300,
+      "assertions": {
+        "contains_speech": [
+          "Dashboard - Single Page App"
+        ]
+      }
+    }
+  ]
+}
