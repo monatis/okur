@@ -1,0 +1,45 @@
+{
+  "id": "32-focus-button-exit-forms",
+  "name": "Live Focus Exit from Forms Mode to Virtual PC Cursor",
+  "category": "Live Focus and ARIA Live",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/live-focus.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "focus",
+      "command": "Full Name:",
+      "settle_ms": 400,
+      "assertions": {
+        "target_role": "edit",
+        "forms_mode_active": true,
+        "contains_speech": [
+          "Type in text"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "type": "focus",
+      "command": "Submit Application",
+      "settle_ms": 400,
+      "assertions": {
+        "target_role": "button",
+        "target_name": "Submit Application",
+        "forms_mode_active": false,
+        "contains_speech": [
+          "Submit Application",
+          "Button",
+          "virtual PC Cursor"
+        ]
+      }
+    }
+  ]
+}

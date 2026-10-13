@@ -1,7 +1,10 @@
 use clap::{Parser, Subcommand};
 use sr_core::{AomNode, Role, ScreenReaderEngine, VirtualBuffer, VirtualCursor};
 use sr_corpus::DifferentialRunner;
-use sr_platform::{create_keyboard_hook, KeyAction, PlatformBridge, TtsEngineType, TtsManager};
+use sr_platform::{
+    create_event_listener, create_keyboard_hook, KeyAction, PlatformBridge, TtsEngineType,
+    TtsManager,
+};
 use std::fs;
 use std::path::Path;
 use std::str::FromStr;
@@ -238,6 +241,22 @@ async fn main() {
                 std::process::exit(1);
             }
 
+            // Start OS-level accessibility event listener
+            let mut event_listener = create_event_listener();
+            let (event_tx, mut event_rx) = tokio::sync::mpsc::unbounded_channel();
+            if let Err(e) = event_listener.start(event_tx) {
+                tracing::warn!("Could not start OS accessibility event listener: {}", e);
+            } else {
+                let engine_events = Arc::clone(&engine);
+                tokio::spawn(async move {
+                    while let Some(event) = event_rx.recv().await {
+                        if let Ok(mut eng) = engine_events.lock() {
+                            eng.handle_accessibility_event(&event);
+                        }
+                    }
+                });
+            }
+
             println!("\nScreen Reader daemon is running.");
             println!("Navigation shortcuts active:");
             println!("  - Arrow keys: Navigate lines / characters");
@@ -260,6 +279,7 @@ async fn main() {
 
             println!("\nShutting down screen reader daemon...");
             let _ = hook.stop();
+            let _ = event_listener.stop();
             {
                 let mut eng = engine.lock().unwrap();
                 eng.speech.speak("Screen reader exiting.", true);
@@ -392,7 +412,7 @@ async fn main() {
             println!("  TTS Driver: {}", tts);
             println!("============================================================");
 
-            let filter = scenarios.as_deref().unwrap_or("01..25");
+            let filter = scenarios.as_deref().unwrap_or("01..35");
             let results = if let Some((start, end)) = parse_range(filter) {
                 runner.run_range(start, end)
             } else {

@@ -1,7 +1,9 @@
+use crate::aom::Role;
 use crate::buffer::VirtualBuffer;
 use crate::cursor::VirtualCursor;
+use crate::event::{AccessibilityEvent, FocusEvent, LiveRegionEvent, Politeness};
 use crate::input::{Key, KeyAction, KeyEvent};
-use crate::speech::SpeechOutput;
+use crate::speech::{SpeechFormatter, SpeechOutput};
 
 /// Primary runtime engine for screen reader execution, coordinating virtual cursor navigation,
 /// speech output, and interactive input event handling.
@@ -186,6 +188,135 @@ impl ScreenReaderEngine {
 
         KeyAction::PassThrough
     }
+
+    /// Handles an incoming accessibility event from the OS event listener.
+    pub fn handle_accessibility_event(&mut self, event: &AccessibilityEvent) -> Option<String> {
+        match event {
+            AccessibilityEvent::Focus(focus) => self.handle_focus_event(focus),
+            AccessibilityEvent::LiveRegion(live) => self.handle_live_region_event(live),
+        }
+    }
+
+    /// Handles an OS-level focus changed event.
+    /// Synchronizes cursor position, activates/deactivates forms mode,
+    /// and emits canonical JAWS speech announcements.
+    pub fn handle_focus_event(&mut self, focus: &FocusEvent) -> Option<String> {
+        // Try matching node in buffer
+        let matched_node_id = focus
+            .node_id
+            .filter(|id| self.cursor.buffer.node_map.contains_key(id));
+
+        let target_id = matched_node_id.or_else(|| {
+            self.cursor.buffer.node_map.values().find_map(|node| {
+                if node.role == focus.role {
+                    let ev_name = focus.name.as_deref();
+                    let node_name = node.name.as_deref().or(node.text.as_deref());
+                    if let (Some(en), Some(nn)) = (ev_name, node_name) {
+                        if en.eq_ignore_ascii_case(nn) {
+                            return Some(node.id);
+                        }
+                    }
+                }
+                None
+            })
+        });
+
+        if let Some(id) = target_id {
+            self.cursor.move_to_node_id(id);
+        }
+
+        let is_edit = matches!(focus.role, Role::Edit);
+        let speech = if is_edit {
+            let doc_title = self.cursor.buffer.document_title().unwrap_or("");
+            let name = focus
+                .name
+                .as_deref()
+                .or_else(|| {
+                    target_id
+                        .and_then(|id| self.cursor.buffer.node_map.get(&id))
+                        .and_then(|n| n.name.as_deref())
+                })
+                .unwrap_or("");
+            let value = focus.value.as_deref().or_else(|| {
+                target_id
+                    .and_then(|id| self.cursor.buffer.node_map.get(&id))
+                    .and_then(|n| n.value.as_deref())
+            });
+
+            if !self.forms_mode {
+                self.forms_mode = true;
+                self.cursor.forms_mode_active = true;
+                Some(SpeechFormatter::format_forms_mode_entry(
+                    doc_title, name, value,
+                ))
+            } else {
+                Some(SpeechFormatter::format_edit(name, value))
+            }
+        } else if self.forms_mode {
+            // Exiting forms mode because focused element is not an Edit
+            self.forms_mode = false;
+            self.cursor.forms_mode_active = false;
+            let exit_msg = SpeechFormatter::format_forms_mode_exit();
+            let control_msg = if let Some(id) = target_id {
+                if let Some(node) = self.cursor.buffer.node_map.get(&id) {
+                    self.cursor.format_tab_stop_node(node, None, None)
+                } else {
+                    String::new()
+                }
+            } else {
+                focus.name.clone().unwrap_or_default()
+            };
+            if !control_msg.is_empty() {
+                Some(format!("{}\n{}", control_msg, exit_msg))
+            } else {
+                Some(exit_msg)
+            }
+        } else {
+            // Staying in Virtual PC Cursor mode: announce focused control
+            if let Some(id) = target_id {
+                if let Some(node) = self.cursor.buffer.node_map.get(&id) {
+                    Some(self.cursor.format_tab_stop_node(node, None, None))
+                } else {
+                    None
+                }
+            } else {
+                let name = focus.name.as_deref().unwrap_or("");
+                match focus.role {
+                    Role::Button => Some(SpeechFormatter::format_button(name)),
+                    Role::CheckBox => Some(SpeechFormatter::format_checkbox(
+                        name,
+                        focus.states.checked.unwrap_or(false),
+                    )),
+                    Role::Link { .. } => Some(SpeechFormatter::format_link(name, false)),
+                    _ => focus.name.clone(),
+                }
+            }
+        };
+
+        if let Some(ref text) = speech {
+            if !text.is_empty() {
+                self.speech.speak(text, true);
+            }
+        }
+
+        speech
+    }
+
+    /// Handles an ARIA live region announcement event with politeness consideration.
+    pub fn handle_live_region_event(&mut self, live: &LiveRegionEvent) -> Option<String> {
+        match live.politeness {
+            Politeness::Assertive => {
+                self.speech.stop();
+                self.speech.speak(&live.text, true);
+                Some(live.text.clone())
+            }
+            Politeness::Polite => {
+                self.speech.speak(&live.text, false);
+                Some(live.text.clone())
+            }
+            Politeness::Off => None,
+        }
+    }
 }
 
 #[cfg(test)]
@@ -202,6 +333,12 @@ mod tests {
                 AomNode::new(1, Role::Heading { level: 1 }).with_text("Main Title"),
                 AomNode::new(2, Role::Paragraph).with_text("This is interactive paragraph."),
                 AomNode::new(3, Role::Edit).with_name("Search Input"),
+                AomNode::new(4, Role::Button).with_name("Submit Button"),
+                {
+                    let mut cb = AomNode::new(5, Role::CheckBox).with_name("Subscribe Checkbox");
+                    cb.states.checked = Some(true);
+                    cb
+                },
             ]);
         VirtualBuffer::from_aom(&aom)
     }
@@ -255,5 +392,70 @@ mod tests {
 
         // Back in Virtual PC Cursor mode, Down arrow is consumed
         assert_eq!(engine.handle_key_event(&down_event), KeyAction::Consume);
+    }
+
+    #[test]
+    fn test_engine_auto_forms_mode_on_focus_edit() {
+        let buffer = create_test_buffer();
+        let cursor = VirtualCursor::new(buffer);
+        let mock_speech = Box::new(MockSpeechOutput::new());
+        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
+
+        assert!(!engine.forms_mode);
+
+        // Focus event moving into Search Input
+        let focus_ev = FocusEvent::new(Role::Edit)
+            .with_node_id(3)
+            .with_name("Search Input");
+        let speech = engine
+            .handle_focus_event(&focus_ev)
+            .expect("Should produce speech");
+
+        // Engine should automatically enter Forms Mode and emit canonical JAWS prompt
+        assert!(engine.forms_mode);
+        assert!(engine.cursor.forms_mode_active);
+        assert_eq!(engine.cursor.current_node_id, Some(3));
+        assert!(speech.contains("Search Input"));
+        assert!(speech.contains("Type in text."));
+
+        // Focus transitions to Submit Button -> should auto exit forms mode
+        let btn_focus = FocusEvent::new(Role::Button)
+            .with_node_id(4)
+            .with_name("Submit Button");
+        let btn_speech = engine
+            .handle_focus_event(&btn_focus)
+            .expect("Should produce exit speech");
+
+        assert!(!engine.forms_mode);
+        assert!(!engine.cursor.forms_mode_active);
+        assert_eq!(engine.cursor.current_node_id, Some(4));
+        assert!(btn_speech.contains("Submit Button"));
+        assert!(btn_speech.contains("virtual PC Cursor"));
+    }
+
+    #[test]
+    fn test_engine_live_region_announcements() {
+        let buffer = create_test_buffer();
+        let cursor = VirtualCursor::new(buffer);
+        let mock_speech = Box::new(MockSpeechOutput::new());
+        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
+
+        // Assertive live region
+        let alert = LiveRegionEvent::new("Security update installed.", Politeness::Assertive);
+        let alert_speech = engine
+            .handle_live_region_event(&alert)
+            .expect("Assertive alert speech");
+        assert_eq!(alert_speech, "Security update installed.");
+
+        // Polite live region
+        let status = LiveRegionEvent::new("Download finished.", Politeness::Polite);
+        let status_speech = engine
+            .handle_live_region_event(&status)
+            .expect("Polite status speech");
+        assert_eq!(status_speech, "Download finished.");
+
+        // Politeness::Off
+        let off = LiveRegionEvent::new("Ignored mutation.", Politeness::Off);
+        assert_eq!(engine.handle_live_region_event(&off), None);
     }
 }

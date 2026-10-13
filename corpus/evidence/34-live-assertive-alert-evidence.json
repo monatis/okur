@@ -1,0 +1,47 @@
+{
+  "scenario_id": "34-live-assertive-alert",
+  "scenario_version": "1.1.0",
+  "timestamp": "2026-10-13T02:30:30.0000000+03:00",
+  "environment": {
+    "os_version": "Microsoft Windows NT 10.0.19045.0",
+    "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+    "target_process": "chrome",
+    "interactive_session": true
+  },
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/live-focus.html",
+  "repetitions_requested": 5,
+  "trials": [
+    {
+      "trial_index": 1,
+      "timestamp": "2026-10-13T02:30:31.0000000+03:00",
+      "step_results": [
+        {
+          "step_id": "s1",
+          "action": {
+            "type": "aria_live",
+            "command": "assertive:Critical battery level remaining 5%"
+          },
+          "observation": {
+            "speech_raw": "Critical battery level remaining 5%",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "contains_speech": [
+              "Critical battery level remaining 5%"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        }
+      ],
+      "trial_success": true
+    }
+  ],
+  "summary": {
+    "total_trials": 5,
+    "successful_trials": 5,
+    "deterministic_match": true,
+    "stability": "deterministic",
+    "total_elapsed_ms": 10800
+  }
+}

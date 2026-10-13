@@ -1,0 +1,33 @@
+{
+  "id": "33-focus-checkbox-sync",
+  "name": "Live Focus Synchronization on Checkbox Control",
+  "category": "Live Focus and ARIA Live",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/live-focus.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "focus",
+      "command": "Receive status updates",
+      "settle_ms": 400,
+      "assertions": {
+        "target_role": "checkbox",
+        "target_name": "Receive status updates",
+        "target_checked": false,
+        "forms_mode_active": false,
+        "contains_speech": [
+          "Receive status updates",
+          "check box",
+          "not checked"
+        ]
+      }
+    }
+  ]
+}

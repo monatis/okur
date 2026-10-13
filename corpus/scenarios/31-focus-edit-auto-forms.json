@@ -1,0 +1,32 @@
+{
+  "id": "31-focus-edit-auto-forms",
+  "name": "Live Focus Tracking and Auto Forms Mode Entry",
+  "category": "Live Focus and ARIA Live",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/live-focus.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "focus",
+      "command": "Full Name:",
+      "settle_ms": 400,
+      "assertions": {
+        "target_role": "edit",
+        "target_name": "Full Name:",
+        "forms_mode_active": true,
+        "contains_speech": [
+          "Full Name:",
+          "Edit",
+          "Type in text"
+        ]
+      }
+    }
+  ]
+}

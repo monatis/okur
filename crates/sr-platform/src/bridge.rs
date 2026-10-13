@@ -13,6 +13,8 @@ pub enum PlatformError {
     AppNotFound(String),
     #[error("Keyboard hook error: {0}")]
     HookError(String),
+    #[error("Event listener error: {0}")]
+    EventListenerError(String),
 }
 
 static NEXT_NODE_ID: AtomicUsize = AtomicUsize::new(1);

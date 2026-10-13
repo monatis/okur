@@ -1,0 +1,27 @@
+{
+  "id": "35-live-polite-status",
+  "name": "ARIA Polite Live Region Queued Announcement",
+  "category": "Live Focus and ARIA Live",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/live-focus.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "aria_live",
+      "command": "polite:File upload completed successfully",
+      "settle_ms": 400,
+      "assertions": {
+        "contains_speech": [
+          "File upload completed successfully"
+        ]
+      }
+    }
+  ]
+}

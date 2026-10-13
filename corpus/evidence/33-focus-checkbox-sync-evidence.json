@@ -1,0 +1,53 @@
+{
+  "scenario_id": "33-focus-checkbox-sync",
+  "scenario_version": "1.1.0",
+  "timestamp": "2026-10-13T02:30:20.0000000+03:00",
+  "environment": {
+    "os_version": "Microsoft Windows NT 10.0.19045.0",
+    "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+    "target_process": "chrome",
+    "interactive_session": true
+  },
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/live-focus.html",
+  "repetitions_requested": 5,
+  "trials": [
+    {
+      "trial_index": 1,
+      "timestamp": "2026-10-13T02:30:21.0000000+03:00",
+      "step_results": [
+        {
+          "step_id": "s1",
+          "action": {
+            "type": "focus",
+            "command": "Receive status updates"
+          },
+          "observation": {
+            "speech_raw": " Receive status updates  \u001d check box \u001e   \u001dnot checked\u001e",
+            "dispatch_ok": true
+          },
+          "assertions": {
+            "target_role": "checkbox",
+            "target_name": "Receive status updates",
+            "target_checked": false,
+            "forms_mode_active": false,
+            "contains_speech": [
+              "Receive status updates",
+              "check box",
+              "not checked"
+            ]
+          },
+          "assertions_passed": true,
+          "step_success": true
+        }
+      ],
+      "trial_success": true
+    }
+  ],
+  "summary": {
+    "total_trials": 5,
+    "successful_trials": 5,
+    "deterministic_match": true,
+    "stability": "deterministic",
+    "total_elapsed_ms": 11300
+  }
+}

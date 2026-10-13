@@ -1,0 +1,27 @@
+{
+  "id": "34-live-assertive-alert",
+  "name": "ARIA Assertive Live Region Immediate Announcement",
+  "category": "Live Focus and ARIA Live",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/live-focus.html",
+  "target_app": "chrome",
+  "reset": {
+    "keystrokes": [
+      "^{HOME}"
+    ],
+    "exit_forms_mode": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "aria_live",
+      "command": "assertive:Critical battery level remaining 5%",
+      "settle_ms": 400,
+      "assertions": {
+        "contains_speech": [
+          "Critical battery level remaining 5%"
+        ]
+      }
+    }
+  ]
+}

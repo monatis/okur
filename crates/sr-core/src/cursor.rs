@@ -667,7 +667,21 @@ impl VirtualCursor {
         Some(self.format_tab_stop_node(&node, prev_node_id, None))
     }
 
-    fn format_tab_stop_node(
+    /// Aligns the virtual cursor offset with the specified node id.
+    pub fn move_to_node_id(&mut self, node_id: usize) -> bool {
+        if let Some(span) = self.buffer.spans.iter().find(|s| s.node_id == node_id) {
+            self.offset = span.start_offset;
+            self.current_node_id = Some(node_id);
+            true
+        } else if self.buffer.node_map.contains_key(&node_id) {
+            self.current_node_id = Some(node_id);
+            true
+        } else {
+            false
+        }
+    }
+
+    pub fn format_tab_stop_node(
         &self,
         node: &AomNode,
         prev_node_id: Option<usize>,

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Focus and ARIA Live Reference Fixture</title>
+</head>
+<body>
+  <h1>Account Settings and Notifications</h1>
+  
+  <form id="settings-form" action="#" method="post">
+    <div>
+      <label for="full-name">Full Name:</label>
+      <input type="text" id="full-name" name="full-name" value="Alex Rivera">
+    </div>
+    <div>
+      <input type="checkbox" id="status-updates" name="status-updates">
+      <label for="status-updates">Receive status updates</label>
+    </div>
+    <div>
+      <button type="submit" id="submit-btn">Submit Application</button>
+    </div>
+  </form>
+
+  <div id="live-assertive" role="alert" aria-live="assertive">
+    Critical battery level remaining 5%
+  </div>
+
+  <div id="live-polite" role="status" aria-live="polite">
+    File upload completed successfully
+  </div>
+</body>
+</html>

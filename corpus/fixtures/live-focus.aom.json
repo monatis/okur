@@ -1,0 +1,148 @@
+{
+  "id": 0,
+  "role": "Document",
+  "name": "Live Focus and ARIA Live Reference Fixture",
+  "value": null,
+  "text": null,
+  "children": [
+    {
+      "id": 1,
+      "role": {
+        "Heading": {
+          "level": 1
+        }
+      },
+      "name": "Account Settings and Notifications",
+      "value": null,
+      "text": "Account Settings and Notifications",
+      "children": [],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false
+      },
+      "attributes": {}
+    },
+    {
+      "id": 2,
+      "role": "Generic",
+      "name": null,
+      "value": null,
+      "text": null,
+      "children": [
+        {
+          "id": 3,
+          "role": "Edit",
+          "name": "Full Name:",
+          "value": "Alex Rivera",
+          "text": null,
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false
+          },
+          "attributes": {}
+        },
+        {
+          "id": 4,
+          "role": "CheckBox",
+          "name": "Receive status updates",
+          "value": null,
+          "text": "Receive status updates",
+          "children": [],
+          "states": {
+            "checked": false,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false
+          },
+          "attributes": {}
+        },
+        {
+          "id": 5,
+          "role": "Button",
+          "name": "Submit Application",
+          "value": null,
+          "text": "Submit Application",
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false
+          },
+          "attributes": {}
+        },
+        {
+          "id": 6,
+          "role": "Generic",
+          "name": "Critical battery level remaining 5%",
+          "value": null,
+          "text": "Critical battery level remaining 5%",
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false
+          },
+          "attributes": {
+            "aria-live": "assertive",
+            "role": "alert"
+          }
+        },
+        {
+          "id": 7,
+          "role": "Generic",
+          "name": "File upload completed successfully",
+          "value": null,
+          "text": "File upload completed successfully",
+          "children": [],
+          "states": {
+            "checked": null,
+            "selected": null,
+            "expanded": null,
+            "focused": false,
+            "disabled": false,
+            "hidden": false
+          },
+          "attributes": {
+            "aria-live": "polite",
+            "role": "status"
+          }
+        }
+      ],
+      "states": {
+        "checked": null,
+        "selected": null,
+        "expanded": null,
+        "focused": false,
+        "disabled": false,
+        "hidden": false
+      },
+      "attributes": {}
+    }
+  ],
+  "states": {
+    "checked": null,
+    "selected": null,
+    "expanded": null,
+    "focused": false,
+    "disabled": false,
+    "hidden": false
+  },
+  "attributes": {}
+}

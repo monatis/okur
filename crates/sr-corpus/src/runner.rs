@@ -1,5 +1,8 @@
 use serde::{Deserialize, Serialize};
-use sr_core::{AomNode, Role, VirtualBuffer, VirtualCursor};
+use sr_core::{
+    AomNode, FocusEvent, LiveRegionEvent, MockSpeechOutput, Politeness, Role, ScreenReaderEngine,
+    VirtualBuffer, VirtualCursor,
+};
 use sr_platform::PlatformBridge;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -124,6 +127,9 @@ impl DifferentialRunner {
             }
         }
 
+        let mock_speech = Box::new(MockSpeechOutput::new());
+        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
+
         // Attempt loading canonical evidence for cross-validation
         let evidence_path = self
             .corpus_dir
@@ -135,7 +141,7 @@ impl DifferentialRunner {
         let mut scenario_passed = true;
 
         for step in &scenario.steps {
-            let step_res = self.execute_step(step, &mut cursor, canonical_evidence.as_ref());
+            let step_res = self.execute_step(step, &mut engine, canonical_evidence.as_ref());
             if !step_res.success {
                 scenario_passed = false;
             }
@@ -153,141 +159,71 @@ impl DifferentialRunner {
     fn execute_step(
         &self,
         step: &ScenarioStep,
-        cursor: &mut VirtualCursor,
+        engine: &mut ScreenReaderEngine,
         evidence: Option<&EvidenceFile>,
     ) -> StepExecutionResult {
         let emitted_speech = match step.step_type.as_str() {
-            "keyboard" => match step.command.as_str() {
-                "{DOWN}" => cursor.move_next_line().unwrap_or_default(),
-                "{UP}" => cursor.move_prior_line().unwrap_or_default(),
-                "^{RIGHT}" => cursor.move_next_word().unwrap_or_default(),
-                "^{LEFT}" => cursor.move_prior_word().unwrap_or_default(),
-                "{RIGHT}" => cursor.move_next_char().unwrap_or_default(),
-                "{LEFT}" => cursor.move_prior_char().unwrap_or_default(),
-                "^{DOWN}" => cursor.move_next_paragraph().unwrap_or_default(),
-                "^{UP}" => cursor.move_prior_paragraph().unwrap_or_default(),
-                "^{HOME}" => cursor.move_to_start(),
-                "^{END}" => cursor.move_to_end(),
-                "H" | "h" => cursor.move_next_heading().unwrap_or_default(),
-                "+H" | "+h" => cursor.move_prior_heading().unwrap_or_default(),
-                "1" => cursor.move_next_heading_level(1).unwrap_or_default(),
-                "2" => cursor.move_next_heading_level(2).unwrap_or_default(),
-                "3" => cursor.move_next_heading_level(3).unwrap_or_default(),
-                "4" => cursor.move_next_heading_level(4).unwrap_or_default(),
-                "5" => cursor.move_next_heading_level(5).unwrap_or_default(),
-                "6" => cursor.move_next_heading_level(6).unwrap_or_default(),
-                "+1" => cursor.move_prior_heading_level(1).unwrap_or_default(),
-                "+2" => cursor.move_prior_heading_level(2).unwrap_or_default(),
-                "+3" => cursor.move_prior_heading_level(3).unwrap_or_default(),
-                "+4" => cursor.move_prior_heading_level(4).unwrap_or_default(),
-                "+5" => cursor.move_prior_heading_level(5).unwrap_or_default(),
-                "+6" => cursor.move_prior_heading_level(6).unwrap_or_default(),
-                "U" | "u" | "K" | "k" => cursor.move_next_link().unwrap_or_default(),
-                "+U" | "+u" | "+K" | "+k" => cursor.move_prior_link().unwrap_or_default(),
-                "L" | "l" => cursor.move_next_list().unwrap_or_default(),
-                "+L" | "+l" => cursor.move_prior_list().unwrap_or_default(),
-                "I" | "i" => cursor.move_next_list_item().unwrap_or_default(),
-                "+I" | "+i" => cursor.move_prior_list_item().unwrap_or_default(),
-                "R" | "r" | ";" => cursor.move_next_landmark().unwrap_or_default(),
-                "+R" | "+r" | "+;" => cursor.move_prior_landmark().unwrap_or_default(),
-                "F" | "f" => cursor.move_next_form_control().unwrap_or_default(),
-                "+F" | "+f" => cursor.move_prior_form_control().unwrap_or_default(),
-                "B" | "b" => cursor.move_next_button().unwrap_or_default(),
-                "+B" | "+b" => cursor.move_prior_button().unwrap_or_default(),
-                "E" | "e" => cursor.move_next_edit().unwrap_or_default(),
-                "+E" | "+e" => cursor.move_prior_edit().unwrap_or_default(),
-                "X" | "x" => cursor.move_next_checkbox().unwrap_or_default(),
-                "+X" | "+x" => cursor.move_prior_checkbox().unwrap_or_default(),
-                "{ENTER}" => cursor.enter_forms_mode().unwrap_or_default(),
-                "{ESC}" => cursor.exit_forms_mode().unwrap_or_default(),
-                "{SPACE}" => cursor.toggle_active_control().unwrap_or_default(),
-                "^%{RIGHT}" => cursor.move_table_cell_right().unwrap_or_default(),
-                "^%{LEFT}" => cursor.move_table_cell_left().unwrap_or_default(),
-                "^%{DOWN}" => cursor.move_table_cell_down().unwrap_or_default(),
-                "^%{UP}" => cursor.move_table_cell_up().unwrap_or_default(),
-                "T" | "t" => cursor.move_next_table().unwrap_or_default(),
-                "+T" | "+t" => cursor.move_prior_table().unwrap_or_default(),
-                "{TAB}" => cursor.move_next_tab_stop().unwrap_or_default(),
-                "+{TAB}" | "+TAB" => cursor.move_prior_tab_stop().unwrap_or_default(),
-                _ => String::new(),
-            },
-            "jaws_script" => match step.command.as_str() {
-                "SayAll" => cursor.say_all(),
-                "SayLine" => cursor.current_line(),
-                "SayWord" => cursor.current_word(),
-                "SayCharacter" => cursor.current_char(),
-                "MoveToNextHeading" => cursor.move_next_heading().unwrap_or_default(),
-                "MoveToPriorHeading" => cursor.move_prior_heading().unwrap_or_default(),
-                "MoveToNextHeadingLevelOne" => {
-                    cursor.move_next_heading_level(1).unwrap_or_default()
+            "focus" => {
+                let cmd = step.command.as_str();
+                let matched_node = engine
+                    .cursor
+                    .buffer
+                    .node_map
+                    .values()
+                    .find(|n| {
+                        if let Some(ref name) = n.name {
+                            if name.eq_ignore_ascii_case(cmd) || name.contains(cmd) {
+                                return true;
+                            }
+                        }
+                        if let Some(ref text) = n.text {
+                            if text.eq_ignore_ascii_case(cmd) || text.contains(cmd) {
+                                return true;
+                            }
+                        }
+                        false
+                    })
+                    .cloned();
+
+                if let Some(node) = matched_node {
+                    let mut ev = FocusEvent::new(node.role.clone())
+                        .with_node_id(node.id)
+                        .with_name(node.name.clone().unwrap_or_default())
+                        .with_states(node.states.clone());
+                    if let Some(ref v) = node.value {
+                        ev = ev.with_value(v);
+                    }
+                    engine.handle_focus_event(&ev).unwrap_or_default()
+                } else {
+                    let role = if cmd.to_lowercase().contains("edit")
+                        || cmd.to_lowercase().contains("input")
+                    {
+                        Role::Edit
+                    } else if cmd.to_lowercase().contains("button") {
+                        Role::Button
+                    } else if cmd.to_lowercase().contains("check") {
+                        Role::CheckBox
+                    } else {
+                        Role::Generic
+                    };
+                    let ev = FocusEvent::new(role).with_name(cmd);
+                    engine.handle_focus_event(&ev).unwrap_or_default()
                 }
-                "MoveToPriorHeadingLevelOne" => {
-                    cursor.move_prior_heading_level(1).unwrap_or_default()
-                }
-                "MoveToNextHeadingLevelTwo" => {
-                    cursor.move_next_heading_level(2).unwrap_or_default()
-                }
-                "MoveToPriorHeadingLevelTwo" => {
-                    cursor.move_prior_heading_level(2).unwrap_or_default()
-                }
-                "MoveToNextHeadingLevelThree" => {
-                    cursor.move_next_heading_level(3).unwrap_or_default()
-                }
-                "MoveToPriorHeadingLevelThree" => {
-                    cursor.move_prior_heading_level(3).unwrap_or_default()
-                }
-                "MoveToNextHeadingLevelFour" => {
-                    cursor.move_next_heading_level(4).unwrap_or_default()
-                }
-                "MoveToPriorHeadingLevelFour" => {
-                    cursor.move_prior_heading_level(4).unwrap_or_default()
-                }
-                "MoveToNextHeadingLevelFive" => {
-                    cursor.move_next_heading_level(5).unwrap_or_default()
-                }
-                "MoveToPriorHeadingLevelFive" => {
-                    cursor.move_prior_heading_level(5).unwrap_or_default()
-                }
-                "MoveToNextHeadingLevelSix" => {
-                    cursor.move_next_heading_level(6).unwrap_or_default()
-                }
-                "MoveToPriorHeadingLevelSix" => {
-                    cursor.move_prior_heading_level(6).unwrap_or_default()
-                }
-                "MoveToNextLink" | "MoveToNextUnvisitedLink" => {
-                    cursor.move_next_link().unwrap_or_default()
-                }
-                "MoveToPriorLink" | "MoveToPriorUnvisitedLink" => {
-                    cursor.move_prior_link().unwrap_or_default()
-                }
-                "MoveToNextList" => cursor.move_next_list().unwrap_or_default(),
-                "MoveToPriorList" => cursor.move_prior_list().unwrap_or_default(),
-                "MoveToNextListItem" => cursor.move_next_list_item().unwrap_or_default(),
-                "MoveToPriorListItem" => cursor.move_prior_list_item().unwrap_or_default(),
-                "MoveToNextLandmark" | "MoveToNextRegion" => {
-                    cursor.move_next_landmark().unwrap_or_default()
-                }
-                "MoveToPriorLandmark" | "MoveToPriorRegion" => {
-                    cursor.move_prior_landmark().unwrap_or_default()
-                }
-                "FocusToNextField" => cursor.move_next_form_control().unwrap_or_default(),
-                "FocusToPriorField" => cursor.move_prior_form_control().unwrap_or_default(),
-                "MoveToNextButton" => cursor.move_next_button().unwrap_or_default(),
-                "MoveToPriorButton" => cursor.move_prior_button().unwrap_or_default(),
-                "MoveToNextEdit" => cursor.move_next_edit().unwrap_or_default(),
-                "MoveToPriorEdit" => cursor.move_prior_edit().unwrap_or_default(),
-                "MoveToNextCheckbox" => cursor.move_next_checkbox().unwrap_or_default(),
-                "MoveToPriorCheckbox" => cursor.move_prior_checkbox().unwrap_or_default(),
-                "EnterFormsMode" => cursor.enter_forms_mode().unwrap_or_default(),
-                "ExitFormsMode" => cursor.exit_forms_mode().unwrap_or_default(),
-                "MoveToNextTable" => cursor.move_next_table().unwrap_or_default(),
-                "MoveToPriorTable" => cursor.move_prior_table().unwrap_or_default(),
-                "NextCell" | "TableCellRight" => cursor.move_table_cell_right().unwrap_or_default(),
-                "PriorCell" | "TableCellLeft" => cursor.move_table_cell_left().unwrap_or_default(),
-                "NextRow" | "TableCellDown" => cursor.move_table_cell_down().unwrap_or_default(),
-                "PriorRow" | "TableCellUp" => cursor.move_table_cell_up().unwrap_or_default(),
-                _ => String::new(),
-            },
+            }
+            "aria_live" | "live_region" => {
+                let (politeness, text) = if let Some((p, t)) = step.command.split_once(':') {
+                    match p.to_lowercase().as_str() {
+                        "assertive" => (Politeness::Assertive, t.trim()),
+                        "polite" => (Politeness::Polite, t.trim()),
+                        _ => (Politeness::Polite, step.command.as_str()),
+                    }
+                } else {
+                    (Politeness::Polite, step.command.as_str())
+                };
+                let ev = LiveRegionEvent::new(text, politeness);
+                engine.handle_live_region_event(&ev).unwrap_or_default()
+            }
+            "keyboard" | "jaws_script" => engine.execute_command(&step.command).unwrap_or_default(),
             _ => String::new(),
         };
 
@@ -312,7 +248,7 @@ impl DifferentialRunner {
             }
 
             if let Some(target_level) = assertions.target_heading_level {
-                let actual_level = cursor.current_node().and_then(|n| match n.role {
+                let actual_level = engine.cursor.current_node().and_then(|n| match n.role {
                     Role::Heading { level } => Some(level),
                     _ => None,
                 });
@@ -326,7 +262,8 @@ impl DifferentialRunner {
             }
 
             if let Some(ref target_heading_name) = assertions.target_heading_name {
-                let actual_name = cursor
+                let actual_name = engine
+                    .cursor
                     .current_node()
                     .and_then(|n| n.name.as_deref().or(n.text.as_deref()));
                 if actual_name != Some(target_heading_name.as_str()) {
@@ -339,7 +276,7 @@ impl DifferentialRunner {
             }
 
             if let Some(ref target_role) = assertions.target_role {
-                let actual_role = cursor.current_node().map(|n| &n.role);
+                let actual_role = engine.cursor.current_node().map(|n| &n.role);
                 let role_matches = matches!(
                     (target_role.as_str(), actual_role),
                     ("heading", Some(Role::Heading { .. }))
@@ -368,7 +305,8 @@ impl DifferentialRunner {
             }
 
             if let Some(ref target_name) = assertions.target_name {
-                let actual_name = cursor
+                let actual_name = engine
+                    .cursor
                     .current_node()
                     .and_then(|n| n.name.as_deref().or(n.text.as_deref()));
                 if actual_name != Some(target_name.as_str()) {
@@ -381,7 +319,7 @@ impl DifferentialRunner {
             }
 
             if let Some(expected_forms_mode) = assertions.forms_mode_active {
-                let actual_forms_mode = cursor.forms_mode_active;
+                let actual_forms_mode = engine.forms_mode;
                 if actual_forms_mode != expected_forms_mode {
                     assertions_passed = false;
                     failed_assertions.push(format!(
@@ -392,7 +330,7 @@ impl DifferentialRunner {
             }
 
             if let Some(expected_checked) = assertions.target_checked {
-                let actual_checked = cursor.current_node().and_then(|n| n.states.checked);
+                let actual_checked = engine.cursor.current_node().and_then(|n| n.states.checked);
                 if actual_checked != Some(expected_checked) {
                     assertions_passed = false;
                     failed_assertions.push(format!(
@@ -403,7 +341,7 @@ impl DifferentialRunner {
             }
 
             if let Some(expected_selected) = assertions.target_selected {
-                let actual_selected = cursor.current_node().and_then(|n| n.states.selected);
+                let actual_selected = engine.cursor.current_node().and_then(|n| n.states.selected);
                 if actual_selected != Some(expected_selected) {
                     assertions_passed = false;
                     failed_assertions.push(format!(
@@ -414,7 +352,7 @@ impl DifferentialRunner {
             }
 
             if let Some(target_col) = assertions.target_col {
-                let actual_col = cursor.current_table_col();
+                let actual_col = engine.cursor.current_table_col();
                 if actual_col != Some(target_col) {
                     assertions_passed = false;
                     failed_assertions.push(format!(
@@ -425,7 +363,7 @@ impl DifferentialRunner {
             }
 
             if let Some(target_row) = assertions.target_row {
-                let actual_row = cursor.current_table_row();
+                let actual_row = engine.cursor.current_table_row();
                 if actual_row != Some(target_row) {
                     assertions_passed = false;
                     failed_assertions.push(format!(

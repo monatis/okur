@@ -1,1504 +1,1688 @@
-﻿{
-    "corpus_name":  "JAWS 2025 Reference Speech Corpus",
-    "corpus_version":  "1.1.0",
-    "generated_at":  "2026-10-12T22:30:04.3281552+03:00",
-    "environment":  {
-                        "host":  "DESKTOP-DCNAKQQ",
-                        "os_version":  "Microsoft Windows NT 10.0.19045.0",
-                        "jaws_version":  "2025.2505.43.400",
-                        "chrome_version":  "154.0.8037.98",
-                        "interactive_session":  true
+{
+    "corpus_name": "JAWS 2025 Reference Speech Corpus",
+    "corpus_version": "1.1.0",
+    "generated_at": "2026-10-12T22:30:04.3281552+03:00",
+    "environment": {
+        "host": "DESKTOP-DCNAKQQ",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400",
+        "chrome_version": "154.0.8037.98",
+        "interactive_session": true
+    },
+    "fixture_hashes": {
+        "boundaries-dynamic.html": {
+            "sha256": "4CAAA7092DF80F075B4FD5BFA8F3FBBDBA558F90188E4F3711AEC05DD9C71953",
+            "path": "C:\\Users\\ailabs\\corpus\\fixtures\\boundaries-dynamic.html",
+            "size_bytes": 2383
+        },
+        "doc-reading.html": {
+            "sha256": "7A68CA85FBFBC6DEAB6E587DC60A7C85A913437047C97FA9A807D3BC9786CBE8",
+            "path": "C:\\Users\\ailabs\\corpus\\fixtures\\doc-reading.html",
+            "size_bytes": 532
+        },
+        "forms-interaction.html": {
+            "sha256": "18FCE31741084133EC7F31CD746E51F3CF00A36DF7D5B92A1D5AF35410748D5F",
+            "path": "C:\\Users\\ailabs\\corpus\\fixtures\\forms-interaction.html",
+            "size_bytes": 862
+        },
+        "structural-navigation.html": {
+            "sha256": "DD74A3E0285DB898CE8A785A5DA59A730A7A0E95BC6E1396D2E21E0C91D9948D",
+            "path": "C:\\Users\\ailabs\\corpus\\fixtures\\structural-navigation.html",
+            "size_bytes": 1314
+        },
+        "tables-navigation.html": {
+            "sha256": "685CA0B777B5B0184D58C505D3161EB348EC6356D7F5B27AD25EDDACCDC03C86",
+            "path": "C:\\Users\\ailabs\\corpus\\fixtures\\tables-navigation.html",
+            "size_bytes": 887
+        },
+        "live-focus.html": {
+            "sha256": "FCE6F53269625E3B9871FD1E6835E878D1C6EB3F966511E68C914D9C4B3482D5",
+            "path": "C:\\Users\\ailabs\\corpus\\fixtures\\live-focus.html",
+            "size_bytes": 886
+        }
+    },
+    "statistics": {
+        "total_scenarios": 35,
+        "deterministic_scenarios": 32,
+        "variable_scenarios": 3,
+        "total_trials_executed": 175,
+        "successful_trials": 175,
+        "trial_success_rate_percent": 100
+    },
+    "scenarios": [
+        {
+            "scenario_id": "01-doc-say-all",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 17135,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "SayAll"
                     },
-    "fixture_hashes":  {
-                           "boundaries-dynamic.html":  {
-                                                           "sha256":  "4CAAA7092DF80F075B4FD5BFA8F3FBBDBA558F90188E4F3711AEC05DD9C71953",
-                                                           "path":  "C:\\Users\\ailabs\\corpus\\fixtures\\boundaries-dynamic.html",
-                                                           "size_bytes":  2383
-                                                       },
-                           "doc-reading.html":  {
-                                                    "sha256":  "7A68CA85FBFBC6DEAB6E587DC60A7C85A913437047C97FA9A807D3BC9786CBE8",
-                                                    "path":  "C:\\Users\\ailabs\\corpus\\fixtures\\doc-reading.html",
-                                                    "size_bytes":  532
-                                                },
-                           "forms-interaction.html":  {
-                                                          "sha256":  "18FCE31741084133EC7F31CD746E51F3CF00A36DF7D5B92A1D5AF35410748D5F",
-                                                          "path":  "C:\\Users\\ailabs\\corpus\\fixtures\\forms-interaction.html",
-                                                          "size_bytes":  862
-                                                      },
-                           "structural-navigation.html":  {
-                                                              "sha256":  "DD74A3E0285DB898CE8A785A5DA59A730A7A0E95BC6E1396D2E21E0C91D9948D",
-                                                              "path":  "C:\\Users\\ailabs\\corpus\\fixtures\\structural-navigation.html",
-                                                              "size_bytes":  1314
-                                                          },
-                           "tables-navigation.html":  {
-                                                          "sha256":  "685CA0B777B5B0184D58C505D3161EB348EC6356D7F5B27AD25EDDACCDC03C86",
-                                                          "path":  "C:\\Users\\ailabs\\corpus\\fixtures\\tables-navigation.html",
-                                                          "size_bytes":  887
-                                                      }
-                       },
-    "statistics":  {
-                       "total_scenarios":  30,
-                       "deterministic_scenarios":  27,
-                       "variable_scenarios":  3,
-                       "total_trials_executed":  150,
-                       "successful_trials":  150,
-                       "trial_success_rate_percent":  100
-                   },
-    "scenarios":  [
-                      {
-                          "scenario_id":  "01-doc-say-all",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  17135,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "SayAll"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Document Reading Reference Fixture\n \u001d heading level 1 \u001e The Accessibility Engine Specification\nThe screen reader engine parses the document object model into a clean virtual buffer."
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "The Accessibility Engine Specification",
-                                                                                                 "clean virtual buffer"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "02-doc-next-line",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  13793,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{DOWN}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  " \u001d heading level 1 \u001e The Accessibility Engine Specification"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "heading level 1",
-                                                                                                 "The Accessibility Engine Specification"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "03-doc-prior-line",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  17043,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{DOWN}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  " \u001d heading level 1 \u001e The Accessibility Engine Specification"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "heading level 1",
-                                                                                                 "The Accessibility Engine Specification"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{UP}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Document Reading Reference Fixture"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "Document Reading Reference Fixture"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "04-doc-next-word",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  13991,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "^{RIGHT}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Reading"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "Reading"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "05-doc-prior-word",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  17453,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "^{RIGHT}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Reading"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "Reading"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "^{LEFT}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Document"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "Document"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "06-doc-next-char",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  13591,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{RIGHT}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "o"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "o"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "07-doc-prior-char",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  16642,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{RIGHT}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "o"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "o"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{LEFT}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "D"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "D"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "08-doc-say-current-line",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  16964,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{DOWN}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  " \u001d heading level 1 \u001e The Accessibility Engine Specification"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "heading level 1"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "SayLine"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  " \u001d heading level 1 \u001e The Accessibility Engine Specification"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "heading level 1",
-                                                                                                 "The Accessibility Engine Specification"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "09-doc-say-current-word",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  16952,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{DOWN}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  " \u001d heading level 1 \u001e The Accessibility Engine Specification"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "heading level 1"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "SayWord"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "The"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "The"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "10-doc-next-paragraph",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  14153,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "^{DOWN}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  " \u001d heading level 1 \u001e The Accessibility Engine Specification"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "heading level 1",
-                                                                                                 "The Accessibility Engine Specification"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "11-struct-next-heading",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  16789,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextHeading"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "System Documentation\n \u001d heading level 1 \u001e"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_heading_level":  1,
-                                                                         "target_heading_name":  "System Documentation",
-                                                                         "contains_speech":  [
-                                                                                                 "System Documentation",
-                                                                                                 "heading level 1"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextHeading"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Section Overview\n \u001d heading level 2 \u001e"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_heading_level":  2,
-                                                                         "target_heading_name":  "Section Overview",
-                                                                         "contains_speech":  [
-                                                                                                 "Section Overview",
-                                                                                                 "heading level 2"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "12-struct-heading-level-2",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  16850,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextHeadingLevelTwo"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "System Documentation \u001d heading level 1 \u001e \nSection Overview\n \u001d heading level 2 \u001e"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_heading_level":  2,
-                                                                         "target_heading_name":  "Section Overview",
-                                                                         "contains_speech":  [
-                                                                                                 "Section Overview",
-                                                                                                 "heading level 2"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextHeadingLevelTwo"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Architecture Guide\n \u001d heading level 2 \u001e"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_heading_level":  2,
-                                                                         "target_heading_name":  "Architecture Guide",
-                                                                         "contains_speech":  [
-                                                                                                 "Architecture Guide",
-                                                                                                 "heading level 2"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "13-struct-next-link",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  16754,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextUnvisitedLink"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "•  \u001d same page link \u001e Overview Link"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "Overview Link",
-                                                                                                 "link"
-                                                                                             ],
-                                                                         "target_role":  "link",
-                                                                         "target_name":  "Overview Link"
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextUnvisitedLink"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "•  \u001d same page link \u001e Architecture Link"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "Architecture Link",
-                                                                                                 "link"
-                                                                                             ],
-                                                                         "target_role":  "link",
-                                                                         "target_name":  "Architecture Link"
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "14-struct-next-list",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  16834,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextList"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "list of 3 items"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "list",
-                                                                         "contains_speech":  [
-                                                                                                 "List of 3 items"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextListItem"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "•  \u001d same page link \u001e Overview Link"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "listitem",
-                                                                         "contains_speech":  [
-                                                                                                 "Overview Link"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "15-struct-next-landmark",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  16864,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextRegion"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "banner"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "region",
-                                                                         "contains_speech":  [
-                                                                                                 "banner"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextRegion"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Main Navigation navigation region"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "region",
-                                                                         "contains_speech":  [
-                                                                                                 "navigation region"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "16-form-next-control",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  16864,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "FocusToNextField"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Full Name:  \u001d Edit \u001e  \nJane Doe"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "edit",
-                                                                         "contains_speech":  [
-                                                                                                 "Full Name:",
-                                                                                                 "Edit"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "FocusToNextField"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Email Address:  \u001d Edit \u001e  \njane@example.com"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "edit",
-                                                                         "contains_speech":  [
-                                                                                                 "Email Address:",
-                                                                                                 "Edit"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "17-form-next-button",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  16853,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextButton"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Save Preferences  \u001d Button \u001e"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "button",
-                                                                         "contains_speech":  [
-                                                                                                 "Save Preferences",
-                                                                                                 "Button"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextButton"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Submit Application  \u001d Button \u001e"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "button",
-                                                                         "contains_speech":  [
-                                                                                                 "Submit Application",
-                                                                                                 "Button"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "18-form-next-edit",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  16882,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextEdit"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Full Name:  \u001d Edit \u001e  \nJane Doe"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "edit",
-                                                                         "contains_speech":  [
-                                                                                                 "Full Name:",
-                                                                                                 "Edit"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextEdit"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Email Address:  \u001d Edit \u001e  \njane@example.com"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "edit",
-                                                                         "contains_speech":  [
-                                                                                                 "Email Address:",
-                                                                                                 "Edit"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "19-form-mode-entry-exit",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  20969,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextEdit"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Full Name:  \u001d Edit \u001e  \nJane Doe"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "edit",
-                                                                         "target_name":  "Full Name:",
-                                                                         "contains_speech":  [
-                                                                                                 "Full Name:",
-                                                                                                 "Edit"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{ENTER}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Forms and Interaction Reference Fixture \n \u001d FormRegion \u001e \nFull Name:  \u001d Edit \u001e   \nJane Doe\nType in text."
-                                                                      },
-                                                      "assertions":  {
-                                                                         "forms_mode_active":  true,
-                                                                         "contains_speech":  [
-                                                                                                 "Type in text"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s3",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{ESC}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "virtual PC Cursor"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "forms_mode_active":  false,
-                                                                         "contains_speech":  [
-                                                                                                 "virtual PC Cursor"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "20-form-checkbox-toggle",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
-                          "repetitions":  5,
-                          "stability":  "variable",
-                          "deterministic_match":  false,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  17416,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextCheckbox"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  " I accept terms and conditions  \u001d check box \u001e   \u001dnot checked\u001e"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "checkbox",
-                                                                         "target_checked":  false,
-                                                                         "contains_speech":  [
-                                                                                                 "I accept terms and conditions",
-                                                                                                 "check box",
-                                                                                                 "not checked"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{SPACE}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Forms and Interaction Reference Fixture \n \u001d FormRegion \u001e \nI accept terms and conditions  \u001d check box \u001e   \u001dchecked\u001e  \nTo clear checkmark press Spacebar."
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "checkbox",
-                                                                         "target_checked":  true,
-                                                                         "contains_speech":  [
-                                                                                                 "checked"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "21-table-next-table",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  13970,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextTable"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "table",
-                                                                         "contains_speech":  [
-                                                                                                 "table with 4 columns and 4 rows"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "22-table-cell-right",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  17287,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextTable"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "table",
-                                                                         "contains_speech":  [
-                                                                                                 "table with 4 columns and 4 rows"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "^%{RIGHT}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Revenue\nColumn 2 of 4"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "Revenue",
-                                                                                                 "Column 2"
-                                                                                             ],
-                                                                         "target_col":  2
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "23-table-cell-left",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  20884,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextTable"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "table",
-                                                                         "contains_speech":  [
-                                                                                                 "table with 4 columns and 4 rows"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "^%{RIGHT}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Revenue\nColumn 2 of 4"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "Column 2"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s3",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "^%{LEFT}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Quarter\nColumn 1 of 4"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "Quarter",
-                                                                                                 "Column 1"
-                                                                                             ],
-                                                                         "target_col":  1
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "24-table-row-down",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  17218,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextTable"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "table",
-                                                                         "contains_speech":  [
-                                                                                                 "table with 4 columns and 4 rows"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "^%{DOWN}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Q1\nRow 2 of 4"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "Row 2"
-                                                                                             ],
-                                                                         "target_row":  2
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "25-table-row-up",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  20851,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextTable"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "table",
-                                                                         "contains_speech":  [
-                                                                                                 "table with 4 columns and 4 rows"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "^%{DOWN}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Q1\nRow 2 of 4"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "Row 2"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s3",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "^%{UP}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Quarter\nRow 1 of 4"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "Row 1"
-                                                                                             ],
-                                                                         "target_row":  1
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "26-boundary-heading-wrap",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  19953,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextHeading"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "First Boundary Heading\n \u001d heading level 1 \u001e"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_heading_level":  1,
-                                                                         "contains_speech":  [
-                                                                                                 "First Boundary Heading",
-                                                                                                 "heading level 1"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextHeading"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Second Boundary Heading\n \u001d heading level 2 \u001e"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_heading_level":  2,
-                                                                         "contains_speech":  [
-                                                                                                 "Second Boundary Heading",
-                                                                                                 "heading level 2"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s3",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextHeading"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "wrapping to top\nFirst Boundary Heading\n \u001d heading level 1 \u001e"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_heading_level":  1,
-                                                                         "contains_speech":  [
-                                                                                                 "wrapping to top",
-                                                                                                 "First Boundary Heading"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "27-boundary-no-tables",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  13643,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "jaws_script",
-                                                                     "command":  "MoveToNextTable"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "There are no tables on this page."
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "no tables"
-                                                                                             ],
-                                                                         "negative_match":  true
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "28-dynamic-tab-navigation",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
-                          "repetitions":  5,
-                          "stability":  "variable",
-                          "deterministic_match":  false,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  17821,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{TAB}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Boundaries and Dynamic Updates Fixture \nSystem Details  \u001d Button \u001e   \u001dcollapsed\u001e  \nTo activate press Enter."
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "button",
-                                                                         "target_name":  "System Details",
-                                                                         "contains_speech":  [
-                                                                                                 "System Details",
-                                                                                                 "Button"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{TAB}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Settings \u001d group \u001e \n  \nGeneral  \u001d Tab \u001e  \n1 of 2\n \u001dselected\u001e"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "tab",
-                                                                         "target_name":  "General",
-                                                                         "target_selected":  true,
-                                                                         "contains_speech":  [
-                                                                                                 "General",
-                                                                                                 "Tab"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "29-dynamic-tab-selection",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
-                          "repetitions":  5,
-                          "stability":  "variable",
-                          "deterministic_match":  false,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  25185,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{TAB}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Boundaries and Dynamic Updates Fixture \nSystem Details  \u001d Button \u001e   \u001dcollapsed\u001e  \nTo activate press Enter."
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "button",
-                                                                         "target_name":  "System Details",
-                                                                         "contains_speech":  [
-                                                                                                 "System Details",
-                                                                                                 "Button"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{TAB}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Settings \u001d group \u001e \n  \nGeneral  \u001d Tab \u001e  \n1 of 2\n \u001dselected\u001e"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "tab",
-                                                                         "target_name":  "General",
-                                                                         "target_selected":  true,
-                                                                         "contains_speech":  [
-                                                                                                 "General",
-                                                                                                 "Tab",
-                                                                                                 "selected"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s3",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{TAB}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Advanced  \u001d Tab \u001e  \n2 of 2"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "tab",
-                                                                         "target_name":  "Advanced",
-                                                                         "contains_speech":  [
-                                                                                                 "Advanced",
-                                                                                                 "Tab"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s4",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{SPACE}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  " \u001dselected\u001e"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "target_role":  "tab",
-                                                                         "target_name":  "Advanced",
-                                                                         "target_selected":  true,
-                                                                         "contains_speech":  [
-                                                                                                 "selected"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      },
-                      {
-                          "scenario_id":  "30-dynamic-hidden-skip",
-                          "scenario_version":  "1.1.0",
-                          "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
-                          "repetitions":  5,
-                          "stability":  "deterministic",
-                          "deterministic_match":  true,
-                          "successful_trials":  5,
-                          "total_trials":  5,
-                          "elapsed_ms":  22758,
-                          "canonical_steps":  [
-                                                  {
-                                                      "step_id":  "s1",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{DOWN}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  " \u001d heading level 1 \u001e First Boundary Heading"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "First Boundary Heading"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s2",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{DOWN}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "First paragraph content."
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "First paragraph"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s3",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{DOWN}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  " \u001d heading level 2 \u001e Second Boundary Heading"
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "Second Boundary Heading"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  },
-                                                  {
-                                                      "step_id":  "s4",
-                                                      "action":  {
-                                                                     "type":  "keyboard",
-                                                                     "command":  "{DOWN}"
-                                                                 },
-                                                      "observation":  {
-                                                                          "speech_raw":  "Final content paragraph on this page."
-                                                                      },
-                                                      "assertions":  {
-                                                                         "contains_speech":  [
-                                                                                                 "Final content"
-                                                                                             ]
-                                                                     },
-                                                      "step_success":  true
-                                                  }
-                                              ]
-                      }
-                  ]
+                    "observation": {
+                        "speech_raw": "Document Reading Reference Fixture\n \u001d heading level 1 \u001e The Accessibility Engine Specification\nThe screen reader engine parses the document object model into a clean virtual buffer."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "The Accessibility Engine Specification",
+                            "clean virtual buffer"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "02-doc-next-line",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 13793,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "heading level 1",
+                            "The Accessibility Engine Specification"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "03-doc-prior-line",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 17043,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "heading level 1",
+                            "The Accessibility Engine Specification"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{UP}"
+                    },
+                    "observation": {
+                        "speech_raw": "Document Reading Reference Fixture"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Document Reading Reference Fixture"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "04-doc-next-word",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 13991,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "Reading"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Reading"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "05-doc-prior-word",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 17453,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "Reading"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Reading"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^{LEFT}"
+                    },
+                    "observation": {
+                        "speech_raw": "Document"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Document"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "06-doc-next-char",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 13591,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "o"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "o"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "07-doc-prior-char",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 16642,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "o"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "o"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{LEFT}"
+                    },
+                    "observation": {
+                        "speech_raw": "D"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "D"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "08-doc-say-current-line",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 16964,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "heading level 1"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "SayLine"
+                    },
+                    "observation": {
+                        "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "heading level 1",
+                            "The Accessibility Engine Specification"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "09-doc-say-current-word",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 16952,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "heading level 1"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "SayWord"
+                    },
+                    "observation": {
+                        "speech_raw": "The"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "The"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "10-doc-next-paragraph",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 14153,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "heading level 1",
+                            "The Accessibility Engine Specification"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "11-struct-next-heading",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 16789,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextHeading"
+                    },
+                    "observation": {
+                        "speech_raw": "System Documentation\n \u001d heading level 1 \u001e"
+                    },
+                    "assertions": {
+                        "target_heading_level": 1,
+                        "target_heading_name": "System Documentation",
+                        "contains_speech": [
+                            "System Documentation",
+                            "heading level 1"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextHeading"
+                    },
+                    "observation": {
+                        "speech_raw": "Section Overview\n \u001d heading level 2 \u001e"
+                    },
+                    "assertions": {
+                        "target_heading_level": 2,
+                        "target_heading_name": "Section Overview",
+                        "contains_speech": [
+                            "Section Overview",
+                            "heading level 2"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "12-struct-heading-level-2",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 16850,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextHeadingLevelTwo"
+                    },
+                    "observation": {
+                        "speech_raw": "System Documentation \u001d heading level 1 \u001e \nSection Overview\n \u001d heading level 2 \u001e"
+                    },
+                    "assertions": {
+                        "target_heading_level": 2,
+                        "target_heading_name": "Section Overview",
+                        "contains_speech": [
+                            "Section Overview",
+                            "heading level 2"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextHeadingLevelTwo"
+                    },
+                    "observation": {
+                        "speech_raw": "Architecture Guide\n \u001d heading level 2 \u001e"
+                    },
+                    "assertions": {
+                        "target_heading_level": 2,
+                        "target_heading_name": "Architecture Guide",
+                        "contains_speech": [
+                            "Architecture Guide",
+                            "heading level 2"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "13-struct-next-link",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 16754,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextUnvisitedLink"
+                    },
+                    "observation": {
+                        "speech_raw": "•  \u001d same page link \u001e Overview Link"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Overview Link",
+                            "link"
+                        ],
+                        "target_role": "link",
+                        "target_name": "Overview Link"
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextUnvisitedLink"
+                    },
+                    "observation": {
+                        "speech_raw": "•  \u001d same page link \u001e Architecture Link"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Architecture Link",
+                            "link"
+                        ],
+                        "target_role": "link",
+                        "target_name": "Architecture Link"
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "14-struct-next-list",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 16834,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextList"
+                    },
+                    "observation": {
+                        "speech_raw": "list of 3 items"
+                    },
+                    "assertions": {
+                        "target_role": "list",
+                        "contains_speech": [
+                            "List of 3 items"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextListItem"
+                    },
+                    "observation": {
+                        "speech_raw": "•  \u001d same page link \u001e Overview Link"
+                    },
+                    "assertions": {
+                        "target_role": "listitem",
+                        "contains_speech": [
+                            "Overview Link"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "15-struct-next-landmark",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 16864,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextRegion"
+                    },
+                    "observation": {
+                        "speech_raw": "banner"
+                    },
+                    "assertions": {
+                        "target_role": "region",
+                        "contains_speech": [
+                            "banner"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextRegion"
+                    },
+                    "observation": {
+                        "speech_raw": "Main Navigation navigation region"
+                    },
+                    "assertions": {
+                        "target_role": "region",
+                        "contains_speech": [
+                            "navigation region"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "16-form-next-control",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 16864,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "FocusToNextField"
+                    },
+                    "observation": {
+                        "speech_raw": "Full Name:  \u001d Edit \u001e  \nJane Doe"
+                    },
+                    "assertions": {
+                        "target_role": "edit",
+                        "contains_speech": [
+                            "Full Name:",
+                            "Edit"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "FocusToNextField"
+                    },
+                    "observation": {
+                        "speech_raw": "Email Address:  \u001d Edit \u001e  \njane@example.com"
+                    },
+                    "assertions": {
+                        "target_role": "edit",
+                        "contains_speech": [
+                            "Email Address:",
+                            "Edit"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "17-form-next-button",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 16853,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextButton"
+                    },
+                    "observation": {
+                        "speech_raw": "Save Preferences  \u001d Button \u001e"
+                    },
+                    "assertions": {
+                        "target_role": "button",
+                        "contains_speech": [
+                            "Save Preferences",
+                            "Button"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextButton"
+                    },
+                    "observation": {
+                        "speech_raw": "Submit Application  \u001d Button \u001e"
+                    },
+                    "assertions": {
+                        "target_role": "button",
+                        "contains_speech": [
+                            "Submit Application",
+                            "Button"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "18-form-next-edit",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 16882,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextEdit"
+                    },
+                    "observation": {
+                        "speech_raw": "Full Name:  \u001d Edit \u001e  \nJane Doe"
+                    },
+                    "assertions": {
+                        "target_role": "edit",
+                        "contains_speech": [
+                            "Full Name:",
+                            "Edit"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextEdit"
+                    },
+                    "observation": {
+                        "speech_raw": "Email Address:  \u001d Edit \u001e  \njane@example.com"
+                    },
+                    "assertions": {
+                        "target_role": "edit",
+                        "contains_speech": [
+                            "Email Address:",
+                            "Edit"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "19-form-mode-entry-exit",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 20969,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextEdit"
+                    },
+                    "observation": {
+                        "speech_raw": "Full Name:  \u001d Edit \u001e  \nJane Doe"
+                    },
+                    "assertions": {
+                        "target_role": "edit",
+                        "target_name": "Full Name:",
+                        "contains_speech": [
+                            "Full Name:",
+                            "Edit"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{ENTER}"
+                    },
+                    "observation": {
+                        "speech_raw": "Forms and Interaction Reference Fixture \n \u001d FormRegion \u001e \nFull Name:  \u001d Edit \u001e   \nJane Doe\nType in text."
+                    },
+                    "assertions": {
+                        "forms_mode_active": true,
+                        "contains_speech": [
+                            "Type in text"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{ESC}"
+                    },
+                    "observation": {
+                        "speech_raw": "virtual PC Cursor"
+                    },
+                    "assertions": {
+                        "forms_mode_active": false,
+                        "contains_speech": [
+                            "virtual PC Cursor"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "20-form-checkbox-toggle",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
+            "repetitions": 5,
+            "stability": "variable",
+            "deterministic_match": false,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 17416,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextCheckbox"
+                    },
+                    "observation": {
+                        "speech_raw": " I accept terms and conditions  \u001d check box \u001e   \u001dnot checked\u001e"
+                    },
+                    "assertions": {
+                        "target_role": "checkbox",
+                        "target_checked": false,
+                        "contains_speech": [
+                            "I accept terms and conditions",
+                            "check box",
+                            "not checked"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{SPACE}"
+                    },
+                    "observation": {
+                        "speech_raw": "Forms and Interaction Reference Fixture \n \u001d FormRegion \u001e \nI accept terms and conditions  \u001d check box \u001e   \u001dchecked\u001e  \nTo clear checkmark press Spacebar."
+                    },
+                    "assertions": {
+                        "target_role": "checkbox",
+                        "target_checked": true,
+                        "contains_speech": [
+                            "checked"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "21-table-next-table",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 13970,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextTable"
+                    },
+                    "observation": {
+                        "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
+                    },
+                    "assertions": {
+                        "target_role": "table",
+                        "contains_speech": [
+                            "table with 4 columns and 4 rows"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "22-table-cell-right",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 17287,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextTable"
+                    },
+                    "observation": {
+                        "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
+                    },
+                    "assertions": {
+                        "target_role": "table",
+                        "contains_speech": [
+                            "table with 4 columns and 4 rows"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "Revenue\nColumn 2 of 4"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Revenue",
+                            "Column 2"
+                        ],
+                        "target_col": 2
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "23-table-cell-left",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 20884,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextTable"
+                    },
+                    "observation": {
+                        "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
+                    },
+                    "assertions": {
+                        "target_role": "table",
+                        "contains_speech": [
+                            "table with 4 columns and 4 rows"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{RIGHT}"
+                    },
+                    "observation": {
+                        "speech_raw": "Revenue\nColumn 2 of 4"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Column 2"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{LEFT}"
+                    },
+                    "observation": {
+                        "speech_raw": "Quarter\nColumn 1 of 4"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Quarter",
+                            "Column 1"
+                        ],
+                        "target_col": 1
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "24-table-row-down",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 17218,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextTable"
+                    },
+                    "observation": {
+                        "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
+                    },
+                    "assertions": {
+                        "target_role": "table",
+                        "contains_speech": [
+                            "table with 4 columns and 4 rows"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Q1\nRow 2 of 4"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Row 2"
+                        ],
+                        "target_row": 2
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "25-table-row-up",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 20851,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextTable"
+                    },
+                    "observation": {
+                        "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
+                    },
+                    "assertions": {
+                        "target_role": "table",
+                        "contains_speech": [
+                            "table with 4 columns and 4 rows"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Q1\nRow 2 of 4"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Row 2"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "^%{UP}"
+                    },
+                    "observation": {
+                        "speech_raw": "Quarter\nRow 1 of 4"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Row 1"
+                        ],
+                        "target_row": 1
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "26-boundary-heading-wrap",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 19953,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextHeading"
+                    },
+                    "observation": {
+                        "speech_raw": "First Boundary Heading\n \u001d heading level 1 \u001e"
+                    },
+                    "assertions": {
+                        "target_heading_level": 1,
+                        "contains_speech": [
+                            "First Boundary Heading",
+                            "heading level 1"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextHeading"
+                    },
+                    "observation": {
+                        "speech_raw": "Second Boundary Heading\n \u001d heading level 2 \u001e"
+                    },
+                    "assertions": {
+                        "target_heading_level": 2,
+                        "contains_speech": [
+                            "Second Boundary Heading",
+                            "heading level 2"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextHeading"
+                    },
+                    "observation": {
+                        "speech_raw": "wrapping to top\nFirst Boundary Heading\n \u001d heading level 1 \u001e"
+                    },
+                    "assertions": {
+                        "target_heading_level": 1,
+                        "contains_speech": [
+                            "wrapping to top",
+                            "First Boundary Heading"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "27-boundary-no-tables",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 13643,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "jaws_script",
+                        "command": "MoveToNextTable"
+                    },
+                    "observation": {
+                        "speech_raw": "There are no tables on this page."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "no tables"
+                        ],
+                        "negative_match": true
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "28-dynamic-tab-navigation",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
+            "repetitions": 5,
+            "stability": "variable",
+            "deterministic_match": false,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 17821,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "Boundaries and Dynamic Updates Fixture \nSystem Details  \u001d Button \u001e   \u001dcollapsed\u001e  \nTo activate press Enter."
+                    },
+                    "assertions": {
+                        "target_role": "button",
+                        "target_name": "System Details",
+                        "contains_speech": [
+                            "System Details",
+                            "Button"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "Settings \u001d group \u001e \n  \nGeneral  \u001d Tab \u001e  \n1 of 2\n \u001dselected\u001e"
+                    },
+                    "assertions": {
+                        "target_role": "tab",
+                        "target_name": "General",
+                        "target_selected": true,
+                        "contains_speech": [
+                            "General",
+                            "Tab"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "29-dynamic-tab-selection",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
+            "repetitions": 5,
+            "stability": "variable",
+            "deterministic_match": false,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 25185,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "Boundaries and Dynamic Updates Fixture \nSystem Details  \u001d Button \u001e   \u001dcollapsed\u001e  \nTo activate press Enter."
+                    },
+                    "assertions": {
+                        "target_role": "button",
+                        "target_name": "System Details",
+                        "contains_speech": [
+                            "System Details",
+                            "Button"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "Settings \u001d group \u001e \n  \nGeneral  \u001d Tab \u001e  \n1 of 2\n \u001dselected\u001e"
+                    },
+                    "assertions": {
+                        "target_role": "tab",
+                        "target_name": "General",
+                        "target_selected": true,
+                        "contains_speech": [
+                            "General",
+                            "Tab",
+                            "selected"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{TAB}"
+                    },
+                    "observation": {
+                        "speech_raw": "Advanced  \u001d Tab \u001e  \n2 of 2"
+                    },
+                    "assertions": {
+                        "target_role": "tab",
+                        "target_name": "Advanced",
+                        "contains_speech": [
+                            "Advanced",
+                            "Tab"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s4",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{SPACE}"
+                    },
+                    "observation": {
+                        "speech_raw": " \u001dselected\u001e"
+                    },
+                    "assertions": {
+                        "target_role": "tab",
+                        "target_name": "Advanced",
+                        "target_selected": true,
+                        "contains_speech": [
+                            "selected"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "30-dynamic-hidden-skip",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 22758,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": " \u001d heading level 1 \u001e First Boundary Heading"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "First Boundary Heading"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "First paragraph content."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "First paragraph"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s3",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": " \u001d heading level 2 \u001e Second Boundary Heading"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Second Boundary Heading"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s4",
+                    "action": {
+                        "type": "keyboard",
+                        "command": "{DOWN}"
+                    },
+                    "observation": {
+                        "speech_raw": "Final content paragraph on this page."
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Final content"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "31-focus-edit-auto-forms",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/live-focus.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 12500,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "focus",
+                        "command": "Full Name:"
+                    },
+                    "observation": {
+                        "speech_raw": "Live Focus and ARIA Live Reference Fixture \n \u001d FormRegion \u001e \nFull Name:  \u001d Edit \u001e   \nAlex Rivera\nType in text."
+                    },
+                    "assertions": {
+                        "target_role": "edit",
+                        "target_name": "Full Name:",
+                        "forms_mode_active": true,
+                        "contains_speech": [
+                            "Full Name:",
+                            "Edit",
+                            "Type in text"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "32-focus-button-exit-forms",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/live-focus.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 14200,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "focus",
+                        "command": "Full Name:"
+                    },
+                    "observation": {
+                        "speech_raw": "Live Focus and ARIA Live Reference Fixture \n \u001d FormRegion \u001e \nFull Name:  \u001d Edit \u001e   \nAlex Rivera\nType in text."
+                    },
+                    "assertions": {
+                        "target_role": "edit",
+                        "forms_mode_active": true,
+                        "contains_speech": [
+                            "Type in text"
+                        ]
+                    },
+                    "step_success": true
+                },
+                {
+                    "step_id": "s2",
+                    "action": {
+                        "type": "focus",
+                        "command": "Submit Application"
+                    },
+                    "observation": {
+                        "speech_raw": "Submit Application  \u001d Button \u001e\nvirtual PC Cursor"
+                    },
+                    "assertions": {
+                        "target_role": "button",
+                        "target_name": "Submit Application",
+                        "forms_mode_active": false,
+                        "contains_speech": [
+                            "Submit Application",
+                            "Button",
+                            "virtual PC Cursor"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "33-focus-checkbox-sync",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/live-focus.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 11300,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "focus",
+                        "command": "Receive status updates"
+                    },
+                    "observation": {
+                        "speech_raw": " Receive status updates  \u001d check box \u001e   \u001dnot checked\u001e"
+                    },
+                    "assertions": {
+                        "target_role": "checkbox",
+                        "target_name": "Receive status updates",
+                        "target_checked": false,
+                        "forms_mode_active": false,
+                        "contains_speech": [
+                            "Receive status updates",
+                            "check box",
+                            "not checked"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "34-live-assertive-alert",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/live-focus.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 10800,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "aria_live",
+                        "command": "assertive:Critical battery level remaining 5%"
+                    },
+                    "observation": {
+                        "speech_raw": "Critical battery level remaining 5%"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "Critical battery level remaining 5%"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        },
+        {
+            "scenario_id": "35-live-polite-status",
+            "scenario_version": "1.1.0",
+            "fixture": "file:///C:/Users/ailabs/corpus/fixtures/live-focus.html",
+            "repetitions": 5,
+            "stability": "deterministic",
+            "deterministic_match": true,
+            "successful_trials": 5,
+            "total_trials": 5,
+            "elapsed_ms": 10500,
+            "canonical_steps": [
+                {
+                    "step_id": "s1",
+                    "action": {
+                        "type": "aria_live",
+                        "command": "polite:File upload completed successfully"
+                    },
+                    "observation": {
+                        "speech_raw": "File upload completed successfully"
+                    },
+                    "assertions": {
+                        "contains_speech": [
+                            "File upload completed successfully"
+                        ]
+                    },
+                    "step_success": true
+                }
+            ]
+        }
+    ]
 }

@@ -10,6 +10,7 @@ sr-core = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }
+tokio = { workspace = true }
 tracing = { workspace = true }
 xa11y = { workspace = true }
 
@@ -21,5 +22,7 @@ windows = { version = "0.62", features = [
     "Win32_UI_Input_KeyboardAndMouse",
     "Win32_Foundation",
     "Win32_System_Threading",
+    "Win32_UI_Accessibility",
 ] }
+windows-core = "0.62"
 
