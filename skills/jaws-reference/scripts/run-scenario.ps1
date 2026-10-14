@@ -234,14 +234,23 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         $maxMs = if ($step.settle_max_ms) { [int]$step.settle_max_ms } else { 10000 }
         $quietMs = if ($step.quiet_ms) { [int]$step.quiet_ms } else { 500 }
 
+        # Start every step from a silent baseline, so residual audio from the previous step
+        # (e.g. the tail of the copy confirmation) cannot be mistaken for this step's speech.
+        $baseline = Wait-Silence -OnsetMs 150 -QuietMs 300 -MaxMs 3000
+        [void]$jaws.RunScript("ClearSpeechHistory")
+
         $dispatchOk = Invoke-Step $step.type $step.command
         $observed = Wait-Silence -OnsetMs 800 -QuietMs $quietMs -MaxMs $maxMs
         $transcript = Read-SpeechHistoryOnce
         if ($transcript -match "unknown script call" -or $transcript -match "unhandled script call") { $dispatchOk = $false }
         # A leaked copy confirmation means the history was contaminated: fail, never trim.
         $contaminated = $transcript.Contains($CopyConfirmation)
+        # Audio with an empty history entry is recorded, not failed: JAWS speaks a space
+        # character aloud but logs an empty history entry (verified 2026-10-14, 107). The
+        # silent baseline above is what prevents the copy from racing ahead of speech.
+        $audioWithoutText = $observed.heard_audio -and [string]::IsNullOrEmpty($transcript)
 
-        $stepSuccess = $dispatchOk -and $observed.settled -and -not $contaminated
+        $stepSuccess = $dispatchOk -and $baseline.settled -and $observed.settled -and -not $contaminated
         if (-not $stepSuccess) { $trialResult.trial_success = $false }
 
         $trialResult.step_results += [ordered]@{
@@ -254,6 +263,8 @@ for ($t = 1; $t -le $Repetitions; $t++) {
                 heard_audio = $observed.heard_audio
                 settle_ms = $observed.elapsed_ms
                 contaminated = $contaminated
+                audio_without_text = $audioWithoutText
+                baseline_settled = $baseline.settled
             }
             step_success = $stepSuccess
         }
