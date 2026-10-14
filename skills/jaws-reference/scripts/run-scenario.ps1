@@ -24,6 +24,7 @@ Step types:
                where the physical key has one: "Down", "H", "Shift+H", "Ctrl+Alt+Right",
                "Insert+Down", "Insert+F7". Modifiers: Ctrl, Alt, Shift, Insert, Win.
                An optional "repeat": N presses the chord N times quickly ("twice quickly").
+               "capture_clipboard": true stores the clipboard after the step (observation.clipboard).
   jaws_script  JAWS script name dispatched through FSAPI RunScript.
   keyboard     Legacy .NET SendKeys string (kept so scenarios 01-30 stay reproducible).
 
@@ -360,6 +361,9 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         $observed = Wait-Silence -OnsetMs 800 -QuietMs $quietMs -MaxMs $maxMs
         # Read before the history copy, whose confirmation JAWS also speaks.
         $spokenRecords = Read-SpokenSince $spokenStart
+        # "capture_clipboard": what the step copied (e.g. Ctrl+C in the Virtual Viewer), read
+        # before the speech history copy replaces it.
+        $clipboard = if ($step.capture_clipboard) { Get-Clipboard -Raw -ErrorAction SilentlyContinue } else { $null }
         $transcript = Read-SpeechHistoryOnce
         $tEnd = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
         if ($transcript -match "unknown script call" -or $transcript -match "unhandled script call") { $dispatchOk = $false }
@@ -383,6 +387,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
                 speech_raw = $transcript
                 spoken = @($spokenRecords | ForEach-Object { Get-SpokenText $_ })
                 spoken_records = $spokenRecords
+                clipboard = $clipboard
                 dispatch_ok = $dispatchOk
                 settled = $observed.settled
                 heard_audio = $observed.heard_audio
