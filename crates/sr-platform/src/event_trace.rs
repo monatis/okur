@@ -22,7 +22,7 @@ const MSAA_MENUITEM: i32 = 0x0C;
 const MSAA_BUTTONMENU: i32 = 0x39;
 
 /// Bumped whenever the recorded fields or their meaning change.
-pub const TRACE_FORMAT_VERSION: u32 = 2;
+pub const TRACE_FORMAT_VERSION: u32 = 3;
 
 /// The MSAA view of an event's object (`AccessibleObjectFromEvent`).
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
@@ -67,6 +67,10 @@ pub struct TraceEvent {
     /// For focus events: the focused element with its control-view subtree to depth 2.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub focus_subtree: Option<UiaNode>,
+    /// For focus on a Win32 combo box or list box: the selection as `[index, count]`,
+    /// with a 0-based index, asked of the control itself.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub list_position: Option<[i32; 2]>,
 }
 
 /// The first line of a trace file.
@@ -261,6 +265,10 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent>
             }
         }
     }
+    if let (None, Some([index, count])) = (focus.item_index, event.list_position) {
+        focus.item_index = usize::try_from(index).ok().map(|i| i + 1);
+        focus.item_count = usize::try_from(count).ok();
+    }
     if focus.item_index.is_none() && focus.role != sr_core::Role::ComboBox {
         let peers: Vec<&UiaNode> = event
             .focus_siblings
@@ -367,6 +375,42 @@ mod capture {
         }
     }
 
+    /// The selection of a Win32 combo box or list box as `[index, count]`, asked of the
+    /// control itself (`CB_GETCURSEL`/`CB_GETCOUNT`, `LB_GETCURSEL`/`LB_GETCOUNT`). A
+    /// collapsed WinForms combo box exposes no items through UIA, yet JAWS says "2 of 3".
+    fn win32_list_position(hwnd: HWND, class: &str) -> Option<[i32; 2]> {
+        use windows::Win32::Foundation::{LPARAM, WPARAM};
+        use windows::Win32::UI::WindowsAndMessaging::{SendMessageTimeoutW, SMTO_ABORTIFHUNG};
+        let upper = class.to_ascii_uppercase();
+        let (get_sel, get_count) = if upper.contains("COMBOBOX") {
+            (0x0147, 0x0146)
+        } else if upper.contains("LISTBOX") {
+            (0x0188, 0x018B)
+        } else {
+            return None;
+        };
+        let ask = |msg: u32| {
+            let mut result = 0usize;
+            // SAFETY: a read-only query message with a timeout, to a window that may be gone.
+            let sent = unsafe {
+                SendMessageTimeoutW(
+                    hwnd,
+                    msg,
+                    WPARAM(0),
+                    LPARAM(0),
+                    SMTO_ABORTIFHUNG,
+                    200,
+                    Some(&mut result),
+                )
+            };
+            // CB_ERR/LB_ERR is -1, as the low 32 bits of the result.
+            (sent.0 != 0).then_some(result as i32)
+        };
+        let index = ask(get_sel).filter(|&i| i >= 0)?;
+        let count = ask(get_count).filter(|&n| n > 0)?;
+        Some([index, count])
+    }
+
     fn msaa_object(hwnd: HWND, id_object: i32, id_child: i32) -> Option<TraceObject> {
         let mut acc: Option<IAccessible> = None;
         let mut child = VARIANT::default();
@@ -432,6 +476,11 @@ mod capture {
                 ("focus", Some(uia)) => focus_context(uia),
                 _ => (Vec::new(), None),
             };
+            let list_position = if name == "focus" {
+                win32_list_position(hwnd, &class)
+            } else {
+                None
+            };
             let event = TraceEvent {
                 t_ms,
                 event: name.to_owned(),
@@ -446,6 +495,7 @@ mod capture {
                 focus_chain: focus,
                 focus_siblings,
                 focus_subtree,
+                list_position,
             };
             if let Ok(mut line) = serde_json::to_string(&event) {
                 line.push('\n');
@@ -552,6 +602,7 @@ mod tests {
             focus_chain: vec![node(GROUP, "Plan", false), node(RADIO, "Pro", true)],
             focus_siblings: siblings,
             focus_subtree: None,
+            list_position: None,
         }
     }
 

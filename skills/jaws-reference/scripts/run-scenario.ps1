@@ -236,6 +236,18 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         trial_success = $true
     }
 
+    # The trace starts before setup, so replay knows the window and focus that launch and
+    # reset produced, as JAWS does when step 1 begins.
+    $traceProc = $null
+    $traceStop = $null
+    if ($TraceDir) {
+        New-Item -ItemType Directory -Force -Path $TraceDir | Out-Null
+        $tracePath = Join-Path $TraceDir "$scenarioId-trial$t.jsonl"
+        $traceStop = Join-Path $env:TEMP "sr-trace-stop-$([guid]::NewGuid().ToString('N'))"
+        $traceProc = Start-Process -FilePath $SrCli -ArgumentList @('trace', '--out', $tracePath, '--stop-file', $traceStop) -WindowStyle Hidden -PassThru
+        Start-Sleep -Milliseconds 400
+        $trialResult.trace_file = Split-Path -Leaf $tracePath
+    }
     # Identical setup for every trial: reload (or relaunch), let load speech finish, reset,
     # settle, clear.
     if ($launch) {
@@ -268,16 +280,6 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         $trialResult.trial_success = $false
     }
 
-    $traceProc = $null
-    $traceStop = $null
-    if ($TraceDir) {
-        New-Item -ItemType Directory -Force -Path $TraceDir | Out-Null
-        $tracePath = Join-Path $TraceDir "$scenarioId-trial$t.jsonl"
-        $traceStop = Join-Path $env:TEMP "sr-trace-stop-$([guid]::NewGuid().ToString('N'))"
-        $traceProc = Start-Process -FilePath $SrCli -ArgumentList @('trace', '--out', $tracePath, '--stop-file', $traceStop) -WindowStyle Hidden -PassThru
-        Start-Sleep -Milliseconds 400
-        $trialResult.trace_file = Split-Path -Leaf $tracePath
-    }
 
     foreach ($step in $scenario.steps) {
         $maxMs = if ($step.settle_max_ms) { [int]$step.settle_max_ms } else { 10000 }
