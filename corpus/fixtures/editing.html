@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Message Composer - Editing Fixture</title>
+</head>
+<body>
+  <main>
+    <h1>Compose a message</h1>
+    <p>
+      <label for="subject">Subject</label>
+      <input id="subject" type="text" value="Weekly update">
+    </p>
+    <p>
+      <label for="body">Body</label>
+      <textarea id="body" rows="4">First line of the body
+Second line of the body</textarea>
+    </p>
+    <div id="chat-label">Type a message</div>
+    <div id="chat" contenteditable="true" role="textbox" aria-multiline="true"
+         aria-labelledby="chat-label">Hello from the chat box</div>
+    <div id="notes-label">Notes</div>
+    <div id="notes" contenteditable="true" aria-labelledby="notes-label">Plain editable notes</div>
+    <p><button type="button">Send</button></p>
+  </main>
+</body>
+</html>

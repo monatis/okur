@@ -1,0 +1,536 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Message Composer - Editing Fixture - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "155.0.8059.40",
+    "fixture_sha256": "a429bac6d2b1a27a28c6cffc64f140bafe9b21f9d040738680c3287d001f8a49",
+    "captured_at_unix_ms": 1791995298229,
+    "node_count": 22,
+    "capture_ms": 178
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Message Composer - Editing Fixture",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/editing.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "unique_id": -3557,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -3524,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼￼￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            7,
+            8
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Compose a message",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -3528,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Compose a message",
+            "lines": [
+              [
+                0,
+                17
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Compose a message",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -3532,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Compose a message",
+                "lines": [
+                  [
+                    0,
+                    17
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -3529,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 42,
+                "ia2_role": 1049,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -3539,
+                "attributes": {
+                  "display": "inline",
+                  "tag": "label",
+                  "text-align": "left"
+                },
+                "text": "Subject",
+                "lines": [
+                  [
+                    0,
+                    7
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Subject",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -3566,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Subject",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 42,
+                "ia2_role": 42,
+                "name": "Subject",
+                "value": "Weekly update",
+                "msaa_states": 1048576,
+                "ia2_states": 13320,
+                "unique_id": -3543,
+                "attributes": {
+                  "display": "inline-block",
+                  "explicit-name": "true",
+                  "id": "subject",
+                  "name-from": "related-element",
+                  "tag": "input",
+                  "text-align": "left",
+                  "text-input-type": "text",
+                  "text-model": "a1"
+                },
+                "text": "Weekly update",
+                "lines": [
+                  [
+                    0,
+                    13
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -3561,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 42,
+                "ia2_role": 1049,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -3564,
+                "attributes": {
+                  "display": "inline",
+                  "tag": "label",
+                  "text-align": "left"
+                },
+                "text": "Body",
+                "lines": [
+                  [
+                    0,
+                    4
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Body",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -3560,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Body",
+                    "lines": [
+                      [
+                        0,
+                        4
+                      ]
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 42,
+                "ia2_role": 42,
+                "name": "Body",
+                "value": "First line of the body\nSecond line of the body",
+                "msaa_states": 1048576,
+                "ia2_states": 5640,
+                "unique_id": -3534,
+                "attributes": {
+                  "display": "inline-block",
+                  "explicit-name": "true",
+                  "id": "body",
+                  "name-from": "related-element",
+                  "tag": "textarea",
+                  "text-align": "left",
+                  "text-model": "a1"
+                },
+                "text": "First line of the body\nSecond line of the body",
+                "lines": [
+                  [
+                    0,
+                    23
+                  ],
+                  [
+                    23,
+                    42
+                  ],
+                  [
+                    42,
+                    46
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -3545,
+            "attributes": {
+              "display": "block",
+              "id": "chat-label",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "Type a message",
+            "lines": [
+              [
+                0,
+                14
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Type a message",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -3559,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Type a message",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 42,
+            "ia2_role": 42,
+            "name": "Type a message",
+            "value": "Hello from the chat box",
+            "msaa_states": 1048576,
+            "ia2_states": 5640,
+            "unique_id": -3548,
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "id": "chat",
+              "name-from": "related-element",
+              "tag": "div",
+              "text-align": "left",
+              "text-model": "a1",
+              "xml-roles": "textbox"
+            },
+            "text": "Hello from the chat box",
+            "lines": [
+              [
+                0,
+                23
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Hello from the chat box",
+                "msaa_states": 0,
+                "ia2_states": 1032,
+                "unique_id": -3537,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Hello from the chat box",
+                "lines": [
+                  [
+                    0,
+                    23
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -3563,
+            "attributes": {
+              "display": "block",
+              "id": "notes-label",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "Notes",
+            "lines": [
+              [
+                0,
+                5
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Notes",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -3525,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Notes",
+                "lines": [
+                  [
+                    0,
+                    5
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "name": "Notes",
+            "value": "Plain editable notes",
+            "msaa_states": 1048576,
+            "ia2_states": 5640,
+            "unique_id": -3530,
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "id": "notes",
+              "name-from": "related-element",
+              "tag": "div",
+              "text-align": "left",
+              "text-model": "a1"
+            },
+            "text": "Plain editable notes",
+            "lines": [
+              [
+                0,
+                20
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Plain editable notes",
+                "msaa_states": 0,
+                "ia2_states": 1032,
+                "unique_id": -3538,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Plain editable notes",
+                "lines": [
+                  [
+                    0,
+                    20
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -3531,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Send",
+                "msaa_states": 1048576,
+                "ia2_states": 1024,
+                "unique_id": -3540,
+                "attributes": {
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Send",
+                "lines": [
+                  [
+                    0,
+                    4
+                  ]
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
