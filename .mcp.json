@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "opendesk": {
+      "type": "stdio",
+      "command": "opendesk-mcp",
+      "args": [],
+      "env": {}
+    }
+  }
+}
