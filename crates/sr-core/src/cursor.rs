@@ -393,7 +393,8 @@ impl VirtualCursor {
             self.current_node_id = Some(next_line.node_id);
             Some(self.format_line_announcement(next_line))
         } else {
-            None
+            // JAWS re-speaks the last line at the bottom; there is no "bottom" message (§2).
+            Some(self.current_line())
         }
     }
 
@@ -414,7 +415,8 @@ impl VirtualCursor {
             self.current_node_id = Some(prior_line.node_id);
             Some(self.format_line_announcement(prior_line))
         } else {
-            None
+            // JAWS re-speaks the title line at the top (§2).
+            Some(self.current_line())
         }
     }
 
@@ -671,11 +673,14 @@ impl VirtualCursor {
             return String::new();
         };
         SpeechFormatter::format_control_focus(node, |node_id| {
+            // The container's own span is the widest one carrying its id (its start and
+            // end lines have narrower spans of their own).
             self.buffer
                 .spans
                 .iter()
-                .find(|s| s.node_id == node_id && s.end_offset > s.start_offset)
-                .is_some_and(|s| previous >= s.start_offset && previous < s.end_offset)
+                .filter(|s| s.node_id == node_id)
+                .max_by_key(|s| s.end_offset - s.start_offset)
+                .is_some_and(|s| previous > s.start_offset && previous < s.end_offset)
         })
     }
 
@@ -1543,7 +1548,7 @@ impl VirtualCursor {
             .cells
             .first()
             .and_then(|r| r.first())
-            .map(|c| c.text.as_str())
+            .map(|c| c.speech.as_str())
             .unwrap_or("");
 
         let speech = SpeechFormatter::format_table_entry(
@@ -1584,7 +1589,7 @@ impl VirtualCursor {
             .cells
             .first()
             .and_then(|r| r.first())
-            .map(|c| c.text.as_str())
+            .map(|c| c.speech.as_str())
             .unwrap_or("");
 
         let speech = SpeechFormatter::format_table_entry(
@@ -1617,7 +1622,7 @@ impl VirtualCursor {
                 self.offset = cell.offset;
                 self.current_node_id = Some(cell.node_id);
                 return Some(SpeechFormatter::format_table_cell_col(
-                    &cell.text,
+                    &cell.speech,
                     cell.col,
                     table.cols,
                     cell.col_header.as_deref(),
@@ -1625,7 +1630,7 @@ impl VirtualCursor {
                 ));
             }
         }
-        Some("edge of table".to_string())
+        Some("end of row".to_string())
     }
 
     /// Moves to cell to the left within the active row (`Ctrl+Alt+LeftArrow`).
@@ -1650,7 +1655,7 @@ impl VirtualCursor {
                 self.offset = cell.offset;
                 self.current_node_id = Some(cell.node_id);
                 return Some(SpeechFormatter::format_table_cell_col(
-                    &cell.text,
+                    &cell.speech,
                     cell.col,
                     table.cols,
                     cell.col_header.as_deref(),
@@ -1680,7 +1685,7 @@ impl VirtualCursor {
                 self.offset = cell.offset;
                 self.current_node_id = Some(cell.node_id);
                 return Some(SpeechFormatter::format_table_cell_row(
-                    &cell.text,
+                    &cell.speech,
                     cell.row,
                     table.rows,
                     cell.row_header.as_deref(),
@@ -1689,7 +1694,7 @@ impl VirtualCursor {
                 ));
             }
         }
-        Some("edge of table".to_string())
+        Some("bottom of column".to_string())
     }
 
     /// Moves to cell directly above in the active column (`Ctrl+Alt+UpArrow`).
@@ -1714,7 +1719,7 @@ impl VirtualCursor {
                 self.offset = cell.offset;
                 self.current_node_id = Some(cell.node_id);
                 return Some(SpeechFormatter::format_table_cell_row(
-                    &cell.text,
+                    &cell.speech,
                     cell.row,
                     table.rows,
                     cell.row_header.as_deref(),

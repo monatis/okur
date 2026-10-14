@@ -93,6 +93,14 @@ impl KeyEvent {
             }
             Key::UpArrow if m.shift && !m.ctrl && !m.alt && !m.insert => Some("+{UP}".to_string()),
 
+            // Say All (Insert+DownArrow) and Say Line (Insert+UpArrow)
+            Key::DownArrow if m.insert && !m.ctrl && !m.alt && !m.shift => {
+                Some("SayAll".to_string())
+            }
+            Key::UpArrow if m.insert && !m.ctrl && !m.alt && !m.shift => {
+                Some("SayLine".to_string())
+            }
+
             // Say selected text (JAWSKey+Shift+DownArrow or Shift+Alt+DownArrow)
             Key::DownArrow if (m.insert || m.alt) && m.shift && !m.ctrl => {
                 Some("+!{DOWN}".to_string())

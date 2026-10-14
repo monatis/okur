@@ -106,6 +106,8 @@ pub struct TableCellInfo {
     pub col_header: Option<String>,
     pub row_header: Option<String>,
     pub text: String,
+    /// The cell content as line reading speaks it (links keep their role markers).
+    pub speech: String,
 }
 
 /// 2D grid structure representing a data table.

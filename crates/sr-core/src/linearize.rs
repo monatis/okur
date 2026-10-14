@@ -696,6 +696,18 @@ impl<'a> Builder<'a> {
                     .map(|l| l.text.as_str())
                     .collect::<Vec<_>>()
                     .join(" ");
+                let speech = self
+                    .buffer
+                    .lines
+                    .get(before..)
+                    .unwrap_or_default()
+                    .iter()
+                    .map(|l| l.speech.as_str())
+                    .collect::<Vec<_>>()
+                    .join(
+                        "
+",
+                    );
                 self.buffer.spans.push(BufferSpan {
                     start_offset: offset,
                     end_offset: self.offset(),
@@ -716,6 +728,7 @@ impl<'a> Builder<'a> {
                     col_header: None,
                     row_header: None,
                     text,
+                    speech,
                 });
             }
             grid.push(row_cells);

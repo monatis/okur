@@ -96,6 +96,14 @@ pub fn check(aom: &AomNode) -> Vec<Violation> {
     for _ in 0..MAX_STEPS {
         match cursor.move_next_line() {
             Some(line) => {
+                let on_last_line = buffer
+                    .lines
+                    .last()
+                    .is_some_and(|l| l.start_offset == cursor.offset);
+                if cursor.offset == last_offset && on_last_line {
+                    // Bottom of the page: JAWS re-speaks the last line (spec §2).
+                    break;
+                }
                 if cursor.offset <= last_offset {
                     violations.push(Violation {
                         invariant: DOWN_ADVANCES,
