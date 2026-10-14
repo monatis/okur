@@ -37,6 +37,13 @@ pub trait TtsEngine: Send + Sync {
     /// If `interrupt` is true, cancels any ongoing speech immediately before speaking.
     fn speak(&mut self, text: &str, interrupt: bool) -> Result<(), TtsError>;
 
+    /// Speaks `text` with its pitch changed by `pitch` on SAPI's scale (-10 to 10): a capital
+    /// letter read alone. Synthesizers without pitch control speak it unchanged.
+    fn speak_pitched(&mut self, text: &str, pitch: i32, interrupt: bool) -> Result<(), TtsError> {
+        let _ = pitch;
+        self.speak(text, interrupt)
+    }
+
     /// Cancels/stops any ongoing speech immediately.
     fn stop(&mut self) -> Result<(), TtsError>;
 
@@ -239,9 +246,11 @@ impl sr_core::speech::SpeechOutput for TtsManager {
         if let Some(log) = self.speech_log.as_mut() {
             log.record(SpeechLogKind::Speak, text, interrupt);
         }
-        let _ = self
-            .engine
-            .speak(&sr_core::pronounce::character(text), interrupt);
+        let _ = self.engine.speak_pitched(
+            &sr_core::pronounce::character(text),
+            sr_core::pronounce::character_pitch(text),
+            interrupt,
+        );
     }
 
     fn stop(&mut self) {

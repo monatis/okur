@@ -111,23 +111,58 @@ fn jaws_spoken_variants(evidence: &Value) -> Option<BTreeMap<String, Vec<String>
         let Some(id) = step.get("step_id").and_then(Value::as_str) else {
             continue;
         };
-        let spoken = step
-            .pointer("/observation/spoken")
-            .and_then(Value::as_array)
-            .map(|a| {
-                a.iter()
-                    .filter_map(Value::as_str)
-                    .filter(|s| !HARNESS_CONFIRMATIONS.contains(&s.trim()))
-                    .collect::<Vec<_>>()
-                    .join(" ")
-            })
-            .unwrap_or_default();
+        // The records keep each fragment's pitch (a capital letter's); `spoken` is their text.
+        let records: Vec<String> = match step.pointer("/observation/spoken_records") {
+            Some(Value::Array(records)) => records.iter().map(record_text).collect(),
+            Some(record @ Value::Object(_)) => vec![record_text(record)],
+            _ => step
+                .pointer("/observation/spoken")
+                .and_then(Value::as_array)
+                .map(|a| {
+                    a.iter()
+                        .filter_map(Value::as_str)
+                        .map(str::to_owned)
+                        .collect()
+                })
+                .unwrap_or_default(),
+        };
+        let spoken = records
+            .iter()
+            .filter(|s| !HARNESS_CONFIRMATIONS.contains(&s.trim()))
+            .map(String::as_str)
+            .collect::<Vec<_>>()
+            .join(" ");
         let entry = variants.entry(id.to_owned()).or_default();
         if !entry.contains(&spoken) {
             entry.push(spoken);
         }
     }
     Some(variants)
+}
+
+/// One speech recorder record's text, as run-scenario.ps1 derives `spoken` from it (its
+/// spoken fragments joined by spaces), with each fragment's pitch change marked.
+fn record_text(record: &Value) -> String {
+    let frags = match record.get("frags") {
+        Some(Value::Array(frags)) => frags.iter().collect(),
+        Some(frag @ Value::Object(_)) => vec![frag],
+        _ => Vec::new(),
+    };
+    frags
+        .into_iter()
+        .filter(|f| {
+            matches!(
+                f.get("action").and_then(Value::as_str),
+                Some("speak" | "spell" | "pronounce")
+            )
+        })
+        .map(|f| {
+            let text = f.get("text").and_then(Value::as_str).unwrap_or_default();
+            let pitch = f.get("pitch").and_then(Value::as_i64).unwrap_or(0);
+            sr_core::pronounce::pitched(text, i32::try_from(pitch).unwrap_or(0))
+        })
+        .collect::<Vec<_>>()
+        .join(" ")
 }
 
 fn read_json(path: &Path) -> Result<Value, String> {
@@ -496,7 +531,11 @@ impl sr_core::speech::SpeechOutput for RecordingSpeech {
 
     fn speak_character(&mut self, text: &str, _interrupt: bool) {
         append(&self.history, text.to_owned());
-        append(&self.spoken, sr_core::pronounce::character(text));
+        let pitch = sr_core::pronounce::character_pitch(text);
+        append(
+            &self.spoken,
+            sr_core::pronounce::pitched(&sr_core::pronounce::character(text), pitch),
+        );
     }
 
     fn stop(&mut self) {}

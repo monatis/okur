@@ -807,7 +807,8 @@ pub trait SpeechOutput: Send + Sync {
 
     /// Speaks a character being read on its own (Left/Right, Delete). `text` is the character
     /// as JAWS's speech history records it; the synthesizer is given its name, as JAWS names
-    /// spaces and symbols whatever its punctuation level ([`crate::pronounce`]).
+    /// spaces and symbols whatever its punctuation level ([`crate::pronounce`]). A synthesizer
+    /// raises a capital's pitch ([`crate::pronounce::character_pitch`]).
     fn speak_character(&mut self, text: &str, interrupt: bool) {
         self.speak(&crate::pronounce::character(text), interrupt);
     }

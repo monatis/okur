@@ -36,6 +36,29 @@ pub fn character(text: &str) -> String {
     }
 }
 
+/// The pitch change of a capital letter read alone, on SAPI's scale (-10 to 10). JAWS sent
+/// this for the reference voice profile's Upper Case Pitch Change of 20 [obs, 307/s35: `B` at
+/// pitch 4; 207].
+pub const CAPITAL_PITCH: i32 = 4;
+
+/// The pitch change of a character read alone: capitals are raised.
+pub fn character_pitch(text: &str) -> i32 {
+    let mut chars = text.chars();
+    match (chars.next(), chars.next()) {
+        (Some(c), None) if c.is_uppercase() => CAPITAL_PITCH,
+        _ => 0,
+    }
+}
+
+/// Spoken text as the spoken layer compares it: with its pitch change, when it has one.
+pub fn pitched(text: &str, pitch: i32) -> String {
+    if pitch == 0 {
+        text.to_owned()
+    } else {
+        format!("[pitch {pitch:+}] {text}")
+    }
+}
+
 /// Text for the synthesizer: the role markers JAWS's history keeps (`\u{1d}…\u{1e}`) are
 /// not spoken characters.
 pub fn text(text: &str) -> String {
@@ -117,5 +140,16 @@ mod tests {
         assert_eq!(character("\u{e9}"), "\u{e9}");
         assert_eq!(character("blank"), "blank");
         assert_eq!(text("Save... \u{1d}Button\u{1e}"), "Save...  Button ");
+    }
+
+    #[test]
+    fn capitals_read_alone_are_raised() {
+        assert_eq!(character_pitch("B"), CAPITAL_PITCH);
+        assert_eq!(character_pitch("\u{130}"), CAPITAL_PITCH);
+        assert_eq!(character_pitch("b"), 0);
+        assert_eq!(character_pitch("("), 0);
+        assert_eq!(character_pitch("Bo"), 0);
+        assert_eq!(pitched("B", 4), "[pitch +4] B");
+        assert_eq!(pitched("b", 0), "b");
     }
 }

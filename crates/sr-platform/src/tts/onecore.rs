@@ -111,12 +111,20 @@ pub fn speaking_rate(rate: i32) -> f64 {
     }
 }
 
+/// A pitch change on SAPI's scale (-10 to 10) as OneCore's audio pitch (0 to 2, 1 is
+/// normal): +4, a capital letter, is 1.4.
+pub fn audio_pitch(pitch: i32) -> f64 {
+    1.0 + f64::from(pitch.clamp(-10, 10)) / 10.0
+}
+
 #[cfg(windows)]
 pub use engine::OneCoreEngine;
 
 #[cfg(windows)]
 mod engine {
-    use super::{parse_wav, speaking_rate, speech_chunks, trim_leading_silence, WavFormat};
+    use super::{
+        audio_pitch, parse_wav, speaking_rate, speech_chunks, trim_leading_silence, WavFormat,
+    };
     use crate::tts::{TtsEngine, TtsError, VoiceInfo};
     use std::sync::atomic::{AtomicU64, AtomicUsize, Ordering};
     use std::sync::mpsc::{channel, Receiver, Sender};
@@ -146,7 +154,12 @@ mod engine {
     const SYNTHESIS_POLL: Duration = Duration::from_millis(2);
 
     enum Command {
-        Speak { text: String, generation: u64 },
+        Speak {
+            text: String,
+            /// The pitch change, on SAPI's scale.
+            pitch: i32,
+            generation: u64,
+        },
         Voice(String),
         Rate(f64),
         Volume(f64),
@@ -456,13 +469,29 @@ mod engine {
         let mut output: Option<Output> = None;
         for command in commands {
             match command {
-                Command::Speak { text, generation } => {
+                Command::Speak {
+                    text,
+                    pitch,
+                    generation,
+                } => {
                     let cancelled = || shared.generation.load(Ordering::SeqCst) != generation;
                     if cancelled() {
                         shared.pending.fetch_sub(1, Ordering::SeqCst);
                         continue;
                     }
+                    // A changed pitch (a capital letter) holds for this utterance only.
+                    let set_pitch = |value: f64| {
+                        if let Err(e) = synth.Options().and_then(|o| o.SetAudioPitch(value)) {
+                            tracing::warn!("OneCore pitch: {e}");
+                        }
+                    };
+                    if pitch != 0 {
+                        set_pitch(audio_pitch(pitch));
+                    }
                     speak_chunks(&synth, &mut output, &speech_chunks(&text), &cancelled);
+                    if pitch != 0 {
+                        set_pitch(1.0);
+                    }
                     shared.pending.fetch_sub(1, Ordering::SeqCst);
                 }
                 Command::Voice(id) => {
@@ -500,6 +529,15 @@ mod engine {
         }
 
         fn speak(&mut self, text: &str, interrupt: bool) -> Result<(), TtsError> {
+            self.speak_pitched(text, 0, interrupt)
+        }
+
+        fn speak_pitched(
+            &mut self,
+            text: &str,
+            pitch: i32,
+            interrupt: bool,
+        ) -> Result<(), TtsError> {
             let generation = if interrupt {
                 self.shared.generation.fetch_add(1, Ordering::SeqCst) + 1
             } else {
@@ -512,6 +550,7 @@ mod engine {
             self.shared.pending.fetch_add(1, Ordering::SeqCst);
             let sent = self.send(Command::Speak {
                 text: clean,
+                pitch,
                 generation,
             });
             if sent.is_err() {
@@ -717,5 +756,13 @@ mod tests {
         assert!((speaking_rate(10) - 3.0).abs() < 1e-9);
         assert!((speaking_rate(-10) - 0.5).abs() < 1e-9);
         assert!((speaking_rate(99) - 3.0).abs() < 1e-9);
+    }
+
+    #[test]
+    fn pitch_changes_map_onto_onecore_pitch() {
+        assert!((audio_pitch(0) - 1.0).abs() < f64::EPSILON);
+        assert!((audio_pitch(4) - 1.4).abs() < 1e-9);
+        assert!((audio_pitch(-10)).abs() < 1e-9);
+        assert!((audio_pitch(20) - 2.0).abs() < 1e-9);
     }
 }

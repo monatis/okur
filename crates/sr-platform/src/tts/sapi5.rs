@@ -5,7 +5,8 @@ use windows::{
     core::PCWSTR,
     Win32::{
         Media::Speech::{
-            ISpVoice, SpVoice, SPF_ASYNC, SPF_IS_NOT_XML, SPF_PURGEBEFORESPEAK, SPVOICESTATUS,
+            ISpVoice, SpVoice, SPF_ASYNC, SPF_IS_NOT_XML, SPF_IS_XML, SPF_PURGEBEFORESPEAK,
+            SPVOICESTATUS,
         },
         System::Com::{CoCreateInstance, CoInitializeEx, CLSCTX_ALL, COINIT_MULTITHREADED},
     },
@@ -96,6 +97,51 @@ impl TtsEngine for Sapi5Engine {
             Err(TtsError::Unsupported(
                 "SAPI 5 is only supported on Windows.".to_string(),
             ))
+        }
+    }
+
+    fn speak_pitched(&mut self, text: &str, pitch: i32, interrupt: bool) -> Result<(), TtsError> {
+        #[cfg(windows)]
+        {
+            if pitch == 0 {
+                return self.speak(text, interrupt);
+            }
+            // SAPI XML: the pitch element changes the voice's middle pitch, as JAWS's own
+            // fragments carry it (SPVPITCH::MiddleAdj).
+            let mut escaped = String::new();
+            for c in text.replace(['\u{001d}', '\u{001e}'], "").chars() {
+                match c {
+                    '&' => escaped.push_str("&amp;"),
+                    '<' => escaped.push_str("&lt;"),
+                    '>' => escaped.push_str("&gt;"),
+                    '"' => escaped.push_str("&quot;"),
+                    '\'' => escaped.push_str("&apos;"),
+                    c => escaped.push(c),
+                }
+            }
+            let xml = format!(
+                "<pitch middle=\"{}\">{escaped}</pitch>",
+                pitch.clamp(-10, 10)
+            );
+            let mut flags = SPF_ASYNC.0 | SPF_IS_XML.0;
+            if interrupt {
+                flags |= SPF_PURGEBEFORESPEAK.0;
+            }
+            let wide: Vec<u16> = xml.encode_utf16().chain(std::iter::once(0)).collect();
+            // SAFETY: a null-terminated string that outlives the asynchronous call (SAPI
+            // copies it before returning).
+            unsafe {
+                self.voice
+                    .Speak(PCWSTR(wide.as_ptr()), flags as u32, None)
+                    .map_err(|e| TtsError::SynthesisFailed(format!("SAPI 5 Speak failed: {e}")))?;
+            }
+            Ok(())
+        }
+
+        #[cfg(not(windows))]
+        {
+            let _ = pitch;
+            self.speak(text, interrupt)
         }
     }
 
