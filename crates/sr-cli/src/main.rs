@@ -464,6 +464,9 @@ async fn main() {
             engine.set_actions(Box::new(sr_platform::actions::WindowsActions::start(Some(
                 event_tx.clone(),
             ))));
+            // Say System Time (Insert+F12) in the user's locale formats.
+            #[cfg(windows)]
+            engine.set_clock(Box::new(sr_platform::clock::WindowsClock));
             let engine = Arc::new(Mutex::new(engine));
 
             // Announce startup

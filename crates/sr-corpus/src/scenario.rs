@@ -39,6 +39,9 @@ pub struct ScenarioStep {
     pub command: String,
     #[serde(default)]
     pub settle_ms: Option<u64>,
+    /// A `key` step's chord pressed this many times quickly ("twice quickly"); 1 when absent.
+    #[serde(default)]
+    pub repeat: Option<u32>,
 }
 
 impl Scenario {

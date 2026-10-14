@@ -63,6 +63,9 @@ pub struct KeyEvent {
     /// The character the key types in the active keyboard layout, when it types one
     /// (filled in by the platform hook; used for typing echo).
     pub text: Option<char>,
+    /// When the key was pressed, in milliseconds on the OS input clock (0 when unknown).
+    /// Tells a command pressed twice quickly from two separate presses.
+    pub time_ms: u64,
 }
 
 impl KeyEvent {
@@ -73,6 +76,7 @@ impl KeyEvent {
             is_down,
             is_repeat: false,
             text: None,
+            time_ms: 0,
         }
     }
 
@@ -154,6 +158,13 @@ impl KeyEvent {
             {
                 Some("SayWindowTitle".to_string())
             }
+
+            // Say System Time (Insert+F12), with seconds (Ctrl+Insert+F12)
+            Key::F(12) if m.insert && !m.alt && !m.shift => Some(if m.ctrl {
+                "SaySystemTimeWithSeconds".to_string()
+            } else {
+                "SaySystemTime".to_string()
+            }),
 
             // Font formatting query (Insert+F)
             Key::Alpha(c)

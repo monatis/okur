@@ -231,6 +231,7 @@ unsafe extern "system" fn low_level_keyboard_proc(
 
     let key = translate_vk_code(vk_code);
     let mut event = KeyEvent::new(key, modifiers, is_down);
+    event.time_ms = u64::from(kbd.time);
     if !ctrl && !alt && !win && !insert {
         event.text = typed_char(vk_code, kbd.scanCode, shift);
     }

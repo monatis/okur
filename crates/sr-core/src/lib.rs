@@ -1,6 +1,7 @@
 pub mod actions;
 pub mod aom;
 pub mod buffer;
+pub mod clock;
 pub mod cursor;
 pub mod editing;
 pub mod engine;

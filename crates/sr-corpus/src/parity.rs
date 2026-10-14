@@ -11,6 +11,7 @@ use crate::scenario::Scenario;
 use crate::snapshots::{self, Api};
 use serde::Serialize;
 use serde_json::Value;
+use sr_core::clock::{FixedClock, LocalDateTime, LocaleFormats};
 use sr_core::{ScreenReaderEngine, VirtualBuffer, VirtualCursor};
 use sr_platform::event_trace::{menu_event_from_trace, EventConverter, TraceEvent};
 use std::collections::BTreeMap;
@@ -97,7 +98,8 @@ fn run_scenario(
     let evidence_path = corpus_dir
         .join("evidence")
         .join(format!("{}-evidence.json", scenario.id));
-    let variants = jaws_variants(&read_json(&evidence_path)?);
+    let evidence = read_json(&evidence_path)?;
+    let variants = jaws_variants(&evidence);
 
     // Desktop scenarios have no document: the engine starts in native-app mode and its speech
     // comes from the replayed OS events. Browser scenarios load the captured document tree.
@@ -139,12 +141,17 @@ fn run_scenario(
     if desktop {
         engine.app_mode = sr_core::engine::AppMode::NativeControl;
     }
+    // Say System Time reads a clock standing at each step's recorded start.
+    let clock = replay_clock(&evidence)?;
+    if let Some((clock, _)) = &clock {
+        engine.set_clock(Box::new(clock.clone()));
+    }
     for chord in scenario.reset.iter().flat_map(|r| r.keys.iter().flatten()) {
-        press(&mut engine, chord)?;
+        press(&mut engine, chord, 0)?;
     }
     spoken.take();
 
-    let replay = StepEvents::load(corpus_dir, &scenario.id, &read_json(&evidence_path)?)?;
+    let replay = StepEvents::load(corpus_dir, &scenario.id, &evidence)?;
     // One converter for the whole run, as live: it tracks the focused object.
     let mut converter = EventConverter::default();
     for event in &replay.setup {
@@ -155,10 +162,29 @@ fn run_scenario(
     spoken.take();
 
     let mut steps = Vec::new();
-    for step in &scenario.steps {
+    for (index, step) in scenario.steps.iter().enumerate() {
+        // Key times keep separate steps from looking like a double press; without recorded
+        // times, steps are spaced apart.
+        let start = replay
+            .starts
+            .get(&step.id)
+            .copied()
+            .unwrap_or(10_000 * (index as u64 + 1));
+        if let Some((clock, offset)) = &clock {
+            clock.set(LocalDateTime::from_unix_ms(
+                i64::try_from(start).unwrap_or(0),
+                *offset,
+            ));
+        }
         let engine_speech = match step.step_type.as_str() {
             "key" => {
-                press(&mut engine, &step.command)?;
+                for press_index in 0..step.repeat.unwrap_or(1).max(1) {
+                    press(
+                        &mut engine,
+                        &step.command,
+                        start + u64::from(press_index) * REPEAT_GAP_MS,
+                    )?;
+                }
                 // Replay the OS events recorded while JAWS handled this step (e.g. the focus
                 // change that follows Tab), exactly as the live listener would deliver them.
                 for event in replay.for_step(&step.id) {
@@ -331,9 +357,37 @@ impl sr_core::speech::SpeechOutput for RecordingSpeech {
     fn stop(&mut self) {}
 }
 
-/// Presses and releases `chord` through the engine's live key-handling entry point.
-fn press(engine: &mut ScreenReaderEngine, chord: &str) -> Result<(), String> {
+/// Milliseconds between the presses of a repeated step: run-scenario.ps1 sends the chord
+/// (30 ms per key down and up) and waits 120 ms before pressing it again.
+const REPEAT_GAP_MS: u64 = 300;
+
+/// The replay clock and its UTC offset, from the evidence's recorded culture and time zone.
+/// Evidence recorded before the culture was captured has no clock: time commands are silent.
+fn replay_clock(evidence: &Value) -> Result<Option<(FixedClock, i32)>, String> {
+    let Some(culture) = evidence
+        .pointer("/provenance/culture")
+        .and_then(Value::as_str)
+    else {
+        return Ok(None);
+    };
+    let formats = match culture {
+        "en-US" => LocaleFormats::en_us(),
+        other => return Err(format!("no locale formats for recorded culture {other:?}")),
+    };
+    let offset = evidence
+        .pointer("/provenance/utc_offset_minutes")
+        .and_then(Value::as_i64)
+        .and_then(|m| i32::try_from(m).ok())
+        .unwrap_or(0);
+    let clock = FixedClock::new(LocalDateTime::from_unix_ms(0, offset), formats);
+    Ok(Some((clock, offset)))
+}
+
+/// Presses and releases `chord` at `time_ms` (0: unknown) through the engine's live
+/// key-handling entry point.
+fn press(engine: &mut ScreenReaderEngine, chord: &str, time_ms: u64) -> Result<(), String> {
     let mut event = crate::keys::parse_chord(chord)?;
+    event.time_ms = time_ms;
     let _ = engine.handle_key_event(&event);
     event.is_down = false;
     let _ = engine.handle_key_event(&event);
@@ -365,6 +419,8 @@ struct StepEvents {
     /// Focus events before the first step (launch and reset), replayed silently so the
     /// engine knows the window and focus JAWS saw when step 1 began.
     setup: Vec<sr_platform::event_trace::TraceEvent>,
+    /// When each step began (unix ms), for the replay clock and key times.
+    starts: std::collections::HashMap<String, u64>,
 }
 
 impl StepEvents {
@@ -383,6 +439,7 @@ impl StepEvents {
         let trace_path = corpus_dir.join("traces").join(trace_file);
         let (_, events) = sr_platform::event_trace::read_trace(&trace_path)?;
         let mut by_step = std::collections::HashMap::new();
+        let mut starts = std::collections::HashMap::new();
         let steps = trial
             .get("step_results")
             .and_then(Value::as_array)
@@ -417,8 +474,13 @@ impl StepEvents {
                 .cloned()
                 .collect();
             by_step.insert(id.to_owned(), window);
+            starts.insert(id.to_owned(), start);
         }
-        Ok(Self { by_step, setup })
+        Ok(Self {
+            by_step,
+            setup,
+            starts,
+        })
     }
 
     fn for_step(&self, step_id: &str) -> Vec<sr_platform::event_trace::TraceEvent> {

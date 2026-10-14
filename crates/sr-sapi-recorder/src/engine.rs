@@ -7,11 +7,13 @@ use std::path::PathBuf;
 use std::sync::Mutex;
 use std::time::{SystemTime, UNIX_EPOCH};
 use windows::core::{implement, IUnknown, Interface, Ref, BOOL, GUID, HRESULT, PCWSTR, PWSTR};
-use windows::Win32::Foundation::{CLASS_E_CLASSNOTAVAILABLE, CLASS_E_NOAGGREGATION, E_POINTER, S_FALSE};
+use windows::Win32::Foundation::{
+    CLASS_E_CLASSNOTAVAILABLE, CLASS_E_NOAGGREGATION, E_POINTER, S_FALSE,
+};
 use windows::Win32::Media::Audio::WAVEFORMATEX;
 use windows::Win32::Media::Speech::{
-    ISpObjectToken, ISpObjectWithToken, ISpObjectWithToken_Impl, ISpTTSEngine,
-    ISpTTSEngineSite, ISpTTSEngine_Impl, SpObjectToken, SPVES_ABORT, SPVTEXTFRAG,
+    ISpObjectToken, ISpObjectWithToken, ISpObjectWithToken_Impl, ISpTTSEngine, ISpTTSEngineSite,
+    ISpTTSEngine_Impl, SpObjectToken, SPVES_ABORT, SPVTEXTFRAG,
 };
 use windows::Win32::System::Com::{
     CoCreateInstance, CoTaskMemAlloc, CoTaskMemFree, IClassFactory, IClassFactory_Impl, CLSCTX_ALL,
@@ -287,7 +289,7 @@ impl ISpObjectWithToken_Impl for Recorder_Impl {
 mod tests {
     use super::*;
     use windows::Win32::Media::Speech::{
-        ISpEventSink_Impl, ISpTTSEngineSite_Impl, SPEVENT, SPVA_Speak, SPVA_SpellOut, SPVSKIPTYPE,
+        ISpEventSink_Impl, ISpTTSEngineSite_Impl, SPVA_Speak, SPVA_SpellOut, SPEVENT, SPVSKIPTYPE,
     };
 
     /// A synthesizer site that counts the audio bytes written to it.
@@ -363,15 +365,8 @@ mod tests {
         let site_impl = CountingSite::default();
         let site: ISpTTSEngineSite = site_impl.into();
         // SAFETY: the fragment list and its text outlive the call.
-        let spoken = unsafe {
-            engine.Speak(
-                0,
-                &SPDFID_WAVE_FORMAT_EX,
-                std::ptr::null(),
-                &head,
-                &site,
-            )
-        };
+        let spoken =
+            unsafe { engine.Speak(0, &SPDFID_WAVE_FORMAT_EX, std::ptr::null(), &head, &site) };
         assert!(spoken.is_ok(), "{spoken:?}");
 
         let written = std::fs::read_to_string(&log).unwrap_or_default();
@@ -385,6 +380,9 @@ mod tests {
             frags: Vec::new(),
         });
         assert_eq!(record.text(), "left paren B");
-        assert_eq!(record.frags.get(1).map(|f| (f.action.as_str(), f.pitch)), Some(("spell", 4)));
+        assert_eq!(
+            record.frags.get(1).map(|f| (f.action.as_str(), f.pitch)),
+            Some(("spell", 4))
+        );
     }
 }

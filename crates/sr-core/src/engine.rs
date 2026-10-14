@@ -5,6 +5,10 @@ use crate::event::{AccessibilityEvent, FocusEvent, LiveRegionEvent, Politeness};
 use crate::input::{Key, KeyAction, KeyEvent};
 use crate::speech::{SpeechFormatter, SpeechOutput};
 
+/// The longest gap between two presses of a JAWS command that counts as "twice quickly"
+/// (the Windows default double-click time).
+const DOUBLE_PRESS_MS: u64 = 500;
+
 /// Active element list dialog state.
 #[derive(Debug, Clone)]
 pub enum ActiveElementList {
@@ -318,6 +322,10 @@ pub struct ScreenReaderEngine {
     last_text: Option<crate::event::TextContext>,
     /// Actions on the real application (focus, default action); None when headless.
     actions: Option<Box<dyn crate::actions::ApplicationActions>>,
+    /// The local time and locale formats for Say System Time; None when headless.
+    clock: Option<Box<dyn crate::clock::Clock>>,
+    /// The last JAWS-key command and when it was pressed, to tell a double press.
+    last_press: Option<(String, u64)>,
 }
 
 impl ScreenReaderEngine {
@@ -342,6 +350,8 @@ impl ScreenReaderEngine {
             pending_page: None,
             last_text: None,
             actions: None,
+            clock: None,
+            last_press: None,
         }
     }
 
@@ -463,6 +473,10 @@ impl ScreenReaderEngine {
                 _ => self.last_window_title.clone(),
             }?;
             let speech = format!("Title is\n{title}");
+            self.speech.speak(&speech, true);
+            return Some(speech);
+        }
+        if let Some(speech) = self.clock_command(command) {
             self.speech.speak(&speech, true);
             return Some(speech);
         }
@@ -1642,8 +1656,42 @@ impl ScreenReaderEngine {
             return;
         }
         if let Some(cmd) = event.to_command_string() {
+            let cmd = self.repeated_command(cmd, event.time_ms);
             let _ = self.execute_command(&cmd);
         }
+    }
+
+    /// The command a JAWS-key command becomes when pressed twice quickly, e.g. Say System
+    /// Time's second press speaks the date [obs, 308/s2, s4].
+    fn repeated_command(&mut self, cmd: String, time_ms: u64) -> String {
+        let twice = matches!(&self.last_press, Some((last, at))
+            if *last == cmd && time_ms != 0 && time_ms.saturating_sub(*at) <= DOUBLE_PRESS_MS);
+        self.last_press = (!twice).then(|| (cmd.clone(), time_ms));
+        if !twice {
+            return cmd;
+        }
+        match cmd.as_str() {
+            "SaySystemTime" => "SaySystemDate".to_owned(),
+            "SaySystemTimeWithSeconds" => "SayWeekNumber".to_owned(),
+            _ => cmd,
+        }
+    }
+
+    /// Say System Time and its variants, from the clock in the user's locale formats.
+    fn clock_command(&self, command: &str) -> Option<String> {
+        let clock = self.clock.as_deref();
+        match command {
+            "SaySystemTime" => Some(crate::clock::say_time(clock?, false)),
+            "SaySystemTimeWithSeconds" => Some(crate::clock::say_time(clock?, true)),
+            "SaySystemDate" => Some(crate::clock::say_date(clock?, false)),
+            "SayWeekNumber" => Some(crate::clock::say_date(clock?, true)),
+            _ => None,
+        }
+    }
+
+    /// Gives the engine the system clock and locale formats (Say System Time).
+    pub fn set_clock(&mut self, clock: Box<dyn crate::clock::Clock>) {
+        self.clock = Some(clock);
     }
 
     /// Feedback for a key passed to a text field: keys that move the caret, select or
@@ -2300,6 +2348,66 @@ mod tests {
         let mut ins_t = KeyEvent::new(Key::Alpha('t'), Modifiers::none(), true);
         ins_t.modifiers.insert = true;
         assert_eq!(engine.handle_key_event(&ins_t), KeyAction::Consume);
+    }
+
+    /// Speech shared with the test, for commands spoken from key events.
+    #[derive(Clone, Default)]
+    struct SharedSpeech(std::sync::Arc<std::sync::Mutex<Vec<String>>>);
+
+    impl SpeechOutput for SharedSpeech {
+        fn speak(&mut self, text: &str, _interrupt: bool) {
+            if let Ok(mut said) = self.0.lock() {
+                said.push(text.to_owned());
+            }
+        }
+        fn stop(&mut self) {}
+    }
+
+    impl SharedSpeech {
+        fn take(&self) -> Vec<String> {
+            self.0
+                .lock()
+                .map(|mut s| s.drain(..).collect())
+                .unwrap_or_default()
+        }
+    }
+
+    /// Insert+F12 speaks the time; pressed twice quickly, the time and then the date. With
+    /// Ctrl, seconds, then the week [obs, 308/s1–s4].
+    #[test]
+    fn test_say_system_time_and_its_double_press() {
+        use crate::clock::{FixedClock, LocalDateTime, LocaleFormats};
+        let empty_doc = AomNode::new(0, Role::Document);
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&empty_doc));
+        let speech = SharedSpeech::default();
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+        engine.app_mode = AppMode::NativeControl;
+        let recorded = LocalDateTime::from_unix_ms(1_792_005_107_069, 180);
+        engine.set_clock(Box::new(FixedClock::new(recorded, LocaleFormats::en_us())));
+
+        let press = |engine: &mut ScreenReaderEngine, ctrl: bool, time_ms: u64| {
+            let mut key = KeyEvent::new(Key::F(12), Modifiers::none(), true);
+            key.modifiers.insert = true;
+            key.modifiers.ctrl = ctrl;
+            key.time_ms = time_ms;
+            assert_eq!(engine.handle_key_event(&key), KeyAction::Consume);
+        };
+        press(&mut engine, false, 1_000);
+        press(&mut engine, false, 5_000);
+        assert_eq!(speech.take(), ["10:11 PM", "10:11 PM"], "separate presses");
+        press(&mut engine, false, 9_000);
+        press(&mut engine, false, 9_300);
+        assert_eq!(
+            speech.take(),
+            ["10:11 PM", "Wednesday, October 14, 2026"],
+            "twice quickly"
+        );
+        press(&mut engine, true, 20_000);
+        press(&mut engine, true, 20_300);
+        assert_eq!(speech.take(), ["10:11:47 PM", "Week 42"]);
+        // A third quick press starts over.
+        press(&mut engine, true, 20_600);
+        assert_eq!(speech.take(), ["10:11:47 PM"]);
     }
 
     /// In a text field, the JAWS key is consumed too, and Say Line (Insert+Up) reads the
