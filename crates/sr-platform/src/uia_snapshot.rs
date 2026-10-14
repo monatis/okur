@@ -344,6 +344,15 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> sr_core::AomNode {
     }
 
     aom.children = node.children.iter().map(|c| convert(c, next_id)).collect();
+    // Chromium gives an editing host (contenteditable) no UIA value; its value is its text.
+    if role == Role::Edit && aom.value.is_none() {
+        let text: String = aom
+            .children
+            .iter()
+            .filter_map(|c| c.text.as_deref())
+            .collect();
+        aom.value = Some(text).filter(|t| !t.is_empty());
+    }
     aom
 }
 

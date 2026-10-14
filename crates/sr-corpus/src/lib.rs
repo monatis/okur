@@ -214,6 +214,33 @@ mod tests {
         );
     }
 
+    /// Every kind of text field maps to an edit through both APIs, so Enter enters forms
+    /// mode and caret keys read text: input, textarea, a WhatsApp-style contenteditable with
+    /// role=textbox, and a plain contenteditable (the user's WhatsApp Web report).
+    #[test]
+    fn every_editing_shape_is_an_edit() {
+        for api in [snapshots::Api::Ia2, snapshots::Api::Uia] {
+            let page = snapshot_aom("editing", api);
+            let edits: Vec<(Option<String>, Option<String>)> =
+                find(&page, &|n| n.role == sr_core::Role::Edit)
+                    .iter()
+                    .map(|n| (n.name.clone(), n.value.clone()))
+                    .collect();
+            let names: Vec<&str> = edits.iter().filter_map(|(n, _)| n.as_deref()).collect();
+            assert_eq!(
+                names,
+                vec!["Subject", "Body", "Type a message", "Notes"],
+                "{api:?}"
+            );
+            let notes = edits.iter().find(|(n, _)| n.as_deref() == Some("Notes"));
+            assert_eq!(
+                notes.and_then(|(_, v)| v.as_deref()),
+                Some("Plain editable notes"),
+                "{api:?}"
+            );
+        }
+    }
+
     /// Actions resolve nodes through their IA2 uniqueID, so every form control must carry one.
     #[test]
     fn ia2_snapshots_carry_unique_ids() {

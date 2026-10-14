@@ -1,15 +1,13 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p sr-cli -- invariants --write-baseline",
-  "total_violations": 1,
+  "total_violations": 0,
   "violations": {
     "boundaries-dynamic.chrome.ia2.json": [],
     "boundaries-dynamic.chrome.uia.json": [],
     "doc-reading.chrome.ia2.json": [],
     "doc-reading.chrome.uia.json": [],
     "editing.chrome.ia2.json": [],
-    "editing.chrome.uia.json": [
-      "[all text is reachable with Down Arrow] never spoken: \"Plain editable notes\""
-    ],
+    "editing.chrome.uia.json": [],
     "forms-interaction.chrome.ia2.json": [],
     "forms-interaction.chrome.uia.json": [],
     "news-article.chrome.ia2.json": [],
