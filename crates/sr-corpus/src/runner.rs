@@ -3,7 +3,6 @@ use sr_core::{
     AomNode, FocusEvent, LiveRegionEvent, MockSpeechOutput, Politeness, Role, ScreenReaderEngine,
     VirtualBuffer, VirtualCursor,
 };
-use sr_platform::PlatformBridge;
 use std::fs;
 use std::path::{Path, PathBuf};
 
@@ -60,26 +59,14 @@ impl DifferentialRunner {
         }
     }
 
-    /// Loads an AOM tree for a scenario, querying live OS accessibility APIs via `PlatformBridge`
-    /// when the application is running, or falling back to canonical AOM snapshots.
+    /// Loads the AOM tree for a scenario from its on-disk snapshot.
+    ///
+    /// Deliberately hermetic: never reads live OS accessibility state, so results
+    /// cannot depend on which applications happen to be open on the machine.
     pub fn load_aom_for_scenario(
         &self,
         scenario: &Scenario,
     ) -> Result<AomNode, Box<dyn std::error::Error>> {
-        let bridge = PlatformBridge::new();
-
-        // 1. If target application is running, query the live OS accessibility tree
-        if let Some(ref target_app) = scenario.target_app {
-            if let Ok(aom) = bridge.get_active_document(Some(target_app)) {
-                tracing::info!(
-                    "Acquired live AOM tree from target application '{}'",
-                    target_app
-                );
-                return Ok(aom);
-            }
-        }
-
-        // 2. Fall back to canonical AOM snapshot (no toy HTML parsing)
         let fixture_path = self
             .resolve_fixture_path(&scenario.fixture)
             .map_err(|e| std::io::Error::new(std::io::ErrorKind::NotFound, e))?;

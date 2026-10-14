@@ -1831,17 +1831,19 @@ mod tests {
 
         let t_key = KeyEvent::new(Key::Alpha('t'), Modifiers::none(), true);
         assert_eq!(engine.handle_key_event(&t_key), KeyAction::PassThrough);
+    }
 
-        // Global JAWS shortcuts with Insert still execute
+    #[test]
+    #[ignore = "known gap: Insert+T (Say Window Title) is unbound; JAWS consumes every JAWS-key combination"]
+    fn test_known_gap_insert_t_consumed_in_native_app() {
+        let empty_doc = AomNode::new(0, Role::Document);
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&empty_doc));
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+        engine.app_mode = AppMode::NativeControl;
+
         let mut ins_t = KeyEvent::new(Key::Alpha('t'), Modifiers::none(), true);
         ins_t.modifiers.insert = true;
-        // Insert+T is say title, consumes if handled
-        let action = engine.handle_key_event(&ins_t);
-        // Say title command handled or passed
-        assert!(matches!(
-            action,
-            KeyAction::Consume | KeyAction::PassThrough
-        ));
+        assert_eq!(engine.handle_key_event(&ins_t), KeyAction::Consume);
     }
 
     #[test]

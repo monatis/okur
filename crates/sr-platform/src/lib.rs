@@ -13,8 +13,8 @@ pub use events::{
 };
 pub use hook::{create_keyboard_hook, Key, KeyAction, KeyEvent, KeyboardHook, Modifiers};
 pub use tts::{
-    clear_speech_history, log_speech_utterance, read_speech_history, NoSpeechEngine, Sapi5Engine,
-    TtsEngine, TtsEngineType, TtsError, TtsManager, VoiceInfo,
+    NoSpeechEngine, Sapi5Engine, SpeechLog, SpeechLogEntry, SpeechLogKind, TtsEngine,
+    TtsEngineType, TtsError, TtsManager, VoiceInfo,
 };
 
 pub fn init() {

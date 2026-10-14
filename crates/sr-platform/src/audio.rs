@@ -170,8 +170,11 @@ mod tests {
 
     #[test]
     #[cfg(windows)]
+    #[ignore = "live: needs a default audio render endpoint"]
     fn test_audio_endpoint_meter_query() {
-        let _lock = crate::TEST_AUDIO_LOCK.lock().unwrap();
+        let _lock = crate::TEST_AUDIO_LOCK
+            .lock()
+            .unwrap_or_else(|poisoned| poisoned.into_inner());
         let peak = AudioEndpointMeter::get_peak_amplitude();
         assert!(
             peak.is_ok(),
@@ -187,33 +190,35 @@ mod tests {
         }
     }
 
+    /// Live: speaks aloud and meters the whole system mix on the default endpoint,
+    /// so it only proves that *some* audio played. Run with `cargo test -- --ignored`
+    /// on an unmuted machine with no other audio playing.
     #[test]
     #[cfg(windows)]
+    #[ignore = "live: speaks aloud and needs an unmuted audio endpoint"]
     fn test_audio_endpoint_meter_detects_speech() {
-        let _lock = crate::TEST_AUDIO_LOCK.lock().unwrap();
+        let _lock = crate::TEST_AUDIO_LOCK
+            .lock()
+            .unwrap_or_else(|poisoned| poisoned.into_inner());
         use crate::tts::{Sapi5Engine, TtsEngine};
 
-        if let Ok(mut sapi) = Sapi5Engine::new() {
-            // Speak a phrase
-            let _ = sapi.speak("Audio device verification test phrase.", true);
+        let sapi = Sapi5Engine::new();
+        assert!(sapi.is_ok(), "SAPI 5 must initialize for this live test");
+        let Ok(mut sapi) = sapi else { return };
+        assert!(sapi
+            .speak("Audio device verification test phrase.", true)
+            .is_ok());
 
-            // Monitor audio for 500ms
-            let report = AudioEndpointMeter::monitor_activity(
-                Duration::from_millis(500),
-                Duration::from_millis(25),
-                0.001,
-            );
+        let report = AudioEndpointMeter::monitor_activity(
+            Duration::from_millis(500),
+            Duration::from_millis(25),
+            0.001,
+        );
+        let _ = sapi.stop();
 
-            let _ = sapi.stop();
-
-            assert!(report.is_ok(), "Monitoring should succeed: {:?}", report);
-            if let Ok(rep) = report {
-                assert!(
-                    rep.detected_audio || rep.max_peak >= 0.0,
-                    "Should measure audio levels from soundcard endpoint: {:?}",
-                    rep
-                );
-            }
-        }
+        assert!(
+            report.as_ref().is_ok_and(|rep| rep.detected_audio),
+            "No audio detected on the default endpoint while speaking: {report:?}"
+        );
     }
 }

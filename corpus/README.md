@@ -2,9 +2,26 @@
 
 Autonomously collected, audited, and verified reference speech corpus from **Freedom Scientific JAWS 2025 (Build 2025.2505.43.400)** with **Google Chrome 154** on Windows 10, captured via the OpenDesk automation harness on remote peer `old-pc`.
 
+## Status and Rules (updated 2026-10-14 after audit)
+
+- **Genuine evidence**: only scenarios 01–30 in `evidence/` were produced by the capture tooling
+  (`skills/jaws-reference/scripts/run-scenario.ps1`, 5 trials each, see `batch_progress.log`).
+- **Quarantined**: scenarios 31–65 live in [`unverified/`](unverified/README.md). Their "evidence"
+  was not produced by the capture tooling and must not be cited as JAWS ground truth.
+- **No parity comparison yet**: `cargo test` currently checks each scenario's agent-authored
+  `assertions` against hand-written `*.aom.json` trees. It does **not** compare engine speech with
+  the recorded JAWS transcripts. Replacing this with a real differential comparison against
+  trees captured from Chrome on `old-pc` is the active work item.
+- **`CORPUS_MANIFEST.json` is generated**: never edit it by hand. Regenerate with
+  `cargo run -p sr-cli -- corpus-manifest --write`; the `manifest_is_current` test fails when stale.
+- **Evidence is written only by capture tooling**, and is never committed together with
+  `crates/` changes (enforced by the pre-commit gate).
+- `fixtures/tables-navigation.html` is intentionally the exact byte-for-byte file JAWS was recorded
+  on (it contains a `<!DICTYPE` typo and a corrupted cell). Fix it only together with re-recording.
+
 ## Corpus Version 1.1.0 (Audited Quality Gate Passed)
 
-This corpus adheres to the 4-stage quality gate lifecycle outlined in [`review.txt`](file:///c:/Users/Gigabyte/screen-reader/corpus/review.txt) and [`AGENTS.md`](file:///c:/Users/Gigabyte/screen-reader/AGENTS.md). All repairs identified during external audit have been resolved, re-executed, and verified against canonical JAWS behavior.
+Capture run history for scenarios 01–30 (2026-10-12).
 
 Original uncorrected v1.0.0 evidence traces are preserved in [`evidence-v1.0.0/`](file:///c:/Users/Gigabyte/screen-reader/corpus/evidence-v1.0.0/).
 

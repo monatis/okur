@@ -2,8 +2,8 @@ use clap::{Parser, Subcommand};
 use sr_core::{AomNode, Role, ScreenReaderEngine, VirtualBuffer, VirtualCursor};
 use sr_corpus::DifferentialRunner;
 use sr_platform::{
-    create_event_listener, create_keyboard_hook, KeyAction, PlatformBridge, TtsEngineType,
-    TtsManager,
+    create_event_listener, create_keyboard_hook, KeyAction, PlatformBridge, SpeechLog,
+    TtsEngineType, TtsManager,
 };
 use std::fs;
 use std::path::Path;
@@ -40,8 +40,12 @@ enum Commands {
         /// Path to fixture file to load (optional; if not provided, queries active application)
         #[arg(short, long)]
         fixture: Option<String>,
+
+        /// Record every utterance as JSON Lines to this file (off by default)
+        #[arg(long)]
+        speech_log: Option<String>,
     },
-    /// Execute differential testing against Freedom Scientific JAWS transcripts
+    /// Run corpus scenarios against their authored assertions (not yet a JAWS parity comparison)
     Test {
         #[arg(short, long, default_value = "corpus")]
         corpus_dir: String,
@@ -54,10 +58,14 @@ enum Commands {
         #[arg(long, default_value = "no-speech")]
         tts: String,
     },
-    /// Validate corpus integrity
-    Validate {
+    /// Check (default) or regenerate the generated corpus manifest
+    CorpusManifest {
         #[arg(short, long, default_value = "corpus")]
         corpus_dir: String,
+
+        /// Regenerate CORPUS_MANIFEST.json from the files on disk instead of checking it
+        #[arg(long)]
+        write: bool,
     },
     /// Speak arbitrary text aloud using the TTS synthesizer
     Speak {
@@ -95,11 +103,10 @@ enum Commands {
         #[arg(short, long, default_value = "auto")]
         engine: String,
     },
-    /// View or clear programmatic speech history log
+    /// Print a speech log recorded with `run --speech-log`
     History {
-        /// Clear the history log
-        #[arg(long)]
-        clear: bool,
+        /// Path of the speech log file
+        path: String,
     },
     /// Query hardware soundcard / default playback audio meter
     Meter {
@@ -152,6 +159,7 @@ async fn main() {
             rate,
             volume,
             fixture,
+            speech_log,
         }) => {
             let engine_type = TtsEngineType::from_str(&engine).unwrap_or_else(|e| {
                 eprintln!("Error: {}", e);
@@ -162,6 +170,15 @@ async fn main() {
                 eprintln!("Failed to initialize TTS engine: {}", e);
                 std::process::exit(1);
             });
+            if let Some(ref path) = speech_log {
+                match SpeechLog::open(path) {
+                    Ok(log) => tts = tts.with_speech_log(log),
+                    Err(e) => {
+                        eprintln!("Failed to open speech log {path:?}: {e}");
+                        std::process::exit(1);
+                    }
+                }
+            }
 
             let _ = tts.set_rate(rate);
             let _ = tts.set_volume(volume);
@@ -172,7 +189,7 @@ async fn main() {
             }
 
             println!("============================================================");
-            println!("  Interactive Screen Reader Daemon (Freedom Scientific JAWS Parity)");
+            println!("  Interactive Screen Reader Daemon");
             println!("  TTS Driver: {}", tts.engine_name());
             println!("============================================================");
 
@@ -412,11 +429,11 @@ async fn main() {
             let mut tts_manager = TtsManager::new(engine_type).ok();
 
             println!("============================================================");
-            println!("  Differential Screen Reader Test Suite (JAWS Parity)        ");
+            println!("  Corpus Scenario Assertions (authored; not JAWS parity)     ");
             println!("  TTS Driver: {}", tts);
             println!("============================================================");
 
-            let filter = scenarios.as_deref().unwrap_or("01..35");
+            let filter = scenarios.as_deref().unwrap_or("0..999");
             let results = if let Some((start, end)) = parse_range(filter) {
                 runner.run_range(start, end)
             } else {
@@ -486,26 +503,20 @@ async fn main() {
                 std::process::exit(1);
             }
         }
-        Some(Commands::History { clear }) => {
-            if clear {
-                sr_platform::clear_speech_history();
-                println!("Programmatic speech history log cleared.");
-            } else {
-                let history = sr_platform::read_speech_history();
-                if history.is_empty() {
-                    println!("Speech history is empty.");
-                } else {
+        Some(Commands::History { path }) => match SpeechLog::read(&path) {
+            Ok(entries) => {
+                for e in entries {
                     println!(
-                        "=== Programmatic Speech History ({} entries) ===",
-                        history.len()
+                        "[{} ms] {:?} interrupt={} {:?}",
+                        e.t_ms, e.kind, e.interrupt, e.text
                     );
-                    for line in history {
-                        println!("{}", line);
-                    }
-                    println!("===============================================");
                 }
             }
-        }
+            Err(e) => {
+                eprintln!("Failed to read speech log {path:?}: {e}");
+                std::process::exit(1);
+            }
+        },
         Some(Commands::Meter { duration_ms }) => {
             println!(
                 "Sampling hardware soundcard / default playback endpoint for {} ms...",
@@ -533,9 +544,23 @@ async fn main() {
                 }
             }
         }
-        Some(Commands::Validate { corpus_dir }) => {
-            println!("Validating corpus manifest at {}...", corpus_dir);
-            sr_corpus::init();
+        Some(Commands::CorpusManifest { corpus_dir, write }) => {
+            let dir = Path::new(&corpus_dir);
+            let result = if write {
+                sr_corpus::manifest::write(dir)
+            } else {
+                sr_corpus::manifest::check(dir)
+            };
+            match result {
+                Ok(()) if write => {
+                    println!("Wrote {:?}", dir.join(sr_corpus::manifest::MANIFEST_FILE))
+                }
+                Ok(()) => println!("Corpus manifest is current."),
+                Err(e) => {
+                    eprintln!("{e}");
+                    std::process::exit(1);
+                }
+            }
         }
         None => {
             println!("No command specified. Use `sr-cli --help` for available options.");

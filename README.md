@@ -2,7 +2,9 @@
 
 A lightweight, modern, open-source, and cross-platform screen reader implemented in Rust, designed for behavioral parity with **Freedom Scientific JAWS 2025**.
 
-This is an autonomous, agent-driven project using **[clean-room software engineering](https://en.wikipedia.org/wiki/Cleanroom_software_engineering)** and **[clean-room design](https://en.wikipedia.org/wiki/Clean-room_design)**, verified through a closed-loop automated harness against external speech and interaction observations from live JAWS on Windows 10.
+This is an autonomous, agent-driven project using **[clean-room software engineering](https://en.wikipedia.org/wiki/Cleanroom_software_engineering)** and **[clean-room design](https://en.wikipedia.org/wiki/Clean-room_design)**, to be verified through a closed-loop automated harness against speech and interaction observations from live JAWS on Windows 10.
+
+> **Project status (2026-10-14)**: early and not yet usable as a daily screen reader. An audit found that earlier parity claims were not backed by a real comparison against JAWS; see [`docs/handoff/2026-10-14-full-audit-of-prior-development.md`](docs/handoff/2026-10-14-full-audit-of-prior-development.md). The verification harness is being rebuilt first.
 
 ---
 
@@ -21,7 +23,7 @@ This project is organized as a Cargo workspace with modular crates:
 
 - **[`crates/sr-core`](file:///c:/Users/Gigabyte/screen-reader/crates/sr-core)**: Core semantic data structures, Accessibility Object Model (AOM), virtual buffer linearization, cursor navigation, interaction modes (Browse mode vs. Forms mode), and speech presentation formatting.
 - **[`crates/sr-platform`](file:///c:/Users/Gigabyte/screen-reader/crates/sr-platform)**: OS-level accessibility bridge adapters (Windows UIA/IA2, Linux AT-SPI2, macOS NSAccessibility) and input injection hooks.
-- **[`crates/sr-corpus`](file:///c:/Users/Gigabyte/screen-reader/crates/sr-corpus)**: Differential testing engine, JAWS reference corpus parser, transcript normalizer, and 4-stage quality gate evaluator.
+- **[`crates/sr-corpus`](file:///c:/Users/Gigabyte/screen-reader/crates/sr-corpus)**: Corpus scenario runner, evidence loader, and generated corpus manifest. (A real differential comparison against recorded JAWS speech is under construction; see `corpus/README.md`.)
 - **[`crates/sr-cli`](file:///c:/Users/Gigabyte/screen-reader/crates/sr-cli)**: Command-line interface and daemon runner for interactive accessibility execution and differential regression testing.
 
 ---
@@ -31,9 +33,10 @@ This project is organized as a Cargo workspace with modular crates:
 Reference speech data and behavioral scenarios are located in the [`corpus/`](file:///c:/Users/Gigabyte/screen-reader/corpus/) directory:
 - `corpus/scenarios/`: Declarative JSON test scenarios.
 - `corpus/fixtures/`: Synthetic HTML/web test fixtures.
-- `corpus/evidence/`: Canonical JAWS 2025 speech transcripts and trial execution recordings (150/150 passed trials).
-- `corpus/CORPUS_MANIFEST.json`: Machine-readable catalog of all recorded scenarios, environment metadata, and fixture SHA-256 hashes.
-- `corpus/quality-report.md`: Quality gate validation report certifying 100% trial success and zero unhandled script errors.
+- `corpus/evidence/`: JAWS 2025 speech transcripts recorded on `old-pc` by the capture tooling (scenarios 01–30, 5 trials each).
+- `corpus/unverified/`: Quarantined scenarios 31–65 whose evidence was not produced by the capture tooling.
+- `corpus/CORPUS_MANIFEST.json`: Generated catalog of scenarios, evidence statistics, and fixture SHA-256 hashes (never hand-edited).
+- `corpus/quality-report.md`: Report of the 2026-10-12 capture run for scenarios 01–30.
 - `corpus/evidence-v1.0.0/`: Preserved archive of initial pre-audit reference traces.
 
 ---

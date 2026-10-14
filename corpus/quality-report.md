@@ -1,5 +1,7 @@
 # Reference Speech Corpus Quality & Validation Report
 
+> **Note (2026-10-14)**: This report covers the 2026-10-12 capture run of scenarios 01–30 only. Its "verified" wording refers to JAWS trial capture, not to any comparison with this project's engine; see `README.md` for current status.
+
 **Corpus Version**: 1.1.0  
 **Generated At**: 2026-10-12T22:30:04.3342049+03:00  
 **Reference Environment**: Freedom Scientific JAWS 2025.2505.43.400, Google Chrome 154.0.8037.98 on Windows 10 (Microsoft Windows NT 10.0.19045.0)

@@ -47,8 +47,8 @@ This is an **autonomous, agent-driven project with a "verification harness in th
 To ensure seamless context passing across autonomous sessions, all engineering work is orchestrated through the `docs/` tree:
 
 ### Active Plan for Current / Next Session
-- **Active Plan**: [`docs/plans/2026-10-13-complex-web-apps-google-docs-and-sheets.md`](file:///c:/Users/Gigabyte/screen-reader/docs/plans/2026-10-13-complex-web-apps-google-docs-and-sheets.md)
-- **Latest Handoff**: [`docs/handoff/2026-10-13-live-window-management-and-browser-virtual-buffer-parity.md`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/2026-10-13-live-window-management-and-browser-virtual-buffer-parity.md)
+- **Active Plan**: [`docs/plans/2026-10-14-verification-harness-rebuild.md`](docs/plans/2026-10-14-verification-harness-rebuild.md)
+- **Latest Handoff**: [`docs/handoff/2026-10-14-full-audit-of-prior-development.md`](docs/handoff/2026-10-14-full-audit-of-prior-development.md) (read this before trusting any earlier handoff)
 
 
 ### Standard Session Execution Protocol
@@ -66,7 +66,7 @@ Every agent session must follow this exact loop:
    - Ensure `cargo fmt --check` passes.
    - Run `cargo clippy --all-targets --all-features -- -D warnings` and verify **0 errors and 0 warnings**.
    - Run `cargo test` and verify all tests pass.
-   - *(Note: An automated `Stop` hook in `.agents/hooks.json` enforces formatting and clippy clean passes on loop completion).*
+   - *(Note: Automated hooks enforce formatting and clippy clean passes on loop completion, and gate `git commit`. Gate logic lives in `.agents/scripts/`; `.agents/hooks.json` (Antigravity) and `.claude/settings.json` (Claude Code) both invoke it).*
 5. **Documentation & Handoff**:
    - Write a dated handoff document in [`docs/handoff/`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/) (referencing previous steps and test results).
    - Author user-facing documentation in [`docs/references/`](file:///c:/Users/Gigabyte/screen-reader/docs/references/) when applicable.
@@ -86,6 +86,17 @@ When developing or verifying screen reader behavior against canonical JAWS execu
   - Multi-trial evidence is recorded in `corpus/evidence/` and cataloged in `corpus/CORPUS_MANIFEST.json`.
 - **Differential Verification**:
   - Compare the output of the Rust engine with JAWS observations. Parity is defined as semantic equivalence in announcement tokens, state changes, and navigation boundaries.
+
+### Verification Integrity Rules (non-negotiable)
+
+These exist because an audit (2026-10-14) found parity claims that no tool had ever computed.
+1. **Evidence is written only by capture tooling** run on `old-pc`. Never hand-write, edit, or "repair" an evidence file. Wrong evidence is deleted and re-recorded.
+2. **Evidence and engine code never land in the same commit** (enforced by the pre-commit gate).
+3. **Generated artifacts are never hand-edited**: `corpus/CORPUS_MANIFEST.json` (`sr-cli corpus-manifest --write`) and, once it exists, the parity baseline. Tests fail when they are stale.
+4. **Claims quote tools**: any parity number or "verified" statement in a handoff must be pasted output of a repo command, named next to it. No unbacked adjectives ("100% parity", "fully verified").
+5. **Hermetic `cargo test`**: no live UI, speech, audio, or network. Live tests are `#[ignore = "live: ..."]` and run with `cargo test -- --ignored`.
+6. **Known gaps are tests**: when the correct JAWS behavior is known but unimplemented, add a test asserting the JAWS behavior marked `#[ignore = "known gap: ..."]`. Never write assertions that cannot fail.
+7. **No fixture-shaped special cases**: code must not branch on fixture text, specific window titles, or names from one machine. App-specific behavior belongs in clearly named per-application modules, like JAWS app scripts.
 
 ---
 
@@ -122,7 +133,8 @@ When developing or verifying screen reader behavior against canonical JAWS execu
 - `crates/sr-cli/`: CLI daemon and regression test binary.
 - `corpus/`: Reference speech corpus (manifest, fixtures, scenarios, evidence, quality report).
 - `skills/jaws-reference/`: Reusable automation skill for JAWS COM and speech extraction.
-- `.agents/`: Project agent configurations, MCP setup (`mcp_config.json`), and lifecycle hooks (`hooks.json`).
+- `.agents/`: Antigravity agent configuration (`mcp_config.json`, `hooks.json`) and the shared quality-gate scripts (`scripts/`) used by every harness.
+- `.claude/`, `.mcp.json`, `CLAUDE.md`: Claude Code adapters for the same hooks, MCP servers, and the `jaws-reference` skill.
 
 ---
 

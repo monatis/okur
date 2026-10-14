@@ -97,7 +97,7 @@ if (Test-Path $cratesDir) {
 # -----------------------------------------------------------------------------
 Push-Location $workspaceRoot
 try {
-    $clippyOutput = & cargo clippy --all-targets --all-features -- -D clippy::indexing_slicing 2>&1
+    $clippyOutput = & cargo clippy --all-targets --all-features -- -D warnings -D clippy::indexing_slicing 2>&1
     $clippyExit = $LASTEXITCODE
     if ($clippyExit -ne 0) {
         $errorMsg = ($clippyOutput -join "`n").Trim()
@@ -108,60 +108,37 @@ try {
 }
 
 # -----------------------------------------------------------------------------
-# Check 4: Corpus Manifest and Evidence Integrity
+# Check 4: Full test suite (includes the generated-corpus-manifest freshness test)
 # -----------------------------------------------------------------------------
-$scenariosDir = Join-Path $workspaceRoot "corpus\scenarios"
-$evidenceDir = Join-Path $workspaceRoot "corpus\evidence"
-$manifestPath = Join-Path $workspaceRoot "corpus\CORPUS_MANIFEST.json"
-
-if ((Test-Path $scenariosDir) -and (Test-Path $evidenceDir) -and (Test-Path $manifestPath)) {
-    $scenarioFiles = Get-ChildItem -Path $scenariosDir -Filter *.json
-    $evidenceFiles = Get-ChildItem -Path $evidenceDir -Filter *-evidence.json
-    $corpusViolations = @()
-
-    # Check that each scenario has an evidence file
-    foreach ($scFile in $scenarioFiles) {
-        $baseName = [System.IO.Path]::GetFileNameWithoutExtension($scFile.Name)
-        $expectedEvidence = Join-Path $evidenceDir "${baseName}-evidence.json"
-        if (-not (Test-Path $expectedEvidence)) {
-            $corpusViolations += "Scenario '${scFile.Name}' is missing evidence file '${baseName}-evidence.json'"
-        }
+Push-Location $workspaceRoot
+try {
+    $testOutput = & cargo test --workspace 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        $tail = ($testOutput | Select-Object -Last 60) -join "`n"
+        $failureReasons += "[Test Gate] cargo test --workspace failed:`n$tail"
     }
-
-    # Validate manifest consistency
-    try {
-        $manifestJson = Get-Content -Raw -Path $manifestPath | ConvertFrom-Json
-        $manifestScenarios = $manifestJson.scenarios
-        $manifestIds = @{}
-        if ($manifestScenarios) {
-            foreach ($ms in $manifestScenarios) {
-                if ($ms.scenario_id) {
-                    $manifestIds[$ms.scenario_id] = $true
-                }
-            }
-        }
-
-        foreach ($scFile in $scenarioFiles) {
-            $baseName = [System.IO.Path]::GetFileNameWithoutExtension($scFile.Name)
-            if (-not $manifestIds.ContainsKey($baseName)) {
-                $corpusViolations += "Scenario file '${scFile.Name}' (ID '${baseName}') is not registered in CORPUS_MANIFEST.json"
-            }
-        }
-
-        if ($manifestJson.statistics -and $manifestJson.statistics.total_scenarios) {
-            if ($manifestJson.statistics.total_scenarios -ne $scenarioFiles.Count) {
-                $corpusViolations += "Manifest statistics.total_scenarios ($($manifestJson.statistics.total_scenarios)) does not match actual scenarios count ($($scenarioFiles.Count))"
-            }
-        }
-    } catch {
-        $corpusViolations += "Failed to parse corpus\CORPUS_MANIFEST.json as JSON: $($_.Exception.Message)"
-    }
-
-    if ($corpusViolations.Count -gt 0) {
-        $corpusList = ($corpusViolations -join "`n")
-        $failureReasons += "[Corpus Integrity Gate] Corpus manifest and evidence synchronization mismatch:`n$corpusList"
-    }
+} finally {
+    Pop-Location
 }
+
+# -----------------------------------------------------------------------------
+# Check 5: Evidence separation. Reference evidence is produced only by the capture
+# tooling and must never be added or modified in the same commit as engine code,
+# so an implementation can never be "verified" by evidence written alongside it.
+# Renames (e.g. quarantine moves) are allowed.
+# -----------------------------------------------------------------------------
+Push-Location $workspaceRoot
+try {
+    $changes = @(& git diff HEAD --name-status -M 2>$null) + @(& git ls-files --others --exclude-standard 2>$null | ForEach-Object { "A`t$_" })
+    $evidenceEdits = @($changes | Where-Object { $_ -match '^[AM]\s+corpus/(unverified/)?evidence/' })
+    $codeEdits = @($changes | Where-Object { $_ -match '^[AMD]\s+crates/' })
+    if ($evidenceEdits.Count -gt 0 -and $codeEdits.Count -gt 0) {
+        $failureReasons += "[Evidence Separation Gate] Evidence files are added/modified together with crates/ changes. Commit recorded evidence separately from engine code:`n" + (($evidenceEdits | Select-Object -First 10) -join "`n")
+    }
+} finally {
+    Pop-Location
+}
+
 
 # -----------------------------------------------------------------------------
 # Decision evaluation

@@ -96,6 +96,7 @@ impl std::str::FromStr for TtsEngineType {
 /// Synthesizer manager managing the active TTS engine and runtime fallback.
 pub struct TtsManager {
     engine: Box<dyn TtsEngine>,
+    speech_log: Option<SpeechLog>,
 }
 
 impl TtsManager {
@@ -128,18 +129,32 @@ impl TtsManager {
             }
         };
 
-        Ok(Self { engine })
+        Ok(Self {
+            engine,
+            speech_log: None,
+        })
+    }
+
+    /// Records every utterance (and stop) to `log`, the screen reader's equivalent of
+    /// JAWS speech history. Off unless explicitly enabled (e.g. `sr-cli run --speech-log`).
+    pub fn with_speech_log(mut self, log: SpeechLog) -> Self {
+        self.speech_log = Some(log);
+        self
     }
 
     /// Speaks text using the active synthesizer.
     pub fn speak(&mut self, text: &str, interrupt: bool) -> Result<(), TtsError> {
-        log_speech_utterance(text, interrupt, self.engine.name());
+        if let Some(log) = self.speech_log.as_mut() {
+            log.record(SpeechLogKind::Speak, text, interrupt);
+        }
         self.engine.speak(text, interrupt)
     }
 
     /// Immediately stops speech.
     pub fn stop(&mut self) -> Result<(), TtsError> {
-        log_speech_utterance("[SPEECH_STOPPED]", false, self.engine.name());
+        if let Some(log) = self.speech_log.as_mut() {
+            log.record(SpeechLogKind::Stop, "", true);
+        }
         self.engine.stop()
     }
 
@@ -218,45 +233,65 @@ impl sr_core::speech::SpeechOutput for TtsManager {
     }
 }
 
-/// Appends a speech utterance to the programmatic speech history log (`target/speech_history.log`).
-pub fn log_speech_utterance(text: &str, interrupt: bool, engine_name: &str) {
-    let clean = text.replace(['\u{001d}', '\u{001e}'], "");
-    let millis = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .map(|d| d.as_millis())
-        .unwrap_or(0);
+/// Kind of entry in the speech log.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SpeechLogKind {
+    Speak,
+    Stop,
+}
 
-    let line = format!(
-        "[{} ms] [{}] [interrupt: {}] {}\n",
-        millis,
-        engine_name,
-        interrupt,
-        clean.trim()
-    );
+/// One speech log entry. `text` is the exact engine output, including the
+/// `\u{1d}`/`\u{1e}` role markers, so it can be compared against JAWS speech history.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct SpeechLogEntry {
+    pub t_ms: u128,
+    pub kind: SpeechLogKind,
+    pub interrupt: bool,
+    pub text: String,
+}
 
-    let _ = std::fs::create_dir_all("target");
-    if let Ok(mut f) = std::fs::OpenOptions::new()
-        .create(true)
-        .append(true)
-        .open("target/speech_history.log")
-    {
+/// Append-only JSON Lines speech log, kept open for the lifetime of the manager.
+#[derive(Debug)]
+pub struct SpeechLog {
+    file: std::fs::File,
+}
+
+impl SpeechLog {
+    /// Opens (creating if needed) the log at `path` for appending.
+    pub fn open(path: impl AsRef<std::path::Path>) -> std::io::Result<Self> {
+        let file = std::fs::OpenOptions::new()
+            .create(true)
+            .append(true)
+            .open(path)?;
+        Ok(Self { file })
+    }
+
+    fn record(&mut self, kind: SpeechLogKind, text: &str, interrupt: bool) {
         use std::io::Write;
-        let _ = f.write_all(line.as_bytes());
+        let entry = SpeechLogEntry {
+            t_ms: std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|d| d.as_millis())
+                .unwrap_or(0),
+            kind,
+            interrupt,
+            text: text.to_owned(),
+        };
+        if let Ok(mut line) = serde_json::to_string(&entry) {
+            line.push('\n');
+            let _ = self.file.write_all(line.as_bytes());
+        }
     }
-}
 
-/// Reads all recorded utterances from the programmatic speech history log.
-pub fn read_speech_history() -> Vec<String> {
-    if let Ok(content) = std::fs::read_to_string("target/speech_history.log") {
-        content.lines().map(|s| s.to_string()).collect()
-    } else {
-        Vec::new()
+    /// Reads every entry from the log at `path`, skipping malformed lines.
+    pub fn read(path: impl AsRef<std::path::Path>) -> std::io::Result<Vec<SpeechLogEntry>> {
+        let content = std::fs::read_to_string(path)?;
+        Ok(content
+            .lines()
+            .filter_map(|l| serde_json::from_str(l).ok())
+            .collect())
     }
-}
-
-/// Clears the programmatic speech history log.
-pub fn clear_speech_history() {
-    let _ = std::fs::remove_file("target/speech_history.log");
 }
 
 #[cfg(test)]
@@ -332,8 +367,11 @@ mod tests {
 
     #[test]
     #[cfg(windows)]
+    #[ignore = "live: speaks aloud through SAPI 5"]
     fn test_sapi5_engine_initialization_and_speech() {
-        let _lock = crate::TEST_AUDIO_LOCK.lock().unwrap();
+        let _lock = crate::TEST_AUDIO_LOCK
+            .lock()
+            .unwrap_or_else(|poisoned| poisoned.into_inner());
         let sapi = Sapi5Engine::new();
         assert!(sapi.is_ok(), "SAPI 5 should initialize on Windows");
         if let Ok(mut sapi) = sapi {
