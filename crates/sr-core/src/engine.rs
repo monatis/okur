@@ -2426,22 +2426,43 @@ mod tests {
         caps_t.modifiers.caps_lock = true;
 
         // Desktop layout (the default): CapsLock is an ordinary key.
-        assert_eq!(engine.handle_key_event(&caps(1_000, false)), KeyAction::PassThrough);
+        assert_eq!(
+            engine.handle_key_event(&caps(1_000, false)),
+            KeyAction::PassThrough
+        );
         assert_ne!(engine.handle_key_event(&caps_t), KeyAction::Consume);
         assert!(speech.take().is_empty());
 
         engine.settings = crate::settings::Settings::reference_machine();
-        assert_eq!(engine.handle_key_event(&caps(5_000, false)), KeyAction::Consume);
+        assert_eq!(
+            engine.handle_key_event(&caps(5_000, false)),
+            KeyAction::Consume
+        );
         // Held down, the key repeats: that is not a second press.
-        assert_eq!(engine.handle_key_event(&caps(5_100, true)), KeyAction::Consume);
+        assert_eq!(
+            engine.handle_key_event(&caps(5_100, true)),
+            KeyAction::Consume
+        );
         assert_eq!(engine.handle_key_event(&caps_t), KeyAction::Consume);
         assert_eq!(speech.take(), ["Title is\nSR Editor Fixture"]);
 
-        assert_eq!(engine.handle_key_event(&caps(9_000, false)), KeyAction::Consume);
-        assert_eq!(engine.handle_key_event(&caps(9_300, false)), KeyAction::PassThrough);
+        assert_eq!(
+            engine.handle_key_event(&caps(9_000, false)),
+            KeyAction::Consume
+        );
+        assert_eq!(
+            engine.handle_key_event(&caps(9_300, false)),
+            KeyAction::PassThrough
+        );
         assert_eq!(speech.take(), ["Caps lock on"]);
-        assert_eq!(engine.handle_key_event(&caps(12_000, false)), KeyAction::Consume);
-        assert_eq!(engine.handle_key_event(&caps(12_300, false)), KeyAction::PassThrough);
+        assert_eq!(
+            engine.handle_key_event(&caps(12_000, false)),
+            KeyAction::Consume
+        );
+        assert_eq!(
+            engine.handle_key_event(&caps(12_300, false)),
+            KeyAction::PassThrough
+        );
         assert_eq!(speech.take(), ["Caps lock off"]);
     }
 

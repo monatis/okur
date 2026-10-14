@@ -68,6 +68,33 @@ impl PeakMeter {
 pub struct AudioEndpointMeter;
 
 impl AudioEndpointMeter {
+    /// Polls the default output every millisecond from `start` until its peak reaches
+    /// `threshold`, returning the time to the first sound: speech latency, measured.
+    pub fn time_to_sound(
+        start: Instant,
+        threshold: f32,
+        timeout: Duration,
+    ) -> Result<Option<Duration>, PlatformError> {
+        #[cfg(windows)]
+        {
+            let meter = PeakMeter::open()?;
+            while start.elapsed() < timeout {
+                if meter.peak() >= threshold {
+                    return Ok(Some(start.elapsed()));
+                }
+                std::thread::sleep(Duration::from_millis(1));
+            }
+            Ok(None)
+        }
+        #[cfg(not(windows))]
+        {
+            let _ = (start, threshold, timeout);
+            Err(PlatformError::Unsupported(
+                "Audio endpoint metering only supported on Windows.".to_string(),
+            ))
+        }
+    }
+
     /// Queries the instantaneous peak amplitude (0.0 to 1.0) of the default output endpoint.
     pub fn get_peak_amplitude() -> Result<f32, PlatformError> {
         #[cfg(windows)]

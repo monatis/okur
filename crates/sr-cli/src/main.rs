@@ -20,7 +20,8 @@ struct Cli {
 enum Commands {
     /// Run the interactive live screen reader daemon
     Run {
-        /// TTS synthesizer engine: auto (default), sapi5, or no-speech
+        /// TTS synthesizer engine: auto (default: OneCore, else SAPI 5, else none), onecore,
+        /// sapi5, or no-speech
         #[arg(short, long, default_value = "auto")]
         engine: String,
 
@@ -176,7 +177,8 @@ enum Commands {
         /// Text utterance to synthesize
         text: String,
 
-        /// TTS synthesizer engine: auto (default), sapi5, or no-speech
+        /// TTS synthesizer engine: auto (default: OneCore, else SAPI 5, else none), onecore,
+        /// sapi5, or no-speech
         #[arg(short, long, default_value = "auto")]
         engine: String,
 
@@ -187,13 +189,19 @@ enum Commands {
         /// Volume (0 to 100)
         #[arg(short, long, default_value_t = 100)]
         volume: u16,
+
+        /// Measure the time from the speak call to the first sound on the default output
+        /// (the system must be otherwise silent)
+        #[arg(long)]
+        measure_latency: bool,
     },
     /// Load and read a document fixture aloud using the virtual cursor
     Read {
         /// UIA snapshot to read (sr-cli snapshot output, e.g. corpus/snapshots/*.json)
         fixture: String,
 
-        /// TTS synthesizer engine: auto (default), sapi5, or no-speech
+        /// TTS synthesizer engine: auto (default: OneCore, else SAPI 5, else none), onecore,
+        /// sapi5, or no-speech
         #[arg(short, long, default_value = "auto")]
         engine: String,
 
@@ -203,7 +211,8 @@ enum Commands {
     },
     /// List available voices from the synthesizer
     Voices {
-        /// TTS synthesizer engine: auto (default), sapi5, or no-speech
+        /// TTS synthesizer engine: auto (default: OneCore, else SAPI 5, else none), onecore,
+        /// sapi5, or no-speech
         #[arg(short, long, default_value = "auto")]
         engine: String,
     },
@@ -632,6 +641,7 @@ async fn main() {
             engine,
             rate,
             volume,
+            measure_latency,
         }) => {
             let engine_type = TtsEngineType::from_str(&engine).unwrap_or_else(|e| {
                 eprintln!("Error: {}", e);
@@ -652,9 +662,21 @@ async fn main() {
                 text.replace(['\u{001d}', '\u{001e}'], "")
             );
 
+            let started = std::time::Instant::now();
             if let Err(e) = tts.speak(&text, true) {
                 eprintln!("Speech error: {}", e);
                 std::process::exit(1);
+            }
+            if measure_latency {
+                match sr_platform::audio::AudioEndpointMeter::time_to_sound(
+                    started,
+                    0.01,
+                    std::time::Duration::from_secs(5),
+                ) {
+                    Ok(Some(latency)) => println!("latency_ms={}", latency.as_millis()),
+                    Ok(None) => println!("latency_ms=none (no sound within 5 s)"),
+                    Err(e) => eprintln!("cannot meter the output: {e}"),
+                }
             }
 
             // Wait for audio rendering to finish

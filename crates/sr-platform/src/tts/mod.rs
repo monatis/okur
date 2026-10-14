@@ -1,7 +1,9 @@
 pub mod no_speech;
+pub mod onecore;
 pub mod sapi5;
 
 pub use no_speech::NoSpeechEngine;
+pub use onecore::OneCoreEngine;
 pub use sapi5::Sapi5Engine;
 
 use serde::{Deserialize, Serialize};
@@ -75,6 +77,7 @@ pub enum TtsEngineType {
     Auto,
     NoSpeech,
     Sapi5,
+    OneCore,
 }
 
 impl std::str::FromStr for TtsEngineType {
@@ -85,8 +88,9 @@ impl std::str::FromStr for TtsEngineType {
             "auto" => Ok(TtsEngineType::Auto),
             "no-speech" | "nospeech" | "silent" | "silence" | "none" => Ok(TtsEngineType::NoSpeech),
             "sapi5" | "sapi" => Ok(TtsEngineType::Sapi5),
+            "onecore" | "one-core" => Ok(TtsEngineType::OneCore),
             _ => Err(format!(
-                "Unknown TTS engine '{}'. Available: auto, no-speech, sapi5",
+                "Unknown TTS engine '{}'. Available: auto, onecore, sapi5, no-speech",
                 s
             )),
         }
@@ -108,17 +112,22 @@ impl TtsManager {
                 let sapi = Sapi5Engine::new()?;
                 Box::new(sapi)
             }
+            TtsEngineType::OneCore => Box::new(OneCoreEngine::new()?),
             TtsEngineType::Auto => {
+                // OneCore voices respond fastest; SAPI 5 where they are missing.
                 #[cfg(windows)]
                 {
-                    match Sapi5Engine::new() {
-                        Ok(sapi) => Box::new(sapi),
+                    match OneCoreEngine::new() {
+                        Ok(onecore) => Box::new(onecore),
                         Err(e) => {
-                            tracing::warn!(
-                                "Failed to initialize SAPI 5, falling back to NoSpeech: {}",
-                                e
-                            );
-                            Box::new(NoSpeechEngine::new())
+                            tracing::warn!("OneCore unavailable ({e}), trying SAPI 5");
+                            match Sapi5Engine::new() {
+                                Ok(sapi) => Box::new(sapi),
+                                Err(e) => {
+                                    tracing::warn!("SAPI 5 unavailable ({e}), no speech");
+                                    Box::new(NoSpeechEngine::new())
+                                }
+                            }
                         }
                     }
                 }
