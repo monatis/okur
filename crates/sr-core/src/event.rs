@@ -20,6 +20,40 @@ pub struct TextContext {
     /// The selection as `(start, end)`, when one exists.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub selection: Option<(usize, usize)>,
+    /// The font at the caret, when the field reports one (Say Font).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub font: Option<FontInfo>,
+}
+
+/// The font at a text field's caret, as UIA text attributes or a rich edit report it.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct FontInfo {
+    pub family: String,
+    /// Size in tenths of a point (11 points is 110).
+    pub size_tenths: u32,
+    #[serde(default)]
+    pub bold: bool,
+    #[serde(default)]
+    pub italic: bool,
+    #[serde(default)]
+    pub underline: bool,
+    /// Paragraph alignment: `left`, `right`, `centered` or `justified`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub alignment: Option<String>,
+}
+
+impl FontInfo {
+    /// As the formatting Say Font speaks.
+    pub fn formatting(&self) -> crate::aom::TextFormatting {
+        crate::aom::TextFormatting {
+            font_family: Some(self.family.clone()).filter(|f| !f.is_empty()),
+            font_size_pt: (self.size_tenths > 0).then(|| self.size_tenths as f32 / 10.0),
+            bold: self.bold,
+            italic: self.italic,
+            underline: self.underline,
+            alignment: self.alignment.clone(),
+        }
+    }
 }
 
 /// What changed on the focused control (MSAA `EVENT_OBJECT_STATECHANGE`, `VALUECHANGE`,

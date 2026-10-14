@@ -48,6 +48,7 @@ mod reader {
                     )
                 }),
                 text: state.text,
+                font: None,
             }),
             // A Chromium page whose focused object has no text.
             Ok(None) => None,
@@ -116,6 +117,7 @@ mod reader {
                 selection: (start < end)
                     .then(|| (utf16_to_chars(&text, start), utf16_to_chars(&text, end))),
                 text,
+                font: win32_font(hwnd),
             })
         }
     }
@@ -158,6 +160,109 @@ mod reader {
                 text,
                 caret: start,
                 selection: (start < end).then_some((start, end)),
+                font: uia_font(&selection),
+            })
+        }
+    }
+
+    /// The font of the character at `range`'s start, from UIA text attributes. Attributes
+    /// that vary over the range (UIA's "mixed" value) or are unsupported are left out.
+    fn uia_font(range: &IUIAutomationTextRange) -> Option<sr_core::FontInfo> {
+        use windows::Win32::System::Variant::VARIANT;
+        use windows::Win32::UI::Accessibility::{
+            TextUnit_Character, UIA_FontNameAttributeId, UIA_FontSizeAttributeId,
+            UIA_FontWeightAttributeId, UIA_HorizontalTextAlignmentAttributeId,
+            UIA_IsItalicAttributeId, UIA_UnderlineStyleAttributeId, UIA_TEXTATTRIBUTE_ID,
+        };
+        // SAFETY: UIA text range calls on a valid range.
+        unsafe {
+            let character = range.Clone().ok()?;
+            let _ = character.ExpandToEnclosingUnit(TextUnit_Character);
+            let get = |id: UIA_TEXTATTRIBUTE_ID| -> Option<VARIANT> {
+                character.GetAttributeValue(id).ok()
+            };
+            let family = get(UIA_FontNameAttributeId)
+                .and_then(|v| windows::core::BSTR::try_from(&v).ok())
+                .map(|b| b.to_string())
+                .filter(|f| !f.is_empty())?;
+            let size = get(UIA_FontSizeAttributeId).and_then(|v| f64::try_from(&v).ok());
+            let int = |id| get(id).and_then(|v| i32::try_from(&v).ok());
+            let alignment = match int(UIA_HorizontalTextAlignmentAttributeId) {
+                Some(0) => Some("left"),
+                Some(1) => Some("centered"),
+                Some(2) => Some("right"),
+                Some(3) => Some("justified"),
+                _ => None,
+            };
+            Some(sr_core::FontInfo {
+                family,
+                size_tenths: size
+                    .map(|s| (s * 10.0).round())
+                    .and_then(|s| u32::try_from(s as i64).ok())
+                    .unwrap_or(0),
+                bold: int(UIA_FontWeightAttributeId).is_some_and(|w| w >= 600),
+                italic: get(UIA_IsItalicAttributeId)
+                    .is_some_and(|v| bool::try_from(&v) == Ok(true)),
+                underline: int(UIA_UnderlineStyleAttributeId).is_some_and(|u| u != 0),
+                alignment: alignment.map(str::to_owned),
+            })
+        }
+    }
+
+    /// The font a Win32 edit draws with (`WM_GETFONT`; GDI font handles are valid across the
+    /// session), in points at the screen's DPI.
+    fn win32_font(hwnd: windows::Win32::Foundation::HWND) -> Option<sr_core::FontInfo> {
+        use windows::Win32::Foundation::{LPARAM, WPARAM};
+        use windows::Win32::Graphics::Gdi::{
+            GetDC, GetDeviceCaps, GetObjectW, ReleaseDC, HFONT, LOGFONTW, LOGPIXELSY,
+        };
+        use windows::Win32::UI::WindowsAndMessaging::{SendMessageTimeoutW, SMTO_ABORTIFHUNG};
+        const WM_GETFONT: u32 = 0x0031;
+        // SAFETY: a query message with a timeout, then GDI queries with valid buffers.
+        unsafe {
+            let mut result = 0usize;
+            let sent = SendMessageTimeoutW(
+                hwnd,
+                WM_GETFONT,
+                WPARAM(0),
+                LPARAM(0),
+                SMTO_ABORTIFHUNG,
+                200,
+                Some(&mut result),
+            );
+            if sent.0 == 0 || result == 0 {
+                return None;
+            }
+            let font = HFONT(result as *mut core::ffi::c_void);
+            let mut logfont = LOGFONTW::default();
+            let size = i32::try_from(std::mem::size_of::<LOGFONTW>()).ok()?;
+            if GetObjectW(
+                font.into(),
+                size,
+                Some((&mut logfont as *mut LOGFONTW).cast()),
+            ) == 0
+            {
+                return None;
+            }
+            let dc = GetDC(None);
+            let dpi = GetDeviceCaps(Some(dc), LOGPIXELSY).max(1);
+            ReleaseDC(None, dc);
+            let family_len = logfont
+                .lfFaceName
+                .iter()
+                .position(|c| *c == 0)
+                .unwrap_or(logfont.lfFaceName.len());
+            let family =
+                String::from_utf16_lossy(logfont.lfFaceName.get(..family_len).unwrap_or_default());
+            let points_tenths = logfont.lfHeight.unsigned_abs() * 720 / dpi.unsigned_abs();
+            Some(sr_core::FontInfo {
+                family,
+                // Whole points, as a font dialog sets them.
+                size_tenths: (points_tenths + 5) / 10 * 10,
+                bold: logfont.lfWeight >= 600,
+                italic: logfont.lfItalic != 0,
+                underline: logfont.lfUnderline != 0,
+                alignment: None,
             })
         }
     }

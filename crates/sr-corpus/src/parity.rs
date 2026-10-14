@@ -12,7 +12,7 @@ use crate::snapshots::{self, Api};
 use serde::Serialize;
 use serde_json::Value;
 use sr_core::clock::{FixedClock, LocalDateTime, LocaleFormats};
-use sr_core::{ScreenReaderEngine, VirtualBuffer, VirtualCursor};
+use sr_core::{Modifiers, ScreenReaderEngine, VirtualBuffer, VirtualCursor};
 use sr_platform::event_trace::{menu_event_from_trace, EventConverter, TraceEvent};
 use std::collections::BTreeMap;
 use std::fs;
@@ -229,7 +229,7 @@ fn run_scenario(
         engine.set_clock(Box::new(clock.clone()));
     }
     for chord in scenario.reset.iter().flat_map(|r| r.keys.iter().flatten()) {
-        press(&mut engine, chord, 0)?;
+        press(&mut engine, chord, 0, Modifiers::none())?;
     }
     spoken.take();
     spoken.take_spoken();
@@ -246,6 +246,8 @@ fn run_scenario(
     spoken.take_spoken();
 
     let mut steps = Vec::new();
+    // Keys held down by key_down steps, part of every key until released.
+    let mut held = Modifiers::none();
     for (index, step) in scenario.steps.iter().enumerate() {
         // Key times keep separate steps from looking like a double press; without recorded
         // times, steps are spaced apart.
@@ -261,13 +263,28 @@ fn run_scenario(
             ));
         }
         let engine_speech = match step.step_type.as_str() {
-            "key" => {
-                for press_index in 0..step.repeat.unwrap_or(1).max(1) {
-                    press(
-                        &mut engine,
-                        &step.command,
-                        start + u64::from(press_index) * REPEAT_GAP_MS,
-                    )?;
+            "key" | "key_down" | "key_up" => {
+                match step.step_type.as_str() {
+                    // A key held across steps (Alt through several Tabs), and its release.
+                    "key_down" | "key_up" => {
+                        let down = step.step_type == "key_down";
+                        let mut event = crate::keys::parse_chord(&step.command)?;
+                        hold(&mut held, event.key, down);
+                        event.modifiers = with_held(event.modifiers, held);
+                        event.is_down = down;
+                        event.time_ms = start;
+                        let _ = engine.handle_key_event(&event);
+                    }
+                    _ => {
+                        for press_index in 0..step.repeat.unwrap_or(1).max(1) {
+                            press(
+                                &mut engine,
+                                &step.command,
+                                start + u64::from(press_index) * REPEAT_GAP_MS,
+                                held,
+                            )?;
+                        }
+                    }
                 }
                 // Replay the OS events recorded while JAWS handled this step (e.g. the focus
                 // change that follows Tab), exactly as the live listener would deliver them.
@@ -532,8 +549,14 @@ fn replay_settings(evidence: &Value) -> sr_core::settings::Settings {
 
 /// Presses and releases `chord` at `time_ms` (0: unknown) through the engine's live
 /// key-handling entry point.
-fn press(engine: &mut ScreenReaderEngine, chord: &str, time_ms: u64) -> Result<(), String> {
+fn press(
+    engine: &mut ScreenReaderEngine,
+    chord: &str,
+    time_ms: u64,
+    held: Modifiers,
+) -> Result<(), String> {
     let mut event = crate::keys::parse_chord(chord)?;
+    event.modifiers = with_held(event.modifiers, held);
     event.time_ms = time_ms;
     let _ = engine.handle_key_event(&event);
     event.is_down = false;
@@ -633,4 +656,29 @@ impl StepEvents {
     fn for_step(&self, step_id: &str) -> Vec<sr_platform::event_trace::TraceEvent> {
         self.by_step.get(step_id).cloned().unwrap_or_default()
     }
+}
+
+/// Records a modifier key held down (`down`) or released by a key_down/key_up step.
+fn hold(held: &mut Modifiers, key: sr_core::Key, down: bool) {
+    use sr_core::Key;
+    match key {
+        Key::Alt => held.alt = down,
+        Key::Control => held.ctrl = down,
+        Key::Shift => held.shift = down,
+        Key::Windows => held.win = down,
+        Key::Insert => held.insert = down,
+        Key::CapsLock => held.caps_lock = down,
+        _ => {}
+    }
+}
+
+/// `modifiers` with the held keys added.
+fn with_held(mut modifiers: Modifiers, held: Modifiers) -> Modifiers {
+    modifiers.alt |= held.alt;
+    modifiers.ctrl |= held.ctrl;
+    modifiers.shift |= held.shift;
+    modifiers.win |= held.win;
+    modifiers.insert |= held.insert;
+    modifiers.caps_lock |= held.caps_lock;
+    modifiers
 }

@@ -242,6 +242,7 @@ mod tests {
             text: text.to_owned(),
             caret,
             selection,
+            font: None,
         }
     }
 

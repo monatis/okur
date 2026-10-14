@@ -26,6 +26,8 @@ Step types:
                An optional "repeat": N presses the chord N times quickly ("twice quickly").
                "capture_clipboard": true stores the clipboard after the step (observation.clipboard).
   jaws_script  JAWS script name dispatched through FSAPI RunScript.
+  key_down     A key pressed and held across the following steps ("Alt" through several
+               Tabs); key_up releases it. Held keys are released when a trial ends.
   keyboard     Legacy .NET SendKeys string (kept so scenarios 01-30 stay reproducible).
 
 Settling: after each action the default audio endpoint is metered (sr-cli wait-silence; JAWS is
@@ -189,10 +191,28 @@ function Invoke-Step($type, [string]$command, [int]$repeat = 1) {
             }
             return $ok
         }
+        # A key held down across the following steps (Alt held through several Tabs), and
+        # its release. Held keys are released at the end of a trial whatever happens.
+        'key_down' {
+            $k = Resolve-Key $command
+            $script:HeldKeys += ,$k
+            return [SrKeyInput]::Key([uint16]$k[0], $k[1], $false)
+        }
+        'key_up' {
+            $k = Resolve-Key $command
+            $script:HeldKeys = @($script:HeldKeys | Where-Object { $_[0] -ne $k[0] })
+            return [SrKeyInput]::Key([uint16]$k[0], $k[1], $true)
+        }
         'jaws_script' { return [bool]$jaws.RunScript($command) }
         'keyboard'    { [System.Windows.Forms.SendKeys]::SendWait($command); return $true }
         default       { throw "Unsupported step type '$type'" }
     }
+}
+
+$script:HeldKeys = @()
+function Release-HeldKeys {
+    foreach ($k in $script:HeldKeys) { [void][SrKeyInput]::Key([uint16]$k[0], $k[1], $true) }
+    $script:HeldKeys = @()
 }
 
 # --- Provenance -------------------------------------------------------------------------
@@ -417,11 +437,13 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         Remove-Item $traceStop -ErrorAction SilentlyContinue
         if (Test-Path $tracePath) { $trialResult.trace_sha256 = Get-Sha256 $tracePath } else { $trialResult.trial_success = $false }
     }
+    Release-HeldKeys
     $evidence.trials += $trialResult
 }
 } finally {
     # An exception mid-trial (e.g. no browser window) must not leave the tracer running: it
     # holds the trace file and the harness binary.
+    Release-HeldKeys
     if ($traceProc -and -not $traceProc.HasExited) { $traceProc.Kill() }
 }
 

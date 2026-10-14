@@ -1779,9 +1779,15 @@ impl ScreenReaderEngine {
     /// Notepad's from the screen ("Consolas 22 point" for a 24-point LOGFONT, 314/s1), a
     /// conversion not yet known.
     fn say_font(&mut self, in_viewer: bool) -> Option<String> {
-        let formatting = (self.app_mode == AppMode::VirtualBuffer)
-            .then(|| self.cursor.buffer.formatting_at_offset(self.cursor.offset))
-            .flatten();
+        let formatting = if self.app_mode == AppMode::VirtualBuffer && !self.forms_mode {
+            self.cursor.buffer.formatting_at_offset(self.cursor.offset)
+        } else {
+            // A text field reports the font at its caret.
+            self.last_text
+                .as_ref()
+                .and_then(|t| t.font.as_ref())
+                .map(crate::event::FontInfo::formatting)
+        };
         let description = formatting
             .as_ref()
             .and_then(SpeechFormatter::font_description);
@@ -2719,6 +2725,7 @@ mod tests {
                 text: "weather today".to_owned(),
                 caret: 3,
                 selection: None,
+                font: None,
             },
         ));
         assert_eq!(

@@ -167,3 +167,23 @@ Keys in the viewer:
 **JAWS defects we do not copy:**
 - Its viewer drops characters outside the Basic Multilingual Plane (an emoji), and the leading tab.
 - Its Ctrl+C reaches the clipboard as UTF-8 read as ANSI, which garbles non-ASCII text.
+
+## 11. What is spoken: the speech history versus the synthesizer [obs, 307, 207]
+
+JAWS's speech history keeps text from *before* its symbol processing: `(`, or an empty entry for a space, tab or line break. The synthesizer is then given the processed text. The harness records it with the **SR Speech Recorder** SAPI voice (`crates/sr-sapi-recorder`, `observation.spoken`). `sr-cli parity` compares both layers ("JAWS spoken parity").
+
+**A character read on its own (Left/Right, Delete, the Virtual Viewer)** is always named, whatever the punctuation level. These are the exact strings JAWS sends a SAPI 5 voice (`sr-core::pronounce`):
+- **Whitespace:** `space` (also a no-break space), `tab`, `blank` (a line break).
+- **Names that keep the symbol:** `exclaim!`, `comma,`, `period.`, `question?`.
+- **Other ASCII symbols:** `quote`, `number`, `dollar`, `percent`, `and`, `apostrophe`, `left paren`, `right paren`, `star`, `plus`, `dash`, `slash`, `colon`, `semi colon`, `less`, `equals`, `greater`, `at`, `left bracket`, `back slash`, `right bracket`.
+- **Respelled for SAPI voices:** `carat`, `underline`, `grawv`, `left brace`, `vertical bar`, `right brace`, `til de`.
+- **Non-ASCII symbols:**
+  - `euro sign`, `em dash —`, `left quote`, `right quote`, `apostrophe` (for both ‘ and ’), `ellipsis …`, `bullet`;
+  - `rightwards arrow`, `copyright`, `one half`, `not equal to`, `less-than or equal to`, `lamda`.
+- **Emoji:** the Unicode name in capitals (`GRINNING FACE`).
+- **Passed unchanged:** letters, digits, `é`, `ç`, Turkish letters, `°`, `×`, `÷`, `±`.
+- **Capitals** are sent with pitch +4. The engine does not raise pitch yet.
+
+The recorder voice uses JAWS's SAPI 5 (64-bit) symbol table. JAWS keeps one per synthesizer (`eloq.sbl`, `SAPI 5x 64.sbl`), so Eloquence may differ.
+
+**Preformatted page text (`<pre>`)** keeps its tabs, runs of spaces and line breaks in the virtual buffer, as Chrome reports it and JAWS reads it (207).

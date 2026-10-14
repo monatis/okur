@@ -3,11 +3,20 @@ use sr_core::{AomNode, Role, VirtualBuffer};
 
 fn page(depth: usize, breadth: usize, next: &mut usize) -> AomNode {
     *next += 1;
-    let mut node = AomNode::new(*next, if depth == 0 { Role::Paragraph } else { Role::Group });
+    let mut node = AomNode::new(
+        *next,
+        if depth == 0 {
+            Role::Paragraph
+        } else {
+            Role::Group
+        },
+    );
     if depth == 0 {
         return node.with_text("A message in a long chat log, with some words in it.");
     }
-    let children = (0..breadth).map(|_| page(depth - 1, breadth, next)).collect();
+    let children = (0..breadth)
+        .map(|_| page(depth - 1, breadth, next))
+        .collect();
     node = node.with_children(children);
     node
 }
@@ -24,6 +33,11 @@ fn main() {
         let doc = AomNode::new(0, Role::Document).with_children(vec![root]);
         let started = std::time::Instant::now();
         let buffer = VirtualBuffer::from_aom(&doc);
-        println!("nodes={next} depth={} lines={} built in {:?}", depth + 25, buffer.lines.len(), started.elapsed());
+        println!(
+            "nodes={next} depth={} lines={} built in {:?}",
+            depth + 25,
+            buffer.lines.len(),
+            started.elapsed()
+        );
     }
 }

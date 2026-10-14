@@ -184,6 +184,7 @@ mod tests {
                 text: text.to_owned(),
                 caret,
                 selection: None,
+                font: None,
             }))
         };
         report(&mut engine, "Zed", 3);
