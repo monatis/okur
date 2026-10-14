@@ -68,3 +68,49 @@ Native buttons say "press spacebar". Buttons in a Chrome page say `To activate p
 | Escape (leaves the menus) | `Leaving menus \| Name: ‹ Edit › \| Ada \| Type in text.` |
 
 Implemented by `native_focus::Menus`. JAWS defers the closed-popup announcement until no further event supersedes it: in s5 the next menu opens at once, and in s7 nothing follows. The engine models this with `on_idle`, which parity calls at the end of each step.
+
+## 5. Changes without a focus change [obs, 304]
+
+JAWS speaks changes only of the focused control (`EventConverter`, `native_focus::change_speech`).
+
+| Step | Speech |
+|---|---|
+| Space on a check box | `‹not checked›` / `‹checked›` |
+| Arrow keys on radios | the newly checked radio, as on focus, within its group (`Team ‹ radio button › ‹checked› \| 3 of 3 \| hint`); unchecking the old radio is not spoken |
+| Down/Up in a collapsed combo box | `Brazil \| 3 of 3` |
+| Alt+Down (open the drop-down) | `Open List Box \| Germany \| 2 of 3` |
+| Down in the open drop-down | `Brazil \| 3 of 3` (MSAA focus moves into its `ComboLBox`; spoken as the combo box's value) |
+| Enter (close it) | the combo box as on focus, with its hint |
+| Right on a tree item (expand) | `Documents \| ‹open› \| 2 items` |
+| Left on a tree item (collapse) | `Documents \| ‹closed› \| 1 of 2` |
+
+WinForms reports a combo box's expanded state only through MSAA, so the converter merges the focused object's MSAA state bits on focus and change events.
+
+## 6. Windows and dialogs [obs, 306]
+
+- **A new active window:** its title, then the focused control. The active window is the innermost window in the focus chain (UIA nests a dialog under its owner). Windows are told apart by title and class.
+- **A Win32 dialog box (`#32770`, such as a message box):** `title ‹ dialog › | its static text | focused control`. Example: `SR Dialog Fixture ‹ dialog › | Save changes to the document? | Yes ‹ Button › | To activate press spacebar.`
+- **A WinForms modal form:** its title alone. Its static text is not read (306/s10).
+- **Insert+T:** `Title is | SR Dialog Fixture`.
+- **Alt+Tab:** sometimes preceded by the task switcher (`Task Switching | To move to an item press the Arrow keys.`); this varies between trials (306/s7).
+- [hyp] An unlabelled edit takes the window title as its name (306/s5).
+
+## 7. Editing text [obs, 305]
+
+Implemented in `sr-core::editing`. JAWS speaks after the application handled the key, from the field's text, caret and selection (`TextContext`) before and after it.
+
+| Key | Speech |
+|---|---|
+| Left / Right | the character at the caret; `blank` at the end |
+| Ctrl+Left / Ctrl+Right | the word at the caret |
+| Up / Down | the line at the caret |
+| Home / End | nothing (single-line edit) |
+| Shift+Left / Shift+Right | `d \| selected` (the character added, then "selected") |
+| Shift+End and other Shift moves | `selected \| a` ("selected", then the text added) |
+| Backspace | the deleted character |
+| Delete | the character now at the caret |
+| Insert+Up (Say Line) | `Name: ‹ Edit › \| d` (the field, then the line; an empty line gives the field alone) |
+| Typing | echoed aloud, but JAWS does not record echo in its speech history (305/s10–s12), so parity cannot compare it |
+
+- **Reading the field:** a field is read through IA2 in Chromium pages, through UIA TextPattern elsewhere, and with window messages (`WM_GETTEXT`, `EM_GETSEL`) for subclassed Win32 edits that UIA does not expose (WinForms).
+- **Open question:** 305/s13 (Shift+Home over `bo ` in `bo d`) speaks `selected | do`.

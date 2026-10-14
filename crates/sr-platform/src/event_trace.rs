@@ -384,7 +384,7 @@ impl EventConverter {
                 return Some(AccessibilityEvent::Focus(focus));
             }
             // The focused text field's caret moved or its text changed.
-            "caret" | "value_change" if event.text_context.is_some() => {
+            "caret" | "text_selection_change" | "value_change" if event.text_context.is_some() => {
                 return event
                     .text_context
                     .clone()
@@ -641,7 +641,9 @@ mod capture {
             } else {
                 None
             };
-            let text_context = if name == "focus" || name == "caret" || changes_focus_context {
+            let text_context = if matches!(name, "focus" | "caret" | "text_selection_change")
+                || changes_focus_context
+            {
                 state
                     .uia
                     .as_ref()

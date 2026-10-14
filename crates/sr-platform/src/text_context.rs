@@ -52,7 +52,64 @@ mod reader {
             // A Chromium page whose focused object has no text.
             Ok(None) => None,
             // Not a Chromium window.
-            Err(_) => read_uia(uia),
+            Err(_) => read_uia(uia).or_else(read_win32_edit),
+        }
+    }
+
+    /// A Win32 edit control read with window messages, as for subclassed edits that UIA's
+    /// edit proxy does not recognize (WinForms `WindowsForms10.EDIT…`, rich edits).
+    fn read_win32_edit() -> Option<TextContext> {
+        use windows::Win32::Foundation::{HWND, LPARAM, WPARAM};
+        use windows::Win32::UI::WindowsAndMessaging::{
+            GetClassNameW, GetGUIThreadInfo, GetWindowThreadProcessId, SendMessageTimeoutW,
+            GUITHREADINFO, SMTO_ABORTIFHUNG,
+        };
+        const WM_GETTEXT: u32 = 0x000D;
+        const WM_GETTEXTLENGTH: u32 = 0x000E;
+        const EM_GETSEL: u32 = 0x00B0;
+        // SAFETY: Win32 queries with valid out-structures; messages to another process use
+        // a timeout, and WM_GETTEXT's buffer is marshalled by the system.
+        unsafe {
+            let thread = GetWindowThreadProcessId(GetForegroundWindow(), None);
+            let mut info = GUITHREADINFO {
+                cbSize: std::mem::size_of::<GUITHREADINFO>() as u32,
+                ..Default::default()
+            };
+            GetGUIThreadInfo(thread, &mut info).ok()?;
+            let hwnd: HWND = info.hwndFocus;
+            let mut class = [0u16; 128];
+            let n = usize::try_from(GetClassNameW(hwnd, &mut class)).ok()?;
+            let class = String::from_utf16_lossy(class.get(..n)?).to_ascii_uppercase();
+            if !class.contains("EDIT") {
+                return None;
+            }
+            let ask = |msg: u32, wparam: usize, lparam: isize| {
+                let mut result = 0usize;
+                let sent = SendMessageTimeoutW(
+                    hwnd,
+                    msg,
+                    WPARAM(wparam),
+                    LPARAM(lparam),
+                    SMTO_ABORTIFHUNG,
+                    200,
+                    Some(&mut result),
+                );
+                (sent.0 != 0).then_some(result)
+            };
+            let len = ask(WM_GETTEXTLENGTH, 0, 0)?.min(MAX_TEXT_CHARS as usize);
+            let mut buf = vec![0u16; len + 1];
+            let copied = ask(WM_GETTEXT, buf.len(), buf.as_mut_ptr() as isize)?;
+            let text = String::from_utf16_lossy(buf.get(..copied.min(len))?);
+            // EM_GETSEL's result packs the selection's start and end in its low and high words.
+            let sel = ask(EM_GETSEL, 0, 0)?;
+            let start = i32::try_from(sel & 0xFFFF).ok()?;
+            let end = i32::try_from((sel >> 16) & 0xFFFF).ok()?;
+            Some(TextContext {
+                caret: utf16_to_chars(&text, start),
+                selection: (start < end)
+                    .then(|| (utf16_to_chars(&text, start), utf16_to_chars(&text, end))),
+                text,
+            })
         }
     }
 

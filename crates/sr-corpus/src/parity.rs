@@ -347,7 +347,13 @@ fn replayable(event: &TraceEvent) -> bool {
     menu_event_from_trace(event).is_some()
         || (matches!(
             event.event.as_str(),
-            "focus" | "foreground" | "caret" | "state_change" | "value_change" | "selection"
+            "focus"
+                | "foreground"
+                | "caret"
+                | "text_selection_change"
+                | "state_change"
+                | "value_change"
+                | "selection"
         ) && (!event.focus_chain.is_empty() || event.object.is_some()))
 }
 
