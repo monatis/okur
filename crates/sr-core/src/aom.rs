@@ -45,6 +45,8 @@ pub enum Role {
     BlockQuote,
     /// An item of a menu bar or a popup menu.
     MenuItem,
+    /// A button that opens a menu (MSAA `ROLE_SYSTEM_BUTTONMENU`).
+    MenuButton,
     Generic,
 }
 

@@ -372,6 +372,20 @@ impl SpeechFormatter {
         }
     }
 
+    /// The usage hint JAWS adds when focus lands on a page control [obs, 204/s7–s10].
+    /// Edits, radio buttons and combo boxes get none.
+    pub fn web_focus_hint(node: &crate::aom::AomNode) -> Option<&'static str> {
+        use crate::aom::Role;
+        match node.role {
+            Role::CheckBox if node.states.checked == Some(true) => {
+                Some("To clear checkmark press Spacebar.")
+            }
+            Role::CheckBox => Some("To check press Spacebar."),
+            Role::Link { .. } | Role::Button => Some("To activate press Enter."),
+            _ => None,
+        }
+    }
+
     /// Formats a heading announcement for quick navigation (`H` / `1`–`6`).
     pub fn format_heading(level: u32, text: &str) -> String {
         format!("{}\n \u{001d} heading level {} \u{001e}", text, level)

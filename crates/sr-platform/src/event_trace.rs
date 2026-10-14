@@ -14,8 +14,11 @@ use serde::{Deserialize, Serialize};
 /// UIA control type ids used to read focus context.
 const UIA_LISTITEM: i32 = 50007;
 const UIA_WINDOW: i32 = 50032;
+const UIA_DOCUMENT: i32 = 50030;
 /// MSAA `ROLE_SYSTEM_MENUITEM`.
 const MSAA_MENUITEM: i32 = 0x0C;
+/// MSAA `ROLE_SYSTEM_BUTTONMENU`.
+const MSAA_BUTTONMENU: i32 = 0x39;
 
 /// Bumped whenever the recorded fields or their meaning change.
 pub const TRACE_FORMAT_VERSION: u32 = 2;
@@ -148,6 +151,15 @@ pub fn focus_event_from_chain(
         .or_else(|| focused.help_text.clone());
     event.window_class = window_class.map(str::to_owned);
     event.window_title = window_title.map(str::to_owned);
+    // Inside a browser document, Chrome reports the DOM id as AutomationId.
+    event.in_document = chain
+        .iter()
+        .rev()
+        .skip(1)
+        .any(|a| a.control_type == UIA_DOCUMENT);
+    if event.in_document {
+        event.dom_id = focused.automation_id.clone().filter(|id| !id.is_empty());
+    }
 
     // The nearest structural container (list, group, tab list, tree, table, dialog, landmark).
     for ancestor in chain.iter().rev().skip(1) {
@@ -206,6 +218,13 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent>
         top_window,
     )?;
     let focused = event.focus_chain.last()?;
+    // JAWS names buttons by their MSAA role: ROLE_SYSTEM_BUTTONMENU is a "button menu"
+    // even when UIA reports a plain button [obs, 204/s11–s12].
+    if focus.role == sr_core::Role::Button
+        && event.object.as_ref().and_then(|o| o.role) == Some(MSAA_BUTTONMENU)
+    {
+        focus.role = sr_core::Role::MenuButton;
+    }
     if let Some(subtree) = &event.focus_subtree {
         // A list-view item's further columns are its text children after the name.
         if focus.role == sr_core::Role::ListItem {

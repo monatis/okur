@@ -143,6 +143,11 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<String> {
             lines.push(format!("{name}{}{selected}", role_marker("Tab")));
             lines.push("To switch pages, press Control+PageDown.".to_owned());
         }
+        Role::MenuButton => {
+            lines.push(format!("{name}{}", role_marker("button menu")));
+            lines
+                .push("Press space to activate the menu, then navigate with arrow keys".to_owned());
+        }
         Role::Button => {
             lines.push(format!("{name}{}", role_marker("Button")));
             lines.push("To activate press spacebar.".to_owned());

@@ -1019,7 +1019,13 @@ impl ScreenReaderEngine {
             return KeyAction::PassThrough;
         }
 
-        // 6. In Virtual PC Cursor mode, check if keystroke translates to a command
+        // 6. Tab and Shift+Tab belong to the page: the browser moves focus, and the focus
+        //    event moves the virtual cursor and speaks [obs, 204].
+        if event.key == Key::Tab && !event.modifiers.ctrl && !event.modifiers.alt {
+            return KeyAction::PassThrough;
+        }
+
+        // 7. In Virtual PC Cursor mode, check if keystroke translates to a command
         if let Some(cmd) = event.to_command_string() {
             let res = self.execute_command(&cmd);
             if res.is_some() {
@@ -1284,7 +1290,7 @@ impl ScreenReaderEngine {
             es.entered = false;
         }
 
-        let is_in_document = focus.container_name.as_deref() == Some("Document")
+        let is_in_document = focus.in_document
             || focus.role == Role::Document
             || focus
                 .node_id
@@ -1292,11 +1298,23 @@ impl ScreenReaderEngine {
 
         if is_in_document {
             self.app_mode = AppMode::VirtualBuffer;
+            // The page is in the same top-level window as anything focused next in the
+            // browser (toolbar, address bar), so that focus does not announce a new window.
+            if let Some(title) = &focus.window_title {
+                self.last_window_title = Some(title.clone());
+            }
 
-            // Try matching node in buffer
+            // Find the buffer node: by node id, then by DOM id, then by role and name.
             let matched_node_id = focus
                 .node_id
-                .filter(|id| self.cursor.buffer.node_map.contains_key(id));
+                .filter(|id| self.cursor.buffer.node_map.contains_key(id))
+                .or_else(|| {
+                    let dom_id = focus.dom_id.as_deref()?;
+                    self.cursor.buffer.node_map.values().find_map(|node| {
+                        (node.attributes.get("id").map(String::as_str) == Some(dom_id))
+                            .then_some(node.id)
+                    })
+                });
 
             let target_id = matched_node_id.or_else(|| {
                 self.cursor.buffer.node_map.values().find_map(|node| {
@@ -1313,14 +1331,11 @@ impl ScreenReaderEngine {
                 })
             });
 
-            if let Some(id) = target_id {
-                self.cursor.move_to_node_id(id);
-            }
-
             // If focus target is a dialog, enter modal confinement and announce Dialog <Title>
             if matches!(focus.role, Role::Dialog | Role::AlertDialog) {
                 let title = focus.name.as_deref().unwrap_or("");
                 let msg = if let Some(id) = target_id {
+                    self.cursor.move_to_node_id(id);
                     self.cursor
                         .enter_modal(id)
                         .unwrap_or_else(|| SpeechFormatter::format_dialog_entry(title))
@@ -1344,74 +1359,17 @@ impl ScreenReaderEngine {
                 }
             }
 
-            let is_edit = matches!(focus.role, Role::Edit);
-            let speech = if is_edit {
-                let doc_title = self.cursor.buffer.document_title().unwrap_or("");
-                let name = focus
-                    .name
-                    .as_deref()
-                    .or_else(|| {
-                        target_id
-                            .and_then(|id| self.cursor.buffer.node_map.get(&id))
-                            .and_then(|n| n.name.as_deref())
-                    })
-                    .unwrap_or("");
-                let value = focus.value.as_deref().or_else(|| {
-                    target_id
-                        .and_then(|id| self.cursor.buffer.node_map.get(&id))
-                        .and_then(|n| n.value.as_deref())
-                });
-
-                if !self.forms_mode {
-                    self.forms_mode = true;
-                    self.cursor.forms_mode_active = true;
-                    Some(SpeechFormatter::format_forms_mode_entry(
-                        doc_title, name, value,
-                    ))
-                } else {
-                    Some(SpeechFormatter::format_edit(name, value))
-                }
-            } else if self.forms_mode {
-                // Exiting forms mode because focused element is not an Edit
-                self.forms_mode = false;
-                self.cursor.forms_mode_active = false;
-                let exit_msg = SpeechFormatter::format_forms_mode_exit();
-                let control_msg = if let Some(id) = target_id {
-                    if let Some(node) = self.cursor.buffer.node_map.get(&id) {
-                        self.cursor.format_tab_stop_node(node, None, None)
-                    } else {
-                        String::new()
-                    }
-                } else {
-                    focus.name.clone().unwrap_or_default()
-                };
-                if !control_msg.is_empty() {
-                    Some(format!("{}\n{}", control_msg, exit_msg))
-                } else {
-                    Some(exit_msg)
-                }
-            } else {
-                // Staying in Virtual PC Cursor mode: announce focused control
-                if let Some(id) = target_id {
-                    if let Some(node) = self.cursor.buffer.node_map.get(&id) {
-                        Some(self.cursor.format_tab_stop_node(node, None, None))
-                    } else {
-                        None
-                    }
-                } else {
-                    let name = focus.name.as_deref().unwrap_or("");
-                    match focus.role {
-                        Role::Button => Some(SpeechFormatter::format_button(name)),
-                        Role::CheckBox => Some(SpeechFormatter::format_checkbox(
-                            name,
-                            focus.states.checked.unwrap_or(false),
-                        )),
-                        Role::Link { .. } => Some(SpeechFormatter::format_link(name, false)),
-                        _ => focus.name.clone(),
-                    }
-                }
-            };
-
+            // Forms mode follows focus into edits silently: JAWS 2025 signals it with a
+            // sound by default, and its speech history has no forms-mode text [obs, 204].
+            let is_edit = target_id
+                .and_then(|id| self.cursor.buffer.node_map.get(&id))
+                .is_some_and(|n| n.role == Role::Edit)
+                || focus.role == Role::Edit;
+            self.forms_mode = is_edit;
+            self.cursor.forms_mode_active = is_edit;
+            let speech = target_id
+                .and_then(|id| self.cursor.focus_node(id))
+                .or_else(|| focus.name.clone());
             if let Some(ref text) = speech {
                 if !text.is_empty() {
                     self.speech.speak(text, true);
@@ -1610,12 +1568,13 @@ mod tests {
             .with_name("Search Input");
         let speech = engine.handle_focus_event(&focus_ev).unwrap_or_default();
 
-        // Engine should automatically enter Forms Mode and emit canonical JAWS prompt
+        // Forms mode follows focus into the edit silently; a page edit has no typing hint
+        // [obs, 204/s1-s6].
         assert!(engine.forms_mode);
         assert!(engine.cursor.forms_mode_active);
         assert_eq!(engine.cursor.current_node_id, Some(3));
         assert!(speech.contains("Search Input"));
-        assert!(speech.contains("Type in text."));
+        assert!(!speech.contains("Type in text."));
 
         // Focus transitions to Submit Button -> should auto exit forms mode
         let btn_focus = FocusEvent::new(Role::Button)
@@ -1627,7 +1586,8 @@ mod tests {
         assert!(!engine.cursor.forms_mode_active);
         assert_eq!(engine.cursor.current_node_id, Some(4));
         assert!(btn_speech.contains("Submit Button"));
-        assert!(btn_speech.contains("virtual PC Cursor"));
+        assert!(btn_speech.contains("To activate press Enter."));
+        assert!(!btn_speech.contains("virtual PC Cursor"));
     }
 
     #[test]

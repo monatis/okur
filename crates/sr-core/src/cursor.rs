@@ -658,6 +658,45 @@ impl VirtualCursor {
 
     /// Form control speech in the JAWS focus phrasing, used by F/E/X/A/C/B (§17). `previous`
     /// is the cursor offset before the move: entering a radio group names the group first.
+    /// Focus moved to `node_id` in the page (Tab, or the application moving focus): the
+    /// virtual cursor follows, and JAWS speaks the control as the F/E/X quick keys do, plus
+    /// the usage hint for check boxes, links and buttons [obs, 204].
+    pub fn focus_node(&mut self, node_id: usize) -> Option<String> {
+        let previous = self.offset;
+        self.move_to_node_id(node_id);
+        let node = self.buffer.node_map.get(&node_id)?;
+        let attr = |k: &str| node.attributes.get(k).map(String::as_str);
+        let name = node.name.as_deref().unwrap_or_default().trim();
+        let mut speech = match &node.role {
+            // Unlike the C quick key, Tab omits the collapsed state.
+            Role::ComboBox => format!(
+                "{name}  \u{1d} Combo box \u{1e}  \n{}",
+                node.value.as_deref().unwrap_or_default()
+            ),
+            Role::Link { .. } => {
+                let kind = if attr("same_page") == Some("true") {
+                    "same page link"
+                } else {
+                    "link"
+                };
+                format!("{name}  \u{1d} {kind} \u{1e} ")
+            }
+            Role::Edit if attr("password") == Some("true") => format!(
+                "{}  \u{1d}\u{1e}",
+                self.control_focus_speech(self.offset, previous)
+            ),
+            _ => self.control_focus_speech(self.offset, previous),
+        };
+        if speech.trim().is_empty() {
+            speech = name.to_owned();
+        }
+        if let Some(hint) = SpeechFormatter::web_focus_hint(node) {
+            speech.push('\n');
+            speech.push_str(hint);
+        }
+        Some(speech)
+    }
+
     fn control_focus_speech(&self, offset: usize, previous: usize) -> String {
         let Some(node) = self
             .buffer

@@ -41,6 +41,10 @@ pub struct FocusEvent {
     pub container_class: Option<String>,
     /// Further columns of a list-view item, after its name.
     pub columns: Vec<String>,
+    /// The focused element is inside a browser document (its focus chain has a document).
+    pub in_document: bool,
+    /// The element's DOM id, when it is in a document and has one.
+    pub dom_id: Option<String>,
     pub window_class: Option<String>,
     pub window_title: Option<String>,
     pub folder_name: Option<String>,
@@ -61,6 +65,8 @@ impl FocusEvent {
             container_name: None,
             container_class: None,
             columns: Vec::new(),
+            in_document: false,
+            dom_id: None,
             window_class: None,
             window_title: None,
             folder_name: None,

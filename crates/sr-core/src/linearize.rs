@@ -509,11 +509,14 @@ impl<'a> Builder<'a> {
             Role::Link { href } => href.as_deref(),
             _ => None,
         };
-        let kind = if self.is_same_page(href) {
-            "same page link"
-        } else {
-            "link"
-        };
+        let same_page = self.is_same_page(href);
+        let kind = if same_page { "same page link" } else { "link" };
+        if same_page {
+            if let Some(n) = self.buffer.node_map.get_mut(&node.id) {
+                n.attributes
+                    .insert("same_page".to_owned(), "true".to_owned());
+            }
+        }
         let speech = format!("{prefix}{}{text}", role_marker(kind));
         let line_text = squash(&format!("{prefix} {text}"));
         let off = self.emit(node.id, node.role.clone(), &line_text, speech);
