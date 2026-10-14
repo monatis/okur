@@ -767,8 +767,9 @@ async fn main() {
             };
             #[cfg(windows)]
             println!(
-                "{unit:?}: {:?}",
-                sr_platform::actions::read_at_caret_now(unit)
+                "{unit:?}: {:?} (Chromium IA2 caret: {:?})",
+                sr_platform::actions::read_at_caret_now(unit),
+                sr_platform::actions::chromium_caret(unit)
             );
             #[cfg(not(windows))]
             {

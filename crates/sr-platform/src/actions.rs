@@ -15,7 +15,7 @@ pub fn unique_id(node: &sr_core::AomNode) -> Option<i32> {
 }
 
 #[cfg(windows)]
-pub use windows_actions::{read_at_caret_now, WindowsActions};
+pub use windows_actions::{chromium_caret, read_at_caret_now, WindowsActions};
 
 #[cfg(windows)]
 mod windows_actions {
@@ -30,11 +30,11 @@ mod windows_actions {
     };
     use windows::Win32::UI::Accessibility::{
         CUIAutomation8, IUIAutomation, IUIAutomationTextPattern, IUIAutomationTextRange,
-        TextPatternRangeEndpoint_Start, TextUnit, TextUnit_Character, TextUnit_Line, TextUnit_Word,
-        UIA_TextPatternId,
+        TextPatternRangeEndpoint_End, TextPatternRangeEndpoint_Start, TextUnit, TextUnit_Character,
+        TextUnit_Line, TextUnit_Word, UIA_TextPatternId,
     };
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
-    use xa11y_windows::ia2::{perform_chromium_action, Ia2Action};
+    use xa11y_windows::ia2::{chromium_caret_text, perform_chromium_action, Ia2Action};
 
     /// How long to wait for the application to move its caret after a key.
     const CARET_SETTLE: Duration = Duration::from_millis(250);
@@ -116,9 +116,42 @@ mod windows_actions {
         .is_ok_and(|order| order == 0)
     }
 
+    /// IA2 text boundary for a caret unit (`IA2_TEXT_BOUNDARY_CHAR`, `_WORD`, `_LINE`).
+    fn ia2_boundary(unit: CaretUnit) -> i32 {
+        match unit {
+            CaretUnit::Character => 0,
+            CaretUnit::Word => 1,
+            CaretUnit::Line => 4,
+        }
+    }
+
+    /// The caret in a Chromium page, through IA2: Chromium's UIA selection does not follow
+    /// the caret in form fields. `None` when the foreground window is not Chromium.
+    pub fn chromium_caret(unit: CaretUnit) -> Option<(i32, String)> {
+        // SAFETY: plain Win32 call with no preconditions.
+        let window = unsafe { GetForegroundWindow() };
+        chromium_caret_text(window, ia2_boundary(unit))
+            .ok()
+            .flatten()
+    }
+
     /// Waits for the caret to move (or the settle time to pass, at a boundary the caret
     /// stays put), then reads `unit` at the caret.
     fn read_after_caret_move(uia: &IUIAutomation, unit: CaretUnit) -> Option<String> {
+        if let Some((before, mut text)) = chromium_caret(unit) {
+            let started = Instant::now();
+            while started.elapsed() < CARET_SETTLE {
+                std::thread::sleep(CARET_POLL);
+                let Some((now, now_text)) = chromium_caret(unit) else {
+                    break;
+                };
+                text = now_text;
+                if now != before {
+                    break;
+                }
+            }
+            return Some(text);
+        }
         let before = caret(uia);
         let started = Instant::now();
         let mut now = caret(uia)?;
@@ -128,15 +161,38 @@ mod windows_actions {
             std::thread::sleep(CARET_POLL);
             now = caret(uia)?;
         }
-        let text_unit: TextUnit = match unit {
-            CaretUnit::Character => TextUnit_Character,
-            CaretUnit::Word => TextUnit_Word,
-            CaretUnit::Line => TextUnit_Line,
-        };
+        text_at(&now, unit)
+    }
+
+    /// The text of `unit` at a caret range. A character is the one after the caret: the
+    /// range's end is moved one character on (Chrome expands an empty range at the start
+    /// of a field to a line break). Words and lines are expanded around the caret.
+    fn text_at(caret: &IUIAutomationTextRange, unit: CaretUnit) -> Option<String> {
         // SAFETY: UIA text range calls on a valid range.
         unsafe {
-            let range = now.Clone().ok()?;
-            range.ExpandToEnclosingUnit(text_unit).ok()?;
+            let range = caret.Clone().ok()?;
+            match unit {
+                CaretUnit::Character => {
+                    range
+                        .MoveEndpointByRange(
+                            TextPatternRangeEndpoint_End,
+                            &range,
+                            TextPatternRangeEndpoint_Start,
+                        )
+                        .ok()?;
+                    range
+                        .MoveEndpointByUnit(TextPatternRangeEndpoint_End, TextUnit_Character, 1)
+                        .ok()?;
+                }
+                CaretUnit::Word | CaretUnit::Line => {
+                    let text_unit: TextUnit = if unit == CaretUnit::Word {
+                        TextUnit_Word
+                    } else {
+                        TextUnit_Line
+                    };
+                    range.ExpandToEnclosingUnit(text_unit).ok()?;
+                }
+            }
             range.GetText(-1).ok().map(|s| s.to_string())
         }
     }
@@ -145,20 +201,13 @@ mod windows_actions {
     pub fn read_at_caret_now(unit: CaretUnit) -> Option<String> {
         // SAFETY: COM initialization; repeated initialization is tolerated.
         let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+        if let Some((_, text)) = chromium_caret(unit) {
+            return Some(text);
+        }
         // SAFETY: in-process COM activation.
         let uia: IUIAutomation =
             unsafe { CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER) }.ok()?;
-        let text_unit: TextUnit = match unit {
-            CaretUnit::Character => TextUnit_Character,
-            CaretUnit::Word => TextUnit_Word,
-            CaretUnit::Line => TextUnit_Line,
-        };
-        let now = caret(&uia)?;
-        // SAFETY: UIA text range calls on a valid range.
-        unsafe {
-            now.ExpandToEnclosingUnit(text_unit).ok()?;
-            now.GetText(-1).ok().map(|s| s.to_string())
-        }
+        text_at(&caret(&uia)?, unit)
     }
 
     impl sr_core::actions::ApplicationActions for WindowsActions {
@@ -198,8 +247,24 @@ pub fn perform_now(node: &sr_core::AomNode, activate: bool) -> Result<(), String
 
 /// Captures the foreground Chromium window's page through IA2 and maps it with
 /// [`crate::ia2_snapshot::ia2_to_aom`]: the same pipeline the parity harness verifies.
+///
+/// When IA2 yields no page (only Chrome's "Chrome Legacy Window" placeholder), the UIA
+/// capture and [`crate::uia_snapshot::to_aom`] are used instead. Page actions need IA2
+/// uniqueIDs, so a UIA page can be read but not acted on.
 #[cfg(windows)]
 pub fn capture_foreground_page() -> Result<sr_core::AomNode, crate::PlatformError> {
-    let snapshot = crate::ia2_snapshot::capture_foreground_document(None, None)?;
-    Ok(crate::ia2_snapshot::ia2_to_aom(&snapshot.root))
+    let ia2 = crate::ia2_snapshot::capture_foreground_document(None, None);
+    match ia2 {
+        Ok(snapshot) if snapshot.root.node_count() > 1 => {
+            Ok(crate::ia2_snapshot::ia2_to_aom(&snapshot.root))
+        }
+        other => {
+            tracing::warn!(
+                "IA2 page capture unusable ({} node(s)); falling back to UIA",
+                other.as_ref().map(|s| s.root.node_count()).unwrap_or(0)
+            );
+            let snapshot = crate::uia_snapshot::capture_foreground_document(None, None)?;
+            Ok(crate::uia_snapshot::to_aom(&snapshot.root))
+        }
+    }
 }

@@ -147,7 +147,8 @@ pub fn parse_attributes(raw: &str) -> BTreeMap<String, String> {
 
 #[cfg(target_os = "windows")]
 pub use com::capture::{
-    capture_chromium_document, perform_chromium_action, Ia2Action, Ia2CaptureError,
+    capture_chromium_document, chromium_caret_text, perform_chromium_action, Ia2Action,
+    Ia2CaptureError,
 };
 
 #[cfg(target_os = "windows")]
@@ -275,7 +276,10 @@ mod com {
         use windows::Win32::UI::Accessibility::{
             AccessibleChildren, AccessibleObjectFromWindow, IAccessible,
         };
-        use windows::Win32::UI::WindowsAndMessaging::FindWindowExW;
+        use windows::Win32::UI::WindowsAndMessaging::{FindWindowExW, IsWindowVisible};
+
+        /// Render windows examined per top-level window, at most (Chrome keeps one per tab).
+        const MAX_RENDER_WINDOWS: usize = 512;
 
         /// `OBJID_CLIENT`.
         const OBJID_CLIENT: u32 = 0xFFFF_FFFC;
@@ -477,19 +481,78 @@ mod com {
             .map_err(|e| err("MSAA action", e))
         }
 
+        /// The caret of the focused object in a Chromium window's page: `(caret offset,
+        /// text of the IA2 boundary unit at the caret)`. `IA2_TEXT_BOUNDARY_CHAR` (0) gives
+        /// the character after the caret, `_WORD` (1) the word, `_LINE` (4) the line. Returns
+        /// `Ok(None)` when the focused object has no text.
+        pub fn chromium_caret_text(
+            top_level: HWND,
+            boundary: i32,
+        ) -> Result<Option<(i32, String)>, Ia2CaptureError> {
+            let document = chromium_document(top_level)?;
+            // SAFETY: MSAA focus query on a valid IAccessible.
+            let focus = unsafe { document.accFocus() }.map_err(|e| err("accFocus", e))?;
+            let focused = match dispatch_child(&focus) {
+                Some(object) => object,
+                // The document itself has focus (VT_I4 CHILDID_SELF) or nothing does.
+                None => document,
+            };
+            let Some(ia2) = ia2_of(&focused) else {
+                return Ok(None);
+            };
+            let Ok(text) = ia2.cast::<IAccessibleText>() else {
+                return Ok(None);
+            };
+            let mut caret = 0i32;
+            // SAFETY: out-pointer to a local on a valid interface.
+            unsafe { text.get_caretOffset(&mut caret) }
+                .ok()
+                .map_err(|e| err("caretOffset", e))?;
+            let (mut start, mut end) = (0i32, 0i32);
+            let mut unit = BSTR::default();
+            // SAFETY: as above; BSTR ownership transfers to `unit`.
+            let read = unsafe {
+                text.get_textAtOffset(caret.max(0), boundary, &mut start, &mut end, &mut unit)
+            };
+            // At the end of the text there is nothing at the caret (E_INVALIDARG/S_FALSE).
+            let unit = if read.is_ok() {
+                unit.to_string()
+            } else {
+                String::new()
+            };
+            Ok(Some((caret, unit)))
+        }
+
         /// The MSAA client object of a Chromium window's web content.
         fn chromium_document(top_level: HWND) -> Result<IAccessible, Ia2CaptureError> {
             let class: Vec<u16> = "Chrome_RenderWidgetHostHWND\0".encode_utf16().collect();
-            // SAFETY: the class name is NUL-terminated and outlives the call.
-            let render = unsafe {
-                FindWindowExW(
-                    Some(top_level),
-                    None,
-                    PCWSTR(class.as_ptr()),
-                    PCWSTR::null(),
-                )
+            // Every tab can keep its own render window; the active tab's is the visible one.
+            let mut first = None;
+            let mut visible = None;
+            let mut after: Option<HWND> = None;
+            for _ in 0..MAX_RENDER_WINDOWS {
+                // SAFETY: the class name is NUL-terminated and outlives the call.
+                let Ok(found) = (unsafe {
+                    FindWindowExW(
+                        Some(top_level),
+                        after,
+                        PCWSTR(class.as_ptr()),
+                        PCWSTR::null(),
+                    )
+                }) else {
+                    break;
+                };
+                first.get_or_insert(found);
+                // SAFETY: plain Win32 query on a window handle.
+                if unsafe { IsWindowVisible(found) }.as_bool() {
+                    visible = Some(found);
+                    break;
+                }
+                after = Some(found);
             }
-            .map_err(|e| err("find Chrome_RenderWidgetHostHWND", e))?;
+            let render = visible.or(first).ok_or_else(|| {
+                Ia2CaptureError("no Chrome_RenderWidgetHostHWND in the window".to_owned())
+            })?;
             let mut raw = std::ptr::null_mut();
             // SAFETY: requests IAccessible for the client object of a valid window.
             unsafe {
