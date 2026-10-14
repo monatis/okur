@@ -761,13 +761,13 @@
       "scenario_id": "303-desktop-lists-and-trees",
       "fixture": "desktop-forms.ps1",
       "evidence": {
-        "sha256": "7cfc95b40d7d5ceac8583a66b346e37a1a4e882cc12ea419bf197eb418f52c67",
+        "sha256": "6ff5e53c7200cad775b0733ee140121a65d81b7d36ee570a0eadd19984d5e2b4",
         "capture_script_sha256": "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 5,
         "successful_trials": 5,
-        "deterministic": true,
+        "deterministic": false,
         "summary_consistent": true
       }
     },
@@ -805,6 +805,6 @@
     "scenarios_with_evidence": 54,
     "total_trials": 270,
     "successful_trials": 269,
-    "deterministic_scenarios": 46
+    "deterministic_scenarios": 45
   }
 }

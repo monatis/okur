@@ -2,7 +2,7 @@
     "format_version":  2,
     "scenario_id":  "303-desktop-lists-and-trees",
     "scenario_version":  "1.0.0",
-    "timestamp":  "2026-10-14T18:07:35.3850124+03:00",
+    "timestamp":  "2026-10-14T20:22:01.9235254+03:00",
     "provenance":  {
                        "capture_script_sha256":  "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
                        "scenario_sha256":  "e32ceebddb04b0c4aef2b944cae576d92f92f63aa80f863c50e04fef061379b7",
@@ -10,7 +10,7 @@
                        "host":  "DESKTOP-DCNAKQQ",
                        "os_build":  "Microsoft Windows [Version 10.0.19045.6456]",
                        "keyboard_layout":  "Turkish Q",
-                       "chrome_version":  "154.0.8037.98",
+                       "chrome_version":  "155.0.8059.40",
                        "jaws_version":  "2025.2505.43.400"
                    },
     "environment":  {
@@ -24,14 +24,14 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-14T18:07:35.5177708+03:00",
+                       "timestamp":  "2026-10-14T20:22:02.0568741+03:00",
                        "foreground_window_start":  "SR Desktop Fixture",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1791990480661,
-                                                "t_end_ms":  1791990482472,
+                                                "t_start_ms":  1791998544859,
+                                                "t_end_ms":  1791998546651,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Down"
@@ -41,7 +41,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1365,
+                                                                    "settle_ms":  1388,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -50,280 +50,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1791990484249,
-                                                "t_end_ms":  1791990486695,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  false,
-                                                                    "settle_ms":  811,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s3",
-                                                "t_start_ms":  1791990487741,
-                                                "t_end_ms":  1791990489443,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Up"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Bananas \n2 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1284,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s4",
-                                                "t_start_ms":  1791990491229,
-                                                "t_end_ms":  1791990494903,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3274,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s5",
-                                                "t_start_ms":  1791990496715,
-                                                "t_end_ms":  1791990498920,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "level 0\nPictures\n2 of 2",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1800,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
-                                                "t_start_ms":  1791990500731,
-                                                "t_end_ms":  1791990502471,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Up"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Documents\n \u001dclosed\u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1348,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s7",
-                                                "t_start_ms":  1791990504285,
-                                                "t_end_ms":  1791990506186,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Right"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Documents\n \u001dopen\u001e \n2 items",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1517,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s8",
-                                                "t_start_ms":  1791990507995,
-                                                "t_end_ms":  1791990510113,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "level 1\nReports\n1 of 2",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1723,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s9",
-                                                "t_start_ms":  1791990511930,
-                                                "t_end_ms":  1791990515834,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  " \u001d List view \u001e \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3502,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s10",
-                                                "t_start_ms":  1791990517646,
-                                                "t_end_ms":  1791990520013,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "notes.txt\n2 KB \n2 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1966,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s11",
-                                                "t_start_ms":  1791990521809,
-                                                "t_end_ms":  1791990524416,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "photo.jpg\n1.2 MB \n3 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2216,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s12",
-                                                "t_start_ms":  1791990526226,
-                                                "t_end_ms":  1791990529232,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "General  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2607,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s13",
-                                                "t_start_ms":  1791990531051,
-                                                "t_end_ms":  1791990534166,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Right"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Advanced  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2699,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            }
-                                        ],
-                       "trial_success":  true,
-                       "trace_file":  "303-desktop-lists-and-trees-trial1.jsonl",
-                       "page_load_settled":  true,
-                       "trace_sha256":  "6f00a3626139a7dec1fafb338eb803fd471ff5c5df34d667418fff65aab4654e"
-                   },
-                   {
-                       "trial_index":  2,
-                       "timestamp":  "2026-10-14T18:08:54.2192286+03:00",
-                       "foreground_window_start":  "SR Desktop Fixture",
-                       "setup_settled":  true,
-                       "step_results":  [
-                                            {
-                                                "step_id":  "s1",
-                                                "t_start_ms":  1791990560258,
-                                                "t_end_ms":  1791990562055,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Cherries \n3 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1406,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s2",
-                                                "t_start_ms":  1791990563869,
-                                                "t_end_ms":  1791990566284,
+                                                "t_start_ms":  1791998548455,
+                                                "t_end_ms":  1791998550885,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Down"
@@ -342,8 +70,8 @@
                                             },
                                             {
                                                 "step_id":  "s3",
-                                                "t_start_ms":  1791990567325,
-                                                "t_end_ms":  1791990569034,
+                                                "t_start_ms":  1791998551933,
+                                                "t_end_ms":  1791998553624,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Up"
@@ -353,7 +81,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1329,
+                                                                    "settle_ms":  1284,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -362,8 +90,8 @@
                                             },
                                             {
                                                 "step_id":  "s4",
-                                                "t_start_ms":  1791990570838,
-                                                "t_end_ms":  1791990574456,
+                                                "t_start_ms":  1791998555433,
+                                                "t_end_ms":  1791998558998,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -373,7 +101,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3188,
+                                                                    "settle_ms":  3154,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -382,18 +110,18 @@
                                             },
                                             {
                                                 "step_id":  "s5",
-                                                "t_start_ms":  1791990576249,
-                                                "t_end_ms":  1791990578431,
+                                                "t_start_ms":  1791998560813,
+                                                "t_end_ms":  1791998562296,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Down"
                                                            },
                                                 "observation":  {
-                                                                    "speech_raw":  "level 0\nPictures\n2 of 2",
+                                                                    "speech_raw":  "Pictures",
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1787,
+                                                                    "settle_ms":  1080,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -402,8 +130,8 @@
                                             },
                                             {
                                                 "step_id":  "s6",
-                                                "t_start_ms":  1791990580242,
-                                                "t_end_ms":  1791990581996,
+                                                "t_start_ms":  1791998564110,
+                                                "t_end_ms":  1791998565941,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Up"
@@ -413,7 +141,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1365,
+                                                                    "settle_ms":  1391,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -422,8 +150,8 @@
                                             },
                                             {
                                                 "step_id":  "s7",
-                                                "t_start_ms":  1791990583806,
-                                                "t_end_ms":  1791990585726,
+                                                "t_start_ms":  1791998567710,
+                                                "t_end_ms":  1791998569660,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Right"
@@ -433,7 +161,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1533,
+                                                                    "settle_ms":  1536,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -442,8 +170,8 @@
                                             },
                                             {
                                                 "step_id":  "s8",
-                                                "t_start_ms":  1791990587514,
-                                                "t_end_ms":  1791990589664,
+                                                "t_start_ms":  1791998571447,
+                                                "t_end_ms":  1791998573568,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Down"
@@ -453,7 +181,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1744,
+                                                                    "settle_ms":  1740,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -462,8 +190,8 @@
                                             },
                                             {
                                                 "step_id":  "s9",
-                                                "t_start_ms":  1791990591473,
-                                                "t_end_ms":  1791990595368,
+                                                "t_start_ms":  1791998575377,
+                                                "t_end_ms":  1791998579271,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -473,7 +201,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3504,
+                                                                    "settle_ms":  3489,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -482,8 +210,8 @@
                                             },
                                             {
                                                 "step_id":  "s10",
-                                                "t_start_ms":  1791990597175,
-                                                "t_end_ms":  1791990599561,
+                                                "t_start_ms":  1791998581088,
+                                                "t_end_ms":  1791998583446,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Down"
@@ -493,7 +221,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1974,
+                                                                    "settle_ms":  1951,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -502,824 +230,8 @@
                                             },
                                             {
                                                 "step_id":  "s11",
-                                                "t_start_ms":  1791990601352,
-                                                "t_end_ms":  1791990603945,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "photo.jpg\n1.2 MB \n3 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2198,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s12",
-                                                "t_start_ms":  1791990605762,
-                                                "t_end_ms":  1791990608785,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "General  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2610,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s13",
-                                                "t_start_ms":  1791990610595,
-                                                "t_end_ms":  1791990613725,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Right"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Advanced  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2712,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            }
-                                        ],
-                       "trial_success":  true,
-                       "trace_file":  "303-desktop-lists-and-trees-trial2.jsonl",
-                       "page_load_settled":  true,
-                       "trace_sha256":  "82ad65f33ebf0d6381669594de8f0a4ea015156a5105b9c974c84117424b54f9"
-                   },
-                   {
-                       "trial_index":  3,
-                       "timestamp":  "2026-10-14T18:10:13.8044805+03:00",
-                       "foreground_window_start":  "SR Desktop Fixture",
-                       "setup_settled":  true,
-                       "step_results":  [
-                                            {
-                                                "step_id":  "s1",
-                                                "t_start_ms":  1791990639793,
-                                                "t_end_ms":  1791990641483,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Cherries \n3 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1304,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s2",
-                                                "t_start_ms":  1791990643293,
-                                                "t_end_ms":  1791990645733,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  false,
-                                                                    "settle_ms":  808,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s3",
-                                                "t_start_ms":  1791990646779,
-                                                "t_end_ms":  1791990648473,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Up"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Bananas \n2 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1264,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s4",
-                                                "t_start_ms":  1791990650261,
-                                                "t_end_ms":  1791990653839,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3196,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s5",
-                                                "t_start_ms":  1791990655650,
-                                                "t_end_ms":  1791990657721,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "level 0\nPictures\n2 of 2",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1664,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
-                                                "t_start_ms":  1791990659534,
-                                                "t_end_ms":  1791990661314,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Up"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Documents\n \u001dclosed\u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1390,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s7",
-                                                "t_start_ms":  1791990663123,
-                                                "t_end_ms":  1791990665060,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Right"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Documents\n \u001dopen\u001e \n2 items",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1553,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s8",
-                                                "t_start_ms":  1791990666852,
-                                                "t_end_ms":  1791990668974,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "level 1\nReports\n1 of 2",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1744,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s9",
-                                                "t_start_ms":  1791990670800,
-                                                "t_end_ms":  1791990674665,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  " \u001d List view \u001e \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3463,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s10",
-                                                "t_start_ms":  1791990676476,
-                                                "t_end_ms":  1791990678852,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "notes.txt\n2 KB \n2 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1987,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s11",
-                                                "t_start_ms":  1791990680657,
-                                                "t_end_ms":  1791990683272,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "photo.jpg\n1.2 MB \n3 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2216,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s12",
-                                                "t_start_ms":  1791990685085,
-                                                "t_end_ms":  1791990688171,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "General  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2695,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s13",
-                                                "t_start_ms":  1791990689980,
-                                                "t_end_ms":  1791990692995,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Right"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Advanced  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2629,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            }
-                                        ],
-                       "trial_success":  true,
-                       "trace_file":  "303-desktop-lists-and-trees-trial3.jsonl",
-                       "page_load_settled":  true,
-                       "trace_sha256":  "97def4f101d875add5e1ec05df4fb660135ef5074c81cbff58d15e0fd41c996c"
-                   },
-                   {
-                       "trial_index":  4,
-                       "timestamp":  "2026-10-14T18:11:33.0737832+03:00",
-                       "foreground_window_start":  "SR Desktop Fixture",
-                       "setup_settled":  true,
-                       "step_results":  [
-                                            {
-                                                "step_id":  "s1",
-                                                "t_start_ms":  1791990719214,
-                                                "t_end_ms":  1791990720984,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Cherries \n3 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1369,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s2",
-                                                "t_start_ms":  1791990722792,
-                                                "t_end_ms":  1791990725212,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  false,
-                                                                    "settle_ms":  811,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s3",
-                                                "t_start_ms":  1791990726258,
-                                                "t_end_ms":  1791990728002,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Up"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Bananas \n2 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1345,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s4",
-                                                "t_start_ms":  1791990729812,
-                                                "t_end_ms":  1791990733475,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3258,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s5",
-                                                "t_start_ms":  1791990735290,
-                                                "t_end_ms":  1791990737490,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "level 0\nPictures\n2 of 2",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1802,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
-                                                "t_start_ms":  1791990739296,
-                                                "t_end_ms":  1791990741045,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Up"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Documents\n \u001dclosed\u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1346,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s7",
-                                                "t_start_ms":  1791990742855,
-                                                "t_end_ms":  1791990744771,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Right"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Documents\n \u001dopen\u001e \n2 items",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1537,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s8",
-                                                "t_start_ms":  1791990746580,
-                                                "t_end_ms":  1791990748705,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "level 1\nReports\n1 of 2",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1737,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s9",
-                                                "t_start_ms":  1791990750517,
-                                                "t_end_ms":  1791990754421,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  " \u001d List view \u001e \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3491,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s10",
-                                                "t_start_ms":  1791990756231,
-                                                "t_end_ms":  1791990758586,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "notes.txt\n2 KB \n2 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1965,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s11",
-                                                "t_start_ms":  1791990760400,
-                                                "t_end_ms":  1791990762997,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "photo.jpg\n1.2 MB \n3 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2191,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s12",
-                                                "t_start_ms":  1791990764807,
-                                                "t_end_ms":  1791990767919,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "General  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2715,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s13",
-                                                "t_start_ms":  1791990769728,
-                                                "t_end_ms":  1791990772836,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Right"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Advanced  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2715,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            }
-                                        ],
-                       "trial_success":  true,
-                       "trace_file":  "303-desktop-lists-and-trees-trial4.jsonl",
-                       "page_load_settled":  true,
-                       "trace_sha256":  "ec557c39e7ac7eeab570c3da1f793a722410cbbd3f36a6979a88622a44d596b7"
-                   },
-                   {
-                       "trial_index":  5,
-                       "timestamp":  "2026-10-14T18:12:52.8678621+03:00",
-                       "foreground_window_start":  "SR Desktop Fixture",
-                       "setup_settled":  true,
-                       "step_results":  [
-                                            {
-                                                "step_id":  "s1",
-                                                "t_start_ms":  1791990798960,
-                                                "t_end_ms":  1791990800733,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Cherries \n3 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1386,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s2",
-                                                "t_start_ms":  1791990802538,
-                                                "t_end_ms":  1791990804962,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  false,
-                                                                    "settle_ms":  813,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s3",
-                                                "t_start_ms":  1791990806006,
-                                                "t_end_ms":  1791990807702,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Up"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Bananas \n2 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1306,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s4",
-                                                "t_start_ms":  1791990809513,
-                                                "t_end_ms":  1791990813101,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3189,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s5",
-                                                "t_start_ms":  1791990814910,
-                                                "t_end_ms":  1791990817099,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "level 0\nPictures\n2 of 2",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1782,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
-                                                "t_start_ms":  1791990818914,
-                                                "t_end_ms":  1791990820668,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Up"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Documents\n \u001dclosed\u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1348,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s7",
-                                                "t_start_ms":  1791990822477,
-                                                "t_end_ms":  1791990824403,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Right"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Documents\n \u001dopen\u001e \n2 items",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1535,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s8",
-                                                "t_start_ms":  1791990826195,
-                                                "t_end_ms":  1791990828334,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "level 1\nReports\n1 of 2",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1761,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s9",
-                                                "t_start_ms":  1791990830149,
-                                                "t_end_ms":  1791990834040,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  " \u001d List view \u001e \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3505,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s10",
-                                                "t_start_ms":  1791990835854,
-                                                "t_end_ms":  1791990838217,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Down"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "notes.txt\n2 KB \n2 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1967,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s11",
-                                                "t_start_ms":  1791990840028,
-                                                "t_end_ms":  1791990842661,
+                                                "t_start_ms":  1791998585258,
+                                                "t_end_ms":  1791998587855,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Down"
@@ -1338,8 +250,8 @@
                                             },
                                             {
                                                 "step_id":  "s12",
-                                                "t_start_ms":  1791990844451,
-                                                "t_end_ms":  1791990847553,
+                                                "t_start_ms":  1791998589687,
+                                                "t_end_ms":  1791998592785,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -1349,7 +261,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2697,
+                                                                    "settle_ms":  2691,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1358,8 +270,8 @@
                                             },
                                             {
                                                 "step_id":  "s13",
-                                                "t_start_ms":  1791990849346,
-                                                "t_end_ms":  1791990852373,
+                                                "t_start_ms":  1791998594596,
+                                                "t_end_ms":  1791998597739,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Right"
@@ -1369,7 +281,1095 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2629,
+                                                                    "settle_ms":  2723,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "303-desktop-lists-and-trees-trial1.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "7666493db29b0d5752d07e5f790eb790eb60b14fbad8081f77e5c5d02f728ec6"
+                   },
+                   {
+                       "trial_index":  2,
+                       "timestamp":  "2026-10-14T20:23:17.7977218+03:00",
+                       "foreground_window_start":  "SR Desktop Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791998625014,
+                                                "t_end_ms":  1791998626720,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Cherries \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1306,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791998628524,
+                                                "t_end_ms":  1791998630948,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  false,
+                                                                    "settle_ms":  809,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791998631989,
+                                                "t_end_ms":  1791998633693,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Bananas \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1306,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791998635488,
+                                                "t_end_ms":  1791998639061,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3147,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791998640874,
+                                                "t_end_ms":  1791998643069,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "level 0\nPictures\n2 of 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1802,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791998644883,
+                                                "t_end_ms":  1791998646633,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Documents\n \u001dclosed\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1351,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791998648442,
+                                                "t_end_ms":  1791998650376,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Documents\n \u001dopen\u001e \n2 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1532,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791998652167,
+                                                "t_end_ms":  1791998654306,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "level 1\nReports\n1 of 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1721,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791998656114,
+                                                "t_end_ms":  1791998660003,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d List view \u001e \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3499,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791998661810,
+                                                "t_end_ms":  1791998664174,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "notes.txt\n2 KB \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1943,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791998665986,
+                                                "t_end_ms":  1791998668602,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "photo.jpg\n1.2 MB \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2215,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791998670414,
+                                                "t_end_ms":  1791998673507,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "General  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2693,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1791998675317,
+                                                "t_end_ms":  1791998678435,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Advanced  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2734,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "303-desktop-lists-and-trees-trial2.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "8b2de47403878454352035fc53d7f54daf2479bf51b2358b4eba7f8b70dbec7c"
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-14T20:24:38.4698880+03:00",
+                       "foreground_window_start":  "SR Desktop Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791998705633,
+                                                "t_end_ms":  1791998707413,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Cherries \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1370,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791998709222,
+                                                "t_end_ms":  1791998711669,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  false,
+                                                                    "settle_ms":  809,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791998712711,
+                                                "t_end_ms":  1791998714397,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Bananas \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1265,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791998716188,
+                                                "t_end_ms":  1791998719809,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3211,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791998721623,
+                                                "t_end_ms":  1791998723799,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "level 0\nPictures\n2 of 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1781,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791998725610,
+                                                "t_end_ms":  1791998727359,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Documents\n \u001dclosed\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1351,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791998729174,
+                                                "t_end_ms":  1791998731116,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Documents\n \u001dopen\u001e \n2 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1533,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791998732910,
+                                                "t_end_ms":  1791998735002,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "level 1\nReports\n1 of 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1699,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791998736811,
+                                                "t_end_ms":  1791998740725,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d List view \u001e \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3506,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791998742537,
+                                                "t_end_ms":  1791998744903,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "notes.txt\n2 KB \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1970,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791998746711,
+                                                "t_end_ms":  1791998749323,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "photo.jpg\n1.2 MB \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2197,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791998751132,
+                                                "t_end_ms":  1791998754227,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "General  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2678,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1791998756037,
+                                                "t_end_ms":  1791998759148,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Advanced  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2717,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "303-desktop-lists-and-trees-trial3.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "1d1aa19ab0f52655019771914faa0a56da9665e699f9f3b0bd8d048e82e3f313"
+                   },
+                   {
+                       "trial_index":  4,
+                       "timestamp":  "2026-10-14T20:25:59.2309062+03:00",
+                       "foreground_window_start":  "SR Desktop Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791998786372,
+                                                "t_end_ms":  1791998788141,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Cherries \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1369,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791998789950,
+                                                "t_end_ms":  1791998792404,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  false,
+                                                                    "settle_ms":  808,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791998793448,
+                                                "t_end_ms":  1791998795240,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Bananas \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1389,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791998797049,
+                                                "t_end_ms":  1791998800632,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3174,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791998802423,
+                                                "t_end_ms":  1791998804625,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "level 0\nPictures\n2 of 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1803,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791998806433,
+                                                "t_end_ms":  1791998808193,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Documents\n \u001dclosed\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1343,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791998810002,
+                                                "t_end_ms":  1791998811919,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Documents\n \u001dopen\u001e \n2 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1518,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791998813714,
+                                                "t_end_ms":  1791998815831,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "level 1\nReports\n1 of 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1702,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791998817643,
+                                                "t_end_ms":  1791998821546,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d List view \u001e \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3484,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791998823357,
+                                                "t_end_ms":  1791998825730,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "notes.txt\n2 KB \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1966,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791998827523,
+                                                "t_end_ms":  1791998830123,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "photo.jpg\n1.2 MB \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2209,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791998831932,
+                                                "t_end_ms":  1791998834955,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "General  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2616,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1791998836745,
+                                                "t_end_ms":  1791998839883,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Advanced  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2754,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "303-desktop-lists-and-trees-trial4.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "e0c00e15ce845f99efcd4f72a2b53555345f0f046a6cc83537b27d0c85b2cb13"
+                   },
+                   {
+                       "trial_index":  5,
+                       "timestamp":  "2026-10-14T20:27:19.9341959+03:00",
+                       "foreground_window_start":  "SR Desktop Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791998867171,
+                                                "t_end_ms":  1791998868962,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Cherries \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1386,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791998870769,
+                                                "t_end_ms":  1791998873240,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  false,
+                                                                    "settle_ms":  811,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791998874286,
+                                                "t_end_ms":  1791998875970,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Bananas \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1266,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791998877781,
+                                                "t_end_ms":  1791998881444,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3260,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791998883258,
+                                                "t_end_ms":  1791998885428,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "level 0\nPictures\n2 of 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1778,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791998887242,
+                                                "t_end_ms":  1791998889012,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Documents\n \u001dclosed\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1386,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791998890824,
+                                                "t_end_ms":  1791998892745,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Documents\n \u001dopen\u001e \n2 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1514,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791998894558,
+                                                "t_end_ms":  1791998896668,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "level 1\nReports\n1 of 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1719,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791998898483,
+                                                "t_end_ms":  1791998902370,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d List view \u001e \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3480,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791998904183,
+                                                "t_end_ms":  1791998906563,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "notes.txt\n2 KB \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1965,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791998908374,
+                                                "t_end_ms":  1791998910977,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "photo.jpg\n1.2 MB \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2195,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791998912787,
+                                                "t_end_ms":  1791998915877,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "General  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2693,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1791998917688,
+                                                "t_end_ms":  1791998920828,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Advanced  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2754,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1380,8 +1380,8 @@
                        "trial_success":  true,
                        "trace_file":  "303-desktop-lists-and-trees-trial5.jsonl",
                        "page_load_settled":  true,
-                       "trace_sha256":  "0ec2c95c1209233314f09babb5d26d450b1eb1b109682593f844e803f5343f74"
+                       "trace_sha256":  "78fdabf5c167241d1f4a33115b8fbb21e72e7eb1e5ecb398881a514baf53e88d"
                    }
                ],
-    "total_elapsed_ms":  397388
+    "total_elapsed_ms":  399305
 }
