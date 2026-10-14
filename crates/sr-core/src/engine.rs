@@ -332,6 +332,8 @@ pub struct ScreenReaderEngine {
     caps_lock_on: bool,
     /// The Virtual Viewer, while it is open (it takes the keys).
     viewer: Option<crate::viewer::VirtualViewer>,
+    /// Alt+Tab's task switcher, read as JAWS reads it.
+    task_switcher: crate::apps::task_switcher::TaskSwitcher,
     /// Each live region's lines when it last changed, by DOM id.
     last_live_text: std::collections::HashMap<String, Vec<String>>,
 }
@@ -363,6 +365,7 @@ impl ScreenReaderEngine {
             settings: crate::settings::Settings::default(),
             caps_lock_on: false,
             viewer: None,
+            task_switcher: Default::default(),
             last_live_text: std::collections::HashMap::new(),
         }
     }
@@ -1310,6 +1313,20 @@ impl ScreenReaderEngine {
             .is_some_and(|n| n.starts_with("Widgets"))
         {
             return None;
+        }
+        // Alt+Tab: the task switcher's items. Its window is remembered, so going back to an
+        // application announces that application's window.
+        if let Some(speech) = self.task_switcher.focus(focus) {
+            Self::note_window(
+                &mut self.last_window_title,
+                &mut self.last_window_kind,
+                focus,
+            );
+            if speech.is_empty() {
+                return None;
+            }
+            self.speech.speak(&speech, true);
+            return Some(speech);
         }
 
         let is_explorer_event = focus.window_class.as_deref() == Some("CabinetWClass")
@@ -2592,10 +2609,10 @@ mod tests {
             .with_window_title("Task Switching")
             .with_name("Untitled - Notepad");
         item.window_kind = Some("MultitaskingViewFrame".to_owned());
-        let speech = engine.handle_focus_event(&item).unwrap_or_default();
-        assert!(
-            speech.starts_with("Task Switching\nUntitled - Notepad"),
-            "{speech:?}"
+        // The switcher's item, not a desktop item ("Untitled - Notepad | 1 of 3").
+        assert_eq!(
+            engine.handle_focus_event(&item).as_deref(),
+            Some("Untitled - Notepad\nTo move to an item press the Arrow keys.")
         );
     }
 

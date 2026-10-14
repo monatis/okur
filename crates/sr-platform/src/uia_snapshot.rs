@@ -575,6 +575,19 @@ pub(crate) mod capture {
     /// The focused element and its control-view ancestors, outermost first (the desktop
     /// root is omitted). This is the context a screen reader announces on focus changes.
     pub(crate) fn focus_chain(uia: &IUIAutomation) -> Vec<UiaNode> {
+        // SAFETY: UIA client query on a valid automation object.
+        unsafe { uia.GetFocusedElement() }
+            .map(|focused| focus_chain_from(uia, &focused))
+            .unwrap_or_default()
+    }
+
+    /// `element` and its control-view ancestors, outermost first, as [`focus_chain`] reads
+    /// the focused element: for a focus that UIA's event names while `GetFocusedElement`
+    /// still answers with its host (the Windows 11 task switcher's items).
+    pub(crate) fn focus_chain_from(
+        uia: &IUIAutomation,
+        element: &IUIAutomationElement,
+    ) -> Vec<UiaNode> {
         let mut chain = Vec::new();
         // SAFETY: UIA client queries on a valid automation object.
         unsafe {
@@ -584,7 +597,7 @@ pub(crate) mod capture {
             let Ok(root) = uia.GetRootElement() else {
                 return chain;
             };
-            let mut current = uia.GetFocusedElement().ok();
+            let mut current = Some(element.clone());
             // Bound the walk: real focus chains are a few dozen levels deep at most.
             for _ in 0..64 {
                 let Some(el) = current else { break };
@@ -615,14 +628,24 @@ pub(crate) mod capture {
     /// counted when the provider reports no PositionInSet, and the element's own control-view
     /// subtree to depth 2 (list-view columns, a combo box's items).
     pub(crate) fn focus_context(uia: &IUIAutomation) -> (Vec<UiaNode>, Option<UiaNode>) {
+        // SAFETY: UIA client query on a valid automation object.
+        unsafe { uia.GetFocusedElement() }
+            .map(|focused| focus_context_of(uia, &focused))
+            .unwrap_or_default()
+    }
+
+    /// [`focus_context`] around `focused`.
+    pub(crate) fn focus_context_of(
+        uia: &IUIAutomation,
+        focused: &IUIAutomationElement,
+    ) -> (Vec<UiaNode>, Option<UiaNode>) {
         // SAFETY: UIA client queries on a valid automation object.
         unsafe {
-            let (Ok(walker), Ok(focused)) = (uia.ControlViewWalker(), uia.GetFocusedElement())
-            else {
+            let Ok(walker) = uia.ControlViewWalker() else {
                 return (Vec::new(), None);
             };
             let mut siblings = Vec::new();
-            if let Ok(parent) = walker.GetParentElement(&focused) {
+            if let Ok(parent) = walker.GetParentElement(focused) {
                 let mut current = walker.GetFirstChildElement(&parent).ok();
                 while let Some(el) = current {
                     if siblings.len() >= MAX_FOCUS_SIBLINGS {
@@ -635,7 +658,7 @@ pub(crate) mod capture {
                 }
             }
             let mut budget = MAX_FOCUS_SUBTREE;
-            let subtree = read_subtree(uia, &walker, &focused, 2, &mut budget);
+            let subtree = read_subtree(uia, &walker, focused, 2, &mut budget);
             (siblings, subtree)
         }
     }

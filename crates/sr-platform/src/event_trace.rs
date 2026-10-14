@@ -109,10 +109,14 @@ pub struct TraceEvent {
     /// the virtual buffer is refreshed.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub page: Option<crate::ia2_snapshot::Ia2Node>,
-    /// The title of the event window's top-level window, for focus outside any UIA window
-    /// (the desktop's list view).
+    /// For focus and foreground events: the caption of the window in front when the event was
+    /// read, as JAWS names the window (Chrome's names the profile; the desktop's list view has
+    /// no UIA window around it).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub top_window_title: Option<String>,
+    /// The class of that window (`XamlExplorerHostIslandWindow` while the task switcher is up).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub top_window_class: Option<String>,
     /// When the top-level window is the desktop (`Progman`, `WorkerW`): the current virtual
     /// desktop's name, which JAWS gives as the desktop's title ("Desktop 1").
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -291,14 +295,16 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent>
         top_window,
     )?;
     let focused = event.focus_chain.last()?;
-    focus.window_kind = active_window
-        .and_then(|w| w.class_name.clone())
-        .or_else(|| {
-            event
-                .virtual_desktop
-                .as_ref()
-                .map(|_| DESKTOP_KIND.to_owned())
-        });
+    // The window's kind is its class: the desktop's, the window in front, or (older traces)
+    // the UIA window around the focus.
+    focus.window_kind = if event.virtual_desktop.is_some() {
+        Some(DESKTOP_KIND.to_owned())
+    } else {
+        event
+            .top_window_class
+            .clone()
+            .or_else(|| active_window.and_then(|w| w.class_name.clone()))
+    };
     // A dialog box (Win32 #32770, as a message box is) is announced with its static text,
     // which sits beside its buttons [obs, 306/s1]. Other windows are announced by title only
     // (306/s10).
@@ -570,7 +576,8 @@ mod capture {
         event_name, TraceEvent, TraceHeader, TraceObject, TRACE_FORMAT_VERSION, UIA_FOCUS_WINDOWS,
     };
     use crate::uia_snapshot::capture::{
-        automation, focus_chain, focus_context, focus_subtree_of, window_text,
+        automation, focus_chain, focus_chain_from, focus_context, focus_context_of,
+        focus_subtree_of, window_text,
     };
     use crate::PlatformError;
     use std::cell::RefCell;
@@ -711,19 +718,23 @@ mod capture {
         )
     }
 
-    /// The title of `hwnd`'s top-level window, and the virtual desktop's name when that
-    /// window is the desktop.
-    fn top_window(hwnd: HWND) -> (Option<String>, Option<String>) {
+    /// The title and class of `hwnd`'s top-level window, and the virtual desktop's name when
+    /// that window is the desktop.
+    fn top_window(hwnd: HWND) -> (Option<String>, Option<String>, Option<String>) {
         use windows::Win32::UI::WindowsAndMessaging::{GetAncestor, GA_ROOT};
         // SAFETY: plain Win32 query on a window handle.
         let top = unsafe { GetAncestor(hwnd, GA_ROOT) };
         if top.is_invalid() {
-            return (None, None);
+            return (None, None, None);
         }
         let (title, class) = window_text(top);
         let desktop = matches!(class.as_str(), "Progman" | "WorkerW")
             .then(crate::virtual_desktop::current_name);
-        (Some(title).filter(|t| !t.is_empty()), desktop)
+        (
+            Some(title).filter(|t| !t.is_empty()),
+            Some(class).filter(|c| !c.is_empty()),
+            desktop,
+        )
     }
 
     /// The events the live screen reader consumes ([`EventConverter`]).
@@ -805,13 +816,26 @@ mod capture {
         let Some(name) = event_name(win_event, id_object) else {
             return;
         };
-        record(name, win_event, hwnd, id_object, id_child);
+        record(name, win_event, hwnd, id_object, id_child, None);
     }
 
     /// UIA's focus-changed event id.
     const UIA_FOCUS_CHANGED: u32 = 20005;
+    /// An event read taking longer is logged with its stages.
+    const SLOW_EVENT: std::time::Duration = std::time::Duration::from_millis(250);
     /// Posted to the tracer thread by [`UiaFocusHandler`].
     const WM_UIA_FOCUS: u32 = windows::Win32::UI::WindowsAndMessaging::WM_APP + 1;
+
+    /// A UIA element handed from UIA's event thread to the tracer thread.
+    struct MtaElement(IUIAutomationElement);
+    // SAFETY: both threads are in the multithreaded apartment, where a COM object may be
+    // called from any thread.
+    unsafe impl Send for MtaElement {}
+
+    /// The element of the latest UIA focus change, for the tracer thread: on Windows 11 the
+    /// task switcher's items are named only by the event, while `GetFocusedElement` answers
+    /// with the switcher's input pane (seen live on the dev box, 2026-10-15).
+    static UIA_FOCUSED: std::sync::Mutex<Option<MtaElement>> = std::sync::Mutex::new(None);
 
     /// Wakes the tracer thread on UIA focus changes in [`UIA_FOCUS_WINDOWS`]. UIA calls it on
     /// its own threads, and it also reports every WinEvent focus (UIA bridges MSAA), so it
@@ -824,7 +848,7 @@ mod capture {
     impl IUIAutomationFocusChangedEventHandler_Impl for UiaFocusHandler_Impl {
         fn HandleFocusChangedEvent(
             &self,
-            _sender: windows::core::Ref<IUIAutomationElement>,
+            sender: windows::core::Ref<IUIAutomationElement>,
         ) -> windows::core::Result<()> {
             use windows::Win32::Foundation::{LPARAM, WPARAM};
             use windows::Win32::UI::WindowsAndMessaging::{
@@ -837,6 +861,9 @@ mod capture {
                 let length = GetClassNameW(GetForegroundWindow(), &mut class);
                 let class = String::from_utf16_lossy(class.get(..length as usize).unwrap_or(&[]));
                 if UIA_FOCUS_WINDOWS.contains(&class.as_str()) {
+                    if let (Some(element), Ok(mut slot)) = (sender.as_ref(), UIA_FOCUSED.lock()) {
+                        *slot = Some(MtaElement(element.clone()));
+                    }
                     let _ = PostThreadMessageW(self.thread, WM_UIA_FOCUS, WPARAM(0), LPARAM(0));
                 }
             }
@@ -866,20 +893,30 @@ mod capture {
             }
         };
         if !focused.is_invalid() {
-            record("focus", EVENT_OBJECT_FOCUS, focused, OBJID_CLIENT, 0);
+            record("focus", EVENT_OBJECT_FOCUS, focused, OBJID_CLIENT, 0, None);
         }
     }
 
-    /// Records the focus UIA reports, on the tracer thread.
+    /// Records the focus UIA reported last, on the tracer thread.
     fn record_uia_focus() {
         use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+        let element = UIA_FOCUSED.lock().ok().and_then(|mut slot| slot.take());
         // SAFETY: plain Win32 call with no preconditions.
         let foreground = unsafe { GetForegroundWindow() };
-        record("uia_focus", UIA_FOCUS_CHANGED, foreground, 0, 0);
+        let element = element.as_ref().map(|e| &e.0);
+        record("uia_focus", UIA_FOCUS_CHANGED, foreground, 0, 0, element);
     }
 
-    /// Records one event through the sink, with what the engine needs read now.
-    fn record(name: &'static str, win_event: u32, hwnd: HWND, id_object: i32, id_child: i32) {
+    /// Records one event through the sink, with what the engine needs read now. `element`
+    /// is the focused element when the event names it (UIA); otherwise UIA's focus is read.
+    fn record(
+        name: &'static str,
+        win_event: u32,
+        hwnd: HWND,
+        id_object: i32,
+        id_child: i32,
+        element: Option<&IUIAutomationElement>,
+    ) {
         let t_ms = now_ms();
         let (title, class) = if hwnd.is_invalid() {
             (String::new(), String::new())
@@ -903,27 +940,46 @@ mod capture {
             {
                 return;
             }
+            // Each read's end, in milliseconds since the event arrived, for the debug log when
+            // an event holds the thread up (a UIA call waiting out its timeout).
+            let clock = std::time::Instant::now();
+            let mut stages: Vec<(&str, u128)> = Vec::new();
             let focus = if focused || name == "foreground" || changes_focus_context {
-                state.uia.as_ref().map(focus_chain).unwrap_or_default()
+                match (state.uia.as_ref(), element) {
+                    (Some(uia), Some(element)) => focus_chain_from(uia, element),
+                    (Some(uia), None) => focus_chain(uia),
+                    (None, _) => Vec::new(),
+                }
             } else {
                 Vec::new()
             };
+            stages.push(("chain", clock.elapsed().as_millis()));
             let (focus_siblings, focus_subtree) = match (name, state.uia.as_ref()) {
-                (_, Some(uia)) if focused => focus_context(uia),
+                (_, Some(uia)) if focused => match element {
+                    Some(element) => focus_context_of(uia, element),
+                    None => focus_context(uia),
+                },
                 (_, Some(uia)) if changes_focus_context => (Vec::new(), focus_subtree_of(uia)),
                 _ => (Vec::new(), None),
             };
+            stages.push(("context", clock.elapsed().as_millis()));
             let list_position = if focused || changes_focus_context {
                 win32_list_position(hwnd, &class)
             } else {
                 None
             };
-            let (top_window_title, virtual_desktop) =
-                if (focused || name == "foreground") && !hwnd.is_invalid() {
-                    top_window(hwnd)
+            // The window is the one in front now, when the focus chain was read: an event's
+            // own window can have lost the foreground meanwhile (the task switcher's last
+            // events arrive after the switch back, seen live on the dev box).
+            let (top_window_title, top_window_class, virtual_desktop) =
+                if focused || name == "foreground" {
+                    use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+                    // SAFETY: plain Win32 call with no preconditions.
+                    top_window(unsafe { GetForegroundWindow() })
                 } else {
-                    (None, None)
+                    (None, None, None)
                 };
+            stages.push(("window", clock.elapsed().as_millis()));
             let (region, page) = if name == "live_region_change" {
                 // Live, the page after the change is captured by the listener's page worker.
                 chromium_live_region(hwnd, &class, id_child, !state.live)
@@ -956,6 +1012,15 @@ mod capture {
             } else {
                 None
             };
+            stages.push(("text", clock.elapsed().as_millis()));
+            // A UIA focus has no MSAA object: the focused item is UIA's.
+            let object = (name != "uia_focus")
+                .then(|| msaa_object(hwnd, id_object, id_child))
+                .flatten();
+            stages.push(("msaa", clock.elapsed().as_millis()));
+            if clock.elapsed() > SLOW_EVENT {
+                tracing::debug!(event = name, %class, ?stages, "slow event read");
+            }
             let event = TraceEvent {
                 t_ms,
                 event: name.to_owned(),
@@ -966,10 +1031,7 @@ mod capture {
                 window_class: Some(class).filter(|s| !s.is_empty()),
                 window_title: Some(title).filter(|s| !s.is_empty()),
                 process: process_name(hwnd),
-                // A UIA focus has no MSAA object: the focused item is UIA's.
-                object: (name != "uia_focus")
-                    .then(|| msaa_object(hwnd, id_object, id_child))
-                    .flatten(),
+                object,
                 focus_chain: focus,
                 focus_siblings,
                 focus_subtree,
@@ -978,6 +1040,7 @@ mod capture {
                 region,
                 page,
                 top_window_title,
+                top_window_class,
                 virtual_desktop,
             };
             (state.sink)(event);
@@ -1142,6 +1205,7 @@ mod tests {
             region: None,
             page: None,
             top_window_title: None,
+            top_window_class: None,
             virtual_desktop: None,
         }
     }
@@ -1186,6 +1250,7 @@ mod tests {
         // Older traces: the UIA window's name.
         let older = TraceEvent {
             top_window_title: None,
+            top_window_class: None,
             ..event
         };
         let focus = focus_event_from_trace(&older).and_then(|f| f.window_title);
