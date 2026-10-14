@@ -536,7 +536,10 @@ async fn main() {
                             None => eng.on_idle(),
                         };
                         if let Some(msg) = spoken {
-                            let msg = msg.replace(['\u{001d}', '\u{001e}'], "");
+                            // One line per utterance, so the debug log stays line-oriented.
+                            let msg = msg
+                                .replace(['\u{001d}', '\u{001e}'], "")
+                                .replace('\n', " | ");
                             tracing::debug!(%msg, "spoken for event");
                             println!("[Event Spoken] {msg}");
                         }
