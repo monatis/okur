@@ -1377,9 +1377,10 @@ fn build_node(
     // `Element` derefs to `ElementData`, so the leaf encoding is shared with
     // `find` and the two cannot describe the same element differently.
     let mut node = element_data_json(element);
-    let obj = node
-        .as_object_mut()
-        .expect("element_data_json always builds an object");
+    // element_data_json always builds an object; return the leaf unchanged if it ever does not.
+    let Some(obj) = node.as_object_mut() else {
+        return node;
+    };
 
     if depth >= max_depth {
         *depth_capped = true;

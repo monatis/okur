@@ -594,7 +594,7 @@ impl LinuxProvider {
         }
 
         if hits.len() == 1 {
-            Some(hits.into_iter().next().unwrap())
+            hits.into_iter().next()
         } else {
             None
         }

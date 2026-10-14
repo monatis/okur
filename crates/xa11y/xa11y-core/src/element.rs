@@ -641,12 +641,13 @@ fn build_tree_node(
 pub(crate) fn write_tree_node(node: &TreeNode, depth: usize, out: &mut String) {
     use fmt::Write as _;
     let indent = "  ".repeat(depth);
-    write!(out, "{}{}", indent, node.role).unwrap();
+    // Writing to a String cannot fail.
+    let _ = write!(out, "{}{}", indent, node.role);
     if let Some(ref n) = node.name {
-        write!(out, " \"{}\"", n).unwrap();
+        let _ = write!(out, " \"{}\"", n);
     }
     if let Some(ref v) = node.value {
-        write!(out, " value=\"{}\"", v).unwrap();
+        let _ = write!(out, " value=\"{}\"", v);
     }
     out.push('\n');
     for child in &node.children {

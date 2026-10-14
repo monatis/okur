@@ -925,16 +925,25 @@ impl Locator {
 
     // ── Wait operations ─────────────────────────────────────────────
 
+    /// The element a successful state wait returned. Waits for a present state always carry
+    /// one; reporting a missing one as "not matched" keeps this path panic-free.
+    fn waited_element(&self, found: Option<Element>) -> Result<Element> {
+        found.ok_or_else(|| Error::SelectorNotMatched {
+            selector: self.selector.clone(),
+            diagnosis: None,
+        })
+    }
+
     /// Wait until the element is visible, polling the provider.
     pub fn wait_visible(&self, timeout: Duration) -> Result<Element> {
         self.wait_for_state(ElementState::Visible, timeout)
-            .map(|opt| opt.expect("visible wait must return an element"))
+            .and_then(|opt| self.waited_element(opt))
     }
 
     /// Wait until the element exists.
     pub fn wait_attached(&self, timeout: Duration) -> Result<Element> {
         self.wait_for_state(ElementState::Attached, timeout)
-            .map(|opt| opt.expect("attached wait must return an element"))
+            .and_then(|opt| self.waited_element(opt))
     }
 
     /// Wait until the element is removed.
@@ -946,13 +955,13 @@ impl Locator {
     /// Wait until the element is enabled.
     pub fn wait_enabled(&self, timeout: Duration) -> Result<Element> {
         self.wait_for_state(ElementState::Enabled, timeout)
-            .map(|opt| opt.expect("enabled wait must return an element"))
+            .and_then(|opt| self.waited_element(opt))
     }
 
     /// Wait until the element is disabled (exists but not enabled).
     pub fn wait_disabled(&self, timeout: Duration) -> Result<Element> {
         self.wait_for_state(ElementState::Disabled, timeout)
-            .map(|opt| opt.expect("disabled wait must return an element"))
+            .and_then(|opt| self.waited_element(opt))
     }
 
     /// Wait until the element is hidden or removed.
@@ -964,13 +973,13 @@ impl Locator {
     /// Wait until the element has keyboard focus.
     pub fn wait_focused(&self, timeout: Duration) -> Result<Element> {
         self.wait_for_state(ElementState::Focused, timeout)
-            .map(|opt| opt.expect("focused wait must return an element"))
+            .and_then(|opt| self.waited_element(opt))
     }
 
     /// Wait until the element does not have keyboard focus.
     pub fn wait_unfocused(&self, timeout: Duration) -> Result<Element> {
         self.wait_for_state(ElementState::Unfocused, timeout)
-            .map(|opt| opt.expect("unfocused wait must return an element"))
+            .and_then(|opt| self.waited_element(opt))
     }
 
     /// Wait for an [`ElementState`] condition to be met.

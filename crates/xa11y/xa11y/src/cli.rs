@@ -661,7 +661,10 @@ pub(crate) fn parse_key_name(name: &str) -> CliResult<Key> {
                 .map_err(|_| CliError::Usage(format!("invalid function key: {s}")))?;
             Key::F(n)
         }
-        s if s.chars().count() == 1 => Key::Char(s.chars().next().unwrap()),
+        s if s.chars().count() == 1 => match s.chars().next() {
+            Some(c) => Key::Char(c),
+            None => return Err(CliError::Usage(format!("unknown key name: {name}"))),
+        },
         _ => {
             return Err(CliError::Usage(format!("unknown key name: {name}")));
         }
