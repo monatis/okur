@@ -1848,7 +1848,11 @@ impl ScreenReaderEngine {
     /// Virtualize Window or Virtualize Current Control: opens the Virtual Viewer on the
     /// window's or the control's text and reads its first line [obs, 311/s1, s14; 312/s1].
     fn virtualize(&mut self, window: bool) -> Option<String> {
-        if self.viewer.is_some() {
+        // A page's virtual cursor is a virtual view already: JAWS virtualizes neither the
+        // window nor the control (observed on the dev box with JAWS 2025 in Chrome,
+        // 2026-10-15; scenario 318 records it on old-pc).
+        let in_page = self.app_mode == AppMode::VirtualBuffer && !self.forms_mode;
+        if self.viewer.is_some() || in_page {
             // [obs, 311/s32]
             let speech = "The current location is already in a virtual view".to_owned();
             self.speech.speak(&speech, true);
@@ -2367,6 +2371,23 @@ mod tests {
         // Politeness::Off
         let off = LiveRegionEvent::new("Ignored mutation.", Politeness::Off);
         assert_eq!(engine.handle_live_region_event(&off), None);
+    }
+
+    #[test]
+    fn a_page_is_already_a_virtual_view() {
+        let aom =
+            AomNode::new(0, Role::Document)
+                .with_children(vec![AomNode::new(1, Role::Paragraph).with_text("Hello")]);
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&aom));
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+        engine.load_buffer(VirtualBuffer::from_aom(&aom));
+        for command in ["VirtualizeWindow", "VirtualizeControl"] {
+            assert_eq!(
+                engine.execute_command(command).as_deref(),
+                Some("The current location is already in a virtual view")
+            );
+        }
+        assert!(engine.viewer.is_none());
     }
 
     #[test]
