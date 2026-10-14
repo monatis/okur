@@ -96,7 +96,7 @@ Building evidence collection and verification tooling is the real engineering in
 - `sr-cli parity`, `sr-cli invariants`, `sr-cli corpus-manifest`: generated, ratcheted verification results.
 - `sr-cli snapshot --api ia2`: IAccessible2 view of a Chromium document (attributes, states, hypertext, rendered line ranges).
 - `sr-cli trace` / `run-scenario.ps1 -TraceDir`: per-trial accessibility event traces, replayed into the engine by `sr-cli parity`.
-- `sr-cli evidence <scenario-id>`: readable view of recorded JAWS transcripts and trial variants.
+- `sr-cli evidence <scenario-id> [--trace]`: readable view of recorded JAWS transcripts and trial variants; `--trace` lists the accessibility events traced during each step.
 
 ### Verification Integrity Rules (non-negotiable)
 

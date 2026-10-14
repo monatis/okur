@@ -122,6 +122,10 @@ enum Commands {
         /// Trial to print (1-based); variants across all trials are always listed
         #[arg(long, default_value_t = 1)]
         trial: usize,
+
+        /// Also list the accessibility events traced during each step of the trial
+        #[arg(long)]
+        trace: bool,
     },
     /// Wait until the default audio output is silent; prints a JSON SilenceReport
     WaitSilence {
@@ -309,7 +313,41 @@ fn visible(speech: &str) -> String {
         .replace('\n', " | ")
 }
 
-fn print_evidence(evidence: &str, trial: usize) -> Result<(), String> {
+/// One traced event as a line: its time into the step, kind, window, and the focus chain's
+/// innermost elements (`control type:class:name`).
+fn trace_line(event: &sr_platform::event_trace::TraceEvent, start_ms: u128) -> String {
+    let chain: Vec<String> = event
+        .focus_chain
+        .iter()
+        .rev()
+        .take(3)
+        .rev()
+        .map(|n| {
+            format!(
+                "{}:{}:{}",
+                n.control_type,
+                n.class_name.as_deref().unwrap_or(""),
+                n.name.as_deref().unwrap_or("")
+            )
+        })
+        .collect();
+    let object = event
+        .object
+        .as_ref()
+        .and_then(|o| o.name.as_deref())
+        .map(|n| format!(" obj={n:?}"))
+        .unwrap_or_default();
+    format!(
+        "+{}ms {:<21} {} {:?}{object} | {}",
+        event.t_ms.saturating_sub(start_ms),
+        event.event,
+        event.window_class.as_deref().unwrap_or("-"),
+        event.window_title.as_deref().unwrap_or(""),
+        chain.join(" > ")
+    )
+}
+
+fn print_evidence(evidence: &str, trial: usize, trace: bool) -> Result<(), String> {
     let path = if Path::new(evidence).exists() {
         Path::new(evidence).to_path_buf()
     } else {
@@ -345,6 +383,27 @@ fn print_evidence(evidence: &str, trial: usize) -> Result<(), String> {
             .get("trial_success")
             .unwrap_or(&serde_json::Value::Null)
     );
+    // The trial's trace sits in corpus/traces, next to corpus/evidence.
+    let events = if trace {
+        let file = chosen
+            .get("trace_file")
+            .and_then(|v| v.as_str())
+            .ok_or_else(|| format!("trial {trial} of {path:?} was not traced"))?;
+        let corpus = path
+            .parent()
+            .and_then(Path::parent)
+            .unwrap_or(Path::new("corpus"));
+        let (header, events) =
+            sr_platform::event_trace::read_trace(corpus.join("traces").join(file))?;
+        println!(
+            "trace {file} (format {}, {} events)",
+            header.trace_format_version,
+            events.len()
+        );
+        events
+    } else {
+        Vec::new()
+    };
     for step in chosen
         .get("step_results")
         .and_then(|s| s.as_array())
@@ -371,6 +430,16 @@ fn print_evidence(evidence: &str, trial: usize) -> Result<(), String> {
         }
         for v in variants {
             println!("{:>21} variant: {}", "", visible(&v));
+        }
+        let time = |key: &str| {
+            step.get(key)
+                .and_then(serde_json::Value::as_u64)
+                .map(u128::from)
+        };
+        if let (Some(start), Some(end)) = (time("t_start_ms"), time("t_end_ms")) {
+            for event in events.iter().filter(|e| (start..=end).contains(&e.t_ms)) {
+                println!("{:>21} {}", "", trace_line(event, start));
+            }
         }
     }
     Ok(())
@@ -992,8 +1061,12 @@ async fn main() {
                 std::process::exit(1);
             }
         }
-        Some(Commands::Evidence { evidence, trial }) => {
-            if let Err(e) = print_evidence(&evidence, trial) {
+        Some(Commands::Evidence {
+            evidence,
+            trial,
+            trace,
+        }) => {
+            if let Err(e) = print_evidence(&evidence, trial, trace) {
                 eprintln!("{e}");
                 std::process::exit(1);
             }
