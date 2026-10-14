@@ -163,7 +163,7 @@ try {
         $changes += @(& git diff --name-status -M 2>$null)
         $changes += @(& git ls-files --others --exclude-standard 2>$null | ForEach-Object { "A`t$_" })
     }
-    $referenceEdits = @($changes | Where-Object { $_ -match '^[AM]\s+corpus/(unverified/)?(evidence|snapshots)/' })
+    $referenceEdits = @($changes | Where-Object { $_ -match '^[AM]\s+corpus/(unverified/)?(evidence|snapshots|traces)/' })
     $codeEdits = @($changes | Where-Object { $_ -match '^[AMD]\s+crates/' })
     if ($referenceEdits.Count -gt 0 -and $codeEdits.Count -gt 0) {
         $failureReasons += "[Reference Data Separation Gate] Evidence/snapshot files are added or modified in the same commit as crates/ changes. Commit captured reference data separately from engine code:`n" + (($referenceEdits | Select-Object -First 10) -join "`n")
