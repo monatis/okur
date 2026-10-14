@@ -1,0 +1,27 @@
+{
+  "id": "305-desktop-edit-review",
+  "name": "Reviewing and changing text in native edits: selection, deletion, typing, say line",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-forms.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Desktop Fixture" },
+  "reset": { "keys": ["End"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Home" },
+    { "id": "s2", "type": "key", "command": "Right" },
+    { "id": "s3", "type": "key", "command": "Shift+Right" },
+    { "id": "s4", "type": "key", "command": "Shift+End" },
+    { "id": "s5", "type": "key", "command": "End" },
+    { "id": "s6", "type": "key", "command": "Backspace" },
+    { "id": "s7", "type": "key", "command": "Home" },
+    { "id": "s8", "type": "key", "command": "Delete" },
+    { "id": "s9", "type": "key", "command": "Insert+Up" },
+    { "id": "s10", "type": "key", "command": "B" },
+    { "id": "s11", "type": "key", "command": "O" },
+    { "id": "s12", "type": "key", "command": "Space" },
+    { "id": "s13", "type": "key", "command": "Shift+Home" },
+    { "id": "s14", "type": "key", "command": "Tab" },
+    { "id": "s15", "type": "key", "command": "Insert+Up" }
+  ]
+}

@@ -786,6 +786,20 @@
       }
     },
     {
+      "scenario_id": "305-desktop-edit-review",
+      "fixture": "desktop-forms.ps1",
+      "evidence": {
+        "sha256": "f75ab8712bdf0d387408bf39e93daa0e21511a137de10f4bc1a0e37568092684",
+        "capture_script_sha256": "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 5,
+        "successful_trials": 5,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "306-desktop-dialogs-and-windows",
       "fixture": "desktop-dialogs.ps1",
       "evidence": {
@@ -801,10 +815,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 54,
-    "scenarios_with_evidence": 54,
-    "total_trials": 270,
-    "successful_trials": 265,
-    "deterministic_scenarios": 46
+    "scenarios": 55,
+    "scenarios_with_evidence": 55,
+    "total_trials": 275,
+    "successful_trials": 270,
+    "deterministic_scenarios": 47
   }
 }
