@@ -559,7 +559,21 @@ async fn main() {
             let engine_cb = Arc::clone(&engine);
 
             if let Err(e) = hook.start(Box::new(move |event| {
-                if let Ok(mut eng) = engine_cb.lock() {
+                // Windows silently removes a low-level keyboard hook that once exceeds
+                // LowLevelHooksTimeout, so the hook never waits long for the engine: a key
+                // that finds it busy for 150 ms passes to the application.
+                let deadline = std::time::Instant::now() + std::time::Duration::from_millis(150);
+                let mut guard = engine_cb.try_lock();
+                while matches!(guard, Err(std::sync::TryLockError::WouldBlock))
+                    && std::time::Instant::now() < deadline
+                {
+                    std::thread::sleep(std::time::Duration::from_millis(1));
+                    guard = engine_cb.try_lock();
+                }
+                if guard.is_err() {
+                    tracing::warn!(key = ?event.key, "engine busy: key passed through");
+                }
+                if let Ok(mut eng) = guard {
                     let action = eng.handle_key_event(&event);
                     if event.is_down {
                         tracing::debug!(
@@ -599,12 +613,16 @@ async fn main() {
                             // Quiet for a moment: speech JAWS defers until no event supersedes it.
                             Err(_) => None,
                         };
-                        let Ok(mut eng) = engine_events.lock() else {
-                            continue;
-                        };
-                        let spoken = match &event {
-                            Some(event) => eng.handle_accessibility_event(event),
-                            None => eng.on_idle(),
+                        // The engine lock is released before printing: a console in QuickEdit
+                        // selection blocks writes, which must not hold the keyboard hook up.
+                        let spoken = {
+                            let Ok(mut eng) = engine_events.lock() else {
+                                continue;
+                            };
+                            match &event {
+                                Some(event) => eng.handle_accessibility_event(event),
+                                None => eng.on_idle(),
+                            }
                         };
                         if let Some(msg) = spoken {
                             // One line per utterance, so the debug log stays line-oriented.

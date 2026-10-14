@@ -327,6 +327,14 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> sr_core::AomNode {
     if node.ia2_states & ia2_state::REQUIRED != 0 {
         set_attr("required", "true".to_owned());
     }
+    // Chrome keeps the whitespace of preformatted elements in their text (tabs, runs of
+    // spaces, line breaks), and so does the virtual buffer.
+    if matches!(
+        attr("tag").as_deref(),
+        Some("pre" | "listing" | "xmp" | "plaintext")
+    ) {
+        set_attr("preformatted", "true".to_owned());
+    }
     if has(STATE_SYSTEM_PROTECTED) {
         set_attr("password", "true".to_owned());
     }

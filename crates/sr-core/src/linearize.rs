@@ -132,6 +132,8 @@ struct Run {
     text: String,
     node_id: Option<usize>,
     role: Option<Role>,
+    /// The run is preformatted text (`<pre>`): its whitespace and line breaks are kept.
+    preformatted: bool,
 }
 
 struct Builder<'a> {
@@ -144,6 +146,8 @@ struct Builder<'a> {
     /// is labelled by it and omits its name (§10).
     last_text_line: Option<String>,
     list_depth: usize,
+    /// How many preformatted elements (`<pre>`) the visit is inside.
+    preformatted: usize,
     /// Enclosing named groups (fieldsets), innermost last: (node id, name).
     groups: Vec<(usize, String)>,
     /// Names of enclosing tab lists, innermost last.
@@ -161,6 +165,7 @@ impl<'a> Builder<'a> {
             absorb_punctuation_into: None,
             last_text_line: None,
             list_depth: 0,
+            preformatted: 0,
             groups: Vec::new(),
             tablists: Vec::new(),
             document_url,
@@ -226,6 +231,22 @@ impl<'a> Builder<'a> {
     fn flush(&mut self) {
         self.absorb_punctuation_into = None;
         let run = std::mem::take(&mut self.run);
+        if run.preformatted {
+            // Preformatted text keeps its tabs and runs of spaces, and its own line breaks
+            // [obs, 207: a <pre> line reads "tab", "x", "space", "space", "equals"].
+            let node_id = run.node_id.unwrap_or_default();
+            let role = run.role.unwrap_or(Role::Text);
+            for line in crate::editing::text_lines(&run.text) {
+                if line.trim().is_empty() {
+                    continue;
+                }
+                for part in wrap_lines(&line, MAX_LINE_LENGTH) {
+                    self.emit(node_id, role.clone(), part, part.to_owned());
+                }
+            }
+            self.last_text_line = Some(squash(&run.text));
+            return;
+        }
         let text = squash(&run.text);
         if text.is_empty() {
             return;
@@ -258,6 +279,9 @@ impl<'a> Builder<'a> {
         if self.run.node_id.is_none() && !text.trim().is_empty() {
             self.run.node_id = Some(node.id);
             self.run.role = Some(node.role.clone());
+        }
+        if self.preformatted > 0 {
+            self.run.preformatted = true;
         }
         self.run.text.push_str(text);
     }
@@ -361,7 +385,21 @@ impl<'a> Builder<'a> {
         }
     }
 
+    /// Visits `node`; inside a preformatted element (`<pre>`) text keeps its whitespace.
     fn visit(&mut self, node: &AomNode, parent: Option<&AomNode>) {
+        let preformatted = node.attributes.contains_key("preformatted");
+        if preformatted {
+            self.flush();
+            self.preformatted += 1;
+        }
+        self.visit_node(node, parent);
+        if preformatted {
+            self.flush();
+            self.preformatted -= 1;
+        }
+    }
+
+    fn visit_node(&mut self, node: &AomNode, parent: Option<&AomNode>) {
         if is_hidden(node) {
             return;
         }

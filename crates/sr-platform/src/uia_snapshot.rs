@@ -532,11 +532,24 @@ pub(crate) mod capture {
         )
     }
 
-    /// Creates the UIA client object (the caller must have initialized COM).
+    /// Creates the UIA client object (the caller must have initialized COM). A busy or hung
+    /// application fails its calls after a second instead of UIA's long defaults, so one
+    /// application cannot stall the reader's event thread.
     pub(crate) fn automation() -> Result<IUIAutomation, PlatformError> {
+        use windows::core::Interface;
+        use windows::Win32::UI::Accessibility::IUIAutomation2;
         // SAFETY: standard in-process COM activation.
-        unsafe { CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER) }
-            .map_err(|e| err("create CUIAutomation8", e))
+        let uia: IUIAutomation =
+            unsafe { CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER) }
+                .map_err(|e| err("create CUIAutomation8", e))?;
+        if let Ok(uia2) = uia.cast::<IUIAutomation2>() {
+            // SAFETY: plain setters on a valid client.
+            unsafe {
+                let _ = uia2.SetConnectionTimeout(1000);
+                let _ = uia2.SetTransactionTimeout(1000);
+            }
+        }
+        Ok(uia)
     }
 
     /// Reads one element (no children) with the full snapshot property set.

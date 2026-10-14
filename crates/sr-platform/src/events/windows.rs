@@ -43,13 +43,15 @@ impl AccessibilityEventListener for WindowsAccessibilityEventListener {
         }
         self.stop.store(false, Ordering::Relaxed);
         let stop = Arc::clone(&self.stop);
+        let refresh = start_page_worker(sender.clone())?;
         let thread = std::thread::Builder::new()
             .name("sr-winevents".to_owned())
             .spawn(move || {
                 let mut page: Option<String> = None;
                 let mut converter = EventConverter::default();
-                let sink =
-                    move |event: TraceEvent| deliver(&event, &mut converter, &mut page, &sender);
+                let sink = move |event: TraceEvent| {
+                    deliver(&event, &mut converter, &mut page, &sender, &refresh)
+                };
                 let count = run_live(Box::new(sink), &stop);
                 tracing::debug!(count, "WinEvent listener stopped");
             })
@@ -79,14 +81,47 @@ fn deliver(
     converter: &mut EventConverter,
     page: &mut Option<String>,
     sender: &UnboundedSender<AccessibilityEvent>,
+    refresh: &std::sync::mpsc::Sender<()>,
 ) {
     let events = converter.convert(event);
     if events.is_empty() && event.event == "focus" {
         tracing::debug!(class = ?event.window_class, "focus event without a usable focus chain");
     }
     for converted in events {
+        // The page after a live region change is captured off this thread.
+        if matches!(converted, AccessibilityEvent::LiveRegion(_)) {
+            let _ = refresh.send(());
+        }
         deliver_one(event, converted, page, sender);
     }
+}
+
+/// Captures the foreground page off the event thread, for refreshes after live region
+/// changes: on a big page a capture takes long, and focus and caret events must keep
+/// flowing meanwhile. Requests that arrive during a capture become one more capture.
+fn start_page_worker(
+    sender: UnboundedSender<AccessibilityEvent>,
+) -> Result<std::sync::mpsc::Sender<()>, PlatformError> {
+    let (tx, rx) = std::sync::mpsc::channel::<()>();
+    std::thread::Builder::new()
+        .name("sr-page-refresh".to_owned())
+        .spawn(move || {
+            use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
+            // SAFETY: COM initialization for this worker thread.
+            let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+            while rx.recv().is_ok() {
+                while rx.try_recv().is_ok() {}
+                match crate::actions::capture_foreground_page() {
+                    Ok(root) => {
+                        let title = root.name.clone().unwrap_or_default();
+                        let _ = sender.send(AccessibilityEvent::DocumentLoaded { title, root });
+                    }
+                    Err(e) => tracing::warn!("page refresh failed: {e}"),
+                }
+            }
+        })
+        .map_err(|e| PlatformError::EventListenerError(e.to_string()))?;
+    Ok(tx)
 }
 
 fn deliver_one(

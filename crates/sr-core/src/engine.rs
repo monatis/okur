@@ -332,6 +332,8 @@ pub struct ScreenReaderEngine {
     caps_lock_on: bool,
     /// The Virtual Viewer, while it is open (it takes the keys).
     viewer: Option<crate::viewer::VirtualViewer>,
+    /// Each live region's lines when it last changed, by DOM id.
+    last_live_text: std::collections::HashMap<String, Vec<String>>,
 }
 
 impl ScreenReaderEngine {
@@ -361,6 +363,7 @@ impl ScreenReaderEngine {
             settings: crate::settings::Settings::default(),
             caps_lock_on: false,
             viewer: None,
+            last_live_text: std::collections::HashMap::new(),
         }
     }
 
@@ -1265,6 +1268,7 @@ impl ScreenReaderEngine {
                 }
                 self.pending_page = None;
                 self.last_page_focus = None;
+                self.last_live_text.clear();
                 self.load_buffer(buffer);
                 self.app_mode = AppMode::VirtualBuffer;
                 self.last_window_title = Some(title.clone());
@@ -2134,7 +2138,7 @@ impl ScreenReaderEngine {
     }
 
     /// The lines of a live region's text that its previous text in the buffer lacked.
-    fn live_region_additions(&self, live: &LiveRegionEvent) -> String {
+    fn live_region_additions(&mut self, live: &LiveRegionEvent) -> String {
         fn texts(node: &AomNode, out: &mut Vec<String>) {
             if let Some(t) = node
                 .text
@@ -2160,6 +2164,20 @@ impl ScreenReaderEngine {
         let mut old = Vec::new();
         if let Some(region) = region {
             texts(region, &mut old);
+        }
+        // The region's text when it last changed, if newer than the page: the page is
+        // refreshed after the change, so two quick changes (two chat messages) would otherwise
+        // compare the second with a page that lacks the first.
+        if let Some(last) = live
+            .region_id
+            .as_ref()
+            .and_then(|id| self.last_live_text.get(id))
+        {
+            old = last.clone();
+        }
+        if let Some(id) = &live.region_id {
+            self.last_live_text
+                .insert(id.clone(), live.text.lines().map(str::to_owned).collect());
         }
         let new: Vec<&str> = live.text.lines().collect();
         let added = if old.len() <= new.len() && old.iter().zip(&new).all(|(o, n)| o.as_str() == *n)

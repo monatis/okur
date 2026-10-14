@@ -58,24 +58,38 @@ mod windows_actions {
                 // SAFETY: in-process COM activation.
                 let uia: Option<IUIAutomation> =
                     unsafe { CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER) }.ok();
-                for request in rx {
-                    match request {
-                        Request::Object(id, action) => {
-                            // SAFETY: plain Win32 call with no preconditions.
-                            let window = unsafe { GetForegroundWindow() };
-                            if let Err(e) = perform_chromium_action(window, id, action) {
-                                tracing::warn!("{action:?} on IA2 object {id} failed: {e}");
+                while let Ok(first) = rx.recv() {
+                    // Keys arrive faster than a read settles (key repeat): of the text reads
+                    // queued meanwhile only the newest matters, since the engine speaks for
+                    // the latest key. Page actions still run, in order.
+                    let mut batch = vec![first];
+                    batch.extend(rx.try_iter());
+                    let last_text = batch.iter().rposition(|r| matches!(r, Request::Text));
+                    let batch = batch.into_iter().enumerate().filter_map(|(i, r)| {
+                        (!matches!(r, Request::Text) || Some(i) == last_text).then_some(r)
+                    });
+                    for request in batch {
+                        match request {
+                            Request::Object(id, action) => {
+                                // SAFETY: plain Win32 call with no preconditions.
+                                let window = unsafe { GetForegroundWindow() };
+                                if let Err(e) = perform_chromium_action(window, id, action) {
+                                    tracing::warn!("{action:?} on IA2 object {id} failed: {e}");
+                                }
                             }
-                        }
-                        Request::Text => {
-                            let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref()) else {
-                                tracing::warn!("text read impossible: no UIA client or channel");
-                                continue;
-                            };
-                            let context = read_after_key(uia);
-                            tracing::debug!(?context, "text context read");
-                            if let Some(context) = context {
-                                let _ = events.send(AccessibilityEvent::TextContext(context));
+                            Request::Text => {
+                                let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref())
+                                else {
+                                    tracing::warn!(
+                                        "text read impossible: no UIA client or channel"
+                                    );
+                                    continue;
+                                };
+                                let context = read_after_key(uia);
+                                tracing::debug!(?context, "text context read");
+                                if let Some(context) = context {
+                                    let _ = events.send(AccessibilityEvent::TextContext(context));
+                                }
                             }
                         }
                     }

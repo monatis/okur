@@ -549,6 +549,9 @@ mod capture {
         sink: Box<dyn FnMut(TraceEvent)>,
         uia: Option<IUIAutomation>,
         count: usize,
+        /// Feeding the live screen reader: events it does not use are dropped before any
+        /// cross-process read, and live-region pages are captured elsewhere.
+        live: bool,
     }
 
     thread_local! {
@@ -633,6 +636,7 @@ mod capture {
         hwnd: HWND,
         class: &str,
         child_id: i32,
+        with_page: bool,
     ) -> (
         Option<crate::ia2_snapshot::Ia2Node>,
         Option<crate::ia2_snapshot::Ia2Node>,
@@ -645,8 +649,41 @@ mod capture {
         let top = unsafe { GetAncestor(hwnd, GA_ROOT) };
         (
             xa11y_windows::ia2::capture_chromium_object(top, child_id).ok(),
-            xa11y_windows::ia2::capture_chromium_document(top).ok(),
+            with_page
+                .then(|| xa11y_windows::ia2::capture_chromium_document(top).ok())
+                .flatten(),
         )
+    }
+
+    /// The events the live screen reader consumes ([`EventConverter`]).
+    const LIVE_EVENTS: [&str; 12] = [
+        "focus",
+        "foreground",
+        "caret",
+        "text_selection_change",
+        "value_change",
+        "state_change",
+        "selection",
+        "live_region_change",
+        "menu_start",
+        "menu_end",
+        "menu_popup_start",
+        "menu_popup_end",
+    ];
+
+    /// Whether `hwnd` belongs to the process of the foreground window.
+    fn in_foreground_process(hwnd: HWND) -> bool {
+        use windows::Win32::UI::WindowsAndMessaging::{
+            GetForegroundWindow, GetWindowThreadProcessId,
+        };
+        let mut event_pid = 0u32;
+        let mut foreground_pid = 0u32;
+        // SAFETY: plain Win32 queries with valid out-pointers.
+        unsafe {
+            GetWindowThreadProcessId(hwnd, Some(&mut event_pid));
+            GetWindowThreadProcessId(GetForegroundWindow(), Some(&mut foreground_pid));
+        }
+        event_pid != 0 && event_pid == foreground_pid
     }
 
     fn msaa_object(hwnd: HWND, id_object: i32, id_child: i32) -> Option<TraceObject> {
@@ -709,6 +746,15 @@ mod capture {
             // box value) is spoken with the same context as a focus landing on it.
             let changes_focus_context =
                 matches!(name, "state_change" | "value_change" | "selection");
+            // Live, every cross-process read on this thread delays the events behind it: drop
+            // what the engine never uses (name and description changes, alerts) and changes
+            // in other applications (the taskbar, the tray clock) before reading anything.
+            if state.live
+                && (!LIVE_EVENTS.contains(&name)
+                    || (changes_focus_context && !in_foreground_process(hwnd)))
+            {
+                return;
+            }
             let focus = if matches!(name, "focus" | "foreground") || changes_focus_context {
                 state.uia.as_ref().map(focus_chain).unwrap_or_default()
             } else {
@@ -725,17 +771,30 @@ mod capture {
                 None
             };
             let (region, page) = if name == "live_region_change" {
-                chromium_live_region(hwnd, &class, id_child)
+                // Live, the page after the change is captured by the listener's page worker.
+                chromium_live_region(hwnd, &class, id_child, !state.live)
             } else {
                 (None, None)
             };
             let text_context = if matches!(name, "focus" | "caret" | "text_selection_change")
                 || changes_focus_context
             {
-                state
-                    .uia
-                    .as_ref()
-                    .and_then(crate::text_context::read_focused)
+                let read = || {
+                    state
+                        .uia
+                        .as_ref()
+                        .and_then(crate::text_context::read_focused)
+                };
+                let first = read();
+                // Chromium fires the caret event before its IA2 caret offset moves: a trace
+                // reads the field again once it has settled (live, the actions worker polls
+                // for the change after the key instead).
+                if !state.live && matches!(name, "caret" | "text_selection_change") {
+                    std::thread::sleep(std::time::Duration::from_millis(40));
+                    read().or(first)
+                } else {
+                    first
+                }
             } else {
                 None
             };
@@ -790,7 +849,7 @@ mod capture {
             }
         };
         let deadline = std::time::Instant::now() + std::time::Duration::from_millis(max_ms);
-        Ok(run_hooks(Box::new(sink), || {
+        Ok(run_hooks(Box::new(sink), false, || {
             std::time::Instant::now() < deadline && !stop_file.is_some_and(|p| p.exists())
         }))
     }
@@ -802,12 +861,18 @@ mod capture {
         sink: Box<dyn FnMut(TraceEvent)>,
         stop: &std::sync::atomic::AtomicBool,
     ) -> usize {
-        run_hooks(sink, || !stop.load(std::sync::atomic::Ordering::Relaxed))
+        run_hooks(sink, true, || {
+            !stop.load(std::sync::atomic::Ordering::Relaxed)
+        })
     }
 
     /// Installs the WinEvent hooks on this thread, pumps messages while `keep_running`,
     /// and returns the number of events delivered.
-    fn run_hooks(sink: Box<dyn FnMut(TraceEvent)>, keep_running: impl Fn() -> bool) -> usize {
+    fn run_hooks(
+        sink: Box<dyn FnMut(TraceEvent)>,
+        live: bool,
+        keep_running: impl Fn() -> bool,
+    ) -> usize {
         // SAFETY: COM for UIA queries on this thread, which also pumps the hook's messages.
         let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
         STATE.with(|s| {
@@ -815,6 +880,7 @@ mod capture {
                 sink,
                 uia: automation().ok(),
                 count: 0,
+                live,
             })
         });
 
