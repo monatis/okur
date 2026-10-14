@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p sr-cli -- parity --write-baseline",
-  "matched_steps": 497,
-  "total_steps": 504,
+  "matched_steps": 514,
+  "total_steps": 521,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -507,6 +507,23 @@
     "303-desktop-lists-and-trees/s6": "mismatch",
     "303-desktop-lists-and-trees/s7": "mismatch",
     "303-desktop-lists-and-trees/s8": "match",
-    "303-desktop-lists-and-trees/s9": "match"
+    "303-desktop-lists-and-trees/s9": "match",
+    "304-desktop-state-changes/s1": "match",
+    "304-desktop-state-changes/s10": "match",
+    "304-desktop-state-changes/s11": "match",
+    "304-desktop-state-changes/s12": "match",
+    "304-desktop-state-changes/s13": "match",
+    "304-desktop-state-changes/s14": "match",
+    "304-desktop-state-changes/s15": "match",
+    "304-desktop-state-changes/s16": "match",
+    "304-desktop-state-changes/s17": "match",
+    "304-desktop-state-changes/s2": "match",
+    "304-desktop-state-changes/s3": "match",
+    "304-desktop-state-changes/s4": "match",
+    "304-desktop-state-changes/s5": "match",
+    "304-desktop-state-changes/s6": "match",
+    "304-desktop-state-changes/s7": "match",
+    "304-desktop-state-changes/s8": "match",
+    "304-desktop-state-changes/s9": "match"
   }
 }

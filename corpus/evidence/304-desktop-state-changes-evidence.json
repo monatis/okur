@@ -1,0 +1,1787 @@
+{
+    "format_version":  2,
+    "scenario_id":  "304-desktop-state-changes",
+    "scenario_version":  "1.0.0",
+    "timestamp":  "2026-10-14T19:59:30.3268894+03:00",
+    "provenance":  {
+                       "capture_script_sha256":  "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
+                       "scenario_sha256":  "448cb7bedd12f033c2d3fd07c17837d43927ea756ff6862731b0d587cce1f945",
+                       "fixture_sha256":  "467dede4cfb8fc4fca76a13343cb3d3d8bba0feb038228ea37e745608bf01b0d",
+                       "host":  "DESKTOP-DCNAKQQ",
+                       "os_build":  "Microsoft Windows [Version 10.0.19045.6456]",
+                       "keyboard_layout":  "Turkish Q",
+                       "chrome_version":  "155.0.8059.40",
+                       "jaws_version":  "2025.2505.43.400"
+                   },
+    "environment":  {
+                        "os_version":  "Microsoft Windows NT 10.0.19045.0",
+                        "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
+                        "target_process":  "desktop",
+                        "interactive_session":  true
+                    },
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/desktop-forms.ps1",
+    "repetitions_requested":  5,
+    "trials":  [
+                   {
+                       "trial_index":  1,
+                       "timestamp":  "2026-10-14T19:59:30.4558400+03:00",
+                       "foreground_window_start":  "SR Desktop Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791997181575,
+                                                "t_end_ms":  1791997183028,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Space"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001dnot checked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1012,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791997184831,
+                                                "t_end_ms":  1791997186174,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Space"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001dchecked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  914,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791997187963,
+                                                "t_end_ms":  1791997190587,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Remember me  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2220,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791997192415,
+                                                "t_end_ms":  1791997193740,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Space"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001dchecked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  912,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791997195550,
+                                                "t_end_ms":  1791997199037,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Plan \nPro  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3086,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791997200827,
+                                                "t_end_ms":  1791997204254,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Team  \u001d radio button \u001e   \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3002,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791997206020,
+                                                "t_end_ms":  1791997209304,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Left"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Pro  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2880,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791997211112,
+                                                "t_end_ms":  1791997214550,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Country:  \u001d Combo box \u001e \nGermany\n2 of 3\nTo change the selection use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3025,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791997216345,
+                                                "t_end_ms":  1791997217959,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Brazil\n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1221,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791997219766,
+                                                "t_end_ms":  1791997221367,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Germany\n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1199,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791997223179,
+                                                "t_end_ms":  1791997225466,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Open List Box\nGermany \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1808,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791997227294,
+                                                "t_end_ms":  1791997228940,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Brazil \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1245,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1791997230753,
+                                                "t_end_ms":  1791997234221,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Country:  \u001d Combo box \u001e \nBrazil\n3 of 3\nTo change the selection use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3065,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "t_start_ms":  1791997236033,
+                                                "t_end_ms":  1791997239352,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Fruit:  \u001d List box \u001e \nBananas \n2 of 3\nTo move to an item press the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2925,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s15",
+                                                "t_start_ms":  1791997241163,
+                                                "t_end_ms":  1791997244745,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3166,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s16",
+                                                "t_start_ms":  1791997246555,
+                                                "t_end_ms":  1791997248920,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "level 0\nDocuments\n \u001dopen\u001e \n2 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1973,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s17",
+                                                "t_start_ms":  1791997250734,
+                                                "t_end_ms":  1791997252742,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Left"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Documents\n \u001dclosed\u001e \n1 of 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1613,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "304-desktop-state-changes-trial1.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "5076c988c69d2931d2db0c1283d7366eec555dc10434eb91f194010a289e84b4"
+                   },
+                   {
+                       "trial_index":  2,
+                       "timestamp":  "2026-10-14T20:00:52.7980103+03:00",
+                       "foreground_window_start":  "SR Desktop Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791997267188,
+                                                "t_end_ms":  1791997268618,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Space"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001dnot checked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1016,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791997270430,
+                                                "t_end_ms":  1791997271749,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Space"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001dchecked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  910,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791997273561,
+                                                "t_end_ms":  1791997276269,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Remember me  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2274,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791997278038,
+                                                "t_end_ms":  1791997279336,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Space"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001dchecked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  892,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791997281148,
+                                                "t_end_ms":  1791997284640,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Plan \nPro  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3084,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791997286433,
+                                                "t_end_ms":  1791997289758,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Team  \u001d radio button \u001e   \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2940,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791997291570,
+                                                "t_end_ms":  1791997294837,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Left"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Pro  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2873,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791997296646,
+                                                "t_end_ms":  1791997300165,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Country:  \u001d Combo box \u001e \nGermany\n2 of 3\nTo change the selection use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3124,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791997301976,
+                                                "t_end_ms":  1791997303622,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Brazil\n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1240,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791997305419,
+                                                "t_end_ms":  1791997307027,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Germany\n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1200,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791997308840,
+                                                "t_end_ms":  1791997311118,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Open List Box\nGermany \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1784,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791997312931,
+                                                "t_end_ms":  1791997314629,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Brazil \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1263,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1791997316419,
+                                                "t_end_ms":  1791997319856,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Country:  \u001d Combo box \u001e \nBrazil\n3 of 3\nTo change the selection use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3047,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "t_start_ms":  1791997321657,
+                                                "t_end_ms":  1791997324889,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Fruit:  \u001d List box \u001e \nBananas \n2 of 3\nTo move to an item press the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2840,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s15",
+                                                "t_start_ms":  1791997326700,
+                                                "t_end_ms":  1791997330269,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3170,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s16",
+                                                "t_start_ms":  1791997332084,
+                                                "t_end_ms":  1791997334025,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Documents\n \u001dopen\u001e \n2 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1535,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s17",
+                                                "t_start_ms":  1791997335817,
+                                                "t_end_ms":  1791997337818,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Left"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Documents\n \u001dclosed\u001e \n1 of 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1614,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "304-desktop-state-changes-trial2.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "549d47f9fad435485d20e62fc52be1948a9e771dd6906ee48703cde21c0429cc"
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-14T20:02:17.8681041+03:00",
+                       "foreground_window_start":  "SR Desktop Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791997352263,
+                                                "t_end_ms":  1791997353694,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Space"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001dnot checked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1038,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791997355504,
+                                                "t_end_ms":  1791997356825,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Space"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001dchecked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  910,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791997358631,
+                                                "t_end_ms":  1791997361227,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Remember me  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2200,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791997363024,
+                                                "t_end_ms":  1791997364351,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Space"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001dchecked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  912,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791997366166,
+                                                "t_end_ms":  1791997369646,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Plan \nPro  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3079,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791997371441,
+                                                "t_end_ms":  1791997374837,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Team  \u001d radio button \u001e   \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2985,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791997376630,
+                                                "t_end_ms":  1791997379922,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Left"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Pro  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2899,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791997381708,
+                                                "t_end_ms":  1791997385166,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Country:  \u001d Combo box \u001e \nGermany\n2 of 3\nTo change the selection use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3065,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791997386974,
+                                                "t_end_ms":  1791997388593,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Brazil\n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1222,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791997390406,
+                                                "t_end_ms":  1791997392040,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Germany\n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1221,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791997393852,
+                                                "t_end_ms":  1791997396148,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Open List Box\nGermany \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1801,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791997397960,
+                                                "t_end_ms":  1791997399723,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Brazil \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1342,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1791997401513,
+                                                "t_end_ms":  1791997405055,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Country:  \u001d Combo box \u001e \nBrazil\n3 of 3\nTo change the selection use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3127,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "t_start_ms":  1791997406867,
+                                                "t_end_ms":  1791997410196,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Fruit:  \u001d List box \u001e \nBananas \n2 of 3\nTo move to an item press the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2923,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s15",
+                                                "t_start_ms":  1791997412005,
+                                                "t_end_ms":  1791997415590,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3190,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s16",
+                                                "t_start_ms":  1791997417402,
+                                                "t_end_ms":  1791997419364,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Documents\n \u001dopen\u001e \n2 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1533,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s17",
+                                                "t_start_ms":  1791997421131,
+                                                "t_end_ms":  1791997423123,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Left"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Documents\n \u001dclosed\u001e \n1 of 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1593,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "304-desktop-state-changes-trial3.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "eb54af89f28354709354a087f1a72741f4b379c9bf21846c4197236bc3998f4d"
+                   },
+                   {
+                       "trial_index":  4,
+                       "timestamp":  "2026-10-14T20:03:43.1868865+03:00",
+                       "foreground_window_start":  "SR Desktop Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791997437583,
+                                                "t_end_ms":  1791997439012,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Space"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001dnot checked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1013,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791997440819,
+                                                "t_end_ms":  1791997442142,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Space"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001dchecked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  910,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791997443956,
+                                                "t_end_ms":  1791997446550,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Remember me  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2192,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791997448345,
+                                                "t_end_ms":  1791997449664,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Space"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001dchecked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  910,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791997451477,
+                                                "t_end_ms":  1791997454944,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Plan \nPro  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3081,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791997456756,
+                                                "t_end_ms":  1791997460165,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Team  \u001d radio button \u001e   \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3005,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791997461954,
+                                                "t_end_ms":  1791997465241,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Left"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Pro  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2874,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791997467030,
+                                                "t_end_ms":  1791997470487,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Country:  \u001d Combo box \u001e \nGermany\n2 of 3\nTo change the selection use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3042,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791997472295,
+                                                "t_end_ms":  1791997473944,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Brazil\n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1268,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791997475758,
+                                                "t_end_ms":  1791997477376,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Germany\n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1202,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791997479186,
+                                                "t_end_ms":  1791997481475,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Open List Box\nGermany \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1801,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791997483286,
+                                                "t_end_ms":  1791997485019,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Brazil \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1305,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1791997486811,
+                                                "t_end_ms":  1791997490227,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Country:  \u001d Combo box \u001e \nBrazil\n3 of 3\nTo change the selection use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3010,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "t_start_ms":  1791997492043,
+                                                "t_end_ms":  1791997495278,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Fruit:  \u001d List box \u001e \nBananas \n2 of 3\nTo move to an item press the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2826,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s15",
+                                                "t_start_ms":  1791997497087,
+                                                "t_end_ms":  1791997500707,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3187,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s16",
+                                                "t_start_ms":  1791997502494,
+                                                "t_end_ms":  1791997504417,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Documents\n \u001dopen\u001e \n2 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1532,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s17",
+                                                "t_start_ms":  1791997506211,
+                                                "t_end_ms":  1791997508180,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Left"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Documents\n \u001dclosed\u001e \n1 of 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1598,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "304-desktop-state-changes-trial4.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "985084ae2effbddeec08af4d967207778b0499370de0d540fe06e9465f80f5e2"
+                   },
+                   {
+                       "trial_index":  5,
+                       "timestamp":  "2026-10-14T20:05:08.2125943+03:00",
+                       "foreground_window_start":  "SR Desktop Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791997522727,
+                                                "t_end_ms":  1791997524140,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Space"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001dnot checked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1012,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791997525954,
+                                                "t_end_ms":  1791997527257,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Space"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001dchecked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  911,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791997529070,
+                                                "t_end_ms":  1791997531635,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Remember me  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2174,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791997533443,
+                                                "t_end_ms":  1791997534765,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Space"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001dchecked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  934,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791997536573,
+                                                "t_end_ms":  1791997540075,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Plan \nPro  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3113,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791997541863,
+                                                "t_end_ms":  1791997545251,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Team  \u001d radio button \u001e   \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3005,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791997547063,
+                                                "t_end_ms":  1791997550366,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Left"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Pro  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2901,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791997552160,
+                                                "t_end_ms":  1791997555684,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Country:  \u001d Combo box \u001e \nGermany\n2 of 3\nTo change the selection use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3131,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791997557495,
+                                                "t_end_ms":  1791997559102,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Brazil\n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1198,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791997560914,
+                                                "t_end_ms":  1791997562522,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Germany\n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1206,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791997564331,
+                                                "t_end_ms":  1791997566607,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Open List Box\nGermany \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1801,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791997568415,
+                                                "t_end_ms":  1791997570100,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Brazil \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1286,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1791997571913,
+                                                "t_end_ms":  1791997575371,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Country:  \u001d Combo box \u001e \nBrazil\n3 of 3\nTo change the selection use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3046,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "t_start_ms":  1791997577183,
+                                                "t_end_ms":  1791997580502,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Fruit:  \u001d List box \u001e \nBananas \n2 of 3\nTo move to an item press the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2922,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s15",
+                                                "t_start_ms":  1791997582315,
+                                                "t_end_ms":  1791997585898,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3171,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s16",
+                                                "t_start_ms":  1791997587709,
+                                                "t_end_ms":  1791997589631,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Documents\n \u001dopen\u001e \n2 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1510,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s17",
+                                                "t_start_ms":  1791997591421,
+                                                "t_end_ms":  1791997593421,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Left"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Documents\n \u001dclosed\u001e \n1 of 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1597,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "304-desktop-state-changes-trial5.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "404219291c643892d113b22fee3de0cfb56786e6a6ca5b4b6e434af647c6b202"
+                   }
+               ],
+    "total_elapsed_ms":  423498
+}

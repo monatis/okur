@@ -752,13 +752,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "304-desktop-state-changes",
+      "fixture": "desktop-forms.ps1",
+      "evidence": {
+        "sha256": "8cd3a9f923c94f05f3e23eb112a95a55f36ef5579e36e31b08089cde7576cde5",
+        "capture_script_sha256": "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 5,
+        "successful_trials": 5,
+        "deterministic": false,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 51,
-    "scenarios_with_evidence": 51,
-    "total_trials": 255,
-    "successful_trials": 255,
+    "scenarios": 52,
+    "scenarios_with_evidence": 52,
+    "total_trials": 260,
+    "successful_trials": 260,
     "deterministic_scenarios": 46
   }
 }
