@@ -1,0 +1,170 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Document Reading Reference Fixture - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "154.0.8037.98",
+    "fixture_sha256": "7a68ca85fbfbc6deab6e587dc60a7c85a913437047c97fa9a807d3bc9786cbe8",
+    "captured_at_unix_ms": 1791958841768,
+    "node_count": 9,
+    "capture_ms": 158
+  },
+  "root": {
+    "control_type": 50030,
+    "localized_control_type": "document",
+    "name": "Document Reading Reference Fixture",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+    "value_is_read_only": true,
+    "aria_role": "document",
+    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+    "automation_id": "RootWebArea",
+    "heading_level": 80050,
+    "is_enabled": true,
+    "is_offscreen": false,
+    "is_password": false,
+    "is_required_for_form": false,
+    "is_keyboard_focusable": true,
+    "has_keyboard_focus": true,
+    "is_control_element": true,
+    "is_content_element": true,
+    "children": [
+      {
+        "control_type": 50020,
+        "localized_control_type": "heading",
+        "name": "The Accessibility Engine Specification",
+        "aria_role": "heading",
+        "aria_properties": "readonly=true;expanded=false;level=1;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "heading_level": 80051,
+        "level": 1,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "The Accessibility Engine Specification",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "group",
+        "aria_role": "group",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": false,
+        "is_content_element": false,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "The screen reader engine parses the document object model into a clean virtual buffer.",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "group",
+        "aria_role": "group",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": false,
+        "is_content_element": false,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "Engine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "group",
+        "aria_role": "group",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": false,
+        "is_content_element": false,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "Rust provides memory safety without garbage collection latency. This ensures predictable audio delivery.",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true
+          }
+        ]
+      }
+    ]
+  }
+}
