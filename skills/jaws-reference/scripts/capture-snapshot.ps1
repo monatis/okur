@@ -18,6 +18,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Fixture,
     [Parameter(Mandatory = $true)][string]$OutputPath,
     [Parameter(Mandatory = $true)][string]$SrCli,
+    [ValidateSet("uia", "ia2")][string]$Api = "uia",
     [int]$LoadWaitMs = 2500,
     [int]$SettleMs = 750
 )
@@ -67,7 +68,7 @@ if ($expectedTitle -and -not $foreground.StartsWith($expectedTitle)) {
 $outDir = Split-Path -Parent $OutputPath
 if ($outDir -and -not (Test-Path $outDir)) { New-Item -ItemType Directory -Path $outDir -Force | Out-Null }
 
-$cliArgs = @('snapshot', '--out', $OutputPath, '--fixture', $fixturePath)
+$cliArgs = @('snapshot', '--api', $Api, '--out', $OutputPath, '--fixture', $fixturePath)
 if ($chromeVersion) { $cliArgs += @('--process-version', $chromeVersion) }
 & $SrCli @cliArgs
 if ($LASTEXITCODE -ne 0) { throw "sr-cli snapshot failed with exit code $LASTEXITCODE" }

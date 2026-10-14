@@ -95,6 +95,10 @@ enum Commands {
         #[arg(long)]
         out: String,
 
+        /// Accessibility API to capture: uia (default) or ia2 (Chromium/Firefox)
+        #[arg(long, default_value = "uia")]
+        api: String,
+
         /// Fixture file the page was loaded from; its SHA-256 is recorded in provenance
         #[arg(long)]
         fixture: Option<String>,
@@ -175,27 +179,53 @@ fn load_aom_from_path(path: &Path) -> Result<AomNode, Box<dyn std::error::Error>
 #[cfg(windows)]
 fn capture_snapshot(
     out: &str,
+    api: &str,
     fixture_sha256: Option<String>,
     process_version: Option<String>,
 ) -> Result<(), String> {
-    let snapshot =
-        sr_platform::uia_snapshot::capture_foreground_document(fixture_sha256, process_version)
+    let (json, nodes, title, ms) = match api {
+        "uia" => {
+            let s = sr_platform::uia_snapshot::capture_foreground_document(
+                fixture_sha256,
+                process_version,
+            )
             .map_err(|e| e.to_string())?;
-    let json = serde_json::to_string_pretty(&snapshot).map_err(|e| e.to_string())?;
+            let json = serde_json::to_string_pretty(&s).map_err(|e| e.to_string())?;
+            (
+                json,
+                s.provenance.node_count,
+                s.provenance.window_title,
+                s.provenance.capture_ms,
+            )
+        }
+        "ia2" => {
+            let s = sr_platform::ia2_snapshot::capture_foreground_document(
+                fixture_sha256,
+                process_version,
+            )
+            .map_err(|e| e.to_string())?;
+            let json = serde_json::to_string_pretty(&s).map_err(|e| e.to_string())?;
+            (
+                json,
+                s.provenance.node_count,
+                s.provenance.window_title,
+                s.provenance.capture_ms,
+            )
+        }
+        other => {
+            return Err(format!(
+                "unknown accessibility API {other:?} (expected uia or ia2)"
+            ))
+        }
+    };
     fs::write(out, json + "\n").map_err(|e| format!("{out:?}: {e}"))?;
-    println!(
-        "Captured {} nodes from {:?} in {} ms -> {}",
-        snapshot.provenance.node_count,
-        snapshot.provenance.window_title,
-        snapshot.provenance.capture_ms,
-        out
-    );
+    println!("Captured {nodes} {api} nodes from {title:?} in {ms} ms -> {out}");
     Ok(())
 }
 
 #[cfg(not(windows))]
-fn capture_snapshot(_: &str, _: Option<String>, _: Option<String>) -> Result<(), String> {
-    Err("UIA snapshots are only available on Windows".to_owned())
+fn capture_snapshot(_: &str, _: &str, _: Option<String>, _: Option<String>) -> Result<(), String> {
+    Err("Accessibility snapshots are only available on Windows".to_owned())
 }
 
 /// Makes JAWS speech-history structure visible on one line: `\u{1d}`/`\u{1e}` role markers
@@ -671,6 +701,7 @@ async fn main() {
         }
         Some(Commands::Snapshot {
             out,
+            api,
             fixture,
             process_version,
             delay_ms,
@@ -686,7 +717,7 @@ async fn main() {
                 },
                 None => None,
             };
-            if let Err(e) = capture_snapshot(&out, fixture_sha256, process_version) {
+            if let Err(e) = capture_snapshot(&out, &api, fixture_sha256, process_version) {
                 eprintln!("Snapshot failed: {e}");
                 std::process::exit(1);
             }

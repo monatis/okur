@@ -2,6 +2,7 @@ pub mod audio;
 pub mod bridge;
 pub mod events;
 pub mod hook;
+pub mod ia2_snapshot;
 pub mod tts;
 pub mod uia_snapshot;
 

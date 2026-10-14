@@ -1,0 +1,471 @@
+//! IAccessible2 (IA2) client support: COM bindings and document tree capture.
+//!
+//! Chromium and Firefox expose their richest accessibility model through IA2 on top of
+//! MSAA: HTML tags and CSS display (`tag:`, `display:` object attributes), visited state,
+//! hypertext with embedded-object characters, and rendered line boundaries via
+//! `IAccessibleText`. UI Automation exposes none of these, and JAWS and NVDA both read
+//! browsers through IA2.
+//!
+//! Interface layouts follow the IA2 IDL (IAccessible2 1.3, <https://github.com/LinuxA11y/IAccessible2>,
+//! BSD licensed): methods are declared in exact vtable order. Only interfaces the capture
+//! uses are bound; [`Ia2Node`] and [`parse_attributes`] are platform independent so hermetic
+//! tests can load IA2 snapshots on any OS.
+
+use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
+
+/// `IA2_TEXT_BOUNDARY_LINE`.
+pub const IA2_TEXT_BOUNDARY_LINE: i32 = 4;
+/// `IA2_TEXT_OFFSET_LENGTH`: the end of the text.
+pub const IA2_TEXT_OFFSET_LENGTH: i32 = -1;
+/// The embedded object character standing in for a child object inside hypertext.
+pub const EMBEDDED_OBJECT_CHAR: char = '\u{FFFC}';
+
+/// Selected IA2 roles (`AccessibleRole.idl`); MSAA roles are used for everything else.
+pub mod roles {
+    pub const IA2_ROLE_CAPTION: i32 = 0x402;
+    pub const IA2_ROLE_FOOTER: i32 = 0x40E;
+    pub const IA2_ROLE_FORM: i32 = 0x410;
+    pub const IA2_ROLE_HEADER: i32 = 0x413;
+    pub const IA2_ROLE_HEADING: i32 = 0x414;
+    pub const IA2_ROLE_LABEL: i32 = 0x419;
+    pub const IA2_ROLE_PARAGRAPH: i32 = 0x41E;
+    pub const IA2_ROLE_SECTION: i32 = 0x424;
+    pub const IA2_ROLE_TOGGLE_BUTTON: i32 = 0x42A;
+    pub const IA2_ROLE_COMPLEMENTARY_CONTENT: i32 = 0x42C;
+    pub const IA2_ROLE_LANDMARK: i32 = 0x42D;
+    pub const IA2_ROLE_BLOCK_QUOTE: i32 = 0x431;
+}
+
+/// Selected MSAA states (`oleacc.h`).
+pub mod msaa_states {
+    pub const STATE_SYSTEM_UNAVAILABLE: u32 = 0x1;
+    pub const STATE_SYSTEM_SELECTED: u32 = 0x2;
+    pub const STATE_SYSTEM_FOCUSED: u32 = 0x4;
+    pub const STATE_SYSTEM_PRESSED: u32 = 0x8;
+    pub const STATE_SYSTEM_CHECKED: u32 = 0x10;
+    pub const STATE_SYSTEM_MIXED: u32 = 0x20;
+    pub const STATE_SYSTEM_READONLY: u32 = 0x40;
+    pub const STATE_SYSTEM_EXPANDED: u32 = 0x200;
+    pub const STATE_SYSTEM_COLLAPSED: u32 = 0x400;
+    pub const STATE_SYSTEM_INVISIBLE: u32 = 0x8000;
+    pub const STATE_SYSTEM_OFFSCREEN: u32 = 0x10000;
+    pub const STATE_SYSTEM_FOCUSABLE: u32 = 0x100000;
+    /// A visited link.
+    pub const STATE_SYSTEM_TRAVERSED: u32 = 0x800000;
+    pub const STATE_SYSTEM_LINKED: u32 = 0x400000;
+    pub const STATE_SYSTEM_PROTECTED: u32 = 0x20000000;
+}
+
+/// One accessible object as exposed through MSAA + IA2.
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+pub struct Ia2Node {
+    /// MSAA role (`ROLE_SYSTEM_*`), when reported as a number.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub msaa_role: Option<i32>,
+    /// MSAA role, when reported as a string (custom roles).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub msaa_role_name: Option<String>,
+    /// IA2 role (`IA2_ROLE_*` or an MSAA role number).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ia2_role: Option<i32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// MSAA state bits (`STATE_SYSTEM_*`).
+    pub msaa_states: u32,
+    /// IA2 state bits (`IA2_STATE_*`).
+    pub ia2_states: i32,
+    /// Parsed IA2 object attributes (`tag`, `display`, `xml-roles`, `level`, …).
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub attributes: BTreeMap<String, String>,
+    /// IA2 group position: `[level, similar_items_in_group, position_in_group]`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub group_position: Option<[i32; 3]>,
+    /// Hypertext: the object's text, with [`EMBEDDED_OBJECT_CHAR`] for each embedded child.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+    /// Rendered line ranges within `text`, as `[start, end)` offsets in UTF-16 code units
+    /// (`IAccessibleText::textAtOffset` with `IA2_TEXT_BOUNDARY_LINE`).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub lines: Vec<[i32; 2]>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub children: Vec<Ia2Node>,
+}
+
+impl Ia2Node {
+    /// Total number of nodes in this subtree, including `self`.
+    pub fn node_count(&self) -> usize {
+        1 + self.children.iter().map(Ia2Node::node_count).sum::<usize>()
+    }
+}
+
+/// Parses an IA2 object attribute string (`name:value;name:value;`), where `\` escapes
+/// `\`, `:`, `;`, `=` and `,`.
+pub fn parse_attributes(raw: &str) -> BTreeMap<String, String> {
+    let mut out = BTreeMap::new();
+    let mut key = String::new();
+    let mut value = String::new();
+    let mut in_value = false;
+    let mut chars = raw.chars();
+    while let Some(c) = chars.next() {
+        match c {
+            '\\' => {
+                if let Some(escaped) = chars.next() {
+                    if in_value {
+                        value.push(escaped);
+                    } else {
+                        key.push(escaped);
+                    }
+                }
+            }
+            ':' if !in_value => in_value = true,
+            ';' => {
+                if !key.is_empty() {
+                    out.insert(std::mem::take(&mut key), std::mem::take(&mut value));
+                }
+                key.clear();
+                value.clear();
+                in_value = false;
+            }
+            _ if in_value => value.push(c),
+            _ => key.push(c),
+        }
+    }
+    if !key.is_empty() {
+        out.insert(key, value);
+    }
+    out
+}
+
+#[cfg(target_os = "windows")]
+pub use com::capture::{capture_chromium_document, Ia2CaptureError};
+
+#[cfg(target_os = "windows")]
+#[allow(non_snake_case, clippy::too_many_arguments)]
+mod com {
+    //! Raw IA2 interfaces, declared in IDL vtable order.
+    use std::ffi::c_void;
+    use windows::core::{BSTR, HRESULT};
+    use windows::Win32::Foundation::HWND;
+    use windows::Win32::UI::Accessibility::{IAccessible, IAccessible_Impl, IAccessible_Vtbl};
+    use windows_core::{IUnknown, IUnknown_Vtbl};
+
+    #[windows_core::interface("E89F726E-C4F4-4c19-BB19-B647D7FA8478")]
+    pub unsafe trait IAccessible2: IAccessible {
+        fn get_nRelations(&self, n: *mut i32) -> HRESULT;
+        fn get_relation(&self, index: i32, relation: *mut *mut c_void) -> HRESULT;
+        fn get_relations(&self, max: i32, relations: *mut *mut c_void, n: *mut i32) -> HRESULT;
+        fn role(&self, role: *mut i32) -> HRESULT;
+        fn scrollTo(&self, scroll_type: i32) -> HRESULT;
+        fn scrollToPoint(&self, coordinate_type: i32, x: i32, y: i32) -> HRESULT;
+        fn get_groupPosition(
+            &self,
+            level: *mut i32,
+            similar: *mut i32,
+            position: *mut i32,
+        ) -> HRESULT;
+        fn get_states(&self, states: *mut i32) -> HRESULT;
+        fn get_extendedRole(&self, role: *mut BSTR) -> HRESULT;
+        fn get_localizedExtendedRole(&self, role: *mut BSTR) -> HRESULT;
+        fn get_nExtendedStates(&self, n: *mut i32) -> HRESULT;
+        fn get_extendedStates(&self, max: i32, states: *mut *mut BSTR, n: *mut i32) -> HRESULT;
+        fn get_localizedExtendedStates(
+            &self,
+            max: i32,
+            states: *mut *mut BSTR,
+            n: *mut i32,
+        ) -> HRESULT;
+        fn get_uniqueID(&self, id: *mut i32) -> HRESULT;
+        fn get_windowHandle(&self, hwnd: *mut HWND) -> HRESULT;
+        fn get_indexInParent(&self, index: *mut i32) -> HRESULT;
+        fn get_locale(&self, locale: *mut c_void) -> HRESULT;
+        fn get_attributes(&self, attributes: *mut BSTR) -> HRESULT;
+    }
+
+    #[windows_core::interface("24FD2FFB-3AAD-4a08-8335-A3AD89C0FB4B")]
+    pub unsafe trait IAccessibleText: IUnknown {
+        fn addSelection(&self, start: i32, end: i32) -> HRESULT;
+        fn get_attributes(
+            &self,
+            offset: i32,
+            start: *mut i32,
+            end: *mut i32,
+            attrs: *mut BSTR,
+        ) -> HRESULT;
+        fn get_caretOffset(&self, offset: *mut i32) -> HRESULT;
+        fn get_characterExtents(
+            &self,
+            offset: i32,
+            coordinate_type: i32,
+            x: *mut i32,
+            y: *mut i32,
+            width: *mut i32,
+            height: *mut i32,
+        ) -> HRESULT;
+        fn get_nSelections(&self, n: *mut i32) -> HRESULT;
+        fn get_offsetAtPoint(
+            &self,
+            x: i32,
+            y: i32,
+            coordinate_type: i32,
+            offset: *mut i32,
+        ) -> HRESULT;
+        fn get_selection(&self, index: i32, start: *mut i32, end: *mut i32) -> HRESULT;
+        fn get_text(&self, start: i32, end: i32, text: *mut BSTR) -> HRESULT;
+        fn get_textBeforeOffset(
+            &self,
+            offset: i32,
+            boundary: i32,
+            start: *mut i32,
+            end: *mut i32,
+            text: *mut BSTR,
+        ) -> HRESULT;
+        fn get_textAfterOffset(
+            &self,
+            offset: i32,
+            boundary: i32,
+            start: *mut i32,
+            end: *mut i32,
+            text: *mut BSTR,
+        ) -> HRESULT;
+        fn get_textAtOffset(
+            &self,
+            offset: i32,
+            boundary: i32,
+            start: *mut i32,
+            end: *mut i32,
+            text: *mut BSTR,
+        ) -> HRESULT;
+        fn removeSelection(&self, index: i32) -> HRESULT;
+        fn setCaretOffset(&self, offset: i32) -> HRESULT;
+        fn setSelection(&self, index: i32, start: i32, end: i32) -> HRESULT;
+        fn get_nCharacters(&self, n: *mut i32) -> HRESULT;
+        fn scrollSubstringTo(&self, start: i32, end: i32, scroll_type: i32) -> HRESULT;
+        fn scrollSubstringToPoint(
+            &self,
+            start: i32,
+            end: i32,
+            coordinate_type: i32,
+            x: i32,
+            y: i32,
+        ) -> HRESULT;
+        fn get_newText(&self, segment: *mut c_void) -> HRESULT;
+        fn get_oldText(&self, segment: *mut c_void) -> HRESULT;
+    }
+
+    pub mod capture {
+        use super::super::{
+            parse_attributes, Ia2Node, IA2_TEXT_BOUNDARY_LINE, IA2_TEXT_OFFSET_LENGTH,
+        };
+        use super::{IAccessible2, IAccessibleText};
+        use windows::core::{Interface, BSTR, PCWSTR};
+        use windows::Win32::Foundation::HWND;
+        use windows::Win32::System::Com::{IDispatch, IServiceProvider};
+        use windows::Win32::System::Variant::{VARIANT, VT_DISPATCH};
+        use windows::Win32::UI::Accessibility::{
+            AccessibleChildren, AccessibleObjectFromWindow, IAccessible,
+        };
+        use windows::Win32::UI::WindowsAndMessaging::FindWindowExW;
+
+        /// `OBJID_CLIENT`.
+        const OBJID_CLIENT: u32 = 0xFFFF_FFFC;
+        /// Bounds recursion and text size on pathological documents.
+        const MAX_DEPTH: usize = 256;
+        const MAX_TEXT_CHARS: i32 = 1_000_000;
+
+        #[derive(Debug)]
+        pub struct Ia2CaptureError(pub String);
+
+        impl std::fmt::Display for Ia2CaptureError {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                f.write_str(&self.0)
+            }
+        }
+
+        impl std::error::Error for Ia2CaptureError {}
+
+        fn err(context: &str, e: impl std::fmt::Display) -> Ia2CaptureError {
+            Ia2CaptureError(format!("{context}: {e}"))
+        }
+
+        fn self_child() -> VARIANT {
+            VARIANT::from(0i32)
+        }
+
+        fn string(result: windows::core::Result<BSTR>) -> Option<String> {
+            result.ok().map(|b| b.to_string()).filter(|s| !s.is_empty())
+        }
+
+        /// The IA2 interface of an MSAA object, via `IServiceProvider` as the IA2 spec requires.
+        fn ia2_of(acc: &IAccessible) -> Option<IAccessible2> {
+            let sp: IServiceProvider = acc.cast().ok()?;
+            // SAFETY: QueryService with the IAccessible service id and IAccessible2 IID.
+            unsafe { sp.QueryService::<IAccessible2>(&IAccessible::IID) }.ok()
+        }
+
+        fn read_text(text: &IAccessibleText, node: &mut Ia2Node) {
+            let mut n = 0i32;
+            // SAFETY: valid interface, out-pointer to a local.
+            if unsafe { text.get_nCharacters(&mut n) }.is_err() || n <= 0 {
+                return;
+            }
+            let n = n.min(MAX_TEXT_CHARS);
+            let mut bstr = BSTR::default();
+            // SAFETY: as above; BSTR ownership transfers to `bstr`.
+            if unsafe { text.get_text(0, IA2_TEXT_OFFSET_LENGTH, &mut bstr) }.is_ok() {
+                node.text = Some(bstr.to_string());
+            }
+            let mut offset = 0i32;
+            while offset < n {
+                let (mut start, mut end) = (0i32, 0i32);
+                let mut line = BSTR::default();
+                // SAFETY: as above.
+                let hr = unsafe {
+                    text.get_textAtOffset(
+                        offset,
+                        IA2_TEXT_BOUNDARY_LINE,
+                        &mut start,
+                        &mut end,
+                        &mut line,
+                    )
+                };
+                if hr.is_err() || end <= offset {
+                    break;
+                }
+                node.lines.push([start, end]);
+                offset = end;
+            }
+        }
+
+        fn read_node(acc: &IAccessible, depth: usize) -> Ia2Node {
+            let me = self_child();
+            let mut node = Ia2Node::default();
+            // SAFETY: plain MSAA property reads on a valid IAccessible.
+            unsafe {
+                if let Ok(role) = acc.get_accRole(&me) {
+                    match i32::try_from(&role) {
+                        Ok(r) => node.msaa_role = Some(r),
+                        Err(_) => {
+                            node.msaa_role_name = BSTR::try_from(&role).ok().map(|b| b.to_string())
+                        }
+                    }
+                }
+                node.name = string(acc.get_accName(&me));
+                node.value = string(acc.get_accValue(&me));
+                node.description = string(acc.get_accDescription(&me));
+                if let Ok(state) = acc.get_accState(&me) {
+                    node.msaa_states = i32::try_from(&state).map(|s| s as u32).unwrap_or(0);
+                }
+            }
+
+            if let Some(ia2) = ia2_of(acc) {
+                // SAFETY: valid IA2 interface; all out-pointers point to locals.
+                unsafe {
+                    let mut role = 0i32;
+                    if ia2.role(&mut role).is_ok() {
+                        node.ia2_role = Some(role);
+                    }
+                    let mut states = 0i32;
+                    if ia2.get_states(&mut states).is_ok() {
+                        node.ia2_states = states;
+                    }
+                    let mut attrs = BSTR::default();
+                    if ia2.get_attributes(&mut attrs).is_ok() {
+                        node.attributes = parse_attributes(&attrs.to_string());
+                    }
+                    let (mut level, mut similar, mut position) = (0i32, 0i32, 0i32);
+                    if ia2
+                        .get_groupPosition(&mut level, &mut similar, &mut position)
+                        .is_ok()
+                        && (level, similar, position) != (0, 0, 0)
+                    {
+                        node.group_position = Some([level, similar, position]);
+                    }
+                }
+                if let Ok(text) = ia2.cast::<IAccessibleText>() {
+                    read_text(&text, &mut node);
+                }
+            }
+
+            if depth < MAX_DEPTH {
+                // SAFETY: valid IAccessible.
+                let count = unsafe { acc.accChildCount() }.unwrap_or(0).max(0);
+                if count > 0 {
+                    let mut children = vec![VARIANT::default(); count as usize];
+                    let mut obtained = 0i32;
+                    // SAFETY: the slice length is the requested child count.
+                    if unsafe { AccessibleChildren(acc, 0, &mut children, &mut obtained) }.is_ok() {
+                        for child in children.iter().take(obtained.max(0) as usize) {
+                            if let Some(child_acc) = dispatch_child(child) {
+                                node.children.push(read_node(&child_acc, depth + 1));
+                            }
+                        }
+                    }
+                }
+            }
+            node
+        }
+
+        /// An MSAA child returned as `VT_DISPATCH` (Chromium returns objects, not child ids).
+        fn dispatch_child(v: &VARIANT) -> Option<IAccessible> {
+            // SAFETY: reading the discriminant and, for VT_DISPATCH, the dispatch pointer field.
+            unsafe {
+                if v.Anonymous.Anonymous.vt != VT_DISPATCH {
+                    return None;
+                }
+                let dispatch: &Option<IDispatch> = &v.Anonymous.Anonymous.Anonymous.pdispVal;
+                dispatch.as_ref()?.cast::<IAccessible>().ok()
+            }
+        }
+
+        /// Captures the web document of a Chromium top-level window (`Chrome_WidgetWin_1`) through
+        /// MSAA + IA2, starting from its `Chrome_RenderWidgetHostHWND` client object.
+        pub fn capture_chromium_document(top_level: HWND) -> Result<Ia2Node, Ia2CaptureError> {
+            let class: Vec<u16> = "Chrome_RenderWidgetHostHWND\0".encode_utf16().collect();
+            // SAFETY: the class name is NUL-terminated and outlives the call.
+            let render = unsafe {
+                FindWindowExW(
+                    Some(top_level),
+                    None,
+                    PCWSTR(class.as_ptr()),
+                    PCWSTR::null(),
+                )
+            }
+            .map_err(|e| err("find Chrome_RenderWidgetHostHWND", e))?;
+            let mut raw = std::ptr::null_mut();
+            // SAFETY: requests IAccessible for the client object of a valid window.
+            unsafe {
+                AccessibleObjectFromWindow(render, OBJID_CLIENT, &IAccessible::IID, &mut raw)
+            }
+            .map_err(|e| err("AccessibleObjectFromWindow", e))?;
+            if raw.is_null() {
+                return Err(Ia2CaptureError(
+                    "no accessible object for the document".to_owned(),
+                ));
+            }
+            // SAFETY: AccessibleObjectFromWindow returned an owned IAccessible pointer.
+            let document = unsafe { IAccessible::from_raw(raw) };
+            Ok(read_node(&document, 0))
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parses_ia2_object_attributes_with_escapes() {
+        let attrs =
+            parse_attributes(r"tag:h1;display:block;xml-roles:heading;level:1;src:a\:b\;c;");
+        assert_eq!(attrs.get("tag").map(String::as_str), Some("h1"));
+        assert_eq!(attrs.get("display").map(String::as_str), Some("block"));
+        assert_eq!(attrs.get("level").map(String::as_str), Some("1"));
+        assert_eq!(attrs.get("src").map(String::as_str), Some("a:b;c"));
+        assert_eq!(attrs.len(), 5);
+    }
+}

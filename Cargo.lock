@@ -1207,6 +1207,7 @@ dependencies = [
  "windows",
  "windows-core",
  "xa11y",
+ "xa11y-windows",
 ]
 
 [[package]]
@@ -1811,6 +1812,7 @@ dependencies = [
 name = "xa11y-windows"
 version = "0.15.2"
 dependencies = [
+ "serde",
  "serde_json",
  "windows",
  "windows-core",

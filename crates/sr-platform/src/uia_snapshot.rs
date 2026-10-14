@@ -340,7 +340,7 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> sr_core::AomNode {
 pub use capture::capture_foreground_document;
 
 #[cfg(windows)]
-mod capture {
+pub(crate) mod capture {
     use super::{SnapshotProvenance, UiaNode, UiaSnapshot, SNAPSHOT_FORMAT_VERSION};
     use crate::PlatformError;
     use windows::core::BSTR;
@@ -484,7 +484,7 @@ mod capture {
         node
     }
 
-    fn window_text(hwnd: windows::Win32::Foundation::HWND) -> (String, String) {
+    pub(crate) fn window_text(hwnd: windows::Win32::Foundation::HWND) -> (String, String) {
         let mut title = [0u16; 512];
         let mut class = [0u16; 256];
         // SAFETY: buffers are valid for their stated lengths.
@@ -570,7 +570,7 @@ mod capture {
         })
     }
 
-    fn os_version() -> String {
+    pub(crate) fn os_version() -> String {
         // `ver` output, e.g. "Microsoft Windows [Version 10.0.19045.5737]".
         std::process::Command::new("cmd")
             .args(["/C", "ver"])
