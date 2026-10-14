@@ -1,0 +1,311 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Team Chat - Live Updates Fixture - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "155.0.8059.40",
+    "fixture_sha256": "f835db9342e5a065f6230c519a3525ac5d8d636460bd0e6e7c6d78491bc54d58",
+    "captured_at_unix_ms": 1792000646677,
+    "node_count": 12,
+    "capture_ms": 177
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Team Chat - Live Updates Fixture",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/live-updates.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "unique_id": -870,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -868,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Team chat",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -871,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Team chat",
+            "lines": [
+              [
+                0,
+                9
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Team chat",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -874,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Team chat",
+                "lines": [
+                  [
+                    0,
+                    9
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 20,
+            "name": "Messages",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -879,
+            "attributes": {
+              "atomic": "false",
+              "container-atomic": "false",
+              "container-busy": "false",
+              "container-live": "polite",
+              "container-relevant": "additions text",
+              "display": "block",
+              "explicit-name": "true",
+              "id": "log",
+              "live": "polite",
+              "name-from": "attribute",
+              "relevant": "additions text",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "log"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -880,
+                "attributes": {
+                  "atomic": "false",
+                  "container-atomic": "false",
+                  "container-busy": "false",
+                  "container-live": "polite",
+                  "container-relevant": "additions text",
+                  "display": "block",
+                  "relevant": "additions text",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "Ada: Good morning",
+                "lines": [
+                  [
+                    0,
+                    17
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Ada: Good morning",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -867,
+                    "attributes": {
+                      "atomic": "false",
+                      "container-atomic": "false",
+                      "container-busy": "false",
+                      "container-live": "polite",
+                      "container-relevant": "additions text",
+                      "name-from": "contents",
+                      "relevant": "additions text"
+                    },
+                    "text": "Ada: Good morning",
+                    "lines": [
+                      [
+                        0,
+                        17
+                      ]
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -872,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Send message",
+                "msaa_states": 1048576,
+                "ia2_states": 1024,
+                "unique_id": -876,
+                "attributes": {
+                  "display": "inline-block",
+                  "id": "send",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Send message",
+                "lines": [
+                  [
+                    0,
+                    12
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 23,
+            "ia2_role": 23,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -881,
+            "attributes": {
+              "atomic": "true",
+              "container-atomic": "true",
+              "container-busy": "false",
+              "container-live": "polite",
+              "container-relevant": "additions text",
+              "display": "block",
+              "id": "status",
+              "live": "polite",
+              "relevant": "additions text",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "status"
+            }
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -873,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "End of chat",
+            "lines": [
+              [
+                0,
+                11
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "End of chat",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -869,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "End of chat",
+                "lines": [
+                  [
+                    0,
+                    11
+                  ]
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

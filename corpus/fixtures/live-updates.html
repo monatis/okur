@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Team Chat - Live Updates Fixture</title>
+</head>
+<body>
+  <main>
+    <h1>Team chat</h1>
+    <div id="log" role="log" aria-live="polite" aria-label="Messages">
+      <p>Ada: Good morning</p>
+    </div>
+    <p><button id="send" type="button">Send message</button></p>
+    <div id="status" role="status"></div>
+    <p>End of chat</p>
+  </main>
+  <script>
+    var sent = 0;
+    document.getElementById('send').addEventListener('click', function () {
+      sent += 1;
+      var message = document.createElement('p');
+      message.textContent = 'You: Message ' + sent;
+      document.getElementById('log').appendChild(message);
+      document.getElementById('status').textContent = 'Message ' + sent + ' sent';
+    });
+  </script>
+</body>
+</html>

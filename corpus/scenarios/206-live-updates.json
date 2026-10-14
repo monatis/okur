@@ -1,0 +1,21 @@
+{
+  "id": "206-live-updates",
+  "name": "A chat log and a status updating after a button press; reading the new content",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/live-updates.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "B" },
+    { "id": "s2", "type": "key", "command": "Enter" },
+    { "id": "s3", "type": "key", "command": "Enter" },
+    { "id": "s4", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s5", "type": "key", "command": "Down" },
+    { "id": "s6", "type": "key", "command": "Down" },
+    { "id": "s7", "type": "key", "command": "Down" },
+    { "id": "s8", "type": "key", "command": "Down" },
+    { "id": "s9", "type": "key", "command": "Down" },
+    { "id": "s10", "type": "key", "command": "Down" }
+  ]
+}

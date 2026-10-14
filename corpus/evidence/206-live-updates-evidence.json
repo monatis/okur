@@ -1,0 +1,1087 @@
+{
+    "format_version":  2,
+    "scenario_id":  "206-live-updates",
+    "scenario_version":  "1.0.0",
+    "timestamp":  "2026-10-14T20:57:31.3705645+03:00",
+    "provenance":  {
+                       "capture_script_sha256":  "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
+                       "scenario_sha256":  "abead2ad80050a48f78a441d3760dd552c2a287de0252778a8fae6cb15ee1a09",
+                       "fixture_sha256":  "f835db9342e5a065f6230c519a3525ac5d8d636460bd0e6e7c6d78491bc54d58",
+                       "host":  "DESKTOP-DCNAKQQ",
+                       "os_build":  "Microsoft Windows [Version 10.0.19045.6456]",
+                       "keyboard_layout":  "Turkish Q",
+                       "chrome_version":  "155.0.8059.40",
+                       "jaws_version":  "2025.2505.43.400"
+                   },
+    "environment":  {
+                        "os_version":  "Microsoft Windows NT 10.0.19045.0",
+                        "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
+                        "target_process":  "chrome",
+                        "interactive_session":  true
+                    },
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/live-updates.html",
+    "repetitions_requested":  5,
+    "trials":  [
+                   {
+                       "trial_index":  1,
+                       "timestamp":  "2026-10-14T20:57:33.6045277+03:00",
+                       "foreground_window_start":  "Team Chat - Live Updates Fixture - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792000660809,
+                                                "t_end_ms":  1792000662382,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "B"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Send message  \u001d Button \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1158,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792000664182,
+                                                "t_end_ms":  1792000668605,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Team Chat - Live Updates Fixture\nSend message\n \u001d Button \u001e \nTo activate press Enter.\nMessages\nYou: Message 1\nMessage 1 sent",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4021,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792000670416,
+                                                "t_end_ms":  1792000672716,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Messages\nYou: Message 2\nMessage 2 sent",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1904,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792000674527,
+                                                "t_end_ms":  1792000676579,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Home"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Team Chat - Live Updates Fixture",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1599,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792000678372,
+                                                "t_end_ms":  1792000679884,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "main region",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  995,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1792000681572,
+                                                "t_end_ms":  1792000683349,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d heading level 1 \u001e Team chat",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1347,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1792000685140,
+                                                "t_end_ms":  1792000686726,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "group start Messages",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1182,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1792000688518,
+                                                "t_end_ms":  1792000689977,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Ada: Good morning",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1061,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1792000691792,
+                                                "t_end_ms":  1792000693334,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "You: Message 1",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1159,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1792000695150,
+                                                "t_end_ms":  1792000696641,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "You: Message 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1100,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "206-live-updates-trial1.jsonl",
+                       "page_load_settled":  false,
+                       "trace_sha256":  "fc1694044f175a743c9c063821dbd9d69baee3ba3d0663b50bde433a40de886d"
+                   },
+                   {
+                       "trial_index":  2,
+                       "timestamp":  "2026-10-14T20:58:16.6760381+03:00",
+                       "foreground_window_start":  "Team Chat - Live Updates Fixture - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792000703680,
+                                                "t_end_ms":  1792000705209,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "B"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Send message  \u001d Button \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1117,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792000707001,
+                                                "t_end_ms":  1792000711567,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Team Chat - Live Updates Fixture\nSend message\n \u001d Button \u001e \nTo activate press Enter.\nMessages\nYou: Message 1\nMessage 1 sent",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4014,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792000713236,
+                                                "t_end_ms":  1792000715591,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Messages\nYou: Message 2\nMessage 2 sent",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1942,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792000717398,
+                                                "t_end_ms":  1792000719465,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Home"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Team Chat - Live Updates Fixture",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1599,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792000721275,
+                                                "t_end_ms":  1792000722708,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "main region",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  994,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1792000724479,
+                                                "t_end_ms":  1792000726249,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d heading level 1 \u001e Team chat",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1370,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1792000728061,
+                                                "t_end_ms":  1792000729634,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "group start Messages",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1180,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1792000731447,
+                                                "t_end_ms":  1792000732895,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Ada: Good morning",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1056,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1792000734705,
+                                                "t_end_ms":  1792000736245,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "You: Message 1",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1141,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1792000738055,
+                                                "t_end_ms":  1792000739539,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "You: Message 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1078,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "206-live-updates-trial2.jsonl",
+                       "page_load_settled":  false,
+                       "trace_sha256":  "6927bcf0f81558504281fb779568b1f12533913e273101a17864d620ae65d7c3"
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-14T20:58:59.6009139+03:00",
+                       "foreground_window_start":  "Team Chat - Live Updates Fixture - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792000746591,
+                                                "t_end_ms":  1792000748143,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "B"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Send message  \u001d Button \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1140,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792000749937,
+                                                "t_end_ms":  1792000754368,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Team Chat - Live Updates Fixture\nSend message\n \u001d Button \u001e \nTo activate press Enter.\nMessages\nYou: Message 1\nMessage 1 sent",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4016,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792000756161,
+                                                "t_end_ms":  1792000758463,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Messages\nYou: Message 2\nMessage 2 sent",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1899,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792000760269,
+                                                "t_end_ms":  1792000762348,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Home"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Team Chat - Live Updates Fixture",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1574,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792000764140,
+                                                "t_end_ms":  1792000765561,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "main region",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1018,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1792000767351,
+                                                "t_end_ms":  1792000769117,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d heading level 1 \u001e Team chat",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1368,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1792000770927,
+                                                "t_end_ms":  1792000772510,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "group start Messages",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1180,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1792000774321,
+                                                "t_end_ms":  1792000775771,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Ada: Good morning",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1057,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1792000777568,
+                                                "t_end_ms":  1792000779119,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "You: Message 1",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1160,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1792000780930,
+                                                "t_end_ms":  1792000782424,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "You: Message 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1100,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "206-live-updates-trial3.jsonl",
+                       "page_load_settled":  false,
+                       "trace_sha256":  "5d9433821cd4004093ede90f4cf02125f254b445e5c139446e43f2aee897bc96"
+                   },
+                   {
+                       "trial_index":  4,
+                       "timestamp":  "2026-10-14T20:59:42.4681171+03:00",
+                       "foreground_window_start":  "Team Chat - Live Updates Fixture - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792000789451,
+                                                "t_end_ms":  1792000790981,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "B"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Send message  \u001d Button \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1141,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792000792793,
+                                                "t_end_ms":  1792000797178,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Team Chat - Live Updates Fixture\nSend message\n \u001d Button \u001e \nTo activate press Enter.\nMessage 1 sent\nMessages\nYou: Message 1",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3973,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792000798993,
+                                                "t_end_ms":  1792000801335,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Messages\nYou: Message 2\nMessage 2 sent",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1928,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792000803146,
+                                                "t_end_ms":  1792000805232,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Home"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Team Chat - Live Updates Fixture",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1595,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792000807023,
+                                                "t_end_ms":  1792000808445,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "main region",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1015,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1792000810234,
+                                                "t_end_ms":  1792000811976,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d heading level 1 \u001e Team chat",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1367,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1792000813792,
+                                                "t_end_ms":  1792000815361,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "group start Messages",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1161,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1792000817172,
+                                                "t_end_ms":  1792000818620,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Ada: Good morning",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1059,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1792000820435,
+                                                "t_end_ms":  1792000821992,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "You: Message 1",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1159,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1792000823800,
+                                                "t_end_ms":  1792000825290,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "You: Message 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1078,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "206-live-updates-trial4.jsonl",
+                       "page_load_settled":  false,
+                       "trace_sha256":  "3b1852e2eae260b9d55a4a16c218fd126bc98ccf1697f54ff5842dc7d7a24ba5"
+                   },
+                   {
+                       "trial_index":  5,
+                       "timestamp":  "2026-10-14T21:00:25.3512592+03:00",
+                       "foreground_window_start":  "Team Chat - Live Updates Fixture - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792000832295,
+                                                "t_end_ms":  1792000833811,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "B"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Send message  \u001d Button \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1140,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792000835616,
+                                                "t_end_ms":  1792000840096,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Team Chat - Live Updates Fixture\nSend message\n \u001d Button \u001e \nTo activate press Enter.\nMessages\nYou: Message 1\nMessage 1 sent",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4074,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792000841902,
+                                                "t_end_ms":  1792000844226,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Messages\nYou: Message 2\nMessage 2 sent",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1906,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792000846040,
+                                                "t_end_ms":  1792000848108,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Home"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Team Chat - Live Updates Fixture",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1597,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792000849902,
+                                                "t_end_ms":  1792000851332,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "main region",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1014,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1792000853117,
+                                                "t_end_ms":  1792000854882,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d heading level 1 \u001e Team chat",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1363,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1792000856677,
+                                                "t_end_ms":  1792000858350,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "group start Messages",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1181,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1792000860059,
+                                                "t_end_ms":  1792000861492,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Ada: Good morning",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1035,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1792000863285,
+                                                "t_end_ms":  1792000864829,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "You: Message 1",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1141,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1792000866620,
+                                                "t_end_ms":  1792000868118,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "You: Message 2",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1116,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "206-live-updates-trial5.jsonl",
+                       "page_load_settled":  false,
+                       "trace_sha256":  "57bf187924b83480664c294ffb6b7bf471c2585ca111d6cd59ae0c38454b016a"
+                   }
+               ],
+    "total_elapsed_ms":  217559
+}
