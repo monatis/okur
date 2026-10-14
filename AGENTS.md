@@ -48,7 +48,7 @@ To ensure seamless context passing across autonomous sessions, all engineering w
 
 ### Active Plan for Current / Next Session
 - **Active Plan**: [`docs/plans/2026-10-14-verification-harness-rebuild.md`](docs/plans/2026-10-14-verification-harness-rebuild.md)
-- **Latest Handoff**: [`docs/handoff/2026-10-14-verification-harness-phase-1-and-2.md`](docs/handoff/2026-10-14-verification-harness-phase-1-and-2.md); read the audit [`docs/handoff/2026-10-14-full-audit-of-prior-development.md`](docs/handoff/2026-10-14-full-audit-of-prior-development.md) before trusting any earlier handoff
+- **Latest Handoff**: [`docs/handoff/2026-10-14-realistic-evidence-buffer-rewrite-ia2-traces.md`](docs/handoff/2026-10-14-realistic-evidence-buffer-rewrite-ia2-traces.md); read the audit [`docs/handoff/2026-10-14-full-audit-of-prior-development.md`](docs/handoff/2026-10-14-full-audit-of-prior-development.md) before trusting any earlier handoff
 
 
 ### Standard Session Execution Protocol
@@ -94,6 +94,9 @@ Building evidence collection and verification tooling is the real engineering in
 - `run-scenario.ps1` (format 2): scan-coded keys, audio-silence settling (`sr-cli wait-silence`), provenance.
 - `lab-push.ps1` / `lab-pull.ps1`: hash-verified deployment of binaries, scripts, fixtures and scenarios to `old-pc` via Dropbox.
 - `sr-cli parity`, `sr-cli invariants`, `sr-cli corpus-manifest`: generated, ratcheted verification results.
+- `sr-cli snapshot --api ia2`: IAccessible2 view of a Chromium document (attributes, states, hypertext, rendered line ranges).
+- `sr-cli trace` / `run-scenario.ps1 -TraceDir`: per-trial accessibility event traces, replayed into the engine by `sr-cli parity`.
+- `sr-cli evidence <scenario-id>`: readable view of recorded JAWS transcripts and trial variants.
 
 ### Verification Integrity Rules (non-negotiable)
 
