@@ -29,7 +29,9 @@ pub enum EditKey {
     DeleteForward,
     /// Insert+Up (Say Line): the field's name and role, then the line (305/s9, s15).
     SayLine,
-    /// Ctrl+A: "selected", then the first line of the selection (313/s7).
+    /// Ctrl+A: "selected", then the whole selection. User report: JAWS reads everything
+    /// selected in Notepad. In a WinForms edit JAWS read only the first line (313/s7),
+    /// apparently a fallback for that control.
     SelectAll,
     /// Ctrl+C: "Copied selection to clipboard" when text is selected (313/s8).
     Copy,
@@ -210,11 +212,14 @@ pub fn speech(
             deleted
         }
         EditKey::SelectAll => {
-            let selected = selected_text(after);
-            let first = text_lines(&selected)
+            let lines: Vec<String> = text_lines(&selected_text(after))
                 .into_iter()
-                .find(|l| !l.trim().is_empty())?;
-            format!("selected\n{}", first.trim())
+                .filter(|l| !l.trim().is_empty())
+                .collect();
+            if lines.is_empty() {
+                return None;
+            }
+            format!("selected\n{}", lines.join("\n"))
         }
         EditKey::Copy => {
             if selected_text(after).is_empty() {
@@ -338,5 +343,22 @@ mod tests {
         );
         assert_eq!(text_lines(text), ["fn main() {", "    let x = 1;", "}"]);
         assert_eq!(text_lines("a\r\nb\nc"), ["a", "b", "c"]);
+    }
+
+    /// User report: selecting several lines (Ctrl+A, Ctrl+Shift+End) must speak all of them.
+    #[test]
+    fn multi_line_selections_are_spoken_whole() {
+        let text = "first\rsecond\rthird";
+        let all = ctx(text, 0, Some((0, 18)));
+        assert_eq!(
+            speech(EditKey::SelectAll, None, &all, "").as_deref(),
+            Some("selected\nfirst\nsecond\nthird")
+        );
+        let before = ctx(text, 6, None);
+        let to_end = ctx(text, 18, Some((6, 18)));
+        assert_eq!(
+            speech(EditKey::SelectMore, Some(&before), &to_end, "").as_deref(),
+            Some("selected\nsecond\rthird")
+        );
     }
 }

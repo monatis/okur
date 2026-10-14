@@ -776,8 +776,12 @@ mod capture {
             } else {
                 (None, None)
             };
-            let text_context = if matches!(name, "focus" | "caret" | "text_selection_change")
-                || changes_focus_context
+            // Live, after an edit key the actions worker reads the field once it has settled.
+            // Reading here too would race it with a half-updated state (a selection still
+            // being extended), and whichever arrived first would be spoken.
+            let caret_moved = matches!(name, "caret" | "text_selection_change");
+            let text_context = if (name == "focus" || changes_focus_context || caret_moved)
+                && !(state.live && caret_moved)
             {
                 let read = || {
                     state

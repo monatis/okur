@@ -9,6 +9,7 @@ pub mod ia2_snapshot;
 pub mod text_context;
 pub mod tts;
 pub mod uia_snapshot;
+pub mod virtual_desktop;
 
 pub use audio::{AudioActivityReport, AudioEndpointMeter, SilenceReport};
 

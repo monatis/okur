@@ -118,6 +118,16 @@ mod windows_actions {
             std::thread::sleep(POLL);
             now = read_focused(uia);
             if now != before {
+                // Changed: wait until two reads agree, so a selection still being extended
+                // (Ctrl+Shift+End over many lines) is read whole.
+                loop {
+                    std::thread::sleep(POLL);
+                    let again = read_focused(uia);
+                    if again == now || started.elapsed() >= SETTLE * 2 {
+                        break;
+                    }
+                    now = again;
+                }
                 break;
             }
         }

@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p sr-cli -- parity --write-baseline",
-  "matched_steps": 819,
+  "matched_steps": 818,
   "total_steps": 844,
   "errors": [],
   "steps": {
@@ -829,7 +829,7 @@
     "313-desktop-say-font/s4": "match",
     "313-desktop-say-font/s5": "match",
     "313-desktop-say-font/s6": "match",
-    "313-desktop-say-font/s7": "match",
+    "313-desktop-say-font/s7": "mismatch",
     "313-desktop-say-font/s8": "match",
     "313-desktop-say-font/s9": "match",
     "314-desktop-notepad-font-and-viewer/s1": "mismatch",
