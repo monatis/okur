@@ -155,8 +155,8 @@ pub fn parse_attributes(raw: &str) -> BTreeMap<String, String> {
 
 #[cfg(target_os = "windows")]
 pub use com::capture::{
-    capture_chromium_document, chromium_caret_text, chromium_text_state, perform_chromium_action,
-    Ia2Action, Ia2CaptureError,
+    capture_chromium_document, capture_chromium_object, chromium_caret_text, chromium_text_state,
+    perform_chromium_action, Ia2Action, Ia2CaptureError,
 };
 
 #[cfg(target_os = "windows")]
@@ -448,6 +448,22 @@ mod com {
         /// MSAA + IA2, starting from its `Chrome_RenderWidgetHostHWND` client object.
         pub fn capture_chromium_document(top_level: HWND) -> Result<Ia2Node, Ia2CaptureError> {
             Ok(read_node(&chromium_document(top_level)?, 0))
+        }
+
+        /// One object of a Chromium page with its subtree, by the child id an event names
+        /// (the object's negative IA2 uniqueID), such as a live region that changed.
+        pub fn capture_chromium_object(
+            top_level: HWND,
+            child_id: i32,
+        ) -> Result<Ia2Node, Ia2CaptureError> {
+            let document = chromium_document(top_level)?;
+            let child = VARIANT::from(child_id);
+            // SAFETY: MSAA child lookup on a valid IAccessible; Chromium returns an object.
+            let object: IAccessible = unsafe { document.get_accChild(&child) }
+                .map_err(|e| err("accChild", e))?
+                .cast()
+                .map_err(|e| err("IAccessible of the object", e))?;
+            Ok(read_node(&object, 0))
         }
 
         /// What to do with a live object.

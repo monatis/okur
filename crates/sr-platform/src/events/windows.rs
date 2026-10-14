@@ -80,12 +80,21 @@ fn deliver(
     page: &mut Option<String>,
     sender: &UnboundedSender<AccessibilityEvent>,
 ) {
-    let Some(converted) = converter.convert(event) else {
-        if event.event == "focus" {
-            tracing::debug!(class = ?event.window_class, "focus event without a usable focus chain");
-        }
-        return;
-    };
+    let events = converter.convert(event);
+    if events.is_empty() && event.event == "focus" {
+        tracing::debug!(class = ?event.window_class, "focus event without a usable focus chain");
+    }
+    for converted in events {
+        deliver_one(event, converted, page, sender);
+    }
+}
+
+fn deliver_one(
+    event: &TraceEvent,
+    converted: AccessibilityEvent,
+    page: &mut Option<String>,
+    sender: &UnboundedSender<AccessibilityEvent>,
+) {
     match &converted {
         AccessibilityEvent::Focus(focus) => {
             tracing::debug!(

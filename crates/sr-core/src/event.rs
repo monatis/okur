@@ -185,9 +185,13 @@ impl FocusEvent {
 /// Event representing ARIA live region DOM mutations and status announcements.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct LiveRegionEvent {
+    /// The region's whole text now, one line per text run.
     pub text: String,
     pub politeness: Politeness,
     pub container_name: Option<String>,
+    /// The region's DOM id, to find its previous text in the page.
+    #[serde(default)]
+    pub region_id: Option<String>,
 }
 
 impl LiveRegionEvent {
@@ -196,6 +200,7 @@ impl LiveRegionEvent {
             text: text.into(),
             politeness,
             container_name: None,
+            region_id: None,
         }
     }
 

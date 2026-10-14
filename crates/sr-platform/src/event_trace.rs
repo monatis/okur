@@ -27,7 +27,7 @@ const MSAA_MENUITEM: i32 = 0x0C;
 const MSAA_BUTTONMENU: i32 = 0x39;
 
 /// Bumped whenever the recorded fields or their meaning change.
-pub const TRACE_FORMAT_VERSION: u32 = 5;
+pub const TRACE_FORMAT_VERSION: u32 = 6;
 
 /// The MSAA view of an event's object (`AccessibleObjectFromEvent`).
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
@@ -80,6 +80,13 @@ pub struct TraceEvent {
     /// selection (`text_context::read_focused`), from which edit keys are spoken.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub text_context: Option<sr_core::TextContext>,
+    /// For a live region change in a Chromium page: the region with its subtree.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub region: Option<crate::ia2_snapshot::Ia2Node>,
+    /// For a live region change in a Chromium page: the page after the change, from which
+    /// the virtual buffer is refreshed.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub page: Option<crate::ia2_snapshot::Ia2Node>,
 }
 
 /// The first line of a trace file.
@@ -351,7 +358,15 @@ pub struct EventConverter {
 }
 
 impl EventConverter {
-    pub fn convert(&mut self, event: &TraceEvent) -> Option<sr_core::AccessibilityEvent> {
+    /// The engine events for one captured event, in order (usually one, or none).
+    pub fn convert(&mut self, event: &TraceEvent) -> Vec<sr_core::AccessibilityEvent> {
+        if event.event == "live_region_change" {
+            return live_region_events(event);
+        }
+        self.convert_one(event).into_iter().collect()
+    }
+
+    fn convert_one(&mut self, event: &TraceEvent) -> Option<sr_core::AccessibilityEvent> {
         use sr_core::{AccessibilityEvent, ChangeKind};
         if let Some(menu) = menu_event_from_trace(event) {
             return Some(AccessibilityEvent::Menu(menu));
@@ -434,6 +449,46 @@ fn is_drop_down_item(event: &TraceEvent) -> bool {
     const MSAA_LISTITEM: i32 = 0x22;
     event.window_class.as_deref() == Some("ComboLBox")
         && event.object.as_ref().and_then(|o| o.role) == Some(MSAA_LISTITEM)
+}
+
+/// Text lines of an IA2 subtree: its static text runs, in order.
+fn text_lines(node: &crate::ia2_snapshot::Ia2Node, out: &mut Vec<String>) {
+    const MSAA_STATICTEXT: i32 = 0x29;
+    if node.msaa_role == Some(MSAA_STATICTEXT) {
+        if let Some(name) = node
+            .name
+            .as_deref()
+            .map(str::trim)
+            .filter(|n| !n.is_empty())
+        {
+            out.push(name.to_owned());
+        }
+    }
+    for child in &node.children {
+        text_lines(child, out);
+    }
+}
+
+/// A live region changed: its announcement, then the page as it is now, which refreshes the
+/// buffer [obs, 206/s2-s10].
+fn live_region_events(event: &TraceEvent) -> Vec<sr_core::AccessibilityEvent> {
+    use sr_core::{AccessibilityEvent, LiveRegionEvent, Politeness};
+    let mut events = Vec::new();
+    if let Some(region) = &event.region {
+        let mut lines = Vec::new();
+        text_lines(region, &mut lines);
+        let mut live = LiveRegionEvent::new(lines.join("\n"), Politeness::Polite);
+        live.container_name = region.name.clone().filter(|n| !n.trim().is_empty());
+        live.region_id = region.attributes.get("id").cloned();
+        events.push(AccessibilityEvent::LiveRegion(live));
+    }
+    if let Some(page) = &event.page {
+        events.push(AccessibilityEvent::DocumentLoaded {
+            title: page.name.clone().unwrap_or_default(),
+            root: crate::ia2_snapshot::ia2_to_aom(page),
+        });
+    }
+    events
 }
 
 /// Updates the states a change can carry from MSAA state bits (`STATE_SYSTEM_*`).
@@ -566,6 +621,27 @@ mod capture {
         Some([index, count])
     }
 
+    /// A Chromium live region that changed, with its subtree, and the page after the change.
+    fn chromium_live_region(
+        hwnd: HWND,
+        class: &str,
+        child_id: i32,
+    ) -> (
+        Option<crate::ia2_snapshot::Ia2Node>,
+        Option<crate::ia2_snapshot::Ia2Node>,
+    ) {
+        use windows::Win32::UI::WindowsAndMessaging::{GetAncestor, GA_ROOT};
+        if class != "Chrome_RenderWidgetHostHWND" {
+            return (None, None);
+        }
+        // SAFETY: plain Win32 query on a window handle.
+        let top = unsafe { GetAncestor(hwnd, GA_ROOT) };
+        (
+            xa11y_windows::ia2::capture_chromium_object(top, child_id).ok(),
+            xa11y_windows::ia2::capture_chromium_document(top).ok(),
+        )
+    }
+
     fn msaa_object(hwnd: HWND, id_object: i32, id_child: i32) -> Option<TraceObject> {
         let mut acc: Option<IAccessible> = None;
         let mut child = VARIANT::default();
@@ -641,6 +717,11 @@ mod capture {
             } else {
                 None
             };
+            let (region, page) = if name == "live_region_change" {
+                chromium_live_region(hwnd, &class, id_child)
+            } else {
+                (None, None)
+            };
             let text_context = if matches!(name, "focus" | "caret" | "text_selection_change")
                 || changes_focus_context
             {
@@ -667,6 +748,8 @@ mod capture {
                 focus_subtree,
                 list_position,
                 text_context,
+                region,
+                page,
             };
             (state.sink)(event);
             state.count += 1;
@@ -794,6 +877,8 @@ mod tests {
             focus_subtree: None,
             list_position: None,
             text_context: None,
+            region: None,
+            page: None,
         }
     }
 

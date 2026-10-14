@@ -1831,18 +1831,66 @@ impl ScreenReaderEngine {
 
     /// Handles an ARIA live region announcement event with politeness consideration.
     pub fn handle_live_region_event(&mut self, live: &LiveRegionEvent) -> Option<String> {
+        // JAWS speaks what was added to the region, after the region's name: "Messages |
+        // You: Message 1" [obs, 206/s2-s3]. The region's previous text is in the buffer.
+        let added = self.live_region_additions(live);
+        if added.trim().is_empty() {
+            return None;
+        }
+        let text = match live.container_name.as_deref() {
+            Some(name) => format!("{name}\n{added}"),
+            None => added,
+        };
         match live.politeness {
             Politeness::Assertive => {
                 self.speech.stop();
-                self.speech.speak(&live.text, true);
-                Some(live.text.clone())
+                self.speech.speak(&text, true);
+                Some(text)
             }
             Politeness::Polite => {
-                self.speech.speak(&live.text, false);
-                Some(live.text.clone())
+                self.speech.speak(&text, false);
+                Some(text)
             }
             Politeness::Off => None,
         }
+    }
+
+    /// The lines of a live region's text that its previous text in the buffer lacked.
+    fn live_region_additions(&self, live: &LiveRegionEvent) -> String {
+        fn texts(node: &AomNode, out: &mut Vec<String>) {
+            if let Some(t) = node
+                .text
+                .as_deref()
+                .map(str::trim)
+                .filter(|t| !t.is_empty())
+            {
+                out.push(t.to_owned());
+            }
+            for child in &node.children {
+                texts(child, out);
+            }
+        }
+        let map = &self.cursor.buffer.node_map;
+        let mut ids: Vec<usize> = map.keys().copied().collect();
+        ids.sort_unstable();
+        let region = live.region_id.as_deref().and_then(|dom_id| {
+            ids.iter().find_map(|id| {
+                map.get(id)
+                    .filter(|n| n.attributes.get("id").map(String::as_str) == Some(dom_id))
+            })
+        });
+        let mut old = Vec::new();
+        if let Some(region) = region {
+            texts(region, &mut old);
+        }
+        let new: Vec<&str> = live.text.lines().collect();
+        let added = if old.len() <= new.len() && old.iter().zip(&new).all(|(o, n)| o.as_str() == *n)
+        {
+            new.get(old.len()..).unwrap_or_default().to_vec()
+        } else {
+            new
+        };
+        added.join("\n")
     }
 }
 

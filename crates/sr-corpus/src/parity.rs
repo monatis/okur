@@ -148,7 +148,7 @@ fn run_scenario(
     // One converter for the whole run, as live: it tracks the focused object.
     let mut converter = EventConverter::default();
     for event in &replay.setup {
-        if let Some(converted) = converter.convert(event) {
+        for converted in converter.convert(event) {
             let _ = engine.handle_accessibility_event(&converted);
         }
     }
@@ -162,12 +162,11 @@ fn run_scenario(
                 // Replay the OS events recorded while JAWS handled this step (e.g. the focus
                 // change that follows Tab), exactly as the live listener would deliver them.
                 for event in replay.for_step(&step.id) {
-                    let Some(converted) = converter.convert(&event) else {
-                        continue;
-                    };
-                    if let Some(speech) = engine.handle_accessibility_event(&converted) {
-                        if spoken.is_empty() {
-                            spoken.push(&speech);
+                    for converted in converter.convert(&event) {
+                        if let Some(speech) = engine.handle_accessibility_event(&converted) {
+                            if spoken.is_empty() {
+                                spoken.push(&speech);
+                            }
                         }
                     }
                 }
@@ -351,6 +350,7 @@ fn replayable(event: &TraceEvent) -> bool {
                 | "foreground"
                 | "caret"
                 | "text_selection_change"
+                | "live_region_change"
                 | "state_change"
                 | "value_change"
                 | "selection"
