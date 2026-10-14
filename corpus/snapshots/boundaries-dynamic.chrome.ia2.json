@@ -1,0 +1,426 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Boundaries and Dynamic Updates Fixture - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "154.0.8037.98",
+    "fixture_sha256": "4caaa7092df80f075b4fd5bfa8f3fbbdba558f90188e4f3711aec05dd9c71953",
+    "captured_at_unix_ms": 1791985548035,
+    "node_count": 17,
+    "capture_ms": 163
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Boundaries and Dynamic Updates Fixture",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼￼￼￼￼￼￼￼",
+    "lines": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        8
+      ]
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1044,
+        "name": "First Boundary Heading",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "group_position": [
+          1,
+          0,
+          0
+        ],
+        "text": "First Boundary Heading",
+        "lines": [
+          [
+            0,
+            22
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "First Boundary Heading",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "First Boundary Heading",
+            "lines": [
+              [
+                0,
+                22
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "First paragraph content.",
+        "lines": [
+          [
+            0,
+            24
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "First paragraph content.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "First paragraph content.",
+            "lines": [
+              [
+                0,
+                24
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1044,
+        "name": "Second Boundary Heading",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "group_position": [
+          2,
+          0,
+          0
+        ],
+        "text": "Second Boundary Heading",
+        "lines": [
+          [
+            0,
+            23
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Second Boundary Heading",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Second Boundary Heading",
+            "lines": [
+              [
+                0,
+                23
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Final content paragraph on this page.",
+        "lines": [
+          [
+            0,
+            37
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Final content paragraph on this page.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Final content paragraph on this page.",
+            "lines": [
+              [
+                0,
+                37
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 43,
+        "ia2_role": 43,
+        "name": "System Details",
+        "msaa_states": 1049600,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "inline-block",
+          "id": "btn-disclosure",
+          "name-from": "contents",
+          "tag": "button",
+          "text-align": "center"
+        },
+        "text": "System Details",
+        "lines": [
+          [
+            0,
+            14
+          ]
+        ]
+      },
+      {
+        "msaa_role": 60,
+        "ia2_role": 60,
+        "name": "Settings",
+        "msaa_states": 0,
+        "ia2_states": 1040,
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "setsize": "2",
+          "tag": "div",
+          "text-align": "left",
+          "xml-roles": "tablist"
+        },
+        "group_position": [
+          0,
+          2,
+          0
+        ],
+        "text": "￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 37,
+            "ia2_role": 37,
+            "name": "General",
+            "msaa_states": 3145730,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "inline-block",
+              "id": "tab-1",
+              "name-from": "contents",
+              "posinset": "1",
+              "setsize": "2",
+              "tag": "button",
+              "text-align": "center",
+              "xml-roles": "tab"
+            },
+            "group_position": [
+              0,
+              2,
+              1
+            ],
+            "text": "General",
+            "lines": [
+              [
+                0,
+                7
+              ]
+            ]
+          },
+          {
+            "msaa_role": 37,
+            "ia2_role": 37,
+            "name": "Advanced",
+            "msaa_states": 3145728,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "inline-block",
+              "id": "tab-2",
+              "name-from": "contents",
+              "posinset": "2",
+              "setsize": "2",
+              "tag": "button",
+              "text-align": "center",
+              "xml-roles": "tab"
+            },
+            "group_position": [
+              0,
+              2,
+              2
+            ],
+            "text": "Advanced",
+            "lines": [
+              [
+                0,
+                8
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 38,
+        "ia2_role": 38,
+        "name": "General",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "id": "panel-1",
+          "name-from": "related-element",
+          "tag": "div",
+          "text-align": "left",
+          "xml-roles": "tabpanel"
+        },
+        "text": "￼",
+        "lines": [
+          [
+            0,
+            1
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "General settings configuration content.",
+            "lines": [
+              [
+                0,
+                39
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "General settings configuration content.",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "General settings configuration content.",
+                "lines": [
+                  [
+                    0,
+                    39
+                  ]
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 43,
+        "ia2_role": 43,
+        "name": "Footer Action",
+        "msaa_states": 1048576,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "inline-block",
+          "id": "btn-footer",
+          "name-from": "contents",
+          "tag": "button",
+          "text-align": "center"
+        },
+        "text": "Footer Action",
+        "lines": [
+          [
+            0,
+            13
+          ]
+        ]
+      }
+    ]
+  }
+}

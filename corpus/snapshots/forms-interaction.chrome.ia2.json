@@ -1,0 +1,398 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Forms and Interaction Reference Fixture - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "154.0.8037.98",
+    "fixture_sha256": "18fce31741084133ec7f31cd746e51f3cf00a36df7d5b92a1d5af35410748d5f",
+    "captured_at_unix_ms": 1791985540921,
+    "node_count": 17,
+    "capture_ms": 138
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Forms and Interaction Reference Fixture",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼￼",
+    "lines": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1044,
+        "name": "Account Registration Form",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "group_position": [
+          1,
+          0,
+          0
+        ],
+        "text": "Account Registration Form",
+        "lines": [
+          [
+            0,
+            25
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Account Registration Form",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Account Registration Form",
+            "lines": [
+              [
+                0,
+                25
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1060,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "id": "user-form",
+          "tag": "form",
+          "text-align": "left",
+          "xml-roles": "form"
+        },
+        "text": "￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 42,
+                "ia2_role": 1049,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "inline",
+                  "tag": "label",
+                  "text-align": "left"
+                },
+                "text": "Full Name:",
+                "lines": [
+                  [
+                    0,
+                    10
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Full Name:",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Full Name:",
+                    "lines": [
+                      [
+                        0,
+                        10
+                      ]
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 42,
+                "ia2_role": 42,
+                "name": "Full Name:",
+                "value": "Jane Doe",
+                "msaa_states": 1048576,
+                "ia2_states": 13320,
+                "attributes": {
+                  "display": "inline-block",
+                  "explicit-name": "true",
+                  "html-input-name": "full-name",
+                  "id": "full-name",
+                  "name-from": "related-element",
+                  "tag": "input",
+                  "text-align": "left",
+                  "text-input-type": "text",
+                  "text-model": "a1"
+                },
+                "text": "Jane Doe",
+                "lines": [
+                  [
+                    0,
+                    8
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 42,
+                "ia2_role": 1049,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "inline",
+                  "tag": "label",
+                  "text-align": "left"
+                },
+                "text": "Email Address:",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Email Address:",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Email Address:",
+                    "lines": [
+                      [
+                        0,
+                        14
+                      ]
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 42,
+                "ia2_role": 42,
+                "name": "Email Address:",
+                "value": "jane@example.com",
+                "msaa_states": 1048576,
+                "ia2_states": 13320,
+                "attributes": {
+                  "display": "inline-block",
+                  "explicit-name": "true",
+                  "html-input-name": "email-addr",
+                  "id": "email-addr",
+                  "name-from": "related-element",
+                  "tag": "input",
+                  "text-align": "left",
+                  "text-input-type": "text",
+                  "text-model": "a1"
+                },
+                "text": "jane@example.com",
+                "lines": [
+                  [
+                    0,
+                    16
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 44,
+                "ia2_role": 44,
+                "name": "I accept terms and conditions",
+                "msaa_states": 1048576,
+                "ia2_states": 263168,
+                "attributes": {
+                  "checkable": "true",
+                  "display": "inline-block",
+                  "explicit-name": "true",
+                  "html-input-name": "terms",
+                  "id": "terms-agree",
+                  "name-from": "related-element",
+                  "tag": "input",
+                  "text-align": "left"
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Save Preferences",
+                "msaa_states": 1048576,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "inline-block",
+                  "id": "save-btn",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Save Preferences",
+                "lines": [
+                  [
+                    0,
+                    16
+                  ]
+                ]
+              },
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Submit Application",
+                "msaa_states": 1048832,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "inline-block",
+                  "id": "submit-btn",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Submit Application",
+                "lines": [
+                  [
+                    0,
+                    18
+                  ]
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

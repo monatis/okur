@@ -1,0 +1,1017 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Create Your Account - Riverside Library - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "154.0.8037.98",
+    "fixture_sha256": "141f98219e00ce80559e312fdf548a7b3b9f41087250648d09b6040c6433badf",
+    "captured_at_unix_ms": 1791985530372,
+    "node_count": 46,
+    "capture_ms": 337
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Create Your Account - Riverside Library",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Create your account",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Create your account",
+            "lines": [
+              [
+                0,
+                19
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Create your account",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Create your account",
+                "lines": [
+                  [
+                    0,
+                    19
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "Fields marked required must be filled in.",
+            "lines": [
+              [
+                0,
+                41
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Fields marked required must be filled in.",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Fields marked required must be filled in.",
+                "lines": [
+                  [
+                    0,
+                    41
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "tag": "form",
+              "text-align": "left",
+              "xml-roles": "form"
+            },
+            "text": "￼￼￼￼￼￼￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                5
+              ],
+              [
+                5,
+                6
+              ],
+              [
+                6,
+                7
+              ],
+              [
+                7,
+                8
+              ],
+              [
+                8,
+                9
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1049,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "text": "Full name",
+                    "lines": [
+                      [
+                        0,
+                        9
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Full name",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Full name",
+                        "lines": [
+                          [
+                            0,
+                            9
+                          ]
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 42,
+                    "name": "Full name",
+                    "msaa_states": 1048576,
+                    "ia2_states": 15368,
+                    "attributes": {
+                      "display": "inline-block",
+                      "explicit-name": "true",
+                      "html-input-name": "full-name",
+                      "id": "full-name",
+                      "name-from": "related-element",
+                      "tag": "input",
+                      "text-align": "left",
+                      "text-input-type": "text",
+                      "text-model": "a1"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "￼￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1049,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "text": "Email address",
+                    "lines": [
+                      [
+                        0,
+                        13
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Email address",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Email address",
+                        "lines": [
+                          [
+                            0,
+                            13
+                          ]
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 42,
+                    "name": "Email address",
+                    "value": "sam@example.com",
+                    "description": "We never share your email.",
+                    "msaa_states": 1048576,
+                    "ia2_states": 13320,
+                    "attributes": {
+                      "description-from": "aria-describedby",
+                      "display": "inline-block",
+                      "explicit-name": "true",
+                      "html-input-name": "email",
+                      "id": "email",
+                      "name-from": "related-element",
+                      "tag": "input",
+                      "text-align": "left",
+                      "text-input-type": "email",
+                      "text-model": "a1"
+                    },
+                    "text": "sam@example.com",
+                    "lines": [
+                      [
+                        0,
+                        15
+                      ]
+                    ]
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "inline",
+                      "id": "email-hint",
+                      "tag": "span",
+                      "text-align": "left"
+                    },
+                    "text": "We never share your email.",
+                    "lines": [
+                      [
+                        0,
+                        26
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "We never share your email.",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "We never share your email.",
+                        "lines": [
+                          [
+                            0,
+                            26
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1049,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "text": "Password",
+                    "lines": [
+                      [
+                        0,
+                        8
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Password",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Password",
+                        "lines": [
+                          [
+                            0,
+                            8
+                          ]
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 42,
+                    "name": "Password",
+                    "msaa_states": 537919488,
+                    "ia2_states": 15368,
+                    "attributes": {
+                      "display": "inline-block",
+                      "explicit-name": "true",
+                      "html-input-name": "password",
+                      "id": "password",
+                      "name-from": "related-element",
+                      "tag": "input",
+                      "text-align": "left",
+                      "text-input-type": "password",
+                      "text-model": "a1"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 20,
+                "name": "Membership type",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "name-from": "related-element",
+                  "setsize": "0",
+                  "tag": "fieldset",
+                  "text-align": "left"
+                },
+                "text": "￼￼￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ],
+                  [
+                    3,
+                    4
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1049,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "block",
+                      "tag": "legend",
+                      "text-align": "left"
+                    },
+                    "text": "Membership type",
+                    "lines": [
+                      [
+                        0,
+                        15
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Membership type",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Membership type",
+                        "lines": [
+                          [
+                            0,
+                            15
+                          ]
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 45,
+                    "ia2_role": 45,
+                    "name": "Adult",
+                    "msaa_states": 1048592,
+                    "ia2_states": 263168,
+                    "attributes": {
+                      "checkable": "true",
+                      "display": "inline-block",
+                      "explicit-name": "true",
+                      "html-input-name": "membership",
+                      "id": "m-adult",
+                      "name-from": "related-element",
+                      "posinset": "1",
+                      "setsize": "3",
+                      "tag": "input",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      0,
+                      3,
+                      1
+                    ]
+                  },
+                  {
+                    "msaa_role": 45,
+                    "ia2_role": 45,
+                    "name": "Student",
+                    "msaa_states": 1048576,
+                    "ia2_states": 263168,
+                    "attributes": {
+                      "checkable": "true",
+                      "display": "inline-block",
+                      "explicit-name": "true",
+                      "html-input-name": "membership",
+                      "id": "m-student",
+                      "name-from": "related-element",
+                      "posinset": "2",
+                      "setsize": "3",
+                      "tag": "input",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      0,
+                      3,
+                      2
+                    ]
+                  },
+                  {
+                    "msaa_role": 45,
+                    "ia2_role": 45,
+                    "name": "Senior",
+                    "msaa_states": 1048576,
+                    "ia2_states": 263168,
+                    "attributes": {
+                      "checkable": "true",
+                      "display": "inline-block",
+                      "explicit-name": "true",
+                      "html-input-name": "membership",
+                      "id": "m-senior",
+                      "name-from": "related-element",
+                      "posinset": "3",
+                      "setsize": "3",
+                      "tag": "input",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      0,
+                      3,
+                      3
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1049,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "text": "Home branch",
+                    "lines": [
+                      [
+                        0,
+                        11
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Home branch",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Home branch",
+                        "lines": [
+                          [
+                            0,
+                            11
+                          ]
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 46,
+                    "ia2_role": 46,
+                    "name": "Home branch",
+                    "value": "Northside",
+                    "msaa_states": 1074791424,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "inline-block",
+                      "explicit-name": "true",
+                      "haspopup": "menu",
+                      "id": "branch",
+                      "name-from": "related-element",
+                      "posinset": "2",
+                      "setsize": "3",
+                      "tag": "select",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      0,
+                      3,
+                      0
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1049,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "text": "Accessibility needs",
+                    "lines": [
+                      [
+                        0,
+                        19
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Accessibility needs",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Accessibility needs",
+                        "lines": [
+                          [
+                            0,
+                            19
+                          ]
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 42,
+                    "name": "Accessibility needs",
+                    "msaa_states": 1048576,
+                    "ia2_states": 5640,
+                    "attributes": {
+                      "display": "inline-block",
+                      "explicit-name": "true",
+                      "id": "notes",
+                      "name-from": "related-element",
+                      "tag": "textarea",
+                      "text-align": "left",
+                      "text-model": "a1"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 44,
+                    "ia2_role": 44,
+                    "name": "Send me the monthly newsletter",
+                    "msaa_states": 1048592,
+                    "ia2_states": 263168,
+                    "attributes": {
+                      "checkable": "true",
+                      "display": "inline-block",
+                      "explicit-name": "true",
+                      "html-input-name": "newsletter",
+                      "id": "newsletter",
+                      "name-from": "related-element",
+                      "tag": "input",
+                      "text-align": "left"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 44,
+                    "ia2_role": 44,
+                    "name": "I agree to the terms of use",
+                    "msaa_states": 1048576,
+                    "ia2_states": 263168,
+                    "attributes": {
+                      "checkable": "true",
+                      "display": "inline-block",
+                      "explicit-name": "true",
+                      "html-input-name": "terms",
+                      "id": "terms",
+                      "name-from": "related-element",
+                      "tag": "input",
+                      "text-align": "left"
+                    }
+                  },
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1049,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "text": "I agree to the ￼",
+                    "lines": [
+                      [
+                        0,
+                        16
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "I agree to the ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "I agree to the ",
+                        "lines": [
+                          [
+                            0,
+                            15
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "terms of use",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html#terms-text",
+                        "msaa_states": 5242880,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "terms of use",
+                        "lines": [
+                          [
+                            0,
+                            12
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "terms of use",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "terms of use",
+                            "lines": [
+                              [
+                                0,
+                                12
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 43,
+                    "ia2_role": 43,
+                    "name": "Save draft",
+                    "msaa_states": 1,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "text": "Save draft",
+                    "lines": [
+                      [
+                        0,
+                        10
+                      ]
+                    ]
+                  },
+                  {
+                    "msaa_role": 43,
+                    "ia2_role": 43,
+                    "name": "Create account",
+                    "msaa_states": 1048832,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "text": "Create account",
+                    "lines": [
+                      [
+                        0,
+                        14
+                      ]
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,1172 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Structural Navigation Reference Fixture - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "154.0.8037.98",
+    "fixture_sha256": "dd74a3e0285db898ce8a785a5da59a730a7a0e95bc6e1396d2e21e0c91d9948d",
+    "captured_at_unix_ms": 1791985537449,
+    "node_count": 51,
+    "capture_ms": 320
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Structural Navigation Reference Fixture",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼￼￼￼",
+    "lines": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        4
+      ]
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "tag": "header",
+          "text-align": "left",
+          "xml-roles": "banner"
+        },
+        "text": "￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "System Documentation",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "System Documentation",
+            "lines": [
+              [
+                0,
+                20
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "System Documentation",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "System Documentation",
+                "lines": [
+                  [
+                    0,
+                    20
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1069,
+            "name": "Main Navigation",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "attribute",
+              "tag": "nav",
+              "text-align": "left",
+              "xml-roles": "navigation"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 33,
+                "ia2_role": 33,
+                "msaa_states": 64,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "setsize": "3",
+                  "tag": "ul",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  0,
+                  3,
+                  0
+                ],
+                "text": "￼￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "1",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      3,
+                      1
+                    ],
+                    "text": "• ￼",
+                    "lines": [
+                      [
+                        0,
+                        3
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "• ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "• ",
+                        "lines": [
+                          [
+                            0,
+                            2
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "Overview Link",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html#overview",
+                        "msaa_states": 5242880,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "Overview Link",
+                        "lines": [
+                          [
+                            0,
+                            13
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Overview Link",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Overview Link",
+                            "lines": [
+                              [
+                                0,
+                                13
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "2",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      3,
+                      2
+                    ],
+                    "text": "• ￼",
+                    "lines": [
+                      [
+                        0,
+                        3
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "• ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "• ",
+                        "lines": [
+                          [
+                            0,
+                            2
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "Architecture Link",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html#architecture",
+                        "msaa_states": 5242880,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "Architecture Link",
+                        "lines": [
+                          [
+                            0,
+                            17
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Architecture Link",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Architecture Link",
+                            "lines": [
+                              [
+                                0,
+                                17
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "3",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      3,
+                      3
+                    ],
+                    "text": "• ￼",
+                    "lines": [
+                      [
+                        0,
+                        3
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "• ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "• ",
+                        "lines": [
+                          [
+                            0,
+                            2
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "Download Link",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html#download",
+                        "msaa_states": 5242880,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "Download Link",
+                        "lines": [
+                          [
+                            0,
+                            13
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Download Link",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Download Link",
+                            "lines": [
+                              [
+                                0,
+                                13
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "id": "overview",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Section Overview",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "Section Overview",
+                "lines": [
+                  [
+                    0,
+                    16
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Section Overview",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Section Overview",
+                    "lines": [
+                      [
+                        0,
+                        16
+                      ]
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "This section outlines high-level concepts for synthetic speech evaluation.",
+                "lines": [
+                  [
+                    0,
+                    74
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "This section outlines high-level concepts for synthetic speech evaluation.",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "This section outlines high-level concepts for synthetic speech evaluation.",
+                    "lines": [
+                      [
+                        0,
+                        74
+                      ]
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Subsection Details",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "level": "3",
+                  "name-from": "contents",
+                  "tag": "h3",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  3,
+                  0,
+                  0
+                ],
+                "text": "Subsection Details",
+                "lines": [
+                  [
+                    0,
+                    18
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Subsection Details",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Subsection Details",
+                    "lines": [
+                      [
+                        0,
+                        18
+                      ]
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "Details covering buffer generation and quick navigation keys.",
+                "lines": [
+                  [
+                    0,
+                    61
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Details covering buffer generation and quick navigation keys.",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Details covering buffer generation and quick navigation keys.",
+                    "lines": [
+                      [
+                        0,
+                        61
+                      ]
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "id": "architecture",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Architecture Guide",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "Architecture Guide",
+                "lines": [
+                  [
+                    0,
+                    18
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Architecture Guide",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Architecture Guide",
+                    "lines": [
+                      [
+                        0,
+                        18
+                      ]
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "Architecture description with ordered components:",
+                "lines": [
+                  [
+                    0,
+                    49
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Architecture description with ordered components:",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Architecture description with ordered components:",
+                    "lines": [
+                      [
+                        0,
+                        49
+                      ]
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 33,
+                "ia2_role": 33,
+                "msaa_states": 64,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "setsize": "3",
+                  "tag": "ol",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  0,
+                  3,
+                  0
+                ],
+                "text": "￼￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "1",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      3,
+                      1
+                    ],
+                    "text": "1. DOM Ingestion Layer",
+                    "lines": [
+                      [
+                        0,
+                        22
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "1. ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "1. ",
+                        "lines": [
+                          [
+                            0,
+                            3
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "DOM Ingestion Layer",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "DOM Ingestion Layer",
+                        "lines": [
+                          [
+                            0,
+                            19
+                          ]
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "2",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      3,
+                      2
+                    ],
+                    "text": "2. Virtual Buffer Engine",
+                    "lines": [
+                      [
+                        0,
+                        24
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "2. ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "2. ",
+                        "lines": [
+                          [
+                            0,
+                            3
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Virtual Buffer Engine",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Virtual Buffer Engine",
+                        "lines": [
+                          [
+                            0,
+                            21
+                          ]
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "3",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      3,
+                      3
+                    ],
+                    "text": "3. Speech Synthesis Output",
+                    "lines": [
+                      [
+                        0,
+                        26
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "3. ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "3. ",
+                        "lines": [
+                          [
+                            0,
+                            3
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Speech Synthesis Output",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Speech Synthesis Output",
+                        "lines": [
+                          [
+                            0,
+                            23
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "name": "Quick Reference",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "tag": "aside",
+          "text-align": "left",
+          "xml-roles": "complementary"
+        },
+        "text": "￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Helpful Resources",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "group_position": [
+              2,
+              0,
+              0
+            ],
+            "text": "Helpful Resources",
+            "lines": [
+              [
+                0,
+                17
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Helpful Resources",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Helpful Resources",
+                "lines": [
+                  [
+                    0,
+                    17
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "Reference documentation and guidelines.",
+            "lines": [
+              [
+                0,
+                39
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Reference documentation and guidelines.",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Reference documentation and guidelines.",
+                "lines": [
+                  [
+                    0,
+                    39
+                  ]
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "tag": "footer",
+          "text-align": "left",
+          "xml-roles": "contentinfo"
+        },
+        "text": "￼",
+        "lines": [
+          [
+            0,
+            1
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "Copyright 2026 Accessibility Lab.",
+            "lines": [
+              [
+                0,
+                33
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Copyright 2026 Accessibility Lab.",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Copyright 2026 Accessibility Lab.",
+                "lines": [
+                  [
+                    0,
+                    33
+                  ]
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

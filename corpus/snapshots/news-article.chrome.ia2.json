@@ -1,0 +1,2847 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "154.0.8037.98",
+    "fixture_sha256": "b3567efa1f8f22dfc3fbc0347978c42909d2921a59b1559fdb51dac6120b0fa4",
+    "captured_at_unix_ms": 1791985526668,
+    "node_count": 128,
+    "capture_ms": 897
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "City Library Expands Evening Hours - Riverside Gazette",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼￼￼￼",
+    "lines": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        4
+      ]
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "tag": "header",
+          "text-align": "left",
+          "xml-roles": "banner"
+        },
+        "text": "￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 30,
+            "ia2_role": 30,
+            "name": "Riverside Gazette",
+            "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#top",
+            "msaa_states": 5242880,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "inline",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "text": "Riverside Gazette",
+            "lines": [
+              [
+                0,
+                17
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Riverside Gazette",
+                "msaa_states": 4194304,
+                "ia2_states": 1024,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Riverside Gazette",
+                "lines": [
+                  [
+                    0,
+                    17
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1069,
+            "name": "Primary",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "attribute",
+              "tag": "nav",
+              "text-align": "left",
+              "xml-roles": "navigation"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 33,
+                "ia2_role": 33,
+                "msaa_states": 64,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "setsize": "4",
+                  "tag": "ul",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  0,
+                  4,
+                  0
+                ],
+                "text": "￼￼￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ],
+                  [
+                    3,
+                    4
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "1",
+                      "setsize": "4",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      4,
+                      1
+                    ],
+                    "text": "• ￼",
+                    "lines": [
+                      [
+                        0,
+                        3
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "• ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "• ",
+                        "lines": [
+                          [
+                            0,
+                            2
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "News",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#news",
+                        "msaa_states": 5242880,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "News",
+                        "lines": [
+                          [
+                            0,
+                            4
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "News",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "News",
+                            "lines": [
+                              [
+                                0,
+                                4
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "2",
+                      "setsize": "4",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      4,
+                      2
+                    ],
+                    "text": "• ￼",
+                    "lines": [
+                      [
+                        0,
+                        3
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "• ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "• ",
+                        "lines": [
+                          [
+                            0,
+                            2
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "Sports",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#sports",
+                        "msaa_states": 5242880,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "Sports",
+                        "lines": [
+                          [
+                            0,
+                            6
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Sports",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Sports",
+                            "lines": [
+                              [
+                                0,
+                                6
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "3",
+                      "setsize": "4",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      4,
+                      3
+                    ],
+                    "text": "• ￼",
+                    "lines": [
+                      [
+                        0,
+                        3
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "• ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "• ",
+                        "lines": [
+                          [
+                            0,
+                            2
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "Culture",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#culture",
+                        "msaa_states": 5242880,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "Culture",
+                        "lines": [
+                          [
+                            0,
+                            7
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Culture",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Culture",
+                            "lines": [
+                              [
+                                0,
+                                7
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "4",
+                      "setsize": "4",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      4,
+                      4
+                    ],
+                    "text": "• ￼",
+                    "lines": [
+                      [
+                        0,
+                        3
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "• ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "• ",
+                        "lines": [
+                          [
+                            0,
+                            2
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "Opinion",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#opinion",
+                        "msaa_states": 5242880,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "Opinion",
+                        "lines": [
+                          [
+                            0,
+                            7
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Opinion",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Opinion",
+                            "lines": [
+                              [
+                                0,
+                                7
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼",
+        "lines": [
+          [
+            0,
+            1
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 15,
+            "ia2_role": 15,
+            "msaa_states": 64,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "tag": "article",
+              "text-align": "left"
+            },
+            "text": "￼￼￼￼￼￼￼￼￼￼￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                5
+              ],
+              [
+                5,
+                6
+              ],
+              [
+                6,
+                7
+              ],
+              [
+                7,
+                8
+              ],
+              [
+                8,
+                9
+              ],
+              [
+                9,
+                10
+              ],
+              [
+                10,
+                11
+              ],
+              [
+                11,
+                12
+              ],
+              [
+                12,
+                13
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "City Library Expands Evening Hours",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "level": "1",
+                  "name-from": "contents",
+                  "tag": "h1",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  1,
+                  0,
+                  0
+                ],
+                "text": "City Library Expands Evening Hours",
+                "lines": [
+                  [
+                    0,
+                    34
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "City Library Expands Evening Hours",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "City Library Expands Evening Hours",
+                    "lines": [
+                      [
+                        0,
+                        34
+                      ]
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "By ￼, published ￼",
+                "lines": [
+                  [
+                    0,
+                    17
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "By ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "By ",
+                    "lines": [
+                      [
+                        0,
+                        3
+                      ]
+                    ]
+                  },
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Maria Lopez",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#author",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Maria Lopez",
+                    "lines": [
+                      [
+                        0,
+                        11
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Maria Lopez",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Maria Lopez",
+                        "lines": [
+                          [
+                            0,
+                            11
+                          ]
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": ", published ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": ", published ",
+                    "lines": [
+                      [
+                        0,
+                        12
+                      ]
+                    ]
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1065,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "datetime": "2026-03-14",
+                      "display": "inline",
+                      "tag": "time",
+                      "text-align": "left"
+                    },
+                    "text": "March 14, 2026",
+                    "lines": [
+                      [
+                        0,
+                        14
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "March 14, 2026",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "March 14, 2026",
+                        "lines": [
+                          [
+                            0,
+                            14
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "The Riverside City Library will stay open until ￼ on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which ￼ respondents asked for later hours.",
+                "lines": [
+                  [
+                    0,
+                    186
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "The Riverside City Library will stay open until ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "The Riverside City Library will stay open until ",
+                    "lines": [
+                      [
+                        0,
+                        48
+                      ]
+                    ]
+                  },
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1065,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "strong",
+                      "text-align": "left"
+                    },
+                    "text": "9 p.m.",
+                    "lines": [
+                      [
+                        0,
+                        6
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "9 p.m.",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "9 p.m.",
+                        "lines": [
+                          [
+                            0,
+                            6
+                          ]
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": " on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": " on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which ",
+                    "lines": [
+                      [
+                        0,
+                        101
+                      ]
+                    ]
+                  },
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1065,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "em",
+                      "text-align": "left"
+                    },
+                    "text": "most",
+                    "lines": [
+                      [
+                        0,
+                        4
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "most",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "most",
+                        "lines": [
+                          [
+                            0,
+                            4
+                          ]
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": " respondents asked for later hours.",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": " respondents asked for later hours.",
+                    "lines": [
+                      [
+                        0,
+                        35
+                      ]
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 40,
+                "ia2_role": 40,
+                "name": "Front entrance of the Riverside City Library at dusk",
+                "msaa_states": 64,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "inline",
+                  "explicit-name": "true",
+                  "name-from": "attribute",
+                  "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Crect width='120' height='60' fill='%23468'/%3E%3C/svg%3E",
+                  "tag": "img",
+                  "text-align": "left"
+                }
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "What changes",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "What changes",
+                "lines": [
+                  [
+                    0,
+                    12
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "What changes",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "What changes",
+                    "lines": [
+                      [
+                        0,
+                        12
+                      ]
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "Membership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org — or call 555-0142. Attendance rose 3.5% last year, and staff say they can't wait.",
+                "lines": [
+                  [
+                    0,
+                    194
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Membership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org — or call 555-0142. Attendance rose 3.5% last year, and staff say they can't wait.",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Membership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org — or call 555-0142. Attendance rose 3.5% last year, and staff say they can't wait.",
+                    "lines": [
+                      [
+                        0,
+                        194
+                      ]
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 33,
+                "ia2_role": 33,
+                "msaa_states": 64,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "setsize": "3",
+                  "tag": "ul",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  0,
+                  3,
+                  0
+                ],
+                "text": "￼￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "1",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      3,
+                      1
+                    ],
+                    "text": "• Weekday hours: 9 a.m. to 9 p.m.",
+                    "lines": [
+                      [
+                        0,
+                        33
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "• ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "• ",
+                        "lines": [
+                          [
+                            0,
+                            2
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Weekday hours: 9 a.m. to 9 p.m.",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Weekday hours: 9 a.m. to 9 p.m.",
+                        "lines": [
+                          [
+                            0,
+                            31
+                          ]
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "2",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      3,
+                      2
+                    ],
+                    "text": "• Weekend hours, which do not change:￼",
+                    "lines": [
+                      [
+                        0,
+                        37
+                      ],
+                      [
+                        37,
+                        38
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "• ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "• ",
+                        "lines": [
+                          [
+                            0,
+                            2
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Weekend hours, which do not change:",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Weekend hours, which do not change:",
+                        "lines": [
+                          [
+                            0,
+                            35
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 33,
+                        "ia2_role": 33,
+                        "msaa_states": 64,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "block",
+                          "setsize": "2",
+                          "tag": "ul",
+                          "text-align": "left"
+                        },
+                        "group_position": [
+                          0,
+                          2,
+                          0
+                        ],
+                        "text": "￼￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ],
+                          [
+                            1,
+                            2
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "msaa_states": 64,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "display": "list-item",
+                              "level": "2",
+                              "posinset": "1",
+                              "setsize": "2",
+                              "tag": "li",
+                              "text-align": "left"
+                            },
+                            "group_position": [
+                              2,
+                              2,
+                              1
+                            ],
+                            "text": "◦ Saturday: 10 a.m. to 6 p.m.",
+                            "lines": [
+                              [
+                                0,
+                                29
+                              ]
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "◦ ",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "attributes": {
+                                  "display": "inline-block",
+                                  "name-from": "contents",
+                                  "tag": "::marker",
+                                  "text-align": "left"
+                                },
+                                "text": "◦ ",
+                                "lines": [
+                                  [
+                                    0,
+                                    2
+                                  ]
+                                ]
+                              },
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "Saturday: 10 a.m. to 6 p.m.",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "text": "Saturday: 10 a.m. to 6 p.m.",
+                                "lines": [
+                                  [
+                                    0,
+                                    27
+                                  ]
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "msaa_states": 64,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "display": "list-item",
+                              "level": "2",
+                              "posinset": "2",
+                              "setsize": "2",
+                              "tag": "li",
+                              "text-align": "left"
+                            },
+                            "group_position": [
+                              2,
+                              2,
+                              2
+                            ],
+                            "text": "◦ Sunday: noon to 5 p.m.",
+                            "lines": [
+                              [
+                                0,
+                                24
+                              ]
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "◦ ",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "attributes": {
+                                  "display": "inline-block",
+                                  "name-from": "contents",
+                                  "tag": "::marker",
+                                  "text-align": "left"
+                                },
+                                "text": "◦ ",
+                                "lines": [
+                                  [
+                                    0,
+                                    2
+                                  ]
+                                ]
+                              },
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "Sunday: noon to 5 p.m.",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "text": "Sunday: noon to 5 p.m.",
+                                "lines": [
+                                  [
+                                    0,
+                                    22
+                                  ]
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "3",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      3,
+                      3
+                    ],
+                    "text": "• New ￼ open in May.",
+                    "lines": [
+                      [
+                        0,
+                        20
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "• ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "• ",
+                        "lines": [
+                          [
+                            0,
+                            2
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "New ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "New ",
+                        "lines": [
+                          [
+                            0,
+                            4
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "study rooms",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#study-rooms",
+                        "msaa_states": 5242880,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "study rooms",
+                        "lines": [
+                          [
+                            0,
+                            11
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "study rooms",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "study rooms",
+                            "lines": [
+                              [
+                                0,
+                                11
+                              ]
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": " open in May.",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": " open in May.",
+                        "lines": [
+                          [
+                            0,
+                            13
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Opening schedule",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "Opening schedule",
+                "lines": [
+                  [
+                    0,
+                    16
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Opening schedule",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Opening schedule",
+                    "lines": [
+                      [
+                        0,
+                        16
+                      ]
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 24,
+                "ia2_role": 24,
+                "name": "Branch hours after the change",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "table",
+                  "explicit-name": "true",
+                  "name-from": "caption",
+                  "tag": "table",
+                  "text-align": "left"
+                },
+                "text": "￼￼￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ],
+                  [
+                    3,
+                    4
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1026,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "table-caption",
+                      "tag": "caption",
+                      "text-align": "center"
+                    },
+                    "text": "Branch hours after the change",
+                    "lines": [
+                      [
+                        0,
+                        29
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Branch hours after the change",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Branch hours after the change",
+                        "lines": [
+                          [
+                            0,
+                            29
+                          ]
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 28,
+                    "ia2_role": 28,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "table-row",
+                      "tag": "tr",
+                      "text-align": "left"
+                    },
+                    "text": "￼￼￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ],
+                      [
+                        2,
+                        3
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 25,
+                        "ia2_role": 25,
+                        "name": "Branch",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "0",
+                          "tag": "th",
+                          "text-align": "center"
+                        },
+                        "text": "Branch",
+                        "lines": [
+                          [
+                            0,
+                            6
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Branch",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Branch",
+                            "lines": [
+                              [
+                                0,
+                                6
+                              ]
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 25,
+                        "ia2_role": 25,
+                        "name": "Weekdays",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "1",
+                          "tag": "th",
+                          "text-align": "center"
+                        },
+                        "text": "Weekdays",
+                        "lines": [
+                          [
+                            0,
+                            8
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Weekdays",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Weekdays",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 25,
+                        "ia2_role": 25,
+                        "name": "Details",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "2",
+                          "tag": "th",
+                          "text-align": "center"
+                        },
+                        "text": "Details",
+                        "lines": [
+                          [
+                            0,
+                            7
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Details",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Details",
+                            "lines": [
+                              [
+                                0,
+                                7
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 28,
+                    "ia2_role": 28,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "table-row",
+                      "tag": "tr",
+                      "text-align": "left"
+                    },
+                    "text": "￼￼￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ],
+                      [
+                        2,
+                        3
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 26,
+                        "ia2_role": 26,
+                        "name": "Central",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "3",
+                          "tag": "th",
+                          "text-align": "center"
+                        },
+                        "text": "Central",
+                        "lines": [
+                          [
+                            0,
+                            7
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Central",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Central",
+                            "lines": [
+                              [
+                                0,
+                                7
+                              ]
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 29,
+                        "ia2_role": 29,
+                        "name": "9 a.m. to 9 p.m.",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "4",
+                          "tag": "td",
+                          "text-align": "left"
+                        },
+                        "text": "9 a.m. to 9 p.m.",
+                        "lines": [
+                          [
+                            0,
+                            16
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "9 a.m. to 9 p.m.",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "9 a.m. to 9 p.m.",
+                            "lines": [
+                              [
+                                0,
+                                16
+                              ]
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 29,
+                        "ia2_role": 29,
+                        "name": "Directions",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "5",
+                          "tag": "td",
+                          "text-align": "left"
+                        },
+                        "text": "￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 30,
+                            "ia2_role": 30,
+                            "name": "Directions",
+                            "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#central",
+                            "msaa_states": 5242880,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "display": "inline",
+                              "name-from": "contents",
+                              "tag": "a",
+                              "text-align": "left"
+                            },
+                            "text": "Directions",
+                            "lines": [
+                              [
+                                0,
+                                10
+                              ]
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "Directions",
+                                "msaa_states": 4194304,
+                                "ia2_states": 1024,
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "text": "Directions",
+                                "lines": [
+                                  [
+                                    0,
+                                    10
+                                  ]
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 28,
+                    "ia2_role": 28,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "table-row",
+                      "tag": "tr",
+                      "text-align": "left"
+                    },
+                    "text": "￼￼￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ],
+                      [
+                        2,
+                        3
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 26,
+                        "ia2_role": 26,
+                        "name": "Northside",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "6",
+                          "tag": "th",
+                          "text-align": "center"
+                        },
+                        "text": "Northside",
+                        "lines": [
+                          [
+                            0,
+                            9
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Northside",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Northside",
+                            "lines": [
+                              [
+                                0,
+                                9
+                              ]
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 29,
+                        "ia2_role": 29,
+                        "name": "10 a.m. to 8 p.m.",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "7",
+                          "tag": "td",
+                          "text-align": "left"
+                        },
+                        "text": "10 a.m. to 8 p.m.",
+                        "lines": [
+                          [
+                            0,
+                            17
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "10 a.m. to 8 p.m.",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "10 a.m. to 8 p.m.",
+                            "lines": [
+                              [
+                                0,
+                                17
+                              ]
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 29,
+                        "ia2_role": 29,
+                        "name": "Directions",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "8",
+                          "tag": "td",
+                          "text-align": "left"
+                        },
+                        "text": "￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ]
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 30,
+                            "ia2_role": 30,
+                            "name": "Directions",
+                            "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#northside",
+                            "msaa_states": 5242880,
+                            "ia2_states": 1024,
+                            "attributes": {
+                              "display": "inline",
+                              "name-from": "contents",
+                              "tag": "a",
+                              "text-align": "left"
+                            },
+                            "text": "Directions",
+                            "lines": [
+                              [
+                                0,
+                                10
+                              ]
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "Directions",
+                                "msaa_states": 4194304,
+                                "ia2_states": 1024,
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "text": "Directions",
+                                "lines": [
+                                  [
+                                    0,
+                                    10
+                                  ]
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "What readers said",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "level": "3",
+                  "name-from": "contents",
+                  "tag": "h3",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  3,
+                  0,
+                  0
+                ],
+                "text": "What readers said",
+                "lines": [
+                  [
+                    0,
+                    17
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "What readers said",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "What readers said",
+                    "lines": [
+                      [
+                        0,
+                        17
+                      ]
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1073,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "tag": "blockquote",
+                  "text-align": "left"
+                },
+                "text": "￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1054,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "block",
+                      "tag": "p",
+                      "text-align": "left"
+                    },
+                    "text": "Finally, I can study after work.",
+                    "lines": [
+                      [
+                        0,
+                        32
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Finally, I can study after work.",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Finally, I can study after work.",
+                        "lines": [
+                          [
+                            0,
+                            32
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 65536,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before most people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available at the times when the community actually needs them, according to the library director.",
+                "lines": [
+                  [
+                    0,
+                    233
+                  ],
+                  [
+                    233,
+                    396
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before most people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available at the times when the community actually needs them, according to the library director.",
+                    "msaa_states": 65536,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before most people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available at the times when the community actually needs them, according to the library director.",
+                    "lines": [
+                      [
+                        0,
+                        233
+                      ],
+                      [
+                        233,
+                        396
+                      ]
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 33,
+                "ia2_role": 33,
+                "msaa_states": 65600,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "block",
+                  "setsize": "3",
+                  "tag": "ol",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  0,
+                  3,
+                  0
+                ],
+                "text": "￼￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 65600,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "1",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      3,
+                      1
+                    ],
+                    "text": "1. Board vote in March",
+                    "lines": [
+                      [
+                        0,
+                        22
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "1. ",
+                        "msaa_states": 65536,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "1. ",
+                        "lines": [
+                          [
+                            0,
+                            3
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Board vote in March",
+                        "msaa_states": 65536,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Board vote in March",
+                        "lines": [
+                          [
+                            0,
+                            19
+                          ]
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 65600,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "2",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      3,
+                      2
+                    ],
+                    "text": "2. Hiring in April",
+                    "lines": [
+                      [
+                        0,
+                        18
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "2. ",
+                        "msaa_states": 65536,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "2. ",
+                        "lines": [
+                          [
+                            0,
+                            3
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Hiring in April",
+                        "msaa_states": 65536,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Hiring in April",
+                        "lines": [
+                          [
+                            0,
+                            15
+                          ]
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 65600,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "3",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      3,
+                      3
+                    ],
+                    "text": "3. Review in October",
+                    "lines": [
+                      [
+                        0,
+                        20
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "3. ",
+                        "msaa_states": 65536,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "3. ",
+                        "lines": [
+                          [
+                            0,
+                            3
+                          ]
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Review in October",
+                        "msaa_states": 65536,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Review in October",
+                        "lines": [
+                          [
+                            0,
+                            17
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "name": "Related stories",
+        "msaa_states": 65536,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "tag": "aside",
+          "text-align": "left",
+          "xml-roles": "complementary"
+        },
+        "text": "￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Related stories",
+            "msaa_states": 65536,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "group_position": [
+              2,
+              0,
+              0
+            ],
+            "text": "Related stories",
+            "lines": [
+              [
+                0,
+                15
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Related stories",
+                "msaa_states": 65536,
+                "ia2_states": 1024,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Related stories",
+                "lines": [
+                  [
+                    0,
+                    15
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 33,
+            "ia2_role": 33,
+            "msaa_states": 65600,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "setsize": "2",
+              "tag": "ul",
+              "text-align": "left"
+            },
+            "group_position": [
+              0,
+              2,
+              0
+            ],
+            "text": "￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 34,
+                "ia2_role": 34,
+                "msaa_states": 65600,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "1",
+                  "setsize": "2",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  1,
+                  2,
+                  1
+                ],
+                "text": "• ￼",
+                "lines": [
+                  [
+                    0,
+                    3
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "• ",
+                    "msaa_states": 65536,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "text": "• ",
+                    "lines": [
+                      [
+                        0,
+                        2
+                      ]
+                    ]
+                  },
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Council approves library budget",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#budget",
+                    "msaa_states": 5308416,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Council approves library budget",
+                    "lines": [
+                      [
+                        0,
+                        31
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Council approves library budget",
+                        "msaa_states": 4259840,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Council approves library budget",
+                        "lines": [
+                          [
+                            0,
+                            31
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 34,
+                "ia2_role": 34,
+                "msaa_states": 65600,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "2",
+                  "setsize": "2",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  1,
+                  2,
+                  2
+                ],
+                "text": "• ￼",
+                "lines": [
+                  [
+                    0,
+                    3
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "• ",
+                    "msaa_states": 65536,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "text": "• ",
+                    "lines": [
+                      [
+                        0,
+                        2
+                      ]
+                    ]
+                  },
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Spring book fair returns",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#bookfair",
+                    "msaa_states": 5308416,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Spring book fair returns",
+                    "lines": [
+                      [
+                        0,
+                        24
+                      ]
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Spring book fair returns",
+                        "msaa_states": 4259840,
+                        "ia2_states": 1024,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Spring book fair returns",
+                        "lines": [
+                          [
+                            0,
+                            24
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 65536,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "tag": "footer",
+          "text-align": "left",
+          "xml-roles": "contentinfo"
+        },
+        "text": "￼",
+        "lines": [
+          [
+            0,
+            1
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 65536,
+            "ia2_states": 1024,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "© 2026 Riverside Gazette. ￼",
+            "lines": [
+              [
+                0,
+                27
+              ]
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "© 2026 Riverside Gazette. ",
+                "msaa_states": 65536,
+                "ia2_states": 1024,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "© 2026 Riverside Gazette. ",
+                "lines": [
+                  [
+                    0,
+                    26
+                  ]
+                ]
+              },
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "Contact us",
+                "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#contact",
+                "msaa_states": 5308416,
+                "ia2_states": 1024,
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "Contact us",
+                "lines": [
+                  [
+                    0,
+                    10
+                  ]
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Contact us",
+                    "msaa_states": 4259840,
+                    "ia2_states": 1024,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Contact us",
+                    "lines": [
+                      [
+                        0,
+                        10
+                      ]
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

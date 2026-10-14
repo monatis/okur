@@ -1,0 +1,206 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Document Reading Reference Fixture - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "154.0.8037.98",
+    "fixture_sha256": "7a68ca85fbfbc6deab6e587dc60a7c85a913437047c97fa9a807d3bc9786cbe8",
+    "captured_at_unix_ms": 1791985533802,
+    "node_count": 9,
+    "capture_ms": 93
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Document Reading Reference Fixture",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼￼￼￼",
+    "lines": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        4
+      ]
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1044,
+        "name": "The Accessibility Engine Specification",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "group_position": [
+          1,
+          0,
+          0
+        ],
+        "text": "The Accessibility Engine Specification",
+        "lines": [
+          [
+            0,
+            38
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "The Accessibility Engine Specification",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "The Accessibility Engine Specification",
+            "lines": [
+              [
+                0,
+                38
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "The screen reader engine parses the document object model into a clean virtual buffer.",
+        "lines": [
+          [
+            0,
+            86
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "The screen reader engine parses the document object model into a clean virtual buffer.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "The screen reader engine parses the document object model into a clean virtual buffer.",
+            "lines": [
+              [
+                0,
+                86
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Engine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.",
+        "lines": [
+          [
+            0,
+            115
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Engine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Engine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.",
+            "lines": [
+              [
+                0,
+                115
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Rust provides memory safety without garbage collection latency. This ensures predictable audio delivery.",
+        "lines": [
+          [
+            0,
+            104
+          ]
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Rust provides memory safety without garbage collection latency. This ensures predictable audio delivery.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Rust provides memory safety without garbage collection latency. This ensures predictable audio delivery.",
+            "lines": [
+              [
+                0,
+                104
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
