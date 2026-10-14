@@ -32,11 +32,18 @@ const MSAA_BUTTONMENU: i32 = 0x39;
 /// Bumped whenever the recorded fields or their meaning change.
 pub const TRACE_FORMAT_VERSION: u32 = 7;
 
-/// Foreground windows whose focus moves only through UIA: no WinEvent reports it. The task
+/// Foreground windows while focus moves only through UIA: no WinEvent reports it. The task
 /// switcher (Alt+Tab) focuses each window's item as Tab is pressed with Alt held (the same
 /// items NVDA's explorer module handles: `MultitaskingViewFrame` on Windows 10,
-/// `XamlExplorerHostIslandWindow` on Windows 11, which also hosts Task View).
-pub const UIA_FOCUS_WINDOWS: [&str; 2] = ["MultitaskingViewFrame", "XamlExplorerHostIslandWindow"];
+/// `XamlExplorerHostIslandWindow` on Windows 11, which also hosts Task View). On Windows 10
+/// the switcher itself is never foreground: the shell's invisible `ForegroundStaging` window
+/// is, and no WinEvent names the switcher, though JAWS speaks it [obs, 306/s7 trial 1:
+/// "Task Switching" with only ForegroundStaging events traced].
+pub const UIA_FOCUS_WINDOWS: [&str; 3] = [
+    "MultitaskingViewFrame",
+    "XamlExplorerHostIslandWindow",
+    "ForegroundStaging",
+];
 
 /// Whether a recorded event is a focus change, from a WinEvent or from UIA.
 pub fn is_focus(event: &TraceEvent) -> bool {
