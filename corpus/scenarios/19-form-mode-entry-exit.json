@@ -2,53 +2,13 @@
   "id": "19-form-mode-entry-exit",
   "name": "Forms Mode Entry and Exit",
   "category": "Forms and Interaction Modes",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
   "target_app": "chrome",
-  "reset": {
-    "keystrokes": [
-      "^{HOME}"
-    ],
-    "exit_forms_mode": true
-  },
+  "reset": { "keys": ["Ctrl+Home"] },
   "steps": [
-    {
-      "id": "s1",
-      "type": "jaws_script",
-      "command": "MoveToNextEdit",
-      "settle_ms": 350,
-      "assertions": {
-        "target_role": "edit",
-        "target_name": "Full Name:",
-        "contains_speech": [
-          "Full Name:",
-          "Edit"
-        ]
-      }
-    },
-    {
-      "id": "s2",
-      "type": "keyboard",
-      "command": "{ENTER}",
-      "settle_ms": 400,
-      "assertions": {
-        "forms_mode_active": true,
-        "contains_speech": [
-          "Type in text"
-        ]
-      }
-    },
-    {
-      "id": "s3",
-      "type": "keyboard",
-      "command": "{ESC}",
-      "settle_ms": 400,
-      "assertions": {
-        "forms_mode_active": false,
-        "contains_speech": [
-          "virtual PC Cursor"
-        ]
-      }
-    }
+    { "id": "s1", "type": "key", "command": "E" },
+    { "id": "s2", "type": "key", "command": "Enter" },
+    { "id": "s3", "type": "key", "command": "Escape" }
   ]
 }

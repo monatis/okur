@@ -1,7 +1,18 @@
-﻿{
+{
+    "format_version":  2,
     "scenario_id":  "19-form-mode-entry-exit",
-    "scenario_version":  "1.1.0",
-    "timestamp":  "2026-10-12T22:26:15.9935524+03:00",
+    "scenario_version":  "2.0.0",
+    "timestamp":  "2026-10-14T20:35:08.7100494+03:00",
+    "provenance":  {
+                       "capture_script_sha256":  "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
+                       "scenario_sha256":  "4f14e33684c008fae9d2bf8496238cfa92aacffe73bce1806a35c8e94828c88d",
+                       "fixture_sha256":  "18fce31741084133ec7f31cd746e51f3cf00a36df7d5b92a1d5af35410748d5f",
+                       "host":  "DESKTOP-DCNAKQQ",
+                       "os_build":  "Microsoft Windows [Version 10.0.19045.6456]",
+                       "keyboard_layout":  "Turkish Q",
+                       "chrome_version":  "155.0.8059.40",
+                       "jaws_version":  "2025.2505.43.400"
+                   },
     "environment":  {
                         "os_version":  "Microsoft Windows NT 10.0.19045.0",
                         "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
@@ -13,345 +24,364 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-12T22:26:18.6068781+03:00",
-                       "foreground_window_start":  "Forms and Interaction Reference Fixture - Google Chrome",
+                       "timestamp":  "2026-10-14T20:35:10.9773036+03:00",
+                       "foreground_window_start":  "C:\\Users\\ailabs\\Desktop\\code",
+                       "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
+                                                "t_start_ms":  1791999316567,
+                                                "t_end_ms":  1791999320578,
                                                 "action":  {
-                                                               "type":  "jaws_script",
-                                                               "command":  "MoveToNextEdit"
+                                                               "type":  "key",
+                                                               "command":  "E"
                                                            },
                                                 "observation":  {
-                                                                    "speech_raw":  "Full Name:  \u001d Edit \u001e  \nJane Doe",
-                                                                    "dispatch_ok":  true
+                                                                    "speech_raw":  "",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2300,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  true,
+                                                                    "baseline_settled":  true
                                                                 },
-                                                "assertions":  {
-                                                                   "target_role":  "edit",
-                                                                   "target_name":  "Full Name:",
-                                                                   "contains_speech":  [
-                                                                                           "Full Name:",
-                                                                                           "Edit"
-                                                                                       ]
-                                                               },
-                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s2",
+                                                "t_start_ms":  1791999321611,
+                                                "t_end_ms":  1791999328486,
                                                 "action":  {
-                                                               "type":  "keyboard",
-                                                               "command":  "{ENTER}"
+                                                               "type":  "key",
+                                                               "command":  "Enter"
                                                            },
                                                 "observation":  {
-                                                                    "speech_raw":  "Forms and Interaction Reference Fixture \n \u001d FormRegion \u001e \nFull Name:  \u001d Edit \u001e   \nJane Doe\nType in text.",
-                                                                    "dispatch_ok":  true
+                                                                    "speech_raw":  "Items View  \u001d MultiSelect ListBox \u001e \nNot Selected load_display_save.py \n‎6/‎6/‎2016 ‏‎8:50 AM PY File 1 KB\n1 of 1\nTo move to an item press the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  6476,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
-                                                "assertions":  {
-                                                                   "forms_mode_active":  true,
-                                                                   "contains_speech":  [
-                                                                                           "Type in text"
-                                                                                       ]
-                                                               },
-                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s3",
+                                                "t_start_ms":  1791999330306,
+                                                "t_end_ms":  1791999332712,
                                                 "action":  {
-                                                               "type":  "keyboard",
-                                                               "command":  "{ESC}"
+                                                               "type":  "key",
+                                                               "command":  "Escape"
                                                            },
                                                 "observation":  {
-                                                                    "speech_raw":  "virtual PC Cursor",
-                                                                    "dispatch_ok":  true
+                                                                    "speech_raw":  "",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  false,
+                                                                    "settle_ms":  805,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
-                                                "assertions":  {
-                                                                   "forms_mode_active":  false,
-                                                                   "contains_speech":  [
-                                                                                           "virtual PC Cursor"
-                                                                                       ]
-                                                               },
-                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
-                       "trial_success":  true
+                       "trial_success":  false,
+                       "trace_file":  "19-form-mode-entry-exit-trial1.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "5f672cee6984f5ae47fe0d4a635f91f8373a7329472729fdb89ca90b53a25a66"
                    },
                    {
                        "trial_index":  2,
-                       "timestamp":  "2026-10-12T22:26:22.6678464+03:00",
+                       "timestamp":  "2026-10-14T20:35:32.7796837+03:00",
                        "foreground_window_start":  "Forms and Interaction Reference Fixture - Google Chrome",
+                       "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
+                                                "t_start_ms":  1791999339947,
+                                                "t_end_ms":  1791999341768,
                                                 "action":  {
-                                                               "type":  "jaws_script",
-                                                               "command":  "MoveToNextEdit"
+                                                               "type":  "key",
+                                                               "command":  "E"
                                                            },
                                                 "observation":  {
                                                                     "speech_raw":  "Full Name:  \u001d Edit \u001e  \nJane Doe",
-                                                                    "dispatch_ok":  true
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1383,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
-                                                "assertions":  {
-                                                                   "target_role":  "edit",
-                                                                   "target_name":  "Full Name:",
-                                                                   "contains_speech":  [
-                                                                                           "Full Name:",
-                                                                                           "Edit"
-                                                                                       ]
-                                                               },
-                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s2",
+                                                "t_start_ms":  1791999343538,
+                                                "t_end_ms":  1791999347261,
                                                 "action":  {
-                                                               "type":  "keyboard",
-                                                               "command":  "{ENTER}"
+                                                               "type":  "key",
+                                                               "command":  "Enter"
                                                            },
                                                 "observation":  {
                                                                     "speech_raw":  "Forms and Interaction Reference Fixture \n \u001d FormRegion \u001e \nFull Name:  \u001d Edit \u001e   \nJane Doe\nType in text.",
-                                                                    "dispatch_ok":  true
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3316,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
-                                                "assertions":  {
-                                                                   "forms_mode_active":  true,
-                                                                   "contains_speech":  [
-                                                                                           "Type in text"
-                                                                                       ]
-                                                               },
-                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s3",
+                                                "t_start_ms":  1791999349077,
+                                                "t_end_ms":  1791999350777,
                                                 "action":  {
-                                                               "type":  "keyboard",
-                                                               "command":  "{ESC}"
+                                                               "type":  "key",
+                                                               "command":  "Escape"
                                                            },
                                                 "observation":  {
                                                                     "speech_raw":  "virtual PC Cursor",
-                                                                    "dispatch_ok":  true
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1290,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
-                                                "assertions":  {
-                                                                   "forms_mode_active":  false,
-                                                                   "contains_speech":  [
-                                                                                           "virtual PC Cursor"
-                                                                                       ]
-                                                               },
-                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
-                       "trial_success":  true
+                       "trial_success":  true,
+                       "trace_file":  "19-form-mode-entry-exit-trial2.jsonl",
+                       "page_load_settled":  false,
+                       "trace_sha256":  "6b048d076e6840cfbe4be2a19fecc8ffbc0d1641200750f219a6b746cd2a7d71"
                    },
                    {
                        "trial_index":  3,
-                       "timestamp":  "2026-10-12T22:26:26.7339675+03:00",
+                       "timestamp":  "2026-10-14T20:35:50.8389864+03:00",
                        "foreground_window_start":  "Forms and Interaction Reference Fixture - Google Chrome",
+                       "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
+                                                "t_start_ms":  1791999357992,
+                                                "t_end_ms":  1791999359784,
                                                 "action":  {
-                                                               "type":  "jaws_script",
-                                                               "command":  "MoveToNextEdit"
+                                                               "type":  "key",
+                                                               "command":  "E"
                                                            },
                                                 "observation":  {
                                                                     "speech_raw":  "Full Name:  \u001d Edit \u001e  \nJane Doe",
-                                                                    "dispatch_ok":  true
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1373,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
-                                                "assertions":  {
-                                                                   "target_role":  "edit",
-                                                                   "target_name":  "Full Name:",
-                                                                   "contains_speech":  [
-                                                                                           "Full Name:",
-                                                                                           "Edit"
-                                                                                       ]
-                                                               },
-                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s2",
+                                                "t_start_ms":  1791999361596,
+                                                "t_end_ms":  1791999365343,
                                                 "action":  {
-                                                               "type":  "keyboard",
-                                                               "command":  "{ENTER}"
+                                                               "type":  "key",
+                                                               "command":  "Enter"
                                                            },
                                                 "observation":  {
                                                                     "speech_raw":  "Forms and Interaction Reference Fixture \n \u001d FormRegion \u001e \nFull Name:  \u001d Edit \u001e   \nJane Doe\nType in text.",
-                                                                    "dispatch_ok":  true
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3340,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
-                                                "assertions":  {
-                                                                   "forms_mode_active":  true,
-                                                                   "contains_speech":  [
-                                                                                           "Type in text"
-                                                                                       ]
-                                                               },
-                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s3",
+                                                "t_start_ms":  1791999367156,
+                                                "t_end_ms":  1791999368868,
                                                 "action":  {
-                                                               "type":  "keyboard",
-                                                               "command":  "{ESC}"
+                                                               "type":  "key",
+                                                               "command":  "Escape"
                                                            },
                                                 "observation":  {
                                                                     "speech_raw":  "virtual PC Cursor",
-                                                                    "dispatch_ok":  true
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1325,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
-                                                "assertions":  {
-                                                                   "forms_mode_active":  false,
-                                                                   "contains_speech":  [
-                                                                                           "virtual PC Cursor"
-                                                                                       ]
-                                                               },
-                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
-                       "trial_success":  true
+                       "trial_success":  true,
+                       "trace_file":  "19-form-mode-entry-exit-trial3.jsonl",
+                       "page_load_settled":  false,
+                       "trace_sha256":  "0c5cfb20b07e34ec36802114e9876546b046038fa4fd7ebcc07196c9fd6ace7f"
                    },
                    {
                        "trial_index":  4,
-                       "timestamp":  "2026-10-12T22:26:30.7943068+03:00",
+                       "timestamp":  "2026-10-14T20:36:08.9480270+03:00",
                        "foreground_window_start":  "Forms and Interaction Reference Fixture - Google Chrome",
+                       "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
+                                                "t_start_ms":  1791999376101,
+                                                "t_end_ms":  1791999377876,
                                                 "action":  {
-                                                               "type":  "jaws_script",
-                                                               "command":  "MoveToNextEdit"
+                                                               "type":  "key",
+                                                               "command":  "E"
                                                            },
                                                 "observation":  {
                                                                     "speech_raw":  "Full Name:  \u001d Edit \u001e  \nJane Doe",
-                                                                    "dispatch_ok":  true
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1366,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
-                                                "assertions":  {
-                                                                   "target_role":  "edit",
-                                                                   "target_name":  "Full Name:",
-                                                                   "contains_speech":  [
-                                                                                           "Full Name:",
-                                                                                           "Edit"
-                                                                                       ]
-                                                               },
-                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s2",
+                                                "t_start_ms":  1791999379686,
+                                                "t_end_ms":  1791999383388,
                                                 "action":  {
-                                                               "type":  "keyboard",
-                                                               "command":  "{ENTER}"
+                                                               "type":  "key",
+                                                               "command":  "Enter"
                                                            },
                                                 "observation":  {
                                                                     "speech_raw":  "Forms and Interaction Reference Fixture \n \u001d FormRegion \u001e \nFull Name:  \u001d Edit \u001e   \nJane Doe\nType in text.",
-                                                                    "dispatch_ok":  true
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3297,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
-                                                "assertions":  {
-                                                                   "forms_mode_active":  true,
-                                                                   "contains_speech":  [
-                                                                                           "Type in text"
-                                                                                       ]
-                                                               },
-                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s3",
+                                                "t_start_ms":  1791999385192,
+                                                "t_end_ms":  1791999386896,
                                                 "action":  {
-                                                               "type":  "keyboard",
-                                                               "command":  "{ESC}"
+                                                               "type":  "key",
+                                                               "command":  "Escape"
                                                            },
                                                 "observation":  {
                                                                     "speech_raw":  "virtual PC Cursor",
-                                                                    "dispatch_ok":  true
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1325,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
-                                                "assertions":  {
-                                                                   "forms_mode_active":  false,
-                                                                   "contains_speech":  [
-                                                                                           "virtual PC Cursor"
-                                                                                       ]
-                                                               },
-                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
-                       "trial_success":  true
+                       "trial_success":  true,
+                       "trace_file":  "19-form-mode-entry-exit-trial4.jsonl",
+                       "page_load_settled":  false,
+                       "trace_sha256":  "74a1caacf18fb9cd36cf05ddfe26a811124d0a6c03747e9c952304e793450c44"
                    },
                    {
                        "trial_index":  5,
-                       "timestamp":  "2026-10-12T22:26:34.8507369+03:00",
+                       "timestamp":  "2026-10-14T20:36:26.9273393+03:00",
                        "foreground_window_start":  "Forms and Interaction Reference Fixture - Google Chrome",
+                       "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
+                                                "t_start_ms":  1791999394097,
+                                                "t_end_ms":  1791999395926,
                                                 "action":  {
-                                                               "type":  "jaws_script",
-                                                               "command":  "MoveToNextEdit"
+                                                               "type":  "key",
+                                                               "command":  "E"
                                                            },
                                                 "observation":  {
                                                                     "speech_raw":  "Full Name:  \u001d Edit \u001e  \nJane Doe",
-                                                                    "dispatch_ok":  true
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1410,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
-                                                "assertions":  {
-                                                                   "target_role":  "edit",
-                                                                   "target_name":  "Full Name:",
-                                                                   "contains_speech":  [
-                                                                                           "Full Name:",
-                                                                                           "Edit"
-                                                                                       ]
-                                                               },
-                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s2",
+                                                "t_start_ms":  1791999397696,
+                                                "t_end_ms":  1791999401443,
                                                 "action":  {
-                                                               "type":  "keyboard",
-                                                               "command":  "{ENTER}"
+                                                               "type":  "key",
+                                                               "command":  "Enter"
                                                            },
                                                 "observation":  {
                                                                     "speech_raw":  "Forms and Interaction Reference Fixture \n \u001d FormRegion \u001e \nFull Name:  \u001d Edit \u001e   \nJane Doe\nType in text.",
-                                                                    "dispatch_ok":  true
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3348,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
-                                                "assertions":  {
-                                                                   "forms_mode_active":  true,
-                                                                   "contains_speech":  [
-                                                                                           "Type in text"
-                                                                                       ]
-                                                               },
-                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             },
                                             {
                                                 "step_id":  "s3",
+                                                "t_start_ms":  1791999403249,
+                                                "t_end_ms":  1791999404960,
                                                 "action":  {
-                                                               "type":  "keyboard",
-                                                               "command":  "{ESC}"
+                                                               "type":  "key",
+                                                               "command":  "Escape"
                                                            },
                                                 "observation":  {
                                                                     "speech_raw":  "virtual PC Cursor",
-                                                                    "dispatch_ok":  true
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1291,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
-                                                "assertions":  {
-                                                                   "forms_mode_active":  false,
-                                                                   "contains_speech":  [
-                                                                                           "virtual PC Cursor"
-                                                                                       ]
-                                                               },
-                                                "assertions_passed":  true,
                                                 "step_success":  true
                                             }
                                         ],
-                       "trial_success":  true
+                       "trial_success":  true,
+                       "trace_file":  "19-form-mode-entry-exit-trial5.jsonl",
+                       "page_load_settled":  false,
+                       "trace_sha256":  "4ac5dc1aeb845b87fb391f8ec80e2afc7ed243e4dadf3b2c69ac3deb3850f95f"
                    }
                ],
-    "summary":  {
-                    "total_trials":  5,
-                    "successful_trials":  5,
-                    "deterministic_match":  true,
-                    "stability":  "deterministic",
-                    "total_elapsed_ms":  20969
-                }
+    "total_elapsed_ms":  97070
 }

@@ -495,12 +495,12 @@
       "scenario_id": "19-form-mode-entry-exit",
       "fixture": "forms-interaction.html",
       "evidence": {
-        "sha256": "c92347868a533be58ddd0c99d9689483e5e19fa0aba6565515bfacd5715ade2b",
-        "capture_script_sha256": null,
+        "sha256": "5b34efc4d923a8e7ab155da26acb1422397a58f90aeb5080c94a08ffca23305b",
+        "capture_script_sha256": "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 5,
-        "successful_trials": 5,
+        "successful_trials": 4,
         "deterministic": true,
         "summary_consistent": true
       }
@@ -509,12 +509,12 @@
       "scenario_id": "20-form-checkbox-toggle",
       "fixture": "forms-interaction.html",
       "evidence": {
-        "sha256": "1260948d12d55b9826a7bfaf6713cf51e6296892203f1ea4c88639bb82035222",
-        "capture_script_sha256": null,
+        "sha256": "29b18fc3f079c3b6a0fe369864da0e593a522e77541bdc15fa5e61844622d457",
+        "capture_script_sha256": "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 5,
-        "successful_trials": 5,
+        "successful_trials": 4,
         "deterministic": false,
         "summary_consistent": true
       }
@@ -705,13 +705,13 @@
       "scenario_id": "29-dynamic-tab-selection",
       "fixture": "boundaries-dynamic.html",
       "evidence": {
-        "sha256": "ea76bd7464503cef66c0577c75ebec7a4053331a6750d3273d4f86ff2e334048",
-        "capture_script_sha256": null,
+        "sha256": "8eb881ab41c9a51f18c4cff9144e50a84d8d6a81deb0a61702b4b96346290646",
+        "capture_script_sha256": "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 5,
-        "successful_trials": 5,
-        "deterministic": false,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -804,7 +804,7 @@
     "scenarios": 54,
     "scenarios_with_evidence": 54,
     "total_trials": 270,
-    "successful_trials": 269,
-    "deterministic_scenarios": 45
+    "successful_trials": 265,
+    "deterministic_scenarios": 46
   }
 }
