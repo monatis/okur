@@ -21,7 +21,7 @@ Step types:
 
 Settling: after each action the default audio endpoint is metered (sr-cli wait-silence; JAWS is
 the only audio source on the reference machine) until it has been silent for quiet_ms (default
-500) after speech, or no speech started within 800 ms, or settle_max_ms (default 4000) elapses.
+500) after speech, or no speech started within 800 ms, or settle_max_ms (default 10000) elapses.
 The speech history is then copied exactly once; polling it is impossible because JAWS speaks and
 records a "Copy speech history to clipboard" confirmation on every copy. Every trial reloads the
 page, waits for the page-load speech to finish, applies the reset keys, waits again, then stops
@@ -217,7 +217,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     $resetQuiet = $loadQuiet
     foreach ($rk in $resetKeys) {
         [void](Send-Chord $rk)
-        $resetQuiet = Wait-Silence -OnsetMs 800 -QuietMs 500 -MaxMs 5000
+        $resetQuiet = Wait-Silence -OnsetMs 800 -QuietMs 500 -MaxMs 10000
     }
     $jaws.StopSpeech()
     [void]$jaws.RunScript("ClearSpeechHistory")
@@ -231,7 +231,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     }
 
     foreach ($step in $scenario.steps) {
-        $maxMs = if ($step.settle_max_ms) { [int]$step.settle_max_ms } else { 4000 }
+        $maxMs = if ($step.settle_max_ms) { [int]$step.settle_max_ms } else { 10000 }
         $quietMs = if ($step.quiet_ms) { [int]$step.quiet_ms } else { 500 }
 
         $dispatchOk = Invoke-Step $step.type $step.command

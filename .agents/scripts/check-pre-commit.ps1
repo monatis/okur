@@ -49,8 +49,13 @@ if (Test-Path $cratesDir) {
     $rustFiles = Get-ChildItem -Path $cratesDir -Recurse -Filter *.rs
     $unwrapViolations = @()
     $panicViolations = @()
+    # Vendored xa11y (crates\xa11y) predates these rules; it is ratcheted by Check 1b instead.
+    $vendoredDir = Join-Path $cratesDir "xa11y"
+    $vendoredUnwraps = 0
+    $vendoredPanics = 0
 
     foreach ($file in $rustFiles) {
+        $isVendored = $file.FullName.StartsWith($vendoredDir + [System.IO.Path]::DirectorySeparatorChar)
         $lineNum = 0
         $lines = Get-Content -Path $file.FullName
         foreach ($line in $lines) {
@@ -59,11 +64,16 @@ if (Test-Path $cratesDir) {
             if ($trimmed.StartsWith("//") -or $trimmed.StartsWith("/*") -or $trimmed.StartsWith("*")) {
                 continue
             }
+            if ($isVendored) {
+                if ($line -match '\.(unwrap|expect)\s*\(') { $vendoredUnwraps++ }
+                if ($line -match '\b(panic|todo|unimplemented|dbg)!') { $vendoredPanics++ }
+                continue
+            }
             if ($line -match '\.(unwrap|expect)\s*\(') {
                 $relPath = $file.FullName.Substring($workspaceRoot.Length).TrimStart('\', '/')
                 $unwrapViolations += "${relPath}:${lineNum}: ${trimmed}"
             }
-            if ($line -match '\b(panic!|todo!|unimplemented!|dbg!)\b') {
+            if ($line -match '\b(panic|todo|unimplemented|dbg)!') {
                 $relPath = $file.FullName.Substring($workspaceRoot.Length).TrimStart('\', '/')
                 $panicViolations += "${relPath}:${lineNum}: ${trimmed}"
             }
@@ -89,6 +99,22 @@ if (Test-Path $cratesDir) {
             $violationList += "`n... and $($panicViolations.Count - $displayLimit) more violation(s)"
         }
         $failureReasons += "[Panic Gate] $($panicViolations.Count) usage(s) of panic!, todo!, unimplemented!, or dbg! found in Rust code.`nViolations:`n$violationList"
+    }
+
+    # -------------------------------------------------------------------------
+    # Check 1b: Vendored xa11y ratchet. Counts may only go down; lower them in
+    # crates\xa11y\gate-baseline.json as the code is hardened.
+    # -------------------------------------------------------------------------
+    $baselinePath = Join-Path $vendoredDir "gate-baseline.json"
+    if (Test-Path $vendoredDir) {
+        if (-not (Test-Path $baselinePath)) {
+            $failureReasons += "[Vendored Ratchet] Missing $baselinePath (current: unwrap_expect=$vendoredUnwraps, panic_macros=$vendoredPanics)."
+        } else {
+            $baseline = Get-Content -Raw $baselinePath | ConvertFrom-Json
+            if ($vendoredUnwraps -gt $baseline.unwrap_expect -or $vendoredPanics -gt $baseline.panic_macros) {
+                $failureReasons += "[Vendored Ratchet] crates\xa11y gained panicking calls: unwrap/expect $vendoredUnwraps (baseline $($baseline.unwrap_expect)), panic macros $vendoredPanics (baseline $($baseline.panic_macros)). New code must not panic."
+            }
+        }
     }
 }
 

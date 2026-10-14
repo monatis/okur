@@ -1,0 +1,18 @@
+[package]
+name = "xa11y-macos"
+version = "0.15.2"
+edition = "2021"
+rust-version = "1.88"
+license = "MIT"
+description = "macOS accessibility backend for xa11y (AXUIElement)"
+
+[dependencies]
+xa11y-core = { workspace = true }
+serde_json = { workspace = true }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+core-foundation = "0.10"
+rayon = "1"
+
+[target.'cfg(target_os = "macos")'.build-dependencies]
+cc = "1"

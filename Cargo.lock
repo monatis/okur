@@ -1460,6 +1460,7 @@ version = "1.28.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7cc1186384beb7dd8eedea376413fd654937285ea6c9cfbb928dc3043ea4b606"
 dependencies = [
+ "getrandom",
  "js-sys",
  "serde_core",
  "wasm-bindgen",
@@ -1563,6 +1564,7 @@ dependencies = [
  "wayland-backend",
  "wayland-client",
  "wayland-scanner",
+ "wayland-server",
 ]
 
 [[package]]
@@ -1574,6 +1576,19 @@ dependencies = [
  "proc-macro2",
  "quick-xml",
  "quote",
+]
+
+[[package]]
+name = "wayland-server"
+version = "0.31.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0dde9c29be0f723a573977de51ee455bf3dfa03652730a74f9dd3b337e374d75"
+dependencies = [
+ "bitflags",
+ "downcast-rs",
+ "rustix",
+ "wayland-backend",
+ "wayland-scanner",
 ]
 
 [[package]]
@@ -1742,11 +1757,10 @@ checksum = "acf4d1bc32aa46eec18caa634ec3cf4c05bfa151f12b93b510b15190f69a1ca8"
 [[package]]
 name = "xa11y"
 version = "0.15.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ab1a8ec345ea8e9b58a3c24f56385906e9024b979938d3de1cc7a7036afccc17"
 dependencies = [
  "serde",
  "serde_json",
+ "xa11y",
  "xa11y-core",
  "xa11y-linux",
  "xa11y-macos",
@@ -1756,8 +1770,6 @@ dependencies = [
 [[package]]
 name = "xa11y-core"
 version = "0.15.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dfed37d23cfb7a47937efc7b3e55ab44215cd1167f773bdeab45c699563b2e03"
 dependencies = [
  "png",
  "serde",
@@ -1769,8 +1781,6 @@ dependencies = [
 [[package]]
 name = "xa11y-linux"
 version = "0.15.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7bb74449856072583738f4276345aa465990fefacb711cb1800aa65eeab6d204"
 dependencies = [
  "evdev",
  "nix 0.31.3",
@@ -1779,6 +1789,7 @@ dependencies = [
  "serde_json",
  "wayland-client",
  "wayland-protocols",
+ "wayland-server",
  "x11rb",
  "xa11y-core",
  "xkbcommon",
@@ -1788,8 +1799,6 @@ dependencies = [
 [[package]]
 name = "xa11y-macos"
 version = "0.15.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ca41a13fa3473e70428fdf62fcb96a0c7d91df3b64faaf762ec6e9e248cbc1d5"
 dependencies = [
  "cc",
  "core-foundation",
@@ -1801,8 +1810,6 @@ dependencies = [
 [[package]]
 name = "xa11y-windows"
 version = "0.15.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a6c3d25f892391989395596ea1dfcbe439f35ccc599554f0a22eb5c136fac556"
 dependencies = [
  "serde_json",
  "windows",

@@ -24,8 +24,8 @@ mod tests {
     }
 
     /// Runs every scenario under `dir` and returns a failure report (empty when all pass).
-    fn run_all_and_report(dir: &Path, expected_count: usize) -> Vec<String> {
-        let results = DifferentialRunner::new(dir).run_range(0, u32::MAX);
+    fn run_all_and_report(dir: &Path, range: (u32, u32), expected_count: usize) -> Vec<String> {
+        let results = DifferentialRunner::new(dir).run_range(range.0, range.1);
         let mut failures = Vec::new();
         if results.len() != expected_count {
             failures.push(format!(
@@ -59,7 +59,8 @@ mod tests {
     /// parity comparison against the recorded JAWS speech.
     #[test]
     fn recorded_scenarios_meet_authored_assertions() {
-        let failures = run_all_and_report(&corpus_dir(), 30);
+        // Only the frozen legacy set: later scenarios are verified by parity alone.
+        let failures = run_all_and_report(&corpus_dir(), (1, 30), 30);
         assert!(failures.is_empty(), "{}", failures.join("\n"));
     }
 
@@ -189,7 +190,7 @@ mod tests {
     /// produced by the capture tooling. Kept only as engine regression checks.
     #[test]
     fn unverified_scenarios_meet_authored_assertions() {
-        let failures = run_all_and_report(&corpus_dir().join("unverified"), 35);
+        let failures = run_all_and_report(&corpus_dir().join("unverified"), (31, 65), 35);
         assert!(failures.is_empty(), "{}", failures.join("\n"));
     }
 }

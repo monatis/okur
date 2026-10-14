@@ -1,0 +1,43 @@
+[package]
+name = "xa11y-windows"
+version = "0.15.2"
+edition = "2021"
+rust-version = "1.88"
+license = "MIT"
+description = "Windows accessibility backend for xa11y (UI Automation)"
+
+[dependencies]
+xa11y-core = { workspace = true }
+serde_json = { workspace = true }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows = { version = "0.62", features = [
+    "Win32_UI_Accessibility",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_System_Com",
+    "Win32_System_Com_StructuredStorage",
+    "Win32_System_Ole",
+    "Win32_System_Variant",
+    "Win32_Foundation",
+    "Win32_Graphics_Dwm",
+    "Win32_Graphics_Gdi",
+    "Win32_System_Threading",
+    "Win32_System_ProcessStatus",
+    "Win32_UI_HiDpi",
+] }
+# Needed by the `#[implement]` macro, whose generated code references
+# `::windows_core::*` paths directly rather than going through the `windows`
+# re-export.
+windows-core = "0.62"
+
+[target.'cfg(target_os = "windows")'.dev-dependencies]
+# tests/send_input_wire.rs installs WH_KEYBOARD_LL / WH_MOUSE_LL hooks to read
+# back what SendInput actually put on the wire. Integration tests link the
+# crate from outside, so they need their own handle on the `windows` bindings.
+windows = { version = "0.62", features = [
+    "Win32_Foundation",
+    "Win32_UI_HiDpi",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_UI_WindowsAndMessaging",
+] }

@@ -5,6 +5,11 @@ members= [
     "crates/sr-platform",
     "crates/sr-corpus",
     "crates/sr-cli",
+    "crates/xa11y/xa11y",
+    "crates/xa11y/xa11y-core",
+    "crates/xa11y/xa11y-windows",
+    "crates/xa11y/xa11y-macos",
+    "crates/xa11y/xa11y-linux",
 ]
 
 [workspace.package]
@@ -26,6 +31,11 @@ tokio = { version = "1.40", features = ["full"] }
 clap = { version = "4.5", features = ["derive"] }
 regex = "1.11"
 sha2 = "0.10"
-xa11y = "0.15"
+# Vendored from xa11y 0.15.2 (MIT, see crates/xa11y/LICENSE) and extended in-tree.
+xa11y = { path = "crates/xa11y/xa11y", default-features = false }
+xa11y-core = { path = "crates/xa11y/xa11y-core", default-features = false }
+xa11y-windows = { path = "crates/xa11y/xa11y-windows" }
+xa11y-macos = { path = "crates/xa11y/xa11y-macos" }
+xa11y-linux = { path = "crates/xa11y/xa11y-linux" }
 
 

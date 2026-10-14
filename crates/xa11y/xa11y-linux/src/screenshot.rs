@@ -1,0 +1,413 @@
+//! Linux screen capture. X11 path uses `GetImage` on the root window; Wayland
+//! path uses `org.freedesktop.portal.Screenshot` (PNG file URI returned by
+//! xdg-desktop-portal, decoded back into RGBA).
+//!
+//! Wayland portal capture **prompts the user** for consent the first time per
+//! session (subsequent calls may be auto-approved depending on the portal
+//! implementation) and captures the full screen only — regions are cropped
+//! client-side from the full capture.
+//!
+//! Captured pixels are physical on both paths. `Screenshot::scale` carries the
+//! physical-to-logical ratio detected by [`crate::scale`]: an integer factor on
+//! a pure-X11 integer-scaled session (read from `Xft.dpi`), and `1.0`
+//! elsewhere (Wayland, fractional, or unknown). `capture_region` receives a
+//! **logical** rectangle (matching `Element::bounds`) and converts it to
+//! physical before reading pixels.
+
+use std::collections::HashMap;
+use std::io::Read as _;
+use std::sync::Mutex;
+
+use x11rb::connection::Connection;
+use x11rb::protocol::xproto::{ConnectionExt as _, ImageFormat};
+use x11rb::rust_connection::RustConnection;
+use zbus::blocking::{Connection as ZbusConnection, MessageIterator, Proxy};
+use zbus::message::Type as MessageType;
+use zbus::zvariant::{OwnedObjectPath, OwnedValue, Value};
+use zbus::MatchRule;
+
+use xa11y_core::{CaptureMapping, Error, Point, Rect, Result, Screenshot, ScreenshotProvider};
+
+use crate::session::{select_backend, DesktopBackend};
+
+/// Choose the Linux screenshot backend based on session environment.
+pub struct LinuxScreenshot {
+    backend: Backend,
+}
+
+// Box the X11 variant's fields — `RustConnection` is large enough that the
+// enum would otherwise be dominated by the X11 case and clippy flags it as
+// `large_enum_variant`. The backend sits behind an `Arc` in `Screenshotter`,
+// so the extra indirection costs at most one allocation per process.
+enum Backend {
+    X11(Box<X11Backend>),
+    Wayland { conn: ZbusConnection },
+}
+
+struct X11Backend {
+    conn: Mutex<RustConnection>,
+    root_width: u16,
+    root_height: u16,
+    root: u32,
+}
+
+impl LinuxScreenshot {
+    pub fn new() -> Result<Self> {
+        match select_backend("XA11Y_LINUX_SCREENSHOT_BACKEND", "screenshot capture")? {
+            DesktopBackend::X11 => {
+                let (conn, screen_num) =
+                    RustConnection::connect(None).map_err(|e| Error::Platform {
+                        code: -1,
+                        message: format!("X11 connect: {e}"),
+                    })?;
+                let screen = conn
+                    .setup()
+                    .roots
+                    .get(screen_num)
+                    .ok_or_else(|| Error::Platform {
+                        code: -1,
+                        message: "X server reported no screens".into(),
+                    })?;
+                let root = screen.root;
+                let root_width = screen.width_in_pixels;
+                let root_height = screen.height_in_pixels;
+                Ok(Self {
+                    backend: Backend::X11(Box::new(X11Backend {
+                        conn: Mutex::new(conn),
+                        root,
+                        root_width,
+                        root_height,
+                    })),
+                })
+            }
+            DesktopBackend::Wayland => {
+                let conn = ZbusConnection::session().map_err(|e| Error::Platform {
+                    code: -1,
+                    message: format!("session bus connect for Wayland screenshot portal: {e}"),
+                })?;
+                Ok(Self {
+                    backend: Backend::Wayland { conn },
+                })
+            }
+        }
+    }
+
+    fn capture_x11(
+        &self,
+        conn: &Mutex<RustConnection>,
+        root: u32,
+        root_w: u16,
+        root_h: u16,
+        rect: Option<Rect>,
+    ) -> Result<Screenshot> {
+        let (x, y, w, h) = match rect {
+            None => (0_i16, 0_i16, root_w, root_h),
+            Some(r) => {
+                let x = i16::try_from(r.x).map_err(|_| Error::Platform {
+                    code: -1,
+                    message: "rect x out of i16 range".into(),
+                })?;
+                let y = i16::try_from(r.y).map_err(|_| Error::Platform {
+                    code: -1,
+                    message: "rect y out of i16 range".into(),
+                })?;
+                let w = u16::try_from(r.width).map_err(|_| Error::Platform {
+                    code: -1,
+                    message: "rect width out of u16 range".into(),
+                })?;
+                let h = u16::try_from(r.height).map_err(|_| Error::Platform {
+                    code: -1,
+                    message: "rect height out of u16 range".into(),
+                })?;
+                (x, y, w, h)
+            }
+        };
+        if w == 0 || h == 0 {
+            return Err(Error::Platform {
+                code: -1,
+                message: "zero-sized capture rect".into(),
+            });
+        }
+
+        let guard = conn.lock().unwrap_or_else(|e| e.into_inner());
+        let reply = guard
+            .get_image(ImageFormat::Z_PIXMAP, root, x, y, w, h, !0)
+            .map_err(|e| Error::Platform {
+                code: -1,
+                message: format!("GetImage: {e}"),
+            })?
+            .reply()
+            .map_err(|e| Error::Platform {
+                code: -1,
+                message: format!("GetImage reply: {e}"),
+            })?;
+
+        // Most modern X servers return Z_PIXMAP at 32 bpp for 24-bit visuals,
+        // with layout BGRX on little-endian. Detect and convert to RGBA.
+        let bpp = (reply.data.len() / (w as usize * h as usize)) as u32;
+        if bpp != 4 {
+            return Err(Error::Platform {
+                code: -1,
+                message: format!("unsupported X11 pixmap layout: {bpp} bytes/pixel (expected 4)"),
+            });
+        }
+
+        let mut rgba = Vec::with_capacity(reply.data.len());
+        for chunk in reply.data.as_chunks::<4>().0 {
+            // X11 BGRX little-endian → RGBA
+            rgba.push(chunk[2]);
+            rgba.push(chunk[1]);
+            rgba.push(chunk[0]);
+            rgba.push(0xFF);
+        }
+
+        Ok(Screenshot::new(w as u32, h as u32, rgba, 1.0))
+    }
+
+    fn capture_wayland(&self, conn: &ZbusConnection, rect: Option<Rect>) -> Result<Screenshot> {
+        let proxy = Proxy::new(
+            conn,
+            "org.freedesktop.portal.Desktop",
+            "/org/freedesktop/portal/desktop",
+            "org.freedesktop.portal.Screenshot",
+        )
+        .map_err(|e| Error::Platform {
+            code: -1,
+            message: format!("portal Screenshot proxy: {e}"),
+        })?;
+
+        let mut options: HashMap<&str, Value> = HashMap::new();
+        options.insert("interactive", Value::Bool(false));
+        options.insert("modal", Value::Bool(false));
+        let handle_token = portal_handle_token()?;
+        options.insert("handle_token", Value::from(handle_token.as_str()));
+
+        // Portal responses can arrive before the method call returns. Register
+        // the signal match first, then select the response whose path matches
+        // the handle returned by Screenshot. `handle_token` also makes every
+        // request path unique; without it, repeated captures can collide in
+        // portal backends that export one object per request.
+        let response_rule = MatchRule::builder()
+            .msg_type(MessageType::Signal)
+            .interface("org.freedesktop.portal.Request")
+            .map_err(|e| Error::Platform {
+                code: -1,
+                message: format!("portal Response match interface: {e}"),
+            })?
+            .member("Response")
+            .map_err(|e| Error::Platform {
+                code: -1,
+                message: format!("portal Response match member: {e}"),
+            })?
+            .build();
+        let mut responses =
+            MessageIterator::for_match_rule(response_rule, conn, Some(8)).map_err(|e| {
+                Error::Platform {
+                    code: -1,
+                    message: format!("subscribe to portal Response: {e}"),
+                }
+            })?;
+
+        let request_path: OwnedObjectPath =
+            proxy
+                .call("Screenshot", &("", options))
+                .map_err(|e| Error::Platform {
+                    code: -1,
+                    message: format!("portal Screenshot call: {e}"),
+                })?;
+
+        // Block for Response(response: u, results: a{sv}) on this request.
+        let msg = loop {
+            let msg = responses
+                .next()
+                .ok_or_else(|| Error::Platform {
+                    code: -1,
+                    message: "portal Response signal channel closed".into(),
+                })?
+                .map_err(|e| Error::Platform {
+                    code: -1,
+                    message: format!("receive portal Response: {e}"),
+                })?;
+            if msg
+                .header()
+                .path()
+                .is_some_and(|path| path.as_str() == request_path.as_str())
+            {
+                break msg;
+            }
+        };
+        let (response, results): (u32, HashMap<String, OwnedValue>) =
+            msg.body().deserialize().map_err(|e| Error::Platform {
+                code: -1,
+                message: format!("portal Response deserialize: {e}"),
+            })?;
+        if response != 0 {
+            return Err(Error::PermissionDenied {
+                instructions: format!("xdg-desktop-portal Screenshot denied (response={response})"),
+            });
+        }
+        let uri_val = results.get("uri").ok_or_else(|| Error::Platform {
+            code: -1,
+            message: "portal Response missing 'uri' key".into(),
+        })?;
+        let uri: String = uri_val
+            .downcast_ref::<String>()
+            .map_err(|_| Error::Platform {
+                code: -1,
+                message: "portal Response 'uri' is not a string".into(),
+            })?;
+        let path = uri.strip_prefix("file://").ok_or_else(|| Error::Platform {
+            code: -1,
+            message: format!("portal URI not file://: {uri}"),
+        })?;
+        let bytes = std::fs::read(path).map_err(|e| Error::Platform {
+            code: e.raw_os_error().unwrap_or(-1) as i64,
+            message: format!("read portal PNG: {e}"),
+        })?;
+        // Best-effort cleanup of portal tmpfile.
+        let _ = std::fs::remove_file(path);
+
+        let shot = decode_png_to_rgba(&bytes)?;
+        match rect {
+            None => Ok(shot),
+            Some(r) => crop_rgba(shot, r),
+        }
+    }
+}
+
+/// Generate a valid, per-call portal request token. Portal request paths are
+/// public on the session bus, so use kernel entropy rather than a predictable
+/// process-local counter as recommended by the portal protocol.
+fn portal_handle_token() -> Result<String> {
+    let mut entropy = [0_u8; 16];
+    std::fs::File::open("/dev/urandom")
+        .and_then(|mut file| file.read_exact(&mut entropy))
+        .map_err(|e| Error::Platform {
+            code: e.raw_os_error().unwrap_or(-1) as i64,
+            message: format!("generate portal handle token: {e}"),
+        })?;
+
+    const HEX: &[u8; 16] = b"0123456789abcdef";
+    let mut token = String::with_capacity(6 + entropy.len() * 2);
+    token.push_str("xa11y_");
+    for byte in entropy {
+        token.push(HEX[(byte >> 4) as usize] as char);
+        token.push(HEX[(byte & 0x0f) as usize] as char);
+    }
+    Ok(token)
+}
+
+impl ScreenshotProvider for LinuxScreenshot {
+    fn capture_full(&self) -> Result<(Screenshot, Point)> {
+        // Captured pixels are physical; stamp the physical-to-logical ratio so
+        // callers can map logical bounds onto them. `capture_*` produce the
+        // raw pixels; the scale is metadata applied here. See `crate::scale`.
+        let scale = crate::scale::screenshot_scale();
+        let mut shot = match &self.backend {
+            Backend::X11(x) => self.capture_x11(&x.conn, x.root, x.root_width, x.root_height, None),
+            Backend::Wayland { conn } => self.capture_wayland(conn, None),
+        }?;
+        shot.scale = scale as f32;
+        let (width, height, shot_scale) = (shot.width, shot.height, shot.scale);
+        shot = shot.with_mapping(CaptureMapping::single(
+            Point::new(0, 0),
+            width,
+            height,
+            shot_scale,
+        ));
+        // Both paths start at the coordinate-space origin, so unlike Windows
+        // and macOS there is no offset to subtract: X11 reads the root window,
+        // whose top-left is (0, 0) by definition, and the portal hands back the
+        // whole screen. This is asserted rather than assumed — a backend that
+        // grew a per-output capture would have to report that output's origin
+        // here, per `ScreenshotProvider::capture_full`.
+        Ok((shot, Point::new(0, 0)))
+    }
+
+    fn capture_region(&self, rect: Rect) -> Result<Screenshot> {
+        // `rect` is logical (matching `Element::bounds`); convert to the
+        // physical pixels the X server / portal image work in.
+        let scale = crate::scale::screenshot_scale();
+        let phys = rect.to_physical(scale);
+        let mut shot = match &self.backend {
+            Backend::X11(x) => {
+                self.capture_x11(&x.conn, x.root, x.root_width, x.root_height, Some(phys))
+            }
+            Backend::Wayland { conn } => self.capture_wayland(conn, Some(phys)),
+        }?;
+        shot.scale = scale as f32;
+        let (width, height, shot_scale) = (shot.width, shot.height, shot.scale);
+        shot = shot.with_mapping(CaptureMapping::single(
+            Point::new(rect.x, rect.y),
+            width,
+            height,
+            shot_scale,
+        ));
+        Ok(shot)
+    }
+}
+
+fn decode_png_to_rgba(bytes: &[u8]) -> Result<Screenshot> {
+    let decoder = png::Decoder::new(std::io::Cursor::new(bytes));
+    let mut reader = decoder.read_info().map_err(|e| Error::Platform {
+        code: -1,
+        message: format!("png decode header: {e}"),
+    })?;
+    let info = reader.info().clone();
+    let buf_size = reader.output_buffer_size().ok_or_else(|| Error::Platform {
+        code: -1,
+        message: "png decode: output buffer size overflowed usize".to_string(),
+    })?;
+    let mut buf = vec![0u8; buf_size];
+    let frame = reader.next_frame(&mut buf).map_err(|e| Error::Platform {
+        code: -1,
+        message: format!("png decode frame: {e}"),
+    })?;
+    buf.truncate(frame.buffer_size());
+
+    let rgba = match (info.color_type, info.bit_depth) {
+        (png::ColorType::Rgba, png::BitDepth::Eight) => buf,
+        (png::ColorType::Rgb, png::BitDepth::Eight) => {
+            let mut out = Vec::with_capacity((info.width * info.height * 4) as usize);
+            for px in buf.as_chunks::<3>().0 {
+                out.extend_from_slice(&[px[0], px[1], px[2], 0xFF]);
+            }
+            out
+        }
+        (ct, bd) => {
+            return Err(Error::Platform {
+                code: -1,
+                message: format!("unsupported portal PNG format: {ct:?} @ {bd:?}"),
+            });
+        }
+    };
+
+    Ok(Screenshot::new(info.width, info.height, rgba, 1.0))
+}
+
+fn crop_rgba(shot: Screenshot, rect: Rect) -> Result<Screenshot> {
+    let (sw, sh, pixels, scale) = (shot.width, shot.height, shot.pixels, shot.scale);
+    let x = rect.x.max(0) as u32;
+    let y = rect.y.max(0) as u32;
+    if x >= sw || y >= sh {
+        return Err(Error::Platform {
+            code: -1,
+            message: "crop rect outside captured image".into(),
+        });
+    }
+    let w = rect.width.min(sw - x);
+    let h = rect.height.min(sh - y);
+    if w == 0 || h == 0 {
+        return Err(Error::Platform {
+            code: -1,
+            message: "crop rect has zero size".into(),
+        });
+    }
+    let mut out = Vec::with_capacity((w * h * 4) as usize);
+    for row in 0..h {
+        let start = ((y + row) * sw + x) as usize * 4;
+        let end = start + (w as usize) * 4;
+        out.extend_from_slice(&pixels[start..end]);
+    }
+    Ok(Screenshot::new(w, h, out, scale))
+}

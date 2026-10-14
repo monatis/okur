@@ -47,10 +47,27 @@ opendesk exec --peer old-pc --timeout 120 "powershell -NoProfile -ExecutionPolic
 
 ## Deploying our tools to old-pc
 
-`old-pc` has a Rust toolchain, but the fastest path is the dev-box build: copy
-`target/debug/sr-cli.exe` to `C:\Users\Gigabyte\Dropbox\sr-harness\bin\`, wait for the hash to
-match on old-pc, then copy it to `C:\Users\ailabs\sr-harness\bin\` (never run it from the
-Dropbox folder, which may be mid-sync). `capture-snapshot.ps1` goes to `C:\Users\ailabs\sr-harness\`.
+Build locally, then push and pull with the hash-verified pair:
+
+```bash
+cargo build -p sr-cli
+powershell -NoProfile -ExecutionPolicy Bypass -File skills/jaws-reference/scripts/lab-push.ps1   # prints PushId
+```
+then on old-pc (via `opendesk_exec`):
+`powershell -NoProfile -ExecutionPolicy Bypass -File C:\Users\ailabs\skills\jaws-reference\scripts\lab-pull.ps1 -PushId <id>`
+
+`-PushId` is mandatory. Without it, a stale manifest that still matches stale files would
+"verify" and silently install an old version; this happened once on 2026-10-14 and was caught by
+the evidence `provenance.capture_script_sha256`. After recording, always check that hash against
+your local `run-scenario.ps1` before importing evidence.
+
+## Recording evidence
+
+Run long recordings detached with `run-batch.ps1` (writes `batch.log` and a final `batch.done` to
+its `-OutputDir`, ideally under `C:\Users\ailabs\Dropbox\sr-harness\`), then poll for `batch.done`
+from the dev box. Runs must be serial: never start a batch while another one, or a snapshot
+capture, is running. New scenarios use `key` steps ("Down", "Shift+H", "Insert+Down"); see the
+header of `run-scenario.ps1`.
 
 In Git Bash, pass Windows paths to `opendesk exec` with forward slashes
 (`C:/Users/ailabs/...`): backslashes before `$var` inside double quotes are mangled.

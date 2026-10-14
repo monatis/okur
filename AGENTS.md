@@ -118,7 +118,7 @@ These exist because an audit (2026-10-14) found parity claims that no tool had e
   - Use `xa11y` as the primary cross-platform accessibility abstraction layer.
   - **Delegation Principle**: If an accessibility feature, query, pattern, or action is covered in `xa11y`, **delegate that work directly to `xa11y`**.
   - **OS-Level Self-Sufficiency**: If `xa11y` lacks an accessibility API, pattern, event hook, or complex text-range support required by the screen reader, **implement and extend it directly at the OS level** (e.g., Windows UI Automation `IUIAutomation`, IAccessible2, Win32 events, macOS `AXUIElement`, Linux AT-SPI2).
-  - **Vendoring is allowed**: if depending on the external `xa11y` crate slows development, copy it into this workspace as our own accessibility-API crate (alongside `sr-core`, `sr-platform`) and extend it there, rather than growing parallel hand-rolled API code.
+  - **Vendored (2026-10-14)**: xa11y now lives in `crates/xa11y/` as our own accessibility-API layer. Extend it there (new `ElementData` properties go through the `ElementParts` completeness guard so every platform backend must map them) rather than growing parallel hand-rolled API code elsewhere.
 - **Learning from NVDA**:
   - Repository: [`https://github.com/nvaccess/nvda`](https://github.com/nvaccess/nvda)
   - Consult the open-source **NVDA** and **`xa11y`** codebases for accessibility API patterns, complex text-range normalization, line/word boundaries, formatting runs, and virtual buffer linearization.
@@ -140,6 +140,7 @@ These exist because an audit (2026-10-14) found parity claims that no tool had e
 - `crates/sr-platform/`: Platform accessibility bindings (xa11y, UIA, AXUIElement).
 - `crates/sr-corpus/`: Test harness, normalizer, differential comparison engine.
 - `crates/sr-cli/`: CLI daemon and regression test binary.
+- `crates/xa11y/`: our accessibility-API layer, vendored from xa11y 0.15.2 (MIT) and extended in-tree. See `crates/xa11y/VENDORED.md` for import changes, the hardening ratchet, and planned extensions.
 - `corpus/`: Reference speech corpus (manifest, fixtures, scenarios, evidence, quality report).
 - `skills/jaws-reference/`: Reusable automation skill for JAWS COM and speech extraction.
 - `.agents/`: Antigravity agent configuration (`mcp_config.json`, `hooks.json`) and the shared quality-gate scripts (`scripts/`) used by every harness.

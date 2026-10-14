@@ -35,5 +35,7 @@ foreach ($set in $sets) {
         $manifest["$($set.dest)/$($f.Name)"] = (Get-FileHash -Algorithm SHA256 $f.FullName).Hash.ToLowerInvariant()
     }
 }
-$manifest | ConvertTo-Json | Set-Content -Path $manifestPath -Encoding UTF8
+$pushId = [guid]::NewGuid().ToString("N")
+[ordered]@{ push_id = $pushId; files = $manifest } | ConvertTo-Json | Set-Content -Path $manifestPath -Encoding UTF8
 Write-Output "Staged $($manifest.Count) files in $Dropbox"
+Write-Output "PushId: $pushId   (on old-pc: lab-pull.ps1 -PushId $pushId)"

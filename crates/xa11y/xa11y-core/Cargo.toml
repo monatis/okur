@@ -1,0 +1,37 @@
+[package]
+name = "xa11y-core"
+version = "0.15.2"
+edition = "2021"
+rust-version = "1.88"
+license = "MIT"
+description = "Core types, traits, and selector engine for xa11y cross-platform accessibility"
+
+[features]
+strict-roles = []
+# Opt-in shared mock Provider used by binding tests. Kept off by default so
+# production consumers don't pull the extra fixture code.
+test-support = []
+
+[dependencies]
+png = "0.18"
+serde = { workspace = true }
+serde_json = { workspace = true }
+strum = { version = "0.28", features = ["derive"] }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }
+
+# Public API surface: every public struct and enum in this crate must make an
+# explicit choice about future extensibility — `#[non_exhaustive]` when the
+# type is expected to grow, or an `#[allow(..., reason = "...")]` naming the
+# closed domain that makes growth impossible. These two clippy lints are
+# allow-by-default restriction lints; enabling them here means a new public
+# type cannot be added without that decision being made and recorded.
+#
+# Scoped to xa11y-core deliberately: this is the crate whose types cross into
+# downstream consumers and the language bindings. The provider crates' public
+# types are internal plumbing behind the umbrella crate.
+[lints.clippy]
+exhaustive_enums = "warn"
+exhaustive_structs = "warn"

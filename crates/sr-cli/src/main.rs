@@ -71,6 +71,15 @@ enum Commands {
         #[arg(long)]
         write_baseline: bool,
     },
+    /// Print an evidence file's steps and JAWS transcripts readably
+    Evidence {
+        /// Evidence file path, or a scenario id looked up in corpus/evidence
+        evidence: String,
+
+        /// Trial to print (1-based); variants across all trials are always listed
+        #[arg(long, default_value_t = 1)]
+        trial: usize,
+    },
     /// Wait until the default audio output is silent; prints a JSON SilenceReport
     WaitSilence {
         /// Give up waiting for any audio to start after this long (no speech)
@@ -225,6 +234,84 @@ fn capture_snapshot(
 #[cfg(not(windows))]
 fn capture_snapshot(_: &str, _: Option<String>, _: Option<String>) -> Result<(), String> {
     Err("UIA snapshots are only available on Windows".to_owned())
+}
+
+/// Makes JAWS speech-history structure visible on one line: `\u{1d}`/`\u{1e}` role markers
+/// become `‹ ›`, line breaks become ` | `, and no-break spaces become `·`.
+fn visible(speech: &str) -> String {
+    speech
+        .replace("\r\n", "\n")
+        .replace('\u{1d}', "‹")
+        .replace('\u{1e}', "›")
+        .replace('\u{a0}', "·")
+        .replace('\n', " | ")
+}
+
+fn print_evidence(evidence: &str, trial: usize) -> Result<(), String> {
+    let path = if Path::new(evidence).exists() {
+        Path::new(evidence).to_path_buf()
+    } else {
+        Path::new("corpus/evidence").join(format!("{evidence}-evidence.json"))
+    };
+    let text = fs::read_to_string(&path).map_err(|e| format!("{path:?}: {e}"))?;
+    let json: serde_json::Value =
+        serde_json::from_str(text.trim_start_matches('\u{feff}')).map_err(|e| e.to_string())?;
+    let trials = json
+        .get("trials")
+        .and_then(|t| t.as_array())
+        .cloned()
+        .unwrap_or_default();
+    let chosen = trials
+        .get(trial.saturating_sub(1))
+        .ok_or_else(|| format!("{path:?} has {} trial(s)", trials.len()))?;
+    let speech_of = |t: &serde_json::Value, id: &str| -> Option<String> {
+        t.get("step_results")?
+            .as_array()?
+            .iter()
+            .find(|s| s.get("step_id").and_then(|v| v.as_str()) == Some(id))?
+            .pointer("/observation/speech_raw")?
+            .as_str()
+            .map(str::to_owned)
+    };
+    println!(
+        "{} trial {trial}/{}  success={}",
+        json.get("scenario_id")
+            .and_then(|v| v.as_str())
+            .unwrap_or("?"),
+        trials.len(),
+        chosen
+            .get("trial_success")
+            .unwrap_or(&serde_json::Value::Null)
+    );
+    for step in chosen
+        .get("step_results")
+        .and_then(|s| s.as_array())
+        .into_iter()
+        .flatten()
+    {
+        let id = step.get("step_id").and_then(|v| v.as_str()).unwrap_or("?");
+        let command = step
+            .pointer("/action/command")
+            .and_then(|v| v.as_str())
+            .unwrap_or("?");
+        let speech = step
+            .pointer("/observation/speech_raw")
+            .and_then(|v| v.as_str())
+            .unwrap_or("");
+        println!("{id:>4} {command:<16} {}", visible(speech));
+        let mut variants: Vec<String> = Vec::new();
+        for t in &trials {
+            if let Some(s) = speech_of(t, id) {
+                if s != speech && !variants.contains(&s) {
+                    variants.push(s);
+                }
+            }
+        }
+        for v in variants {
+            println!("{:>21} variant: {}", "", visible(&v));
+        }
+    }
+    Ok(())
 }
 
 #[tokio::main]
@@ -660,6 +747,12 @@ async fn main() {
                     std::process::exit(1);
                 }
                 println!("Wrote {:?}", dir.join(sr_corpus::parity::BASELINE_FILE));
+            }
+        }
+        Some(Commands::Evidence { evidence, trial }) => {
+            if let Err(e) = print_evidence(&evidence, trial) {
+                eprintln!("{e}");
+                std::process::exit(1);
             }
         }
         Some(Commands::WaitSilence {

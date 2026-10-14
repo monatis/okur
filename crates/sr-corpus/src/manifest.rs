@@ -38,6 +38,8 @@ pub struct ScenarioEntry {
 #[derive(Debug, Serialize)]
 pub struct EvidenceEntry {
     pub sha256: String,
+    /// SHA-256 of the capture script that produced the evidence (format 2 and later).
+    pub capture_script_sha256: Option<String>,
     pub os_version: Option<String>,
     pub jaws_version: Option<String>,
     pub trials: usize,
@@ -137,6 +139,10 @@ fn evidence_entry(path: &Path) -> Result<EvidenceEntry, String> {
 
     Ok(EvidenceEntry {
         sha256: sha256_hex(&bytes),
+        capture_script_sha256: json
+            .pointer("/provenance/capture_script_sha256")
+            .and_then(Value::as_str)
+            .map(str::to_owned),
         os_version: env_str("os_version"),
         jaws_version: env_str("jaws_version"),
         trials: trials.len(),
