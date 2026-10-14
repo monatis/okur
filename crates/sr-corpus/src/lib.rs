@@ -178,7 +178,6 @@ mod tests {
 
     /// Actions resolve nodes through their IA2 uniqueID, so every form control must carry one.
     #[test]
-    #[ignore = "known gap: committed IA2 snapshots predate uniqueID capture; re-capture them"]
     fn ia2_snapshots_carry_unique_ids() {
         let form = snapshot_aom("signup-form", snapshots::Api::Ia2);
         let controls = find(&form, &|n| {
