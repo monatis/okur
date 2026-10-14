@@ -11,6 +11,9 @@ pub struct Scenario {
     pub fixture: String,
     #[serde(default)]
     pub target_app: Option<String>,
+    /// Desktop scenarios: a fixture app launched fresh per trial, found by window title.
+    #[serde(default)]
+    pub launch: Option<serde_json::Value>,
     #[serde(default)]
     pub reset: Option<ScenarioReset>,
     pub steps: Vec<ScenarioStep>,

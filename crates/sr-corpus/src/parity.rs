@@ -102,18 +102,24 @@ fn run_scenario(corpus_dir: &Path, scenario: &Scenario) -> Result<Vec<StepParity
         .join(format!("{}-evidence.json", scenario.id));
     let variants = jaws_variants(&read_json(&evidence_path)?);
 
-    let snapshot = UiaSnapshot::load(snapshot_path(corpus_dir, scenario))?;
-    let fixture = scenario.fixture.rsplit('/').next().unwrap_or_default();
-    let fixture_bytes =
-        fs::read(corpus_dir.join("fixtures").join(fixture)).map_err(|e| format!("{e}"))?;
-    let fixture_hash = crate::manifest::sha256_hex(&fixture_bytes);
-    if snapshot.provenance.fixture_sha256.as_deref() != Some(fixture_hash.as_str()) {
-        return Err(format!(
-            "snapshot for {fixture} was not captured from the current fixture bytes"
-        ));
-    }
-
-    let aom = to_aom(&snapshot.root);
+    // Desktop scenarios have no document: the engine starts in native-app mode and its speech
+    // comes from the replayed OS events. Browser scenarios load the captured document tree.
+    let desktop = scenario.launch.is_some();
+    let aom = if desktop {
+        sr_core::AomNode::new(0, sr_core::Role::Document)
+    } else {
+        let snapshot = UiaSnapshot::load(snapshot_path(corpus_dir, scenario))?;
+        let fixture = scenario.fixture.rsplit('/').next().unwrap_or_default();
+        let fixture_bytes =
+            fs::read(corpus_dir.join("fixtures").join(fixture)).map_err(|e| format!("{e}"))?;
+        let fixture_hash = crate::manifest::sha256_hex(&fixture_bytes);
+        if snapshot.provenance.fixture_sha256.as_deref() != Some(fixture_hash.as_str()) {
+            return Err(format!(
+                "snapshot for {fixture} was not captured from the current fixture bytes"
+            ));
+        }
+        to_aom(&snapshot.root)
+    };
     let mut cursor = VirtualCursor::new(VirtualBuffer::from_aom(&aom));
     let spoken = RecordingSpeech::default();
     if let Some(reset) = &scenario.reset {
@@ -131,6 +137,9 @@ fn run_scenario(corpus_dir: &Path, scenario: &Scenario) -> Result<Vec<StepParity
         }
     }
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(spoken.clone()));
+    if desktop {
+        engine.app_mode = sr_core::engine::AppMode::NativeControl;
+    }
     for chord in scenario.reset.iter().flat_map(|r| r.keys.iter().flatten()) {
         press(&mut engine, chord)?;
     }

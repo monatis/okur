@@ -20,7 +20,7 @@ $ErrorActionPreference = 'Stop'
 $sets = @(
     @{ dest = 'bin';       files = @(Get-Item (Join-Path $RepoRoot 'target\debug\sr-cli.exe') -ErrorAction SilentlyContinue) },
     @{ dest = 'scripts';   files = @(Get-ChildItem (Join-Path $RepoRoot 'skills\jaws-reference\scripts\*.ps1')) },
-    @{ dest = 'fixtures';  files = @(Get-ChildItem (Join-Path $RepoRoot 'corpus\fixtures\*.html')) },
+    @{ dest = 'fixtures';  files = @(Get-ChildItem (Join-Path $RepoRoot 'corpus\fixtures\*') -Include *.html, *.ps1) },
     @{ dest = 'scenarios'; files = @(Get-ChildItem (Join-Path $RepoRoot 'corpus\scenarios\*.json')) }
 )
 

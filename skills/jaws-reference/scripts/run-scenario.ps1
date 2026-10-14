@@ -194,7 +194,34 @@ $evidence = [ordered]@{
     trials = @()
 }
 
-if ($scenario.fixture) {
+# Desktop scenarios carry a "launch" block: a fixture app started fresh for every trial and
+# found by its window title. Browser scenarios open the fixture page once and reload it.
+$launch = $scenario.launch
+if ($launch) { $expectedTitle = $launch.window_title }
+
+function Find-WindowByTitle([string]$title) {
+    Get-Process -ErrorAction SilentlyContinue |
+        Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero -and $_.MainWindowTitle -eq $title } |
+        Select-Object -First 1
+}
+
+function Start-DesktopFixture {
+    $old = Find-WindowByTitle $launch.window_title
+    if ($old) { Stop-Process -Id $old.Id -Force; Start-Sleep -Milliseconds 500 }
+    Start-Process powershell -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $fixturePath) | Out-Null
+    for ($i = 0; $i -lt 100; $i++) {
+        $p = Find-WindowByTitle $launch.window_title
+        if ($p) {
+            [void][SrKeyInput]::ShowWindow($p.MainWindowHandle, 9)
+            [void][SrKeyInput]::SetForegroundWindow($p.MainWindowHandle)
+            return $true
+        }
+        Start-Sleep -Milliseconds 100
+    }
+    return $false
+}
+
+if ($scenario.fixture -and -not $launch) {
     [System.Diagnostics.Process]::Start($targetProc, $scenario.fixture) | Out-Null
     Start-Sleep -Milliseconds 2000
 }
@@ -209,14 +236,22 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         trial_success = $true
     }
 
-    # Identical setup for every trial: reload, let page-load speech finish, reset, settle, clear.
-    Focus-Target $targetProc
-    [void](Send-Chord "Escape"); Start-Sleep -Milliseconds 100
-    [void](Send-Chord "Ctrl+R")
-    # JAWS starts Say All on page load by default; the reset keys interrupt it, so the load wait
-    # is bounded and only the post-reset silence decides whether setup settled.
-    $loadQuiet = Wait-Silence -OnsetMs 1500 -QuietMs 700 -MaxMs 3000
-    $resetKeys = if ($scenario.reset -and $scenario.reset.keys) { @($scenario.reset.keys) } else { @("Ctrl+Home") }
+    # Identical setup for every trial: reload (or relaunch), let load speech finish, reset,
+    # settle, clear.
+    if ($launch) {
+        if (-not (Start-DesktopFixture)) { $trialResult.trial_success = $false }
+        $loadQuiet = Wait-Silence -OnsetMs 1500 -QuietMs 700 -MaxMs 8000
+    } else {
+        Focus-Target $targetProc
+        [void](Send-Chord "Escape"); Start-Sleep -Milliseconds 100
+        [void](Send-Chord "Ctrl+R")
+        # JAWS starts Say All on page load by default; the reset keys interrupt it, so the
+        # load wait is bounded and only the post-reset silence decides whether setup settled.
+        $loadQuiet = Wait-Silence -OnsetMs 1500 -QuietMs 700 -MaxMs 3000
+    }
+    # An explicit (possibly empty) reset.keys list wins; browser scenarios default to Ctrl+Home.
+    $hasResetKeys = $scenario.reset -and ($scenario.reset.PSObject.Properties.Name -contains 'keys')
+    $resetKeys = if ($hasResetKeys) { @($scenario.reset.keys) } else { @("Ctrl+Home") }
     $resetQuiet = $loadQuiet
     foreach ($rk in $resetKeys) {
         [void](Send-Chord $rk)
@@ -296,9 +331,14 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     $evidence.trials += $trialResult
 }
 
-# Close the tab this run opened.
-Focus-Target $targetProc
-[void](Send-Chord "Ctrl+W")
+# Close what this run opened: the desktop fixture app, or the browser tab.
+if ($launch) {
+    $p = Find-WindowByTitle $launch.window_title
+    if ($p) { Stop-Process -Id $p.Id -Force }
+} else {
+    Focus-Target $targetProc
+    [void](Send-Chord "Ctrl+W")
+}
 
 $sw.Stop()
 $evidence.total_elapsed_ms = $sw.ElapsedMilliseconds
