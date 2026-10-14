@@ -1331,7 +1331,14 @@ impl ScreenReaderEngine {
                 || (focus.window_class.as_deref() == Some("SysListView32")
                     && focus.container_name.as_deref() != Some("Items View")
                     && focus.container_name.as_deref() != Some("Items view"))
-                || (focus.role == Role::ListItem && self.app_mode == AppMode::NativeDesktop));
+                // An item still on the desktop; not one in another window (the task
+                // switcher's, after Win+M then Alt+Tab).
+                || (focus.role == Role::ListItem
+                    && self.app_mode == AppMode::NativeDesktop
+                    && focus
+                        .window_kind
+                        .as_deref()
+                        .is_none_or(|k| matches!(k, "Progman" | "WorkerW"))));
 
         if is_desktop_event {
             let prev_mode = self.app_mode;
@@ -2544,6 +2551,31 @@ mod tests {
         // Back in Notepad, its window is announced again.
         let back = engine.handle_focus_event(&edit).unwrap_or_default();
         assert!(back.starts_with("Untitled - Notepad"), "{back:?}");
+    }
+
+    #[test]
+    fn task_switcher_items_after_the_desktop_are_not_desktop_items() {
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+        let desktop = FocusEvent::new(Role::ListItem)
+            .with_container_name("FolderView")
+            .with_window_class("SysListView32")
+            .with_window_title("Desktop 1")
+            .with_name("Recycle Bin")
+            .with_item_index(1)
+            .with_item_count(3);
+        engine.handle_focus_event(&desktop);
+        // Alt+Tab: the switcher's item takes focus through UIA.
+        let mut item = FocusEvent::new(Role::ListItem)
+            .with_window_class("ForegroundStaging")
+            .with_window_title("Task Switching")
+            .with_name("Untitled - Notepad");
+        item.window_kind = Some("MultitaskingViewFrame".to_owned());
+        let speech = engine.handle_focus_event(&item).unwrap_or_default();
+        assert!(
+            speech.starts_with("Task Switching\nUntitled - Notepad"),
+            "{speech:?}"
+        );
     }
 
     #[test]
