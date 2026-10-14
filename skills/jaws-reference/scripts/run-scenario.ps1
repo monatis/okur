@@ -6,6 +6,9 @@ param(
     [string]$OutputPath,
     [string]$TargetProcess,
     [string]$SrCli = (Join-Path $env:USERPROFILE "sr-harness\bin\sr-cli.exe"),
+    # When set, each trial records an accessibility event trace (sr-cli trace) to
+    # <TraceDir>\<scenario-id>-trial<N>.jsonl, aligned with steps by unix-ms timestamps.
+    [string]$TraceDir,
     [switch]$Quiet
 )
 
@@ -230,6 +233,17 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         $trialResult.trial_success = $false
     }
 
+    $traceProc = $null
+    $traceStop = $null
+    if ($TraceDir) {
+        New-Item -ItemType Directory -Force -Path $TraceDir | Out-Null
+        $tracePath = Join-Path $TraceDir "$scenarioId-trial$t.jsonl"
+        $traceStop = Join-Path $env:TEMP "sr-trace-stop-$([guid]::NewGuid().ToString('N'))"
+        $traceProc = Start-Process -FilePath $SrCli -ArgumentList @('trace', '--out', $tracePath, '--stop-file', $traceStop) -WindowStyle Hidden -PassThru
+        Start-Sleep -Milliseconds 400
+        $trialResult.trace_file = Split-Path -Leaf $tracePath
+    }
+
     foreach ($step in $scenario.steps) {
         $maxMs = if ($step.settle_max_ms) { [int]$step.settle_max_ms } else { 10000 }
         $quietMs = if ($step.quiet_ms) { [int]$step.quiet_ms } else { 500 }
@@ -239,9 +253,11 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         $baseline = Wait-Silence -OnsetMs 150 -QuietMs 300 -MaxMs 3000
         [void]$jaws.RunScript("ClearSpeechHistory")
 
+        $tStart = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
         $dispatchOk = Invoke-Step $step.type $step.command
         $observed = Wait-Silence -OnsetMs 800 -QuietMs $quietMs -MaxMs $maxMs
         $transcript = Read-SpeechHistoryOnce
+        $tEnd = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
         if ($transcript -match "unknown script call" -or $transcript -match "unhandled script call") { $dispatchOk = $false }
         # A leaked copy confirmation means the history was contaminated: fail, never trim.
         $contaminated = $transcript.Contains($CopyConfirmation)
@@ -255,6 +271,8 @@ for ($t = 1; $t -le $Repetitions; $t++) {
 
         $trialResult.step_results += [ordered]@{
             step_id = $step.id
+            t_start_ms = $tStart
+            t_end_ms = $tEnd
             action = [ordered]@{ type = $step.type; command = $step.command }
             observation = [ordered]@{
                 speech_raw = $transcript
@@ -268,6 +286,12 @@ for ($t = 1; $t -le $Repetitions; $t++) {
             }
             step_success = $stepSuccess
         }
+    }
+    if ($traceProc) {
+        New-Item -ItemType File -Force -Path $traceStop | Out-Null
+        if (-not $traceProc.WaitForExit(15000)) { $traceProc.Kill(); $trialResult.trial_success = $false }
+        Remove-Item $traceStop -ErrorAction SilentlyContinue
+        if (Test-Path $tracePath) { $trialResult.trace_sha256 = Get-Sha256 $tracePath } else { $trialResult.trial_success = $false }
     }
     $evidence.trials += $trialResult
 }

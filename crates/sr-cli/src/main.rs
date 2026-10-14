@@ -57,6 +57,20 @@ enum Commands {
         #[arg(long)]
         write_baseline: bool,
     },
+    /// Record system-wide accessibility events as JSON Lines (Windows)
+    Trace {
+        /// Output trace file
+        #[arg(long)]
+        out: String,
+
+        /// Stop when this file appears (lets a capture script end the trace cleanly)
+        #[arg(long)]
+        stop_file: Option<String>,
+
+        /// Hard limit on the trace duration (milliseconds)
+        #[arg(long, default_value_t = 600_000)]
+        max_ms: u64,
+    },
     /// Print an evidence file's steps and JAWS transcripts readably
     Evidence {
         /// Evidence file path, or a scenario id looked up in corpus/evidence
@@ -645,6 +659,30 @@ async fn main() {
                     std::process::exit(1);
                 }
                 println!("Wrote {:?}", dir.join(sr_corpus::parity::BASELINE_FILE));
+            }
+        }
+        Some(Commands::Trace {
+            out,
+            stop_file,
+            max_ms,
+        }) => {
+            #[cfg(windows)]
+            match sr_platform::event_trace::run_trace(
+                Path::new(&out),
+                stop_file.as_deref().map(Path::new),
+                max_ms,
+            ) {
+                Ok(n) => println!("Recorded {n} events -> {out}"),
+                Err(e) => {
+                    eprintln!("Trace failed: {e}");
+                    std::process::exit(1);
+                }
+            }
+            #[cfg(not(windows))]
+            {
+                let _ = (out, stop_file, max_ms);
+                eprintln!("Event traces are only available on Windows");
+                std::process::exit(1);
             }
         }
         Some(Commands::Evidence { evidence, trial }) => {

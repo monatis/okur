@@ -496,6 +496,66 @@ pub(crate) mod capture {
         )
     }
 
+    /// Creates the UIA client object (the caller must have initialized COM).
+    pub(crate) fn automation() -> Result<IUIAutomation, PlatformError> {
+        // SAFETY: standard in-process COM activation.
+        unsafe { CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER) }
+            .map_err(|e| err("create CUIAutomation8", e))
+    }
+
+    /// Reads one element (no children) with the full snapshot property set.
+    pub(crate) fn read_element(
+        uia: &IUIAutomation,
+        element: &IUIAutomationElement,
+    ) -> Option<UiaNode> {
+        // SAFETY: a cache request for a single element of a valid UIA client.
+        unsafe {
+            let request = uia.CreateCacheRequest().ok()?;
+            for &prop in PROPERTIES {
+                request.AddProperty(prop).ok()?;
+            }
+            request.SetTreeScope(TreeScope_Element).ok()?;
+            request
+                .SetAutomationElementMode(AutomationElementMode_None)
+                .ok()?;
+            let cached = element.BuildUpdatedCache(&request).ok()?;
+            Some(read_node(&cached, usize::MAX))
+        }
+    }
+
+    /// The focused element and its control-view ancestors, outermost first (the desktop
+    /// root is omitted). This is the context a screen reader announces on focus changes.
+    pub(crate) fn focus_chain(uia: &IUIAutomation) -> Vec<UiaNode> {
+        let mut chain = Vec::new();
+        // SAFETY: UIA client queries on a valid automation object.
+        unsafe {
+            let Ok(walker) = uia.ControlViewWalker() else {
+                return chain;
+            };
+            let Ok(root) = uia.GetRootElement() else {
+                return chain;
+            };
+            let mut current = uia.GetFocusedElement().ok();
+            // Bound the walk: real focus chains are a few dozen levels deep at most.
+            for _ in 0..64 {
+                let Some(el) = current else { break };
+                if uia
+                    .CompareElements(&el, &root)
+                    .map(|b| b.as_bool())
+                    .unwrap_or(false)
+                {
+                    break;
+                }
+                if let Some(node) = read_element(uia, &el) {
+                    chain.push(node);
+                }
+                current = walker.GetParentElement(&el).ok();
+            }
+        }
+        chain.reverse();
+        chain
+    }
+
     /// Captures the first `Document` element in the foreground window (e.g. a Chrome tab's
     /// web content) with its entire raw-view subtree, in a single cached request.
     pub fn capture_foreground_document(

@@ -17,7 +17,9 @@
 param(
     [Parameter(Mandatory = $true)][string]$ScenarioGlob,
     [Parameter(Mandatory = $true)][string]$OutputDir,
-    [int]$Repetitions = 5
+    [int]$Repetitions = 5,
+    # Record an accessibility event trace per trial into OutputDir/traces.
+    [switch]$Trace
 )
 $ErrorActionPreference = 'Continue'
 New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
@@ -34,7 +36,9 @@ foreach ($f in $files) {
     $id = [System.IO.Path]::GetFileNameWithoutExtension($f.Name)
     $out = Join-Path $OutputDir "$id-evidence.json"
     $sw = [System.Diagnostics.Stopwatch]::StartNew()
-    & powershell -NoProfile -ExecutionPolicy Bypass -File $runner -ScenarioFile $f.FullName -Repetitions $Repetitions -OutputPath $out -Quiet
+    $runnerArgs = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $runner, '-ScenarioFile', $f.FullName, '-Repetitions', $Repetitions, '-OutputPath', $out, '-Quiet')
+    if ($Trace) { $runnerArgs += @('-TraceDir', (Join-Path $OutputDir 'traces')) }
+    & powershell @runnerArgs
     $code = $LASTEXITCODE
     "[$i/$($files.Count)] $id exit=$code $([int]$sw.Elapsed.TotalSeconds)s" | Out-File $log -Append -Encoding utf8
 }
