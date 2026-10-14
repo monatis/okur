@@ -710,9 +710,10 @@ impl SpeechFormatter {
         format!("Text not found: {}", query)
     }
 
-    /// Formats desktop folder view entry announcement. JAWS heads it with "Desktop", not the
-    /// list's role (user report: "Desktop | FolderView list view"; no recorded evidence yet,
-    /// scenario 316 records it).
+    /// Formats desktop folder view entry announcement. JAWS heads it with "desktop", not the
+    /// list's role. JAWS 2025 on Windows 11, observed on the dev box (2026-10-15; research,
+    /// scenario 316 records it on old-pc): "desktop | FolderView List view | Dropbox | 7 of 11 |
+    /// To move to items use the Arrow keys. | To edit the selected item press f2."
     pub fn format_desktop_entry(
         container_name: &str,
         item_name: &str,
@@ -720,7 +721,7 @@ impl SpeechFormatter {
         total: usize,
     ) -> String {
         format!(
-            "Desktop\n{}    List view   \n{}\n{} of {}\nTo move to items use the Arrow keys.\nTo edit the selected item press f2.",
+            "desktop\n{}    List view   \n{}\n{} of {}\nTo move to items use the Arrow keys.\nTo edit the selected item press f2.",
             container_name, item_name, index, total
         )
     }

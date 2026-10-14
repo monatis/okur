@@ -1674,10 +1674,10 @@ impl ScreenReaderEngine {
         let speech = if window_changed {
             // A new active window: its title, then the control. A dialog box adds its role
             // and its text [obs, 306/s1, s3, s10].
-            // The desktop is announced as "Desktop"; its title (Insert+T) is the virtual
-            // desktop's name (user report; JAWS: "Desktop | FolderView list view").
+            // The desktop is announced as "desktop"; its title (Insert+T) is the virtual
+            // desktop's name (JAWS on Windows 11: "desktop | FolderView List view").
             let win = if focus.window_kind.as_deref() == Some("Progman") {
-                "Desktop"
+                "desktop"
             } else {
                 focus.window_title.as_deref().unwrap_or("")
             };
@@ -2521,7 +2521,7 @@ mod tests {
             .with_item_index(7)
             .with_item_count(11);
         let s1 = engine.handle_focus_event(&focus_entry).unwrap_or_default();
-        assert!(s1.starts_with("Desktop\nFolderView    List view"));
+        assert!(s1.starts_with("desktop\nFolderView    List view"));
         assert!(s1.contains("Dropbox"));
         assert!(s1.contains("7 of 11"));
         assert!(s1.contains("To move to items use the Arrow keys."));
@@ -2581,7 +2581,7 @@ mod tests {
             .with_item_index(1)
             .with_item_count(3);
         let entry = engine.handle_focus_event(&desktop).unwrap_or_default();
-        assert!(entry.starts_with("Desktop\n"), "{entry:?}");
+        assert!(entry.starts_with("desktop\n"), "{entry:?}");
         assert_eq!(
             engine.execute_command("SayWindowTitle").as_deref(),
             Some("Title is\nDesktop 1")
