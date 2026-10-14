@@ -1,0 +1,25 @@
+{
+  "id": "110-article-regions",
+  "name": "Cycle regions with R and landmarks with semicolon",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "R" },
+    { "id": "s2", "type": "key", "command": "R" },
+    { "id": "s3", "type": "key", "command": "R" },
+    { "id": "s4", "type": "key", "command": "R" },
+    { "id": "s5", "type": "key", "command": "R" },
+    { "id": "s6", "type": "key", "command": "R" },
+    { "id": "s7", "type": "key", "command": "R" },
+    { "id": "s8", "type": "key", "command": "Semicolon" },
+    { "id": "s9", "type": "key", "command": "Semicolon" },
+    { "id": "s10", "type": "key", "command": "Semicolon" },
+    { "id": "s11", "type": "key", "command": "Semicolon" },
+    { "id": "s12", "type": "key", "command": "Semicolon" },
+    { "id": "s13", "type": "key", "command": "Semicolon" },
+    { "id": "s14", "type": "key", "command": "Semicolon" }
+  ]
+}

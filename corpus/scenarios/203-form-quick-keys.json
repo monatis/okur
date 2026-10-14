@@ -1,0 +1,28 @@
+{
+  "id": "203-form-quick-keys",
+  "name": "Form control quick keys E, X, A, C, B",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "E" },
+    { "id": "s2", "type": "key", "command": "E" },
+    { "id": "s3", "type": "key", "command": "E" },
+    { "id": "s4", "type": "key", "command": "E" },
+    { "id": "s5", "type": "key", "command": "E" },
+    { "id": "s6", "type": "key", "command": "X" },
+    { "id": "s7", "type": "key", "command": "X" },
+    { "id": "s8", "type": "key", "command": "X" },
+    { "id": "s9", "type": "key", "command": "A" },
+    { "id": "s10", "type": "key", "command": "A" },
+    { "id": "s11", "type": "key", "command": "A" },
+    { "id": "s12", "type": "key", "command": "A" },
+    { "id": "s13", "type": "key", "command": "C" },
+    { "id": "s14", "type": "key", "command": "C" },
+    { "id": "s15", "type": "key", "command": "B" },
+    { "id": "s16", "type": "key", "command": "B" },
+    { "id": "s17", "type": "key", "command": "B" }
+  ]
+}

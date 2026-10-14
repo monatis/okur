@@ -1,0 +1,19 @@
+{
+  "id": "103-article-headings",
+  "name": "Cycle headings with H and Shift+H, including wrap",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "H" },
+    { "id": "s2", "type": "key", "command": "H" },
+    { "id": "s3", "type": "key", "command": "H" },
+    { "id": "s4", "type": "key", "command": "H" },
+    { "id": "s5", "type": "key", "command": "H" },
+    { "id": "s6", "type": "key", "command": "H" },
+    { "id": "s7", "type": "key", "command": "Shift+H" },
+    { "id": "s8", "type": "key", "command": "Shift+H" }
+  ]
+}

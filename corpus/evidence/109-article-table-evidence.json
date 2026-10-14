@@ -1,0 +1,877 @@
+{
+    "format_version":  2,
+    "scenario_id":  "109-article-table",
+    "scenario_version":  "1.0.0",
+    "timestamp":  "2026-10-14T12:49:38.7153099+03:00",
+    "provenance":  {
+                       "capture_script_sha256":  "c9e10ee341ea69eb17d07ebd27116b3ef986dc8068f68069dadde5f856a1f8bf",
+                       "scenario_sha256":  "376a90b81f90dc7a1e4e69ff3e1e4916d712386694f1fe586fff313539e1ef95",
+                       "fixture_sha256":  "b3567efa1f8f22dfc3fbc0347978c42909d2921a59b1559fdb51dac6120b0fa4",
+                       "host":  "DESKTOP-DCNAKQQ",
+                       "os_build":  "Microsoft Windows [Version 10.0.19045.6456]",
+                       "keyboard_layout":  "Turkish Q",
+                       "chrome_version":  "154.0.8037.98",
+                       "jaws_version":  "2025.2505.43.400"
+                   },
+    "environment":  {
+                        "os_version":  "Microsoft Windows NT 10.0.19045.0",
+                        "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
+                        "target_process":  "chrome",
+                        "interactive_session":  true
+                    },
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+    "repetitions_requested":  5,
+    "trials":  [
+                   {
+                       "trial_index":  1,
+                       "timestamp":  "2026-10-14T12:49:40.9632171+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "T"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3380,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Weekdays\nColumn 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1553,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Details\nColumn 3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1557,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "end of row",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  829,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Central\n \u001d same page link \u001e Directions\nRow 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1948,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Northside\n \u001d same page link \u001e Directions\nRow 3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2118,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "bottom of column",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  995,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Left"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Weekdays \n10 a.m. to 8 p.m.\nColumn 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2155,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Central\n9 a.m. to 9 p.m.\nRow 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2071,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+T"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3332,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  2,
+                       "timestamp":  "2026-10-14T12:50:12.7234954+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "T"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3367,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Weekdays\nColumn 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1553,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Details\nColumn 3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1580,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "end of row",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  803,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Central\n \u001d same page link \u001e Directions\nRow 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1924,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Northside\n \u001d same page link \u001e Directions\nRow 3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2107,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "bottom of column",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  994,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Left"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Weekdays \n10 a.m. to 8 p.m.\nColumn 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2180,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Central\n9 a.m. to 9 p.m.\nRow 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2117,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+T"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3342,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-14T12:50:44.1436673+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "T"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3357,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Weekdays\nColumn 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1560,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Details\nColumn 3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1570,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "end of row",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  829,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Central\n \u001d same page link \u001e Directions\nRow 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1947,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Northside\n \u001d same page link \u001e Directions\nRow 3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2095,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "bottom of column",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1034,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Left"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Weekdays \n10 a.m. to 8 p.m.\nColumn 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2177,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Central\n9 a.m. to 9 p.m.\nRow 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2089,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+T"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3358,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  4,
+                       "timestamp":  "2026-10-14T12:51:15.6325768+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "T"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3361,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Weekdays\nColumn 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1536,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Details\nColumn 3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1553,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "end of row",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  825,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Central\n \u001d same page link \u001e Directions\nRow 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1947,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Northside\n \u001d same page link \u001e Directions\nRow 3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2114,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "bottom of column",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  972,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Left"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Weekdays \n10 a.m. to 8 p.m.\nColumn 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2182,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Central\n9 a.m. to 9 p.m.\nRow 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2114,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+T"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3350,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  5,
+                       "timestamp":  "2026-10-14T12:51:47.0895923+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "T"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3385,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Weekdays\nColumn 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1556,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Details\nColumn 3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1559,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "end of row",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  808,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Central\n \u001d same page link \u001e Directions\nRow 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1966,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Northside\n \u001d same page link \u001e Directions\nRow 3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2113,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "bottom of column",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1037,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Left"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Weekdays \n10 a.m. to 8 p.m.\nColumn 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2175,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Up"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Central\n9 a.m. to 9 p.m.\nRow 2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2098,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+T"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3369,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   }
+               ],
+    "total_elapsed_ms":  160759
+}

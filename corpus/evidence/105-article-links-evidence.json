@@ -1,0 +1,1117 @@
+{
+    "format_version":  2,
+    "scenario_id":  "105-article-links",
+    "scenario_version":  "1.0.0",
+    "timestamp":  "2026-10-14T12:33:10.6107404+03:00",
+    "provenance":  {
+                       "capture_script_sha256":  "c9e10ee341ea69eb17d07ebd27116b3ef986dc8068f68069dadde5f856a1f8bf",
+                       "scenario_sha256":  "f0aa2eacc00bfbd89441d1ebce1fb2d72fec81480737d7950c01aac32a086043",
+                       "fixture_sha256":  "b3567efa1f8f22dfc3fbc0347978c42909d2921a59b1559fdb51dac6120b0fa4",
+                       "host":  "DESKTOP-DCNAKQQ",
+                       "os_build":  "Microsoft Windows [Version 10.0.19045.6456]",
+                       "keyboard_layout":  "Turkish Q",
+                       "chrome_version":  "154.0.8037.98",
+                       "jaws_version":  "2025.2505.43.400"
+                   },
+    "environment":  {
+                        "os_version":  "Microsoft Windows NT 10.0.19045.0",
+                        "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
+                        "target_process":  "chrome",
+                        "interactive_session":  true
+                    },
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+    "repetitions_requested":  5,
+    "trials":  [
+                   {
+                       "trial_index":  1,
+                       "timestamp":  "2026-10-14T12:33:12.8604896+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Riverside Gazette",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1555,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e News",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1391,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Sports",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1444,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Culture",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1425,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Opinion",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1469,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Maria Lopez,",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1430,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e study rooms",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1473,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Directions",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1385,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Directions",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1383,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Council approves library budget",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2132,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Spring book fair returns",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1922,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Council approves library budget",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2050,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Directions",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1366,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  2,
+                       "timestamp":  "2026-10-14T12:33:45.2589283+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Riverside Gazette",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1530,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e News",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1365,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Sports",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1450,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Culture",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1453,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Opinion",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1467,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Maria Lopez,",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1409,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e study rooms",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1470,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Directions",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1388,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Directions",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1368,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Council approves library budget",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2132,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Spring book fair returns",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1927,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Council approves library budget",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2066,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Directions",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1382,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-14T12:34:17.1634412+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Riverside Gazette",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1522,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e News",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1365,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Sports",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1470,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Culture",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1450,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Opinion",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1469,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Maria Lopez,",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1409,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e study rooms",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1488,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Directions",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1388,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Directions",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1393,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Council approves library budget",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2113,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Spring book fair returns",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1928,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Council approves library budget",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2072,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Directions",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1366,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  4,
+                       "timestamp":  "2026-10-14T12:34:49.0836883+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Riverside Gazette",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1539,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e News",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1372,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Sports",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1446,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Culture",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1432,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Opinion",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1491,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Maria Lopez,",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1409,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e study rooms",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1473,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Directions",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1370,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Directions",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1389,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Council approves library budget",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2135,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Spring book fair returns",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1926,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Council approves library budget",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2073,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Directions",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1350,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  5,
+                       "timestamp":  "2026-10-14T12:35:21.1400632+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Riverside Gazette",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1555,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e News",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1383,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Sports",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1473,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Culture",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1452,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Opinion",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1468,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Maria Lopez,",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1432,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e study rooms",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1471,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Directions",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1389,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Directions",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1386,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Council approves library budget",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2130,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Spring book fair returns",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1906,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Council approves library budget",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2075,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+U"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Directions",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1345,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   }
+               ],
+    "total_elapsed_ms":  163328
+}

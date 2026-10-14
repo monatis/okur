@@ -1,0 +1,1197 @@
+{
+    "format_version":  2,
+    "scenario_id":  "202-form-fields",
+    "scenario_version":  "1.0.0",
+    "timestamp":  "2026-10-14T13:13:27.5286573+03:00",
+    "provenance":  {
+                       "capture_script_sha256":  "c9e10ee341ea69eb17d07ebd27116b3ef986dc8068f68069dadde5f856a1f8bf",
+                       "scenario_sha256":  "3566e3053e949d8689f94cc7afef725452240ac8b6eaa1fcd7dd03cf0b6c34bc",
+                       "fixture_sha256":  "141f98219e00ce80559e312fdf548a7b3b9f41087250648d09b6040c6433badf",
+                       "host":  "DESKTOP-DCNAKQQ",
+                       "os_build":  "Microsoft Windows [Version 10.0.19045.6456]",
+                       "keyboard_layout":  "Turkish Q",
+                       "chrome_version":  "154.0.8037.98",
+                       "jaws_version":  "2025.2505.43.400"
+                   },
+    "environment":  {
+                        "os_version":  "Microsoft Windows NT 10.0.19045.0",
+                        "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
+                        "target_process":  "chrome",
+                        "interactive_session":  true
+                    },
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+    "repetitions_requested":  5,
+    "trials":  [
+                   {
+                       "trial_index":  1,
+                       "timestamp":  "2026-10-14T13:13:29.7784490+03:00",
+                       "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Full name \u001d Edit \u001e \n  \n \u001dRequired\u001e \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1595,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Email address  \u001d Edit \u001e  \nsam@example.com\nWe never share your email.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2364,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Password  \u001d password edit \u001e   \u001dRequired\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1553,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Membership type \u001d group \u001e \n  \n Adult  \u001d radio button \u001e   \u001dchecked\u001e  \n1 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2281,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " Student  \u001d radio button \u001e   \u001dnot checked\u001e  \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1797,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " Senior  \u001d radio button \u001e   \u001dnot checked\u001e  \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1800,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e  \nNorthside",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1967,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Accessibility needs \u001d edit \u001e \n  \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1550,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1819,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1801,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Create account  \u001d Button \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1143,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "wrapping to top\nFull name \u001d Edit \u001e \n  \n \u001dRequired\u001e \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2319,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "wrapping to bottom\nCreate account  \u001d Button \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2281,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1781,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  2,
+                       "timestamp":  "2026-10-14T13:14:07.3571571+03:00",
+                       "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Full name \u001d Edit \u001e \n  \n \u001dRequired\u001e \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1616,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Email address  \u001d Edit \u001e  \nsam@example.com\nWe never share your email.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2381,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Password  \u001d password edit \u001e   \u001dRequired\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1556,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Membership type \u001d group \u001e \n  \n Adult  \u001d radio button \u001e   \u001dchecked\u001e  \n1 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2277,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " Student  \u001d radio button \u001e   \u001dnot checked\u001e  \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1826,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " Senior  \u001d radio button \u001e   \u001dnot checked\u001e  \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1824,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e  \nNorthside",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1974,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Accessibility needs \u001d edit \u001e \n  \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1555,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1823,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1824,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Create account  \u001d Button \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1138,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "wrapping to top\nFull name \u001d Edit \u001e \n  \n \u001dRequired\u001e \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2323,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "wrapping to bottom\nCreate account  \u001d Button \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2281,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1738,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-14T13:14:44.8230842+03:00",
+                       "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Full name \u001d Edit \u001e \n  \n \u001dRequired\u001e \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1591,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Email address  \u001d Edit \u001e  \nsam@example.com\nWe never share your email.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2381,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Password  \u001d password edit \u001e   \u001dRequired\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1555,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Membership type \u001d group \u001e \n  \n Adult  \u001d radio button \u001e   \u001dchecked\u001e  \n1 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2281,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " Student  \u001d radio button \u001e   \u001dnot checked\u001e  \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1802,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " Senior  \u001d radio button \u001e   \u001dnot checked\u001e  \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1825,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e  \nNorthside",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1970,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Accessibility needs \u001d edit \u001e \n  \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1553,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1843,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1825,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Create account  \u001d Button \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1161,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "wrapping to top\nFull name \u001d Edit \u001e \n  \n \u001dRequired\u001e \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2304,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "wrapping to bottom\nCreate account  \u001d Button \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2279,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1759,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  4,
+                       "timestamp":  "2026-10-14T13:15:22.2591420+03:00",
+                       "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Full name \u001d Edit \u001e \n  \n \u001dRequired\u001e \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1599,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Email address  \u001d Edit \u001e  \nsam@example.com\nWe never share your email.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2380,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Password  \u001d password edit \u001e   \u001dRequired\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1554,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Membership type \u001d group \u001e \n  \n Adult  \u001d radio button \u001e   \u001dchecked\u001e  \n1 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2285,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " Student  \u001d radio button \u001e   \u001dnot checked\u001e  \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1828,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " Senior  \u001d radio button \u001e   \u001dnot checked\u001e  \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1806,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e  \nNorthside",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1944,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Accessibility needs \u001d edit \u001e \n  \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1572,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1824,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1781,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Create account  \u001d Button \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1140,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "wrapping to top\nFull name \u001d Edit \u001e \n  \n \u001dRequired\u001e \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2319,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "wrapping to bottom\nCreate account  \u001d Button \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2259,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1781,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  5,
+                       "timestamp":  "2026-10-14T13:15:59.6665528+03:00",
+                       "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Full name \u001d Edit \u001e \n  \n \u001dRequired\u001e \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1592,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Email address  \u001d Edit \u001e  \nsam@example.com\nWe never share your email.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2385,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Password  \u001d password edit \u001e   \u001dRequired\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1554,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Membership type \u001d group \u001e \n  \n Adult  \u001d radio button \u001e   \u001dchecked\u001e  \n1 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2283,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " Student  \u001d radio button \u001e   \u001dnot checked\u001e  \n2 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1821,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " Senior  \u001d radio button \u001e   \u001dnot checked\u001e  \n3 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1818,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e  \nNorthside",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1948,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Accessibility needs \u001d edit \u001e \n  \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1574,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1825,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1802,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Create account  \u001d Button \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1158,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "wrapping to top\nFull name \u001d Edit \u001e \n  \n \u001dRequired\u001e \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2297,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "wrapping to bottom\nCreate account  \u001d Button \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2257,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+F"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1779,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   }
+               ],
+    "total_elapsed_ms":  190471
+}

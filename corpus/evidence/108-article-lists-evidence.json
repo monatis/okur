@@ -1,0 +1,1117 @@
+{
+    "format_version":  2,
+    "scenario_id":  "108-article-lists",
+    "scenario_version":  "1.0.0",
+    "timestamp":  "2026-10-14T12:47:03.5010548+03:00",
+    "provenance":  {
+                       "capture_script_sha256":  "c9e10ee341ea69eb17d07ebd27116b3ef986dc8068f68069dadde5f856a1f8bf",
+                       "scenario_sha256":  "5a14ba0dfda327ffcc95e1ccce73bf9751c87f250301796ba6b3b342739c488c",
+                       "fixture_sha256":  "b3567efa1f8f22dfc3fbc0347978c42909d2921a59b1559fdb51dac6120b0fa4",
+                       "host":  "DESKTOP-DCNAKQQ",
+                       "os_build":  "Microsoft Windows [Version 10.0.19045.6456]",
+                       "keyboard_layout":  "Turkish Q",
+                       "chrome_version":  "154.0.8037.98",
+                       "jaws_version":  "2025.2505.43.400"
+                   },
+    "environment":  {
+                        "os_version":  "Microsoft Windows NT 10.0.19045.0",
+                        "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
+                        "target_process":  "chrome",
+                        "interactive_session":  true
+                    },
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+    "repetitions_requested":  5,
+    "trials":  [
+                   {
+                       "trial_index":  1,
+                       "timestamp":  "2026-10-14T12:47:05.7733111+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 4 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1077,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1137,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 2 items nesting level 1",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1536,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1118,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 2 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1059,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1079,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 2 items nesting level 1",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1597,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "• New",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  897,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "1. Board vote in March",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2322,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "2. Hiring in April",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1303,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "3. Review in October",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1450,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Council approves library budget",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2306,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Spring book fair returns",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1922,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  2,
+                       "timestamp":  "2026-10-14T12:47:36.2356820+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 4 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1078,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1119,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 2 items nesting level 1",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1594,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1104,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 2 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1076,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1037,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 2 items nesting level 1",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1554,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "• New",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  889,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "1. Board vote in March",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2315,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "2. Hiring in April",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1325,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "3. Review in October",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1429,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Council approves library budget",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2320,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Spring book fair returns",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1945,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-14T12:48:06.5118189+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 4 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1097,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1140,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 2 items nesting level 1",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1556,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1138,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 2 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1082,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1038,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 2 items nesting level 1",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1574,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "• New",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  888,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "1. Board vote in March",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2317,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "2. Hiring in April",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1325,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "3. Review in October",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1431,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Council approves library budget",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2323,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Spring book fair returns",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1946,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  4,
+                       "timestamp":  "2026-10-14T12:48:36.9528255+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 4 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1096,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1134,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 2 items nesting level 1",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1575,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1121,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 2 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1074,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1034,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 2 items nesting level 1",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1573,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "• New",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  916,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "1. Board vote in March",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2321,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "2. Hiring in April",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1326,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "3. Review in October",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1449,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Council approves library budget",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2305,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Spring book fair returns",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1924,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  5,
+                       "timestamp":  "2026-10-14T12:49:07.2622784+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 4 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1059,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1118,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 2 items nesting level 1",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1575,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1119,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 2 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1096,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 3 items",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1059,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+L"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "list of 2 items nesting level 1",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1536,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "• New",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  891,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "1. Board vote in March",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2298,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "2. Hiring in April",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1324,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "3. Review in October",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1449,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Council approves library budget",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2319,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "I"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "•  \u001d same page link \u001e Spring book fair returns",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1909,
+                                                                    "contaminated":  false
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   }
+               ],
+    "total_elapsed_ms":  154894
+}

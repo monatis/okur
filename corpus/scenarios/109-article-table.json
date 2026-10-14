@@ -1,0 +1,21 @@
+{
+  "id": "109-article-table",
+  "name": "Navigate a table with Ctrl+Alt+Arrows, including edges",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "T" },
+    { "id": "s2", "type": "key", "command": "Ctrl+Alt+Right" },
+    { "id": "s3", "type": "key", "command": "Ctrl+Alt+Right" },
+    { "id": "s4", "type": "key", "command": "Ctrl+Alt+Right" },
+    { "id": "s5", "type": "key", "command": "Ctrl+Alt+Down" },
+    { "id": "s6", "type": "key", "command": "Ctrl+Alt+Down" },
+    { "id": "s7", "type": "key", "command": "Ctrl+Alt+Down" },
+    { "id": "s8", "type": "key", "command": "Ctrl+Alt+Left" },
+    { "id": "s9", "type": "key", "command": "Ctrl+Alt+Up" },
+    { "id": "s10", "type": "key", "command": "Shift+T" }
+  ]
+}

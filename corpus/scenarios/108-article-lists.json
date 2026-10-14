@@ -1,0 +1,24 @@
+{
+  "id": "108-article-lists",
+  "name": "Cycle lists and list items with L and I",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "L" },
+    { "id": "s2", "type": "key", "command": "L" },
+    { "id": "s3", "type": "key", "command": "L" },
+    { "id": "s4", "type": "key", "command": "L" },
+    { "id": "s5", "type": "key", "command": "L" },
+    { "id": "s6", "type": "key", "command": "Shift+L" },
+    { "id": "s7", "type": "key", "command": "Shift+L" },
+    { "id": "s8", "type": "key", "command": "I" },
+    { "id": "s9", "type": "key", "command": "I" },
+    { "id": "s10", "type": "key", "command": "I" },
+    { "id": "s11", "type": "key", "command": "I" },
+    { "id": "s12", "type": "key", "command": "I" },
+    { "id": "s13", "type": "key", "command": "I" }
+  ]
+}

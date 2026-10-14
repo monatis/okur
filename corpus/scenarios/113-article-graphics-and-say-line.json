@@ -1,0 +1,14 @@
+{
+  "id": "113-article-graphics-and-say-line",
+  "name": "Graphic quick key and Say Line",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "G" },
+    { "id": "s2", "type": "key", "command": "G" },
+    { "id": "s3", "type": "key", "command": "Insert+Up" }
+  ]
+}

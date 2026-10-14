@@ -1,0 +1,12 @@
+{
+  "id": "111-article-say-all",
+  "name": "Say All from the top of the article",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+Down", "settle_max_ms": 90000, "quiet_ms": 1500 }
+  ]
+}
