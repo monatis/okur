@@ -854,6 +854,20 @@
       }
     },
     {
+      "scenario_id": "307-desktop-character-review",
+      "fixture": "desktop-editor.ps1",
+      "evidence": {
+        "sha256": "1ae5650ed24fcde02545df3fcf30180257045f991f8bff1d59ca51d6da2a0ee0",
+        "capture_script_sha256": "1ab646bc41ad2fca1752dbb07ae93148fc9dfc8828f3ec66e035252e3df0435e",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "308-desktop-time-and-date",
       "fixture": "desktop-editor.ps1",
       "evidence": {
@@ -939,10 +953,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 63,
-    "scenarios_with_evidence": 63,
-    "total_trials": 301,
-    "successful_trials": 294,
-    "deterministic_scenarios": 51
+    "scenarios": 64,
+    "scenarios_with_evidence": 64,
+    "total_trials": 304,
+    "successful_trials": 297,
+    "deterministic_scenarios": 52
   }
 }
