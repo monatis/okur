@@ -10,8 +10,8 @@ use windows::Win32::System::Com::{CoInitializeEx, CoUninitialize, COINIT_MULTITH
 use windows::Win32::System::Threading::GetCurrentThreadId;
 use windows::Win32::UI::Input::KeyboardAndMouse::{
     GetAsyncKeyState, VIRTUAL_KEY, VK_BACK, VK_CONTROL, VK_DELETE, VK_DOWN, VK_END, VK_ESCAPE,
-    VK_HOME, VK_INSERT, VK_LEFT, VK_MENU, VK_NEXT, VK_OEM_1, VK_PRIOR, VK_RETURN, VK_RIGHT,
-    VK_SHIFT, VK_SPACE, VK_TAB, VK_UP,
+    VK_HOME, VK_INSERT, VK_LEFT, VK_MENU, VK_NEXT, VK_OEM_1, VK_OEM_7, VK_PRIOR, VK_RETURN,
+    VK_RIGHT, VK_SHIFT, VK_SPACE, VK_TAB, VK_UP,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
     CallNextHookEx, DispatchMessageW, GetMessageW, PostThreadMessageW, SetWindowsHookExW,
@@ -265,7 +265,10 @@ fn translate_vk_code(vk: u32) -> Key {
         VK_DELETE => Key::Delete,
         VK_INSERT => Key::Insert,
 
+        // Physical-key bindings, as JAWS does: the key at the US ";" and "'" positions,
+        // whatever character the active layout prints on it.
         VK_OEM_1 => Key::Semicolon,
+        VK_OEM_7 => Key::Apostrophe,
 
         VK_CONTROL => Key::Control,
         VK_MENU => Key::Alt,

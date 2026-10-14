@@ -941,6 +941,59 @@ impl VirtualCursor {
         self.line_nav(t, false, "There are no graphics on this page.")
     }
 
+    /// Moves cursor to next article (`O`).
+    pub fn move_next_article(&mut self) -> Option<String> {
+        let t = self.buffer.articles.clone();
+        self.line_nav(t, true, "There are no articles on this page.")
+    }
+
+    /// Moves cursor to prior article (`Shift+O`).
+    pub fn move_prior_article(&mut self) -> Option<String> {
+        let t = self.buffer.articles.clone();
+        self.line_nav(t, false, "There are no articles on this page.")
+    }
+
+    /// Moves cursor to the main region (`Q`). JAWS's message for a page without a main
+    /// region has not been recorded, so that case is silent rather than guessed.
+    pub fn move_to_main_region(&mut self) -> Option<String> {
+        let target = self.buffer.main_region?;
+        self.selection = None;
+        self.offset = target;
+        self.current_node_id = self.buffer.line_at_offset(target).map(|l| l.node_id);
+        Some(self.line_speech_at(target))
+    }
+
+    /// Moves cursor to next element with an onMouseOver handler (`;`). UIA does not expose
+    /// event handlers, so the index stays empty until a source (IAccessible2) provides it.
+    pub fn move_next_on_mouse_over(&mut self) -> Option<String> {
+        let t = self.buffer.on_mouse_over.clone();
+        self.line_nav(t, true, "There are no onMouseOver elements on this page.")
+    }
+
+    /// Moves cursor to prior onMouseOver element (`Shift+;`).
+    pub fn move_prior_on_mouse_over(&mut self) -> Option<String> {
+        let t = self.buffer.on_mouse_over.clone();
+        self.line_nav(t, false, "There are no onMouseOver elements on this page.")
+    }
+
+    /// Moves cursor to next tab (`'`). The no-tabs message is unrecorded, so it is silent.
+    pub fn move_next_tab(&mut self) -> Option<String> {
+        let t: Vec<usize> = self.buffer.tabs.iter().map(|t| t.offset).collect();
+        if t.is_empty() {
+            return None;
+        }
+        self.line_nav(t, true, "")
+    }
+
+    /// Moves cursor to prior tab (`Shift+'`).
+    pub fn move_prior_tab(&mut self) -> Option<String> {
+        let t: Vec<usize> = self.buffer.tabs.iter().map(|t| t.offset).collect();
+        if t.is_empty() {
+            return None;
+        }
+        self.line_nav(t, false, "")
+    }
+
     /// Moves cursor to next form field (`F`).
     pub fn move_next_form_control(&mut self) -> Option<String> {
         let t = self.buffer.form_controls.clone();

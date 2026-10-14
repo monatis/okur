@@ -23,6 +23,7 @@ pub enum Key {
     Digit(u8),
     F(u8),
     Semicolon,
+    Apostrophe,
 
     Control,
     Alt,
@@ -215,6 +216,15 @@ impl KeyEvent {
                     Some("+;".to_string())
                 } else if m.is_empty() {
                     Some(";".to_string())
+                } else {
+                    None
+                }
+            }
+            Key::Apostrophe => {
+                if m.shift && !m.ctrl && !m.alt {
+                    Some("+'".to_string())
+                } else if m.is_empty() {
+                    Some("'".to_string())
                 } else {
                     None
                 }

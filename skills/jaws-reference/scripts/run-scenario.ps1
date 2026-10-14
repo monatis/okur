@@ -77,7 +77,7 @@ $KeyTable = @{
     'home'=@(0x24,$true); 'end'=@(0x23,$true); 'pageup'=@(0x21,$true); 'pagedown'=@(0x22,$true);
     'insert'=@(0x2D,$true); 'delete'=@(0x2E,$true); 'tab'=@(0x09,$false); 'enter'=@(0x0D,$false);
     'escape'=@(0x1B,$false); 'esc'=@(0x1B,$false); 'space'=@(0x20,$false); 'backspace'=@(0x08,$false);
-    'semicolon'=@(0xBA,$false);
+    'semicolon'=@(0xBA,$false); 'apostrophe'=@(0xDE,$false);
     'ctrl'=@(0xA2,$false); 'alt'=@(0xA4,$false); 'shift'=@(0xA0,$false); 'win'=@(0x5B,$true)
 }
 

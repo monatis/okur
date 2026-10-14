@@ -188,6 +188,11 @@ pub struct VirtualBuffer {
     pub checkboxes: Vec<usize>,
     pub radio_buttons: Vec<usize>,
     pub graphics: Vec<usize>,
+    pub articles: Vec<usize>,
+    /// Start of the first main landmark, if any (`Q`).
+    pub main_region: Option<usize>,
+    /// Elements with onMouseOver handlers (`;`); empty until a source exposes them.
+    pub on_mouse_over: Vec<usize>,
     pub comboboxes: Vec<usize>,
     pub trees: Vec<usize>,
     pub tree_items: Vec<usize>,

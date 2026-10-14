@@ -726,10 +726,10 @@ impl ScreenReaderEngine {
             "+6" | "MoveToPriorHeadingLevelSix" => self.cursor.move_prior_heading_level(6),
 
             // Links
-            "U" | "u" | "K" | "k" | "MoveToNextLink" | "MoveToNextUnvisitedLink" => {
+            "U" | "u" | "MoveToNextLink" | "MoveToNextUnvisitedLink" => {
                 self.cursor.move_next_link()
             }
-            "+U" | "+u" | "+K" | "+k" | "MoveToPriorLink" | "MoveToPriorUnvisitedLink" => {
+            "+U" | "+u" | "MoveToPriorLink" | "MoveToPriorUnvisitedLink" => {
                 self.cursor.move_prior_link()
             }
 
@@ -760,6 +760,18 @@ impl ScreenReaderEngine {
             "^%+H" | "^%+h" | "SayColumnHeader" => self.cursor.read_current_col_header(),
             "^%+R" | "^%+r" | "SayRowHeader" => self.cursor.read_current_row_header(),
 
+            // Bindings from JAWS's Quick Navigation Keys table
+            // (docs/references/jaws-quick-navigation-keys.md).
+            "O" | "o" | "MoveToNextArticle" => self.cursor.move_next_article(),
+            "+O" | "+o" | "MoveToPriorArticle" => self.cursor.move_prior_article(),
+            "Q" | "q" | "+Q" | "+q" | "MoveToMainRegion" => self.cursor.move_to_main_region(),
+            ";" | "MoveToNextOnMouseOverElement" => self.cursor.move_next_on_mouse_over(),
+            "+;" | "MoveToPriorOnMouseOverElement" => self.cursor.move_prior_on_mouse_over(),
+            "'" | "MoveToNextTab" => self.cursor.move_next_tab(),
+            "+'" | "MoveToPriorTab" => self.cursor.move_prior_tab(),
+            // Place markers are not implemented; K must not fall through to another command.
+            "K" | "k" | "+K" | "+k" | "MoveToNextPlaceMarker" | "MoveToPriorPlaceMarker" => None,
+
             // Graphics and radio buttons (spec §16, §17)
             "G" | "g" | "MoveToNextGraphic" => self.cursor.move_next_graphic(),
             "+G" | "+g" | "MoveToPriorGraphic" => self.cursor.move_prior_graphic(),
@@ -767,8 +779,8 @@ impl ScreenReaderEngine {
             "+A" | "+a" | "MoveToPriorRadioButton" => self.cursor.move_prior_radio_button(),
 
             // MathML
-            "O" | "o" | "MoveToNextMath" => self.cursor.move_next_math(),
-            "+O" | "+o" | "MoveToPriorMath" => self.cursor.move_prior_math(),
+            "MoveToNextMath" => self.cursor.move_next_math(),
+            "MoveToPriorMath" => self.cursor.move_prior_math(),
             "EnterMathViewer" | "ShowMathEditor" => self.cursor.enter_math_viewer(),
 
             // Form controls
@@ -794,10 +806,10 @@ impl ScreenReaderEngine {
             "+L" | "+l" | "MoveToPriorList" => self.cursor.move_prior_list(),
             "I" | "i" | "MoveToNextListItem" => self.cursor.move_next_list_item(),
             "+I" | "+i" | "MoveToPriorListItem" => self.cursor.move_prior_list_item(),
-            "R" | "r" | ";" | "MoveToNextLandmark" | "MoveToNextRegion" => {
+            "R" | "r" | "MoveToNextLandmark" | "MoveToNextRegion" => {
                 self.cursor.move_next_landmark()
             }
-            "+R" | "+r" | "+;" | "MoveToPriorLandmark" | "MoveToPriorRegion" => {
+            "+R" | "+r" | "MoveToPriorLandmark" | "MoveToPriorRegion" => {
                 self.cursor.move_prior_landmark()
             }
 

@@ -349,8 +349,17 @@ impl<'a> Builder<'a> {
             Class::Container { start, end } => {
                 self.flush();
                 let start_offset = self.emit(node.id, node.role.clone(), &start, start.clone());
-                if matches!(node.role, Role::Landmark { .. }) {
-                    self.buffer.landmarks.push(start_offset);
+                match &node.role {
+                    Role::Landmark { landmark_type } => {
+                        self.buffer.landmarks.push(start_offset);
+                        if landmark_type == "main" && self.buffer.main_region.is_none() {
+                            self.buffer.main_region = Some(start_offset);
+                        }
+                    }
+                    Role::Group if attr(node, "aria_role") == Some("article") => {
+                        self.buffer.articles.push(start_offset);
+                    }
+                    _ => {}
                 }
                 let legend = node.name.as_deref().map(squash);
                 let is_group = node.role == Role::Group;

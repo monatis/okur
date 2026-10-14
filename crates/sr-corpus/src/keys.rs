@@ -27,6 +27,7 @@ fn key_from_name(name: &str) -> Option<Key> {
         "delete" => Key::Delete,
         "insert" => Key::Insert,
         "semicolon" => Key::Semicolon,
+        "apostrophe" => Key::Apostrophe,
         _ => {
             let mut chars = lower.chars();
             match (chars.next(), chars.next()) {
