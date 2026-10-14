@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p sr-cli -- parity --write-baseline",
-  "matched_steps": 561,
-  "total_steps": 569,
+  "matched_steps": 566,
+  "total_steps": 574,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -572,6 +572,11 @@
     "306-desktop-dialogs-and-windows/s6": "match",
     "306-desktop-dialogs-and-windows/s7": "mismatch",
     "306-desktop-dialogs-and-windows/s8": "match",
-    "306-desktop-dialogs-and-windows/s9": "match"
+    "306-desktop-dialogs-and-windows/s9": "match",
+    "308-desktop-time-and-date/s1": "match",
+    "308-desktop-time-and-date/s2": "match",
+    "308-desktop-time-and-date/s3": "match",
+    "308-desktop-time-and-date/s4": "match",
+    "308-desktop-time-and-date/s5": "match"
   }
 }

@@ -1,0 +1,17 @@
+{
+  "id": "308-desktop-time-and-date",
+  "name": "Say System Time, with seconds, the date and the week number; the window title",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-editor.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Editor Fixture" },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+F12" },
+    { "id": "s2", "type": "key", "command": "Insert+F12", "repeat": 2 },
+    { "id": "s3", "type": "key", "command": "Ctrl+Insert+F12" },
+    { "id": "s4", "type": "key", "command": "Ctrl+Insert+F12", "repeat": 2 },
+    { "id": "s5", "type": "key", "command": "Insert+T" }
+  ]
+}
