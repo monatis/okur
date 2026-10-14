@@ -848,13 +848,27 @@
         "deterministic": false,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "309-desktop-jaws-key",
+      "fixture": "desktop-editor.ps1",
+      "evidence": {
+        "sha256": "17d1883dd23ade3d204a544287b3ac2bace5b6cf52a1231b938c4907449270bb",
+        "capture_script_sha256": "c28dd4bef681b315b474852a616a96695b76be2814ddbcd4de3899a776e53c3f",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 2,
+        "deterministic": false,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 57,
-    "scenarios_with_evidence": 57,
-    "total_trials": 283,
-    "successful_trials": 278,
+    "scenarios": 58,
+    "scenarios_with_evidence": 58,
+    "total_trials": 286,
+    "successful_trials": 280,
     "deterministic_scenarios": 47
   }
 }

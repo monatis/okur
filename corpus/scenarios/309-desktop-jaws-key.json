@@ -1,0 +1,17 @@
+{
+  "id": "309-desktop-jaws-key",
+  "name": "The JAWS key in the laptop layout: CapsLock and Insert combinations, CapsLock twice quickly toggling Caps Lock",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-editor.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Editor Fixture" },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "CapsLock+T" },
+    { "id": "s2", "type": "key", "command": "CapsLock+F12" },
+    { "id": "s3", "type": "key", "command": "CapsLock", "repeat": 2 },
+    { "id": "s4", "type": "key", "command": "CapsLock", "repeat": 2 },
+    { "id": "s5", "type": "key", "command": "Insert+T" }
+  ]
+}

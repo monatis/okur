@@ -1,0 +1,503 @@
+{
+    "format_version":  2,
+    "scenario_id":  "309-desktop-jaws-key",
+    "scenario_version":  "1.0.0",
+    "timestamp":  "2026-10-14T22:33:47.7235645+03:00",
+    "provenance":  {
+                       "capture_script_sha256":  "c28dd4bef681b315b474852a616a96695b76be2814ddbcd4de3899a776e53c3f",
+                       "scenario_sha256":  "70018d00433867fea160db1d3eb470deb37099450bcf9e4288f844bfbd240723",
+                       "fixture_sha256":  "1714eada49baac05b6637982281b7fd0f226c29d4bae6e4868f1d8b9dd0802e8",
+                       "host":  "DESKTOP-DCNAKQQ",
+                       "os_build":  "Microsoft Windows [Version 10.0.19045.6456]",
+                       "keyboard_layout":  "Turkish Q",
+                       "culture":  "en-US",
+                       "utc_offset_minutes":  180,
+                       "chrome_version":  "155.0.8059.40",
+                       "jaws_version":  "2025.2505.43.400",
+                       "jaws_settings":  {
+                                             "DEFAULT.JCF":  {
+                                                                 "Options":  {
+                                                                                 "MigrationWizardDisplayed":  "1",
+                                                                                 "TypingEcho":  "0",
+                                                                                 "KeyboardType":  "Laptop",
+                                                                                 "LanguageDetection":  "0",
+                                                                                 "AutomaticNotificationOfUpdates":  "0",
+                                                                                 "EnableAdditionalVoiceProfiles":  "0",
+                                                                                 "DisplayStartupWizard":  "0",
+                                                                                 "ShowSoundMixerDiscoveryDialog":  "0"
+                                                                             },
+                                                                 "FormsMode":  {
+                                                                                   "AutoFormsMode":  "0"
+                                                                               },
+                                                                 "OutputModes":  {
+                                                                                     "ACCESS_KEY":  "0|0|0|Access Key"
+                                                                                 },
+                                                                 "FSCasts":  {
+                                                                                 "EnableNotifications":  "0"
+                                                                             },
+                                                                 "Braille":  {
+                                                                                 "SelectedBrailleTranslator":  ""
+                                                                             },
+                                                                 "Braille Profiles":  {
+                                                                                          "ENU":  "0|20|US_Unicode|US_Unicode|0|1|0"
+                                                                                      },
+                                                                 "MessageCenter":  {
+                                                                                       "PendingMessages":  "0"
+                                                                                   }
+                                                             }
+                                         }
+                   },
+    "environment":  {
+                        "os_version":  "Microsoft Windows NT 10.0.19045.0",
+                        "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
+                        "target_process":  "desktop",
+                        "interactive_session":  true
+                    },
+    "speech_recorder_log":  null,
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/desktop-editor.ps1",
+    "repetitions_requested":  3,
+    "trials":  [
+                   {
+                       "trial_index":  1,
+                       "timestamp":  "2026-10-14T22:33:47.8814639+03:00",
+                       "foreground_window_start":  "SR Editor Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792006435490,
+                                                "t_end_ms":  1792006437456,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "CapsLock+T",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Title is\nSR Editor Fixture",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1425,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792006439245,
+                                                "t_end_ms":  1792006440939,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "CapsLock+F12",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "10:33 PM",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1221,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792006442744,
+                                                "t_end_ms":  1792006444596,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "CapsLock",
+                                                               "repeat":  2
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Caps lock on",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1243,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792006446408,
+                                                "t_end_ms":  1792006448152,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "CapsLock",
+                                                               "repeat":  2
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Caps lock off",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1160,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792006449961,
+                                                "t_end_ms":  1792006451841,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+T",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Title is\nSR Editor Fixture",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1425,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "309-desktop-jaws-key-trial1.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "88db13918350f8ab9bb2bb05ea085d35f6bb155c3c1508bfbc445d6b5ab27641"
+                   },
+                   {
+                       "trial_index":  2,
+                       "timestamp":  "2026-10-14T22:34:11.8808764+03:00",
+                       "foreground_window_start":  "SR Editor Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792006463102,
+                                                "t_end_ms":  1792006464984,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "CapsLock+T",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Title is\nSR Editor Fixture",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1429,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792006466796,
+                                                "t_end_ms":  1792006468491,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "CapsLock+F12",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "10:34 PM",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1243,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792006470304,
+                                                "t_end_ms":  1792006472052,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "CapsLock",
+                                                               "repeat":  2
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Caps lock on",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1161,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792006473863,
+                                                "t_end_ms":  1792006475595,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "CapsLock",
+                                                               "repeat":  2
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Caps lock off",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1137,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792006477414,
+                                                "t_end_ms":  1792006479289,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+T",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Title is\nSR Editor Fixture",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1431,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "309-desktop-jaws-key-trial2.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "7b92f035f2c66aae0275d352ff20b99fdaa96847f8ebb444a9a0cc83a49710ca"
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-14T22:34:39.3366457+03:00",
+                       "foreground_window_start":  "SR Editor Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792006483609,
+                                                "t_end_ms":  1792006486175,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "CapsLock+T",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Title is\nSR Editor Fixture",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  false,
+                                                                    "settle_ms":  811,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792006489211,
+                                                "t_end_ms":  1792006490910,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "CapsLock+F12",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "10:34 PM",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1224,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  false
+                                                                },
+                                                "step_success":  false
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792006492729,
+                                                "t_end_ms":  1792006494466,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "CapsLock",
+                                                               "repeat":  2
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Caps lock on",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1160,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792006496263,
+                                                "t_end_ms":  1792006498028,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "CapsLock",
+                                                               "repeat":  2
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Caps lock off",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1163,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792006499828,
+                                                "t_end_ms":  1792006501719,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+T",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Title is\nSR Editor Fixture",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1430,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  false,
+                       "trace_file":  "309-desktop-jaws-key-trial3.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "87024dcdcc4cd5c1c8f1d9d6930e7ba9bc4de8648a3fea95b6df8d8e749631b5"
+                   }
+               ],
+    "total_elapsed_ms":  74456
+}
