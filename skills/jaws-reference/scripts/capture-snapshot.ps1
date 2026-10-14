@@ -72,3 +72,12 @@ $cliArgs = @('snapshot', '--api', $Api, '--out', $OutputPath, '--fixture', $fixt
 if ($chromeVersion) { $cliArgs += @('--process-version', $chromeVersion) }
 & $SrCli @cliArgs
 if ($LASTEXITCODE -ne 0) { throw "sr-cli snapshot failed with exit code $LASTEXITCODE" }
+
+# Close the tab this capture opened (every capture opens a new one), but only while the
+# fixture is still the foreground tab, so no other window receives Ctrl+W.
+$sb = New-Object System.Text.StringBuilder 512
+[void][SnapshotWin32]::GetWindowText([SnapshotWin32]::GetForegroundWindow(), $sb, 512)
+if ($expectedTitle -and $sb.ToString().StartsWith($expectedTitle)) {
+    Add-Type -AssemblyName System.Windows.Forms
+    [System.Windows.Forms.SendKeys]::SendWait("^w")
+}
