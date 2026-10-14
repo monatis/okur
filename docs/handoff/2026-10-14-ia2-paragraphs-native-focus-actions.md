@@ -58,6 +58,17 @@ At the start of this session parity was 296/449, on UIA snapshots.
 - Verified on old-pc (commit 6de2d34, with JAWS's virtual cursor toggled off so that JAWS does not take the arrows): Home "H", Right "e", Ctrl+Right "world", text area Up "first line", Down "second line".
 - The page capture picks the visible tab's render window. Chrome keeps one per tab, and the first was a hidden tab with no page. It falls back to UIA when IA2 gives no page.
 
+### Live use, round 3: one event pipeline (user report: editing still silent)
+- **One pipeline.** The live listener was a hand-rolled UIA path that parity never measured. It is replaced by the tracer's WinEvent capture (`run_live`), converted by the same functions replay uses. Live and replay now consume one event stream.
+- **Windows 11 Notepad** reports a UIA Document. Every Document used to count as a web page, so the virtual cursor took the arrows. Only documents in browser content windows count as pages now. Native edits and text documents get caret reading.
+- **Typing echo** of characters uses the foreground keyboard layout (`ToUnicodeEx`).
+- **Contenteditable** hosts with and without `role=textbox` are edits in both APIs. Test: `every_editing_shape_is_an_edit` on the new `editing.html` fixture.
+- **`sr-cli run --debug-log <file>`** logs keys and decisions, events, caret reads and speech. Ask the user for this log on any live report.
+- **Live on old-pc (commit eb17b44 build, JAWS's virtual cursor off):**
+  - Notepad: echo and caret reads work.
+  - `editing.html`: the role=textbox box reads Home "H", Ctrl+Right "from", End "blank"; the plain contenteditable reads "P", "l", "editable".
+- **Test artifact:** with JAWS active on old-pc, navigation keys arrive twice because JAWS re-injects them.
+
 ## Known gaps (ratchet shows them)
 - **Tree view:**
   - Moving up to a visited parent drops the position (303/s6).
