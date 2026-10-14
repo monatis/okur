@@ -2,9 +2,9 @@
     "format_version":  2,
     "scenario_id":  "111-article-say-all",
     "scenario_version":  "1.0.0",
-    "timestamp":  "2026-10-14T12:55:13.0906034+03:00",
+    "timestamp":  "2026-10-14T15:47:37.8372385+03:00",
     "provenance":  {
-                       "capture_script_sha256":  "c9e10ee341ea69eb17d07ebd27116b3ef986dc8068f68069dadde5f856a1f8bf",
+                       "capture_script_sha256":  "36f71d307a6e5eeef10482390896d1c804c025acab8329e753933d42695792eb",
                        "scenario_sha256":  "80aa01841687df27d1d1587a9a0efee938fce132ab9abf64cbe1b8c69aee560d",
                        "fixture_sha256":  "b3567efa1f8f22dfc3fbc0347978c42909d2921a59b1559fdb51dac6120b0fa4",
                        "host":  "DESKTOP-DCNAKQQ",
@@ -24,7 +24,7 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-14T12:55:15.3410912+03:00",
+                       "timestamp":  "2026-10-14T15:47:40.0719222+03:00",
                        "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
@@ -39,8 +39,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  72119,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  72097,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             }
@@ -50,7 +52,7 @@
                    },
                    {
                        "trial_index":  2,
-                       "timestamp":  "2026-10-14T12:56:34.1745426+03:00",
+                       "timestamp":  "2026-10-14T15:48:59.9468942+03:00",
                        "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
@@ -65,8 +67,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  72112,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  72116,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             }
@@ -76,7 +80,7 @@
                    },
                    {
                        "trial_index":  3,
-                       "timestamp":  "2026-10-14T12:57:52.8439677+03:00",
+                       "timestamp":  "2026-10-14T15:50:19.7044151+03:00",
                        "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
@@ -91,8 +95,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  72102,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  72101,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             }
@@ -102,7 +108,7 @@
                    },
                    {
                        "trial_index":  4,
-                       "timestamp":  "2026-10-14T12:59:11.5236274+03:00",
+                       "timestamp":  "2026-10-14T15:51:39.3591312+03:00",
                        "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
@@ -117,8 +123,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  72094,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  72125,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             }
@@ -128,7 +136,7 @@
                    },
                    {
                        "trial_index":  5,
-                       "timestamp":  "2026-10-14T13:00:30.2176720+03:00",
+                       "timestamp":  "2026-10-14T15:52:59.1040440+03:00",
                        "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
@@ -143,8 +151,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  72082,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  72122,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             }
@@ -153,5 +163,5 @@
                        "page_load_settled":  false
                    }
                ],
-    "total_elapsed_ms":  396506
+    "total_elapsed_ms":  401732
 }

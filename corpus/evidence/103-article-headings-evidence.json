@@ -2,9 +2,9 @@
     "format_version":  2,
     "scenario_id":  "103-article-headings",
     "scenario_version":  "1.0.0",
-    "timestamp":  "2026-10-14T12:29:09.2749450+03:00",
+    "timestamp":  "2026-10-14T15:00:14.3733693+03:00",
     "provenance":  {
-                       "capture_script_sha256":  "c9e10ee341ea69eb17d07ebd27116b3ef986dc8068f68069dadde5f856a1f8bf",
+                       "capture_script_sha256":  "36f71d307a6e5eeef10482390896d1c804c025acab8329e753933d42695792eb",
                        "scenario_sha256":  "1977094a78084b12a1bf8f33279b2e9dcf0bfde8beb1cb4f75e04fe5d9ab13f7",
                        "fixture_sha256":  "b3567efa1f8f22dfc3fbc0347978c42909d2921a59b1559fdb51dac6120b0fa4",
                        "host":  "DESKTOP-DCNAKQQ",
@@ -24,7 +24,7 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-14T12:29:11.5426429+03:00",
+                       "timestamp":  "2026-10-14T15:00:16.6281308+03:00",
                        "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
@@ -39,8 +39,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2114,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2108,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -55,8 +57,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1370,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1367,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -71,8 +75,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1532,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1516,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -87,8 +93,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1432,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1446,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -103,8 +111,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1472,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1487,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -119,8 +129,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2541,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2553,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -131,12 +143,14 @@
                                                                "command":  "Shift+H"
                                                            },
                                                 "observation":  {
-                                                                    "speech_raw":  "",
+                                                                    "speech_raw":  "wrapping to bottom\nRelated stories\n \u001d heading level 2 \u001e",
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  538,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2264,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -147,12 +161,14 @@
                                                                "command":  "Shift+H"
                                                            },
                                                 "observation":  {
-                                                                    "speech_raw":  "",
+                                                                    "speech_raw":  "What readers said\n \u001d heading level 3 \u001e",
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  517,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1428,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             }
@@ -162,7 +178,7 @@
                    },
                    {
                        "trial_index":  2,
-                       "timestamp":  "2026-10-14T12:29:35.1857482+03:00",
+                       "timestamp":  "2026-10-14T15:00:54.1183796+03:00",
                        "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
@@ -177,146 +193,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2114,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s2",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "What changes\n \u001d heading level 2 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1386,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s3",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Opening schedule\n \u001d heading level 2 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1513,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s4",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "What readers said\n \u001d heading level 3 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1449,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s5",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Related stories\n \u001d heading level 2 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1473,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "wrapping to top\nCity Library Expands Evening Hours\n \u001d heading level 1 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2552,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s7",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Shift+H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  540,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s8",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Shift+H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  false,
-                                                                    "settle_ms":  808,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            }
-                                        ],
-                       "trial_success":  true,
-                       "page_load_settled":  false
-                   },
-                   {
-                       "trial_index":  3,
-                       "timestamp":  "2026-10-14T12:29:58.9918321+03:00",
-                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
-                       "setup_settled":  true,
-                       "step_results":  [
-                                            {
-                                                "step_id":  "s1",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2114,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2139,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -332,283 +212,9 @@
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
                                                                     "settle_ms":  1390,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s3",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Opening schedule\n \u001d heading level 2 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1535,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s4",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "What readers said\n \u001d heading level 3 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1449,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s5",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Related stories\n \u001d heading level 2 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1490,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "wrapping to top\nCity Library Expands Evening Hours\n \u001d heading level 1 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2548,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s7",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Shift+H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  536,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s8",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Shift+H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  520,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            }
-                                        ],
-                       "trial_success":  true,
-                       "page_load_settled":  false
-                   },
-                   {
-                       "trial_index":  4,
-                       "timestamp":  "2026-10-14T12:30:22.4946806+03:00",
-                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
-                       "setup_settled":  true,
-                       "step_results":  [
-                                            {
-                                                "step_id":  "s1",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2118,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s2",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "What changes\n \u001d heading level 2 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1385,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s3",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Opening schedule\n \u001d heading level 2 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1495,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s4",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "What readers said\n \u001d heading level 3 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1447,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s5",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Related stories\n \u001d heading level 2 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1492,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "wrapping to top\nCity Library Expands Evening Hours\n \u001d heading level 1 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2568,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s7",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Shift+H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  537,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s8",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Shift+H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  false,
-                                                                    "settle_ms":  807,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            }
-                                        ],
-                       "trial_success":  true,
-                       "page_load_settled":  false
-                   },
-                   {
-                       "trial_index":  5,
-                       "timestamp":  "2026-10-14T12:30:46.2617762+03:00",
-                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
-                       "setup_settled":  true,
-                       "step_results":  [
-                                            {
-                                                "step_id":  "s1",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2111,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s2",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "H"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "What changes\n \u001d heading level 2 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1389,
-                                                                    "contaminated":  false
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -624,7 +230,9 @@
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
                                                                     "settle_ms":  1510,
-                                                                    "contaminated":  false
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -639,8 +247,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1427,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1449,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -655,8 +265,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1491,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1469,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -671,8 +283,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2552,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2531,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -683,12 +297,14 @@
                                                                "command":  "Shift+H"
                                                            },
                                                 "observation":  {
-                                                                    "speech_raw":  "",
+                                                                    "speech_raw":  "wrapping to bottom\nRelated stories\n \u001d heading level 2 \u001e",
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  561,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2280,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -699,12 +315,476 @@
                                                                "command":  "Shift+H"
                                                            },
                                                 "observation":  {
-                                                                    "speech_raw":  "",
+                                                                    "speech_raw":  "What readers said\n \u001d heading level 3 \u001e",
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  516,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1446,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-14T15:01:31.6143651+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2136,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "What changes\n \u001d heading level 2 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1389,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Opening schedule\n \u001d heading level 2 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1510,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "What readers said\n \u001d heading level 3 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1449,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Related stories\n \u001d heading level 2 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1466,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "wrapping to top\nCity Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2546,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "wrapping to bottom\nRelated stories\n \u001d heading level 2 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2300,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "What readers said\n \u001d heading level 3 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1450,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  4,
+                       "timestamp":  "2026-10-14T15:02:08.9300230+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2112,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "What changes\n \u001d heading level 2 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1386,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Opening schedule\n \u001d heading level 2 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1528,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "What readers said\n \u001d heading level 3 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1449,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Related stories\n \u001d heading level 2 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1471,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "wrapping to top\nCity Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2546,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "wrapping to bottom\nRelated stories\n \u001d heading level 2 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2260,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "What readers said\n \u001d heading level 3 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1473,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  5,
+                       "timestamp":  "2026-10-14T15:02:46.2914708+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2108,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "What changes\n \u001d heading level 2 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1388,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Opening schedule\n \u001d heading level 2 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1509,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "What readers said\n \u001d heading level 3 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1454,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Related stories\n \u001d heading level 2 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1496,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "wrapping to top\nCity Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2553,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "wrapping to bottom\nRelated stories\n \u001d heading level 2 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2281,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+H"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "What readers said\n \u001d heading level 3 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1448,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             }
@@ -713,5 +793,5 @@
                        "page_load_settled":  false
                    }
                ],
-    "total_elapsed_ms":  121146
+    "total_elapsed_ms":  189967
 }

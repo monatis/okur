@@ -2,9 +2,9 @@
     "format_version":  2,
     "scenario_id":  "104-article-heading-levels",
     "scenario_version":  "1.0.0",
-    "timestamp":  "2026-10-14T12:31:10.7759009+03:00",
+    "timestamp":  "2026-10-14T15:03:24.7121588+03:00",
     "provenance":  {
-                       "capture_script_sha256":  "c9e10ee341ea69eb17d07ebd27116b3ef986dc8068f68069dadde5f856a1f8bf",
+                       "capture_script_sha256":  "36f71d307a6e5eeef10482390896d1c804c025acab8329e753933d42695792eb",
                        "scenario_sha256":  "8182e8d91fa2b046ca7f01d5491262e6b49d5116d80c581e61ea944558cf35d1",
                        "fixture_sha256":  "b3567efa1f8f22dfc3fbc0347978c42909d2921a59b1559fdb51dac6120b0fa4",
                        "host":  "DESKTOP-DCNAKQQ",
@@ -24,7 +24,7 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-14T12:31:13.0413254+03:00",
+                       "timestamp":  "2026-10-14T15:03:26.9833158+03:00",
                        "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
@@ -39,8 +39,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2946,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2930,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -55,8 +57,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1531,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1514,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -71,8 +75,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1492,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1507,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -88,7 +94,9 @@
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
                                                                     "settle_ms":  1722,
-                                                                    "contaminated":  false
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -103,8 +111,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1723,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1739,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -120,7 +130,9 @@
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
                                                                     "settle_ms":  1739,
-                                                                    "contaminated":  false
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -135,8 +147,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1389,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1391,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -151,8 +165,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1408,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1407,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             }
@@ -162,7 +178,7 @@
                    },
                    {
                        "trial_index":  2,
-                       "timestamp":  "2026-10-14T12:31:36.4504662+03:00",
+                       "timestamp":  "2026-10-14T15:04:03.9947219+03:00",
                        "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
@@ -177,8 +193,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2927,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2939,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -193,8 +211,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1513,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1536,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -209,8 +229,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1492,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1473,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -225,8 +247,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1721,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1719,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -241,8 +265,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1742,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1738,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -257,8 +283,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1740,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1721,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -273,8 +301,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1409,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1431,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -289,8 +319,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1430,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1415,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             }
@@ -300,7 +332,7 @@
                    },
                    {
                        "trial_index":  3,
-                       "timestamp":  "2026-10-14T12:31:59.8185143+03:00",
+                       "timestamp":  "2026-10-14T15:04:40.9214279+03:00",
                        "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
@@ -315,8 +347,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2922,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2923,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -331,8 +365,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1532,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1512,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -347,8 +383,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1471,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1508,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -363,8 +401,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1719,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1694,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -379,8 +419,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1704,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1721,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -395,8 +437,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1719,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1720,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -411,8 +455,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1405,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1431,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -427,8 +473,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1393,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1412,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             }
@@ -438,7 +486,7 @@
                    },
                    {
                        "trial_index":  4,
-                       "timestamp":  "2026-10-14T12:32:23.0673385+03:00",
+                       "timestamp":  "2026-10-14T15:05:17.8372568+03:00",
                        "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
@@ -453,146 +501,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2917,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s2",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "2"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Opening schedule\n \u001d heading level 2 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1499,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s3",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "2"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Related stories\n \u001d heading level 2 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1491,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s4",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "2"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "No more headings at level2 in this section.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1719,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s5",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "3"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "No more headings at level3 in this section.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1722,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "3"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "No more headings at level3 in this section.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1718,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s7",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "1"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "No more headings at level1.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1384,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s8",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "1"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "No more headings at level1.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1390,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            }
-                                        ],
-                       "trial_success":  true,
-                       "page_load_settled":  false
-                   },
-                   {
-                       "trial_index":  5,
-                       "timestamp":  "2026-10-14T12:32:46.2852375+03:00",
-                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
-                       "setup_settled":  true,
-                       "step_results":  [
-                                            {
-                                                "step_id":  "s1",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "2"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "City Library Expands Evening Hours \u001d heading level 1 \u001e \nWhat changes\n \u001d heading level 2 \u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2937,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2940,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -608,7 +520,9 @@
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
                                                                     "settle_ms":  1515,
-                                                                    "contaminated":  false
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -623,8 +537,164 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1471,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1472,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "2"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "No more headings at level2 in this section.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1720,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "3"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "No more headings at level3 in this section.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1737,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "3"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "No more headings at level3 in this section.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1741,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "1"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "No more headings at level1.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1411,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "1"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "No more headings at level1.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1408,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  5,
+                       "timestamp":  "2026-10-14T15:05:54.7885870+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "2"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "City Library Expands Evening Hours \u001d heading level 1 \u001e \nWhat changes\n \u001d heading level 2 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2943,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "2"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Opening schedule\n \u001d heading level 2 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1510,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "2"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Related stories\n \u001d heading level 2 \u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1511,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -640,7 +710,9 @@
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
                                                                     "settle_ms":  1719,
-                                                                    "contaminated":  false
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -655,8 +727,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1720,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1740,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -671,8 +745,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1720,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1742,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -687,8 +763,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1409,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1411,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -704,7 +782,9 @@
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
                                                                     "settle_ms":  1405,
-                                                                    "contaminated":  false
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             }
@@ -713,5 +793,5 @@
                        "page_load_settled":  false
                    }
                ],
-    "total_elapsed_ms":  119458
+    "total_elapsed_ms":  187717
 }

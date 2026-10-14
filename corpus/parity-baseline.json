@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p sr-cli -- parity --write-baseline",
-  "matched_steps": 294,
+  "matched_steps": 296,
   "total_steps": 449,
   "errors": [],
   "steps": {
@@ -173,8 +173,8 @@
     "103-article-headings/s4": "match",
     "103-article-headings/s5": "match",
     "103-article-headings/s6": "match",
-    "103-article-headings/s7": "mismatch",
-    "103-article-headings/s8": "mismatch",
+    "103-article-headings/s7": "match",
+    "103-article-headings/s8": "match",
     "104-article-heading-levels/s1": "mismatch",
     "104-article-heading-levels/s2": "match",
     "104-article-heading-levels/s3": "match",

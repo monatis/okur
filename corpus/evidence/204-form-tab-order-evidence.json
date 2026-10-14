@@ -2,9 +2,9 @@
     "format_version":  2,
     "scenario_id":  "204-form-tab-order",
     "scenario_version":  "1.0.0",
-    "timestamp":  "2026-10-14T13:20:34.8651339+03:00",
+    "timestamp":  "2026-10-14T16:25:12.6406487+03:00",
     "provenance":  {
-                       "capture_script_sha256":  "c9e10ee341ea69eb17d07ebd27116b3ef986dc8068f68069dadde5f856a1f8bf",
+                       "capture_script_sha256":  "36f71d307a6e5eeef10482390896d1c804c025acab8329e753933d42695792eb",
                        "scenario_sha256":  "3bed82e3f14e52637b67c8d7ae24124f55f162eb94bbabbbe614c0fbb052c7c6",
                        "fixture_sha256":  "141f98219e00ce80559e312fdf548a7b3b9f41087250648d09b6040c6433badf",
                        "host":  "DESKTOP-DCNAKQQ",
@@ -24,7 +24,7 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-14T13:20:37.1075124+03:00",
+                       "timestamp":  "2026-10-14T16:25:14.8898269+03:00",
                        "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
@@ -39,8 +39,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3410,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  3504,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -55,8 +57,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2452,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2531,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -71,8 +75,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1620,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1698,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -87,8 +93,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2368,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2325,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -103,8 +111,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1781,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1836,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -119,8 +129,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1614,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1655,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -135,8 +147,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2818,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2887,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -151,8 +165,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2507,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2528,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -167,8 +183,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2198,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2218,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -183,8 +201,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1945,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1908,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -199,8 +219,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3253,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  3186,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -215,8 +237,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2841,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2882,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -231,8 +255,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3733,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  3695,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             }
@@ -242,7 +268,7 @@
                    },
                    {
                        "trial_index":  2,
-                       "timestamp":  "2026-10-14T13:21:20.6475437+03:00",
+                       "timestamp":  "2026-10-14T16:26:21.4427778+03:00",
                        "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
@@ -257,8 +283,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2408,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2422,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -273,8 +301,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2407,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2451,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -289,8 +319,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1641,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1695,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -305,8 +337,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2381,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2443,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -321,8 +355,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1804,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1822,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -337,8 +373,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1683,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1678,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -353,8 +391,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2839,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2799,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -369,8 +409,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2509,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2486,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -385,8 +427,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2173,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2136,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -401,8 +445,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1820,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1884,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -417,8 +463,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3250,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  3262,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -433,8 +481,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2855,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2926,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -449,8 +499,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3754,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  3790,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             }
@@ -460,7 +512,7 @@
                    },
                    {
                        "trial_index":  3,
-                       "timestamp":  "2026-10-14T13:22:03.0693648+03:00",
+                       "timestamp":  "2026-10-14T16:27:26.8516743+03:00",
                        "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
@@ -475,8 +527,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2384,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2421,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -491,8 +545,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2444,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2484,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -507,8 +563,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1636,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1719,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -523,8 +581,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2404,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2362,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -539,8 +599,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1804,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1822,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -555,8 +617,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1595,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1658,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -571,8 +635,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2794,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2748,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -587,8 +653,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2489,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2546,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -603,8 +671,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2155,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2115,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -619,8 +689,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1946,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1926,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -635,8 +707,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3209,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  3272,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -651,8 +725,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2814,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2899,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -667,8 +743,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3774,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  3689,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             }
@@ -678,7 +756,7 @@
                    },
                    {
                        "trial_index":  4,
-                       "timestamp":  "2026-10-14T13:22:45.5270676+03:00",
+                       "timestamp":  "2026-10-14T16:28:32.0468141+03:00",
                        "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
@@ -693,8 +771,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2405,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2360,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -709,8 +789,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2548,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2462,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -725,8 +807,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1637,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1701,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -741,8 +825,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2380,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2346,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -757,8 +843,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1804,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1807,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -773,8 +861,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1680,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1717,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -789,8 +879,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2877,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2872,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -805,8 +897,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2570,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2528,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -821,8 +915,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2201,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  2161,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -837,8 +933,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1948,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  1905,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -853,8 +951,254 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3207,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  3173,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Dosya  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2881,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Adres ve arama çubuğu  \u001d Edit \u001e  \nC:/Users/ailabs/corpus/fixtures/signup-form.html\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3675,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false
+                   },
+                   {
+                       "trial_index":  5,
+                       "timestamp":  "2026-10-14T16:29:37.1160833+03:00",
+                       "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Create Your Account - Riverside Library\nFull name  \u001d Edit \u001e   \u001dRequired\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2424,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Email address  \u001d Edit \u001e  \nsam@example.com\nWe never share your email.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2468,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Password  \u001d password edit \u001e   \u001dRequired\u001e  \u001d\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1701,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Membership type  \u001d group \u001e   \nAdult  \u001d radio button \u001e   \u001dchecked\u001e  \n1 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2443,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Home branch  \u001d Combo box \u001e  \nNorthside",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1843,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Accessibility needs \u001d edit \u001e \n  \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1676,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e  \nTo clear checkmark press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2799,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e  \nTo check press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2508,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "terms of use  \u001d same page link \u001e  \nTo activate press Enter.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2132,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Create account  \u001d Button \u001e  \nTo activate press Enter.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1884,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Sekme araması  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3208,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -870,7 +1214,9 @@
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
                                                                     "settle_ms":  2876,
-                                                                    "contaminated":  false
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             },
@@ -885,226 +1231,10 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3759,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            }
-                                        ],
-                       "trial_success":  true,
-                       "page_load_settled":  false
-                   },
-                   {
-                       "trial_index":  5,
-                       "timestamp":  "2026-10-14T13:23:28.1905143+03:00",
-                       "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
-                       "setup_settled":  true,
-                       "step_results":  [
-                                            {
-                                                "step_id":  "s1",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Create Your Account - Riverside Library\nFull name  \u001d Edit \u001e   \u001dRequired\u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2445,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s2",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Email address  \u001d Edit \u001e  \nsam@example.com\nWe never share your email.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2527,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s3",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Password  \u001d password edit \u001e   \u001dRequired\u001e  \u001d\u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1638,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s4",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Membership type  \u001d group \u001e   \nAdult  \u001d radio button \u001e   \u001dchecked\u001e  \n1 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2379,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s5",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Home branch  \u001d Combo box \u001e  \nNorthside",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1781,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Accessibility needs \u001d edit \u001e \n  \nblank",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1701,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s7",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e  \nTo clear checkmark press Spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2833,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s8",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e  \nTo check press Spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2483,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s9",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "terms of use  \u001d same page link \u001e  \nTo activate press Enter.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2178,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s10",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Create account  \u001d Button \u001e  \nTo activate press Enter.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1888,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s11",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Sekme araması  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3212,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s12",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Dosya  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2856,
-                                                                    "contaminated":  false
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s13",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Adres ve arama çubuğu  \u001d Edit \u001e  \nC:/Users/ailabs/corpus/fixtures/signup-form.html\nType in text.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3717,
-                                                                    "contaminated":  false
+                                                                    "settle_ms":  3683,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
                                             }
@@ -1113,5 +1243,5 @@
                        "page_load_settled":  false
                    }
                ],
-    "total_elapsed_ms":  216530
+    "total_elapsed_ms":  330367
 }
