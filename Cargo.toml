@@ -5,6 +5,7 @@ members= [
     "crates/sr-platform",
     "crates/sr-corpus",
     "crates/sr-cli",
+    "crates/sr-sapi-recorder",
     "crates/xa11y/xa11y",
     "crates/xa11y/xa11y-core",
     "crates/xa11y/xa11y-windows",

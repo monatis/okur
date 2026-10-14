@@ -91,6 +91,24 @@ The snapshot's `provenance` records the fixture SHA-256 and Chrome version; the 
 refuses snapshots whose fixture hash differs from `corpus/fixtures/`. Copy snapshots into
 `corpus/snapshots/` unmodified and commit them separately from `crates/` changes.
 
+### Workflow G: Record What JAWS Actually Speaks (Speech Recorder Voice)
+JAWS's speech history holds text from *before* its symbol and punctuation processing: a Right
+Arrow onto `$` records `$`, and onto a space records an empty entry, while the user hears
+"dollar" and "space". To capture what is spoken, JAWS on old-pc speaks through **SR Speech
+Recorder** (`crates/sr-sapi-recorder`), a SAPI 5 voice that appends every text fragment it is
+asked to speak to `C:\Users\ailabs\sr-harness\recorder\spoken.jsonl` and hands the call to
+Microsoft David, so speech stays audible and timed for silence detection.
+
+1. Build and deploy: `cargo build --release -p sr-sapi-recorder` (x64) and with
+   `--target i686-pc-windows-msvc` (x86), then `lab-push.ps1 -Recorder <x64 dll> -Recorder32
+   <x86 dll>` and `lab-pull.ps1` on old-pc. Stop JAWS first if it has the voice loaded.
+2. Register once, elevated (SAPI lists voices only from HKLM; JAWS runs elevated):
+   `install-speech-recorder.ps1` (`-Uninstall` removes it).
+3. Select it as JAWS's voice (SAPI 5 synthesizer, voice "SR Speech Recorder").
+
+`run-scenario.ps1` then stores, per step, `observation.spoken` (the text of each synthesizer
+call) and `observation.spoken_records` (fragments with SAPI action, pitch, rate and volume)
+next to `speech_raw`. The log is read before the history copy, whose confirmation JAWS speaks.
 
 ## 4. Quick Command Reference Table
 

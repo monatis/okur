@@ -11,6 +11,7 @@
       scripts/*   -> C:\Users\ailabs\skills\jaws-reference\scripts\
       fixtures/*  -> C:\Users\ailabs\corpus\fixtures\
       scenarios/* -> C:\Users\ailabs\corpus\scenarios\
+      recorder/*  -> C:\Users\ailabs\sr-harness\recorder\  (stop JAWS first if it uses the voice)
     Never runs anything from the Dropbox folder itself.
 #>
 param(
@@ -28,6 +29,7 @@ $targets = @{
     'scripts'   = Join-Path $LabRoot 'skills\jaws-reference\scripts'
     'fixtures'  = Join-Path $LabRoot 'corpus\fixtures'
     'scenarios' = Join-Path $LabRoot 'corpus\scenarios'
+    'recorder'  = Join-Path $LabRoot 'sr-harness\recorder'
 }
 
 $deadline = (Get-Date).AddSeconds($TimeoutSec)

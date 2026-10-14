@@ -9,6 +9,10 @@ param(
     # When set, each trial records an accessibility event trace (sr-cli trace) to
     # <TraceDir>\<scenario-id>-trial<N>.jsonl, aligned with steps by unix-ms timestamps.
     [string]$TraceDir,
+    # The recording SAPI voice's log (install-speech-recorder.ps1). While JAWS speaks through that
+    # voice, each step also records what JAWS sent the synthesizer: the text after JAWS's symbol
+    # and punctuation processing, which the speech history does not show.
+    [string]$SpokenLog = (Join-Path $env:USERPROFILE "sr-harness\recorder\spoken.jsonl"),
     [switch]$Quiet
 )
 
@@ -19,6 +23,7 @@ Step types:
   key          Readable key chord, sent as scan-coded SendInput with the extended-key flag
                where the physical key has one: "Down", "H", "Shift+H", "Ctrl+Alt+Right",
                "Insert+Down", "Insert+F7". Modifiers: Ctrl, Alt, Shift, Insert, Win.
+               An optional "repeat": N presses the chord N times quickly ("twice quickly").
   jaws_script  JAWS script name dispatched through FSAPI RunScript.
   keyboard     Legacy .NET SendKeys string (kept so scenarios 01-30 stay reproducible).
 
@@ -147,9 +152,41 @@ function Read-SpeechHistoryOnce {
     return $text
 }
 
-function Invoke-Step($type, [string]$command) {
+# The spoken log grows by one JSON line per synthesizer call; a step reads what was appended
+# while it ran.
+function Get-SpokenOffset {
+    if (Test-Path $SpokenLog) { return (Get-Item $SpokenLog).Length }
+    return [long]0
+}
+
+function Read-SpokenSince([long]$offset) {
+    if (-not (Test-Path $SpokenLog)) { return @() }
+    $fs = [System.IO.File]::Open($SpokenLog, "Open", "Read", "ReadWrite")
+    try {
+        if ($fs.Length -lt $offset) { $offset = 0 }
+        [void]$fs.Seek($offset, "Begin")
+        $text = (New-Object System.IO.StreamReader($fs, [System.Text.Encoding]::UTF8)).ReadToEnd()
+    } finally { $fs.Dispose() }
+    return @($text -split "`n" | Where-Object { $_.Trim() } | ForEach-Object { $_ | ConvertFrom-Json })
+}
+
+# A synthesizer call's text: its spoken, spelled and pronounced fragments.
+function Get-SpokenText($record) {
+    return ((@($record.frags | Where-Object { $_.action -in @("speak", "spell", "pronounce") } | ForEach-Object { $_.text })) -join " ")
+}
+
+function Invoke-Step($type, [string]$command, [int]$repeat = 1) {
     switch ($type) {
-        'key'         { return (Send-Chord $command) }
+        'key' {
+            # "repeat": the chord pressed again 120 ms after each release, for JAWS's
+            # "twice quickly" commands.
+            $ok = $true
+            for ($i = 0; $i -lt [Math]::Max(1, $repeat); $i++) {
+                if ($i -gt 0) { Start-Sleep -Milliseconds 120 }
+                $ok = (Send-Chord $command) -and $ok
+            }
+            return $ok
+        }
         'jaws_script' { return [bool]$jaws.RunScript($command) }
         'keyboard'    { [System.Windows.Forms.SendKeys]::SendWait($command); return $true }
         default       { throw "Unsupported step type '$type'" }
@@ -180,6 +217,9 @@ $evidence = [ordered]@{
         host = $env:COMPUTERNAME
         os_build = (cmd /c ver | Out-String).Trim()
         keyboard_layout = [System.Windows.Forms.InputLanguage]::CurrentInputLanguage.LayoutName
+        # Time and date announcements follow the user locale and time zone.
+        culture = (Get-Culture).Name
+        utc_offset_minutes = [int][TimeZoneInfo]::Local.GetUtcOffset((Get-Date)).TotalMinutes
         chrome_version = if ($chromeExe) { (Get-Item $chromeExe).VersionInfo.FileVersion } else { $null }
         jaws_version = if (Test-Path $jfwExe) { (Get-Item $jfwExe).VersionInfo.ProductVersion } else { $null }
     }
@@ -189,6 +229,7 @@ $evidence = [ordered]@{
         target_process = $targetProc
         interactive_session = ((Get-Process -Id $PID).SessionId -ne 0)
     }
+    speech_recorder_log = if (Test-Path $SpokenLog) { $SpokenLog } else { $null }
     fixture = $scenario.fixture
     repetitions_requested = $Repetitions
     trials = @()
@@ -252,7 +293,8 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     # settle, clear.
     if ($launch) {
         if (-not (Start-DesktopFixture)) { $trialResult.trial_success = $false }
-        $loadQuiet = Wait-Silence -OnsetMs 1500 -QuietMs 700 -MaxMs 8000
+        # A launch reads the window and the focused control, which takes long for a full edit.
+        $loadQuiet = Wait-Silence -OnsetMs 1500 -QuietMs 700 -MaxMs 20000
     } else {
         Focus-Target $targetProc
         [void](Send-Chord "Escape"); Start-Sleep -Milliseconds 100
@@ -289,10 +331,13 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         # (e.g. the tail of the copy confirmation) cannot be mistaken for this step's speech.
         $baseline = Wait-Silence -OnsetMs 150 -QuietMs 300 -MaxMs 3000
         [void]$jaws.RunScript("ClearSpeechHistory")
+        $spokenStart = Get-SpokenOffset
 
         $tStart = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
-        $dispatchOk = Invoke-Step $step.type $step.command
+        $dispatchOk = Invoke-Step $step.type $step.command ([int]$step.repeat)
         $observed = Wait-Silence -OnsetMs 800 -QuietMs $quietMs -MaxMs $maxMs
+        # Read before the history copy, whose confirmation JAWS also speaks.
+        $spokenRecords = Read-SpokenSince $spokenStart
         $transcript = Read-SpeechHistoryOnce
         $tEnd = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
         if ($transcript -match "unknown script call" -or $transcript -match "unhandled script call") { $dispatchOk = $false }
@@ -311,9 +356,11 @@ for ($t = 1; $t -le $Repetitions; $t++) {
             step_id = $step.id
             t_start_ms = $tStart
             t_end_ms = $tEnd
-            action = [ordered]@{ type = $step.type; command = $step.command }
+            action = [ordered]@{ type = $step.type; command = $step.command; repeat = [Math]::Max(1, [int]$step.repeat) }
             observation = [ordered]@{
                 speech_raw = $transcript
+                spoken = @($spokenRecords | ForEach-Object { Get-SpokenText $_ })
+                spoken_records = $spokenRecords
                 dispatch_ok = $dispatchOk
                 settled = $observed.settled
                 heard_audio = $observed.heard_audio
@@ -345,7 +392,7 @@ if ($launch) {
 
 $sw.Stop()
 $evidence.total_elapsed_ms = $sw.ElapsedMilliseconds
-$jsonEvidence = $evidence | ConvertTo-Json -Depth 8
+$jsonEvidence = $evidence | ConvertTo-Json -Depth 12
 
 if ($OutputPath) {
     $outDir = [System.IO.Path]::GetDirectoryName($OutputPath)

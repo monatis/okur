@@ -1,0 +1,24 @@
+[package]
+name = "sr-sapi-recorder"
+description = "Harness SAPI 5 voice that records the text a screen reader sends its synthesizer"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.62", features = [
+    "Win32_Foundation",
+    "Win32_Media_Audio",
+    "Win32_Media_Speech",
+    "Win32_System_Com",
+] }
+# Needed by the `#[implement]` macro, whose generated code references `::windows_core` paths.
+windows-core = "0.62"
