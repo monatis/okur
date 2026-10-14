@@ -28,6 +28,30 @@ fn state_marker(name: &str) -> String {
     format!(" {RS}{name}{RE} ")
 }
 
+/// The longest a line of paragraph text may be before it wraps (§5). JAWS's default
+/// `[HTML] MaxLineLength=150` in `Default.JCF`.
+pub const MAX_LINE_LENGTH: usize = 150;
+
+/// Splits paragraph text into JAWS lines (§5). While more than `max` characters remain,
+/// a line ends at the first space at or after character `max`, so the word crossing the
+/// limit is kept whole. Text without such a space stays on one line.
+pub fn wrap_lines(text: &str, max: usize) -> Vec<&str> {
+    let mut lines = Vec::new();
+    let mut rest = text;
+    while let Some((limit, _)) = rest.char_indices().nth(max) {
+        let Some(space) = rest.get(limit..).and_then(|tail| tail.find(' ')) else {
+            break;
+        };
+        let (line, tail) = rest.split_at(limit + space);
+        lines.push(line);
+        rest = tail.trim_start();
+    }
+    if !rest.is_empty() {
+        lines.push(rest);
+    }
+    lines
+}
+
 /// Collapses runs of whitespace to single spaces and trims.
 fn squash(text: &str) -> String {
     text.split_whitespace().collect::<Vec<_>>().join(" ")
@@ -193,7 +217,20 @@ impl<'a> Builder<'a> {
         }
         let node_id = run.node_id.unwrap_or_default();
         let role = run.role.unwrap_or(Role::Text);
-        self.emit(node_id, role, &text, text.clone());
+        let lines = wrap_lines(&text, MAX_LINE_LENGTH);
+        let first_paragraph = self.buffer.paragraphs.len();
+        for line in &lines {
+            self.emit(node_id, role.clone(), line, (*line).to_owned());
+        }
+        // A wrapped run is still one paragraph.
+        if lines.len() > 1 {
+            let end = self.offset();
+            self.buffer.paragraphs.truncate(first_paragraph + 1);
+            if let Some(p) = self.buffer.paragraphs.last_mut() {
+                p.end_offset = end;
+                p.text = text.clone();
+            }
+        }
         self.last_text_line = Some(text);
     }
 
@@ -923,6 +960,41 @@ mod tests {
                 "3.5%"
             ]
         );
+    }
+
+    /// Line breaks recorded from JAWS on `news-article.html` [obs, 101/s18, s22, s52–s53].
+    #[test]
+    fn long_text_wraps_after_the_word_crossing_the_limit() {
+        let p = "The library board will review attendance in the fall. A long-standing \
+                 complaint among students and working parents was that the reading rooms \
+                 closed before most people finished their day, so the extended schedule is \
+                 intended to make the collections, the public computers, and the quiet \
+                 study spaces available at the times when the community actually needs \
+                 them, according to the library director.";
+        let lines = wrap_lines(p, MAX_LINE_LENGTH);
+        let lengths: Vec<usize> = lines.iter().map(|l| l.chars().count()).collect();
+        assert_eq!(lengths, vec![155, 152, 87]);
+        assert!(lines.first().is_some_and(|l| l.ends_with("closed before")));
+        assert!(lines.get(1).is_some_and(|l| l.starts_with("most people")));
+
+        let p = "Membership costs $5.99 a month, e.g. for adults; children join free. \
+                 Questions go to help@riverside-library.org — or call 555-0142. Attendance \
+                 rose 3.5% last year, and staff say they can't wait.";
+        let lines = wrap_lines(p, MAX_LINE_LENGTH);
+        assert_eq!(lines.first().map(|l| l.chars().count()), Some(152));
+        assert_eq!(
+            lines.get(1).copied(),
+            Some("last year, and staff say they can't wait.")
+        );
+    }
+
+    #[test]
+    fn short_or_unbreakable_text_stays_on_one_line() {
+        assert_eq!(wrap_lines("short", MAX_LINE_LENGTH), vec!["short"]);
+        let word = "x".repeat(200);
+        assert_eq!(wrap_lines(&word, MAX_LINE_LENGTH), vec![word.as_str()]);
+        let exact = "a ".repeat(75);
+        assert_eq!(wrap_lines(exact.trim_end(), MAX_LINE_LENGTH).len(), 1);
     }
 
     #[test]

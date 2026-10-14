@@ -38,8 +38,12 @@ line break within one step's speech history.
 4. **Each link is its own line**, splitting the surrounding text [obs, 101/s15–s17: `By` / `‹ same page link › Maria Lopez,` / `published March 14, 2026`].
    - Punctuation immediately after a link stays on the link's line ("Maria Lopez,").
    - Inline `strong`, `em` and `time` do not split lines [obs, 101/s18: `…until 9 p.m. on weekdays…`].
-5. **Long text wraps at about 152–155 characters on word boundaries** [obs, 101/s18–s19, s22–s23, s52–s54].
-   - [hyp] The break follows Chrome's rendered visual lines, not a fixed character limit: a 152-character line was not extended by a following 2-letter word. Verify by recording the same page at two window widths.
+5. **Long paragraph text wraps after the word that crosses 150 characters** [obs, 101/s18–s19, s22–s23, s52–s54].
+   - The limit is JAWS's `[HTML] MaxLineLength=150` in `Default.JCF`, described there as the maximum number of characters on a line of a paragraph. There is no Chrome or user override on `old-pc`.
+   - Rule: while more than 150 characters remain, the line ends at the first space at or after character 150, and the next line starts at the following word. This reproduces all four recorded breaks: 154, 152, 155 and 152 characters.
+   - It is not Chrome's layout. On `old-pc`, Chrome's IA2 and UIA line boundaries put each of these paragraphs on one rendered line (a 1920 px window at 125% scaling).
+   - A wrapped paragraph is still one paragraph for Ctrl+Up/Down.
+   - [hyp] Headings, list items and table cells longer than 150 characters wrap the same way. This is unrecorded.
 6. **Headings while reading lines:** `‹ heading level N › Text` [obs, 101/s14].
 7. **Graphics:** the alt text and `‹ Graphic ›` form one step [obs, 101/s20, 113/s1].
 8. **List items:** the item's marker is spoken as text. Examples: `•` (disc), `◦` (circle, nested) and `1.` (ordered) [obs, 101/s25–s29, 108/s9]. A link inside an item: `•  ‹ same page link › News`.
