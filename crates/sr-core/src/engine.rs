@@ -330,6 +330,8 @@ pub struct ScreenReaderEngine {
     pub settings: crate::settings::Settings,
     /// Caps Lock's state as toggled through the JAWS key, when the platform does not report it.
     caps_lock_on: bool,
+    /// The Virtual Viewer, while it is open (it takes the keys).
+    viewer: Option<crate::viewer::VirtualViewer>,
 }
 
 impl ScreenReaderEngine {
@@ -358,6 +360,7 @@ impl ScreenReaderEngine {
             last_press: None,
             settings: crate::settings::Settings::default(),
             caps_lock_on: false,
+            viewer: None,
         }
     }
 
@@ -485,6 +488,9 @@ impl ScreenReaderEngine {
         if let Some(speech) = self.clock_command(command) {
             self.speech.speak(&speech, true);
             return Some(speech);
+        }
+        if command == "VirtualizeWindow" || command == "VirtualizeControl" {
+            return self.virtualize(command == "VirtualizeWindow");
         }
         // Native desktop navigation mode handling
         if self.app_mode == AppMode::NativeDesktop {
@@ -1072,6 +1078,32 @@ impl ScreenReaderEngine {
                 return self.caps_lock_press(event);
             }
             return KeyAction::Consume;
+        }
+        // The Virtual Viewer takes the keys while it is open.
+        if let Some(action) = self.viewer.as_mut().map(|v| v.key(event)) {
+            use crate::viewer::ViewerAction;
+            match action {
+                ViewerAction::Speak(speech) => {
+                    if let Some(speech) = speech {
+                        self.speech.speak(&speech, true);
+                    }
+                    return KeyAction::Consume;
+                }
+                ViewerAction::Copy(text) => {
+                    if let Some(actions) = &self.actions {
+                        actions.copy_text(&text);
+                    }
+                    // [obs, 311/s11]
+                    self.speech.speak("Copied selection to clipboard", true);
+                    return KeyAction::Consume;
+                }
+                ViewerAction::Close => {
+                    self.viewer = None;
+                    self.speak_focus_again();
+                    return KeyAction::Consume;
+                }
+                ViewerAction::Ignore => {}
+            }
         }
         if event.modifiers.insert {
             self.jaws_key_command(event);
@@ -1718,6 +1750,82 @@ impl ScreenReaderEngine {
             "SaySystemDate" => Some(crate::clock::say_date(clock?, false)),
             "SayWeekNumber" => Some(crate::clock::say_date(clock?, true)),
             _ => None,
+        }
+    }
+
+    /// Virtualize Window or Virtualize Current Control: opens the Virtual Viewer on the
+    /// window's or the control's text and reads its first line [obs, 311/s1, s14; 312/s1].
+    fn virtualize(&mut self, window: bool) -> Option<String> {
+        if self.viewer.is_some() {
+            // [obs, 311/s32]
+            let speech = "The current location is already in a virtual view".to_owned();
+            self.speech.speak(&speech, true);
+            return Some(speech);
+        }
+        let lines = self.virtualized_lines(window)?;
+        let viewer = crate::viewer::VirtualViewer::new(lines);
+        let what = if window { "window" } else { "control" };
+        let speech = format!("Virtualizing current {what}\n{}", viewer.line_text());
+        self.viewer = Some(viewer);
+        self.speech.speak(&speech, true);
+        Some(speech)
+    }
+
+    /// The Virtual Viewer's lines for the focused native control or its window:
+    /// - a dialog box: its title, its text, and its buttons on one line [obs, 311/s14–s22];
+    /// - a text field: its lines, after the window title for the whole window [obs, 312];
+    /// - another control: its name and type, then a blank line [obs, 311/s1–s11].
+    fn virtualized_lines(&self, window: bool) -> Option<Vec<String>> {
+        let focus = self.last_native_focus.as_ref()?;
+        let title = focus.window_title.clone().unwrap_or_default();
+        if window && focus.window_kind.as_deref() == Some("#32770") {
+            let mut lines = vec![title];
+            lines.extend(
+                focus
+                    .dialog_text
+                    .iter()
+                    .flat_map(|t| t.lines())
+                    .map(str::to_owned),
+            );
+            if !focus.dialog_buttons.is_empty() {
+                lines.push(focus.dialog_buttons.join(" "));
+            }
+            return Some(lines);
+        }
+        if self.editing_text() {
+            if let Some(text) = &self.last_text {
+                let mut lines: Vec<String> = Vec::new();
+                if window {
+                    lines.push(title);
+                }
+                lines.extend(
+                    text.text
+                        .lines()
+                        .map(|l| l.trim_end_matches('\r').to_owned()),
+                );
+                return Some(lines);
+            }
+        }
+        let name = focus.name.clone().unwrap_or_default();
+        let control = match crate::native_focus::role_word(&focus.role) {
+            Some(role) => format!("{name} {role}"),
+            None => name,
+        };
+        Some(vec![control, " ".to_owned()])
+    }
+
+    /// What JAWS reads when the Virtual Viewer closes: the text field's line, or the focused
+    /// control's name and type [obs, 311/s12, s23; 312/s11].
+    fn speak_focus_again(&mut self) {
+        let speech = if self.editing_text() {
+            self.last_text.as_ref().map(crate::editing::line_at)
+        } else {
+            self.last_native_focus
+                .as_ref()
+                .map(crate::native_focus::focus_line)
+        };
+        if let Some(speech) = speech.filter(|s| !s.is_empty()) {
+            self.speech.speak(&speech, true);
         }
     }
 

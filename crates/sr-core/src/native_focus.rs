@@ -251,6 +251,29 @@ pub fn focus_speech(focus: &FocusEvent, previous: Option<&ContainerKey>) -> Stri
     lines.join("\n")
 }
 
+/// The focused control's own line (name, role and state, without its hint), as JAWS reads
+/// it again when the Virtual Viewer closes [obs, 311/s12: "Save... Button"].
+pub fn focus_line(focus: &FocusEvent) -> String {
+    control_lines(focus, false)
+        .into_iter()
+        .find(|l| !l.is_empty())
+        .unwrap_or_default()
+}
+
+/// The word JAWS uses for a control's type, as in the Virtual Viewer's "Save... Button".
+pub fn role_word(role: &Role) -> Option<&'static str> {
+    Some(match role {
+        Role::Button => "Button",
+        Role::MenuButton => "button menu",
+        Role::Edit => "Edit",
+        Role::CheckBox => "check box",
+        Role::RadioButton => "radio button",
+        Role::ComboBox => "Combo box",
+        Role::Tab => "Tab",
+        _ => return None,
+    })
+}
+
 /// Speech for a change of the focused native control, given its state before and after.
 /// `None` when nothing JAWS speaks changed (Windows fires several events per change).
 pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<String> {

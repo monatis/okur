@@ -19,6 +19,7 @@ const UIA_DOCUMENT: i32 = 50030;
 const WEB_CONTENT_WINDOW_CLASSES: [&str; 2] = ["Chrome_RenderWidgetHostHWND", "MozillaWindowClass"];
 const UIA_TREEITEM: i32 = 50024;
 const UIA_TEXT: i32 = 50020;
+const UIA_BUTTON: i32 = 50000;
 /// The window class of Win32 dialog boxes (message boxes, common dialogs).
 const WIN32_DIALOG_CLASS: &str = "#32770";
 /// MSAA `ROLE_SYSTEM_MENUITEM`.
@@ -266,6 +267,12 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent>
             .filter(|n| !n.trim().is_empty())
             .collect();
         focus.dialog_text = Some(text.join("\n"));
+        focus.dialog_buttons = event
+            .focus_siblings
+            .iter()
+            .filter(|s| s.control_type == UIA_BUTTON)
+            .filter_map(|s| s.name.clone())
+            .collect();
     }
     // JAWS names buttons by their MSAA role: ROLE_SYSTEM_BUTTONMENU is a "button menu"
     // even when UIA reports a plain button [obs, 204/s11–s12].

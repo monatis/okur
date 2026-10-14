@@ -84,6 +84,9 @@ pub struct FocusEvent {
     pub text: Option<TextContext>,
     /// When the active window is a dialog box (Win32 `#32770`): its static text.
     pub dialog_text: Option<String>,
+    /// When the active window is a dialog box: its buttons, in order (the Virtual Viewer's
+    /// last line, "Yes No Cancel") [obs, 311/s14].
+    pub dialog_buttons: Vec<String>,
     /// The active window's class, which tells windows with the same title apart (a message
     /// box titled like its main window).
     pub window_kind: Option<String>,
@@ -113,6 +116,7 @@ impl FocusEvent {
             child_count: None,
             text: None,
             dialog_text: None,
+            dialog_buttons: Vec::new(),
             window_kind: None,
             window_class: None,
             window_title: None,

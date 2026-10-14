@@ -23,6 +23,13 @@ pub trait ApplicationActions: Send {
         let _ = unit;
         false
     }
+
+    /// Puts `text` on the system clipboard (the Virtual Viewer's Ctrl+C). Returns false when
+    /// unsupported.
+    fn copy_text(&self, text: &str) -> bool {
+        let _ = text;
+        false
+    }
 }
 
 /// Records requested actions; for tests and headless runs.
@@ -57,6 +64,13 @@ impl ApplicationActions for RecordingActions {
     fn read_at_caret(&self, unit: crate::event::CaretUnit) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push((format!("caret {unit:?}"), 0));
+        }
+        true
+    }
+
+    fn copy_text(&self, text: &str) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((format!("copy {text}"), 0));
         }
         true
     }

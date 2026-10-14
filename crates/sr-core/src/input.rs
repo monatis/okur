@@ -177,6 +177,18 @@ impl KeyEvent {
                 "SaySystemTime".to_string()
             }),
 
+            // Virtualize Window (Insert+Alt+W) and Virtualize Current Control (Insert+Shift+V)
+            Key::Alpha(c)
+                if c.eq_ignore_ascii_case(&'W') && m.insert && m.alt && !m.ctrl && !m.shift =>
+            {
+                Some("VirtualizeWindow".to_string())
+            }
+            Key::Alpha(c)
+                if c.eq_ignore_ascii_case(&'V') && m.insert && m.shift && !m.ctrl && !m.alt =>
+            {
+                Some("VirtualizeControl".to_string())
+            }
+
             // Font formatting query (Insert+F)
             Key::Alpha(c)
                 if c.eq_ignore_ascii_case(&'F') && m.insert && !m.ctrl && !m.alt && !m.shift =>

@@ -123,6 +123,16 @@ mod windows_actions {
         fn read_at_caret(&self, _unit: CaretUnit) -> bool {
             self.send(Request::Text)
         }
+
+        fn copy_text(&self, text: &str) -> bool {
+            match super::set_clipboard_text(text) {
+                Ok(()) => true,
+                Err(e) => {
+                    tracing::warn!("copy to the clipboard failed: {e}");
+                    false
+                }
+            }
+        }
     }
 }
 
@@ -182,5 +192,38 @@ pub fn capture_foreground_page() -> Result<sr_core::AomNode, crate::PlatformErro
             let snapshot = crate::uia_snapshot::capture_foreground_document(None, None)?;
             Ok(crate::uia_snapshot::to_aom(&snapshot.root))
         }
+    }
+}
+
+/// Puts `text` on the clipboard as Unicode text (CF_UNICODETEXT).
+#[cfg(windows)]
+pub fn set_clipboard_text(text: &str) -> Result<(), String> {
+    use windows::Win32::Foundation::HANDLE;
+    use windows::Win32::System::DataExchange::{
+        CloseClipboard, EmptyClipboard, OpenClipboard, SetClipboardData,
+    };
+    use windows::Win32::System::Memory::{GlobalAlloc, GlobalLock, GlobalUnlock, GMEM_MOVEABLE};
+    const CF_UNICODETEXT: u32 = 13;
+    let wide: Vec<u16> = text.encode_utf16().chain(std::iter::once(0)).collect();
+    // SAFETY: the clipboard is opened and closed here; the global block is sized for the
+    // text and, once set, owned by the clipboard.
+    unsafe {
+        OpenClipboard(None).map_err(|e| format!("OpenClipboard: {e}"))?;
+        let result = (|| {
+            EmptyClipboard().map_err(|e| format!("EmptyClipboard: {e}"))?;
+            let block = GlobalAlloc(GMEM_MOVEABLE, wide.len() * 2)
+                .map_err(|e| format!("GlobalAlloc: {e}"))?;
+            let target = GlobalLock(block).cast::<u16>();
+            if target.is_null() {
+                return Err("GlobalLock failed".to_owned());
+            }
+            std::ptr::copy_nonoverlapping(wide.as_ptr(), target, wide.len());
+            let _ = GlobalUnlock(block);
+            SetClipboardData(CF_UNICODETEXT, Some(HANDLE(block.0)))
+                .map_err(|e| format!("SetClipboardData: {e}"))?;
+            Ok(())
+        })();
+        let _ = CloseClipboard();
+        result
     }
 }

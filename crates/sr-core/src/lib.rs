@@ -11,6 +11,7 @@ pub mod linearize;
 pub mod native_focus;
 pub mod settings;
 pub mod speech;
+pub mod viewer;
 
 pub use aom::{AomNode, NodeStates, Role};
 pub use buffer::{
