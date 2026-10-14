@@ -174,6 +174,8 @@ impl LiveRegionEvent {
 #[allow(clippy::large_enum_variant)]
 pub enum AccessibilityEvent {
     Focus(FocusEvent),
+    /// Menu mode transitions.
+    Menu(MenuEvent),
     /// Text at the caret of the focused edit, read after a caret movement key.
     CaretText {
         unit: CaretUnit,

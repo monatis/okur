@@ -301,6 +301,8 @@ pub struct ScreenReaderEngine {
     pub last_window_title: Option<String>,
     /// Container of the last focused native control; entering a new one announces it.
     native_focus: crate::native_focus::NativeFocus,
+    /// The page node that last had focus, to drop repeated focus events on it.
+    last_page_focus: Option<usize>,
     /// The last native focus outside menus, re-announced when menus close.
     last_native_focus: Option<FocusEvent>,
     menus: crate::native_focus::Menus,
@@ -321,6 +323,7 @@ impl ScreenReaderEngine {
             explorer_state: None,
             last_window_title: None,
             native_focus: crate::native_focus::NativeFocus::default(),
+            last_page_focus: None,
             last_native_focus: None,
             menus: crate::native_focus::Menus::default(),
             actions: None,
@@ -1021,8 +1024,8 @@ impl ScreenReaderEngine {
                 return KeyAction::Consume;
             }
             // In forms mode, pass all typing and navigation through to the active control;
-            // caret movement keys then read the text they moved over.
-            self.read_caret_after(event);
+            // caret movement keys then read the text they moved over, typed keys are echoed.
+            self.edit_key_feedback(event);
             return KeyAction::PassThrough;
         }
 
@@ -1051,13 +1054,12 @@ impl ScreenReaderEngine {
         // navigation and typing keys MUST pass through to the OS so Windows
         // handles arrow navigation, Tab cycling, and initial-letter jumps natively!
         if self.app_mode != AppMode::VirtualBuffer {
-            if !event.modifiers.insert
-                && self
-                    .last_native_focus
-                    .as_ref()
-                    .is_some_and(|f| f.role == Role::Edit)
-            {
-                self.read_caret_after(event);
+            let native_text = self.last_native_focus.as_ref().is_some_and(|f| {
+                // Edits, and text documents outside browsers (Windows 11 Notepad, Word).
+                matches!(f.role, Role::Edit | Role::Document)
+            });
+            if !event.modifiers.insert && native_text {
+                self.edit_key_feedback(event);
             }
             if event.modifiers.insert {
                 if let Some(cmd) = event.to_command_string() {
@@ -1138,6 +1140,7 @@ impl ScreenReaderEngine {
     pub fn handle_accessibility_event(&mut self, event: &AccessibilityEvent) -> Option<String> {
         match event {
             AccessibilityEvent::Focus(focus) => self.handle_focus_event(focus),
+            AccessibilityEvent::Menu(menu) => self.handle_menu_event(*menu),
             AccessibilityEvent::CaretText { unit, text } => {
                 let speech = Self::caret_speech(*unit, text);
                 self.speech.speak(&speech, true);
@@ -1146,6 +1149,18 @@ impl ScreenReaderEngine {
             AccessibilityEvent::LiveRegion(live) => self.handle_live_region_event(live),
             AccessibilityEvent::DocumentLoaded { title, root } => {
                 let buffer = VirtualBuffer::from_aom(root);
+                // The page already in the buffer, captured again (the first focus in it
+                // after start-up): refresh it without announcing it or leaving forms mode.
+                let same_page = self.app_mode == AppMode::VirtualBuffer
+                    && self.cursor.buffer.document_title() == Some(title.as_str());
+                if same_page {
+                    let offset = self.cursor.offset;
+                    self.cursor.buffer = buffer;
+                    self.cursor.offset = offset.min(self.cursor.buffer.len());
+                    self.last_page_focus = None;
+                    return None;
+                }
+                self.last_page_focus = None;
                 self.load_buffer(buffer);
                 self.app_mode = AppMode::VirtualBuffer;
                 self.last_window_title = Some(title.clone());
@@ -1346,7 +1361,6 @@ impl ScreenReaderEngine {
         }
 
         let is_in_document = focus.in_document
-            || focus.role == Role::Document
             || focus
                 .node_id
                 .is_some_and(|id| self.cursor.buffer.node_map.contains_key(&id));
@@ -1422,6 +1436,12 @@ impl ScreenReaderEngine {
                 || focus.role == Role::Edit;
             self.forms_mode = is_edit;
             self.cursor.forms_mode_active = is_edit;
+            // Chrome can report focus on the same element again (while typing in it); JAWS
+            // does not repeat the field.
+            if target_id.is_some() && target_id == self.last_page_focus {
+                return None;
+            }
+            self.last_page_focus = target_id;
             let speech = target_id
                 .and_then(|id| self.cursor.focus_node(id))
                 .or_else(|| focus.name.clone());
@@ -1435,6 +1455,7 @@ impl ScreenReaderEngine {
         }
 
         // Native control / application window handling
+        self.last_page_focus = None;
         self.app_mode = AppMode::NativeControl;
         if self.forms_mode {
             self.forms_mode = false;
@@ -1530,10 +1551,23 @@ impl ScreenReaderEngine {
         }
     }
 
-    /// Asks the platform to read at the caret once the application has handled `event`.
-    fn read_caret_after(&self, event: &KeyEvent) {
-        if let (Some(actions), Some(unit)) = (&self.actions, Self::caret_unit(event)) {
-            actions.read_at_caret(unit);
+    /// Feedback for a key passed to a text field: caret movement keys read the text they
+    /// move over (once the application has moved its caret), and typed characters are
+    /// echoed, as JAWS does with its default typing echo (characters).
+    fn edit_key_feedback(&mut self, event: &KeyEvent) {
+        if let Some(unit) = Self::caret_unit(event) {
+            tracing::debug!(?unit, "caret read requested");
+            if let Some(actions) = &self.actions {
+                actions.read_at_caret(unit);
+            }
+        } else if let Some(c) = event.text {
+            let echo = if c == ' ' {
+                "space".to_owned()
+            } else {
+                SpeechFormatter::format_char(c)
+            };
+            tracing::debug!(%echo, "typing echo");
+            self.speech.speak(&echo, true);
         }
     }
 

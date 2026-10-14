@@ -72,9 +72,14 @@ mod windows_actions {
                         }
                         Request::Caret(unit) => {
                             let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref()) else {
+                                tracing::warn!(
+                                    "caret read impossible: no UIA client or no event channel"
+                                );
                                 continue;
                             };
-                            if let Some(text) = read_after_caret_move(uia, unit) {
+                            let text = read_after_caret_move(uia, unit);
+                            tracing::debug!(?unit, ?text, "caret read");
+                            if let Some(text) = text {
                                 let _ = events.send(AccessibilityEvent::CaretText { unit, text });
                             }
                         }

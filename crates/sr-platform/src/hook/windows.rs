@@ -224,7 +224,10 @@ unsafe extern "system" fn low_level_keyboard_proc(
     };
 
     let key = translate_vk_code(vk_code);
-    let event = KeyEvent::new(key, modifiers, is_down);
+    let mut event = KeyEvent::new(key, modifiers, is_down);
+    if !ctrl && !alt && !win && !insert {
+        event.text = typed_char(vk_code, kbd.scanCode, shift);
+    }
 
     let mut action = KeyAction::PassThrough;
     if let Ok(mut cb_guard) = ACTIVE_CALLBACK.lock() {
@@ -242,6 +245,34 @@ unsafe extern "system" fn low_level_keyboard_proc(
         LRESULT(1)
     } else {
         CallNextHookEx(None, ncode, wparam, lparam)
+    }
+}
+
+/// The character a key press types in the foreground window's keyboard layout, for typing
+/// echo. Flag 0x4 keeps `ToUnicodeEx` from changing the keyboard state, so dead keys still
+/// compose in the application.
+fn typed_char(vk: u32, scan: u32, shift: bool) -> Option<char> {
+    use windows::Win32::UI::Input::KeyboardAndMouse::{
+        GetKeyState, GetKeyboardLayout, ToUnicodeEx,
+    };
+    use windows::Win32::UI::WindowsAndMessaging::{GetForegroundWindow, GetWindowThreadProcessId};
+    let mut state = [0u8; 256];
+    if shift {
+        state[0x10] = 0x80; // VK_SHIFT
+    }
+    // SAFETY: plain Win32 state and layout queries with valid arguments.
+    unsafe {
+        if GetKeyState(0x14) & 1 != 0 {
+            state[0x14] = 0x01; // VK_CAPITAL toggled
+        }
+        let thread = GetWindowThreadProcessId(GetForegroundWindow(), None);
+        let layout = GetKeyboardLayout(thread);
+        let mut buf = [0u16; 8];
+        let n = ToUnicodeEx(vk, scan, &state, &mut buf, 0x4, Some(layout));
+        if n != 1 {
+            return None;
+        }
+        char::from_u32(u32::from(buf[0])).filter(|c| !c.is_control())
     }
 }
 

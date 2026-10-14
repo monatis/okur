@@ -43,6 +43,11 @@ enum Commands {
         /// Record every utterance as JSON Lines to this file (off by default)
         #[arg(long)]
         speech_log: Option<String>,
+
+        /// Write a debug log of keys, engine decisions, OS events, caret reads and speech
+        /// to this file, for diagnosing live sessions (off by default)
+        #[arg(long)]
+        debug_log: Option<String>,
     },
     /// Compare engine speech with recorded JAWS speech for every genuine corpus scenario
     Parity {
@@ -342,10 +347,35 @@ fn print_evidence(evidence: &str, trial: usize) -> Result<(), String> {
     Ok(())
 }
 
+/// Logs to stderr at the RUST_LOG level, or, for `run --debug-log <file>`, everything from
+/// the screen reader's crates at debug level to that file.
+fn init_logging(cli: &Cli) {
+    if let Some(Commands::Run {
+        debug_log: Some(path),
+        ..
+    }) = &cli.command
+    {
+        match std::fs::File::create(path) {
+            Ok(file) => {
+                tracing_subscriber::fmt()
+                    .with_writer(std::sync::Mutex::new(file))
+                    .with_ansi(false)
+                    .with_env_filter(tracing_subscriber::EnvFilter::new(
+                        "sr_core=debug,sr_platform=debug,sr_cli=debug",
+                    ))
+                    .init();
+                return;
+            }
+            Err(e) => eprintln!("Cannot write debug log {path}: {e}"),
+        }
+    }
+    tracing_subscriber::fmt::init();
+}
+
 #[tokio::main]
 async fn main() {
-    tracing_subscriber::fmt::init();
     let cli = Cli::parse();
+    init_logging(&cli);
 
     match cli.command {
         Some(Commands::Run {
@@ -355,6 +385,7 @@ async fn main() {
             volume,
             fixture,
             speech_log,
+            debug_log: _,
         }) => {
             let engine_type = TtsEngineType::from_str(&engine).unwrap_or_else(|e| {
                 eprintln!("Error: {}", e);
@@ -458,7 +489,22 @@ async fn main() {
 
             if let Err(e) = hook.start(Box::new(move |event| {
                 if let Ok(mut eng) = engine_cb.lock() {
-                    eng.handle_key_event(&event)
+                    let action = eng.handle_key_event(&event);
+                    if event.is_down {
+                        tracing::debug!(
+                            key = ?event.key,
+                            text = ?event.text,
+                            ctrl = event.modifiers.ctrl,
+                            shift = event.modifiers.shift,
+                            alt = event.modifiers.alt,
+                            insert = event.modifiers.insert,
+                            ?action,
+                            mode = ?eng.app_mode,
+                            forms = eng.forms_mode,
+                            "key"
+                        );
+                    }
+                    action
                 } else {
                     KeyAction::PassThrough
                 }
@@ -474,14 +520,25 @@ async fn main() {
             } else {
                 let engine_events = Arc::clone(&engine);
                 tokio::spawn(async move {
-                    while let Some(event) = event_rx.recv().await {
-                        if let Ok(mut eng) = engine_events.lock() {
-                            if let Some(msg) = eng.handle_accessibility_event(&event) {
-                                println!(
-                                    "[Event Spoken] {}",
-                                    msg.replace(['\u{001d}', '\u{001e}'], "")
-                                );
-                            }
+                    let idle = std::time::Duration::from_millis(150);
+                    loop {
+                        let event = match tokio::time::timeout(idle, event_rx.recv()).await {
+                            Ok(Some(event)) => Some(event),
+                            Ok(None) => break,
+                            // Quiet for a moment: speech JAWS defers until no event supersedes it.
+                            Err(_) => None,
+                        };
+                        let Ok(mut eng) = engine_events.lock() else {
+                            continue;
+                        };
+                        let spoken = match &event {
+                            Some(event) => eng.handle_accessibility_event(event),
+                            None => eng.on_idle(),
+                        };
+                        if let Some(msg) = spoken {
+                            let msg = msg.replace(['\u{001d}', '\u{001e}'], "");
+                            tracing::debug!(%msg, "spoken for event");
+                            println!("[Event Spoken] {msg}");
                         }
                     }
                 });

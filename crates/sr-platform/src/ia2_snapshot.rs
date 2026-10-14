@@ -126,6 +126,7 @@ fn is_block_display(display: Option<&str>) -> bool {
 
 fn map_role(node: &Ia2Node) -> sr_core::Role {
     use sr_core::Role;
+    use xa11y_windows::ia2::msaa_states::STATE_SYSTEM_FOCUSABLE as FOCUSABLE;
     use xa11y_windows::ia2::roles::{IA2_ROLE_BLOCK_QUOTE, IA2_ROLE_HEADING};
 
     let attr = |k: &str| node.attributes.get(k).map(String::as_str);
@@ -189,6 +190,9 @@ fn map_role(node: &Ia2Node) -> sr_core::Role {
         msaa_role::CELL | msaa_role::COLUMNHEADER | msaa_role::ROWHEADER => Role::TableCell,
         msaa_role::EQUATION => Role::Math,
         // A fieldset; its name is the legend.
+        // An editing host (contenteditable without a role): editable and focusable.
+        // Its text children are editable too, but not focusable.
+        _ if editable && node.msaa_states & FOCUSABLE != 0 => Role::Edit,
         msaa_role::GROUPING if named => Role::Group,
         // Any other element reads by its CSS box: block boxes break lines, inline
         // elements (strong, em, time, label) flow with the surrounding text.

@@ -184,6 +184,14 @@ fn aria_property<'a>(node: &'a UiaNode, key: &str) -> Option<&'a str> {
     })
 }
 
+/// A focusable element whose ARIA properties say it is writable (Chromium reports
+/// `readonly=true` for all other content).
+fn is_editing_host(node: &UiaNode) -> bool {
+    node.is_keyboard_focusable
+        && node.aria_properties.is_some()
+        && aria_property(node, "readonly") != Some("true")
+}
+
 fn map_role(node: &UiaNode) -> sr_core::Role {
     use sr_core::Role;
     let aria = node.aria_role.as_deref().unwrap_or_default();
@@ -227,6 +235,9 @@ fn map_role(node: &UiaNode) -> sr_core::Role {
         CT_DATAITEM => Role::TableCell,
         CT_WINDOW => Role::Window,
         CT_GROUP if aria == "tabpanel" => Role::TabPanel,
+        // An editing host (contenteditable without a role): Chromium reports a focusable
+        // group without `readonly=true` among its ARIA properties.
+        CT_GROUP if is_editing_host(node) => Role::Edit,
         CT_GROUP => Role::Group,
         _ => Role::Generic,
     }

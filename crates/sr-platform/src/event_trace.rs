@@ -15,6 +15,8 @@ use serde::{Deserialize, Serialize};
 const UIA_LISTITEM: i32 = 50007;
 const UIA_WINDOW: i32 = 50032;
 const UIA_DOCUMENT: i32 = 50030;
+/// Window classes that host web page content: Chromium (Chrome, Edge, Electron) and Firefox.
+const WEB_CONTENT_WINDOW_CLASSES: [&str; 2] = ["Chrome_RenderWidgetHostHWND", "MozillaWindowClass"];
 const UIA_TREEITEM: i32 = 50024;
 /// MSAA `ROLE_SYSTEM_MENUITEM`.
 const MSAA_MENUITEM: i32 = 0x0C;
@@ -168,11 +170,10 @@ pub fn focus_event_from_chain(
     event.window_class = window_class.map(str::to_owned);
     event.window_title = window_title.map(str::to_owned);
     // Inside a browser document, Chrome reports the DOM id as AutomationId.
-    event.in_document = chain
-        .iter()
-        .rev()
-        .skip(1)
-        .any(|a| a.control_type == UIA_DOCUMENT);
+    // A page: a document in a browser's web content window. Documents elsewhere (Windows 11
+    // Notepad, Word) are native text controls, read by caret, not by the virtual cursor.
+    event.in_document = window_class.is_some_and(|c| WEB_CONTENT_WINDOW_CLASSES.contains(&c))
+        && chain.iter().any(|a| a.control_type == UIA_DOCUMENT);
     if event.in_document {
         event.dom_id = focused.automation_id.clone().filter(|id| !id.is_empty());
     }
@@ -288,7 +289,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent>
 }
 
 #[cfg(windows)]
-pub use capture::run_trace;
+pub use capture::{run_live, run_trace};
 
 /// The menu mode transition a recorded event reports, if any.
 pub fn menu_event_from_trace(event: &TraceEvent) -> Option<sr_core::MenuEvent> {
@@ -329,7 +330,8 @@ mod capture {
     const WINEVENT_SKIPOWNPROCESS: u32 = 0x0002;
 
     struct TraceState {
-        out: std::fs::File,
+        /// Receives every event: the trace file, or the live screen reader.
+        sink: Box<dyn FnMut(TraceEvent)>,
         uia: Option<IUIAutomation>,
         count: usize,
     }
@@ -497,12 +499,8 @@ mod capture {
                 focus_subtree,
                 list_position,
             };
-            if let Ok(mut line) = serde_json::to_string(&event) {
-                line.push('\n');
-                if state.out.write_all(line.as_bytes()).is_ok() {
-                    state.count += 1;
-                }
-            }
+            (state.sink)(event);
+            state.count += 1;
         });
     }
 
@@ -526,11 +524,36 @@ mod capture {
         file.write_all(format!("{header}\n").as_bytes())
             .map_err(io_err)?;
 
+        let sink = move |event: TraceEvent| {
+            if let Ok(mut line) = serde_json::to_string(&event) {
+                line.push('\n');
+                let _ = file.write_all(line.as_bytes());
+            }
+        };
+        let deadline = std::time::Instant::now() + std::time::Duration::from_millis(max_ms);
+        Ok(run_hooks(Box::new(sink), || {
+            std::time::Instant::now() < deadline && !stop_file.is_some_and(|p| p.exists())
+        }))
+    }
+
+    /// Delivers accessibility events to `sink` as they happen, with the same capture as
+    /// [`run_trace`], until `stop` is set. This is the live screen reader's event source,
+    /// so the engine consumes exactly the event stream the harness records and replays.
+    pub fn run_live(
+        sink: Box<dyn FnMut(TraceEvent)>,
+        stop: &std::sync::atomic::AtomicBool,
+    ) -> usize {
+        run_hooks(sink, || !stop.load(std::sync::atomic::Ordering::Relaxed))
+    }
+
+    /// Installs the WinEvent hooks on this thread, pumps messages while `keep_running`,
+    /// and returns the number of events delivered.
+    fn run_hooks(sink: Box<dyn FnMut(TraceEvent)>, keep_running: impl Fn() -> bool) -> usize {
         // SAFETY: COM for UIA queries on this thread, which also pumps the hook's messages.
         let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
         STATE.with(|s| {
             *s.borrow_mut() = Some(TraceState {
-                out: file,
+                sink,
                 uia: automation().ok(),
                 count: 0,
             })
@@ -545,9 +568,8 @@ mod capture {
             ]
         };
 
-        let deadline = std::time::Instant::now() + std::time::Duration::from_millis(max_ms);
         let mut msg = MSG::default();
-        while std::time::Instant::now() < deadline && !stop_file.is_some_and(|p| p.exists()) {
+        while keep_running() {
             // SAFETY: standard message pump; waits at most 50 ms between stop checks.
             unsafe {
                 let _ = MsgWaitForMultipleObjects(None, false, 50, QS_ALLINPUT);
@@ -564,8 +586,7 @@ mod capture {
                 let _ = unsafe { UnhookWinEvent(hook) };
             }
         }
-        let count = STATE.with(|s| s.borrow_mut().take().map(|s| s.count).unwrap_or(0));
-        Ok(count)
+        STATE.with(|s| s.borrow_mut().take().map(|s| s.count).unwrap_or(0))
     }
 }
 

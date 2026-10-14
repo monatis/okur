@@ -60,6 +60,9 @@ pub struct KeyEvent {
     pub modifiers: Modifiers,
     pub is_down: bool,
     pub is_repeat: bool,
+    /// The character the key types in the active keyboard layout, when it types one
+    /// (filled in by the platform hook; used for typing echo).
+    pub text: Option<char>,
 }
 
 impl KeyEvent {
@@ -69,6 +72,7 @@ impl KeyEvent {
             modifiers,
             is_down,
             is_repeat: false,
+            text: None,
         }
     }
 
