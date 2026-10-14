@@ -29,6 +29,10 @@ pub enum EditKey {
     DeleteForward,
     /// Insert+Up (Say Line): the field's name and role, then the line (305/s9, s15).
     SayLine,
+    /// Ctrl+A: "selected", then the first line of the selection (313/s7).
+    SelectAll,
+    /// Ctrl+C: "Copied selection to clipboard" when text is selected (313/s8).
+    Copy,
 }
 
 impl EditKey {
@@ -57,6 +61,8 @@ impl EditKey {
             (false, false) if ends => Self::Silent,
             (false, false) if event.key == Key::Backspace => Self::DeleteBackward,
             (false, false) if event.key == Key::Delete => Self::DeleteForward,
+            (false, true) if event.key == Key::Alpha('A') => Self::SelectAll,
+            (false, true) if event.key == Key::Alpha('C') => Self::Copy,
             _ => return None,
         })
     }
@@ -179,6 +185,17 @@ pub fn speech(
                 return None;
             }
             deleted
+        }
+        EditKey::SelectAll => {
+            let selected = selected_text(after);
+            let first = selected.lines().find(|l| !l.trim().is_empty())?;
+            format!("selected\n{}", first.trim())
+        }
+        EditKey::Copy => {
+            if selected_text(after).is_empty() {
+                return None;
+            }
+            "Copied selection to clipboard".to_owned()
         }
         EditKey::SayLine => {
             let line = line_at(after);

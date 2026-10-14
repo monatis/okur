@@ -287,9 +287,18 @@ function Start-DesktopFixture {
 
 if ($scenario.fixture -and -not $launch) {
     [System.Diagnostics.Process]::Start($targetProc, $scenario.fixture) | Out-Null
+    # A cold browser start takes longer than a new tab: wait for the fixture's window.
+    for ($i = 0; $i -lt 100; $i++) {
+        $w = Get-Process $targetProc -ErrorAction SilentlyContinue |
+            Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero -and (-not $expectedTitle -or $_.MainWindowTitle.StartsWith($expectedTitle)) }
+        if ($w) { break }
+        Start-Sleep -Milliseconds 200
+    }
     Start-Sleep -Milliseconds 2000
 }
 
+$traceProc = $null
+try {
 for ($t = 1; $t -le $Repetitions; $t++) {
     $trialResult = [ordered]@{
         trial_index = $t
@@ -406,6 +415,11 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         if (Test-Path $tracePath) { $trialResult.trace_sha256 = Get-Sha256 $tracePath } else { $trialResult.trial_success = $false }
     }
     $evidence.trials += $trialResult
+}
+} finally {
+    # An exception mid-trial (e.g. no browser window) must not leave the tracer running: it
+    # holds the trace file and the harness binary.
+    if ($traceProc -and -not $traceProc.HasExited) { $traceProc.Kill() }
 }
 
 # Close what this run opened: the desktop fixture app, or the browser tab.

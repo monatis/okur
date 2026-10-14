@@ -104,6 +104,11 @@ pub struct Ia2Node {
     /// (`IAccessibleText::textAtOffset` with `IA2_TEXT_BOUNDARY_LINE`).
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub lines: Vec<[i32; 2]>,
+    /// Text formatting runs within `text` (`IAccessibleText::attributes`), keeping the font
+    /// attributes JAWS reports with Say Font: family, size, weight, style, underline and
+    /// line-through.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub text_runs: Vec<Ia2TextRun>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub children: Vec<Ia2Node>,
 }
@@ -117,6 +122,24 @@ impl Ia2Node {
 
 /// Parses an IA2 object attribute string (`name:value;name:value;`), where `\` escapes
 /// `\`, `:`, `;`, `=` and `,`.
+/// A run of text with one formatting, as `[start, end)` UTF-16 offsets into the hypertext.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Ia2TextRun {
+    pub start: i32,
+    pub end: i32,
+    pub attributes: BTreeMap<String, String>,
+}
+
+/// The text attributes a run keeps (Say Font's).
+pub const FONT_ATTRIBUTES: [&str; 6] = [
+    "font-family",
+    "font-size",
+    "font-weight",
+    "font-style",
+    "text-underline-style",
+    "text-line-through-style",
+];
+
 pub fn parse_attributes(raw: &str) -> BTreeMap<String, String> {
     let mut out = BTreeMap::new();
     let mut key = String::new();
@@ -274,7 +297,8 @@ mod com {
 
     pub mod capture {
         use super::super::{
-            parse_attributes, Ia2Node, Ia2TextState, IA2_TEXT_BOUNDARY_LINE, IA2_TEXT_OFFSET_LENGTH,
+            parse_attributes, Ia2Node, Ia2TextRun, Ia2TextState, FONT_ATTRIBUTES,
+            IA2_TEXT_BOUNDARY_LINE, IA2_TEXT_OFFSET_LENGTH,
         };
         use super::{IAccessible2, IAccessibleText};
         use windows::core::{Interface, BSTR, PCWSTR};
@@ -294,6 +318,8 @@ mod com {
         /// Bounds recursion and text size on pathological documents.
         const MAX_DEPTH: usize = 256;
         const MAX_TEXT_CHARS: i32 = 1_000_000;
+        /// Formatting runs read per object at most.
+        const MAX_TEXT_RUNS: usize = 512;
 
         #[derive(Debug)]
         pub struct Ia2CaptureError(pub String);
@@ -355,6 +381,32 @@ mod com {
                     break;
                 }
                 node.lines.push([start, end]);
+                offset = end;
+            }
+            let mut offset = 0i32;
+            while offset < n && node.text_runs.len() < MAX_TEXT_RUNS {
+                let (mut start, mut end) = (0i32, 0i32);
+                let mut attrs = BSTR::default();
+                // SAFETY: as above.
+                let hr = unsafe { text.get_attributes(offset, &mut start, &mut end, &mut attrs) };
+                if hr.is_err() || end <= offset {
+                    break;
+                }
+                let attributes = parse_attributes(&attrs.to_string())
+                    .into_iter()
+                    .filter(|(k, _)| FONT_ATTRIBUTES.contains(&k.as_str()))
+                    .collect();
+                // Adjacent runs that differ only in attributes we do not keep are one run.
+                match node.text_runs.last_mut() {
+                    Some(last) if last.end == start && last.attributes == attributes => {
+                        last.end = end;
+                    }
+                    _ => node.text_runs.push(Ia2TextRun {
+                        start,
+                        end,
+                        attributes,
+                    }),
+                }
                 offset = end;
             }
         }

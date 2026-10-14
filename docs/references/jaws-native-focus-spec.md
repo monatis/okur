@@ -110,7 +110,60 @@ Implemented in `sr-core::editing`. JAWS speaks after the application handled the
 | Backspace | the deleted character |
 | Delete | the character now at the caret |
 | Insert+Up (Say Line) | `Name: ‹ Edit › \| d` (the field, then the line; an empty line gives the field alone) |
-| Typing | echoed aloud, but JAWS does not record echo in its speech history (305/s10–s12), so parity cannot compare it |
+| Typing | nothing in the speech history (305/s10–s12). Audio was heard, but old-pc's JAWS has typing echo **off** (`TypingEcho=0`), so that audio was not echo. To be identified with the speech recorder voice. |
 
 - **Reading the field:** a field is read through IA2 in Chromium pages, through UIA TextPattern elsewhere, and with window messages (`WM_GETTEXT`, `EM_GETSEL`) for subclassed Win32 edits that UIA does not expose (WinForms).
 - **Open question:** 305/s13 (Shift+Home over `bo ` in `bo d`) speaks `selected | do`.
+
+## 8. The JAWS key and JAWS's settings [obs, 309, 310]
+
+- **The reference machine is not on JAWS's defaults.** Its `DEFAULT.JCF` sets:
+  - `KeyboardType=Laptop`;
+  - `TypingEcho=0` (echo off);
+  - `AutoFormsMode=0` (manual forms mode).
+
+  JAWS's defaults are the desktop layout, character echo and Auto forms mode. Evidence since 2026-10-14 records these files as `provenance.jaws_settings`. Replay uses them, falling back to `Settings::reference_machine()`.
+- **Desktop layout:** Insert is the JAWS key.
+- **Laptop layout:** CapsLock is the JAWS key, and Insert works as well (`CapsLock+T` and `Insert+T` both speak the title).
+- **Choosing the JAWS key:** Settings Center can choose Insert, CapsLock or ScrollLock for a layout (`sr-cli run --keyboard-layout`, `--jaws-key`).
+- **CapsLock as the JAWS key, pressed twice quickly:** toggles Caps Lock and says `Caps lock on` or `Caps lock off`. Auto-repeat while it is held is not a second press.
+
+## 9. Time and date [obs, 308]
+
+The user locale's formats (old-pc: en-US).
+
+| Keys | Speech |
+|---|---|
+| Insert+F12 | `10:19 PM` (short time) |
+| Insert+F12 twice quickly | `10:19 PM \| Wednesday, October 14, 2026` (long date) |
+| Ctrl+Insert+F12 | `10:19:27 PM` (long time) |
+| Ctrl+Insert+F12 twice quickly | `10:19:31 PM \| Week 42` |
+
+"Twice quickly" means within 500 ms. The week number follows the locale's week rule. In 2026 the US and ISO rules agree, so evidence cannot tell them apart.
+
+## 10. The Virtual Viewer [obs, 311, 312]
+
+**Insert+Alt+W (Virtualize Window)** says `Virtualizing current window | <first line>`. **Insert+Shift+V (Virtualize Current Control)** says `... current control ...`. The viewer's lines:
+
+| Focus | Lines |
+|---|---|
+| A dialog box (`#32770`) | title; static text; its buttons on one line (`Yes No Cancel`) |
+| A text field, whole window | the window title, then the field's lines (a label beside it is not included) |
+| A text field, current control | the field's lines |
+| Another control (WinForms button) | `Save... Button`, then a line holding a space |
+
+Keys in the viewer:
+- Up and Down read lines, and at the top or bottom read the same line again.
+- Ctrl+Home and Ctrl+End read the first and last line.
+- Left and Right read characters.
+- Ctrl+Left and Ctrl+Right read words; a run of punctuation is a word (`Save`, `...`, `Button`).
+- Insert+Up reads the line.
+- Ctrl+A says `selected | <all lines>`.
+- Ctrl+C says `Copied selection to clipboard`.
+- Escape closes the viewer, and JAWS reads the focus again: `Save... ‹ Button ›`, or the edit's current line.
+- Tab, Shift+Tab and Enter stay in the viewer silently. JAWS help says Tab closes it, but it did not close.
+- Virtualizing again says `The current location is already in a virtual view`.
+
+**JAWS defects we do not copy:**
+- Its viewer drops characters outside the Basic Multilingual Plane (an emoji), and the leading tab.
+- Its Ctrl+C reaches the clipboard as UTF-8 read as ANSI, which garbles non-ASCII text.

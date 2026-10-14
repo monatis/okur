@@ -476,11 +476,13 @@ impl ScreenReaderEngine {
     /// Speaks the resulting announcement and returns the emitted speech text.
     pub fn execute_command(&mut self, command: &str) -> Option<String> {
         if command == "SayWindowTitle" {
-            // [obs, 306/s12]: "Title is | SR Dialog Fixture".
-            let title = match self.app_mode {
-                AppMode::VirtualBuffer => self.cursor.buffer.document_title().map(str::to_owned),
-                _ => self.last_window_title.clone(),
-            }?;
+            // [obs, 306/s12]: "Title is | SR Dialog Fixture". In a browser it is the browser
+            // window's title, not the page's [obs, 209/s1: "... - Google Chrome - <profile>"].
+            let title = self.last_window_title.clone().or_else(|| {
+                (self.app_mode == AppMode::VirtualBuffer)
+                    .then(|| self.cursor.buffer.document_title().map(str::to_owned))
+                    .flatten()
+            })?;
             let speech = format!("Title is\n{title}");
             self.speech.speak(&speech, true);
             return Some(speech);
@@ -491,6 +493,9 @@ impl ScreenReaderEngine {
         }
         if command == "VirtualizeWindow" || command == "VirtualizeControl" {
             return self.virtualize(command == "VirtualizeWindow");
+        }
+        if command == "Insert+F" || command == "SayFontInViewer" {
+            return self.say_font(command == "SayFontInViewer");
         }
         // Native desktop navigation mode handling
         if self.app_mode == AppMode::NativeDesktop {
@@ -1719,6 +1724,7 @@ impl ScreenReaderEngine {
             "SaySystemTime" => "SaySystemDate".to_owned(),
             "SaySystemTimeWithSeconds" => "SayWeekNumber".to_owned(),
             "CapsLock" => "ToggleCapsLock".to_owned(),
+            "Insert+F" => "SayFontInViewer".to_owned(),
             _ => cmd,
         }
     }
@@ -1751,6 +1757,38 @@ impl ScreenReaderEngine {
             "SayWeekNumber" => Some(crate::clock::say_date(clock?, true)),
             _ => None,
         }
+    }
+
+    /// Say Font (`Insert+F`): the font at the cursor. Pressed twice quickly, JAWS shows it in
+    /// the Virtual Viewer and reads the message [obs, 209/s7, 314/s2]; with no font it just
+    /// says "No font" again (313/s2). Native controls report no font yet: JAWS reads
+    /// Notepad's from the screen ("Consolas 22 point" for a 24-point LOGFONT, 314/s1), a
+    /// conversion not yet known.
+    fn say_font(&mut self, in_viewer: bool) -> Option<String> {
+        let formatting = (self.app_mode == AppMode::VirtualBuffer)
+            .then(|| self.cursor.buffer.formatting_at_offset(self.cursor.offset))
+            .flatten();
+        let description = formatting
+            .as_ref()
+            .and_then(SpeechFormatter::font_description);
+        let speech = match (in_viewer, description) {
+            (true, Some(font)) if self.viewer.is_none() => {
+                let viewer = crate::viewer::VirtualViewer::message(vec![
+                    "Font information:".to_owned(),
+                    font,
+                    String::new(),
+                    String::new(),
+                    "\u{1d} Link \u{1e} List JAWS Hot Keys".to_owned(),
+                    "Press ESCAPE to close this message.".to_owned(),
+                ]);
+                let speech = viewer.message_speech();
+                self.viewer = Some(viewer);
+                speech
+            }
+            _ => SpeechFormatter::format_font(formatting.as_ref()),
+        };
+        self.speech.speak(&speech, true);
+        Some(speech)
     }
 
     /// Virtualize Window or Virtualize Current Control: opens the Virtual Viewer on the
@@ -1819,6 +1857,9 @@ impl ScreenReaderEngine {
     fn speak_focus_again(&mut self) {
         let speech = if self.editing_text() {
             self.last_text.as_ref().map(crate::editing::line_at)
+        } else if self.app_mode == AppMode::VirtualBuffer {
+            // In a page, the virtual cursor's line [obs, 209/s11].
+            Some(self.cursor.current_line())
         } else {
             self.last_native_focus
                 .as_ref()
@@ -2029,6 +2070,17 @@ impl ScreenReaderEngine {
             self.cursor.offset = offset.min(self.cursor.buffer.len());
             self.last_page_focus = None;
         }
+    }
+
+    /// Completes an edit key the application did not act on (Down on the last line, Ctrl+C):
+    /// the field's text is unchanged, so no change event follows, but JAWS still speaks
+    /// (313/s5–s8). Live, the platform reads the field after every edit key and reports it
+    /// changed or not; replay, which has only the recorded change events, calls this after a
+    /// step's events.
+    pub fn settle_pending_edit(&mut self) -> Option<String> {
+        self.pending_edit?;
+        let unchanged = self.last_text.clone()?;
+        self.handle_accessibility_event(&AccessibilityEvent::TextContext(unchanged))
     }
 
     /// Called when the OS event stream goes quiet: speech JAWS defers until no further
@@ -2256,11 +2308,11 @@ mod tests {
         let mock_speech = Box::new(MockSpeechOutput::new());
         let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
 
-        // Font query
+        // Font query, in JAWS's phrasing [obs, 209/s3]
         let font_speech = engine.execute_command("Insert+F");
         assert_eq!(
             font_speech,
-            Some("16 pt, bold, Arial on default background, left aligned".to_string())
+            Some("Font is bold  Arial 16 point".to_string())
         );
 
         // Select next character

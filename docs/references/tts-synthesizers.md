@@ -38,9 +38,10 @@ The TTS subsystem is designed with a cross-platform driver abstraction ([`TtsEng
 
 | Driver Name | Identifier | Supported Platforms | Description |
 |---|---|---|---|
+| **OneCore** | `onecore` | Windows 10, 11 | The Windows OneCore voices (`Windows.Media.SpeechSynthesis`, NVDA's default). Each utterance is synthesized to PCM in memory, its leading silence is trimmed, and it plays through our own WASAPI stream, so a stop drops audio at once. Measured key-to-sound latency on old-pc: 106–155 ms, against 325–397 ms for SAPI 5 (`sr-cli speak --measure-latency`). |
 | **SAPI 5** | `sapi5` | Windows | Native Microsoft Speech API 5 using COM `ISpVoice` (`CLSID_SpVoice`). Asynchronous audio rendering via `SPF_ASYNC`, instant interruption via `SPF_PURGEBEFORESPEAK`. |
 | **No Speech** | `no-speech` | Windows, macOS, Linux, CI | Universal silent synthesizer matching Freedom Scientific JAWS "No Speech" and NVDA "Silence" driver. Stores utterances in an inspectable memory buffer for test validation, braille display synchronization, and noise-free CI pipelines. |
-| **Auto** | `auto` | All | Automatically selects native platform driver (`sapi5` on Windows) with silent fallback (`no-speech`) if initialization fails. |
+| **Auto** | `auto` | All | On Windows: OneCore, else SAPI 5, else `no-speech`. Elsewhere: `no-speech` until native drivers exist. |
 
 ---
 

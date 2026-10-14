@@ -597,43 +597,43 @@ impl SpeechFormatter {
         format!("math {}", math_text)
     }
 
-    /// Formats font formatting attributes into canonical JAWS description string.
-    /// Format: "{size} pt, {styles}, {family} on default background, {alignment} aligned"
-    pub fn format_font(formatting: &TextFormatting) -> String {
-        let mut parts = Vec::new();
-
-        if let Some(size) = formatting.font_size_pt {
-            parts.push(format!("{:.0} pt", size));
-        }
-
+    /// The font part of Say Font: attributes, then family and size, e.g. `bold  Times New
+    /// Roman 24 point` or `Times New Roman 12 point` [obs, 209/s3, s5, s7].
+    pub fn font_description(formatting: &TextFormatting) -> Option<String> {
+        let mut attributes = Vec::new();
         if formatting.bold {
-            parts.push("bold".to_string());
+            attributes.push("bold");
         }
         if formatting.italic {
-            parts.push("italic".to_string());
+            attributes.push("italic");
         }
         if formatting.underline {
-            parts.push("underline".to_string());
+            attributes.push("underline");
         }
-
-        if let Some(ref family) = formatting.font_family {
-            parts.push(format!("{} on default background", family));
+        let mut font = Vec::new();
+        font.extend(formatting.font_family.clone());
+        font.extend(
+            formatting
+                .font_size_pt
+                .map(|size| format!("{size:.0} point")),
+        );
+        if font.is_empty() {
+            return None;
         }
-
-        if let Some(ref align) = formatting.alignment {
-            let align_str = if align.to_lowercase().contains("align") {
-                align.clone()
-            } else {
-                format!("{} aligned", align)
-            };
-            parts.push(align_str);
-        }
-
-        if parts.is_empty() {
-            "No font".to_string()
+        let font = font.join(" ");
+        Some(if attributes.is_empty() {
+            font
         } else {
-            parts.join(", ")
-        }
+            format!("{}  {font}", attributes.join(" "))
+        })
+    }
+
+    /// Say Font (`Insert+F`): `Font is bold  Times New Roman 24 point`, or `No font` when the
+    /// text has none [obs, 209/s3; 313/s1].
+    pub fn format_font(formatting: Option<&TextFormatting>) -> String {
+        formatting
+            .and_then(Self::font_description)
+            .map_or_else(|| "No font".to_owned(), |f| format!("Font is {f}"))
     }
 
     /// Formats selection action announcement matching JAWS conventions.

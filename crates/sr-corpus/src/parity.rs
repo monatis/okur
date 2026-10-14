@@ -198,6 +198,12 @@ fn run_scenario(
                         }
                     }
                 }
+                // An edit key that changed nothing reports the field unchanged, as live.
+                if let Some(speech) = engine.settle_pending_edit() {
+                    if spoken.is_empty() {
+                        spoken.push(&speech);
+                    }
+                }
                 // The step's events are over; JAWS then speaks what it deferred.
                 let _ = engine.on_idle();
                 spoken.take().join("\n")

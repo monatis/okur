@@ -272,11 +272,7 @@ impl VirtualCursor {
 
     /// Speaks font formatting attributes at cursor (`Insert+F` / `WhatFont`).
     pub fn say_font_formatting(&self) -> String {
-        if let Some(fmt) = self.buffer.formatting_at_offset(self.offset) {
-            SpeechFormatter::format_font(&fmt)
-        } else {
-            "No font".to_string()
-        }
+        SpeechFormatter::format_font(self.buffer.formatting_at_offset(self.offset).as_ref())
     }
 
     /// Resets the cursor to the top of document (`^{HOME}`).

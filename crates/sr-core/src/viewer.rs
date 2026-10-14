@@ -72,6 +72,25 @@ impl VirtualViewer {
         }
     }
 
+    /// A JAWS message (Say Font twice quickly): JAWS reads it all on opening, so the cursor
+    /// ends on its last line [obs, 314/s2–s5: Down repeats "Press ESCAPE to close this
+    /// message."].
+    pub fn message(lines: Vec<String>) -> Self {
+        let mut viewer = Self::new(lines);
+        viewer.line = viewer.lines.len() - 1;
+        viewer
+    }
+
+    /// What JAWS reads when a message opens: its lines, skipping blank ones.
+    pub fn message_speech(&self) -> String {
+        self.lines
+            .iter()
+            .map(|l| l.iter().collect::<String>())
+            .filter(|l| !l.trim().is_empty())
+            .collect::<Vec<_>>()
+            .join("\n")
+    }
+
     /// The whole text, lines joined with Windows line breaks (what Ctrl+C copies).
     pub fn text(&self) -> String {
         self.lines

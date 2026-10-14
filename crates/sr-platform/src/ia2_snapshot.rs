@@ -124,6 +124,41 @@ fn is_block_display(display: Option<&str>) -> bool {
     display.is_some_and(|d| !d.is_empty() && !d.starts_with("inline") && d != "contents")
 }
 
+/// A font size from IA2 text attributes in points: IA2 specifies points (`12pt`), and CSS
+/// pixels (`16px`) are three quarters of a point.
+fn font_size_points(raw: &str) -> Option<f32> {
+    let raw = raw.trim();
+    if let Some(px) = raw.strip_suffix("px") {
+        return px.trim().parse::<f32>().ok().map(|px| px * 0.75);
+    }
+    raw.strip_suffix("pt").unwrap_or(raw).trim().parse().ok()
+}
+
+/// Say Font's formatting from an IA2 text run (`font-family`, `font-size`, `font-weight`,
+/// `font-style`, `text-underline-style`).
+fn text_formatting(
+    attributes: &std::collections::BTreeMap<String, String>,
+) -> Option<sr_core::aom::TextFormatting> {
+    let get = |k: &str| attributes.get(k).map(|v| v.trim().trim_matches('"'));
+    let font_family = get("font-family")
+        .filter(|f| !f.is_empty())
+        .map(str::to_owned);
+    let font_size_pt = get("font-size").and_then(font_size_points);
+    if font_family.is_none() && font_size_pt.is_none() {
+        return None;
+    }
+    let bold =
+        get("font-weight").is_some_and(|w| w == "bold" || w.parse::<u32>().is_ok_and(|n| n >= 600));
+    Some(sr_core::aom::TextFormatting {
+        font_family,
+        font_size_pt,
+        bold,
+        italic: get("font-style").is_some_and(|s| s == "italic" || s == "oblique"),
+        underline: get("text-underline-style").is_some_and(|s| !s.is_empty() && s != "none"),
+        alignment: None,
+    })
+}
+
 fn map_role(node: &Ia2Node) -> sr_core::Role {
     use sr_core::Role;
     use xa11y_windows::ia2::msaa_states::STATE_SYSTEM_FOCUSABLE as FOCUSABLE;
@@ -245,6 +280,10 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> sr_core::AomNode {
         _ => {}
     }
     aom.level = attr("level").and_then(|l| l.parse().ok());
+    aom.formatting = node
+        .text_runs
+        .first()
+        .and_then(|run| text_formatting(&run.attributes));
     aom.states = NodeStates {
         checked: matches!(role, Role::CheckBox | Role::RadioButton)
             .then(|| has(STATE_SYSTEM_CHECKED)),
