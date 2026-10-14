@@ -1,0 +1,9 @@
+# Reference data is stored byte-for-byte, exactly as the capture tooling wrote it.
+# Manifest hashes and provenance are computed over these bytes, so no line-ending
+# conversion may touch them on any platform.
+corpus/evidence/** -text
+corpus/unverified/evidence/** -text
+corpus/evidence-v1.0.0/** -text
+corpus/snapshots/** -text
+corpus/fixtures/** -text
+corpus/unverified/fixtures/** -text
