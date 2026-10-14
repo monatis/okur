@@ -56,6 +56,10 @@ enum Commands {
         /// Regenerate corpus/parity-baseline.json from the current results
         #[arg(long)]
         write_baseline: bool,
+
+        /// Snapshot API to drive the engine with: ia2 (the ratchet's API) or uia
+        #[arg(long)]
+        api: Option<String>,
     },
     /// Record system-wide accessibility events as JSON Lines (Windows)
     Trace {
@@ -627,9 +631,23 @@ async fn main() {
             corpus_dir,
             all,
             write_baseline,
+            api,
         }) => {
+            use sr_corpus::snapshots::{Api, PARITY_API};
             let dir = Path::new(&corpus_dir);
-            let report = sr_corpus::parity::run(dir);
+            let api = match api.as_deref().map(Api::parse) {
+                None => PARITY_API,
+                Some(Some(api)) => api,
+                Some(None) => {
+                    eprintln!("--api must be uia or ia2");
+                    std::process::exit(2);
+                }
+            };
+            if write_baseline && api != PARITY_API {
+                eprintln!("The baseline ratchets {PARITY_API:?} parity; drop --api to write it.");
+                std::process::exit(2);
+            }
+            let report = sr_corpus::parity::run_with(dir, api);
             for step in report.steps.iter().filter(|s| all || !s.matched) {
                 println!(
                     "[{}] {}  ({})",
@@ -648,7 +666,7 @@ async fn main() {
                 println!("[ERROR] {e}");
             }
             println!(
-                "JAWS parity: {}/{} steps match exactly ({} scenarios could not run)",
+                "JAWS parity ({api:?}): {}/{} steps match exactly ({} scenarios could not run)",
                 report.matched(),
                 report.steps.len(),
                 report.errors.len()

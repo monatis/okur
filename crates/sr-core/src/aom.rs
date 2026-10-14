@@ -41,6 +41,8 @@ pub enum Role {
     Group,
     RadioButton,
     Image,
+    /// A quotation block (HTML `blockquote`), read with start and end lines.
+    BlockQuote,
     Generic,
 }
 
@@ -65,6 +67,7 @@ impl Role {
                 | Role::IFrame
                 | Role::Math
                 | Role::Window
+                | Role::BlockQuote
         )
     }
 }

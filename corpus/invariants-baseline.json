@@ -2,12 +2,19 @@
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p sr-cli -- invariants --write-baseline",
   "total_violations": 0,
   "violations": {
+    "boundaries-dynamic.chrome.ia2.json": [],
     "boundaries-dynamic.chrome.uia.json": [],
+    "doc-reading.chrome.ia2.json": [],
     "doc-reading.chrome.uia.json": [],
+    "forms-interaction.chrome.ia2.json": [],
     "forms-interaction.chrome.uia.json": [],
+    "news-article.chrome.ia2.json": [],
     "news-article.chrome.uia.json": [],
+    "signup-form.chrome.ia2.json": [],
     "signup-form.chrome.uia.json": [],
+    "structural-navigation.chrome.ia2.json": [],
     "structural-navigation.chrome.uia.json": [],
+    "tables-navigation.chrome.ia2.json": [],
     "tables-navigation.chrome.uia.json": []
   }
 }

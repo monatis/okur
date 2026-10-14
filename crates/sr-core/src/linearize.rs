@@ -328,6 +328,10 @@ impl<'a> Builder<'a> {
                     end: "dialog end".to_owned(),
                 }
             }
+            Role::BlockQuote => Class::Container {
+                start: "block quote".to_owned(),
+                end: "block quote end".to_owned(),
+            },
             Role::Group if aria == "article" => Class::Container {
                 start: "article".to_owned(),
                 end: "article end".to_owned(),
@@ -531,8 +535,9 @@ impl<'a> Builder<'a> {
                 self.buffer.node_map.insert(node.id, annotated);
             }
         }
-        let labelled_by_previous_line = self.last_text_line.clone();
+        // Flush first: an inline label in the same block is still pending in the run.
         self.flush();
+        let labelled_by_previous_line = self.last_text_line.clone();
         let labelled = labelled_by_previous_line.is_some()
             && labelled_by_previous_line.as_deref() == node.name.as_deref().map(squash).as_deref();
         let name = node.name.as_deref().map(squash).unwrap_or_default();

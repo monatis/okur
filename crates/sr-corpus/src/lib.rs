@@ -3,6 +3,7 @@ pub mod keys;
 pub mod manifest;
 pub mod parity;
 pub mod scenario;
+pub mod snapshots;
 
 pub use scenario::{Scenario, ScenarioReset, ScenarioStep};
 
@@ -46,14 +47,12 @@ mod tests {
         }
     }
 
-    fn snapshot_aom(name: &str) -> sr_core::AomNode {
-        let path = corpus_dir()
-            .join("snapshots")
-            .join(format!("{name}.chrome.uia.json"));
-        let snapshot = sr_platform::uia_snapshot::UiaSnapshot::load(&path);
-        assert!(snapshot.is_ok(), "{snapshot:?}");
-        snapshot
-            .map(|s| sr_platform::uia_snapshot::to_aom(&s.root))
+    fn snapshot_aom(name: &str, api: snapshots::Api) -> sr_core::AomNode {
+        let path = snapshots::path(&corpus_dir(), &format!("{name}.html"), api);
+        let loaded = snapshots::load(&path);
+        assert!(loaded.is_ok(), "{:?}", loaded.as_ref().err());
+        loaded
+            .map(|l| l.aom)
             .unwrap_or_else(|_| sr_core::AomNode::new(0, sr_core::Role::Generic))
     }
 
@@ -74,9 +73,15 @@ mod tests {
     /// The UIA→AOM mapping on real Chrome data: semantics come from control types, ARIA
     /// roles and UIA properties (old-pc's localized names are Turkish and must not matter).
     #[test]
-    fn uia_mapping_preserves_chrome_semantics() {
+    fn snapshot_mapping_preserves_chrome_semantics() {
+        for api in [snapshots::Api::Uia, snapshots::Api::Ia2] {
+            mapping_preserves_chrome_semantics(api);
+        }
+    }
+
+    fn mapping_preserves_chrome_semantics(api: snapshots::Api) {
         use sr_core::Role;
-        let doc = snapshot_aom("structural-navigation");
+        let doc = snapshot_aom("structural-navigation", api);
         let levels: Vec<u32> = find(&doc, &|n| matches!(n.role, Role::Heading { .. }))
             .iter()
             .filter_map(|n| match n.role {
@@ -114,7 +119,7 @@ mod tests {
             ]
         );
 
-        let forms = snapshot_aom("forms-interaction");
+        let forms = snapshot_aom("forms-interaction", api);
         let checkbox = find(&forms, &|n| n.role == Role::CheckBox);
         assert_eq!(checkbox.len(), 1);
         assert_eq!(checkbox.first().and_then(|c| c.states.checked), Some(false));
@@ -124,7 +129,7 @@ mod tests {
             vec![Some("Jane Doe"), Some("jane@example.com")]
         );
 
-        let tables = snapshot_aom("tables-navigation");
+        let tables = snapshot_aom("tables-navigation", api);
         let col_headers = find(&tables, &|n| {
             n.attributes.get("scope").map(String::as_str) == Some("col")
         });
@@ -133,6 +138,43 @@ mod tests {
             n.attributes.get("scope").map(String::as_str) == Some("row")
         });
         assert_eq!(row_headers.len(), 3);
+    }
+
+    /// Semantics only IA2 carries without localization: block quotes (UIA gives only a
+    /// localized control type), inline versus block elements, and the IA2 form states.
+    #[test]
+    fn ia2_mapping_adds_semantics_uia_lacks() {
+        use sr_core::Role;
+        let article = snapshot_aom("news-article", snapshots::Api::Ia2);
+        let quotes = find(&article, &|n| n.role == Role::BlockQuote);
+        assert_eq!(quotes.len(), 1);
+        let articles = find(&article, &|n| {
+            n.attributes.get("aria_role").map(String::as_str) == Some("article")
+        });
+        assert_eq!(articles.len(), 1);
+
+        let form = snapshot_aom("signup-form", snapshots::Api::Ia2);
+        let required: Vec<_> = find(&form, &|n| {
+            n.attributes.get("required").map(String::as_str) == Some("true")
+        })
+        .iter()
+        .filter_map(|n| n.name.clone())
+        .collect();
+        assert_eq!(required, vec!["Full name", "Password"]);
+        let passwords = find(&form, &|n| n.attributes.contains_key("password"));
+        assert_eq!(passwords.len(), 1);
+        let radios = find(&form, &|n| n.role == Role::RadioButton);
+        assert_eq!(
+            radios.iter().map(|r| r.states.checked).collect::<Vec<_>>(),
+            vec![Some(true), Some(false), Some(false)]
+        );
+        let described = find(&form, &|n| n.attributes.contains_key("description"));
+        assert_eq!(
+            described
+                .first()
+                .and_then(|n| n.attributes.get("description")),
+            Some(&"We never share your email.".to_owned())
+        );
     }
 
     /// Focus events built from a chain of real Chrome UIA nodes, as trace replay and the

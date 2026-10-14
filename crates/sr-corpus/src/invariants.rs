@@ -183,8 +183,7 @@ pub fn run_all(
     paths.sort();
     let mut results = std::collections::BTreeMap::new();
     for path in paths {
-        let snapshot = sr_platform::uia_snapshot::UiaSnapshot::load(&path)?;
-        let aom = sr_platform::uia_snapshot::to_aom(&snapshot.root);
+        let aom = crate::snapshots::load(&path)?.aom;
         let name = path
             .file_name()
             .map(|n| n.to_string_lossy().into_owned())

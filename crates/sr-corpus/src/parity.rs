@@ -1,17 +1,18 @@
 //! Differential parity against recorded JAWS speech.
 //!
 //! For every scenario step with genuine evidence, the engine is driven with the same
-//! command JAWS received, over the UIA snapshot Chrome produced for the same fixture on the
-//! reference machine, and its speech is compared with every distinct transcript JAWS produced
-//! across trials. The per-step outcome is ratcheted in `corpus/parity-baseline.json`, a
+//! command JAWS received, over the snapshot Chrome produced for the same fixture on the
+//! reference machine (through IA2, as JAWS reads Chrome; see
+//! [`crate::snapshots::PARITY_API`]), and its speech is compared with every distinct
+//! transcript JAWS produced across trials. The per-step outcome is ratcheted in `corpus/parity-baseline.json`, a
 //! generated file: `cargo test` fails on any regression and whenever the baseline is stale.
 
 use crate::scenario::Scenario;
+use crate::snapshots::{self, Api};
 use serde::Serialize;
 use serde_json::Value;
 use sr_core::{ScreenReaderEngine, VirtualBuffer, VirtualCursor};
 use sr_platform::event_trace::focus_event_from_chain;
-use sr_platform::uia_snapshot::{to_aom, UiaSnapshot};
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -88,15 +89,11 @@ fn jaws_variants(evidence: &Value) -> BTreeMap<String, Vec<String>> {
     variants
 }
 
-fn snapshot_path(corpus_dir: &Path, scenario: &Scenario) -> PathBuf {
-    let fixture = scenario.fixture.rsplit('/').next().unwrap_or_default();
-    let stem = fixture.strip_suffix(".html").unwrap_or(fixture);
-    corpus_dir
-        .join("snapshots")
-        .join(format!("{stem}.chrome.uia.json"))
-}
-
-fn run_scenario(corpus_dir: &Path, scenario: &Scenario) -> Result<Vec<StepParity>, String> {
+fn run_scenario(
+    corpus_dir: &Path,
+    scenario: &Scenario,
+    api: Api,
+) -> Result<Vec<StepParity>, String> {
     let evidence_path = corpus_dir
         .join("evidence")
         .join(format!("{}-evidence.json", scenario.id));
@@ -108,17 +105,17 @@ fn run_scenario(corpus_dir: &Path, scenario: &Scenario) -> Result<Vec<StepParity
     let aom = if desktop {
         sr_core::AomNode::new(0, sr_core::Role::Document)
     } else {
-        let snapshot = UiaSnapshot::load(snapshot_path(corpus_dir, scenario))?;
         let fixture = scenario.fixture.rsplit('/').next().unwrap_or_default();
+        let snapshot = snapshots::load(&snapshots::path(corpus_dir, fixture, api))?;
         let fixture_bytes =
             fs::read(corpus_dir.join("fixtures").join(fixture)).map_err(|e| format!("{e}"))?;
         let fixture_hash = crate::manifest::sha256_hex(&fixture_bytes);
-        if snapshot.provenance.fixture_sha256.as_deref() != Some(fixture_hash.as_str()) {
+        if snapshot.fixture_sha256.as_deref() != Some(fixture_hash.as_str()) {
             return Err(format!(
                 "snapshot for {fixture} was not captured from the current fixture bytes"
             ));
         }
-        to_aom(&snapshot.root)
+        snapshot.aom
     };
     let mut cursor = VirtualCursor::new(VirtualBuffer::from_aom(&aom));
     let spoken = RecordingSpeech::default();
@@ -200,6 +197,11 @@ fn run_scenario(corpus_dir: &Path, scenario: &Scenario) -> Result<Vec<StepParity
 
 /// Runs every scenario in `corpus_dir/scenarios` against its evidence and snapshot.
 pub fn run(corpus_dir: &Path) -> ParityReport {
+    run_with(corpus_dir, snapshots::PARITY_API)
+}
+
+/// Runs every scenario against its evidence and the `api` snapshot of its fixture.
+pub fn run_with(corpus_dir: &Path, api: Api) -> ParityReport {
     let mut report = ParityReport::default();
     let mut files: Vec<PathBuf> = fs::read_dir(corpus_dir.join("scenarios"))
         .map(|rd| rd.filter_map(|e| e.ok().map(|e| e.path())).collect())
@@ -209,7 +211,7 @@ pub fn run(corpus_dir: &Path) -> ParityReport {
 
     for path in files {
         match Scenario::load_from_file(&path) {
-            Ok(scenario) => match run_scenario(corpus_dir, &scenario) {
+            Ok(scenario) => match run_scenario(corpus_dir, &scenario, api) {
                 Ok(steps) => report.steps.extend(steps),
                 Err(e) => report.errors.push(format!("{}: {e}", scenario.id)),
             },
