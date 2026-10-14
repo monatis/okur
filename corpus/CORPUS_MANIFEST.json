@@ -1,25 +1,13 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p sr-cli -- corpus-manifest --write",
   "fixtures": {
-    "boundaries-dynamic.aom.json": {
-      "sha256": "266df9d645f50d76997363d43be152396cc18fb1c094e7dc28de479a6793eb1b",
-      "size_bytes": 6876
-    },
     "boundaries-dynamic.html": {
       "sha256": "4caaa7092df80f075b4fd5bfa8f3fbbdba558f90188e4f3711aec05dd9c71953",
       "size_bytes": 2383
     },
-    "doc-reading.aom.json": {
-      "sha256": "e40dbfcec3c76fa49af60aa36876ee0039cbe045b8be027db4a947de7f0b702d",
-      "size_bytes": 2095
-    },
     "doc-reading.html": {
       "sha256": "7a68ca85fbfbc6deab6e587dc60a7c85a913437047c97fa9a807d3bc9786cbe8",
       "size_bytes": 532
-    },
-    "forms-interaction.aom.json": {
-      "sha256": "1d0bde737d96ceb3949562de7ff535f7c56f34cd6898b21fed9c1cf4f1175d9d",
-      "size_bytes": 3504
     },
     "forms-interaction.html": {
       "sha256": "18fce31741084133ec7f31cd746e51f3cf00a36df7d5b92a1d5af35410748d5f",
@@ -33,17 +21,9 @@
       "sha256": "141f98219e00ce80559e312fdf548a7b3b9f41087250648d09b6040c6433badf",
       "size_bytes": 2134
     },
-    "structural-navigation.aom.json": {
-      "sha256": "aa198dee7018598664a509aebb44cf110b9c7911075a791829a0c062326266e9",
-      "size_bytes": 15289
-    },
     "structural-navigation.html": {
       "sha256": "dd74a3e0285db898ce8a785a5da59a730a7a0e95bc6e1396d2e21e0c91d9948d",
       "size_bytes": 1314
-    },
-    "tables-navigation.aom.json": {
-      "sha256": "9e0bc43f44694a6b533587c3115624a0d140a50b6171373b2c4c2ec30b0a58df",
-      "size_bytes": 12323
     },
     "tables-navigation.html": {
       "sha256": "685ca0b777b5b0184d58c505d3161eb348ec6356d7f5b27ad25eddaccdc03c86",

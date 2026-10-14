@@ -4,6 +4,7 @@ pub mod cursor;
 pub mod engine;
 pub mod event;
 pub mod input;
+pub mod linearize;
 pub mod speech;
 
 pub use aom::{AomNode, NodeStates, Role};
@@ -24,6 +25,11 @@ pub fn init() {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// Whitespace-insensitive speech, the same equality the JAWS parity harness uses.
+    fn norm(s: &str) -> String {
+        s.split_whitespace().collect::<Vec<_>>().join(" ")
+    }
 
     fn create_test_aom_tree() -> AomNode {
         AomNode::new(0, Role::Document)
@@ -331,14 +337,25 @@ mod tests {
 
         cursor.move_to_start();
 
+        // The bullet JAWS speaks comes from the list marker text leaf, which real Chrome trees
+        // carry (covered by 105-article-links parity); this hand-written tree has none.
         let s1 = cursor.move_next_link().unwrap_or_default();
-        assert_eq!(s1, "•  \u{001d} same page link \u{001e} Overview Link");
+        assert_eq!(
+            norm(&s1),
+            norm("\u{001d} same page link \u{001e} Overview Link")
+        );
 
         let s2 = cursor.move_next_link().unwrap_or_default();
-        assert_eq!(s2, "•  \u{001d} same page link \u{001e} Architecture Link");
+        assert_eq!(
+            norm(&s2),
+            norm("\u{001d} same page link \u{001e} Architecture Link")
+        );
 
         let prior = cursor.move_prior_link().unwrap_or_default();
-        assert_eq!(prior, "•  \u{001d} same page link \u{001e} Overview Link");
+        assert_eq!(
+            norm(&prior),
+            norm("\u{001d} same page link \u{001e} Overview Link")
+        );
     }
 
     #[test]
@@ -350,13 +367,20 @@ mod tests {
         cursor.move_to_start();
 
         let s1 = cursor.move_next_list().unwrap_or_default();
-        assert_eq!(s1, "List of 3 items");
+        // JAWS says "list of 3 items" (lowercase): corpus/evidence/14-struct-next-list.
+        assert_eq!(s1, "list of 3 items");
 
         let s2 = cursor.move_next_list_item().unwrap_or_default();
-        assert_eq!(s2, "•  \u{001d} same page link \u{001e} Overview Link");
+        assert_eq!(
+            norm(&s2),
+            norm("\u{001d} same page link \u{001e} Overview Link")
+        );
 
         let s3 = cursor.move_next_list_item().unwrap_or_default();
-        assert_eq!(s3, "•  \u{001d} same page link \u{001e} Architecture Link");
+        assert_eq!(
+            norm(&s3),
+            norm("\u{001d} same page link \u{001e} Architecture Link")
+        );
     }
 
     #[test]
@@ -414,18 +438,21 @@ mod tests {
         cursor.move_to_start();
 
         let s1 = cursor.move_next_form_control().unwrap_or_default();
-        assert_eq!(s1, "Full Name:  \u{001d} Edit \u{001e}  \nJane Doe");
+        assert_eq!(
+            norm(&s1),
+            norm("Full Name:  \u{001d} Edit \u{001e}  \nJane Doe")
+        );
 
         let s2 = cursor.move_next_form_control().unwrap_or_default();
         assert_eq!(
-            s2,
-            "Email Address:  \u{001d} Edit \u{001e}  \njane@example.com"
+            norm(&s2),
+            norm("Email Address:  \u{001d} Edit \u{001e}  \njane@example.com")
         );
 
         let s3 = cursor.move_next_form_control().unwrap_or_default();
         assert_eq!(
-            s3,
-            " I accept terms and conditions  \u{001d} check box \u{001e}   \u{001d}not checked\u{001e}"
+            norm(&s3),
+            norm(" I accept terms and conditions  \u{001d} check box \u{001e}   \u{001d}not checked\u{001e}")
         );
     }
 
@@ -453,12 +480,15 @@ mod tests {
         cursor.move_to_start();
 
         let e1 = cursor.move_next_edit().unwrap_or_default();
-        assert_eq!(e1, "Full Name:  \u{001d} Edit \u{001e}  \nJane Doe");
+        assert_eq!(
+            norm(&e1),
+            norm("Full Name:  \u{001d} Edit \u{001e}  \nJane Doe")
+        );
 
         let e2 = cursor.move_next_edit().unwrap_or_default();
         assert_eq!(
-            e2,
-            "Email Address:  \u{001d} Edit \u{001e}  \njane@example.com"
+            norm(&e2),
+            norm("Email Address:  \u{001d} Edit \u{001e}  \njane@example.com")
         );
     }
 

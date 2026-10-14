@@ -319,6 +319,10 @@ impl VirtualCursor {
 
     /// Formats the announcement for a line, taking into account specialized widget roles.
     pub fn format_line_announcement(&self, line: &BufferLine) -> String {
+        // Lines carry their exact JAWS speech from linearization.
+        if !line.speech.is_empty() || line.text.is_empty() {
+            return line.speech.clone();
+        }
         if let Some(node) = self.buffer.node_map.get(&line.node_id) {
             match node.role {
                 Role::TreeItem => {
@@ -594,190 +598,197 @@ impl VirtualCursor {
             .lines
             .iter()
             .skip(current_line_idx)
-            .map(SpeechFormatter::format_line)
+            .map(|l| self.format_line_announcement(l))
             .collect();
 
         lines.join("\n")
     }
 
+    /// Shared quick-navigation movement (JAWS spec §11–§17).
+    ///
+    /// Moves to the next (or prior) offset in `targets`, wrapping with the JAWS
+    /// `wrapping to top` / `wrapping to bottom` prefix, or speaks `none` when the page has no
+    /// targets. `speak` renders the target. Respects an active modal dialog's range.
+    fn quick_nav(
+        &mut self,
+        targets: &[usize],
+        forward: bool,
+        none: &str,
+        speak: impl Fn(&Self, usize, usize) -> String,
+    ) -> Option<String> {
+        self.selection = None;
+        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
+        let in_range: Vec<usize> = targets
+            .iter()
+            .copied()
+            .filter(|&o| o >= min_off && o <= max_off)
+            .collect();
+        if in_range.is_empty() {
+            return Some(none.to_owned());
+        }
+        let current_line_start = self
+            .buffer
+            .line_at_offset(self.offset)
+            .map(|l| l.start_offset)
+            .unwrap_or(self.offset);
+        let (target, wrapped) = if forward {
+            match in_range.iter().copied().find(|&o| o > self.offset) {
+                Some(o) => (o, None),
+                None => (in_range.first().copied()?, Some("wrapping to top")),
+            }
+        } else {
+            match in_range.iter().copied().rfind(|&o| o < current_line_start) {
+                Some(o) => (o, None),
+                None => (in_range.last().copied()?, Some("wrapping to bottom")),
+            }
+        };
+        let previous = self.offset;
+        self.offset = target;
+        self.current_node_id = self.buffer.line_at_offset(target).map(|l| l.node_id);
+        let speech = speak(self, target, previous);
+        Some(match wrapped {
+            Some(prefix) => format!("{prefix}\n{speech}"),
+            None => speech,
+        })
+    }
+
+    /// The speech of the line starting at `offset`, as Down Arrow would speak it.
+    fn line_speech_at(&self, offset: usize) -> String {
+        self.buffer
+            .line_at_offset(offset)
+            .map(|l| self.format_line_announcement(l))
+            .unwrap_or_default()
+    }
+
+    /// Form control speech in the JAWS focus phrasing, used by F/E/X/A/C/B (§17). `previous`
+    /// is the cursor offset before the move: entering a radio group names the group first.
+    fn control_focus_speech(&self, offset: usize, previous: usize) -> String {
+        let Some(node) = self
+            .buffer
+            .line_at_offset(offset)
+            .and_then(|l| self.buffer.node_map.get(&l.node_id))
+        else {
+            return String::new();
+        };
+        SpeechFormatter::format_control_focus(node, |node_id| {
+            self.buffer
+                .spans
+                .iter()
+                .find(|s| s.node_id == node_id && s.end_offset > s.start_offset)
+                .is_some_and(|s| previous >= s.start_offset && previous < s.end_offset)
+        })
+    }
+
+    fn heading_speech_at(&self, offset: usize) -> String {
+        let level = self
+            .buffer
+            .headings
+            .iter()
+            .find(|h| h.0 == offset)
+            .map(|h| h.1)
+            .unwrap_or(1);
+        let text = self
+            .buffer
+            .line_at_offset(offset)
+            .map(|l| l.text.clone())
+            .unwrap_or_default();
+        SpeechFormatter::format_heading(level, &text)
+    }
+
     /// Moves cursor to next heading across all levels (`H` / `MoveToNextHeading`).
     pub fn move_next_heading(&mut self) -> Option<String> {
-        self.selection = None;
-        let headings: Vec<(usize, u32)> =
-            if let Some((min_off, max_off)) = self.active_modal_range() {
-                self.buffer
-                    .headings
-                    .iter()
-                    .copied()
-                    .filter(|&(off, _)| off >= min_off && off <= max_off)
-                    .collect()
-            } else {
-                self.buffer.headings.clone()
-            };
-
-        if headings.is_empty() {
-            return Some("There are no headings on this page.".to_string());
-        }
-
-        let (target_offset, level, wrapped) =
-            match headings.iter().find(|&&(off, _)| off > self.offset) {
-                Some(&(off, lvl)) => (off, lvl, false),
-                None => {
-                    let (off, lvl) = headings.first().copied()?;
-                    (off, lvl, true)
-                }
-            };
-        self.offset = target_offset;
-        let node = self.buffer.find_heading_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let text = node
-            .and_then(|n| n.text.as_deref().or(n.name.as_deref()))
-            .or_else(|| {
-                self.buffer
-                    .line_at_offset(target_offset)
-                    .map(|l| l.text.as_str())
-            })
-            .unwrap_or("");
-        let heading_speech = SpeechFormatter::format_heading(level, text);
-        if wrapped {
-            Some(format!("wrapping to top\n{}", heading_speech))
-        } else {
-            Some(heading_speech)
-        }
+        let targets: Vec<usize> = self.buffer.headings.iter().map(|h| h.0).collect();
+        self.quick_nav(
+            &targets,
+            true,
+            "There are no headings on this page.",
+            |c, o, _| c.heading_speech_at(o),
+        )
     }
 
-    /// Moves cursor to prior heading across all levels (`+H` / `MoveToPriorHeading`).
+    /// Moves cursor to prior heading across all levels (`Shift+H`).
     pub fn move_prior_heading(&mut self) -> Option<String> {
-        self.selection = None;
-        let headings: Vec<(usize, u32)> =
-            if let Some((min_off, max_off)) = self.active_modal_range() {
-                self.buffer
-                    .headings
-                    .iter()
-                    .copied()
-                    .filter(|&(off, _)| off >= min_off && off <= max_off)
-                    .collect()
-            } else {
-                self.buffer.headings.clone()
-            };
+        let targets: Vec<usize> = self.buffer.headings.iter().map(|h| h.0).collect();
+        self.quick_nav(
+            &targets,
+            false,
+            "There are no headings on this page.",
+            |c, o, _| c.heading_speech_at(o),
+        )
+    }
 
-        if headings.is_empty() {
-            return Some("There are no headings on this page.".to_string());
-        }
-
-        let (target_offset, level, wrapped) =
-            match headings.iter().rfind(|&&(off, _)| off < self.offset) {
-                Some(&(off, lvl)) => (off, lvl, false),
-                None => {
-                    let (off, lvl) = headings.last().copied()?;
-                    (off, lvl, true)
-                }
-            };
-        self.offset = target_offset;
-        let node = self.buffer.find_heading_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let text = node
-            .and_then(|n| n.text.as_deref().or(n.name.as_deref()))
-            .or_else(|| {
-                self.buffer
-                    .line_at_offset(target_offset)
-                    .map(|l| l.text.as_str())
-            })
-            .unwrap_or("");
-        let heading_speech = SpeechFormatter::format_heading(level, text);
-        if wrapped {
-            Some(format!("wrapping to bottom\n{}", heading_speech))
+    /// Heading level keys do not wrap (§12).
+    fn no_more_headings(level: u32) -> String {
+        if level == 1 {
+            "No more headings at level1.".to_owned()
         } else {
-            Some(heading_speech)
+            format!("No more headings at level{level} in this section.")
         }
     }
 
-    /// Moves cursor to next heading of a specific level (`1`–`6` / `MoveToNextHeadingLevelX`).
+    /// Moves cursor to next heading of `level` (`1`–`6`).
     pub fn move_next_heading_level(&mut self, level: u32) -> Option<String> {
         self.selection = None;
-        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
-        let (target_offset, lvl) = self.buffer.next_heading_level_from(self.offset, level)?;
-        if target_offset < min_off || target_offset > max_off {
-            return None;
+        let target = self
+            .buffer
+            .headings
+            .iter()
+            .find(|&&(off, l)| l == level && off > self.offset)
+            .map(|h| h.0);
+        match target {
+            Some(off) => {
+                self.offset = off;
+                self.current_node_id = self.buffer.line_at_offset(off).map(|l| l.node_id);
+                Some(self.heading_speech_at(off))
+            }
+            None => Some(Self::no_more_headings(level)),
         }
-        self.offset = target_offset;
-        let node = self.buffer.find_heading_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let text = node
-            .and_then(|n| n.text.as_deref().or(n.name.as_deref()))
-            .or_else(|| {
-                self.buffer
-                    .line_at_offset(target_offset)
-                    .map(|l| l.text.as_str())
-            })
-            .unwrap_or("");
-        Some(SpeechFormatter::format_heading(lvl, text))
     }
 
-    /// Moves cursor to prior heading of a specific level (`+1`–`+6` / `MoveToPriorHeadingLevelX`).
+    /// Moves cursor to prior heading of `level` (`Shift+1`–`Shift+6`).
     pub fn move_prior_heading_level(&mut self, level: u32) -> Option<String> {
         self.selection = None;
-        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
-        let (target_offset, lvl) = self.buffer.prior_heading_level_from(self.offset, level)?;
-        if target_offset < min_off || target_offset > max_off {
-            return None;
+        let current_line_start = self
+            .buffer
+            .line_at_offset(self.offset)
+            .map(|l| l.start_offset)
+            .unwrap_or(self.offset);
+        let target = self
+            .buffer
+            .headings
+            .iter()
+            .rfind(|&&(off, l)| l == level && off < current_line_start)
+            .map(|h| h.0);
+        match target {
+            Some(off) => {
+                self.offset = off;
+                self.current_node_id = self.buffer.line_at_offset(off).map(|l| l.node_id);
+                Some(self.heading_speech_at(off))
+            }
+            None => Some(Self::no_more_headings(level)),
         }
-        self.offset = target_offset;
-        let node = self.buffer.find_heading_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let text = node
-            .and_then(|n| n.text.as_deref().or(n.name.as_deref()))
-            .or_else(|| {
-                self.buffer
-                    .line_at_offset(target_offset)
-                    .map(|l| l.text.as_str())
-            })
-            .unwrap_or("");
-        Some(SpeechFormatter::format_heading(lvl, text))
     }
 
-    /// Moves cursor to next link (`U` / `K` / `MoveToNextLink`).
+    /// Moves cursor to next link (`U` / `MoveToNextLink`).
     pub fn move_next_link(&mut self) -> Option<String> {
-        self.selection = None;
-        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
-        let target_offset = self.buffer.next_link_from(self.offset)?;
-        if target_offset < min_off || target_offset > max_off {
-            return None;
-        }
-        self.offset = target_offset;
-        let node = self.buffer.find_link_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let is_same_page = match node.map(|n| &n.role) {
-            Some(Role::Link { href: Some(h) }) => h.starts_with('#'),
-            _ => false,
-        };
-        let text = node
-            .and_then(|n| n.name.as_deref().or(n.text.as_deref()))
-            .or_else(|| self.buffer.span_text_at_offset(target_offset))
-            .unwrap_or("");
-        Some(SpeechFormatter::format_link(text, is_same_page))
+        let targets = self.buffer.links.clone();
+        self.quick_nav(
+            &targets,
+            true,
+            "There are no links on this page.",
+            |c, o, _| c.line_speech_at(o),
+        )
     }
 
-    /// Moves cursor to prior link (`+U` / `+K` / `MoveToPriorLink`).
+    /// Moves cursor to prior link (`Shift+U`).
     pub fn move_prior_link(&mut self) -> Option<String> {
-        self.selection = None;
-        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
-        let target_offset = self.buffer.prior_link_from(self.offset)?;
-        if target_offset < min_off || target_offset > max_off {
-            return None;
-        }
-        self.offset = target_offset;
-        let node = self.buffer.find_link_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let is_same_page = match node.map(|n| &n.role) {
-            Some(Role::Link { href: Some(h) }) => h.starts_with('#'),
-            _ => false,
-        };
-        let text = node
-            .and_then(|n| n.name.as_deref().or(n.text.as_deref()))
-            .or_else(|| self.buffer.span_text_at_offset(target_offset))
-            .unwrap_or("");
-        Some(SpeechFormatter::format_link(text, is_same_page))
+        let targets = self.buffer.links.clone();
+        self.quick_nav(
+            &targets,
+            false,
+            "There are no links on this page.",
+            |c, o, _| c.line_speech_at(o),
+        )
     }
 
     /// Activates an in-page fragment link at the cursor and jumps directly to its anchor target.
@@ -867,295 +878,134 @@ impl VirtualCursor {
         }
     }
 
+    fn line_nav(&mut self, targets: Vec<usize>, forward: bool, none: &str) -> Option<String> {
+        self.quick_nav(&targets, forward, none, |c, o, _| c.line_speech_at(o))
+    }
+
+    fn control_nav(&mut self, targets: Vec<usize>, forward: bool, none: &str) -> Option<String> {
+        self.quick_nav(&targets, forward, none, |c, o, previous| {
+            c.control_focus_speech(o, previous)
+        })
+    }
+
     /// Moves cursor to next list container (`L` / `MoveToNextList`).
     pub fn move_next_list(&mut self) -> Option<String> {
-        self.selection = None;
-        let target_offset = self.buffer.next_list_from(self.offset)?;
-        self.offset = target_offset;
-        let node = self.buffer.find_list_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let count = node.map(|n| n.children.len()).unwrap_or(0);
-        Some(SpeechFormatter::format_list(count))
+        let t = self.buffer.lists.clone();
+        self.line_nav(t, true, "There are no lists on this page.")
     }
 
-    /// Moves cursor to prior list container (`+L` / `MoveToPriorList`).
+    /// Moves cursor to prior list container (`Shift+L`).
     pub fn move_prior_list(&mut self) -> Option<String> {
-        self.selection = None;
-        let target_offset = self.buffer.prior_list_from(self.offset)?;
-        self.offset = target_offset;
-        let node = self.buffer.find_list_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let count = node.map(|n| n.children.len()).unwrap_or(0);
-        Some(SpeechFormatter::format_list(count))
+        let t = self.buffer.lists.clone();
+        self.line_nav(t, false, "There are no lists on this page.")
     }
 
-    /// Moves cursor to next list item (`I` / `MoveToNextListItem`).
+    /// Moves cursor to next list item (`I`).
     pub fn move_next_list_item(&mut self) -> Option<String> {
-        self.selection = None;
-        let is_at_list = self
-            .current_node()
-            .map(|n| matches!(n.role, Role::List))
-            .unwrap_or(false);
-
-        let target_offset = if is_at_list {
-            self.buffer
-                .list_items
-                .iter()
-                .find(|&&l| l >= self.offset)
-                .copied()?
-        } else {
-            self.buffer.next_list_item_from(self.offset)?
-        };
-        self.offset = target_offset;
-        let node = self.buffer.find_list_item_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let text = node
-            .map(|n| n.collect_text())
-            .filter(|t| !t.is_empty())
-            .or_else(|| {
-                self.buffer
-                    .line_at_offset(target_offset)
-                    .map(|l| l.text.clone())
-            })
-            .unwrap_or_default();
-        let has_link = node
-            .map(|n| {
-                n.children
-                    .iter()
-                    .any(|c| matches!(c.role, Role::Link { .. }))
-            })
-            .unwrap_or(false);
-        Some(SpeechFormatter::format_list_item(&text, has_link))
+        let t = self.buffer.list_items.clone();
+        self.line_nav(t, true, "There are no list items on this page.")
     }
 
-    /// Moves cursor to prior list item (`+I` / `MoveToPriorListItem`).
+    /// Moves cursor to prior list item (`Shift+I`).
     pub fn move_prior_list_item(&mut self) -> Option<String> {
-        self.selection = None;
-        let target_offset = self.buffer.prior_list_item_from(self.offset)?;
-        self.offset = target_offset;
-        let node = self.buffer.find_list_item_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let text = node
-            .map(|n| n.collect_text())
-            .filter(|t| !t.is_empty())
-            .or_else(|| {
-                self.buffer
-                    .line_at_offset(target_offset)
-                    .map(|l| l.text.clone())
-            })
-            .unwrap_or_default();
-        let has_link = node
-            .map(|n| {
-                n.children
-                    .iter()
-                    .any(|c| matches!(c.role, Role::Link { .. }))
-            })
-            .unwrap_or(false);
-        Some(SpeechFormatter::format_list_item(&text, has_link))
+        let t = self.buffer.list_items.clone();
+        self.line_nav(t, false, "There are no list items on this page.")
     }
 
-    /// Moves cursor to next landmark / region (`R` / `;` / `MoveToNextRegion`).
+    /// Moves cursor to next region (`R`, §15).
     pub fn move_next_landmark(&mut self) -> Option<String> {
-        self.selection = None;
-        let target_offset = self.buffer.next_landmark_from(self.offset)?;
-        self.offset = target_offset;
-        let node = self.buffer.find_landmark_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        if let Some(n) = node {
-            if let Role::Landmark { ref landmark_type } = n.role {
-                return Some(SpeechFormatter::format_landmark(
-                    landmark_type,
-                    n.name.as_deref(),
-                ));
-            }
-        }
-        Some(SpeechFormatter::format_landmark("region", None))
+        let t = self.buffer.landmarks.clone();
+        self.line_nav(t, true, "There are no regions on this page.")
     }
 
-    /// Moves cursor to prior landmark / region (`+R` / `+;` / `MoveToPriorRegion`).
+    /// Moves cursor to prior region (`Shift+R`).
     pub fn move_prior_landmark(&mut self) -> Option<String> {
-        self.selection = None;
-        let target_offset = self.buffer.prior_landmark_from(self.offset)?;
-        self.offset = target_offset;
-        let node = self.buffer.find_landmark_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        if let Some(n) = node {
-            if let Role::Landmark { ref landmark_type } = n.role {
-                return Some(SpeechFormatter::format_landmark(
-                    landmark_type,
-                    n.name.as_deref(),
-                ));
-            }
-        }
-        Some(SpeechFormatter::format_landmark("region", None))
+        let t = self.buffer.landmarks.clone();
+        self.line_nav(t, false, "There are no regions on this page.")
     }
 
-    /// Moves cursor to next form control (`F` / `FocusToNextField`).
+    /// Moves cursor to next graphic (`G`, §16).
+    pub fn move_next_graphic(&mut self) -> Option<String> {
+        let t = self.buffer.graphics.clone();
+        self.line_nav(t, true, "There are no graphics on this page.")
+    }
+
+    /// Moves cursor to prior graphic (`Shift+G`).
+    pub fn move_prior_graphic(&mut self) -> Option<String> {
+        let t = self.buffer.graphics.clone();
+        self.line_nav(t, false, "There are no graphics on this page.")
+    }
+
+    /// Moves cursor to next form field (`F`).
     pub fn move_next_form_control(&mut self) -> Option<String> {
-        self.selection = None;
-        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
-        let target_offset = self.buffer.next_form_control_from(self.offset)?;
-        if target_offset < min_off || target_offset > max_off {
-            return None;
-        }
-        self.offset = target_offset;
-        let node = self.buffer.find_form_control_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        node.map(SpeechFormatter::format_form_control_node)
+        let t = self.buffer.form_controls.clone();
+        self.control_nav(t, true, "There are no form fields on this page.")
     }
 
-    /// Moves cursor to prior form control (`+F` / `FocusToPriorField`).
+    /// Moves cursor to prior form field (`Shift+F`).
     pub fn move_prior_form_control(&mut self) -> Option<String> {
-        self.selection = None;
-        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
-        let target_offset = self.buffer.prior_form_control_from(self.offset)?;
-        if target_offset < min_off || target_offset > max_off {
-            return None;
-        }
-        self.offset = target_offset;
-        let node = self.buffer.find_form_control_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        node.map(SpeechFormatter::format_form_control_node)
+        let t = self.buffer.form_controls.clone();
+        self.control_nav(t, false, "There are no form fields on this page.")
     }
 
-    /// Moves cursor to next button (`B` / `MoveToNextButton`).
+    /// Moves cursor to next button (`B`).
     pub fn move_next_button(&mut self) -> Option<String> {
-        self.selection = None;
-        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
-        let target_offset = self.buffer.next_button_from(self.offset)?;
-        if target_offset < min_off || target_offset > max_off {
-            return None;
-        }
-        self.offset = target_offset;
-        let node = self.buffer.find_button_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let name = node
-            .and_then(|n| n.name.as_deref().or(n.text.as_deref()))
-            .unwrap_or("");
-        Some(SpeechFormatter::format_button(name))
+        let t = self.buffer.buttons.clone();
+        self.control_nav(t, true, "There are no buttons on this page.")
     }
 
-    /// Moves cursor to prior button (`+B` / `MoveToPriorButton`).
+    /// Moves cursor to prior button (`Shift+B`).
     pub fn move_prior_button(&mut self) -> Option<String> {
-        self.selection = None;
-        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
-        let target_offset = self.buffer.prior_button_from(self.offset)?;
-        if target_offset < min_off || target_offset > max_off {
-            return None;
-        }
-        self.offset = target_offset;
-        let node = self.buffer.find_button_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let name = node
-            .and_then(|n| n.name.as_deref().or(n.text.as_deref()))
-            .unwrap_or("");
-        Some(SpeechFormatter::format_button(name))
+        let t = self.buffer.buttons.clone();
+        self.control_nav(t, false, "There are no buttons on this page.")
     }
 
-    /// Moves cursor to next edit field (`E` / `MoveToNextEdit`).
+    /// Moves cursor to next edit field (`E`).
     pub fn move_next_edit(&mut self) -> Option<String> {
-        self.selection = None;
-        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
-        let target_offset = self.buffer.next_edit_from(self.offset)?;
-        if target_offset < min_off || target_offset > max_off {
-            return None;
-        }
-        self.offset = target_offset;
-        let node = self.buffer.find_edit_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let name = node.and_then(|n| n.name.as_deref()).unwrap_or("");
-        let value = node.and_then(|n| n.value.as_deref());
-        Some(SpeechFormatter::format_edit(name, value))
+        let t = self.buffer.edits.clone();
+        self.control_nav(t, true, "There are no edit fields on this page.")
     }
 
-    /// Moves cursor to prior edit field (`+E` / `MoveToPriorEdit`).
+    /// Moves cursor to prior edit field (`Shift+E`).
     pub fn move_prior_edit(&mut self) -> Option<String> {
-        self.selection = None;
-        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
-        let target_offset = self.buffer.prior_edit_from(self.offset)?;
-        if target_offset < min_off || target_offset > max_off {
-            return None;
-        }
-        self.offset = target_offset;
-        let node = self.buffer.find_edit_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let name = node.and_then(|n| n.name.as_deref()).unwrap_or("");
-        let value = node.and_then(|n| n.value.as_deref());
-        Some(SpeechFormatter::format_edit(name, value))
+        let t = self.buffer.edits.clone();
+        self.control_nav(t, false, "There are no edit fields on this page.")
     }
 
-    /// Moves cursor to next checkbox (`X` / `MoveToNextCheckbox`).
+    /// Moves cursor to next check box (`X`).
     pub fn move_next_checkbox(&mut self) -> Option<String> {
-        self.selection = None;
-        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
-        let target_offset = self.buffer.next_checkbox_from(self.offset)?;
-        if target_offset < min_off || target_offset > max_off {
-            return None;
-        }
-        self.offset = target_offset;
-        let node = self.buffer.find_checkbox_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let name = node
-            .and_then(|n| n.name.as_deref().or(n.text.as_deref()))
-            .unwrap_or("");
-        let checked = node.and_then(|n| n.states.checked).unwrap_or(false);
-        Some(SpeechFormatter::format_checkbox(name, checked))
+        let t = self.buffer.checkboxes.clone();
+        self.control_nav(t, true, "There are no check boxes on this page.")
     }
 
-    /// Moves cursor to prior checkbox (`+X` / `MoveToPriorCheckbox`).
+    /// Moves cursor to prior check box (`Shift+X`).
     pub fn move_prior_checkbox(&mut self) -> Option<String> {
-        self.selection = None;
-        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
-        let target_offset = self.buffer.prior_checkbox_from(self.offset)?;
-        if target_offset < min_off || target_offset > max_off {
-            return None;
-        }
-        self.offset = target_offset;
-        let node = self.buffer.find_checkbox_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let name = node
-            .and_then(|n| n.name.as_deref().or(n.text.as_deref()))
-            .unwrap_or("");
-        let checked = node.and_then(|n| n.states.checked).unwrap_or(false);
-        Some(SpeechFormatter::format_checkbox(name, checked))
+        let t = self.buffer.checkboxes.clone();
+        self.control_nav(t, false, "There are no check boxes on this page.")
     }
 
-    /// Moves cursor to next combobox (`C` / `MoveToNextCombo`).
+    /// Moves cursor to next radio button (`A`).
+    pub fn move_next_radio_button(&mut self) -> Option<String> {
+        let t = self.buffer.radio_buttons.clone();
+        self.control_nav(t, true, "There are no radio buttons on this page.")
+    }
+
+    /// Moves cursor to prior radio button (`Shift+A`).
+    pub fn move_prior_radio_button(&mut self) -> Option<String> {
+        let t = self.buffer.radio_buttons.clone();
+        self.control_nav(t, false, "There are no radio buttons on this page.")
+    }
+
+    /// Moves cursor to next combo box (`C`).
     pub fn move_next_combobox(&mut self) -> Option<String> {
-        self.selection = None;
-        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
-        let target_offset = self.buffer.next_combobox_from(self.offset)?;
-        if target_offset < min_off || target_offset > max_off {
-            return None;
-        }
-        self.offset = target_offset;
-        let node = self.buffer.find_combobox_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let name = node
-            .and_then(|n| n.name.as_deref().or(n.text.as_deref()))
-            .unwrap_or("");
-        let value = node.and_then(|n| n.value.as_deref());
-        let expanded = node.and_then(|n| n.states.expanded).unwrap_or(false);
-        Some(SpeechFormatter::format_combobox(name, value, expanded))
+        let t = self.buffer.comboboxes.clone();
+        self.control_nav(t, true, "There are no combo boxes on this page.")
     }
 
-    /// Moves cursor to prior combobox (`+C` / `MoveToPriorCombo`).
+    /// Moves cursor to prior combo box (`Shift+C`).
     pub fn move_prior_combobox(&mut self) -> Option<String> {
-        self.selection = None;
-        let (min_off, max_off) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
-        let target_offset = self.buffer.prior_combobox_from(self.offset)?;
-        if target_offset < min_off || target_offset > max_off {
-            return None;
-        }
-        self.offset = target_offset;
-        let node = self.buffer.find_combobox_node(target_offset);
-        self.current_node_id = node.map(|n| n.id);
-        let name = node
-            .and_then(|n| n.name.as_deref().or(n.text.as_deref()))
-            .unwrap_or("");
-        let value = node.and_then(|n| n.value.as_deref());
-        let expanded = node.and_then(|n| n.states.expanded).unwrap_or(false);
-        Some(SpeechFormatter::format_combobox(name, value, expanded))
+        let t = self.buffer.comboboxes.clone();
+        self.control_nav(t, false, "There are no combo boxes on this page.")
     }
 
     /// Enters Forms Mode (`{ENTER}` on an Edit field or `EnterFormsMode`).

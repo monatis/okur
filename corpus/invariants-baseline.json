@@ -1,70 +1,13 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p sr-cli -- invariants --write-baseline",
-  "total_violations": 50,
+  "total_violations": 0,
   "violations": {
-    "boundaries-dynamic.chrome.uia.json": [
-      "[all text is reachable with Down Arrow] never spoken: \"First paragraph content.\"",
-      "[all text is reachable with Down Arrow] never spoken: \"Final content paragraph on this page.\"",
-      "[all text is reachable with Down Arrow] never spoken: \"General settings configuration content.\"",
-      "[words never merge text from different elements] word \"HeadingFirst\" spans elements",
-      "[words never merge text from different elements] word \"HeadingFinal\" spans elements",
-      "[words never merge text from different elements] word \"AdvancedGeneral\" spans elements"
-    ],
-    "doc-reading.chrome.uia.json": [
-      "[all text is reachable with Down Arrow] never spoken: \"The screen reader engine parses the document object model into a clean virtual buffer.\"",
-      "[all text is reachable with Down Arrow] never spoken: \"Engine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.\"",
-      "[all text is reachable with Down Arrow] never spoken: \"Rust provides memory safety without garbage collection latency. This ensures predictable audio delivery.\"",
-      "[words never merge text from different elements] word \"SpecificationThe\" spans elements"
-    ],
-    "forms-interaction.chrome.uia.json": [
-      "[words never merge text from different elements] word \"FormFull\" spans elements",
-      "[words never merge text from different elements] word \"DoeEmail\" spans elements"
-    ],
-    "news-article.chrome.uia.json": [
-      "[lines are in document order and do not overlap] line 11 \"Sunday: noon to 5 p.m.\" [692..714) precedes line 12 \"Saturday: 10 a.m. to 6 p.m.\\nSunday: noon to 5 p.m.\" [664..714)",
-      "[every link is in the links list] 12 links in the tree, 10 in the links list",
-      "[all text is reachable with Down Arrow] never spoken: \"By\"",
-      "[all text is reachable with Down Arrow] never spoken: \", published\"",
-      "[all text is reachable with Down Arrow] never spoken: \"March 14, 2026\"",
-      "[all text is reachable with Down Arrow] never spoken: \"The Riverside City Library will stay open until\"",
-      "[all text is reachable with Down Arrow] never spoken: \"on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which\"",
-      "[all text is reachable with Down Arrow] never spoken: \"most\"",
-      "[all text is reachable with Down Arrow] never spoken: \"respondents asked for later hours.\"",
-      "[all text is reachable with Down Arrow] never spoken: \"Membership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org — or call 555-0142. Attendance rose 3.5% last year, and staff say they can't wait.\"",
-      "[all text is reachable with Down Arrow] never spoken: \"Branch hours after the change\"",
-      "[all text is reachable with Down Arrow] never spoken: \"Finally, I can study after work.\"",
-      "[all text is reachable with Down Arrow] never spoken: \"The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before most people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available at the times when the community actually needs them, according to the library director.\"",
-      "[all text is reachable with Down Arrow] never spoken: \"© 2026 Riverside Gazette.\"",
-      "[words never merge text from different elements] word \"HoursBy\" spans elements",
-      "[words never merge text from different elements] word \"2026The\" spans elements",
-      "[words never merge text from different elements] word \"changesMembership\" spans elements",
-      "[words never merge text from different elements] word \"saidFinally\" spans elements"
-    ],
-    "signup-form.chrome.uia.json": [
-      "[all text is reachable with Down Arrow] never spoken: \"Fields marked required must be filled in.\"",
-      "[all text is reachable with Down Arrow] never spoken: \"We never share your email.\"",
-      "[all text is reachable with Down Arrow] never spoken: \"Membership type\"",
-      "[words never merge text from different elements] word \"accountFields\" spans elements",
-      "[words never merge text from different elements] word \"nameEmail\" spans elements",
-      "[words never merge text from different elements] word \"comWe\" spans elements",
-      "[words never merge text from different elements] word \"PasswordMembership\" spans elements",
-      "[words never merge text from different elements] word \"typeAdultStudentSeniorHome\" spans elements",
-      "[words never merge text from different elements] word \"NorthsideAccessibility\" spans elements",
-      "[words never merge text from different elements] word \"useI\" spans elements"
-    ],
-    "structural-navigation.chrome.uia.json": [
-      "[all text is reachable with Down Arrow] never spoken: \"This section outlines high-level concepts for synthetic speech evaluation.\"",
-      "[all text is reachable with Down Arrow] never spoken: \"Details covering buffer generation and quick navigation keys.\"",
-      "[all text is reachable with Down Arrow] never spoken: \"Architecture description with ordered components:\"",
-      "[all text is reachable with Down Arrow] never spoken: \"Reference documentation and guidelines.\"",
-      "[all text is reachable with Down Arrow] never spoken: \"Copyright 2026 Accessibility Lab.\"",
-      "[words never merge text from different elements] word \"OverviewThis\" spans elements",
-      "[words never merge text from different elements] word \"DetailsDetails\" spans elements",
-      "[words never merge text from different elements] word \"GuideArchitecture\" spans elements",
-      "[words never merge text from different elements] word \"ResourcesReference\" spans elements"
-    ],
-    "tables-navigation.chrome.uia.json": [
-      "[all text is reachable with Down Arrow] never spoken: \"Q3 Financial Summary Table\""
-    ]
+    "boundaries-dynamic.chrome.uia.json": [],
+    "doc-reading.chrome.uia.json": [],
+    "forms-interaction.chrome.uia.json": [],
+    "news-article.chrome.uia.json": [],
+    "signup-form.chrome.uia.json": [],
+    "structural-navigation.chrome.uia.json": [],
+    "tables-navigation.chrome.uia.json": []
   }
 }

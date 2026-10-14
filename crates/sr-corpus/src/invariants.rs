@@ -29,12 +29,24 @@ fn walk<'a>(node: &'a AomNode, out: &mut Vec<&'a AomNode>) {
 pub const TEXT_REACHABLE: &str = "all text is reachable with Down Arrow";
 /// Buffer lines must be in document order and must not overlap.
 pub const LINES_ORDERED: &str = "lines are in document order and do not overlap";
-/// No line may be spoken twice when reading top to bottom.
-pub const NO_REPEATED_LINES: &str = "Down Arrow never reads the same line twice";
-/// Every word reached with Ctrl+Right must come from a single node's text.
+/// Each Down Arrow press lands on a line strictly after the previous one. (Identical text
+/// may legitimately repeat, e.g. two "Directions" links; position must not.)
+pub const DOWN_ADVANCES: &str = "Down Arrow always moves forward";
+/// On lines of flowing content, every word reached with Ctrl+Right comes from a single
+/// element's text: adjacent text leaves are never glued into one word ("PageWelcome").
+/// Lines JAWS synthesizes (container start/end, controls, graphics) are exempt: their words
+/// ("list of 4 items", "check box") are generated, not taken from elements.
 pub const WORDS_WITHIN_NODES: &str = "words never merge text from different elements";
 /// Every link in the tree must appear in the buffer's link list.
 pub const LINKS_LISTED: &str = "every link is in the links list";
+
+/// Lines whose text is taken verbatim from element text (as opposed to synthesized).
+fn is_flow_line(role: &Role) -> bool {
+    matches!(
+        role,
+        Role::Text | Role::Heading { .. } | Role::Link { .. } | Role::Paragraph | Role::Generic
+    )
+}
 
 pub fn check(aom: &AomNode) -> Vec<Violation> {
     let mut violations = Vec::new();
@@ -80,9 +92,25 @@ pub fn check(aom: &AomNode) -> Vec<Violation> {
     // Read the page with Down Arrow from the top.
     let mut cursor = VirtualCursor::new(buffer.clone());
     let mut spoken_lines = vec![normalize(&cursor.move_to_start())];
+    let mut last_offset = cursor.offset;
     for _ in 0..MAX_STEPS {
         match cursor.move_next_line() {
-            Some(line) => spoken_lines.push(normalize(&line)),
+            Some(line) => {
+                if cursor.offset <= last_offset {
+                    violations.push(Violation {
+                        invariant: DOWN_ADVANCES,
+                        detail: format!(
+                            "offset {} -> {} speaking {:?}",
+                            last_offset,
+                            cursor.offset,
+                            normalize(&line)
+                        ),
+                    });
+                    break;
+                }
+                last_offset = cursor.offset;
+                spoken_lines.push(normalize(&line));
+            }
             None => break,
         }
     }
@@ -96,41 +124,43 @@ pub fn check(aom: &AomNode) -> Vec<Violation> {
             });
         }
     }
-    let mut seen = std::collections::HashSet::new();
-    for line in spoken_lines.iter().filter(|l| !l.is_empty()) {
-        if !seen.insert(line.as_str()) {
-            violations.push(Violation {
-                invariant: NO_REPEATED_LINES,
-                detail: format!("spoken twice: {line:?}"),
-            });
-        }
-    }
 
-    // Read the page word by word with Ctrl+Right from the top.
+    // Every word on a flow line must come from a single element's text.
     let sources: Vec<String> = nodes
         .iter()
         .flat_map(|n| [n.text.as_deref(), n.name.as_deref(), n.value.as_deref()])
         .flatten()
         .map(str::to_owned)
         .collect();
-    let mut cursor = VirtualCursor::new(buffer);
-    let _ = cursor.move_to_start();
-    for _ in 0..MAX_STEPS {
-        let Some(word) = cursor.move_next_word() else {
-            break;
-        };
-        let word = normalize(&word);
-        if !word.is_empty() && !sources.iter().any(|s| s.contains(&word)) {
+    for word in &buffer.words {
+        let Some(line) = buffer
+            .lines
+            .iter()
+            .find(|l| word.start_offset >= l.start_offset && word.end_offset <= l.end_offset)
+        else {
             violations.push(Violation {
                 invariant: WORDS_WITHIN_NODES,
-                detail: format!("word {word:?} spans elements"),
+                detail: format!("word {:?} crosses a line boundary", word.text),
+            });
+            continue;
+        };
+        // JAWS attaches punctuation following a link to the link line ("Maria Lopez,").
+        let core = word.text.trim_matches(|c: char| !c.is_alphanumeric());
+        let core = if core.is_empty() {
+            word.text.as_str()
+        } else {
+            core
+        };
+        if is_flow_line(&line.role) && !sources.iter().any(|s| s.contains(core)) {
+            violations.push(Violation {
+                invariant: WORDS_WITHIN_NODES,
+                detail: format!("word {:?} spans elements", word.text),
             });
         }
     }
 
     violations
 }
-
 pub const BASELINE_FILE: &str = "invariants-baseline.json";
 
 /// Violations per snapshot file name, for every snapshot in `corpus_dir/snapshots`.

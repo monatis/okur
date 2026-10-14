@@ -192,6 +192,8 @@ fn map_role(node: &UiaNode) -> sr_core::Role {
     }
     match aria {
         "dialog" => return Role::Dialog,
+        // Chrome exposes tab panels as Pane or Group; the ARIA role is authoritative.
+        "tabpanel" => return Role::TabPanel,
         "alertdialog" => return Role::AlertDialog,
         _ => {}
     }
@@ -230,16 +232,14 @@ fn map_role(node: &UiaNode) -> sr_core::Role {
     }
 }
 
-/// Raw-view-only text leaves duplicate their parent's name (e.g. a heading's inner text);
-/// the control view excludes them, and so do we.
-fn is_redundant_text(node: &UiaNode) -> bool {
-    node.control_type == CT_TEXT && !node.is_control_element && node.children.is_empty()
-}
-
 /// Converts a captured UIA tree into the engine's AOM.
 ///
 /// Pure and platform-independent: the live screen reader and the hermetic corpus tests
 /// share this mapping, so tests exercise production code on data captured from Chrome.
+///
+/// Every text leaf is kept, including raw-view-only ones: Chrome exposes visible content
+/// there (list markers, the text around links, cell text), and the virtual buffer renders
+/// content from text leaves rather than from element names.
 pub fn to_aom(root: &UiaNode) -> sr_core::AomNode {
     let mut next_id = 0;
     convert(root, &mut next_id)
@@ -256,6 +256,12 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> sr_core::AomNode {
     match role {
         Role::Text => aom.text = node.name.clone(),
         Role::Edit | Role::ComboBox => aom.value = node.value.clone(),
+        // The document value is its URL; same-page links are resolved against it.
+        Role::Document => {
+            if let Some(url) = &node.value {
+                aom.attributes.insert("url".to_owned(), url.clone());
+            }
+        }
         _ => {}
     }
     aom.level = node.level.and_then(|l| u32::try_from(l).ok());
@@ -263,9 +269,11 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> sr_core::AomNode {
     aom.value_min = node.range_minimum;
     aom.value_max = node.range_maximum;
     aom.states = NodeStates {
-        checked: match node.toggle_state {
-            Some(0) => Some(false),
-            Some(1) => Some(true),
+        // Radio buttons report "checked" through SelectionItem, not Toggle.
+        checked: match (&role, node.toggle_state) {
+            (Role::RadioButton, _) => node.is_selected,
+            (_, Some(0)) => Some(false),
+            (_, Some(1)) => Some(true),
             _ => None,
         },
         selected: node.is_selected,
@@ -295,17 +303,36 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> sr_core::AomNode {
             _ => {}
         }
     }
+    let mut set_attr = |key: &str, value: String| {
+        aom.attributes.insert(key.to_owned(), value);
+    };
     if node.is_required_for_form {
-        aom.attributes
-            .insert("required".to_owned(), "true".to_owned());
+        set_attr("required", "true".to_owned());
+    }
+    if node.is_password {
+        set_attr("password", "true".to_owned());
+    }
+    if aria_property(node, "multiline") == Some("true") {
+        set_attr("multiline", "true".to_owned());
+    }
+    // aria-describedby text, spoken after the value in focus phrasing.
+    if let Some(d) = node
+        .full_description
+        .as_deref()
+        .or(node.help_text.as_deref())
+    {
+        set_attr("description", d.to_owned());
+    }
+    // Chrome reports the DOM id as AutomationId; same-page link targets resolve against it.
+    if let Some(id) = &node.automation_id {
+        set_attr("id", id.clone());
+    }
+    if let (Some(pos), Some(size)) = (node.position_in_set, node.size_of_set) {
+        set_attr("posinset", pos.to_string());
+        set_attr("setsize", size.to_string());
     }
 
-    aom.children = node
-        .children
-        .iter()
-        .filter(|c| !is_redundant_text(c))
-        .map(|c| convert(c, next_id))
-        .collect();
+    aom.children = node.children.iter().map(|c| convert(c, next_id)).collect();
     aom
 }
 

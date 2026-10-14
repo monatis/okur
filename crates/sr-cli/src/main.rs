@@ -1,6 +1,5 @@
 use clap::{Parser, Subcommand};
 use sr_core::{AomNode, Role, ScreenReaderEngine, VirtualBuffer, VirtualCursor};
-use sr_corpus::DifferentialRunner;
 use sr_platform::{
     create_event_listener, create_keyboard_hook, KeyAction, PlatformBridge, SpeechLog,
     TtsEngineType, TtsManager,
@@ -37,26 +36,13 @@ enum Commands {
         #[arg(long, default_value_t = 100)]
         volume: u16,
 
-        /// Path to fixture file to load (optional; if not provided, queries active application)
+        /// UIA snapshot to load instead of the active application (sr-cli snapshot output)
         #[arg(short, long)]
         fixture: Option<String>,
 
         /// Record every utterance as JSON Lines to this file (off by default)
         #[arg(long)]
         speech_log: Option<String>,
-    },
-    /// Run corpus scenarios against their authored assertions (not yet a JAWS parity comparison)
-    Test {
-        #[arg(short, long, default_value = "corpus")]
-        corpus_dir: String,
-
-        /// Scenario range or specific ID (e.g. "01..10", "1..10", or "01-doc-say-all")
-        #[arg(short, long)]
-        scenarios: Option<String>,
-
-        /// TTS output driver during tests: "no-speech" (default) or "sapi5"
-        #[arg(long, default_value = "no-speech")]
-        tts: String,
     },
     /// Compare engine speech with recorded JAWS speech for every genuine corpus scenario
     Parity {
@@ -149,7 +135,7 @@ enum Commands {
     },
     /// Load and read a document fixture aloud using the virtual cursor
     Read {
-        /// Path to fixture file (HTML or AOM JSON)
+        /// UIA snapshot to read (sr-cli snapshot output, e.g. corpus/snapshots/*.json)
         fixture: String,
 
         /// TTS synthesizer engine: auto (default), sapi5, or no-speech
@@ -179,35 +165,11 @@ enum Commands {
     },
 }
 
-fn parse_range(range_str: &str) -> Option<(u32, u32)> {
-    let mut parts = range_str.split("..");
-    let start = parts.next()?.trim().parse::<u32>().ok()?;
-    let end = parts.next()?.trim().parse::<u32>().ok()?;
-    if parts.next().is_none() {
-        Some((start, end))
-    } else {
-        None
-    }
-}
-
+/// Loads a page from a UIA snapshot (`sr-cli snapshot` output) through the production
+/// UIA-to-AOM mapping.
 fn load_aom_from_path(path: &Path) -> Result<AomNode, Box<dyn std::error::Error>> {
-    let aom_path = if path.extension().and_then(|s| s.to_str()) == Some("json") {
-        path.to_path_buf()
-    } else {
-        let parent = path.parent().unwrap_or_else(|| Path::new("."));
-        let stem = path.file_stem().and_then(|s| s.to_str()).unwrap_or("doc");
-        let candidate = parent.join(format!("{}.aom.json", stem));
-        if candidate.exists() {
-            candidate
-        } else {
-            return Err(format!("No corresponding .aom.json found for {:?}", path).into());
-        }
-    };
-
-    let content = fs::read_to_string(&aom_path)?;
-    let clean = content.trim_start_matches('\u{feff}');
-    let aom: AomNode = serde_json::from_str(clean)?;
-    Ok(aom)
+    let snapshot = sr_platform::uia_snapshot::UiaSnapshot::load(path)?;
+    Ok(sr_platform::uia_snapshot::to_aom(&snapshot.root))
 }
 
 #[cfg(windows)]
@@ -574,100 +536,6 @@ async fn main() {
                     voice.name,
                     voice.language
                 );
-            }
-        }
-        Some(Commands::Test {
-            corpus_dir,
-            scenarios,
-            tts,
-        }) => {
-            let corpus_path = Path::new(&corpus_dir);
-            if !corpus_path.exists() {
-                eprintln!("Error: corpus directory not found at {:?}", corpus_path);
-                std::process::exit(1);
-            }
-
-            let runner = DifferentialRunner::new(corpus_path);
-            let mut total = 0;
-            let mut passed = 0;
-            let mut failed = 0;
-
-            let engine_type = TtsEngineType::from_str(&tts).unwrap_or(TtsEngineType::NoSpeech);
-            let mut tts_manager = TtsManager::new(engine_type).ok();
-
-            println!("============================================================");
-            println!("  Corpus Scenario Assertions (authored; not JAWS parity)     ");
-            println!("  TTS Driver: {}", tts);
-            println!("============================================================");
-
-            let filter = scenarios.as_deref().unwrap_or("0..999");
-            let results = if let Some((start, end)) = parse_range(filter) {
-                runner.run_range(start, end)
-            } else {
-                vec![runner.run_scenario_by_id(filter)]
-            };
-
-            for res in results {
-                total += 1;
-                match res {
-                    Ok(scenario_res) => {
-                        let status_str = if scenario_res.passed {
-                            passed += 1;
-                            "PASS"
-                        } else {
-                            failed += 1;
-                            "FAIL"
-                        };
-
-                        println!(
-                            "[{}] {} - {} ({} steps)",
-                            status_str,
-                            scenario_res.scenario_id,
-                            scenario_res.scenario_name,
-                            scenario_res.steps.len()
-                        );
-
-                        for step in &scenario_res.steps {
-                            if let Some(ref mut mgr) = tts_manager {
-                                if !step.emitted_speech.is_empty() {
-                                    let _ = mgr.speak(&step.emitted_speech, true);
-                                }
-                            }
-
-                            if !step.success {
-                                eprintln!(
-                                    "   Step [{}]: command='{}', speech='{}'",
-                                    step.step_id, step.command, step.emitted_speech
-                                );
-                                for fail in &step.failed_assertions {
-                                    eprintln!("     * {}", fail);
-                                }
-                            }
-                        }
-                    }
-                    Err(e) => {
-                        failed += 1;
-                        eprintln!("[ERROR] Execution failure: {}", e);
-                    }
-                }
-            }
-
-            println!("------------------------------------------------------------");
-            println!(
-                "Summary: {} total, {} passed, {} failed ({:.1}% parity)",
-                total,
-                passed,
-                failed,
-                if total > 0 {
-                    (passed as f64 / total as f64) * 100.0
-                } else {
-                    0.0
-                }
-            );
-            println!("============================================================");
-
-            if failed > 0 {
-                std::process::exit(1);
             }
         }
         Some(Commands::History { path }) => match SpeechLog::read(&path) {

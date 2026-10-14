@@ -760,6 +760,12 @@ impl ScreenReaderEngine {
             "^%+H" | "^%+h" | "SayColumnHeader" => self.cursor.read_current_col_header(),
             "^%+R" | "^%+r" | "SayRowHeader" => self.cursor.read_current_row_header(),
 
+            // Graphics and radio buttons (spec §16, §17)
+            "G" | "g" | "MoveToNextGraphic" => self.cursor.move_next_graphic(),
+            "+G" | "+g" | "MoveToPriorGraphic" => self.cursor.move_prior_graphic(),
+            "A" | "a" | "MoveToNextRadioButton" => self.cursor.move_next_radio_button(),
+            "+A" | "+a" | "MoveToPriorRadioButton" => self.cursor.move_prior_radio_button(),
+
             // MathML
             "O" | "o" | "MoveToNextMath" => self.cursor.move_next_math(),
             "+O" | "+o" | "MoveToPriorMath" => self.cursor.move_prior_math(),

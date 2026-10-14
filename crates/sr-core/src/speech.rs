@@ -290,6 +290,88 @@ impl SpeechFormatter {
         }
     }
 
+    /// Form control speech in JAWS's focus phrasing, as spoken by F/E/X/A/C/B quick keys
+    /// (spec §17, corpus/evidence/202-form-fields). `was_inside` reports whether the cursor
+    /// was already inside the container with the given node id; entering a radio group
+    /// names the group first.
+    pub fn format_control_focus(
+        node: &crate::aom::AomNode,
+        was_inside: impl Fn(usize) -> bool,
+    ) -> String {
+        use crate::aom::Role;
+        let attr = |k: &str| node.attributes.get(k).map(String::as_str);
+        let name = node.name.as_deref().unwrap_or_default().trim();
+        let required = attr("required") == Some("true");
+        let checked = |c: Option<bool>| {
+            if c == Some(true) {
+                "checked"
+            } else {
+                "not checked"
+            }
+        };
+        match &node.role {
+            Role::Edit => {
+                let password = attr("password") == Some("true");
+                let kind = if password {
+                    "password edit"
+                } else if attr("multiline") == Some("true") {
+                    "edit"
+                } else {
+                    "Edit"
+                };
+                let mut s = format!("{name} \u{1d} {kind} \u{1e} ");
+                if required {
+                    s.push_str("\n \u{1d}Required\u{1e} ");
+                }
+                if !password {
+                    match node.value.as_deref().filter(|v| !v.is_empty()) {
+                        Some(v) => s.push_str(&format!("\n{v}")),
+                        None => s.push_str("\nblank"),
+                    }
+                }
+                if let Some(d) = attr("description") {
+                    s.push_str(&format!("\n{d}"));
+                }
+                s
+            }
+            Role::RadioButton => {
+                let mut s = String::new();
+                if let (Some(group), Some(group_id)) = (attr("group_name"), attr("group_id")) {
+                    let inside = group_id.parse().is_ok_and(&was_inside);
+                    if !inside {
+                        s.push_str(&format!("{group} \u{1d} group \u{1e} \n"));
+                    }
+                }
+                s.push_str(&format!(
+                    "{name}  \u{1d} radio button \u{1e}   \u{1d}{}\u{1e} ",
+                    checked(node.states.checked)
+                ));
+                if let (Some(p), Some(n)) = (attr("posinset"), attr("setsize")) {
+                    s.push_str(&format!("\n{p} of {n}"));
+                }
+                s
+            }
+            Role::ComboBox => {
+                let state = if node.states.expanded == Some(true) {
+                    "expanded"
+                } else {
+                    "collapsed"
+                };
+                let mut s = format!("{name}  \u{1d} Combo box \u{1e}   \u{1d}{state}\u{1e} ");
+                if let Some(v) = node.value.as_deref() {
+                    s.push_str(&format!("\n{v}"));
+                }
+                s
+            }
+            Role::CheckBox => format!(
+                "{name}  \u{1d} check box \u{1e}   \u{1d}{}\u{1e}",
+                checked(node.states.checked)
+            ),
+            Role::Button => format!("{name}  \u{1d} Button \u{1e}"),
+            _ => name.to_owned(),
+        }
+    }
+
     /// Formats a heading announcement for quick navigation (`H` / `1`–`6`).
     pub fn format_heading(level: u32, text: &str) -> String {
         format!("{}\n \u{001d} heading level {} \u{001e}", text, level)
