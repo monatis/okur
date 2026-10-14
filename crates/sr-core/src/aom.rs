@@ -43,6 +43,8 @@ pub enum Role {
     Image,
     /// A quotation block (HTML `blockquote`), read with start and end lines.
     BlockQuote,
+    /// An item of a menu bar or a popup menu.
+    MenuItem,
     Generic,
 }
 

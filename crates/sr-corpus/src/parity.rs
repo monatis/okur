@@ -12,7 +12,7 @@ use crate::snapshots::{self, Api};
 use serde::Serialize;
 use serde_json::Value;
 use sr_core::{ScreenReaderEngine, VirtualBuffer, VirtualCursor};
-use sr_platform::event_trace::focus_event_from_trace;
+use sr_platform::event_trace::{focus_event_from_trace, menu_event_from_trace, TraceEvent};
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -158,6 +158,10 @@ fn run_scenario(
                 // Replay the OS events recorded while JAWS handled this step (e.g. the focus
                 // change that follows Tab), exactly as the live listener would deliver them.
                 for event in replay.for_step(&step.id) {
+                    if let Some(menu) = menu_event_from_trace(&event) {
+                        let _ = engine.handle_menu_event(menu);
+                        continue;
+                    }
                     if let Some(focus) = focus_event_from_trace(&event) {
                         if let Some(speech) = engine.handle_focus_event(&focus) {
                             if spoken.is_empty() {
@@ -166,6 +170,8 @@ fn run_scenario(
                         }
                     }
                 }
+                // The step's events are over; JAWS then speaks what it deferred.
+                let _ = engine.on_idle();
                 spoken.take().join("\n")
             }
             "keyboard" | "jaws_script" => {
@@ -331,8 +337,16 @@ fn press(engine: &mut ScreenReaderEngine, chord: &str) -> Result<(), String> {
     Ok(())
 }
 
-/// Focus-bearing events recorded during each step of trial 1, when the scenario has a trace
-/// (`corpus/traces/<scenario-id>-trial1.jsonl`, recorded with `run-scenario.ps1 -TraceDir`).
+/// Events the engine consumes: focus changes (with a UIA chain or an MSAA object) and menu
+/// mode transitions.
+fn replayable(event: &TraceEvent) -> bool {
+    menu_event_from_trace(event).is_some()
+        || (matches!(event.event.as_str(), "focus" | "foreground")
+            && (!event.focus_chain.is_empty() || event.object.is_some()))
+}
+
+/// Replayable events recorded during each step of the first successful traced trial
+/// (`corpus/traces/<trace_file>`, recorded with `run-scenario.ps1 -TraceDir`).
 #[derive(Default)]
 struct StepEvents {
     by_step: std::collections::HashMap<String, Vec<sr_platform::event_trace::TraceEvent>>,
@@ -370,7 +384,7 @@ impl StepEvents {
             .unwrap_or(0);
         let setup = events
             .iter()
-            .filter(|e| e.event == "focus" && e.t_ms < first_start && !e.focus_chain.is_empty())
+            .filter(|e| e.event == "focus" && e.t_ms < first_start && replayable(e))
             .cloned()
             .collect();
         for step in steps {
@@ -386,10 +400,7 @@ impl StepEvents {
             let window: Vec<_> = events
                 .iter()
                 .filter(|e| {
-                    matches!(e.event.as_str(), "focus" | "foreground")
-                        && e.t_ms >= u128::from(start)
-                        && e.t_ms <= u128::from(end)
-                        && !e.focus_chain.is_empty()
+                    replayable(e) && e.t_ms >= u128::from(start) && e.t_ms <= u128::from(end)
                 })
                 .cloned()
                 .collect();

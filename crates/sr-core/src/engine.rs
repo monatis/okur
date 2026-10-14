@@ -301,6 +301,9 @@ pub struct ScreenReaderEngine {
     pub last_window_title: Option<String>,
     /// Container of the last focused native control; entering a new one announces it.
     native_container: Option<crate::native_focus::ContainerKey>,
+    /// The last native focus outside menus, re-announced when menus close.
+    last_native_focus: Option<FocusEvent>,
+    menus: crate::native_focus::Menus,
 }
 
 impl ScreenReaderEngine {
@@ -316,6 +319,8 @@ impl ScreenReaderEngine {
             explorer_state: None,
             last_window_title: None,
             native_container: None,
+            last_native_focus: None,
+            menus: crate::native_focus::Menus::default(),
         }
     }
 
@@ -1094,6 +1099,13 @@ impl ScreenReaderEngine {
     /// Synchronizes cursor position, activates/deactivates forms mode,
     /// and emits canonical JAWS speech announcements.
     pub fn handle_focus_event(&mut self, focus: &FocusEvent) -> Option<String> {
+        if focus.role == Role::MenuItem {
+            let speech = self
+                .menus
+                .focus(focus.name.as_deref().unwrap_or_default())?;
+            self.speech.speak(&speech, true);
+            return Some(speech);
+        }
         // Ignore spontaneous background tile updates from Windows 11 Widgets applet
         if focus
             .name
@@ -1433,6 +1445,7 @@ impl ScreenReaderEngine {
         };
         let control_speech = crate::native_focus::focus_speech(focus, previous_container.as_ref());
         self.native_container = crate::native_focus::ContainerKey::of(focus);
+        self.last_native_focus = Some(focus.clone());
 
         let speech = if window_changed {
             let win = focus.window_title.as_deref().unwrap_or("");
@@ -1451,6 +1464,43 @@ impl ScreenReaderEngine {
         } else {
             None
         }
+    }
+
+    /// Handles menu mode transitions [obs, 302]. Leaving menus re-announces the control
+    /// focused before them, as on a fresh focus: `Leaving menus` | `Name: ‹ Edit ›` | …
+    pub fn handle_menu_event(&mut self, event: crate::event::MenuEvent) -> Option<String> {
+        use crate::event::MenuEvent;
+        match event {
+            MenuEvent::Start => None,
+            MenuEvent::PopupStart => {
+                self.menus.popup_start();
+                None
+            }
+            MenuEvent::PopupEnd => {
+                self.menus.popup_end();
+                None
+            }
+            MenuEvent::End => {
+                if !self.menus.end() {
+                    return None;
+                }
+                let mut speech = "Leaving menus".to_owned();
+                if let Some(focus) = &self.last_native_focus {
+                    speech.push('\n');
+                    speech.push_str(&crate::native_focus::focus_speech(focus, None));
+                }
+                self.speech.speak(&speech, true);
+                Some(speech)
+            }
+        }
+    }
+
+    /// Called when the OS event stream goes quiet: speech JAWS defers until no further
+    /// event supersedes it (a closed popup menu, unless focus moved on).
+    pub fn on_idle(&mut self) -> Option<String> {
+        let speech = self.menus.idle()?;
+        self.speech.speak(&speech, true);
+        Some(speech)
     }
 
     /// Handles an ARIA live region announcement event with politeness consideration.

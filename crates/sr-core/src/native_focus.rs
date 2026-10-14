@@ -172,10 +172,129 @@ pub fn focus_speech(focus: &FocusEvent, previous: Option<&ContainerKey>) -> Stri
     lines.join("\n")
 }
 
+/// Menu mode as JAWS announces it [obs, 302]. Focus inside menus arrives as focus events on
+/// menu items; popups opening and closing arrive as [`crate::event::MenuEvent`]s.
+#[derive(Debug, Default)]
+pub struct Menus {
+    active: bool,
+    /// Items whose popups are open, outermost first.
+    open: Vec<String>,
+    /// A popup just opened and its first item is not announced yet.
+    popup_pending: bool,
+    /// The first popup of a menu session is introduced with its role and a hint; later
+    /// ones only with their name (302/s2 versus s5).
+    popup_shown: bool,
+    current: Option<String>,
+    /// The item whose popup just closed. If focus does not move on (switching menus with
+    /// Left/Right), JAWS announces the item once speech goes idle (302/s7).
+    closed: Option<String>,
+}
+
+impl Menus {
+    pub fn is_active(&self) -> bool {
+        self.active
+    }
+
+    /// Focus landed on a menu item.
+    pub fn focus(&mut self, name: &str) -> Option<String> {
+        let name = name.trim();
+        let switching = self.closed.take().is_some() && self.open.is_empty();
+        let speech = if !self.active {
+            self.active = true;
+            Some(format!(
+                "{}\n{name}\nTo navigate press Left or Right Arrow.",
+                role_marker("Menu bar")
+            ))
+        } else if self.popup_pending {
+            self.popup_pending = false;
+            let parent = self.open.last().cloned().unwrap_or_default();
+            let first = !self.popup_shown;
+            self.popup_shown = true;
+            Some(if first {
+                format!(
+                    "{}\n\n{parent} menu\n{name}\nTo move through items press up or down arrow.",
+                    role_marker("menu")
+                )
+            } else {
+                format!("{parent} menu\n{name}")
+            })
+        } else if switching {
+            // The next menu's popup opens right away and introduces the item (302/s5).
+            None
+        } else {
+            Some(name.to_owned())
+        };
+        self.current = Some(name.to_owned());
+        speech
+    }
+
+    pub fn popup_start(&mut self) {
+        self.open.push(self.current.clone().unwrap_or_default());
+        self.popup_pending = true;
+        self.closed = None;
+    }
+
+    pub fn popup_end(&mut self) {
+        self.closed = self.open.pop();
+        self.popup_pending = false;
+    }
+
+    /// Ends menu mode; true when menus were active ("Leaving menus").
+    pub fn end(&mut self) -> bool {
+        let was_active = self.active;
+        *self = Self::default();
+        was_active
+    }
+
+    /// Speech that waits for the event stream to go quiet.
+    pub fn idle(&mut self) -> Option<String> {
+        let item = self.closed.take()?;
+        let sub_menu = state_marker("sub menu");
+        Some(format!("{item}\n{sub_menu}\n{item} {sub_menu}"))
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::aom::NodeStates;
+
+    /// 302-desktop-menu-bar, as one session: Alt, Down ×3, Right, Down, Escape, Escape.
+    #[test]
+    fn menu_session() {
+        let mut m = Menus::default();
+        let s1 = m.focus("File");
+        assert_eq!(
+            s1.as_deref().map(norm),
+            Some(norm(
+                " \u{1d} Menu bar \u{1e} \nFile \nTo navigate press Left or Right Arrow."
+            ))
+        );
+        m.popup_start();
+        assert_eq!(
+            m.focus("New").as_deref().map(norm),
+            Some(norm("  \u{1d} menu \u{1e} \n  \nFile menu\nNew \nTo move through items press up or down arrow."))
+        );
+        assert_eq!(m.focus("Open...").as_deref(), Some("Open..."));
+        assert_eq!(m.focus("Exit").as_deref(), Some("Exit"));
+        // Right: the File popup closes, Edit gets focus silently, its popup opens.
+        m.popup_end();
+        assert_eq!(m.focus("Edit"), None);
+        m.popup_start();
+        assert_eq!(m.focus("Copy").as_deref(), Some("Edit menu\nCopy"));
+        assert_eq!(m.idle(), None);
+        assert_eq!(m.focus("Paste").as_deref(), Some("Paste"));
+        // Escape closes the popup; nothing follows, so the bar item is announced on idle.
+        m.popup_end();
+        assert_eq!(
+            m.idle().as_deref().map(norm),
+            Some(norm(
+                "Edit\n \u{1d}sub menu\u{1e} \nEdit  \u{1d}sub menu\u{1e}"
+            ))
+        );
+        assert!(m.end());
+        assert!(!m.is_active());
+    }
 
     /// Collapses whitespace, as the parity normalizer does.
     fn norm(s: &str) -> String {

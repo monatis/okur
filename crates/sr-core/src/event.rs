@@ -11,6 +11,20 @@ pub enum Politeness {
     Assertive,
 }
 
+/// Menu mode transitions (MSAA `EVENT_SYSTEM_MENU*`). Focus within menus arrives as focus
+/// events on [`Role::MenuItem`].
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum MenuEvent {
+    /// The menu bar became active.
+    Start,
+    /// Menu mode ended; focus returns to the application.
+    End,
+    /// A popup menu opened.
+    PopupStart,
+    /// A popup menu closed.
+    PopupEnd,
+}
+
 /// Event representing OS-level keyboard focus changes across applications and controls.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct FocusEvent {

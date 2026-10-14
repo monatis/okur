@@ -67,4 +67,4 @@ Native buttons say "press spacebar". Buttons in a Chrome page say `To activate p
 | Escape | `Edit \| sub menu \| Edit sub menu` |
 | Escape (leaves the menus) | `Leaving menus \| Name: ‹ Edit › \| Ada \| Type in text.` |
 
-Menu speech is not implemented yet.
+Implemented by `native_focus::Menus`. JAWS defers the closed-popup announcement until no further event supersedes it: in s5 the next menu opens at once, and in s7 nothing follows. The engine models this with `on_idle`, which parity calls at the end of each step.

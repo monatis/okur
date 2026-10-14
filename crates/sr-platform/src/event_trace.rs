@@ -14,6 +14,8 @@ use serde::{Deserialize, Serialize};
 /// UIA control type ids used to read focus context.
 const UIA_LISTITEM: i32 = 50007;
 const UIA_WINDOW: i32 = 50032;
+/// MSAA `ROLE_SYSTEM_MENUITEM`.
+const MSAA_MENUITEM: i32 = 0x0C;
 
 /// Bumped whenever the recorded fields or their meaning change.
 pub const TRACE_FORMAT_VERSION: u32 = 2;
@@ -179,6 +181,18 @@ pub fn focus_event_from_chain(
 /// Without a provider PositionInSet (WinForms and most Win32 controls report none), the
 /// position is counted among the focused element's siblings of the same control type.
 pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent> {
+    // Menus: UIA keeps reporting the control focused before the menu (WinForms MenuStrip),
+    // while the MSAA focus event names the menu item, as JAWS reads it [obs, 302].
+    if let Some(object) = event
+        .object
+        .as_ref()
+        .filter(|o| o.role == Some(MSAA_MENUITEM))
+    {
+        return Some(
+            sr_core::FocusEvent::new(sr_core::Role::MenuItem)
+                .with_name(object.name.clone().unwrap_or_default()),
+        );
+    }
     // The recorded window text belongs to the focused HWND (an edit's text is its content);
     // the window the user is in is the outermost element of the focus chain.
     let top_window = event
@@ -236,6 +250,18 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent>
 
 #[cfg(windows)]
 pub use capture::run_trace;
+
+/// The menu mode transition a recorded event reports, if any.
+pub fn menu_event_from_trace(event: &TraceEvent) -> Option<sr_core::MenuEvent> {
+    use sr_core::MenuEvent;
+    match event.event.as_str() {
+        "menu_start" => Some(MenuEvent::Start),
+        "menu_end" => Some(MenuEvent::End),
+        "menu_popup_start" => Some(MenuEvent::PopupStart),
+        "menu_popup_end" => Some(MenuEvent::PopupEnd),
+        _ => None,
+    }
+}
 
 #[cfg(windows)]
 mod capture {
