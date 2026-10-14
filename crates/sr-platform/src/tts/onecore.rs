@@ -70,6 +70,37 @@ pub fn trim_leading_silence(pcm: &[u8], format: WavFormat, threshold: i16) -> &[
         .unwrap_or_default()
 }
 
+/// Longest piece of text synthesized at once: the voice starts after the first piece.
+const MAX_CHUNK_CHARS: usize = 160;
+
+/// An utterance split for synthesis: by line, and long lines after sentence ends (or at a
+/// space). Synthesis takes time in proportion to the text, so a long utterance (Say All, a
+/// whole page) synthesized in one piece would delay its first word, and an interruption
+/// could not stop the synthesis already running.
+pub fn speech_chunks(text: &str) -> Vec<String> {
+    let mut chunks = Vec::new();
+    for line in text.split(['\n', '\r', '\u{2028}', '\u{2029}']) {
+        let mut current = String::new();
+        let mut count = 0usize;
+        let mut chars = line.chars().peekable();
+        while let Some(c) = chars.next() {
+            current.push(c);
+            count += 1;
+            let at_space = chars.peek().is_some_and(|n| n.is_whitespace());
+            let sentence_end = matches!(c, '.' | '!' | '?' | ';' | ':') && at_space;
+            if (sentence_end && count >= MAX_CHUNK_CHARS / 3)
+                || (count >= MAX_CHUNK_CHARS && c.is_whitespace())
+            {
+                chunks.push(std::mem::take(&mut current));
+                count = 0;
+            }
+        }
+        chunks.push(current);
+    }
+    chunks.retain(|c| !c.trim().is_empty());
+    chunks
+}
+
 /// Our -10..10 rate scale as OneCore's speaking rate (0.5 to 6, 1 is normal).
 pub fn speaking_rate(rate: i32) -> f64 {
     let rate = f64::from(rate.clamp(-10, 10));
@@ -85,14 +116,16 @@ pub use engine::OneCoreEngine;
 
 #[cfg(windows)]
 mod engine {
-    use super::{parse_wav, speaking_rate, trim_leading_silence, WavFormat};
+    use super::{parse_wav, speaking_rate, speech_chunks, trim_leading_silence, WavFormat};
     use crate::tts::{TtsEngine, TtsError, VoiceInfo};
     use std::sync::atomic::{AtomicU64, AtomicUsize, Ordering};
     use std::sync::mpsc::{channel, Receiver, Sender};
     use std::sync::{Arc, Mutex};
     use std::time::{Duration, Instant};
     use windows::core::HSTRING;
-    use windows::Media::SpeechSynthesis::SpeechSynthesizer;
+    use windows::Media::SpeechSynthesis::{
+        SpeechAppendedSilence, SpeechPunctuationSilence, SpeechSynthesisStream, SpeechSynthesizer,
+    };
     use windows::Storage::Streams::DataReader;
     use windows::Win32::Media::Audio::{
         eConsole, eRender, IAudioClient, IAudioRenderClient, IMMDeviceEnumerator,
@@ -102,12 +135,15 @@ mod engine {
     use windows::Win32::System::Com::{
         CoCreateInstance, CoInitializeEx, CLSCTX_ALL, COINIT_MULTITHREADED,
     };
+    use windows_future::AsyncStatus;
 
     /// The playback buffer: 60 ms, in 100 ns units.
     const BUFFER_DURATION: i64 = 600_000;
     const POLL: Duration = Duration::from_millis(4);
     /// Samples quieter than this before speech are dropped.
     const SILENCE_THRESHOLD: i16 = 256;
+    /// How often a synthesis in flight checks for an interruption.
+    const SYNTHESIS_POLL: Duration = Duration::from_millis(2);
 
     enum Command {
         Speak { text: String, generation: u64 },
@@ -180,17 +216,102 @@ mod engine {
             .collect()
     }
 
-    /// The synthesizer's WAV for `text`.
-    fn synthesize(synth: &SpeechSynthesizer, text: &str) -> windows::core::Result<Vec<u8>> {
-        let stream = synth
-            .SynthesizeTextToStreamAsync(&HSTRING::from(text))?
-            .join()?;
-        let size = u32::try_from(stream.Size()?).unwrap_or(u32::MAX);
-        let reader = DataReader::CreateDataReader(&stream.GetInputStreamAt(0)?)?;
-        let loaded = reader.LoadAsync(size)?.join()?;
-        let mut bytes = vec![0u8; usize::try_from(loaded).unwrap_or(0)];
-        reader.ReadBytes(&mut bytes)?;
-        Ok(bytes)
+    type Synthesis = windows_future::IAsyncOperation<SpeechSynthesisStream>;
+
+    /// Starts synthesizing `text` in the background.
+    fn start(synth: &SpeechSynthesizer, text: &str) -> Option<Synthesis> {
+        synth
+            .SynthesizeTextToStreamAsync(&HSTRING::from(text))
+            .map_err(|e| tracing::warn!("OneCore synthesis failed to start: {e}"))
+            .ok()
+    }
+
+    /// The WAV a synthesis produced, or `None` when it failed or speech was interrupted
+    /// first: an interrupted synthesis is cancelled instead of waited for, so a long stale
+    /// utterance never holds up the next one.
+    fn finish(op: &Synthesis, cancelled: &dyn Fn() -> bool) -> Option<Vec<u8>> {
+        loop {
+            match op.Status() {
+                Ok(AsyncStatus::Started) => {
+                    if cancelled() {
+                        let _ = op.Cancel();
+                        return None;
+                    }
+                    std::thread::sleep(SYNTHESIS_POLL);
+                }
+                Ok(AsyncStatus::Completed) => break,
+                other => {
+                    tracing::warn!("OneCore synthesis ended with {other:?}");
+                    return None;
+                }
+            }
+        }
+        let read = || -> windows::core::Result<Vec<u8>> {
+            let stream = op.GetResults()?;
+            let size = u32::try_from(stream.Size()?).unwrap_or(u32::MAX);
+            let reader = DataReader::CreateDataReader(&stream.GetInputStreamAt(0)?)?;
+            let loaded = reader.LoadAsync(size)?.join()?;
+            let mut bytes = vec![0u8; usize::try_from(loaded).unwrap_or(0)];
+            reader.ReadBytes(&mut bytes)?;
+            Ok(bytes)
+        };
+        read()
+            .map_err(|e| tracing::warn!("OneCore stream read failed: {e}"))
+            .ok()
+    }
+
+    /// Speaks an utterance chunk by chunk: the next chunk is synthesized while the current
+    /// one plays, and an interruption stops playback and cancels the synthesis in flight.
+    fn speak_chunks(
+        synth: &SpeechSynthesizer,
+        output: &mut Option<Output>,
+        chunks: &[String],
+        cancelled: &dyn Fn() -> bool,
+    ) {
+        let started = Instant::now();
+        let mut next = chunks.first().and_then(|c| start(synth, c));
+        for index in 0..chunks.len() {
+            let Some(op) = next.take() else {
+                break;
+            };
+            let Some(wav) = finish(&op, cancelled) else {
+                break;
+            };
+            next = chunks.get(index + 1).and_then(|c| start(synth, c));
+            let Some((format, pcm)) = parse_wav(&wav) else {
+                continue;
+            };
+            let pcm = trim_leading_silence(pcm, format, SILENCE_THRESHOLD);
+            if index == 0 {
+                tracing::debug!(ms = started.elapsed().as_millis(), "OneCore first chunk");
+            }
+            if output.as_ref().is_none_or(|o| o.format != format) {
+                if let Some(old) = output.take() {
+                    old.stop();
+                }
+                *output = Output::open(format)
+                    .map_err(|e| tracing::warn!("audio output: {e}"))
+                    .ok();
+            }
+            let Some(out) = output.as_ref() else {
+                break;
+            };
+            let last = index + 1 == chunks.len();
+            if let Err(e) = out.play(pcm, cancelled, last) {
+                tracing::warn!("audio playback: {e}");
+                *output = None;
+                break;
+            }
+            if cancelled() {
+                break;
+            }
+        }
+        if let Some(op) = next {
+            let _ = op.Cancel();
+        }
+        if let Some(out) = output.as_ref() {
+            out.stop();
+        }
     }
 
     /// A WASAPI shared-mode stream on the default output, for one PCM format.
@@ -199,6 +320,8 @@ mod engine {
         client: IAudioClient,
         render: IAudioRenderClient,
         frames: u32,
+        /// The stream is started (between chunks of an utterance).
+        running: std::cell::Cell<bool>,
     }
 
     impl Output {
@@ -233,36 +356,44 @@ mod engine {
                     client,
                     render,
                     frames,
+                    running: std::cell::Cell::new(false),
                 })
             }
         }
 
-        /// Plays `pcm` to the end, or until `cancelled` (then the buffer is dropped at once).
-        fn play(&self, pcm: &[u8], cancelled: &dyn Fn() -> bool) -> windows::core::Result<()> {
+        /// Queues `pcm` for playback, starting the stream if needed, until all of it is
+        /// written, or until `cancelled` (then buffered audio is dropped at once). With
+        /// `drain`, also waits until the device has played it (the utterance's last chunk);
+        /// otherwise the stream keeps running for the next chunk, without a gap.
+        fn play(
+            &self,
+            pcm: &[u8],
+            cancelled: &dyn Fn() -> bool,
+            drain: bool,
+        ) -> windows::core::Result<()> {
             let frame = usize::from(self.format.block_align.max(1));
-            let mut chunks = pcm.chunks(frame * 256);
-            let mut pending: &[u8] = &[];
+            let mut pending = pcm;
             // SAFETY: the render buffer is written within the frames WASAPI granted.
             unsafe {
-                self.client.Start()?;
+                if !self.running.get() {
+                    self.client.Start()?;
+                    self.running.set(true);
+                }
                 loop {
                     if cancelled() {
-                        break;
+                        self.stop();
+                        return Ok(());
                     }
-                    if pending.is_empty() {
-                        match chunks.next() {
-                            Some(chunk) => pending = chunk,
-                            None => {
-                                // Drained once the device has played what is queued.
-                                if self.client.GetCurrentPadding()? == 0 {
-                                    break;
-                                }
-                                std::thread::sleep(POLL);
-                                continue;
-                            }
+                    let padding = self.client.GetCurrentPadding()?;
+                    if pending.len() < frame {
+                        // Drained once the device has played what is queued.
+                        if !drain || padding == 0 {
+                            break;
                         }
+                        std::thread::sleep(POLL);
+                        continue;
                     }
-                    let free = self.frames - self.client.GetCurrentPadding()?;
+                    let free = self.frames.saturating_sub(padding);
                     let n = (pending.len() / frame).min(usize::try_from(free).unwrap_or(0));
                     if n == 0 {
                         std::thread::sleep(POLL);
@@ -275,10 +406,19 @@ mod engine {
                     self.render.ReleaseBuffer(count, 0)?;
                     pending = rest;
                 }
-                self.client.Stop()?;
-                self.client.Reset()?;
             }
             Ok(())
+        }
+
+        /// Stops the stream and drops whatever it still holds.
+        fn stop(&self) {
+            if self.running.replace(false) {
+                // SAFETY: plain calls on a valid, started client.
+                unsafe {
+                    let _ = self.client.Stop();
+                    let _ = self.client.Reset();
+                }
+            }
         }
     }
 
@@ -295,6 +435,12 @@ mod engine {
         });
         let synth = match started {
             Ok((synth, voices)) if !voices.is_empty() => {
+                // No silence padded after each utterance or at punctuation, as NVDA sets it:
+                // the next utterance follows at once (Windows 10 1803 and later).
+                if let Ok(options) = synth.Options() {
+                    let _ = options.SetAppendedSilence(SpeechAppendedSilence::Min);
+                    let _ = options.SetPunctuationSilence(SpeechPunctuationSilence::Min);
+                }
                 let _ = ready.send(Ok(voices));
                 synth
             }
@@ -316,29 +462,7 @@ mod engine {
                         shared.pending.fetch_sub(1, Ordering::SeqCst);
                         continue;
                     }
-                    let started = Instant::now();
-                    let result = synthesize(&synth, &text).map(|wav| {
-                        let Some((format, pcm)) = parse_wav(&wav) else {
-                            tracing::warn!("OneCore produced no PCM for {text:?}");
-                            return;
-                        };
-                        let pcm = trim_leading_silence(pcm, format, SILENCE_THRESHOLD).to_vec();
-                        tracing::debug!(ms = started.elapsed().as_millis(), "OneCore synthesis");
-                        if output.as_ref().is_none_or(|o| o.format != format) {
-                            output = Output::open(format)
-                                .map_err(|e| tracing::warn!("audio output: {e}"))
-                                .ok();
-                        }
-                        if let Some(out) = &output {
-                            if let Err(e) = out.play(&pcm, &cancelled) {
-                                tracing::warn!("audio playback: {e}");
-                                output = None;
-                            }
-                        }
-                    });
-                    if let Err(e) = result {
-                        tracing::warn!("OneCore synthesis failed: {e}");
-                    }
+                    speak_chunks(&synth, &mut output, &speech_chunks(&text), &cancelled);
                     shared.pending.fetch_sub(1, Ordering::SeqCst);
                 }
                 Command::Voice(id) => {
@@ -564,6 +688,27 @@ mod tests {
         assert_eq!(pcm.len(), 8);
         assert_eq!(trim_leading_silence(pcm, format, 256).len(), 4);
         assert!(parse_wav(b"RIFF\0\0\0\0WAVX").is_none());
+    }
+
+    #[test]
+    fn utterances_split_by_line_and_long_sentences() {
+        assert_eq!(
+            speech_chunks("Title is\nSR Editor Fixture"),
+            ["Title is", "SR Editor Fixture"]
+        );
+        assert_eq!(speech_chunks("left paren"), ["left paren"]);
+        assert!(speech_chunks(" \n\n ").is_empty());
+        let sentence = "The library will stay open late on weekdays from April onward. ";
+        let long = sentence.repeat(6);
+        let chunks = speech_chunks(&long);
+        assert!(chunks.len() >= 3, "{chunks:?}");
+        assert!(chunks
+            .iter()
+            .all(|c| c.chars().count() <= MAX_CHUNK_CHARS * 2));
+        assert_eq!(chunks.concat(), long.trim_end());
+        // A long run without sentence ends still breaks, at a space.
+        let words = "word ".repeat(100);
+        assert!(speech_chunks(&words).len() >= 3);
     }
 
     #[test]

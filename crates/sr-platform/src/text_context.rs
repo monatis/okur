@@ -100,6 +100,13 @@ mod reader {
             let mut buf = vec![0u16; len + 1];
             let copied = ask(WM_GETTEXT, buf.len(), buf.as_mut_ptr() as isize)?;
             let text = String::from_utf16_lossy(buf.get(..copied.min(len))?);
+            // RichEdit returns `\r\n` to WM_GETTEXT but counts a line break as one character
+            // in EM_GETSEL: give the text its own bare `\r` breaks so offsets line up.
+            let text = if class.contains("RICHEDIT") {
+                text.replace("\r\n", "\r")
+            } else {
+                text
+            };
             // EM_GETSEL's result packs the selection's start and end in its low and high words.
             let sel = ask(EM_GETSEL, 0, 0)?;
             let start = i32::try_from(sel & 0xFFFF).ok()?;

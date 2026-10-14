@@ -199,6 +199,11 @@ enum Commands {
         /// (the system must be otherwise silent)
         #[arg(long)]
         measure_latency: bool,
+
+        /// First start a long utterance (a page read aloud) and interrupt it after this many
+        /// milliseconds with the text: how fast speech recovers from an interruption
+        #[arg(long)]
+        after_long_ms: Option<u64>,
     },
     /// Load and read a document fixture aloud using the virtual cursor
     Read {
@@ -647,6 +652,7 @@ async fn main() {
             rate,
             volume,
             measure_latency,
+            after_long_ms,
         }) => {
             let engine_type = TtsEngineType::from_str(&engine).unwrap_or_else(|e| {
                 eprintln!("Error: {}", e);
@@ -667,6 +673,11 @@ async fn main() {
                 text.replace(['\u{001d}', '\u{001e}'], "")
             );
 
+            if let Some(ms) = after_long_ms {
+                let long = "The Riverside City Library will stay open until nine in the evening on weekdays starting in April, the board announced on Tuesday. ".repeat(25);
+                let _ = tts.speak(&long, true);
+                std::thread::sleep(std::time::Duration::from_millis(ms));
+            }
             let started = std::time::Instant::now();
             if let Err(e) = tts.speak(&text, true) {
                 eprintln!("Speech error: {}", e);
