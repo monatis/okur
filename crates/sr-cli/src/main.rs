@@ -61,6 +61,18 @@ enum Commands {
         #[arg(long)]
         api: Option<String>,
     },
+    /// Act on the foreground browser page like Enter/Space would (Windows): find a control by
+    /// name in the page's IA2 capture, request focus or its default action, then report the
+    /// element UIA says has keyboard focus. A live check of the engine's action path.
+    Act {
+        /// Accessible name of the target control (first match in document order)
+        #[arg(long)]
+        name: String,
+
+        /// focus or activate
+        #[arg(long, default_value = "focus")]
+        action: String,
+    },
     /// Record system-wide accessibility events as JSON Lines (Windows)
     Trace {
         /// Output trace file
@@ -687,6 +699,52 @@ async fn main() {
                     std::process::exit(1);
                 }
                 println!("Wrote {:?}", dir.join(sr_corpus::parity::BASELINE_FILE));
+            }
+        }
+        Some(Commands::Act { name, action }) => {
+            #[cfg(windows)]
+            {
+                use sr_core::actions::ApplicationActions;
+                fn find<'a>(node: &'a AomNode, name: &str) -> Option<&'a AomNode> {
+                    if node.name.as_deref().map(str::trim) == Some(name)
+                        && sr_platform::actions::unique_id(node).is_some()
+                    {
+                        return Some(node);
+                    }
+                    node.children.iter().find_map(|c| find(c, name))
+                }
+                let page = match sr_platform::actions::capture_foreground_page() {
+                    Ok(page) => page,
+                    Err(e) => {
+                        eprintln!("No foreground page: {e}");
+                        std::process::exit(1);
+                    }
+                };
+                let Some(target) = find(&page, &name) else {
+                    eprintln!("No control named {name:?} with an IA2 uniqueID in the page");
+                    std::process::exit(1);
+                };
+                let actions = sr_platform::actions::ChromiumActions::start();
+                let requested = match action.as_str() {
+                    "focus" => actions.focus(target),
+                    "activate" => actions.activate(target),
+                    other => {
+                        eprintln!("--action must be focus or activate, not {other:?}");
+                        std::process::exit(2);
+                    }
+                };
+                std::thread::sleep(std::time::Duration::from_millis(500));
+                let focused = sr_platform::uia_snapshot::focused_element_summary();
+                println!(
+                    "{action} {name:?} ({:?}): requested={requested}; keyboard focus now: {focused}",
+                    target.role
+                );
+            }
+            #[cfg(not(windows))]
+            {
+                let _ = (name, action);
+                eprintln!("act is only available on Windows");
+                std::process::exit(1);
             }
         }
         Some(Commands::Trace {

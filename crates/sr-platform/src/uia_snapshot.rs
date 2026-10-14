@@ -339,6 +339,22 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> sr_core::AomNode {
 #[cfg(windows)]
 pub use capture::capture_foreground_document;
 
+/// The element UIA reports as having keyboard focus, as `"name" (control type N)`, for
+/// harness checks.
+#[cfg(windows)]
+pub fn focused_element_summary() -> String {
+    use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
+    // SAFETY: COM initialization; repeated initialization is tolerated.
+    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+    let Ok(uia) = capture::automation() else {
+        return "unknown (UIA unavailable)".to_owned();
+    };
+    capture::focus_chain(&uia)
+        .last()
+        .map(|n| format!("{:?} (control type {})", n.name, n.control_type))
+        .unwrap_or_else(|| "none".to_owned())
+}
+
 #[cfg(windows)]
 pub(crate) mod capture {
     use super::{SnapshotProvenance, UiaNode, UiaSnapshot, SNAPSHOT_FORMAT_VERSION};
