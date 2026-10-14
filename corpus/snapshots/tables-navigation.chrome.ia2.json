@@ -8,9 +8,9 @@
     "window_class": "Chrome_WidgetWin_1",
     "process_version": "154.0.8037.98",
     "fixture_sha256": "685ca0b777b5b0184d58c505d3161eb348ec6356d7f5b27ad25eddaccdc03c86",
-    "captured_at_unix_ms": 1791985544538,
+    "captured_at_unix_ms": 1791988546774,
     "node_count": 42,
-    "capture_ms": 268
+    "capture_ms": 274
   },
   "root": {
     "msaa_role": 15,
@@ -19,6 +19,7 @@
     "value": "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
     "msaa_states": 1048644,
     "ia2_states": 1024,
+    "unique_id": -71953,
     "attributes": {
       "explicit-name": "true",
       "name-from": "related-element",
@@ -43,6 +44,7 @@
         "name": "Quarterly Financial Summary",
         "msaa_states": 0,
         "ia2_states": 1024,
+        "unique_id": -71942,
         "attributes": {
           "display": "block",
           "level": "1",
@@ -69,6 +71,7 @@
             "name": "Quarterly Financial Summary",
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71969,
             "attributes": {
               "name-from": "contents"
             },
@@ -88,6 +91,7 @@
         "name": "Q3 Financial Summary Table",
         "msaa_states": 0,
         "ia2_states": 1024,
+        "unique_id": -71937,
         "attributes": {
           "display": "table",
           "explicit-name": "true",
@@ -124,6 +128,7 @@
             "ia2_role": 1026,
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71933,
             "attributes": {
               "display": "table-caption",
               "tag": "caption",
@@ -143,6 +148,7 @@
                 "name": "Q3 Financial Summary Table",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71971,
                 "attributes": {
                   "name-from": "contents"
                 },
@@ -161,6 +167,7 @@
             "ia2_role": 28,
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71924,
             "attributes": {
               "display": "table-row",
               "tag": "tr",
@@ -192,6 +199,7 @@
                 "name": "Quarter",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71982,
                 "attributes": {
                   "display": "table-cell",
                   "name-from": "contents",
@@ -213,6 +221,7 @@
                     "name": "Quarter",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71975,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -232,6 +241,7 @@
                 "name": "Revenue",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71974,
                 "attributes": {
                   "display": "table-cell",
                   "name-from": "contents",
@@ -253,6 +263,7 @@
                     "name": "Revenue",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71976,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -272,6 +283,7 @@
                 "name": "Expenses",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71973,
                 "attributes": {
                   "display": "table-cell",
                   "name-from": "contents",
@@ -293,6 +305,7 @@
                     "name": "Expenses",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71928,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -312,6 +325,7 @@
                 "name": "Profit",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71962,
                 "attributes": {
                   "display": "table-cell",
                   "name-from": "contents",
@@ -333,6 +347,7 @@
                     "name": "Profit",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71930,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -353,6 +368,7 @@
             "ia2_role": 28,
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71947,
             "attributes": {
               "display": "table-row",
               "tag": "tr",
@@ -384,6 +400,7 @@
                 "name": "Q1",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71948,
                 "attributes": {
                   "display": "table-cell",
                   "name-from": "contents",
@@ -405,6 +422,7 @@
                     "name": "Q1",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71927,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -424,6 +442,7 @@
                 "name": "$10,000",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71935,
                 "attributes": {
                   "display": "table-cell",
                   "name-from": "contents",
@@ -445,6 +464,7 @@
                     "name": "$10,000",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71938,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -464,6 +484,7 @@
                 "name": "$7,000",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71929,
                 "attributes": {
                   "display": "table-cell",
                   "name-from": "contents",
@@ -485,6 +506,7 @@
                     "name": "$7,000",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71939,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -504,6 +526,7 @@
                 "name": "$3\u0002�{.���00",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71932,
                 "attributes": {
                   "display": "table-cell",
                   "name-from": "contents",
@@ -525,6 +548,7 @@
                     "name": "$3\u0002�{.���00",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71949,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -545,6 +569,7 @@
             "ia2_role": 28,
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71920,
             "attributes": {
               "display": "table-row",
               "tag": "tr",
@@ -576,6 +601,7 @@
                 "name": "Q2",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71979,
                 "attributes": {
                   "display": "table-cell",
                   "name-from": "contents",
@@ -597,6 +623,7 @@
                     "name": "Q2",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71951,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -616,6 +643,7 @@
                 "name": "$14,000",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71980,
                 "attributes": {
                   "display": "table-cell",
                   "name-from": "contents",
@@ -637,6 +665,7 @@
                     "name": "$14,000",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71959,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -656,6 +685,7 @@
                 "name": "$8,500",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71972,
                 "attributes": {
                   "display": "table-cell",
                   "name-from": "contents",
@@ -677,6 +707,7 @@
                     "name": "$8,500",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71965,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -696,6 +727,7 @@
                 "name": "$5,500",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71964,
                 "attributes": {
                   "display": "table-cell",
                   "name-from": "contents",
@@ -717,6 +749,7 @@
                     "name": "$5,500",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71970,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -737,6 +770,7 @@
             "ia2_role": 28,
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71966,
             "attributes": {
               "display": "table-row",
               "tag": "tr",
@@ -768,6 +802,7 @@
                 "name": "Q3",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71960,
                 "attributes": {
                   "display": "table-cell",
                   "name-from": "contents",
@@ -789,6 +824,7 @@
                     "name": "Q3",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71978,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -808,6 +844,7 @@
                 "name": "$18,000",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71946,
                 "attributes": {
                   "display": "table-cell",
                   "name-from": "contents",
@@ -829,6 +866,7 @@
                     "name": "$18,000",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71981,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -848,6 +886,7 @@
                 "name": "$9,200",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71950,
                 "attributes": {
                   "display": "table-cell",
                   "name-from": "contents",
@@ -869,6 +908,7 @@
                     "name": "$9,200",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71925,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -888,6 +928,7 @@
                 "name": "$8,800",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71940,
                 "attributes": {
                   "display": "table-cell",
                   "name-from": "contents",
@@ -909,6 +950,7 @@
                     "name": "$8,800",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71926,
                     "attributes": {
                       "name-from": "contents"
                     },

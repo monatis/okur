@@ -8,9 +8,9 @@
     "window_class": "Chrome_WidgetWin_1",
     "process_version": "154.0.8037.98",
     "fixture_sha256": "4caaa7092df80f075b4fd5bfa8f3fbbdba558f90188e4f3711aec05dd9c71953",
-    "captured_at_unix_ms": 1791985548035,
+    "captured_at_unix_ms": 1791988550248,
     "node_count": 17,
-    "capture_ms": 163
+    "capture_ms": 145
   },
   "root": {
     "msaa_role": 15,
@@ -19,6 +19,7 @@
     "value": "file:///C:/Users/ailabs/corpus/fixtures/boundaries-dynamic.html",
     "msaa_states": 1048644,
     "ia2_states": 1024,
+    "unique_id": -72026,
     "attributes": {
       "explicit-name": "true",
       "name-from": "related-element",
@@ -67,6 +68,7 @@
         "name": "First Boundary Heading",
         "msaa_states": 0,
         "ia2_states": 1024,
+        "unique_id": -72024,
         "attributes": {
           "display": "block",
           "level": "1",
@@ -93,6 +95,7 @@
             "name": "First Boundary Heading",
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -72030,
             "attributes": {
               "name-from": "contents"
             },
@@ -111,6 +114,7 @@
         "ia2_role": 1054,
         "msaa_states": 0,
         "ia2_states": 1024,
+        "unique_id": -72005,
         "attributes": {
           "display": "block",
           "tag": "p",
@@ -130,6 +134,7 @@
             "name": "First paragraph content.",
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -72031,
             "attributes": {
               "name-from": "contents"
             },
@@ -149,6 +154,7 @@
         "name": "Second Boundary Heading",
         "msaa_states": 0,
         "ia2_states": 1024,
+        "unique_id": -72006,
         "attributes": {
           "display": "block",
           "level": "2",
@@ -175,6 +181,7 @@
             "name": "Second Boundary Heading",
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -72011,
             "attributes": {
               "name-from": "contents"
             },
@@ -193,6 +200,7 @@
         "ia2_role": 1054,
         "msaa_states": 0,
         "ia2_states": 1024,
+        "unique_id": -72007,
         "attributes": {
           "display": "block",
           "tag": "p",
@@ -212,6 +220,7 @@
             "name": "Final content paragraph on this page.",
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -72004,
             "attributes": {
               "name-from": "contents"
             },
@@ -231,6 +240,7 @@
         "name": "System Details",
         "msaa_states": 1049600,
         "ia2_states": 1024,
+        "unique_id": -72022,
         "attributes": {
           "display": "inline-block",
           "id": "btn-disclosure",
@@ -252,6 +262,7 @@
         "name": "Settings",
         "msaa_states": 0,
         "ia2_states": 1040,
+        "unique_id": -72028,
         "attributes": {
           "display": "block",
           "explicit-name": "true",
@@ -284,6 +295,7 @@
             "name": "General",
             "msaa_states": 3145730,
             "ia2_states": 1024,
+            "unique_id": -72029,
             "attributes": {
               "display": "inline-block",
               "id": "tab-1",
@@ -313,6 +325,7 @@
             "name": "Advanced",
             "msaa_states": 3145728,
             "ia2_states": 1024,
+            "unique_id": -72010,
             "attributes": {
               "display": "inline-block",
               "id": "tab-2",
@@ -344,6 +357,7 @@
         "name": "General",
         "msaa_states": 0,
         "ia2_states": 1024,
+        "unique_id": -72012,
         "attributes": {
           "display": "block",
           "explicit-name": "true",
@@ -366,6 +380,7 @@
             "ia2_role": 1054,
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -72018,
             "attributes": {
               "display": "block",
               "tag": "p",
@@ -385,6 +400,7 @@
                 "name": "General settings configuration content.",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -72003,
                 "attributes": {
                   "name-from": "contents"
                 },
@@ -406,6 +422,7 @@
         "name": "Footer Action",
         "msaa_states": 1048576,
         "ia2_states": 1024,
+        "unique_id": -72008,
         "attributes": {
           "display": "inline-block",
           "id": "btn-footer",

@@ -8,9 +8,9 @@
     "window_class": "Chrome_WidgetWin_1",
     "process_version": "154.0.8037.98",
     "fixture_sha256": "7a68ca85fbfbc6deab6e587dc60a7c85a913437047c97fa9a807d3bc9786cbe8",
-    "captured_at_unix_ms": 1791985533802,
+    "captured_at_unix_ms": 1791988536070,
     "node_count": 9,
-    "capture_ms": 93
+    "capture_ms": 100
   },
   "root": {
     "msaa_role": 15,
@@ -19,6 +19,7 @@
     "value": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
     "msaa_states": 1048644,
     "ia2_states": 1024,
+    "unique_id": -71754,
     "attributes": {
       "explicit-name": "true",
       "name-from": "related-element",
@@ -51,6 +52,7 @@
         "name": "The Accessibility Engine Specification",
         "msaa_states": 0,
         "ia2_states": 1024,
+        "unique_id": -71749,
         "attributes": {
           "display": "block",
           "level": "1",
@@ -77,6 +79,7 @@
             "name": "The Accessibility Engine Specification",
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71759,
             "attributes": {
               "name-from": "contents"
             },
@@ -95,6 +98,7 @@
         "ia2_role": 1054,
         "msaa_states": 0,
         "ia2_states": 1024,
+        "unique_id": -71748,
         "attributes": {
           "display": "block",
           "tag": "p",
@@ -114,6 +118,7 @@
             "name": "The screen reader engine parses the document object model into a clean virtual buffer.",
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71750,
             "attributes": {
               "name-from": "contents"
             },
@@ -132,6 +137,7 @@
         "ia2_role": 1054,
         "msaa_states": 0,
         "ia2_states": 1024,
+        "unique_id": -71755,
         "attributes": {
           "display": "block",
           "tag": "p",
@@ -151,6 +157,7 @@
             "name": "Engine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.",
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71757,
             "attributes": {
               "name-from": "contents"
             },
@@ -169,6 +176,7 @@
         "ia2_role": 1054,
         "msaa_states": 0,
         "ia2_states": 1024,
+        "unique_id": -71752,
         "attributes": {
           "display": "block",
           "tag": "p",
@@ -188,6 +196,7 @@
             "name": "Rust provides memory safety without garbage collection latency. This ensures predictable audio delivery.",
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71758,
             "attributes": {
               "name-from": "contents"
             },

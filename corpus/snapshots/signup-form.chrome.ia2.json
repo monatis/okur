@@ -8,9 +8,9 @@
     "window_class": "Chrome_WidgetWin_1",
     "process_version": "154.0.8037.98",
     "fixture_sha256": "141f98219e00ce80559e312fdf548a7b3b9f41087250648d09b6040c6433badf",
-    "captured_at_unix_ms": 1791985530372,
+    "captured_at_unix_ms": 1791988532652,
     "node_count": 46,
-    "capture_ms": 337
+    "capture_ms": 288
   },
   "root": {
     "msaa_role": 15,
@@ -19,6 +19,7 @@
     "value": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
     "msaa_states": 1048644,
     "ia2_states": 1024,
+    "unique_id": -71701,
     "attributes": {
       "explicit-name": "true",
       "name-from": "related-element",
@@ -38,6 +39,7 @@
         "ia2_role": 1069,
         "msaa_states": 0,
         "ia2_states": 1024,
+        "unique_id": -71648,
         "attributes": {
           "display": "block",
           "tag": "main",
@@ -66,6 +68,7 @@
             "name": "Create your account",
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71693,
             "attributes": {
               "display": "block",
               "level": "1",
@@ -92,6 +95,7 @@
                 "name": "Create your account",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71727,
                 "attributes": {
                   "name-from": "contents"
                 },
@@ -110,6 +114,7 @@
             "ia2_role": 1054,
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71686,
             "attributes": {
               "display": "block",
               "tag": "p",
@@ -129,6 +134,7 @@
                 "name": "Fields marked required must be filled in.",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71698,
                 "attributes": {
                   "name-from": "contents"
                 },
@@ -147,6 +153,7 @@
             "ia2_role": 1060,
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71704,
             "attributes": {
               "display": "block",
               "tag": "form",
@@ -198,6 +205,7 @@
                 "ia2_role": 1054,
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71675,
                 "attributes": {
                   "display": "block",
                   "tag": "p",
@@ -220,6 +228,7 @@
                     "ia2_role": 1049,
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71702,
                     "attributes": {
                       "display": "inline",
                       "tag": "label",
@@ -239,6 +248,7 @@
                         "name": "Full name",
                         "msaa_states": 0,
                         "ia2_states": 1024,
+                        "unique_id": -71695,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -258,6 +268,7 @@
                     "name": "Full name",
                     "msaa_states": 1048576,
                     "ia2_states": 15368,
+                    "unique_id": -71706,
                     "attributes": {
                       "display": "inline-block",
                       "explicit-name": "true",
@@ -277,6 +288,7 @@
                 "ia2_role": 1054,
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71725,
                 "attributes": {
                   "display": "block",
                   "tag": "p",
@@ -303,6 +315,7 @@
                     "ia2_role": 1049,
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71716,
                     "attributes": {
                       "display": "inline",
                       "tag": "label",
@@ -322,6 +335,7 @@
                         "name": "Email address",
                         "msaa_states": 0,
                         "ia2_states": 1024,
+                        "unique_id": -71684,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -343,6 +357,7 @@
                     "description": "We never share your email.",
                     "msaa_states": 1048576,
                     "ia2_states": 13320,
+                    "unique_id": -71718,
                     "attributes": {
                       "description-from": "aria-describedby",
                       "display": "inline-block",
@@ -368,6 +383,7 @@
                     "ia2_role": 1060,
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71655,
                     "attributes": {
                       "display": "inline",
                       "id": "email-hint",
@@ -388,6 +404,7 @@
                         "name": "We never share your email.",
                         "msaa_states": 0,
                         "ia2_states": 1024,
+                        "unique_id": -71653,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -408,6 +425,7 @@
                 "ia2_role": 1054,
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71657,
                 "attributes": {
                   "display": "block",
                   "tag": "p",
@@ -430,6 +448,7 @@
                     "ia2_role": 1049,
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71683,
                     "attributes": {
                       "display": "inline",
                       "tag": "label",
@@ -449,6 +468,7 @@
                         "name": "Password",
                         "msaa_states": 0,
                         "ia2_states": 1024,
+                        "unique_id": -71662,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -468,6 +488,7 @@
                     "name": "Password",
                     "msaa_states": 537919488,
                     "ia2_states": 15368,
+                    "unique_id": -71670,
                     "attributes": {
                       "display": "inline-block",
                       "explicit-name": "true",
@@ -488,6 +509,7 @@
                 "name": "Membership type",
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71708,
                 "attributes": {
                   "display": "block",
                   "explicit-name": "true",
@@ -521,6 +543,7 @@
                     "ia2_role": 1049,
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71691,
                     "attributes": {
                       "display": "block",
                       "tag": "legend",
@@ -540,6 +563,7 @@
                         "name": "Membership type",
                         "msaa_states": 0,
                         "ia2_states": 1024,
+                        "unique_id": -71715,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -559,6 +583,7 @@
                     "name": "Adult",
                     "msaa_states": 1048592,
                     "ia2_states": 263168,
+                    "unique_id": -71705,
                     "attributes": {
                       "checkable": "true",
                       "display": "inline-block",
@@ -583,6 +608,7 @@
                     "name": "Student",
                     "msaa_states": 1048576,
                     "ia2_states": 263168,
+                    "unique_id": -71714,
                     "attributes": {
                       "checkable": "true",
                       "display": "inline-block",
@@ -607,6 +633,7 @@
                     "name": "Senior",
                     "msaa_states": 1048576,
                     "ia2_states": 263168,
+                    "unique_id": -71654,
                     "attributes": {
                       "checkable": "true",
                       "display": "inline-block",
@@ -632,6 +659,7 @@
                 "ia2_role": 1054,
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71679,
                 "attributes": {
                   "display": "block",
                   "tag": "p",
@@ -654,6 +682,7 @@
                     "ia2_role": 1049,
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71674,
                     "attributes": {
                       "display": "inline",
                       "tag": "label",
@@ -673,6 +702,7 @@
                         "name": "Home branch",
                         "msaa_states": 0,
                         "ia2_states": 1024,
+                        "unique_id": -71668,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -693,6 +723,7 @@
                     "value": "Northside",
                     "msaa_states": 1074791424,
                     "ia2_states": 1024,
+                    "unique_id": -71688,
                     "attributes": {
                       "display": "inline-block",
                       "explicit-name": "true",
@@ -717,6 +748,7 @@
                 "ia2_role": 1054,
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71713,
                 "attributes": {
                   "display": "block",
                   "tag": "p",
@@ -739,6 +771,7 @@
                     "ia2_role": 1049,
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71721,
                     "attributes": {
                       "display": "inline",
                       "tag": "label",
@@ -758,6 +791,7 @@
                         "name": "Accessibility needs",
                         "msaa_states": 0,
                         "ia2_states": 1024,
+                        "unique_id": -71726,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -777,6 +811,7 @@
                     "name": "Accessibility needs",
                     "msaa_states": 1048576,
                     "ia2_states": 5640,
+                    "unique_id": -71723,
                     "attributes": {
                       "display": "inline-block",
                       "explicit-name": "true",
@@ -794,6 +829,7 @@
                 "ia2_role": 1054,
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71661,
                 "attributes": {
                   "display": "block",
                   "tag": "p",
@@ -813,6 +849,7 @@
                     "name": "Send me the monthly newsletter",
                     "msaa_states": 1048592,
                     "ia2_states": 263168,
+                    "unique_id": -71669,
                     "attributes": {
                       "checkable": "true",
                       "display": "inline-block",
@@ -831,6 +868,7 @@
                 "ia2_role": 1054,
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71682,
                 "attributes": {
                   "display": "block",
                   "tag": "p",
@@ -854,6 +892,7 @@
                     "name": "I agree to the terms of use",
                     "msaa_states": 1048576,
                     "ia2_states": 263168,
+                    "unique_id": -71689,
                     "attributes": {
                       "checkable": "true",
                       "display": "inline-block",
@@ -870,6 +909,7 @@
                     "ia2_role": 1049,
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71697,
                     "attributes": {
                       "display": "inline",
                       "tag": "label",
@@ -889,6 +929,7 @@
                         "name": "I agree to the ",
                         "msaa_states": 0,
                         "ia2_states": 1024,
+                        "unique_id": -71659,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -907,6 +948,7 @@
                         "value": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html#terms-text",
                         "msaa_states": 5242880,
                         "ia2_states": 1024,
+                        "unique_id": -71703,
                         "attributes": {
                           "display": "inline",
                           "name-from": "contents",
@@ -927,6 +969,7 @@
                             "name": "terms of use",
                             "msaa_states": 4194304,
                             "ia2_states": 1024,
+                            "unique_id": -71652,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -949,6 +992,7 @@
                 "ia2_role": 1054,
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71712,
                 "attributes": {
                   "display": "block",
                   "tag": "p",
@@ -972,6 +1016,7 @@
                     "name": "Save draft",
                     "msaa_states": 1,
                     "ia2_states": 1024,
+                    "unique_id": -71717,
                     "attributes": {
                       "display": "inline-block",
                       "name-from": "contents",
@@ -992,6 +1037,7 @@
                     "name": "Create account",
                     "msaa_states": 1048832,
                     "ia2_states": 1024,
+                    "unique_id": -71663,
                     "attributes": {
                       "display": "inline-block",
                       "name-from": "contents",

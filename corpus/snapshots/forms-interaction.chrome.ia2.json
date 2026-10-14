@@ -8,9 +8,9 @@
     "window_class": "Chrome_WidgetWin_1",
     "process_version": "154.0.8037.98",
     "fixture_sha256": "18fce31741084133ec7f31cd746e51f3cf00a36df7d5b92a1d5af35410748d5f",
-    "captured_at_unix_ms": 1791985540921,
+    "captured_at_unix_ms": 1791988543179,
     "node_count": 17,
-    "capture_ms": 138
+    "capture_ms": 140
   },
   "root": {
     "msaa_role": 15,
@@ -19,6 +19,7 @@
     "value": "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
     "msaa_states": 1048644,
     "ia2_states": 1024,
+    "unique_id": -71872,
     "attributes": {
       "explicit-name": "true",
       "name-from": "related-element",
@@ -43,6 +44,7 @@
         "name": "Account Registration Form",
         "msaa_states": 0,
         "ia2_states": 1024,
+        "unique_id": -71879,
         "attributes": {
           "display": "block",
           "level": "1",
@@ -69,6 +71,7 @@
             "name": "Account Registration Form",
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71896,
             "attributes": {
               "name-from": "contents"
             },
@@ -87,6 +90,7 @@
         "ia2_role": 1060,
         "msaa_states": 0,
         "ia2_states": 1024,
+        "unique_id": -71895,
         "attributes": {
           "display": "block",
           "id": "user-form",
@@ -119,6 +123,7 @@
             "ia2_role": 1060,
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71869,
             "attributes": {
               "display": "block",
               "tag": "div",
@@ -141,6 +146,7 @@
                 "ia2_role": 1049,
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71889,
                 "attributes": {
                   "display": "inline",
                   "tag": "label",
@@ -160,6 +166,7 @@
                     "name": "Full Name:",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71899,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -180,6 +187,7 @@
                 "value": "Jane Doe",
                 "msaa_states": 1048576,
                 "ia2_states": 13320,
+                "unique_id": -71890,
                 "attributes": {
                   "display": "inline-block",
                   "explicit-name": "true",
@@ -206,6 +214,7 @@
             "ia2_role": 1060,
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71875,
             "attributes": {
               "display": "block",
               "tag": "div",
@@ -228,6 +237,7 @@
                 "ia2_role": 1049,
                 "msaa_states": 0,
                 "ia2_states": 1024,
+                "unique_id": -71876,
                 "attributes": {
                   "display": "inline",
                   "tag": "label",
@@ -247,6 +257,7 @@
                     "name": "Email Address:",
                     "msaa_states": 0,
                     "ia2_states": 1024,
+                    "unique_id": -71882,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -267,6 +278,7 @@
                 "value": "jane@example.com",
                 "msaa_states": 1048576,
                 "ia2_states": 13320,
+                "unique_id": -71900,
                 "attributes": {
                   "display": "inline-block",
                   "explicit-name": "true",
@@ -293,6 +305,7 @@
             "ia2_role": 1060,
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71892,
             "attributes": {
               "display": "block",
               "tag": "div",
@@ -312,6 +325,7 @@
                 "name": "I accept terms and conditions",
                 "msaa_states": 1048576,
                 "ia2_states": 263168,
+                "unique_id": -71884,
                 "attributes": {
                   "checkable": "true",
                   "display": "inline-block",
@@ -330,6 +344,7 @@
             "ia2_role": 1060,
             "msaa_states": 0,
             "ia2_states": 1024,
+            "unique_id": -71878,
             "attributes": {
               "display": "block",
               "tag": "div",
@@ -353,6 +368,7 @@
                 "name": "Save Preferences",
                 "msaa_states": 1048576,
                 "ia2_states": 1024,
+                "unique_id": -71902,
                 "attributes": {
                   "display": "inline-block",
                   "id": "save-btn",
@@ -374,6 +390,7 @@
                 "name": "Submit Application",
                 "msaa_states": 1048832,
                 "ia2_states": 1024,
+                "unique_id": -71893,
                 "attributes": {
                   "display": "inline-block",
                   "id": "submit-btn",
