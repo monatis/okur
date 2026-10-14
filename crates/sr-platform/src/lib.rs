@@ -5,7 +5,7 @@ pub mod hook;
 pub mod tts;
 pub mod uia_snapshot;
 
-pub use audio::{AudioActivityReport, AudioEndpointMeter};
+pub use audio::{AudioActivityReport, AudioEndpointMeter, SilenceReport};
 
 pub use bridge::{PlatformBridge, PlatformError};
 pub use events::{

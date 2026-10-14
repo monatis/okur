@@ -16,57 +16,64 @@ pub struct AudioActivityReport {
     pub detected_audio: bool,
 }
 
-/// Programmatic audio endpoint meter querying the hardware soundcard / default playback device via WASAPI.
+/// Outcome of [`AudioEndpointMeter::wait_for_silence`].
+#[derive(Debug, Clone, PartialEq, serde::Serialize)]
+pub struct SilenceReport {
+    /// Silence was reached (or no audio started within the onset window) before the deadline.
+    pub settled: bool,
+    /// Any audio above the threshold was observed.
+    pub heard_audio: bool,
+    pub elapsed_ms: u128,
+}
+
+/// Peak meter on the default render endpoint (the whole system mix, not one process).
+#[cfg(windows)]
+struct PeakMeter(windows::Win32::Media::Audio::Endpoints::IAudioMeterInformation);
+
+#[cfg(windows)]
+impl PeakMeter {
+    fn open() -> Result<Self, PlatformError> {
+        use windows::Win32::Media::Audio::{
+            eConsole, eRender, IMMDeviceEnumerator, MMDeviceEnumerator,
+        };
+        use windows::Win32::System::Com::{
+            CoCreateInstance, CoInitializeEx, CLSCTX_ALL, COINIT_MULTITHREADED,
+        };
+        let audio_err =
+            |what: &str, e: windows::core::Error| PlatformError::AudioError(format!("{what}: {e}"));
+        // SAFETY: standard COM activation of the default render endpoint's meter; a repeated
+        // CoInitializeEx on the same thread returns S_FALSE, which is fine.
+        unsafe {
+            let _ = CoInitializeEx(None, COINIT_MULTITHREADED);
+            let enumerator: IMMDeviceEnumerator =
+                CoCreateInstance(&MMDeviceEnumerator, None, CLSCTX_ALL)
+                    .map_err(|e| audio_err("Failed to create MMDeviceEnumerator", e))?;
+            let device = enumerator
+                .GetDefaultAudioEndpoint(eRender, eConsole)
+                .map_err(|e| audio_err("Failed to get default audio endpoint", e))?;
+            let meter = device
+                .Activate(CLSCTX_ALL, None)
+                .map_err(|e| audio_err("Failed to activate IAudioMeterInformation", e))?;
+            Ok(Self(meter))
+        }
+    }
+
+    fn peak(&self) -> f32 {
+        // SAFETY: the meter interface stays valid for the lifetime of `self`.
+        unsafe { self.0.GetPeakValue() }.unwrap_or(0.0)
+    }
+}
+
+/// Programmatic audio endpoint meter querying the default playback device via WASAPI.
 pub struct AudioEndpointMeter;
 
 impl AudioEndpointMeter {
-    /// Queries the instantaneous audio peak amplitude (0.0 to 1.0) of the default audio output endpoint.
+    /// Queries the instantaneous peak amplitude (0.0 to 1.0) of the default output endpoint.
     pub fn get_peak_amplitude() -> Result<f32, PlatformError> {
         #[cfg(windows)]
         {
-            use windows::Win32::Media::Audio::Endpoints::IAudioMeterInformation;
-            use windows::Win32::Media::Audio::{
-                eConsole, eRender, IMMDeviceEnumerator, MMDeviceEnumerator,
-            };
-            use windows::Win32::System::Com::{
-                CoCreateInstance, CoInitializeEx, CLSCTX_ALL, COINIT_MULTITHREADED,
-            };
-
-            unsafe {
-                let _ = CoInitializeEx(None, COINIT_MULTITHREADED);
-                let enumerator: IMMDeviceEnumerator =
-                    CoCreateInstance(&MMDeviceEnumerator, None, CLSCTX_ALL).map_err(|e| {
-                        PlatformError::AudioError(format!(
-                            "Failed to create MMDeviceEnumerator: {}",
-                            e
-                        ))
-                    })?;
-
-                let device = enumerator
-                    .GetDefaultAudioEndpoint(eRender, eConsole)
-                    .map_err(|e| {
-                        PlatformError::AudioError(format!(
-                            "Failed to get default audio endpoint: {}",
-                            e
-                        ))
-                    })?;
-
-                let meter: IAudioMeterInformation =
-                    device.Activate(CLSCTX_ALL, None).map_err(|e| {
-                        PlatformError::AudioError(format!(
-                            "Failed to activate IAudioMeterInformation: {}",
-                            e
-                        ))
-                    })?;
-
-                let peak = meter.GetPeakValue().map_err(|e| {
-                    PlatformError::AudioError(format!("Failed to get peak audio value: {}", e))
-                })?;
-
-                Ok(peak)
-            }
+            Ok(PeakMeter::open()?.peak())
         }
-
         #[cfg(not(windows))]
         {
             Err(PlatformError::Unsupported(
@@ -75,8 +82,7 @@ impl AudioEndpointMeter {
         }
     }
 
-    /// Monitors the default audio output endpoint over a given duration and records audio activity.
-    /// Returns an `AudioActivityReport` proving whether audible sound played through the soundcard.
+    /// Samples the default output endpoint for `duration` and summarizes audio activity.
     pub fn monitor_activity(
         duration: Duration,
         sample_interval: Duration,
@@ -84,79 +90,82 @@ impl AudioEndpointMeter {
     ) -> Result<AudioActivityReport, PlatformError> {
         #[cfg(windows)]
         {
-            use windows::Win32::Media::Audio::Endpoints::IAudioMeterInformation;
-            use windows::Win32::Media::Audio::{
-                eConsole, eRender, IMMDeviceEnumerator, MMDeviceEnumerator,
-            };
-            use windows::Win32::System::Com::{
-                CoCreateInstance, CoInitializeEx, CLSCTX_ALL, COINIT_MULTITHREADED,
-            };
-
-            unsafe {
-                let _ = CoInitializeEx(None, COINIT_MULTITHREADED);
-                let enumerator: IMMDeviceEnumerator =
-                    CoCreateInstance(&MMDeviceEnumerator, None, CLSCTX_ALL).map_err(|e| {
-                        PlatformError::AudioError(format!(
-                            "Failed to create MMDeviceEnumerator: {}",
-                            e
-                        ))
-                    })?;
-
-                let device = enumerator
-                    .GetDefaultAudioEndpoint(eRender, eConsole)
-                    .map_err(|e| {
-                        PlatformError::AudioError(format!(
-                            "Failed to get default audio endpoint: {}",
-                            e
-                        ))
-                    })?;
-
-                let meter: IAudioMeterInformation =
-                    device.Activate(CLSCTX_ALL, None).map_err(|e| {
-                        PlatformError::AudioError(format!(
-                            "Failed to activate IAudioMeterInformation: {}",
-                            e
-                        ))
-                    })?;
-
-                let start = Instant::now();
-                let mut max_peak = 0.0f32;
-                let mut peak_sum = 0.0f32;
-                let mut active_samples = 0;
-                let mut total_samples = 0;
-
-                while start.elapsed() < duration {
-                    let peak = meter.GetPeakValue().unwrap_or(0.0);
-                    total_samples += 1;
-                    if peak > max_peak {
-                        max_peak = peak;
-                    }
-                    if peak > silence_threshold {
-                        active_samples += 1;
-                        peak_sum += peak;
-                    }
-                    std::thread::sleep(sample_interval);
+            let meter = PeakMeter::open()?;
+            let start = Instant::now();
+            let mut max_peak = 0.0f32;
+            let mut peak_sum = 0.0f32;
+            let mut active_samples = 0;
+            let mut total_samples = 0;
+            while start.elapsed() < duration {
+                let peak = meter.peak();
+                total_samples += 1;
+                max_peak = max_peak.max(peak);
+                if peak > silence_threshold {
+                    active_samples += 1;
+                    peak_sum += peak;
                 }
-
-                let average_peak = if active_samples > 0 {
+                std::thread::sleep(sample_interval);
+            }
+            Ok(AudioActivityReport {
+                max_peak,
+                average_peak: if active_samples > 0 {
                     peak_sum / (active_samples as f32)
                 } else {
                     0.0
-                };
-
-                Ok(AudioActivityReport {
-                    max_peak,
-                    average_peak,
-                    active_samples,
-                    total_samples,
-                    detected_audio: active_samples > 0,
-                })
-            }
+                },
+                active_samples,
+                total_samples,
+                detected_audio: active_samples > 0,
+            })
         }
-
         #[cfg(not(windows))]
         {
             let _ = (duration, sample_interval, silence_threshold);
+            Err(PlatformError::Unsupported(
+                "Audio endpoint metering only supported on Windows.".to_string(),
+            ))
+        }
+    }
+
+    /// Blocks until the output endpoint has been silent for `quiet` after audio was heard, or
+    /// until `onset` passes with no audio at all (an action that produced no speech), or until
+    /// `max` elapses (`settled: false`).
+    pub fn wait_for_silence(
+        onset: Duration,
+        quiet: Duration,
+        max: Duration,
+        silence_threshold: f32,
+    ) -> Result<SilenceReport, PlatformError> {
+        #[cfg(windows)]
+        {
+            let meter = PeakMeter::open()?;
+            let start = Instant::now();
+            let mut heard_audio = false;
+            let mut last_sound = start;
+            loop {
+                let now = Instant::now();
+                if meter.peak() > silence_threshold {
+                    heard_audio = true;
+                    last_sound = now;
+                }
+                let settled = if heard_audio {
+                    now.duration_since(last_sound) >= quiet
+                } else {
+                    now.duration_since(start) >= onset
+                };
+                if settled || now.duration_since(start) >= max {
+                    return Ok(SilenceReport {
+                        settled,
+                        heard_audio,
+                        elapsed_ms: start.elapsed().as_millis(),
+                    });
+                }
+                std::thread::sleep(Duration::from_millis(20));
+            }
+        }
+        #[cfg(not(windows))]
+        {
+            let _ = (onset, quiet, max, silence_threshold);
             Err(PlatformError::Unsupported(
                 "Audio endpoint metering only supported on Windows.".to_string(),
             ))

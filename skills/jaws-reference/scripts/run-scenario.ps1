@@ -2,11 +2,31 @@
 param(
     [Parameter(Mandatory=$true)]
     [string]$ScenarioFile,
-    [int]$Repetitions = 1,
+    [int]$Repetitions = 5,
     [string]$OutputPath,
     [string]$TargetProcess,
+    [string]$SrCli = (Join-Path $env:USERPROFILE "sr-harness\bin\sr-cli.exe"),
     [switch]$Quiet
 )
+
+<#
+Evidence capture (format_version 2). Runs on the reference machine only.
+
+Step types:
+  key          Readable key chord, sent as scan-coded SendInput with the extended-key flag
+               where the physical key has one: "Down", "H", "Shift+H", "Ctrl+Alt+Right",
+               "Insert+Down", "Insert+F7". Modifiers: Ctrl, Alt, Shift, Insert, Win.
+  jaws_script  JAWS script name dispatched through FSAPI RunScript.
+  keyboard     Legacy .NET SendKeys string (kept so scenarios 01-30 stay reproducible).
+
+Settling: after each action the default audio endpoint is metered (sr-cli wait-silence; JAWS is
+the only audio source on the reference machine) until it has been silent for quiet_ms (default
+500) after speech, or no speech started within 800 ms, or settle_max_ms (default 4000) elapses.
+The speech history is then copied exactly once; polling it is impossible because JAWS speaks and
+records a "Copy speech history to clipboard" confirmation on every copy. Every trial reloads the
+page, waits for the page-load speech to finish, applies the reset keys, waits again, then stops
+speech and clears the history, so no trial inherits speech from setup.
+#>
 
 $ErrorActionPreference = "Stop"
 $sw = [System.Diagnostics.Stopwatch]::StartNew()
@@ -20,254 +40,241 @@ $scenario = Get-Content $ScenarioFile -Raw | ConvertFrom-Json
 $scenarioId = if ($scenario.id) { $scenario.id } else { [System.IO.Path]::GetFileNameWithoutExtension($ScenarioFile) }
 $targetProc = if ($TargetProcess) { $TargetProcess } elseif ($scenario.target_app) { $scenario.target_app } else { "chrome" }
 
-$jfwExePath = "C:\Program Files\Freedom Scientific\JAWS\2025\jfw.exe"
-$jawsVer = "Unknown"
-if (Test-Path $jfwExePath) {
-    $vi = (Get-Item $jfwExePath).VersionInfo
-    $jawsVer = "$($vi.ProductVersion) (File: $($vi.FileVersion))"
-}
-
-if (-not ([System.Management.Automation.PSTypeName]"Win32Harness").Type) {
+if (-not ([System.Management.Automation.PSTypeName]"SrKeyInput").Type) {
     Add-Type @"
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
-public class Win32Harness {
+public static class SrKeyInput {
+    [StructLayout(LayoutKind.Sequential)] struct MOUSEINPUT { public int dx, dy; public uint mouseData, dwFlags, time; public IntPtr dwExtraInfo; }
+    [StructLayout(LayoutKind.Sequential)] struct KEYBDINPUT { public ushort wVk, wScan; public uint dwFlags, time; public IntPtr dwExtraInfo; }
+    [StructLayout(LayoutKind.Explicit)] struct UNION { [FieldOffset(0)] public MOUSEINPUT mi; [FieldOffset(0)] public KEYBDINPUT ki; }
+    [StructLayout(LayoutKind.Sequential)] struct INPUT { public uint type; public UNION u; }
+    [DllImport("user32.dll", SetLastError = true)] static extern uint SendInput(uint n, INPUT[] inputs, int size);
+    [DllImport("user32.dll")] static extern uint MapVirtualKey(uint code, uint mapType);
     [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hWnd);
     [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
     [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
-    [DllImport("user32.dll")] public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
-    [DllImport("user32.dll")] public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern int GetWindowText(IntPtr hWnd, StringBuilder s, int n);
+    const uint KEYEVENTF_EXTENDEDKEY = 0x1, KEYEVENTF_KEYUP = 0x2;
 
-    public static void SendKey(byte vk, byte scan) {
-        keybd_event(vk, scan, 0, 0);
-        System.Threading.Thread.Sleep(50);
-        keybd_event(vk, scan, 2, 0);
+    public static bool Key(ushort vk, bool extended, bool up) {
+        INPUT[] input = new INPUT[1];
+        input[0].type = 1;
+        input[0].u.ki.wVk = vk;
+        input[0].u.ki.wScan = (ushort)MapVirtualKey(vk, 0);
+        input[0].u.ki.dwFlags = (extended ? KEYEVENTF_EXTENDEDKEY : 0) | (up ? KEYEVENTF_KEYUP : 0);
+        return SendInput(1, input, Marshal.SizeOf(typeof(INPUT))) == 1;
     }
 }
-"@ -ErrorAction SilentlyContinue
+"@
+}
+Add-Type -AssemblyName System.Windows.Forms
+
+# name -> @(virtual key, extended)
+$KeyTable = @{
+    'down'=@(0x28,$true); 'up'=@(0x26,$true); 'left'=@(0x25,$true); 'right'=@(0x27,$true);
+    'home'=@(0x24,$true); 'end'=@(0x23,$true); 'pageup'=@(0x21,$true); 'pagedown'=@(0x22,$true);
+    'insert'=@(0x2D,$true); 'delete'=@(0x2E,$true); 'tab'=@(0x09,$false); 'enter'=@(0x0D,$false);
+    'escape'=@(0x1B,$false); 'esc'=@(0x1B,$false); 'space'=@(0x20,$false); 'backspace'=@(0x08,$false);
+    'semicolon'=@(0xBA,$false);
+    'ctrl'=@(0xA2,$false); 'alt'=@(0xA4,$false); 'shift'=@(0xA0,$false); 'win'=@(0x5B,$true)
 }
 
-function Focus-Target {
-    param([string]$procName)
-    $proc = Get-Process $procName -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero } | Select-Object -First 1
-    if ($proc) {
-        [void][Win32Harness]::ShowWindow($proc.MainWindowHandle, 9)
-        [void][Win32Harness]::SetForegroundWindow($proc.MainWindowHandle)
-        Start-Sleep -Milliseconds 250
-    }
+function Resolve-Key([string]$name) {
+    $n = $name.Trim().ToLowerInvariant()
+    if ($KeyTable.ContainsKey($n)) { return $KeyTable[$n] }
+    if ($n -match '^f([1-9]|1[0-2])$') { return @((0x6F + [int]$Matches[1]), $false) }
+    if ($n -match '^[a-z0-9]$') { return @([int][char]$n.ToUpperInvariant(), $false) }
+    throw "Unknown key name '$name'"
+}
+
+function Send-Chord([string]$chord) {
+    $parts = $chord.Split('+') | Where-Object { $_ -ne '' }
+    $keys = @($parts | ForEach-Object { ,(Resolve-Key $_) })
+    $ok = $true
+    foreach ($k in $keys) { $ok = $ok -and [SrKeyInput]::Key([uint16]$k[0], $k[1], $false); Start-Sleep -Milliseconds 30 }
+    [array]::Reverse($keys)
+    foreach ($k in $keys) { $ok = $ok -and [SrKeyInput]::Key([uint16]$k[0], $k[1], $true); Start-Sleep -Milliseconds 30 }
+    return $ok
 }
 
 function Get-ForegroundTitle {
-    $hwnd = [Win32Harness]::GetForegroundWindow()
-    $sb = New-Object System.Text.StringBuilder 256
-    [void][Win32Harness]::GetWindowText($hwnd, $sb, 256)
+    $sb = New-Object System.Text.StringBuilder 512
+    [void][SrKeyInput]::GetWindowText([SrKeyInput]::GetForegroundWindow(), $sb, 512)
     return $sb.ToString()
 }
 
-function Reset-NavigationState {
-    param(
-        [string]$procName,
-        [object]$resetConfig,
-        [bool]$reloadPage = $true
-    )
-    Focus-Target -procName $procName
-    [Win32Harness]::SendKey(0x1B, 0x01) # ESC
-    Start-Sleep -Milliseconds 150
-    [Win32Harness]::SendKey(0x1B, 0x01) # ESC
-    Start-Sleep -Milliseconds 150
+function Focus-Target([string]$procName) {
+    $proc = Get-Process $procName -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero } | Select-Object -First 1
+    if (-not $proc) { throw "No '$procName' window found." }
+    [void][SrKeyInput]::ShowWindow($proc.MainWindowHandle, 9)
+    [void][SrKeyInput]::SetForegroundWindow($proc.MainWindowHandle)
+    Start-Sleep -Milliseconds 250
+}
 
-    if ($reloadPage) {
-        [System.Windows.Forms.SendKeys]::SendWait("^{r}")
-        Start-Sleep -Milliseconds 600
-        [Win32Harness]::SendKey(0x1B, 0x01) # ESC
-        Start-Sleep -Milliseconds 150
-    }
+$jaws = New-Object -ComObject "FreedomSci.JawsApi"
 
-    if ($resetConfig -and $resetConfig.keystrokes) {
-        foreach ($k in $resetConfig.keystrokes) {
-            [System.Windows.Forms.SendKeys]::SendWait($k)
-            Start-Sleep -Milliseconds 150
-        }
-    } else {
-        [System.Windows.Forms.SendKeys]::SendWait("^{HOME}")
-        Start-Sleep -Milliseconds 300
+$CopyConfirmation = 'Copy speech history to clipboard'
+
+# Blocks until JAWS's audio output is silent (sr-cli wait-silence on the default endpoint;
+# JAWS is the only audio source on the reference machine). Returns the parsed SilenceReport.
+function Wait-Silence([int]$OnsetMs = 800, [int]$QuietMs = 500, [int]$MaxMs = 4000) {
+    $out = & $SrCli wait-silence --onset-ms $OnsetMs --quiet-ms $QuietMs --max-ms $MaxMs
+    if ($LASTEXITCODE -ne 0) { throw "sr-cli wait-silence failed: $out" }
+    return ($out | Select-Object -Last 1 | ConvertFrom-Json)
+}
+
+# Copies the speech history exactly once, then silences and clears JAWS's spoken copy
+# confirmation (it is queued as soon as the clipboard changes) so it cannot reach the next step.
+function Read-SpeechHistoryOnce {
+    $sentinel = "__SR_SENTINEL_$([guid]::NewGuid().ToString('N').Substring(0,8))__"
+    Set-Clipboard -Value $sentinel
+    [void]$jaws.RunScript("CopySpeechHistoryToClipboard")
+    $text = ""
+    for ($i = 0; $i -lt 40; $i++) {
+        Start-Sleep -Milliseconds 25
+        $clip = Get-Clipboard -Raw -ErrorAction SilentlyContinue
+        if ($null -ne $clip -and $clip -ne $sentinel) { $text = $clip; break }
     }
+    Start-Sleep -Milliseconds 150
+    $jaws.StopSpeech()
     [void]$jaws.RunScript("ClearSpeechHistory")
-    Start-Sleep -Milliseconds 150
+    Start-Sleep -Milliseconds 80
+    return $text
+}
+
+function Invoke-Step($type, [string]$command) {
+    switch ($type) {
+        'key'         { return (Send-Chord $command) }
+        'jaws_script' { return [bool]$jaws.RunScript($command) }
+        'keyboard'    { [System.Windows.Forms.SendKeys]::SendWait($command); return $true }
+        default       { throw "Unsupported step type '$type'" }
+    }
+}
+
+# --- Provenance -------------------------------------------------------------------------
+function Get-Sha256([string]$path) { (Get-FileHash -Algorithm SHA256 -Path $path).Hash.ToLowerInvariant() }
+$fixturePath = $null
+if ($scenario.fixture -match '^file:///(.+)$') { $fixturePath = [uri]::UnescapeDataString($Matches[1]) -replace '/', '\' }
+$chromeExe = @("C:\Program Files\Google\Chrome\Application\chrome.exe", "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe") | Where-Object { Test-Path $_ } | Select-Object -First 1
+$jfwExe = "C:\Program Files\Freedom Scientific\JAWS\2025\jfw.exe"
+$expectedTitle = $null
+if ($fixturePath -and (Test-Path $fixturePath)) {
+    $html = Get-Content -Raw $fixturePath
+    if ($html -match '(?is)<title>\s*(.*?)\s*</title>') { $expectedTitle = $Matches[1] }
 }
 
 $evidence = [ordered]@{
+    format_version = 2
     scenario_id = $scenarioId
-    scenario_version = if ($scenario.version) { $scenario.version } else { "1.1.0" }
+    scenario_version = if ($scenario.version) { $scenario.version } else { "1.0.0" }
     timestamp = (Get-Date -Format "o")
+    provenance = [ordered]@{
+        capture_script_sha256 = Get-Sha256 $PSCommandPath
+        scenario_sha256 = Get-Sha256 $ScenarioFile
+        fixture_sha256 = if ($fixturePath -and (Test-Path $fixturePath)) { Get-Sha256 $fixturePath } else { $null }
+        host = $env:COMPUTERNAME
+        os_build = (cmd /c ver | Out-String).Trim()
+        keyboard_layout = [System.Windows.Forms.InputLanguage]::CurrentInputLanguage.LayoutName
+        chrome_version = if ($chromeExe) { (Get-Item $chromeExe).VersionInfo.FileVersion } else { $null }
+        jaws_version = if (Test-Path $jfwExe) { (Get-Item $jfwExe).VersionInfo.ProductVersion } else { $null }
+    }
     environment = [ordered]@{
         os_version = [System.Environment]::OSVersion.VersionString
-        jaws_version = $jawsVer
+        jaws_version = if (Test-Path $jfwExe) { $vi = (Get-Item $jfwExe).VersionInfo; "$($vi.ProductVersion) (File: $($vi.FileVersion))" } else { "Unknown" }
         target_process = $targetProc
         interactive_session = ((Get-Process -Id $PID).SessionId -ne 0)
     }
     fixture = $scenario.fixture
     repetitions_requested = $Repetitions
     trials = @()
-    summary = [ordered]@{
-        total_trials = $Repetitions
-        successful_trials = 0
-        deterministic_match = $true
-        stability = "deterministic"
-        total_elapsed_ms = 0
-    }
 }
-
-$jaws = New-Object -ComObject "FreedomSci.JawsApi"
-Add-Type -AssemblyName System.Windows.Forms
-
-$trialTranscripts = @()
 
 if ($scenario.fixture) {
     [System.Diagnostics.Process]::Start($targetProc, $scenario.fixture) | Out-Null
-    Start-Sleep -Milliseconds 1500
+    Start-Sleep -Milliseconds 2000
 }
 
 for ($t = 1; $t -le $Repetitions; $t++) {
-    Reset-NavigationState -procName $targetProc -resetConfig $scenario.reset -reloadPage ($t -gt 1)
-    
     $trialResult = [ordered]@{
         trial_index = $t
         timestamp = (Get-Date -Format "o")
-        foreground_window_start = (Get-ForegroundTitle)
+        foreground_window_start = $null
+        setup_settled = $true
         step_results = @()
         trial_success = $true
     }
-    
-    $trialStepTexts = @()
-    
+
+    # Identical setup for every trial: reload, let page-load speech finish, reset, settle, clear.
+    Focus-Target $targetProc
+    [void](Send-Chord "Escape"); Start-Sleep -Milliseconds 100
+    [void](Send-Chord "Ctrl+R")
+    # JAWS starts Say All on page load by default; the reset keys interrupt it, so the load wait
+    # is bounded and only the post-reset silence decides whether setup settled.
+    $loadQuiet = Wait-Silence -OnsetMs 1500 -QuietMs 700 -MaxMs 3000
+    $resetKeys = if ($scenario.reset -and $scenario.reset.keys) { @($scenario.reset.keys) } else { @("Ctrl+Home") }
+    $resetQuiet = $loadQuiet
+    foreach ($rk in $resetKeys) {
+        [void](Send-Chord $rk)
+        $resetQuiet = Wait-Silence -OnsetMs 800 -QuietMs 500 -MaxMs 5000
+    }
+    $jaws.StopSpeech()
+    [void]$jaws.RunScript("ClearSpeechHistory")
+    Start-Sleep -Milliseconds 80
+    $trialResult.page_load_settled = $loadQuiet.settled
+    $trialResult.setup_settled = $resetQuiet.settled
+    if (-not $resetQuiet.settled) { $trialResult.trial_success = $false }
+    $trialResult.foreground_window_start = Get-ForegroundTitle
+    if ($expectedTitle -and -not $trialResult.foreground_window_start.StartsWith($expectedTitle)) {
+        $trialResult.trial_success = $false
+    }
+
     foreach ($step in $scenario.steps) {
-        $stepId = $step.id
-        $actionType = $step.type
-        $command = $step.command
-        $settleMs = if ($step.settle_ms) { [int]$step.settle_ms } else { 350 }
-        
-        [void]$jaws.RunScript("ClearSpeechHistory")
-        Start-Sleep -Milliseconds 100
-        
-        $sentinel = "__SENTINEL_$([guid]::NewGuid().ToString().Substring(0,8))__"
-        Set-Clipboard -Value $sentinel
+        $maxMs = if ($step.settle_max_ms) { [int]$step.settle_max_ms } else { 4000 }
+        $quietMs = if ($step.quiet_ms) { [int]$step.quiet_ms } else { 500 }
 
-        $dispatchOk = $false
-        if ($actionType -eq "jaws_script") {
-            $dispatchOk = [bool]$jaws.RunScript($command)
-        } elseif ($actionType -eq "keyboard") {
-            if ($command -eq "{SPACE}" -or $command -eq " ") {
-                [Win32Harness]::SendKey(0x20, 0x39)
-                $dispatchOk = $true
-            } elseif ($command -eq "{ENTER}") {
-                [Win32Harness]::SendKey(0x0D, 0x1C)
-                $dispatchOk = $true
-            } elseif ($command -eq "{ESC}") {
-                [Win32Harness]::SendKey(0x1B, 0x01)
-                $dispatchOk = $true
-            } elseif ($command -eq "{TAB}") {
-                [Win32Harness]::SendKey(0x09, 0x0F)
-                $dispatchOk = $true
-            } else {
-                [System.Windows.Forms.SendKeys]::SendWait($command)
-                $dispatchOk = $true
-            }
-        }
-        
-        Start-Sleep -Milliseconds $settleMs
-        [void]$jaws.RunScript("CopySpeechHistoryToClipboard")
-        Start-Sleep -Milliseconds 150
-        
-        $transcript = $null
-        for ($retry = 0; $retry -lt 3; $retry++) {
-            $clip = Get-Clipboard -Raw -ErrorAction SilentlyContinue
-            if ($clip -ne $null -and $clip -ne $sentinel) {
-                $transcript = $clip
-                break
-            }
-            Start-Sleep -Milliseconds 100
-        }
+        $dispatchOk = Invoke-Step $step.type $step.command
+        $observed = Wait-Silence -OnsetMs 800 -QuietMs $quietMs -MaxMs $maxMs
+        $transcript = Read-SpeechHistoryOnce
+        if ($transcript -match "unknown script call" -or $transcript -match "unhandled script call") { $dispatchOk = $false }
+        # A leaked copy confirmation means the history was contaminated: fail, never trim.
+        $contaminated = $transcript.Contains($CopyConfirmation)
 
-        # Quality Gate Check 1: Explicitly reject unknown/unhandled script calls
-        if ($transcript -match "unknown script call" -or $transcript -match "unhandled script call") {
-            $dispatchOk = $false
-        }
+        $stepSuccess = $dispatchOk -and $observed.settled -and -not $contaminated
+        if (-not $stepSuccess) { $trialResult.trial_success = $false }
 
-        # Quality Gate Check 2: Semantic assertions evaluation
-        $assertionPassed = $true
-        if ($step.assertions) {
-            if ($step.assertions.contains_speech) {
-                foreach ($phrase in $step.assertions.contains_speech) {
-                    if ($transcript -notmatch [regex]::Escape($phrase)) {
-                        $assertionPassed = $false
-                        break
-                    }
-                }
-            }
-        }
-        
-        $stepSuccess = ($dispatchOk -and ($transcript -ne $null) -and ($transcript -ne $sentinel) -and $assertionPassed)
-        if (-not $stepSuccess) {
-            $trialResult.trial_success = $false
-        }
-        
-        $trialStepTexts += $transcript
         $trialResult.step_results += [ordered]@{
-            step_id = $stepId
-            action = [ordered]@{
-                type = $actionType
-                command = $command
-            }
+            step_id = $step.id
+            action = [ordered]@{ type = $step.type; command = $step.command }
             observation = [ordered]@{
                 speech_raw = $transcript
                 dispatch_ok = $dispatchOk
+                settled = $observed.settled
+                heard_audio = $observed.heard_audio
+                settle_ms = $observed.elapsed_ms
+                contaminated = $contaminated
             }
-            assertions = $step.assertions
-            assertions_passed = $assertionPassed
             step_success = $stepSuccess
         }
     }
-
-    if ($trialResult.trial_success) {
-        $evidence.summary.successful_trials++
-    }
-    
     $evidence.trials += $trialResult
-    $trialTranscripts += ($trialStepTexts -join " ||| ")
 }
 
-if ($trialTranscripts.Count -gt 1) {
-    $first = $trialTranscripts[0]
-    for ($k = 1; $k -lt $trialTranscripts.Count; $k++) {
-        if ($trialTranscripts[$k] -ne $first) {
-            $evidence.summary.deterministic_match = $false
-            $evidence.summary.stability = "variable"
-            break
-        }
-    }
-}
+# Close the tab this run opened.
+Focus-Target $targetProc
+[void](Send-Chord "Ctrl+W")
 
 $sw.Stop()
-$evidence.summary.total_elapsed_ms = $sw.ElapsedMilliseconds
-
-$jsonEvidence = $evidence | ConvertTo-Json -Depth 6
+$evidence.total_elapsed_ms = $sw.ElapsedMilliseconds
+$jsonEvidence = $evidence | ConvertTo-Json -Depth 8
 
 if ($OutputPath) {
     $outDir = [System.IO.Path]::GetDirectoryName($OutputPath)
-    if ($outDir -and -not (Test-Path $outDir)) {
-        New-Item -ItemType Directory -Path $outDir -Force | Out-Null
-    }
-    [System.IO.File]::WriteAllText($OutputPath, $jsonEvidence, [System.Text.Encoding]::UTF8)
+    if ($outDir -and -not (Test-Path $outDir)) { New-Item -ItemType Directory -Path $outDir -Force | Out-Null }
+    [System.IO.File]::WriteAllText($OutputPath, $jsonEvidence, (New-Object System.Text.UTF8Encoding $false))
 }
+if (-not $Quiet) { Write-Output $jsonEvidence }
 
-if (-not $Quiet) {
-    Write-Output $jsonEvidence
-}
-
-if ($evidence.summary.successful_trials -eq $Repetitions) {
-    exit 0
-} else {
-    exit 1
-}
+$failed = @($evidence.trials | Where-Object { -not $_.trial_success }).Count
+if ($failed -eq 0) { exit 0 } else { exit 1 }

@@ -1,5 +1,6 @@
 pub mod evidence;
 pub mod invariants;
+pub mod keys;
 pub mod manifest;
 pub mod parity;
 pub mod runner;

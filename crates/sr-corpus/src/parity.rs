@@ -9,16 +9,13 @@
 use crate::scenario::Scenario;
 use serde::Serialize;
 use serde_json::Value;
-use sr_core::{MockSpeechOutput, ScreenReaderEngine, VirtualBuffer, VirtualCursor};
+use sr_core::{ScreenReaderEngine, VirtualBuffer, VirtualCursor};
 use sr_platform::uia_snapshot::{to_aom, UiaSnapshot};
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 
 pub const BASELINE_FILE: &str = "parity-baseline.json";
-
-/// Step types the capture tooling can actually dispatch to JAWS.
-const REPLAYABLE_STEP_TYPES: &[&str] = &["keyboard", "jaws_script"];
 
 /// The documented normalizer: unify line endings, collapse whitespace runs (including
 /// newlines) to one space, and trim. The `\u{1d}`/`\u{1e}` role markers are kept, because
@@ -117,6 +114,7 @@ fn run_scenario(corpus_dir: &Path, scenario: &Scenario) -> Result<Vec<StepParity
 
     let aom = to_aom(&snapshot.root);
     let mut cursor = VirtualCursor::new(VirtualBuffer::from_aom(&aom));
+    let spoken = RecordingSpeech::default();
     if let Some(reset) = &scenario.reset {
         for key in reset.keystrokes.iter().flatten() {
             match key.as_str() {
@@ -131,17 +129,31 @@ fn run_scenario(corpus_dir: &Path, scenario: &Scenario) -> Result<Vec<StepParity
             cursor.exit_forms_mode();
         }
     }
-    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(spoken.clone()));
+    for chord in scenario.reset.iter().flat_map(|r| r.keys.iter().flatten()) {
+        press(&mut engine, chord)?;
+    }
+    spoken.take();
 
     let mut steps = Vec::new();
     for step in &scenario.steps {
-        if !REPLAYABLE_STEP_TYPES.contains(&step.step_type.as_str()) {
-            return Err(format!(
-                "step {} has type {:?}, which the capture tooling cannot replay",
-                step.id, step.step_type
-            ));
-        }
-        let engine_speech = engine.execute_command(&step.command).unwrap_or_default();
+        let engine_speech = match step.step_type.as_str() {
+            "key" => {
+                press(&mut engine, &step.command)?;
+                spoken.take().join("\n")
+            }
+            "keyboard" | "jaws_script" => {
+                let speech = engine.execute_command(&step.command).unwrap_or_default();
+                spoken.take();
+                speech
+            }
+            other => {
+                return Err(format!(
+                    "step {} has type {other:?}, which the capture tooling cannot replay",
+                    step.id
+                ))
+            }
+        };
         let jaws = variants.get(&step.id).cloned().unwrap_or_default();
         if jaws.is_empty() {
             return Err(format!("no JAWS transcript recorded for step {}", step.id));
@@ -244,4 +256,36 @@ pub fn check_baseline(corpus_dir: &Path, report: &ParityReport) -> Result<(), St
 
 pub fn write_baseline(corpus_dir: &Path, report: &ParityReport) -> Result<(), String> {
     fs::write(corpus_dir.join(BASELINE_FILE), render_baseline(report)?).map_err(|e| e.to_string())
+}
+
+/// Speech sink that records every utterance, shared with the harness after the engine owns it.
+#[derive(Debug, Clone, Default)]
+struct RecordingSpeech(std::sync::Arc<std::sync::Mutex<Vec<String>>>);
+
+impl RecordingSpeech {
+    fn take(&self) -> Vec<String> {
+        self.0
+            .lock()
+            .map(|mut log| std::mem::take(&mut *log))
+            .unwrap_or_default()
+    }
+}
+
+impl sr_core::speech::SpeechOutput for RecordingSpeech {
+    fn speak(&mut self, text: &str, _interrupt: bool) {
+        if let Ok(mut log) = self.0.lock() {
+            log.push(text.to_owned());
+        }
+    }
+
+    fn stop(&mut self) {}
+}
+
+/// Presses and releases `chord` through the engine's live key-handling entry point.
+fn press(engine: &mut ScreenReaderEngine, chord: &str) -> Result<(), String> {
+    let mut event = crate::keys::parse_chord(chord)?;
+    let _ = engine.handle_key_event(&event);
+    event.is_down = false;
+    let _ = engine.handle_key_event(&event);
+    Ok(())
 }

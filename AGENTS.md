@@ -87,6 +87,14 @@ When developing or verifying screen reader behavior against canonical JAWS execu
 - **Differential Verification**:
   - Compare the output of the Rust engine with JAWS observations. Parity is defined as semantic equivalence in announcement tokens, state changes, and navigation boundaries.
 
+### Harness Engineering Is the Core Work
+
+Building evidence collection and verification tooling is the real engineering in this project. Improve `skills/jaws-reference/` as you learn, and add utility scripts, binaries, and `sr-cli` commands whenever they make evidence more trustworthy or debugging faster (capture, snapshots, focus/OS event tracing, debug logs). Harness tools today:
+- `sr-cli snapshot` / `capture-snapshot.ps1`: raw Chrome UIA tree of a fixture on `old-pc`.
+- `run-scenario.ps1` (format 2): scan-coded keys, audio-silence settling (`sr-cli wait-silence`), provenance.
+- `lab-push.ps1` / `lab-pull.ps1`: hash-verified deployment of binaries, scripts, fixtures and scenarios to `old-pc` via Dropbox.
+- `sr-cli parity`, `sr-cli invariants`, `sr-cli corpus-manifest`: generated, ratcheted verification results.
+
 ### Verification Integrity Rules (non-negotiable)
 
 These exist because an audit (2026-10-14) found parity claims that no tool had ever computed.
@@ -110,6 +118,7 @@ These exist because an audit (2026-10-14) found parity claims that no tool had e
   - Use `xa11y` as the primary cross-platform accessibility abstraction layer.
   - **Delegation Principle**: If an accessibility feature, query, pattern, or action is covered in `xa11y`, **delegate that work directly to `xa11y`**.
   - **OS-Level Self-Sufficiency**: If `xa11y` lacks an accessibility API, pattern, event hook, or complex text-range support required by the screen reader, **implement and extend it directly at the OS level** (e.g., Windows UI Automation `IUIAutomation`, IAccessible2, Win32 events, macOS `AXUIElement`, Linux AT-SPI2).
+  - **Vendoring is allowed**: if depending on the external `xa11y` crate slows development, copy it into this workspace as our own accessibility-API crate (alongside `sr-core`, `sr-platform`) and extend it there, rather than growing parallel hand-rolled API code.
 - **Learning from NVDA**:
   - Repository: [`https://github.com/nvaccess/nvda`](https://github.com/nvaccess/nvda)
   - Consult the open-source **NVDA** and **`xa11y`** codebases for accessibility API patterns, complex text-range normalization, line/word boundaries, formatting runs, and virtual buffer linearization.

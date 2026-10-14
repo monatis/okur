@@ -71,6 +71,20 @@ enum Commands {
         #[arg(long)]
         write_baseline: bool,
     },
+    /// Wait until the default audio output is silent; prints a JSON SilenceReport
+    WaitSilence {
+        /// Give up waiting for any audio to start after this long (no speech)
+        #[arg(long, default_value_t = 800)]
+        onset_ms: u64,
+        /// Silence required after the last audio
+        #[arg(long, default_value_t = 500)]
+        quiet_ms: u64,
+        /// Hard deadline
+        #[arg(long, default_value_t = 4000)]
+        max_ms: u64,
+        #[arg(long, default_value_t = 0.001)]
+        threshold: f32,
+    },
     /// Check universal virtual-buffer invariants on every captured snapshot
     Invariants {
         #[arg(short, long, default_value = "corpus")]
@@ -646,6 +660,26 @@ async fn main() {
                     std::process::exit(1);
                 }
                 println!("Wrote {:?}", dir.join(sr_corpus::parity::BASELINE_FILE));
+            }
+        }
+        Some(Commands::WaitSilence {
+            onset_ms,
+            quiet_ms,
+            max_ms,
+            threshold,
+        }) => {
+            use std::time::Duration;
+            match sr_platform::AudioEndpointMeter::wait_for_silence(
+                Duration::from_millis(onset_ms),
+                Duration::from_millis(quiet_ms),
+                Duration::from_millis(max_ms),
+                threshold,
+            ) {
+                Ok(report) => println!("{}", serde_json::to_string(&report).unwrap_or_default()),
+                Err(e) => {
+                    eprintln!("{e}");
+                    std::process::exit(1);
+                }
             }
         }
         Some(Commands::Invariants {

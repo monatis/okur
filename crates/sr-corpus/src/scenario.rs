@@ -18,8 +18,12 @@ pub struct Scenario {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ScenarioReset {
+    /// Legacy SendKeys strings (scenarios 01-30).
     #[serde(default)]
     pub keystrokes: Option<Vec<String>>,
+    /// Key chords in the `key` step syntax, e.g. `["Ctrl+Home"]`.
+    #[serde(default)]
+    pub keys: Option<Vec<String>>,
     #[serde(default)]
     pub exit_forms_mode: Option<bool>,
 }

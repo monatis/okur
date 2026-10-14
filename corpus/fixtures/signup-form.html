@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Your Account - Riverside Library</title>
+</head>
+<body>
+  <main>
+    <h1>Create your account</h1>
+    <p>Fields marked required must be filled in.</p>
+    <form action="#" onsubmit="return false">
+      <p>
+        <label for="full-name">Full name</label>
+        <input type="text" id="full-name" name="full-name" required>
+      </p>
+      <p>
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" value="sam@example.com" aria-describedby="email-hint">
+        <span id="email-hint">We never share your email.</span>
+      </p>
+      <p>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+      </p>
+      <fieldset>
+        <legend>Membership type</legend>
+        <input type="radio" id="m-adult" name="membership" value="adult" checked>
+        <label for="m-adult">Adult</label>
+        <input type="radio" id="m-student" name="membership" value="student">
+        <label for="m-student">Student</label>
+        <input type="radio" id="m-senior" name="membership" value="senior">
+        <label for="m-senior">Senior</label>
+      </fieldset>
+      <p>
+        <label for="branch">Home branch</label>
+        <select id="branch" name="branch">
+          <option>Central</option>
+          <option selected>Northside</option>
+          <option>Eastgate</option>
+        </select>
+      </p>
+      <p>
+        <label for="notes">Accessibility needs</label>
+        <textarea id="notes" name="notes" rows="3"></textarea>
+      </p>
+      <p>
+        <input type="checkbox" id="newsletter" name="newsletter" checked>
+        <label for="newsletter">Send me the monthly newsletter</label>
+      </p>
+      <p>
+        <input type="checkbox" id="terms" name="terms">
+        <label for="terms">I agree to the <a href="#terms-text">terms of use</a></label>
+      </p>
+      <p>
+        <button type="button" disabled>Save draft</button>
+        <button type="submit">Create account</button>
+      </p>
+    </form>
+  </main>
+</body>
+</html>
