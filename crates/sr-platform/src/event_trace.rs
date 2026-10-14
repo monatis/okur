@@ -844,6 +844,32 @@ mod capture {
         }
     }
 
+    /// Records the focus as it is now, as a focus event on the foreground thread's focused
+    /// window (the foreground window when it has none).
+    fn record_current_focus() {
+        use windows::Win32::UI::WindowsAndMessaging::{
+            GetForegroundWindow, GetGUIThreadInfo, GetWindowThreadProcessId, GUITHREADINFO,
+        };
+        const OBJID_CLIENT: i32 = -4;
+        const EVENT_OBJECT_FOCUS: u32 = 0x8005;
+        // SAFETY: plain Win32 queries; the info struct is sized as the call requires.
+        let focused = unsafe {
+            let foreground = GetForegroundWindow();
+            let thread = GetWindowThreadProcessId(foreground, None);
+            let mut info = GUITHREADINFO {
+                cbSize: u32::try_from(std::mem::size_of::<GUITHREADINFO>()).unwrap_or(0),
+                ..Default::default()
+            };
+            match GetGUIThreadInfo(thread, &mut info) {
+                Ok(()) if !info.hwndFocus.is_invalid() => info.hwndFocus,
+                _ => foreground,
+            }
+        };
+        if !focused.is_invalid() {
+            record("focus", EVENT_OBJECT_FOCUS, focused, OBJID_CLIENT, 0);
+        }
+    }
+
     /// Records the focus UIA reports, on the tracer thread.
     fn record_uia_focus() {
         use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
@@ -1040,6 +1066,8 @@ mod capture {
                 .inspect_err(|e| tracing::warn!("UIA focus handler not added: {e}"))
                 .is_ok()
         });
+        // Where focus is already, as JAWS reads it when it starts: no event will report it.
+        record_current_focus();
 
         let mut msg = MSG::default();
         while keep_running() {

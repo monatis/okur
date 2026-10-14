@@ -568,21 +568,19 @@ async fn main() {
                         std::process::exit(1);
                     }
                 }
+            } else if cfg!(windows) {
+                // Live, the event listener starts with the focus as it is (a page is loaded
+                // when that focus is in one), as any later focus change.
+                let empty_doc = AomNode::new(0, Role::Document);
+                (VirtualBuffer::from_aom(&empty_doc), false)
             } else {
-                // The foreground browser page through IA2 (the pipeline parity verifies),
-                // else any document xa11y finds.
-                #[cfg(windows)]
-                let page = sr_platform::actions::capture_foreground_page()
-                    .or_else(|_| PlatformBridge::new().get_active_document(None));
-                #[cfg(not(windows))]
-                let page = PlatformBridge::new().get_active_document(None);
-                match page {
+                match PlatformBridge::new().get_active_document(None) {
                     Ok(aom) => {
                         println!("Attached to live active foreground document via OS accessibility APIs.");
                         (VirtualBuffer::from_aom(&aom), true)
                     }
                     Err(_) => {
-                        println!("Operating in live native Windows navigation mode.");
+                        println!("Operating in live native navigation mode.");
                         let empty_doc = AomNode::new(0, Role::Document);
                         (VirtualBuffer::from_aom(&empty_doc), false)
                     }
