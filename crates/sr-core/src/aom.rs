@@ -5,10 +5,14 @@ use std::collections::HashMap;
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Role {
     Document,
-    Heading { level: u32 },
+    Heading {
+        level: u32,
+    },
     Paragraph,
     Text,
-    Link { href: Option<String> },
+    Link {
+        href: Option<String>,
+    },
     Button,
     CheckBox,
     Edit,
@@ -18,7 +22,9 @@ pub enum Role {
     TabList,
     Tab,
     TabPanel,
-    Landmark { landmark_type: String },
+    Landmark {
+        landmark_type: String,
+    },
     List,
     ListItem,
     Dialog,
@@ -31,6 +37,10 @@ pub enum Role {
     IFrame,
     Math,
     Window,
+    /// Structural container with no role of its own (UIA Group without landmark/dialog semantics).
+    Group,
+    RadioButton,
+    Image,
     Generic,
 }
 

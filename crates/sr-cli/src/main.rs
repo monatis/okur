@@ -58,6 +58,46 @@ enum Commands {
         #[arg(long, default_value = "no-speech")]
         tts: String,
     },
+    /// Compare engine speech with recorded JAWS speech for every genuine corpus scenario
+    Parity {
+        #[arg(short, long, default_value = "corpus")]
+        corpus_dir: String,
+
+        /// Print every step, not only mismatches
+        #[arg(long)]
+        all: bool,
+
+        /// Regenerate corpus/parity-baseline.json from the current results
+        #[arg(long)]
+        write_baseline: bool,
+    },
+    /// Check universal virtual-buffer invariants on every captured snapshot
+    Invariants {
+        #[arg(short, long, default_value = "corpus")]
+        corpus_dir: String,
+
+        /// Regenerate corpus/invariants-baseline.json from the current results
+        #[arg(long)]
+        write_baseline: bool,
+    },
+    /// Capture the foreground window's document as a raw UIA snapshot (Windows)
+    Snapshot {
+        /// Output JSON file
+        #[arg(long)]
+        out: String,
+
+        /// Fixture file the page was loaded from; its SHA-256 is recorded in provenance
+        #[arg(long)]
+        fixture: Option<String>,
+
+        /// Version of the captured application (e.g. Chrome's file version)
+        #[arg(long)]
+        process_version: Option<String>,
+
+        /// Wait before capturing, to let the page settle (milliseconds)
+        #[arg(long, default_value_t = 0)]
+        delay_ms: u64,
+    },
     /// Check (default) or regenerate the generated corpus manifest
     CorpusManifest {
         #[arg(short, long, default_value = "corpus")]
@@ -145,6 +185,32 @@ fn load_aom_from_path(path: &Path) -> Result<AomNode, Box<dyn std::error::Error>
     let clean = content.trim_start_matches('\u{feff}');
     let aom: AomNode = serde_json::from_str(clean)?;
     Ok(aom)
+}
+
+#[cfg(windows)]
+fn capture_snapshot(
+    out: &str,
+    fixture_sha256: Option<String>,
+    process_version: Option<String>,
+) -> Result<(), String> {
+    let snapshot =
+        sr_platform::uia_snapshot::capture_foreground_document(fixture_sha256, process_version)
+            .map_err(|e| e.to_string())?;
+    let json = serde_json::to_string_pretty(&snapshot).map_err(|e| e.to_string())?;
+    fs::write(out, json + "\n").map_err(|e| format!("{out:?}: {e}"))?;
+    println!(
+        "Captured {} nodes from {:?} in {} ms -> {}",
+        snapshot.provenance.node_count,
+        snapshot.provenance.window_title,
+        snapshot.provenance.capture_ms,
+        out
+    );
+    Ok(())
+}
+
+#[cfg(not(windows))]
+fn capture_snapshot(_: &str, _: Option<String>, _: Option<String>) -> Result<(), String> {
+    Err("UIA snapshots are only available on Windows".to_owned())
 }
 
 #[tokio::main]
@@ -542,6 +608,92 @@ async fn main() {
                     eprintln!("Failed to query audio endpoint: {}", e);
                     std::process::exit(1);
                 }
+            }
+        }
+        Some(Commands::Parity {
+            corpus_dir,
+            all,
+            write_baseline,
+        }) => {
+            let dir = Path::new(&corpus_dir);
+            let report = sr_corpus::parity::run(dir);
+            for step in report.steps.iter().filter(|s| all || !s.matched) {
+                println!(
+                    "[{}] {}  ({})",
+                    if step.matched { "MATCH" } else { "DIFF " },
+                    step.key,
+                    step.command
+                );
+                println!("    ours: {:?}", sr_corpus::parity::normalize(&step.engine));
+                if !step.matched {
+                    for v in &step.jaws_variants {
+                        println!("    jaws: {:?}", sr_corpus::parity::normalize(v));
+                    }
+                }
+            }
+            for e in &report.errors {
+                println!("[ERROR] {e}");
+            }
+            println!(
+                "JAWS parity: {}/{} steps match exactly ({} scenarios could not run)",
+                report.matched(),
+                report.steps.len(),
+                report.errors.len()
+            );
+            if write_baseline {
+                if let Err(e) = sr_corpus::parity::write_baseline(dir, &report) {
+                    eprintln!("Failed to write baseline: {e}");
+                    std::process::exit(1);
+                }
+                println!("Wrote {:?}", dir.join(sr_corpus::parity::BASELINE_FILE));
+            }
+        }
+        Some(Commands::Invariants {
+            corpus_dir,
+            write_baseline,
+        }) => {
+            let dir = Path::new(&corpus_dir);
+            let results = sr_corpus::invariants::run_all(dir).unwrap_or_else(|e| {
+                eprintln!("{e}");
+                std::process::exit(1);
+            });
+            let mut total = 0;
+            for (snapshot, violations) in &results {
+                println!("{snapshot}: {} violation(s)", violations.len());
+                for v in violations {
+                    println!("    {v}");
+                }
+                total += violations.len();
+            }
+            println!("Buffer invariants: {total} violation(s)");
+            if write_baseline {
+                if let Err(e) = sr_corpus::invariants::write_baseline(dir, &results) {
+                    eprintln!("Failed to write baseline: {e}");
+                    std::process::exit(1);
+                }
+                println!("Wrote {:?}", dir.join(sr_corpus::invariants::BASELINE_FILE));
+            }
+        }
+        Some(Commands::Snapshot {
+            out,
+            fixture,
+            process_version,
+            delay_ms,
+        }) => {
+            std::thread::sleep(std::time::Duration::from_millis(delay_ms));
+            let fixture_sha256 = match fixture {
+                Some(path) => match fs::read(&path) {
+                    Ok(bytes) => Some(sr_corpus::manifest::sha256_hex(&bytes)),
+                    Err(e) => {
+                        eprintln!("Failed to read fixture {path:?}: {e}");
+                        std::process::exit(1);
+                    }
+                },
+                None => None,
+            };
+            if let Err(e) = capture_snapshot(&out, fixture_sha256, process_version) {
+                eprintln!("Snapshot failed: {e}");
+                std::process::exit(1);
             }
         }
         Some(Commands::CorpusManifest { corpus_dir, write }) => {

@@ -122,22 +122,30 @@ try {
 }
 
 # -----------------------------------------------------------------------------
-# Check 5: Evidence separation. Reference evidence is produced only by the capture
-# tooling and must never be added or modified in the same commit as engine code,
-# so an implementation can never be "verified" by evidence written alongside it.
-# Renames (e.g. quarantine moves) are allowed.
+# Check 5: Reference-data separation. Evidence and UIA snapshots are produced only by the
+# capture tooling on the reference machine and must never be added or modified in the same
+# commit as engine code, so an implementation can never be "verified" by reference data
+# written alongside it. Renames (e.g. quarantine moves) are allowed.
+# Examines what the commit will contain: the index, plus tracked changes for `commit -a`.
 # -----------------------------------------------------------------------------
 Push-Location $workspaceRoot
 try {
-    $changes = @(& git diff HEAD --name-status -M 2>$null) + @(& git ls-files --others --exclude-standard 2>$null | ForEach-Object { "A`t$_" })
-    $evidenceEdits = @($changes | Where-Object { $_ -match '^[AM]\s+corpus/(unverified/)?evidence/' })
+    $changes = @(& git diff --cached --name-status -M 2>$null)
+    # `commit -a` and same-command `git add ... && git commit` stage after this hook runs,
+    # so conservatively include unstaged and untracked changes in those cases.
+    if ($cmdLine -match '\scommit\b[^\r\n;|&]*\s(-[a-zA-Z]*a[a-zA-Z]*|--all)\b' -or $cmdLine -match '\bgit\s+add\b') {
+        $changes += @(& git diff --name-status -M 2>$null)
+        $changes += @(& git ls-files --others --exclude-standard 2>$null | ForEach-Object { "A`t$_" })
+    }
+    $referenceEdits = @($changes | Where-Object { $_ -match '^[AM]\s+corpus/(unverified/)?(evidence|snapshots)/' })
     $codeEdits = @($changes | Where-Object { $_ -match '^[AMD]\s+crates/' })
-    if ($evidenceEdits.Count -gt 0 -and $codeEdits.Count -gt 0) {
-        $failureReasons += "[Evidence Separation Gate] Evidence files are added/modified together with crates/ changes. Commit recorded evidence separately from engine code:`n" + (($evidenceEdits | Select-Object -First 10) -join "`n")
+    if ($referenceEdits.Count -gt 0 -and $codeEdits.Count -gt 0) {
+        $failureReasons += "[Reference Data Separation Gate] Evidence/snapshot files are added or modified in the same commit as crates/ changes. Commit captured reference data separately from engine code:`n" + (($referenceEdits | Select-Object -First 10) -join "`n")
     }
 } finally {
     Pop-Location
 }
+
 
 
 # -----------------------------------------------------------------------------

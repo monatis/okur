@@ -1,0 +1,247 @@
+//! Differential parity against recorded JAWS speech.
+//!
+//! For every scenario step with genuine evidence, the engine is driven with the same
+//! command JAWS received, over the UIA snapshot Chrome produced for the same fixture on the
+//! reference machine, and its speech is compared with every distinct transcript JAWS produced
+//! across trials. The per-step outcome is ratcheted in `corpus/parity-baseline.json`, a
+//! generated file: `cargo test` fails on any regression and whenever the baseline is stale.
+
+use crate::scenario::Scenario;
+use serde::Serialize;
+use serde_json::Value;
+use sr_core::{MockSpeechOutput, ScreenReaderEngine, VirtualBuffer, VirtualCursor};
+use sr_platform::uia_snapshot::{to_aom, UiaSnapshot};
+use std::collections::BTreeMap;
+use std::fs;
+use std::path::{Path, PathBuf};
+
+pub const BASELINE_FILE: &str = "parity-baseline.json";
+
+/// Step types the capture tooling can actually dispatch to JAWS.
+const REPLAYABLE_STEP_TYPES: &[&str] = &["keyboard", "jaws_script"];
+
+/// The documented normalizer: unify line endings, collapse whitespace runs (including
+/// newlines) to one space, and trim. The `\u{1d}`/`\u{1e}` role markers are kept, because
+/// they encode JAWS speech structure.
+pub fn normalize(speech: &str) -> String {
+    speech.split_whitespace().collect::<Vec<_>>().join(" ")
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct StepParity {
+    /// `<scenario_id>/<step_id>`.
+    pub key: String,
+    pub command: String,
+    pub engine: String,
+    /// Distinct transcripts JAWS produced for this step across successful trials.
+    pub jaws_variants: Vec<String>,
+    pub matched: bool,
+}
+
+#[derive(Debug, Default)]
+pub struct ParityReport {
+    pub steps: Vec<StepParity>,
+    /// Scenarios that could not be evaluated, with the reason. These count as failures.
+    pub errors: Vec<String>,
+}
+
+impl ParityReport {
+    pub fn matched(&self) -> usize {
+        self.steps.iter().filter(|s| s.matched).count()
+    }
+}
+
+fn read_json(path: &Path) -> Result<Value, String> {
+    let text = fs::read_to_string(path).map_err(|e| format!("{path:?}: {e}"))?;
+    serde_json::from_str(text.trim_start_matches('\u{feff}')).map_err(|e| format!("{path:?}: {e}"))
+}
+
+/// Distinct raw transcripts per step id, in first-seen order, from successful trials only.
+fn jaws_variants(evidence: &Value) -> BTreeMap<String, Vec<String>> {
+    let mut variants: BTreeMap<String, Vec<String>> = BTreeMap::new();
+    let trials = evidence
+        .get("trials")
+        .and_then(Value::as_array)
+        .cloned()
+        .unwrap_or_default();
+    for trial in trials
+        .iter()
+        .filter(|t| t.get("trial_success").and_then(Value::as_bool) == Some(true))
+    {
+        for step in trial
+            .get("step_results")
+            .and_then(Value::as_array)
+            .into_iter()
+            .flatten()
+        {
+            let (Some(id), Some(speech)) = (
+                step.get("step_id").and_then(Value::as_str),
+                step.pointer("/observation/speech_raw")
+                    .and_then(Value::as_str),
+            ) else {
+                continue;
+            };
+            let entry = variants.entry(id.to_owned()).or_default();
+            if !entry.iter().any(|v| v == speech) {
+                entry.push(speech.to_owned());
+            }
+        }
+    }
+    variants
+}
+
+fn snapshot_path(corpus_dir: &Path, scenario: &Scenario) -> PathBuf {
+    let fixture = scenario.fixture.rsplit('/').next().unwrap_or_default();
+    let stem = fixture.strip_suffix(".html").unwrap_or(fixture);
+    corpus_dir
+        .join("snapshots")
+        .join(format!("{stem}.chrome.uia.json"))
+}
+
+fn run_scenario(corpus_dir: &Path, scenario: &Scenario) -> Result<Vec<StepParity>, String> {
+    let evidence_path = corpus_dir
+        .join("evidence")
+        .join(format!("{}-evidence.json", scenario.id));
+    let variants = jaws_variants(&read_json(&evidence_path)?);
+
+    let snapshot = UiaSnapshot::load(snapshot_path(corpus_dir, scenario))?;
+    let fixture = scenario.fixture.rsplit('/').next().unwrap_or_default();
+    let fixture_bytes =
+        fs::read(corpus_dir.join("fixtures").join(fixture)).map_err(|e| format!("{e}"))?;
+    let fixture_hash = crate::manifest::sha256_hex(&fixture_bytes);
+    if snapshot.provenance.fixture_sha256.as_deref() != Some(fixture_hash.as_str()) {
+        return Err(format!(
+            "snapshot for {fixture} was not captured from the current fixture bytes"
+        ));
+    }
+
+    let aom = to_aom(&snapshot.root);
+    let mut cursor = VirtualCursor::new(VirtualBuffer::from_aom(&aom));
+    if let Some(reset) = &scenario.reset {
+        for key in reset.keystrokes.iter().flatten() {
+            match key.as_str() {
+                "^{HOME}" => {
+                    // Ctrl+Home is silent setup; its announcement is not part of any step.
+                    let _ = cursor.move_to_start();
+                }
+                other => return Err(format!("unsupported reset keystroke {other:?}")),
+            }
+        }
+        if reset.exit_forms_mode == Some(true) {
+            cursor.exit_forms_mode();
+        }
+    }
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+
+    let mut steps = Vec::new();
+    for step in &scenario.steps {
+        if !REPLAYABLE_STEP_TYPES.contains(&step.step_type.as_str()) {
+            return Err(format!(
+                "step {} has type {:?}, which the capture tooling cannot replay",
+                step.id, step.step_type
+            ));
+        }
+        let engine_speech = engine.execute_command(&step.command).unwrap_or_default();
+        let jaws = variants.get(&step.id).cloned().unwrap_or_default();
+        if jaws.is_empty() {
+            return Err(format!("no JAWS transcript recorded for step {}", step.id));
+        }
+        let normalized = normalize(&engine_speech);
+        let matched = jaws.iter().any(|v| normalize(v) == normalized);
+        steps.push(StepParity {
+            key: format!("{}/{}", scenario.id, step.id),
+            command: step.command.clone(),
+            engine: engine_speech,
+            jaws_variants: jaws,
+            matched,
+        });
+    }
+    Ok(steps)
+}
+
+/// Runs every scenario in `corpus_dir/scenarios` against its evidence and snapshot.
+pub fn run(corpus_dir: &Path) -> ParityReport {
+    let mut report = ParityReport::default();
+    let mut files: Vec<PathBuf> = fs::read_dir(corpus_dir.join("scenarios"))
+        .map(|rd| rd.filter_map(|e| e.ok().map(|e| e.path())).collect())
+        .unwrap_or_default();
+    files.retain(|p| p.extension().is_some_and(|e| e == "json"));
+    files.sort();
+
+    for path in files {
+        match Scenario::load_from_file(&path) {
+            Ok(scenario) => match run_scenario(corpus_dir, &scenario) {
+                Ok(steps) => report.steps.extend(steps),
+                Err(e) => report.errors.push(format!("{}: {e}", scenario.id)),
+            },
+            Err(e) => report.errors.push(format!("{path:?}: {e}")),
+        }
+    }
+    report
+}
+
+#[derive(Debug, Serialize)]
+struct Baseline<'a> {
+    notice: &'static str,
+    matched_steps: usize,
+    total_steps: usize,
+    errors: &'a [String],
+    steps: BTreeMap<&'a str, &'static str>,
+}
+
+/// Renders the baseline exactly as stored on disk.
+pub fn render_baseline(report: &ParityReport) -> Result<String, String> {
+    let baseline = Baseline {
+        notice: "GENERATED FILE - do not edit. Regenerate: cargo run -p sr-cli -- parity --write-baseline",
+        matched_steps: report.matched(),
+        total_steps: report.steps.len(),
+        errors: &report.errors,
+        steps: report
+            .steps
+            .iter()
+            .map(|s| {
+                (
+                    s.key.as_str(),
+                    if s.matched { "match" } else { "mismatch" },
+                )
+            })
+            .collect(),
+    };
+    serde_json::to_string_pretty(&baseline)
+        .map(|s| s + "\n")
+        .map_err(|e| e.to_string())
+}
+
+/// Compares `report` with the committed baseline. Regressions (a step that matched JAWS and
+/// no longer does) are reported first; any other difference means the baseline is stale.
+pub fn check_baseline(corpus_dir: &Path, report: &ParityReport) -> Result<(), String> {
+    let committed_text = fs::read_to_string(corpus_dir.join(BASELINE_FILE)).unwrap_or_default();
+    let committed: Value = serde_json::from_str(&committed_text).unwrap_or(Value::Null);
+    let regressions: Vec<&str> = report
+        .steps
+        .iter()
+        .filter(|s| {
+            !s.matched
+                && committed.pointer(&format!("/steps/{}", s.key.replace('/', "~1")))
+                    == Some(&Value::String("match".to_owned()))
+        })
+        .map(|s| s.key.as_str())
+        .collect();
+    if !regressions.is_empty() {
+        return Err(format!(
+            "JAWS parity regressed for: {}",
+            regressions.join(", ")
+        ));
+    }
+    if committed_text.replace("\r\n", "\n") != render_baseline(report)? {
+        return Err(format!(
+            "{BASELINE_FILE} is stale (parity changed). Review `cargo run -p sr-cli -- parity`, \
+             then regenerate with: cargo run -p sr-cli -- parity --write-baseline"
+        ));
+    }
+    Ok(())
+}
+
+pub fn write_baseline(corpus_dir: &Path, report: &ParityReport) -> Result<(), String> {
+    fs::write(corpus_dir.join(BASELINE_FILE), render_baseline(report)?).map_err(|e| e.to_string())
+}

@@ -8,10 +8,15 @@ Autonomously collected, audited, and verified reference speech corpus from **Fre
   (`skills/jaws-reference/scripts/run-scenario.ps1`, 5 trials each, see `batch_progress.log`).
 - **Quarantined**: scenarios 31–65 live in [`unverified/`](unverified/README.md). Their "evidence"
   was not produced by the capture tooling and must not be cited as JAWS ground truth.
-- **No parity comparison yet**: `cargo test` currently checks each scenario's agent-authored
-  `assertions` against hand-written `*.aom.json` trees. It does **not** compare engine speech with
-  the recorded JAWS transcripts. Replacing this with a real differential comparison against
-  trees captured from Chrome on `old-pc` is the active work item.
+- **Differential parity** (`sr-cli parity`): for every genuine scenario step, the engine is driven over
+  the UIA snapshot Chrome produced for the same fixture on `old-pc` (`snapshots/`) and its speech is
+  compared exactly (after whitespace normalization) with every transcript variant JAWS produced.
+  Results are ratcheted in the generated `parity-baseline.json`.
+- **Buffer invariants** (`sr-cli invariants`): universal properties (all text reachable, lines
+  ordered, no merged words, links listed) checked on every snapshot, ratcheted in the generated
+  `invariants-baseline.json`. Run both commands for current numbers; never quote numbers by hand.
+- The older `assertions` in scenario files and the hand-written `*.aom.json` trees remain only as
+  engine regression checks until phase 3 retires them.
 - **`CORPUS_MANIFEST.json` is generated**: never edit it by hand. Regenerate with
   `cargo run -p sr-cli -- corpus-manifest --write`; the `manifest_is_current` test fails when stale.
 - **Evidence is written only by capture tooling**, and is never committed together with

@@ -45,6 +45,16 @@ opendesk exec --peer old-pc --timeout 120 "powershell -NoProfile -ExecutionPolic
 3. **Serial only**: JAWS, focus, and clipboard on old-pc are global state. Never run two
    captures concurrently, and never touch old-pc's keyboard/clipboard while a capture runs.
 
+## Deploying our tools to old-pc
+
+`old-pc` has a Rust toolchain, but the fastest path is the dev-box build: copy
+`target/debug/sr-cli.exe` to `C:\Users\Gigabyte\Dropbox\sr-harness\bin\`, wait for the hash to
+match on old-pc, then copy it to `C:\Users\ailabs\sr-harness\bin\` (never run it from the
+Dropbox folder, which may be mid-sync). `capture-snapshot.ps1` goes to `C:\Users\ailabs\sr-harness\`.
+
+In Git Bash, pass Windows paths to `opendesk exec` with forward slashes
+(`C:/Users/ailabs/...`): backslashes before `$var` inside double quotes are mangled.
+
 ## Moving files (fixtures in, evidence out)
 
 Use the shared Dropbox: write to `C:\Users\Gigabyte\Dropbox\sr-harness\...` locally, then poll

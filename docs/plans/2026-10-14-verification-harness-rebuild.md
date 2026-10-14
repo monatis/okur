@@ -18,7 +18,7 @@ reproducible with one command.
 - Make the speech log opt-in (`run --speech-log`).
 - Use the known-gap test pattern: `#[ignore = "known gap: ..."]` tests assert correct JAWS behavior and document the gap.
 
-## Phase 2: Real differential harness
+## Phase 2: Real differential harness (core done 2026-10-14; see handoff `2026-10-14-verification-harness-phase-1-and-2.md`)
 
 1. **Raw platform snapshots.**
    - `sr-platform::uia_snapshot` defines a serializable `UiaNode` with every UIA property the screen reader needs. Examples: control type, localized type, name, value, ARIA role and properties, heading level, landmark type, toggle, expand/collapse and selection state, PositionInSet/SizeOfSet, GridItem row/column and spans, LiveSetting, IsOffscreen, and the help/full description.

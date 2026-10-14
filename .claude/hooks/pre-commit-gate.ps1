@@ -20,9 +20,9 @@ $projectDir = $env:CLAUDE_PROJECT_DIR
 if (-not $projectDir) { $projectDir = Split-Path -Parent (Split-Path -Parent $PSScriptRoot) }
 $gate = Join-Path $projectDir '.agents\scripts\check-pre-commit.ps1'
 
-# The shared gate only matches '\bgit\s+commit\b'; normalize so forms like
-# 'git -C dir commit' are still gated.
-$agPayload = @{ toolCall = @{ args = @{ CommandLine = 'git commit' } } } | ConvertTo-Json -Compress -Depth 5
+# The shared gate only matches '\bgit\s+commit\b'; prefix it so forms like
+# 'git -C dir commit' are still gated, while keeping the real command for flag checks.
+$agPayload = @{ toolCall = @{ args = @{ CommandLine = "git commit $command" } } } | ConvertTo-Json -Compress -Depth 5
 $gateOut = $agPayload | & powershell -NoProfile -ExecutionPolicy Bypass -File $gate 2>&1 | Out-String
 
 $jsonLine = ($gateOut -split "`r?`n" | Where-Object { $_.Trim().StartsWith('{') } | Select-Object -Last 1)

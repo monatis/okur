@@ -57,7 +57,7 @@ pub struct Statistics {
     pub deterministic_scenarios: usize,
 }
 
-fn sha256_hex(bytes: &[u8]) -> String {
+pub fn sha256_hex(bytes: &[u8]) -> String {
     Sha256::digest(bytes)
         .iter()
         .map(|b| format!("{b:02x}"))

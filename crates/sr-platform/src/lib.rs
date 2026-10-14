@@ -3,6 +3,7 @@ pub mod bridge;
 pub mod events;
 pub mod hook;
 pub mod tts;
+pub mod uia_snapshot;
 
 pub use audio::{AudioActivityReport, AudioEndpointMeter};
 

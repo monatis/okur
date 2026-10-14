@@ -5,7 +5,7 @@ description: Programmatically control JAWS 2025 screen reader via FreedomSci.Jaw
 
 # JAWS Reference Control & Speech Capture Skill
 
-This skill provides deterministic, programmatic control over the Freedom Scientific JAWS screen reader (JAWS 2025 on Windows 11) using the `FreedomSci.JawsApi` COM dispatch interface and the native speech history clipboard capture mechanism (`ClearSpeechHistory` + `CopySpeechHistoryToClipboard`).
+This skill provides deterministic, programmatic control over the Freedom Scientific JAWS screen reader (JAWS 2025 on Windows 10 reference machine `old-pc`) using the `FreedomSci.JawsApi` COM dispatch interface and the native speech history clipboard capture mechanism (`ClearSpeechHistory` + `CopySpeechHistoryToClipboard`).
 
 It is designed as foundational reference infrastructure for developing, benchmarking, and parity-testing screen readers (such as cross-platform Rust screen readers) against canonical JAWS behavior.
 
@@ -75,6 +75,22 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\skills\jaws-reference\scri
 5. Record findings in `references/script-inventory.md` and reference corpus.
 
 ---
+### Workflow F: Capture the Chrome UIA Snapshot of a Fixture
+The differential parity harness (`sr-cli parity`) drives our engine over the exact UIA tree Chrome
+exposed for the fixture JAWS was recorded on. Capture it on the reference machine with the same
+page-loading mechanism as `run-scenario.ps1`:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\skills\jaws-reference\scripts\capture-snapshot.ps1 `
+    -Fixture C:\Users\ailabs\corpus\fixtures\doc-reading.html `
+    -OutputPath C:\Users\ailabs\Dropbox\sr-harness\snapshots\doc-reading.chrome.uia.json `
+    -SrCli C:\Users\ailabs\sr-harness\bin\sr-cli.exe
+```
+
+The snapshot's `provenance` records the fixture SHA-256 and Chrome version; the parity harness
+refuses snapshots whose fixture hash differs from `corpus/fixtures/`. Copy snapshots into
+`corpus/snapshots/` unmodified and commit them separately from `crates/` changes.
+
 
 ## 4. Quick Command Reference Table
 
