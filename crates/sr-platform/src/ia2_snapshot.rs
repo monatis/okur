@@ -297,6 +297,10 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> sr_core::AomNode {
     if let Some(dom_id) = attr("id") {
         set_attr("id", dom_id);
     }
+    // The live object behind the node, for actions (focus, default action).
+    if let Some(unique_id) = node.unique_id {
+        set_attr(crate::actions::UNIQUE_ID_ATTR, unique_id.to_string());
+    }
     if let (Some(pos), Some(size)) = (attr("posinset"), attr("setsize")) {
         if size != "0" {
             set_attr("posinset", pos);

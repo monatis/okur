@@ -51,6 +51,19 @@ pub enum Role {
 }
 
 impl Role {
+    /// Controls whose default action Enter or Space performs in browse mode.
+    pub fn is_interactive_control(&self) -> bool {
+        matches!(
+            self,
+            Role::Button
+                | Role::MenuButton
+                | Role::CheckBox
+                | Role::RadioButton
+                | Role::Tab
+                | Role::Link { .. }
+        )
+    }
+
     /// Determines whether the role represents a block-level element in the virtual buffer.
     pub fn is_block(&self) -> bool {
         matches!(

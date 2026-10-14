@@ -384,8 +384,14 @@ async fn main() {
                     }
                 }
             } else {
-                let bridge = PlatformBridge::new();
-                match bridge.get_active_document(None) {
+                // The foreground browser page through IA2 (the pipeline parity verifies),
+                // else any document xa11y finds.
+                #[cfg(windows)]
+                let page = sr_platform::actions::capture_foreground_page()
+                    .or_else(|_| PlatformBridge::new().get_active_document(None));
+                #[cfg(not(windows))]
+                let page = PlatformBridge::new().get_active_document(None);
+                match page {
                     Ok(aom) => {
                         println!("Attached to live active foreground document via OS accessibility APIs.");
                         (VirtualBuffer::from_aom(&aom), true)
@@ -401,7 +407,11 @@ async fn main() {
             let mut cursor = VirtualCursor::new(buffer);
             cursor.move_to_start();
 
-            let engine = Arc::new(Mutex::new(ScreenReaderEngine::new(cursor, Box::new(tts))));
+            let mut engine = ScreenReaderEngine::new(cursor, Box::new(tts));
+            // Enter on an edit focuses it in the page, Enter/Space on a control activates it.
+            #[cfg(windows)]
+            engine.set_actions(Box::new(sr_platform::actions::ChromiumActions::start()));
+            let engine = Arc::new(Mutex::new(engine));
 
             // Announce startup
             if let Ok(mut eng) = engine.lock() {

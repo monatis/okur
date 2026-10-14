@@ -180,6 +180,7 @@ impl FocusChangedHandler {
         }
 
         let mut container_name = None;
+        let mut in_document = false;
         let mut window_class = None;
         let mut window_title = None;
         let mut folder_name = None;
@@ -369,14 +370,18 @@ impl FocusChangedHandler {
                         };
                         if should_load {
                             *last_doc = Some(doc_title.clone());
-                            let aom = extract_uia_document_tree(&self.uia, doc, &doc_title);
+                            // The verified pipeline: IA2 capture mapped by ia2_to_aom.
+                            let aom =
+                                crate::actions::capture_foreground_page().unwrap_or_else(|_| {
+                                    extract_uia_document_tree(&self.uia, doc, &doc_title)
+                                });
                             let _ = self.sender.send(AccessibilityEvent::DocumentLoaded {
                                 title: doc_title.clone(),
                                 root: aom,
                             });
                         }
                     }
-                    container_name = Some("Document".to_string());
+                    in_document = true;
                     if !top_title.is_empty() {
                         window_title = Some(top_title.clone());
                     }
@@ -451,6 +456,16 @@ impl FocusChangedHandler {
         }
         if let Some(c) = item_count {
             focus = focus.with_item_count(c);
+        }
+
+        if in_document {
+            focus.in_document = true;
+            // Chrome reports the DOM id as AutomationId.
+            // SAFETY: a property read on a valid element.
+            focus.dom_id = unsafe { element.CurrentAutomationId() }
+                .ok()
+                .map(|s| s.to_string())
+                .filter(|s| !s.is_empty());
         }
 
         let _ = self.sender.send(AccessibilityEvent::Focus(focus));

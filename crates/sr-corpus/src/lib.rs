@@ -140,6 +140,59 @@ mod tests {
         assert_eq!(row_headers.len(), 3);
     }
 
+    /// E moves to an edit; Enter must put real focus in it (the user reported typing went
+    /// nowhere). The request names the IA2 object, so the platform can resolve it.
+    #[test]
+    fn enter_on_an_edit_focuses_it_in_the_page() {
+        use sr_core::actions::RecordingActions;
+        use sr_core::{KeyEvent, MockSpeechOutput, Modifiers, ScreenReaderEngine};
+        let page = snapshot_aom("signup-form", snapshots::Api::Ia2);
+        let mut cursor = sr_core::VirtualCursor::new(sr_core::VirtualBuffer::from_aom(&page));
+        cursor.move_to_start();
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+        engine.app_mode = sr_core::engine::AppMode::VirtualBuffer;
+        let actions = RecordingActions::default();
+        engine.set_actions(Box::new(actions.clone()));
+
+        let press = |engine: &mut ScreenReaderEngine, key: sr_core::Key| {
+            engine.handle_key_event(&KeyEvent::new(key, Modifiers::none(), true))
+        };
+        press(&mut engine, sr_core::Key::Alpha('e'));
+        let action = press(&mut engine, sr_core::Key::Enter);
+        assert_eq!(action, sr_core::input::KeyAction::Consume);
+        assert!(engine.forms_mode);
+
+        let requests = actions.requests();
+        assert_eq!(requests.len(), 1, "{requests:?}");
+        let Some((kind, node_id)) = requests.first() else {
+            return;
+        };
+        assert_eq!(kind, "focus");
+        let node = engine.cursor.buffer.node_map.get(node_id);
+        assert_eq!(node.and_then(|n| n.name.as_deref()), Some("Full name"));
+
+        // In forms mode, typing reaches the page.
+        let typed = press(&mut engine, sr_core::Key::Alpha('a'));
+        assert_eq!(typed, sr_core::input::KeyAction::PassThrough);
+    }
+
+    /// Actions resolve nodes through their IA2 uniqueID, so every form control must carry one.
+    #[test]
+    #[ignore = "known gap: committed IA2 snapshots predate uniqueID capture; re-capture them"]
+    fn ia2_snapshots_carry_unique_ids() {
+        let form = snapshot_aom("signup-form", snapshots::Api::Ia2);
+        let controls = find(&form, &|n| {
+            matches!(
+                n.role,
+                sr_core::Role::Edit | sr_core::Role::CheckBox | sr_core::Role::Button
+            )
+        });
+        assert!(!controls.is_empty());
+        assert!(controls
+            .iter()
+            .all(|n| sr_platform::actions::unique_id(n).is_some()));
+    }
+
     /// Semantics only IA2 carries without localization: block quotes (UIA gives only a
     /// localized control type), inline versus block elements, and the IA2 form states.
     #[test]

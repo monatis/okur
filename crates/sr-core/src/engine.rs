@@ -304,6 +304,8 @@ pub struct ScreenReaderEngine {
     /// The last native focus outside menus, re-announced when menus close.
     last_native_focus: Option<FocusEvent>,
     menus: crate::native_focus::Menus,
+    /// Actions on the real application (focus, default action); None when headless.
+    actions: Option<Box<dyn crate::actions::ApplicationActions>>,
 }
 
 impl ScreenReaderEngine {
@@ -321,6 +323,7 @@ impl ScreenReaderEngine {
             native_container: None,
             last_native_focus: None,
             menus: crate::native_focus::Menus::default(),
+            actions: None,
         }
     }
 
@@ -828,8 +831,45 @@ impl ScreenReaderEngine {
             // Interactive navigation & actions
             "{TAB}" => self.cursor.move_next_tab_stop(),
             "+{TAB}" | "+TAB" => self.cursor.move_prior_tab_stop(),
-            "{SPACE}" => self.cursor.toggle_active_control(),
+            "{SPACE}" => {
+                if let (Some(actions), Some(node)) = (&self.actions, self.node_under_cursor()) {
+                    let is_link = matches!(node.role, Role::Link { .. });
+                    if node.role.is_interactive_control() && !is_link && actions.activate(&node) {
+                        // The page's own state change and focus events report the result.
+                        return Some(String::new());
+                    }
+                }
+                self.cursor.toggle_active_control()
+            }
             "{ENTER}" | "EnterFormsMode" | "ActivateLink" => {
+                let node = self.node_under_cursor();
+                let same_page_link = node
+                    .as_ref()
+                    .is_some_and(|n| n.attributes.get("same_page").is_some_and(|v| v == "true"));
+                if let (Some(actions), Some(node)) = (&self.actions, node) {
+                    let handled = match node.role {
+                        // Forms mode on (JAWS plays a sound) and real focus in the field; the
+                        // browser's focus event then speaks it.
+                        Role::Edit | Role::ComboBox => {
+                            let focused = actions.focus(&node);
+                            if focused {
+                                self.forms_mode = true;
+                                self.cursor.forms_mode_active = true;
+                            }
+                            focused
+                        }
+                        Role::Link { .. } => !same_page_link && actions.activate(&node),
+                        Role::Button
+                        | Role::MenuButton
+                        | Role::CheckBox
+                        | Role::RadioButton
+                        | Role::Tab => actions.activate(&node),
+                        _ => false,
+                    };
+                    if handled {
+                        return Some(String::new());
+                    }
+                }
                 if let Some(link_speech) = self.cursor.activate_current_link() {
                     Some(link_speech)
                 } else if let Some(math_speech) = self.cursor.enter_math_viewer() {
@@ -1451,6 +1491,18 @@ impl ScreenReaderEngine {
                 Some(speech)
             }
         }
+    }
+
+    /// Connects the engine to the real application, so that commands such as Enter on an
+    /// edit act on the page and not only on the buffer.
+    pub fn set_actions(&mut self, actions: Box<dyn crate::actions::ApplicationActions>) {
+        self.actions = Some(actions);
+    }
+
+    /// The node of the line under the virtual cursor.
+    fn node_under_cursor(&self) -> Option<AomNode> {
+        let line = self.cursor.buffer.line_at_offset(self.cursor.offset)?;
+        self.cursor.buffer.node_map.get(&line.node_id).cloned()
     }
 
     /// Called when the OS event stream goes quiet: speech JAWS defers until no further

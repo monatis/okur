@@ -79,6 +79,10 @@ pub struct Ia2Node {
     pub msaa_states: u32,
     /// IA2 state bits (`IA2_STATE_*`).
     pub ia2_states: i32,
+    /// `IAccessible2::uniqueID`: identifies the live object within its window, where
+    /// `accChild(-unique_id)` on the document resolves it again (focus, default action).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub unique_id: Option<i32>,
     /// Parsed IA2 object attributes (`tag`, `display`, `xml-roles`, `level`, …).
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub attributes: BTreeMap<String, String>,
@@ -142,7 +146,9 @@ pub fn parse_attributes(raw: &str) -> BTreeMap<String, String> {
 }
 
 #[cfg(target_os = "windows")]
-pub use com::capture::{capture_chromium_document, Ia2CaptureError};
+pub use com::capture::{
+    capture_chromium_document, perform_chromium_action, Ia2Action, Ia2CaptureError,
+};
 
 #[cfg(target_os = "windows")]
 #[allow(non_snake_case, clippy::too_many_arguments)]
@@ -373,6 +379,10 @@ mod com {
                     if ia2.get_states(&mut states).is_ok() {
                         node.ia2_states = states;
                     }
+                    let mut unique_id = 0i32;
+                    if ia2.get_uniqueID(&mut unique_id).is_ok() {
+                        node.unique_id = Some(unique_id);
+                    }
                     let mut attrs = BSTR::default();
                     if ia2.get_attributes(&mut attrs).is_ok() {
                         node.attributes = parse_attributes(&attrs.to_string());
@@ -425,6 +435,47 @@ mod com {
         /// Captures the web document of a Chromium top-level window (`Chrome_WidgetWin_1`) through
         /// MSAA + IA2, starting from its `Chrome_RenderWidgetHostHWND` client object.
         pub fn capture_chromium_document(top_level: HWND) -> Result<Ia2Node, Ia2CaptureError> {
+            Ok(read_node(&chromium_document(top_level)?, 0))
+        }
+
+        /// What to do with a live object.
+        #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+        pub enum Ia2Action {
+            /// Move keyboard focus to it (`accSelect(SELFLAG_TAKEFOCUS)`).
+            Focus,
+            /// Its default action: click a button or link, toggle a check box
+            /// (`accDoDefaultAction`).
+            DefaultAction,
+        }
+
+        /// Performs `action` on the object with IA2 `unique_id` in the document of a Chromium
+        /// top-level window. Chromium resolves `accChild(-uniqueID)` on any of its objects.
+        pub fn perform_chromium_action(
+            top_level: HWND,
+            unique_id: i32,
+            action: Ia2Action,
+        ) -> Result<(), Ia2CaptureError> {
+            let document = chromium_document(top_level)?;
+            let child = VARIANT::from(unique_id.checked_neg().unwrap_or(unique_id));
+            // SAFETY: MSAA child lookup on a valid IAccessible; Chromium returns an object.
+            let target: IAccessible = unsafe { document.get_accChild(&child) }
+                .map_err(|e| err("accChild", e))?
+                .cast()
+                .map_err(|e| err("IAccessible of the target", e))?;
+            let me = self_child();
+            // SAFETY: plain MSAA calls on a valid IAccessible.
+            unsafe {
+                match action {
+                    // SELFLAG_TAKEFOCUS (oleacc.h).
+                    Ia2Action::Focus => target.accSelect(0x1, &me),
+                    Ia2Action::DefaultAction => target.accDoDefaultAction(&me),
+                }
+            }
+            .map_err(|e| err("MSAA action", e))
+        }
+
+        /// The MSAA client object of a Chromium window's web content.
+        fn chromium_document(top_level: HWND) -> Result<IAccessible, Ia2CaptureError> {
             let class: Vec<u16> = "Chrome_RenderWidgetHostHWND\0".encode_utf16().collect();
             // SAFETY: the class name is NUL-terminated and outlives the call.
             let render = unsafe {
@@ -448,8 +499,7 @@ mod com {
                 ));
             }
             // SAFETY: AccessibleObjectFromWindow returned an owned IAccessible pointer.
-            let document = unsafe { IAccessible::from_raw(raw) };
-            Ok(read_node(&document, 0))
+            Ok(unsafe { IAccessible::from_raw(raw) })
         }
     }
 }

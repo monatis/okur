@@ -1,3 +1,4 @@
+pub mod actions;
 pub mod aom;
 pub mod buffer;
 pub mod cursor;
