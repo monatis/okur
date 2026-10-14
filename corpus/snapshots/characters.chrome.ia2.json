@@ -1,0 +1,395 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Character Review - Characters Fixture - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "155.0.8059.40",
+    "fixture_sha256": "323de35dd193a55f34aebe9f855d6fa252a90154cf8ddbbf3bba54fd5b985cca",
+    "captured_at_unix_ms": 1792015358221,
+    "node_count": 10,
+    "capture_ms": 136
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Character Review - Characters Fixture",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/characters.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "unique_id": -868,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -878,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "font-family": "Times New Roman",
+              "font-size": "24pt",
+              "font-weight": "bold"
+            }
+          },
+          {
+            "start": 1,
+            "end": 2,
+            "attributes": {
+              "font-family": "Consolas",
+              "font-size": "10pt"
+            }
+          },
+          {
+            "start": 2,
+            "end": 3,
+            "attributes": {
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Character review",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -870,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Character review",
+            "lines": [
+              [
+                0,
+                16
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 16,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "24pt",
+                  "font-weight": "bold"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Character review",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -884,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Character review",
+                "lines": [
+                  [
+                    0,
+                    16
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 16,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "24pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -882,
+            "attributes": {
+              "display": "block",
+              "tag": "pre",
+              "text-align": "left"
+            },
+            "text": "a !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ B\n\tx  = 1.5; a.b end.\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ 😀",
+            "lines": [
+              [
+                0,
+                37
+              ],
+              [
+                37,
+                57
+              ],
+              [
+                57,
+                84
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 84,
+                "attributes": {
+                  "font-family": "Consolas",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "a !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ B\n\tx  = 1.5; a.b end.\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ 😀",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -872,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "a !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ B\n\tx  = 1.5; a.b end.\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ 😀",
+                "lines": [
+                  [
+                    0,
+                    37
+                  ],
+                  [
+                    37,
+                    57
+                  ],
+                  [
+                    57,
+                    84
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 84,
+                    "attributes": {
+                      "font-family": "Consolas",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -871,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "attributes": {
+                  "font-family": "Consolas",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 42,
+                "ia2_role": 1049,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -883,
+                "attributes": {
+                  "display": "inline",
+                  "tag": "label",
+                  "text-align": "left"
+                },
+                "text": "Code",
+                "lines": [
+                  [
+                    0,
+                    4
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 4,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Code",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -874,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Code",
+                    "lines": [
+                      [
+                        0,
+                        4
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 4,
+                        "attributes": {
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 42,
+                "ia2_role": 42,
+                "name": "Code",
+                "value": "a !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ B\n\tx  = 1.5; a.b end.\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ 😀",
+                "msaa_states": 1048576,
+                "ia2_states": 5640,
+                "unique_id": -876,
+                "attributes": {
+                  "display": "inline-block",
+                  "explicit-name": "true",
+                  "id": "code",
+                  "name-from": "related-element",
+                  "tag": "textarea",
+                  "text-align": "left",
+                  "text-model": "a1"
+                },
+                "text": "a !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ B\n\tx  = 1.5; a.b end.\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ 😀",
+                "lines": [
+                  [
+                    0,
+                    37
+                  ],
+                  [
+                    37,
+                    57
+                  ],
+                  [
+                    57,
+                    84
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 84,
+                    "attributes": {
+                      "font-family": "Consolas",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -5,6 +5,10 @@
       "sha256": "4caaa7092df80f075b4fd5bfa8f3fbbdba558f90188e4f3711aec05dd9c71953",
       "size_bytes": 2383
     },
+    "characters.html": {
+      "sha256": "323de35dd193a55f34aebe9f855d6fa252a90154cf8ddbbf3bba54fd5b985cca",
+      "size_bytes": 835
+    },
     "desktop-dialogs.ps1": {
       "sha256": "8f1a7824d4171b14b66b3a97d4469f8ff25d4f9ef4dcf5618757296570829c66",
       "size_bytes": 3305
@@ -616,6 +620,20 @@
       }
     },
     {
+      "scenario_id": "207-web-character-review",
+      "fixture": "characters.html",
+      "evidence": {
+        "sha256": "147c9590fe8cc656d95d1049579c8a57b6dbe198177891ba5938f147db8a63d7",
+        "capture_script_sha256": "1ab646bc41ad2fca1752dbb07ae93148fc9dfc8828f3ec66e035252e3df0435e",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 2,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "209-web-title-and-font",
       "fixture": "news-article.html",
       "evidence": {
@@ -953,10 +971,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 64,
-    "scenarios_with_evidence": 64,
-    "total_trials": 304,
-    "successful_trials": 297,
-    "deterministic_scenarios": 52
+    "scenarios": 65,
+    "scenarios_with_evidence": 65,
+    "total_trials": 307,
+    "successful_trials": 299,
+    "deterministic_scenarios": 53
   }
 }
