@@ -26,6 +26,8 @@ fn key_from_name(name: &str) -> Option<Key> {
         "backspace" => Key::Backspace,
         "delete" => Key::Delete,
         "insert" => Key::Insert,
+        "alt" => Key::Alt,
+        "ctrl" | "control" => Key::Control,
         "semicolon" => Key::Semicolon,
         "apostrophe" => Key::Apostrophe,
         _ => {

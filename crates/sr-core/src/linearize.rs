@@ -453,7 +453,10 @@ impl<'a> Builder<'a> {
                 self.visit_children(node);
                 self.flush();
                 self.end_paragraph_since(first_line);
-                if let Some(line) = self.buffer.lines.get(first_line) {
+                // §14: I and Shift+I stop only on items of lists that are not nested in
+                // another list [obs, 108/s8, 114/s6–s7, s15–s19].
+                let top_level = self.list_depth <= 1;
+                if let Some(line) = self.buffer.lines.get(first_line).filter(|_| top_level) {
                     self.buffer.list_items.push(line.start_offset);
                 }
             }

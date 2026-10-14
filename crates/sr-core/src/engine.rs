@@ -300,7 +300,7 @@ pub struct ScreenReaderEngine {
     pub explorer_state: Option<NativeExplorerState>,
     pub last_window_title: Option<String>,
     /// Container of the last focused native control; entering a new one announces it.
-    native_container: Option<crate::native_focus::ContainerKey>,
+    native_focus: crate::native_focus::NativeFocus,
     /// The last native focus outside menus, re-announced when menus close.
     last_native_focus: Option<FocusEvent>,
     menus: crate::native_focus::Menus,
@@ -320,7 +320,7 @@ impl ScreenReaderEngine {
             shell_nav_state: None,
             explorer_state: None,
             last_window_title: None,
-            native_container: None,
+            native_focus: crate::native_focus::NativeFocus::default(),
             last_native_focus: None,
             menus: crate::native_focus::Menus::default(),
             actions: None,
@@ -1436,13 +1436,10 @@ impl ScreenReaderEngine {
             false
         };
 
-        let previous_container = if window_changed {
-            None
-        } else {
-            self.native_container.take()
-        };
-        let control_speech = crate::native_focus::focus_speech(focus, previous_container.as_ref());
-        self.native_container = crate::native_focus::ContainerKey::of(focus);
+        if window_changed {
+            self.native_focus.reset();
+        }
+        let control_speech = self.native_focus.focus(focus)?;
         self.last_native_focus = Some(focus.clone());
 
         let speech = if window_changed {

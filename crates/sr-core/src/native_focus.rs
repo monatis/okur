@@ -123,8 +123,8 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<String> {
             }
         }
         Role::TreeItem => {
-            // Expanded items say "open" [obs, 303/s7]. Arrow-key moves inside a tree also
-            // speak level changes and drop the position at times (303/s5–s8): a known gap.
+            // Expanded items say "open" [obs, 303/s7]. Moving up to an already visited
+            // parent drops the position (303/s6); that rule is not known yet.
             let state = match focus.states.expanded {
                 Some(true) => state_marker("open"),
                 Some(false) => state_marker("closed"),
@@ -132,7 +132,9 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<String> {
             };
             lines.push(format!("{name}{state}"));
             lines.extend(position(focus));
-            lines.push("To move through or expand items use the Arrow keys.".to_owned());
+            if entering {
+                lines.push("To move through or expand items use the Arrow keys.".to_owned());
+            }
         }
         Role::Tab => {
             let selected = if focus.states.selected == Some(true) {
@@ -158,6 +160,70 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<String> {
         }
     }
     lines
+}
+
+/// What identifies one focus landing, to drop repeats: Windows focuses a list, tree or tab
+/// control and then its item within milliseconds, and UIA reports the item both times. JAWS
+/// speaks once [obs, 301/s6–s9].
+#[derive(Debug, Clone, PartialEq)]
+struct FocusKey {
+    role: Role,
+    name: Option<String>,
+    item_index: Option<usize>,
+    container: Option<ContainerKey>,
+}
+
+impl FocusKey {
+    fn of(focus: &FocusEvent) -> Self {
+        Self {
+            role: focus.role.clone(),
+            name: focus.name.clone(),
+            item_index: focus.item_index,
+            container: ContainerKey::of(focus),
+        }
+    }
+}
+
+/// Focus speech across a sequence of native focus events.
+#[derive(Debug, Default)]
+pub struct NativeFocus {
+    container: Option<ContainerKey>,
+    last: Option<FocusKey>,
+    /// The tree level last announced in the current tree.
+    tree_level: Option<usize>,
+}
+
+impl NativeFocus {
+    /// Forgets the context, as when another window becomes active.
+    pub fn reset(&mut self) {
+        *self = Self::default();
+    }
+
+    /// Speech for a focus event, or `None` for a repeat of the previous one.
+    pub fn focus(&mut self, focus: &FocusEvent) -> Option<String> {
+        let key = FocusKey::of(focus);
+        if self.last.as_ref() == Some(&key) {
+            return None;
+        }
+        let previous = self.container.take();
+        let within = key.container.is_some() && key.container == previous;
+        let mut speech = focus_speech(focus, previous.as_ref());
+        if focus.role == Role::TreeItem {
+            if !within {
+                self.tree_level = None;
+            } else if let Some(level) = focus.tree_level {
+                // Arrow keys in a tree announce a level different from the last one
+                // announced [obs, 303/s5, s8]; Tab into the tree does not (303/s4).
+                if self.tree_level != Some(level) {
+                    speech = format!("level {level}\n{speech}");
+                }
+                self.tree_level = Some(level);
+            }
+        }
+        self.container = key.container.clone();
+        self.last = Some(key);
+        Some(speech)
+    }
 }
 
 /// Speech for focus landing on a native control. `previous` is the container of the

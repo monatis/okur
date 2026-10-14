@@ -45,6 +45,8 @@ pub struct FocusEvent {
     pub in_document: bool,
     /// The element's DOM id, when it is in a document and has one.
     pub dom_id: Option<String>,
+    /// For tree items: the nesting level, 0 for top-level items.
+    pub tree_level: Option<usize>,
     pub window_class: Option<String>,
     pub window_title: Option<String>,
     pub folder_name: Option<String>,
@@ -67,6 +69,7 @@ impl FocusEvent {
             columns: Vec::new(),
             in_document: false,
             dom_id: None,
+            tree_level: None,
             window_class: None,
             window_title: None,
             folder_name: None,

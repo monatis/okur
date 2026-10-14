@@ -15,6 +15,7 @@ use serde::{Deserialize, Serialize};
 const UIA_LISTITEM: i32 = 50007;
 const UIA_WINDOW: i32 = 50032;
 const UIA_DOCUMENT: i32 = 50030;
+const UIA_TREEITEM: i32 = 50024;
 /// MSAA `ROLE_SYSTEM_MENUITEM`.
 const MSAA_MENUITEM: i32 = 0x0C;
 /// MSAA `ROLE_SYSTEM_BUTTONMENU`.
@@ -145,6 +146,17 @@ pub fn focus_event_from_chain(
         .position_in_set
         .and_then(|p| usize::try_from(p).ok());
     event.item_count = focused.size_of_set.and_then(|s| usize::try_from(s).ok());
+    if focused.control_type == UIA_TREEITEM {
+        // Nesting level: tree items above this one in the control view.
+        event.tree_level = Some(
+            chain
+                .iter()
+                .rev()
+                .skip(1)
+                .filter(|a| a.control_type == UIA_TREEITEM)
+                .count(),
+        );
+    }
     event.help_text = focused
         .full_description
         .clone()
