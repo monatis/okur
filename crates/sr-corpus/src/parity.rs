@@ -10,6 +10,7 @@ use crate::scenario::Scenario;
 use serde::Serialize;
 use serde_json::Value;
 use sr_core::{ScreenReaderEngine, VirtualBuffer, VirtualCursor};
+use sr_platform::event_trace::focus_event_from_chain;
 use sr_platform::uia_snapshot::{to_aom, UiaSnapshot};
 use std::collections::BTreeMap;
 use std::fs;
@@ -135,11 +136,28 @@ fn run_scenario(corpus_dir: &Path, scenario: &Scenario) -> Result<Vec<StepParity
     }
     spoken.take();
 
+    let replay = StepEvents::load(corpus_dir, &scenario.id, &read_json(&evidence_path)?)?;
+
     let mut steps = Vec::new();
     for step in &scenario.steps {
         let engine_speech = match step.step_type.as_str() {
             "key" => {
                 press(&mut engine, &step.command)?;
+                // Replay the OS events recorded while JAWS handled this step (e.g. the focus
+                // change that follows Tab), exactly as the live listener would deliver them.
+                for event in replay.for_step(&step.id) {
+                    if let Some(focus) = focus_event_from_chain(
+                        &event.focus_chain,
+                        event.window_class.as_deref(),
+                        event.window_title.as_deref(),
+                    ) {
+                        if let Some(speech) = engine.handle_focus_event(&focus) {
+                            if spoken.is_empty() {
+                                spoken.push(&speech);
+                            }
+                        }
+                    }
+                }
                 spoken.take().join("\n")
             }
             "keyboard" | "jaws_script" => {
@@ -263,6 +281,16 @@ pub fn write_baseline(corpus_dir: &Path, report: &ParityReport) -> Result<(), St
 struct RecordingSpeech(std::sync::Arc<std::sync::Mutex<Vec<String>>>);
 
 impl RecordingSpeech {
+    fn is_empty(&self) -> bool {
+        self.0.lock().map(|log| log.is_empty()).unwrap_or(true)
+    }
+
+    fn push(&self, text: &str) {
+        if let Ok(mut log) = self.0.lock() {
+            log.push(text.to_owned());
+        }
+    }
+
     fn take(&self) -> Vec<String> {
         self.0
             .lock()
@@ -288,4 +316,56 @@ fn press(engine: &mut ScreenReaderEngine, chord: &str) -> Result<(), String> {
     event.is_down = false;
     let _ = engine.handle_key_event(&event);
     Ok(())
+}
+
+/// Focus-bearing events recorded during each step of trial 1, when the scenario has a trace
+/// (`corpus/traces/<scenario-id>-trial1.jsonl`, recorded with `run-scenario.ps1 -TraceDir`).
+#[derive(Default)]
+struct StepEvents {
+    by_step: std::collections::HashMap<String, Vec<sr_platform::event_trace::TraceEvent>>,
+}
+
+impl StepEvents {
+    fn load(corpus_dir: &Path, scenario_id: &str, evidence: &Value) -> Result<Self, String> {
+        let trace_path = corpus_dir
+            .join("traces")
+            .join(format!("{scenario_id}-trial1.jsonl"));
+        if !trace_path.exists() {
+            return Ok(Self::default());
+        }
+        let (_, events) = sr_platform::event_trace::read_trace(&trace_path)?;
+        let mut by_step = std::collections::HashMap::new();
+        let steps = evidence
+            .pointer("/trials/0/step_results")
+            .and_then(Value::as_array)
+            .cloned()
+            .unwrap_or_default();
+        for step in steps {
+            let (Some(id), Some(start), Some(end)) = (
+                step.get("step_id").and_then(Value::as_str),
+                step.get("t_start_ms").and_then(Value::as_u64),
+                step.get("t_end_ms").and_then(Value::as_u64),
+            ) else {
+                return Err(format!(
+                    "{scenario_id}: trace present but trial 1 steps lack t_start_ms/t_end_ms"
+                ));
+            };
+            let window: Vec<_> = events
+                .iter()
+                .filter(|e| {
+                    matches!(e.event.as_str(), "focus" | "foreground")
+                        && e.t_ms >= u128::from(start)
+                        && e.t_ms <= u128::from(end)
+                        && !e.focus_chain.is_empty()
+                })
+                .cloned()
+                .collect();
+            by_step.insert(id.to_owned(), window);
+        }
+        Ok(Self { by_step })
+    }
+
+    fn for_step(&self, step_id: &str) -> Vec<sr_platform::event_trace::TraceEvent> {
+        self.by_step.get(step_id).cloned().unwrap_or_default()
+    }
 }

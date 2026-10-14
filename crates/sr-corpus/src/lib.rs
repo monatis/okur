@@ -135,6 +135,51 @@ mod tests {
         assert_eq!(row_headers.len(), 3);
     }
 
+    /// Focus events built from a chain of real Chrome UIA nodes, as trace replay and the
+    /// live listener build them: the radio button inside the "Membership type" fieldset.
+    #[test]
+    fn focus_event_from_chrome_focus_chain() {
+        use sr_platform::uia_snapshot::UiaNode;
+        let path = corpus_dir().join("snapshots/signup-form.chrome.uia.json");
+        let snapshot = sr_platform::uia_snapshot::UiaSnapshot::load(&path);
+        assert!(snapshot.is_ok(), "{snapshot:?}");
+        let Ok(snapshot) = snapshot else { return };
+
+        // Path from the document to the first radio button.
+        fn path_to<'a>(node: &'a UiaNode, pred: &dyn Fn(&UiaNode) -> bool) -> Vec<&'a UiaNode> {
+            if pred(node) {
+                return vec![node];
+            }
+            for c in &node.children {
+                let mut p = path_to(c, pred);
+                if !p.is_empty() {
+                    p.insert(0, node);
+                    return p;
+                }
+            }
+            Vec::new()
+        }
+        let chain: Vec<UiaNode> = path_to(&snapshot.root, &|n| n.control_type == 50013)
+            .into_iter()
+            .cloned()
+            .collect();
+        assert!(chain.len() >= 3, "radio button not found");
+
+        let event = sr_platform::event_trace::focus_event_from_chain(
+            &chain,
+            Some("Chrome_RenderWidgetHostHWND"),
+            None,
+        );
+        assert!(event.is_some());
+        let Some(event) = event else { return };
+        assert_eq!(event.role, sr_core::Role::RadioButton);
+        assert_eq!(event.name.as_deref(), Some("Adult"));
+        assert_eq!(event.states.checked, Some(true));
+        assert_eq!((event.item_index, event.item_count), (Some(1), Some(3)));
+        assert_eq!(event.container_role, Some(sr_core::Role::Group));
+        assert_eq!(event.container_name.as_deref(), Some("Membership type"));
+    }
+
     /// `corpus/CORPUS_MANIFEST.json` must be exactly what the generator derives from disk.
     #[test]
     fn manifest_is_current() {

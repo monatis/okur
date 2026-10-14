@@ -107,6 +107,60 @@ pub fn event_name(win_event: u32, id_object: i32) -> Option<&'static str> {
     })
 }
 
+/// Builds the engine's focus event from a focus chain (outermost first), using the same
+/// UIA-to-AOM mapping as document snapshots. Used by trace replay, and by the live listener,
+/// so both exercise one conversion.
+pub fn focus_event_from_chain(
+    chain: &[UiaNode],
+    window_class: Option<&str>,
+    window_title: Option<&str>,
+) -> Option<sr_core::FocusEvent> {
+    use sr_core::Role;
+    let focused = chain.last()?;
+    let mut leaf = focused.clone();
+    leaf.children.clear();
+    let aom = crate::uia_snapshot::to_aom(&leaf);
+
+    let mut event = sr_core::FocusEvent::new(aom.role.clone());
+    event.name = aom.name.clone();
+    event.value = aom.value.clone();
+    event.states = aom.states.clone();
+    event.item_index = focused
+        .position_in_set
+        .and_then(|p| usize::try_from(p).ok());
+    event.item_count = focused.size_of_set.and_then(|s| usize::try_from(s).ok());
+    event.help_text = focused
+        .full_description
+        .clone()
+        .or_else(|| focused.help_text.clone());
+    event.window_class = window_class.map(str::to_owned);
+    event.window_title = window_title.map(str::to_owned);
+
+    // The nearest structural container (list, group, tab list, tree, table, dialog, landmark).
+    for ancestor in chain.iter().rev().skip(1) {
+        let mut a = ancestor.clone();
+        a.children.clear();
+        let role = crate::uia_snapshot::to_aom(&a).role;
+        let is_container = matches!(
+            role,
+            Role::List
+                | Role::TabList
+                | Role::Tree
+                | Role::Table
+                | Role::Dialog
+                | Role::AlertDialog
+                | Role::Landmark { .. }
+        ) || (role == Role::Group
+            && a.name.as_deref().is_some_and(|n| !n.trim().is_empty()));
+        if is_container {
+            event.container_name = a.name.clone();
+            event.container_role = Some(role);
+            break;
+        }
+    }
+    Some(event)
+}
+
 #[cfg(windows)]
 pub use capture::run_trace;
 
