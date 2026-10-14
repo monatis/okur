@@ -5,7 +5,7 @@
 
 .DESCRIPTION
     Runs on the development machine from the repository root. Stages:
-      bin/sr-cli.exe                       <- target/debug/sr-cli.exe (if built)
+      bin/sr-cli.exe                       <- -SrCli (default target/debug/sr-cli.exe), if built
       scripts/*.ps1                        <- skills/jaws-reference/scripts/*.ps1
       fixtures/*.html                      <- corpus/fixtures/*.html
       scenarios/*.json                     <- corpus/scenarios/*.json
@@ -13,12 +13,14 @@
 #>
 param(
     [string]$Dropbox = (Join-Path $env:USERPROFILE "Dropbox\sr-harness"),
-    [string]$RepoRoot = (Get-Location).Path
+    [string]$RepoRoot = (Get-Location).Path,
+    # The sr-cli build to stage; use another target dir while target\debug is locked.
+    [string]$SrCli = (Join-Path $RepoRoot 'target\debug\sr-cli.exe')
 )
 $ErrorActionPreference = 'Stop'
 
 $sets = @(
-    @{ dest = 'bin';       files = @(Get-Item (Join-Path $RepoRoot 'target\debug\sr-cli.exe') -ErrorAction SilentlyContinue) },
+    @{ dest = 'bin';       files = @(Get-Item $SrCli -ErrorAction SilentlyContinue) },
     @{ dest = 'scripts';   files = @(Get-ChildItem (Join-Path $RepoRoot 'skills\jaws-reference\scripts\*.ps1')) },
     @{ dest = 'fixtures';  files = @(Get-ChildItem (Join-Path $RepoRoot 'corpus\fixtures\*') -Include *.html, *.ps1) },
     @{ dest = 'scenarios'; files = @(Get-ChildItem (Join-Path $RepoRoot 'corpus\scenarios\*.json')) }

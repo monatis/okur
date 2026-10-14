@@ -34,6 +34,11 @@ opendesk exec --peer old-pc --timeout 120 "powershell -NoProfile -ExecutionPolic
 
 `opendesk exec` runs as `ailabs` in the interactive session, which FSAPI requires.
 
+`opendesk exec` stops waiting after `--timeout` seconds (default **30**). A scenario run is
+cut off mid-trial, which leaves its fixture app and `sr-cli trace` running on `old-pc`. Pass
+`--timeout 900` for single runs. For anything longer, launch `run-batch.ps1` detached
+(`Start-Process`) and poll `batch.log` in the shared Dropbox.
+
 ## Preconditions (every session)
 
 1. **Probe**: run `probe.ps1` remotely; JAWS (`jfw`) must be running and speech history enabled.

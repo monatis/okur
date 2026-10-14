@@ -12,7 +12,7 @@ use crate::snapshots::{self, Api};
 use serde::Serialize;
 use serde_json::Value;
 use sr_core::{ScreenReaderEngine, VirtualBuffer, VirtualCursor};
-use sr_platform::event_trace::focus_event_from_chain;
+use sr_platform::event_trace::focus_event_from_trace;
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -152,11 +152,7 @@ fn run_scenario(
                 // Replay the OS events recorded while JAWS handled this step (e.g. the focus
                 // change that follows Tab), exactly as the live listener would deliver them.
                 for event in replay.for_step(&step.id) {
-                    if let Some(focus) = focus_event_from_chain(
-                        &event.focus_chain,
-                        event.window_class.as_deref(),
-                        event.window_title.as_deref(),
-                    ) {
+                    if let Some(focus) = focus_event_from_trace(&event) {
                         if let Some(speech) = engine.handle_focus_event(&focus) {
                             if spoken.is_empty() {
                                 spoken.push(&speech);
@@ -338,16 +334,22 @@ struct StepEvents {
 
 impl StepEvents {
     fn load(corpus_dir: &Path, scenario_id: &str, evidence: &Value) -> Result<Self, String> {
-        let trace_path = corpus_dir
-            .join("traces")
-            .join(format!("{scenario_id}-trial1.jsonl"));
-        if !trace_path.exists() {
+        // The first successful trial that recorded a trace, with its own step timings.
+        let traced = evidence
+            .get("trials")
+            .and_then(Value::as_array)
+            .into_iter()
+            .flatten()
+            .filter(|t| t.get("trial_success").and_then(Value::as_bool) == Some(true))
+            .find_map(|t| Some((t, t.get("trace_file")?.as_str()?)));
+        let Some((trial, trace_file)) = traced else {
             return Ok(Self::default());
-        }
+        };
+        let trace_path = corpus_dir.join("traces").join(trace_file);
         let (_, events) = sr_platform::event_trace::read_trace(&trace_path)?;
         let mut by_step = std::collections::HashMap::new();
-        let steps = evidence
-            .pointer("/trials/0/step_results")
+        let steps = trial
+            .get("step_results")
             .and_then(Value::as_array)
             .cloned()
             .unwrap_or_default();
@@ -358,7 +360,7 @@ impl StepEvents {
                 step.get("t_end_ms").and_then(Value::as_u64),
             ) else {
                 return Err(format!(
-                    "{scenario_id}: trace present but trial 1 steps lack t_start_ms/t_end_ms"
+                    "{scenario_id}: traced trial steps lack t_start_ms/t_end_ms"
                 ));
             };
             let window: Vec<_> = events

@@ -12,7 +12,7 @@ use crate::uia_snapshot::UiaNode;
 use serde::{Deserialize, Serialize};
 
 /// Bumped whenever the recorded fields or their meaning change.
-pub const TRACE_FORMAT_VERSION: u32 = 1;
+pub const TRACE_FORMAT_VERSION: u32 = 2;
 
 /// The MSAA view of an event's object (`AccessibleObjectFromEvent`).
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
@@ -50,6 +50,13 @@ pub struct TraceEvent {
     /// first, read through UIA with the snapshot property set.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub focus_chain: Vec<UiaNode>,
+    /// For focus events: the focused element's control-view siblings, itself included,
+    /// without their children.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub focus_siblings: Vec<UiaNode>,
+    /// For focus events: the focused element with its control-view subtree to depth 2.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub focus_subtree: Option<UiaNode>,
 }
 
 /// The first line of a trace file.
@@ -161,13 +168,43 @@ pub fn focus_event_from_chain(
     Some(event)
 }
 
+/// The focus event a recorded `focus` trace event delivers to the engine: the chain mapping
+/// of [`focus_event_from_chain`], plus the context a live listener would query.
+///
+/// Without a provider PositionInSet (WinForms and most Win32 controls report none), the
+/// position is counted among the focused element's siblings of the same control type.
+pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent> {
+    let mut focus = focus_event_from_chain(
+        &event.focus_chain,
+        event.window_class.as_deref(),
+        event.window_title.as_deref(),
+    )?;
+    if focus.item_index.is_none() {
+        let focused = event.focus_chain.last()?;
+        let peers: Vec<&UiaNode> = event
+            .focus_siblings
+            .iter()
+            .filter(|s| s.control_type == focused.control_type)
+            .collect();
+        let index = peers
+            .iter()
+            .position(|s| s.has_keyboard_focus)
+            .or_else(|| peers.iter().position(|s| s.name == focused.name));
+        if let Some(index) = index {
+            focus.item_index = Some(index + 1);
+            focus.item_count = Some(peers.len());
+        }
+    }
+    Some(focus)
+}
+
 #[cfg(windows)]
 pub use capture::run_trace;
 
 #[cfg(windows)]
 mod capture {
     use super::{event_name, TraceEvent, TraceHeader, TraceObject, TRACE_FORMAT_VERSION};
-    use crate::uia_snapshot::capture::{automation, focus_chain, window_text};
+    use crate::uia_snapshot::capture::{automation, focus_chain, focus_context, window_text};
     use crate::PlatformError;
     use std::cell::RefCell;
     use std::io::Write;
@@ -298,6 +335,10 @@ mod capture {
             } else {
                 Vec::new()
             };
+            let (focus_siblings, focus_subtree) = match (name, state.uia.as_ref()) {
+                ("focus", Some(uia)) => focus_context(uia),
+                _ => (Vec::new(), None),
+            };
             let event = TraceEvent {
                 t_ms,
                 event: name.to_owned(),
@@ -310,6 +351,8 @@ mod capture {
                 process: process_name(hwnd),
                 object: msaa_object(hwnd, id_object, id_child),
                 focus_chain: focus,
+                focus_siblings,
+                focus_subtree,
             };
             if let Ok(mut line) = serde_json::to_string(&event) {
                 line.push('\n');
@@ -380,5 +423,64 @@ mod capture {
         }
         let count = STATE.with(|s| s.borrow_mut().take().map(|s| s.count).unwrap_or(0));
         Ok(count)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const RADIO: i32 = 50013;
+    const GROUP: i32 = 50026;
+    const TEXT: i32 = 50020;
+
+    fn node(control_type: i32, name: &str, focused: bool) -> UiaNode {
+        UiaNode {
+            control_type,
+            name: Some(name.to_owned()),
+            has_keyboard_focus: focused,
+            is_enabled: true,
+            ..UiaNode::default()
+        }
+    }
+
+    fn focus_event(siblings: Vec<UiaNode>) -> TraceEvent {
+        TraceEvent {
+            t_ms: 0,
+            event: "focus".to_owned(),
+            win_event: 0x8005,
+            hwnd: 0,
+            id_object: -4,
+            id_child: 0,
+            window_class: None,
+            window_title: None,
+            process: None,
+            object: None,
+            focus_chain: vec![node(GROUP, "Plan", false), node(RADIO, "Pro", true)],
+            focus_siblings: siblings,
+            focus_subtree: None,
+        }
+    }
+
+    /// WinForms radio buttons report no PositionInSet; JAWS still says "2 of 3" [obs, 301/s4].
+    #[test]
+    fn position_is_counted_among_same_type_siblings() {
+        let event = focus_event(vec![
+            node(TEXT, "Choose a plan", false),
+            node(RADIO, "Basic", false),
+            node(RADIO, "Pro", true),
+            node(RADIO, "Team", false),
+        ]);
+        let focus = focus_event_from_trace(&event);
+        assert_eq!(
+            focus.map(|f| (f.item_index, f.item_count)),
+            Some((Some(2), Some(3)))
+        );
+    }
+
+    #[test]
+    fn no_siblings_means_no_position() {
+        let focus = focus_event_from_trace(&focus_event(Vec::new()));
+        assert_eq!(focus.map(|f| f.item_index), Some(None));
     }
 }

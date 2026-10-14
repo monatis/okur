@@ -556,6 +556,66 @@ pub(crate) mod capture {
         chain
     }
 
+    /// Siblings recorded around a focused element, at most.
+    const MAX_FOCUS_SIBLINGS: usize = 200;
+    /// Nodes recorded below a focused element, at most.
+    const MAX_FOCUS_SUBTREE: usize = 200;
+
+    /// What a screen reader reads around the focused element besides its ancestors: the
+    /// control-view siblings (without children), from which positions such as "2 of 3" are
+    /// counted when the provider reports no PositionInSet, and the element's own control-view
+    /// subtree to depth 2 (list-view columns, a combo box's items).
+    pub(crate) fn focus_context(uia: &IUIAutomation) -> (Vec<UiaNode>, Option<UiaNode>) {
+        // SAFETY: UIA client queries on a valid automation object.
+        unsafe {
+            let (Ok(walker), Ok(focused)) = (uia.ControlViewWalker(), uia.GetFocusedElement())
+            else {
+                return (Vec::new(), None);
+            };
+            let mut siblings = Vec::new();
+            if let Ok(parent) = walker.GetParentElement(&focused) {
+                let mut current = walker.GetFirstChildElement(&parent).ok();
+                while let Some(el) = current {
+                    if siblings.len() >= MAX_FOCUS_SIBLINGS {
+                        break;
+                    }
+                    if let Some(node) = read_element(uia, &el) {
+                        siblings.push(node);
+                    }
+                    current = walker.GetNextSiblingElement(&el).ok();
+                }
+            }
+            let mut budget = MAX_FOCUS_SUBTREE;
+            let subtree = read_subtree(uia, &walker, &focused, 2, &mut budget);
+            (siblings, subtree)
+        }
+    }
+
+    fn read_subtree(
+        uia: &IUIAutomation,
+        walker: &IUIAutomationTreeWalker,
+        element: &IUIAutomationElement,
+        depth: usize,
+        budget: &mut usize,
+    ) -> Option<UiaNode> {
+        *budget = budget.checked_sub(1)?;
+        let mut node = read_element(uia, element)?;
+        if depth == 0 {
+            return Some(node);
+        }
+        // SAFETY: UIA tree walking on valid elements.
+        let mut current = unsafe { walker.GetFirstChildElement(element) }.ok();
+        while let Some(el) = current {
+            match read_subtree(uia, walker, &el, depth - 1, budget) {
+                Some(child) => node.children.push(child),
+                None => break,
+            }
+            // SAFETY: as above.
+            current = unsafe { walker.GetNextSiblingElement(&el) }.ok();
+        }
+        Some(node)
+    }
+
     /// Captures the first `Document` element in the foreground window (e.g. a Chrome tab's
     /// web content) with its entire raw-view subtree, in a single cached request.
     pub fn capture_foreground_document(
