@@ -308,6 +308,8 @@ pub struct ScreenReaderEngine {
     /// The last native focus outside menus, re-announced when menus close.
     last_native_focus: Option<FocusEvent>,
     menus: crate::native_focus::Menus,
+    /// Forms mode was just turned on by Enter (not by focus moving into a field).
+    forms_mode_by_enter: bool,
     /// The edit key whose effect is spoken when the field next reports its text.
     pending_edit: Option<crate::editing::EditKey>,
     /// The focused text field's last known text, caret and selection.
@@ -334,6 +336,7 @@ impl ScreenReaderEngine {
             last_native_focus: None,
             menus: crate::native_focus::Menus::default(),
             pending_edit: None,
+            forms_mode_by_enter: false,
             last_text: None,
             actions: None,
         }
@@ -877,6 +880,7 @@ impl ScreenReaderEngine {
                             if focused {
                                 self.forms_mode = true;
                                 self.cursor.forms_mode_active = true;
+                                self.forms_mode_by_enter = true;
                             }
                             focused
                         }
@@ -1480,9 +1484,22 @@ impl ScreenReaderEngine {
                 speech =
                     speech.map(|s| format!("{s}\nTo change the selection use the Arrow keys."));
             }
+            // Forms mode turned on by Enter adds the regions the field is in and the edit's
+            // hint [obs, 19/s2]; Tab's automatic forms mode does not (204/s1).
+            let by_enter = std::mem::take(&mut self.forms_mode_by_enter) && is_edit;
+            if by_enter {
+                speech = speech.map(|s| format!("{s}\nType in text."));
+            }
             if entering_page {
+                let regions = if by_enter {
+                    target_id
+                        .map(|id| self.region_markers(id))
+                        .unwrap_or_default()
+                } else {
+                    String::new()
+                };
                 if let Some(title) = self.cursor.buffer.document_title() {
-                    speech = speech.map(|s| format!("{title}\n{s}"));
+                    speech = speech.map(|s| format!("{title}\n{regions}{s}"));
                 }
             }
             if let Some(ref text) = speech {
@@ -1682,10 +1699,18 @@ impl ScreenReaderEngine {
                 crate::linearize::state_marker(state)
             }
             Role::ComboBox if before.value != control.value => control.value.clone()?,
+            // Space on a tab selects it [obs, 29/s4].
+            Role::Tab
+                if before.states.selected != control.states.selected
+                    && control.states.selected == Some(true) =>
+            {
+                crate::linearize::state_marker("selected")
+            }
             _ => return None,
         };
         let rebuilt = self.cursor.buffer.with_node_changed(id, |node| {
             node.states.checked = control.states.checked;
+            node.states.selected = control.states.selected;
             if control.value.is_some() {
                 node.value = control.value.clone();
             }
@@ -1694,6 +1719,49 @@ impl ScreenReaderEngine {
         self.cursor.move_to_node_id(id);
         self.speech.speak(&speech, true);
         Some(speech)
+    }
+
+    /// The region markers for the landmarks around a page node, outermost first: `main`
+    /// and forms (named or not) [obs, 19/s2; 204/s1].
+    fn region_markers(&self, node_id: usize) -> String {
+        fn path<'a>(node: &'a AomNode, id: usize, out: &mut Vec<&'a AomNode>) -> bool {
+            if node.id == id {
+                return true;
+            }
+            out.push(node);
+            if node.children.iter().any(|c| path(c, id, out)) {
+                return true;
+            }
+            out.pop();
+            false
+        }
+        let Some(root) = self
+            .cursor
+            .buffer
+            .root_id
+            .and_then(|r| self.cursor.buffer.node_map.get(&r))
+        else {
+            return String::new();
+        };
+        let mut ancestors = Vec::new();
+        path(root, node_id, &mut ancestors);
+        ancestors
+            .iter()
+            .filter_map(|n| {
+                let aria = n.attributes.get("aria_role").map(String::as_str);
+                match &n.role {
+                    Role::Landmark { landmark_type } if landmark_type == "main" => {
+                        Some("MainRegion")
+                    }
+                    Role::Landmark { landmark_type } if landmark_type == "form" => {
+                        Some("FormRegion")
+                    }
+                    _ if aria == Some("form") => Some("FormRegion"),
+                    _ => None,
+                }
+            })
+            .map(|r| format!(" \u{1d} {r} \u{1e} \n"))
+            .collect()
     }
 
     /// The buffer node a page event concerns: by node id, then by DOM id, then by role and

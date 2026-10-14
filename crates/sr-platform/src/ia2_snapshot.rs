@@ -267,7 +267,10 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> sr_core::AomNode {
     };
     match (&role, node.msaa_role) {
         (Role::Group, Some(msaa_role::DOCUMENT)) => set_attr("aria_role", "article".to_owned()),
-        (Role::Group, Some(msaa_role::GROUPING)) => set_attr("aria_role", "group".to_owned()),
+        // A fieldset: a named grouping. An unnamed one (a form, a section) keeps its xml-roles.
+        (Role::Group, Some(msaa_role::GROUPING)) if aom.name.is_some() => {
+            set_attr("aria_role", "group".to_owned())
+        }
         (_, Some(msaa_role::COLUMNHEADER)) => {
             set_attr("tag", "th".to_owned());
             set_attr("scope", "col".to_owned());

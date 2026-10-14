@@ -367,7 +367,15 @@ impl SpeechFormatter {
                 "{name}  \u{1d} check box \u{1e}   \u{1d}{}\u{1e}",
                 checked(node.states.checked)
             ),
-            Role::Button => format!("{name}  \u{1d} Button \u{1e}"),
+            Role::Button => {
+                // A disclosure button speaks its state [obs, 29/s1].
+                let state = match node.states.expanded {
+                    Some(true) => " \u{1d}expanded\u{1e}",
+                    Some(false) => " \u{1d}collapsed\u{1e}",
+                    None => "",
+                };
+                format!("{name}  \u{1d} Button \u{1e}{state}")
+            }
             _ => name.to_owned(),
         }
     }

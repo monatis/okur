@@ -681,6 +681,33 @@ impl VirtualCursor {
                 };
                 format!("{name}  \u{1d} {kind} \u{1e} ")
             }
+            // A tab: its tab list as a group when focus enters it, then name, position and
+            // selection [obs, 29/s2-s3].
+            Role::Tab => {
+                let info = self.buffer.tab_info_for_node(node_id);
+                let entering = info.is_some_and(|i| {
+                    !self
+                        .buffer
+                        .tabs
+                        .iter()
+                        .any(|t| t.group_name == i.group_name && t.offset == previous)
+                });
+                let mut lines = Vec::new();
+                if let Some(group) = info
+                    .and_then(|i| i.group_name.as_deref())
+                    .filter(|_| entering)
+                {
+                    lines.push(format!("{group} \u{1d} group \u{1e} \n"));
+                }
+                lines.push(format!("{name}  \u{1d} Tab \u{1e} "));
+                if let Some(i) = info {
+                    lines.push(format!("{} of {}", i.index, i.total));
+                }
+                if node.states.selected == Some(true) {
+                    lines.push(" \u{1d}selected\u{1e}".to_owned());
+                }
+                lines.join("\n")
+            }
             Role::Edit if attr("password") == Some("true") => format!(
                 "{}  \u{1d}\u{1e}",
                 self.control_focus_speech(self.offset, previous)
