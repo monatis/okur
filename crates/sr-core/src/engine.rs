@@ -308,6 +308,8 @@ pub struct ScreenReaderEngine {
     /// The last native focus outside menus, re-announced when menus close.
     last_native_focus: Option<FocusEvent>,
     menus: crate::native_focus::Menus,
+    /// The page re-read after a change, waiting for the change's events to be handled.
+    pending_page: Option<VirtualBuffer>,
     /// Forms mode was just turned on by Enter (not by focus moving into a field).
     forms_mode_by_enter: bool,
     /// The edit key whose effect is spoken when the field next reports its text.
@@ -337,6 +339,7 @@ impl ScreenReaderEngine {
             menus: crate::native_focus::Menus::default(),
             pending_edit: None,
             forms_mode_by_enter: false,
+            pending_page: None,
             last_text: None,
             actions: None,
         }
@@ -1029,6 +1032,7 @@ impl ScreenReaderEngine {
         if !event.is_down {
             return KeyAction::PassThrough;
         }
+        self.apply_pending_page();
 
         // 1. Any key press interrupts speech immediately (NVDA & JAWS standard behavior)
         self.speech.stop();
@@ -1160,6 +1164,12 @@ impl ScreenReaderEngine {
 
     /// Handles an incoming accessibility event from the OS event listener.
     pub fn handle_accessibility_event(&mut self, event: &AccessibilityEvent) -> Option<String> {
+        if !matches!(
+            event,
+            AccessibilityEvent::LiveRegion(_) | AccessibilityEvent::DocumentLoaded { .. }
+        ) {
+            self.apply_pending_page();
+        }
         match event {
             AccessibilityEvent::Focus(focus) => self.handle_focus_event(focus),
             AccessibilityEvent::Menu(menu) => self.handle_menu_event(*menu),
@@ -1173,12 +1183,13 @@ impl ScreenReaderEngine {
                 let same_page = self.app_mode == AppMode::VirtualBuffer
                     && self.cursor.buffer.document_title() == Some(title.as_str());
                 if same_page {
-                    let offset = self.cursor.offset;
-                    self.cursor.buffer = buffer;
-                    self.cursor.offset = offset.min(self.cursor.buffer.len());
-                    self.last_page_focus = None;
+                    // Applied once the events of this change are handled: several live regions
+                    // can change at once, and each is compared with the page before the change
+                    // [obs, 206/s2].
+                    self.pending_page = Some(buffer);
                     return None;
                 }
+                self.pending_page = None;
                 self.last_page_focus = None;
                 self.load_buffer(buffer);
                 self.app_mode = AppMode::VirtualBuffer;
@@ -1821,9 +1832,21 @@ impl ScreenReaderEngine {
         Some(speech)
     }
 
+    /// Replaces the buffer with the page refreshed after a change, keeping the virtual
+    /// cursor's place.
+    fn apply_pending_page(&mut self) {
+        if let Some(buffer) = self.pending_page.take() {
+            let offset = self.cursor.offset;
+            self.cursor.buffer = buffer;
+            self.cursor.offset = offset.min(self.cursor.buffer.len());
+            self.last_page_focus = None;
+        }
+    }
+
     /// Called when the OS event stream goes quiet: speech JAWS defers until no further
     /// event supersedes it (a closed popup menu, unless focus moved on).
     pub fn on_idle(&mut self) -> Option<String> {
+        self.apply_pending_page();
         let speech = self.menus.idle()?;
         self.speech.speak(&speech, true);
         Some(speech)
