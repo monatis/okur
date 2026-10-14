@@ -15,6 +15,14 @@ pub trait ApplicationActions: Send {
 
     /// Requests the element's default action (click a button or link, toggle a check box).
     fn activate(&self, node: &AomNode) -> bool;
+
+    /// Asks for the text at the focused edit's caret once the application has handled the
+    /// navigation key being passed to it. The text arrives later as
+    /// [`crate::event::AccessibilityEvent::CaretText`]. Returns false when unsupported.
+    fn read_at_caret(&self, unit: crate::event::CaretUnit) -> bool {
+        let _ = unit;
+        false
+    }
 }
 
 /// Records requested actions; for tests and headless runs.
@@ -44,5 +52,12 @@ impl ApplicationActions for RecordingActions {
 
     fn activate(&self, node: &AomNode) -> bool {
         self.record("activate", node)
+    }
+
+    fn read_at_caret(&self, unit: crate::event::CaretUnit) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((format!("caret {unit:?}"), 0));
+        }
+        true
     }
 }

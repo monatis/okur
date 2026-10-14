@@ -1020,7 +1020,9 @@ impl ScreenReaderEngine {
                 self.speech.speak("Virtual PC Cursor", true);
                 return KeyAction::Consume;
             }
-            // In forms mode, pass all typing and navigation through to the active control
+            // In forms mode, pass all typing and navigation through to the active control;
+            // caret movement keys then read the text they moved over.
+            self.read_caret_after(event);
             return KeyAction::PassThrough;
         }
 
@@ -1049,6 +1051,14 @@ impl ScreenReaderEngine {
         // navigation and typing keys MUST pass through to the OS so Windows
         // handles arrow navigation, Tab cycling, and initial-letter jumps natively!
         if self.app_mode != AppMode::VirtualBuffer {
+            if !event.modifiers.insert
+                && self
+                    .last_native_focus
+                    .as_ref()
+                    .is_some_and(|f| f.role == Role::Edit)
+            {
+                self.read_caret_after(event);
+            }
             if event.modifiers.insert {
                 if let Some(cmd) = event.to_command_string() {
                     if let Some(_res) = self.execute_command(&cmd) {
@@ -1128,6 +1138,11 @@ impl ScreenReaderEngine {
     pub fn handle_accessibility_event(&mut self, event: &AccessibilityEvent) -> Option<String> {
         match event {
             AccessibilityEvent::Focus(focus) => self.handle_focus_event(focus),
+            AccessibilityEvent::CaretText { unit, text } => {
+                let speech = Self::caret_speech(*unit, text);
+                self.speech.speak(&speech, true);
+                Some(speech)
+            }
             AccessibilityEvent::LiveRegion(live) => self.handle_live_region_event(live),
             AccessibilityEvent::DocumentLoaded { title, root } => {
                 let buffer = VirtualBuffer::from_aom(root);
@@ -1494,6 +1509,52 @@ impl ScreenReaderEngine {
     /// edit act on the page and not only on the buffer.
     pub fn set_actions(&mut self, actions: Box<dyn crate::actions::ApplicationActions>) {
         self.actions = Some(actions);
+    }
+
+    /// The text a caret movement key reads in an edit: Left/Right a character, Ctrl+Left/
+    /// Right a word, Up/Down a line, Home/End the character at the new caret.
+    fn caret_unit(event: &KeyEvent) -> Option<crate::event::CaretUnit> {
+        use crate::event::CaretUnit;
+        let m = &event.modifiers;
+        if m.alt || m.win || m.insert || m.shift {
+            return None;
+        }
+        match (&event.key, m.ctrl) {
+            (Key::LeftArrow | Key::RightArrow, false) => Some(CaretUnit::Character),
+            (Key::LeftArrow | Key::RightArrow, true) => Some(CaretUnit::Word),
+            (Key::UpArrow | Key::DownArrow, false) => Some(CaretUnit::Line),
+            (Key::Home | Key::End, false) => Some(CaretUnit::Character),
+            (Key::Home | Key::End, true) => Some(CaretUnit::Line),
+            (Key::PageUp | Key::PageDown, false) => Some(CaretUnit::Line),
+            _ => None,
+        }
+    }
+
+    /// Asks the platform to read at the caret once the application has handled `event`.
+    fn read_caret_after(&self, event: &KeyEvent) {
+        if let (Some(actions), Some(unit)) = (&self.actions, Self::caret_unit(event)) {
+            actions.read_at_caret(unit);
+        }
+    }
+
+    /// Speech for text read at the caret.
+    fn caret_speech(unit: crate::event::CaretUnit, text: &str) -> String {
+        use crate::event::CaretUnit;
+        let blank = || "blank".to_owned();
+        match unit {
+            CaretUnit::Character => match text.chars().next() {
+                None | Some('\r' | '\n') => blank(),
+                Some(c) => SpeechFormatter::format_char(c),
+            },
+            CaretUnit::Word | CaretUnit::Line => {
+                let t = text.trim_end_matches(['\r', '\n']).trim();
+                if t.is_empty() {
+                    blank()
+                } else {
+                    t.to_owned()
+                }
+            }
+        }
     }
 
     /// The node of the line under the virtual cursor.

@@ -73,6 +73,12 @@ enum Commands {
         #[arg(long, default_value = "focus")]
         action: String,
     },
+    /// Read the focused edit's text at its caret, as caret keys do in an edit (Windows)
+    Caret {
+        /// char, word or line
+        #[arg(long, default_value = "char")]
+        unit: String,
+    },
     /// Record system-wide accessibility events as JSON Lines (Windows)
     Trace {
         /// Output trace file
@@ -419,10 +425,14 @@ async fn main() {
             let mut cursor = VirtualCursor::new(buffer);
             cursor.move_to_start();
 
+            // OS accessibility events and caret text both reach the engine through this channel.
+            let (event_tx, mut event_rx) = tokio::sync::mpsc::unbounded_channel();
             let mut engine = ScreenReaderEngine::new(cursor, Box::new(tts));
             // Enter on an edit focuses it in the page, Enter/Space on a control activates it.
             #[cfg(windows)]
-            engine.set_actions(Box::new(sr_platform::actions::ChromiumActions::start()));
+            engine.set_actions(Box::new(sr_platform::actions::WindowsActions::start(Some(
+                event_tx.clone(),
+            ))));
             let engine = Arc::new(Mutex::new(engine));
 
             // Announce startup
@@ -459,7 +469,6 @@ async fn main() {
 
             // Start OS-level accessibility event listener
             let mut event_listener = create_event_listener();
-            let (event_tx, mut event_rx) = tokio::sync::mpsc::unbounded_channel();
             if let Err(e) = event_listener.start(event_tx) {
                 tracing::warn!("Could not start OS accessibility event listener: {}", e);
             } else {
@@ -744,6 +753,27 @@ async fn main() {
                 let _ = (name, action);
                 eprintln!("act is only available on Windows");
                 std::process::exit(1);
+            }
+        }
+        Some(Commands::Caret { unit }) => {
+            let unit = match unit.as_str() {
+                "char" => sr_core::CaretUnit::Character,
+                "word" => sr_core::CaretUnit::Word,
+                "line" => sr_core::CaretUnit::Line,
+                other => {
+                    eprintln!("--unit must be char, word or line, not {other:?}");
+                    std::process::exit(2);
+                }
+            };
+            #[cfg(windows)]
+            println!(
+                "{unit:?}: {:?}",
+                sr_platform::actions::read_at_caret_now(unit)
+            );
+            #[cfg(not(windows))]
+            {
+                let _ = unit;
+                eprintln!("caret is only available on Windows");
             }
         }
         Some(Commands::Trace {

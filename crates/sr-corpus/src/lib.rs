@@ -174,6 +174,44 @@ mod tests {
         // In forms mode, typing reaches the page.
         let typed = press(&mut engine, sr_core::Key::Alpha('a'));
         assert_eq!(typed, sr_core::input::KeyAction::PassThrough);
+
+        // Caret keys reach the field too, and ask for the text they moved over (the user
+        // reported arrow keys read nothing in an edit).
+        let left = press(&mut engine, sr_core::Key::LeftArrow);
+        assert_eq!(left, sr_core::input::KeyAction::PassThrough);
+        let mut ctrl = Modifiers::none();
+        ctrl.ctrl = true;
+        engine.handle_key_event(&KeyEvent::new(sr_core::Key::RightArrow, ctrl, true));
+        press(&mut engine, sr_core::Key::UpArrow);
+        let kinds: Vec<String> = actions.requests().into_iter().map(|(k, _)| k).collect();
+        assert_eq!(
+            kinds,
+            vec!["focus", "caret Character", "caret Word", "caret Line"]
+        );
+
+        use sr_core::{AccessibilityEvent, CaretUnit};
+        let speak = |engine: &mut ScreenReaderEngine, unit, text: &str| {
+            engine.handle_accessibility_event(&AccessibilityEvent::CaretText {
+                unit,
+                text: text.to_owned(),
+            })
+        };
+        assert_eq!(
+            speak(&mut engine, CaretUnit::Character, "Z").as_deref(),
+            Some("Z")
+        );
+        assert_eq!(
+            speak(&mut engine, CaretUnit::Character, "").as_deref(),
+            Some("blank")
+        );
+        assert_eq!(
+            speak(&mut engine, CaretUnit::Word, "Zed ").as_deref(),
+            Some("Zed")
+        );
+        assert_eq!(
+            speak(&mut engine, CaretUnit::Line, "\r\n").as_deref(),
+            Some("blank")
+        );
     }
 
     /// Actions resolve nodes through their IA2 uniqueID, so every form control must carry one.
