@@ -243,6 +243,36 @@ pub fn focus_speech(focus: &FocusEvent, previous: Option<&ContainerKey>) -> Stri
     lines.join("\n")
 }
 
+/// Speech for a change of the focused native control, given its state before and after.
+/// `None` when nothing JAWS speaks changed (Windows fires several events per change).
+pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<String> {
+    let name = named(after.name.as_deref().unwrap_or_default());
+    match after.role {
+        Role::CheckBox | Role::RadioButton if before.states.checked != after.states.checked => {
+            Some(checked(after).trim().to_owned())
+        }
+        Role::TreeItem if before.states.expanded != after.states.expanded => {
+            // [obs, 303/s7]: "Documents | ‹open› | 2 items".
+            Some(match after.states.expanded {
+                Some(true) => {
+                    let mut s = format!("{name}\n{}", state_marker("open"));
+                    if let Some(n) = after.child_count {
+                        s.push_str(&format!("\n{n} items"));
+                    }
+                    s
+                }
+                _ => format!("{name}\n{}", state_marker("closed")),
+            })
+        }
+        Role::ComboBox if before.value != after.value => {
+            let mut lines: Vec<String> = after.value.iter().map(|v| named(v)).collect();
+            lines.extend(position(after));
+            Some(lines.join("\n"))
+        }
+        _ => None,
+    }
+}
+
 /// Menu mode as JAWS announces it [obs, 302]. Focus inside menus arrives as focus events on
 /// menu items; popups opening and closing arrive as [`crate::event::MenuEvent`]s.
 #[derive(Debug, Default)]

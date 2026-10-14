@@ -1015,6 +1015,15 @@ impl ScreenReaderEngine {
             return KeyAction::PassThrough;
         }
 
+        // The JAWS key (Insert) and every combination with it are JAWS commands: they never
+        // reach the application, bound or not, in any mode.
+        if event.key == Key::Insert || event.modifiers.insert {
+            if event.key != Key::Insert {
+                self.jaws_key_command(event);
+            }
+            return KeyAction::Consume;
+        }
+
         // 3. Handle Forms Mode
         if self.forms_mode {
             if event.key == Key::Escape {
@@ -1054,19 +1063,8 @@ impl ScreenReaderEngine {
         // navigation and typing keys MUST pass through to the OS so Windows
         // handles arrow navigation, Tab cycling, and initial-letter jumps natively!
         if self.app_mode != AppMode::VirtualBuffer {
-            let native_text = self.last_native_focus.as_ref().is_some_and(|f| {
-                // Edits, and text documents outside browsers (Windows 11 Notepad, Word).
-                matches!(f.role, Role::Edit | Role::Document)
-            });
-            if !event.modifiers.insert && native_text {
+            if self.editing_text() {
                 self.edit_key_feedback(event);
-            }
-            if event.modifiers.insert {
-                if let Some(cmd) = event.to_command_string() {
-                    if let Some(_res) = self.execute_command(&cmd) {
-                        return KeyAction::Consume;
-                    }
-                }
             }
             return KeyAction::PassThrough;
         }
@@ -1141,6 +1139,7 @@ impl ScreenReaderEngine {
         match event {
             AccessibilityEvent::Focus(focus) => self.handle_focus_event(focus),
             AccessibilityEvent::Menu(menu) => self.handle_menu_event(*menu),
+            AccessibilityEvent::Change { kind, control } => self.handle_change(*kind, control),
             AccessibilityEvent::CaretText { unit, text } => {
                 let speech = Self::caret_speech(*unit, text);
                 self.speech.speak(&speech, true);
@@ -1532,6 +1531,32 @@ impl ScreenReaderEngine {
         self.actions = Some(actions);
     }
 
+    /// Whether keys go to a text field: forms mode in a page, or a focused native edit or
+    /// text document (Windows 11 Notepad, Word).
+    fn editing_text(&self) -> bool {
+        self.forms_mode
+            || (self.app_mode != AppMode::VirtualBuffer
+                && self
+                    .last_native_focus
+                    .as_ref()
+                    .is_some_and(|f| matches!(f.role, Role::Edit | Role::Document)))
+    }
+
+    /// A JAWS key command (Insert+…). In a text field the reading commands read at the
+    /// caret; elsewhere they run as virtual cursor or application commands.
+    fn jaws_key_command(&mut self, event: &KeyEvent) {
+        if self.editing_text() && event.key == Key::UpArrow && !event.modifiers.ctrl {
+            // Say Line (Insert+Up) reads the caret's line.
+            if let Some(actions) = &self.actions {
+                actions.read_at_caret(crate::event::CaretUnit::Line);
+            }
+            return;
+        }
+        if let Some(cmd) = event.to_command_string() {
+            let _ = self.execute_command(&cmd);
+        }
+    }
+
     /// The text a caret movement key reads in an edit: Left/Right a character, Ctrl+Left/
     /// Right a word, Up/Down a line, Home/End the character at the new caret.
     fn caret_unit(event: &KeyEvent) -> Option<crate::event::CaretUnit> {
@@ -1595,6 +1620,23 @@ impl ScreenReaderEngine {
     fn node_under_cursor(&self) -> Option<AomNode> {
         let line = self.cursor.buffer.line_at_offset(self.cursor.offset)?;
         self.cursor.buffer.node_map.get(&line.node_id).cloned()
+    }
+
+    /// The focused control changed without focus moving (Space on a check box, a tree item
+    /// expanded, a combo box value). Speaks what changed, as JAWS does.
+    pub fn handle_change(
+        &mut self,
+        kind: crate::event::ChangeKind,
+        control: &FocusEvent,
+    ) -> Option<String> {
+        tracing::debug!(?kind, role = ?control.role, name = ?control.name, "control changed");
+        if control.in_document {
+            return None;
+        }
+        let before = self.last_native_focus.replace(control.clone())?;
+        let speech = crate::native_focus::change_speech(&before, control)?;
+        self.speech.speak(&speech, true);
+        Some(speech)
     }
 
     /// Called when the OS event stream goes quiet: speech JAWS defers until no further
@@ -1996,8 +2038,7 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "known gap: Insert+T (Say Window Title) is unbound; JAWS consumes every JAWS-key combination"]
-    fn test_known_gap_insert_t_consumed_in_native_app() {
+    fn test_jaws_key_combinations_are_consumed_in_native_apps() {
         let empty_doc = AomNode::new(0, Role::Document);
         let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&empty_doc));
         let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
@@ -2006,6 +2047,26 @@ mod tests {
         let mut ins_t = KeyEvent::new(Key::Alpha('t'), Modifiers::none(), true);
         ins_t.modifiers.insert = true;
         assert_eq!(engine.handle_key_event(&ins_t), KeyAction::Consume);
+    }
+
+    /// In a text field, the JAWS key is consumed too, and Say Line (Insert+Up) reads the
+    /// caret's line instead of reaching the field.
+    #[test]
+    fn test_jaws_key_in_forms_mode_reads_the_caret_line() {
+        let empty_doc = AomNode::new(0, Role::Document);
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&empty_doc));
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+        let actions = crate::actions::RecordingActions::default();
+        engine.set_actions(Box::new(actions.clone()));
+        engine.forms_mode = true;
+
+        let insert = KeyEvent::new(Key::Insert, Modifiers::none(), true);
+        assert_eq!(engine.handle_key_event(&insert), KeyAction::Consume);
+        let mut say_line = KeyEvent::new(Key::UpArrow, Modifiers::none(), true);
+        say_line.modifiers.insert = true;
+        assert_eq!(engine.handle_key_event(&say_line), KeyAction::Consume);
+        let kinds: Vec<String> = actions.requests().into_iter().map(|(k, _)| k).collect();
+        assert_eq!(kinds, vec!["caret Line"]);
     }
 
     #[test]

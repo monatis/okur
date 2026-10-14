@@ -627,6 +627,17 @@ pub(crate) mod capture {
         }
     }
 
+    /// The focused element with its control-view subtree to depth 2.
+    pub(crate) fn focus_subtree_of(uia: &IUIAutomation) -> Option<UiaNode> {
+        // SAFETY: UIA client queries on a valid automation object.
+        unsafe {
+            let walker = uia.ControlViewWalker().ok()?;
+            let focused = uia.GetFocusedElement().ok()?;
+            let mut budget = MAX_FOCUS_SUBTREE;
+            read_subtree(uia, &walker, &focused, 2, &mut budget)
+        }
+    }
+
     fn read_subtree(
         uia: &IUIAutomation,
         walker: &IUIAutomationTreeWalker,

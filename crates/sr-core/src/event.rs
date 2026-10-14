@@ -11,6 +11,18 @@ pub enum Politeness {
     Assertive,
 }
 
+/// What changed on the focused control (MSAA `EVENT_OBJECT_STATECHANGE`, `VALUECHANGE`,
+/// `SELECTION`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum ChangeKind {
+    /// A state: checked, expanded, selected.
+    State,
+    /// The value: a combo box selection, a slider position.
+    Value,
+    /// The selected item of a container.
+    Selection,
+}
+
 /// How much text around the caret a navigation key reads in an edit.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum CaretUnit {
@@ -55,6 +67,8 @@ pub struct FocusEvent {
     pub dom_id: Option<String>,
     /// For tree items: the nesting level, 0 for top-level items.
     pub tree_level: Option<usize>,
+    /// Number of child items (an expanded tree item's children).
+    pub child_count: Option<usize>,
     pub window_class: Option<String>,
     pub window_title: Option<String>,
     pub folder_name: Option<String>,
@@ -78,6 +92,7 @@ impl FocusEvent {
             in_document: false,
             dom_id: None,
             tree_level: None,
+            child_count: None,
             window_class: None,
             window_title: None,
             folder_name: None,
@@ -176,6 +191,12 @@ pub enum AccessibilityEvent {
     Focus(FocusEvent),
     /// Menu mode transitions.
     Menu(MenuEvent),
+    /// The focused control changed without focus moving: `control` is its new state, read
+    /// like a focus landing on it.
+    Change {
+        kind: ChangeKind,
+        control: FocusEvent,
+    },
     /// Text at the caret of the focused edit, read after a caret movement key.
     CaretText {
         unit: CaretUnit,

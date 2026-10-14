@@ -6,7 +6,7 @@
 //! the event stream the harness records, replays and verifies against JAWS.
 
 use super::AccessibilityEventListener;
-use crate::event_trace::{focus_event_from_trace, menu_event_from_trace, run_live, TraceEvent};
+use crate::event_trace::{run_live, EventConverter, TraceEvent};
 use crate::PlatformError;
 use sr_core::AccessibilityEvent;
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -47,7 +47,9 @@ impl AccessibilityEventListener for WindowsAccessibilityEventListener {
             .name("sr-winevents".to_owned())
             .spawn(move || {
                 let mut page: Option<String> = None;
-                let sink = move |event: TraceEvent| deliver(&event, &mut page, &sender);
+                let mut converter = EventConverter::default();
+                let sink =
+                    move |event: TraceEvent| deliver(&event, &mut converter, &mut page, &sender);
                 let count = run_live(Box::new(sink), &stop);
                 tracing::debug!(count, "WinEvent listener stopped");
             })
@@ -69,55 +71,65 @@ impl AccessibilityEventListener for WindowsAccessibilityEventListener {
     }
 }
 
-/// Converts one captured event for the engine. A focus landing in a page that differs from
-/// the last one (by its document's title and URL) first loads that page into the buffer.
+/// Converts one captured event for the engine, through the [`EventConverter`] parity replay
+/// uses. A focus landing in a page that differs from the last one (by its document's title
+/// and URL) first loads that page into the buffer.
 fn deliver(
+    event: &TraceEvent,
+    converter: &mut EventConverter,
+    page: &mut Option<String>,
+    sender: &UnboundedSender<AccessibilityEvent>,
+) {
+    let Some(converted) = converter.convert(event) else {
+        if event.event == "focus" {
+            tracing::debug!(class = ?event.window_class, "focus event without a usable focus chain");
+        }
+        return;
+    };
+    match &converted {
+        AccessibilityEvent::Focus(focus) => {
+            tracing::debug!(
+                role = ?focus.role,
+                name = ?focus.name,
+                in_document = focus.in_document,
+                class = ?focus.window_class,
+                "focus event"
+            );
+            if focus.in_document {
+                load_page_if_new(event, page, sender);
+            }
+        }
+        other => tracing::debug!(event = ?other, "event"),
+    }
+    let _ = sender.send(converted);
+}
+
+fn load_page_if_new(
     event: &TraceEvent,
     page: &mut Option<String>,
     sender: &UnboundedSender<AccessibilityEvent>,
 ) {
-    if let Some(menu) = menu_event_from_trace(event) {
-        tracing::debug!(?menu, "menu event");
-        let _ = sender.send(AccessibilityEvent::Menu(menu));
+    let document = event
+        .focus_chain
+        .iter()
+        .find(|n| n.control_type == UIA_DOCUMENT);
+    let key = document.map(|d| {
+        format!(
+            "{}\u{1}{}",
+            d.name.as_deref().unwrap_or_default(),
+            d.value.as_deref().unwrap_or_default()
+        )
+    });
+    if key == *page {
         return;
     }
-    if event.event != "focus" {
-        return;
-    }
-    let Some(focus) = focus_event_from_trace(event) else {
-        tracing::debug!(class = ?event.window_class, "focus event without a usable focus chain");
-        return;
-    };
-    tracing::debug!(
-        role = ?focus.role,
-        name = ?focus.name,
-        in_document = focus.in_document,
-        class = ?focus.window_class,
-        "focus event"
-    );
-    if focus.in_document {
-        let document = event
-            .focus_chain
-            .iter()
-            .find(|n| n.control_type == UIA_DOCUMENT);
-        let key = document.map(|d| {
-            format!(
-                "{}\u{1}{}",
-                d.name.as_deref().unwrap_or_default(),
-                d.value.as_deref().unwrap_or_default()
-            )
-        });
-        if key != *page {
-            *page = key;
-            match crate::actions::capture_foreground_page() {
-                Ok(root) => {
-                    let title = document.and_then(|d| d.name.clone()).unwrap_or_default();
-                    tracing::debug!(%title, "page loaded");
-                    let _ = sender.send(AccessibilityEvent::DocumentLoaded { title, root });
-                }
-                Err(e) => tracing::warn!("page capture failed: {e}"),
-            }
+    *page = key;
+    match crate::actions::capture_foreground_page() {
+        Ok(root) => {
+            let title = document.and_then(|d| d.name.clone()).unwrap_or_default();
+            tracing::debug!(%title, "page loaded");
+            let _ = sender.send(AccessibilityEvent::DocumentLoaded { title, root });
         }
+        Err(e) => tracing::warn!("page capture failed: {e}"),
     }
-    let _ = sender.send(AccessibilityEvent::Focus(focus));
 }

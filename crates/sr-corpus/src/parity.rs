@@ -12,7 +12,7 @@ use crate::snapshots::{self, Api};
 use serde::Serialize;
 use serde_json::Value;
 use sr_core::{ScreenReaderEngine, VirtualBuffer, VirtualCursor};
-use sr_platform::event_trace::{focus_event_from_trace, menu_event_from_trace, TraceEvent};
+use sr_platform::event_trace::{menu_event_from_trace, EventConverter, TraceEvent};
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -143,9 +143,11 @@ fn run_scenario(
     spoken.take();
 
     let replay = StepEvents::load(corpus_dir, &scenario.id, &read_json(&evidence_path)?)?;
+    // One converter for the whole run, as live: it tracks the focused object.
+    let mut converter = EventConverter::default();
     for event in &replay.setup {
-        if let Some(focus) = focus_event_from_trace(event) {
-            let _ = engine.handle_focus_event(&focus);
+        if let Some(converted) = converter.convert(event) {
+            let _ = engine.handle_accessibility_event(&converted);
         }
     }
     spoken.take();
@@ -158,15 +160,12 @@ fn run_scenario(
                 // Replay the OS events recorded while JAWS handled this step (e.g. the focus
                 // change that follows Tab), exactly as the live listener would deliver them.
                 for event in replay.for_step(&step.id) {
-                    if let Some(menu) = menu_event_from_trace(&event) {
-                        let _ = engine.handle_menu_event(menu);
+                    let Some(converted) = converter.convert(&event) else {
                         continue;
-                    }
-                    if let Some(focus) = focus_event_from_trace(&event) {
-                        if let Some(speech) = engine.handle_focus_event(&focus) {
-                            if spoken.is_empty() {
-                                spoken.push(&speech);
-                            }
+                    };
+                    if let Some(speech) = engine.handle_accessibility_event(&converted) {
+                        if spoken.is_empty() {
+                            spoken.push(&speech);
                         }
                     }
                 }
@@ -341,8 +340,10 @@ fn press(engine: &mut ScreenReaderEngine, chord: &str) -> Result<(), String> {
 /// mode transitions.
 fn replayable(event: &TraceEvent) -> bool {
     menu_event_from_trace(event).is_some()
-        || (matches!(event.event.as_str(), "focus" | "foreground")
-            && (!event.focus_chain.is_empty() || event.object.is_some()))
+        || (matches!(
+            event.event.as_str(),
+            "focus" | "foreground" | "state_change" | "value_change" | "selection"
+        ) && (!event.focus_chain.is_empty() || event.object.is_some()))
 }
 
 /// Replayable events recorded during each step of the first successful traced trial

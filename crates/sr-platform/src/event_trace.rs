@@ -24,7 +24,7 @@ const MSAA_MENUITEM: i32 = 0x0C;
 const MSAA_BUTTONMENU: i32 = 0x39;
 
 /// Bumped whenever the recorded fields or their meaning change.
-pub const TRACE_FORMAT_VERSION: u32 = 3;
+pub const TRACE_FORMAT_VERSION: u32 = 4;
 
 /// The MSAA view of an event's object (`AccessibleObjectFromEvent`).
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
@@ -243,6 +243,14 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent>
         focus.role = sr_core::Role::MenuButton;
     }
     if let Some(subtree) = &event.focus_subtree {
+        if focus.role == sr_core::Role::TreeItem {
+            let children = subtree
+                .children
+                .iter()
+                .filter(|c| c.control_type == UIA_TREEITEM)
+                .count();
+            focus.child_count = (children > 0).then_some(children);
+        }
         // A list-view item's further columns are its text children after the name.
         if focus.role == sr_core::Role::ListItem {
             focus.columns = subtree
@@ -303,10 +311,88 @@ pub fn menu_event_from_trace(event: &TraceEvent) -> Option<sr_core::MenuEvent> {
     }
 }
 
+/// Converts captured events (live or recorded) into engine events. The live listener and
+/// parity replay share it, so both feed the engine the same sequence.
+///
+/// It remembers the focused object: a state, value or selection change is passed on only when
+/// it concerns that object (a check box toggled with Space, a tree item expanded, a combo
+/// box value changed), as JAWS speaks changes of the focused control and not of others.
+#[derive(Debug, Default)]
+pub struct EventConverter {
+    /// The MSAA identity (`hwnd`, `id_object`, `id_child`) and name of the last focus.
+    focused: Option<(isize, i32, i32, Option<String>)>,
+    /// The last focus as the engine received it.
+    last_focus: Option<sr_core::FocusEvent>,
+}
+
+impl EventConverter {
+    pub fn convert(&mut self, event: &TraceEvent) -> Option<sr_core::AccessibilityEvent> {
+        use sr_core::{AccessibilityEvent, ChangeKind};
+        if let Some(menu) = menu_event_from_trace(event) {
+            return Some(AccessibilityEvent::Menu(menu));
+        }
+        let kind = match event.event.as_str() {
+            "focus" => {
+                let focus = focus_event_from_trace(event)?;
+                let name = event.object.as_ref().and_then(|o| o.name.clone());
+                self.focused = Some((event.hwnd, event.id_object, event.id_child, name));
+                self.last_focus = Some(focus.clone());
+                return Some(AccessibilityEvent::Focus(focus));
+            }
+            "state_change" => ChangeKind::State,
+            "value_change" => ChangeKind::Value,
+            "selection" => ChangeKind::Selection,
+            _ => return None,
+        };
+        let (hwnd, id_object, id_child, name) = self.focused.as_ref()?;
+        let same_object =
+            event.hwnd == *hwnd && event.id_object == *id_object && event.id_child == *id_child;
+        let same_name =
+            name.is_some() && event.object.as_ref().and_then(|o| o.name.as_ref()) == name.as_ref();
+        if !(same_object || same_name) {
+            return None;
+        }
+        // The control as UIA reports it now; without a focus chain (a failed UIA read), the
+        // last focus with the event object's MSAA states.
+        let control = match focus_event_from_trace(event) {
+            Some(control) => control,
+            None => {
+                let mut control = self.last_focus.clone()?;
+                if let Some(states) = event.object.as_ref().map(|o| o.states) {
+                    apply_msaa_states(&mut control, states);
+                }
+                control
+            }
+        };
+        self.last_focus = Some(control.clone());
+        Some(AccessibilityEvent::Change { kind, control })
+    }
+}
+
+/// Updates the states a change can carry from MSAA state bits (`STATE_SYSTEM_*`).
+fn apply_msaa_states(control: &mut sr_core::FocusEvent, states: u32) {
+    const CHECKED: u32 = 0x10;
+    const EXPANDED: u32 = 0x200;
+    const COLLAPSED: u32 = 0x400;
+    if matches!(
+        control.role,
+        sr_core::Role::CheckBox | sr_core::Role::RadioButton
+    ) {
+        control.states.checked = Some(states & CHECKED != 0);
+    }
+    if states & EXPANDED != 0 {
+        control.states.expanded = Some(true);
+    } else if states & COLLAPSED != 0 {
+        control.states.expanded = Some(false);
+    }
+}
+
 #[cfg(windows)]
 mod capture {
     use super::{event_name, TraceEvent, TraceHeader, TraceObject, TRACE_FORMAT_VERSION};
-    use crate::uia_snapshot::capture::{automation, focus_chain, focus_context, window_text};
+    use crate::uia_snapshot::capture::{
+        automation, focus_chain, focus_context, focus_subtree_of, window_text,
+    };
     use crate::PlatformError;
     use std::cell::RefCell;
     use std::io::Write;
@@ -469,16 +555,21 @@ mod capture {
         STATE.with(|state| {
             let mut state = state.borrow_mut();
             let Some(state) = state.as_mut() else { return };
-            let focus = if matches!(name, "focus" | "foreground") {
+            // A change to the focused control (check box toggled, tree item expanded, combo
+            // box value) is spoken with the same context as a focus landing on it.
+            let changes_focus_context =
+                matches!(name, "state_change" | "value_change" | "selection");
+            let focus = if matches!(name, "focus" | "foreground") || changes_focus_context {
                 state.uia.as_ref().map(focus_chain).unwrap_or_default()
             } else {
                 Vec::new()
             };
             let (focus_siblings, focus_subtree) = match (name, state.uia.as_ref()) {
                 ("focus", Some(uia)) => focus_context(uia),
+                (_, Some(uia)) if changes_focus_context => (Vec::new(), focus_subtree_of(uia)),
                 _ => (Vec::new(), None),
             };
-            let list_position = if name == "focus" {
+            let list_position = if name == "focus" || changes_focus_context {
                 win32_list_position(hwnd, &class)
             } else {
                 None

@@ -22,6 +22,9 @@ use windows::Win32::UI::WindowsAndMessaging::{
 static ACTIVE_CALLBACK: Mutex<Option<HookCallback>> = Mutex::new(None);
 static CONSUMED_KEYS: Mutex<Option<HashSet<u32>>> = Mutex::new(None);
 static HOOK_THREAD_ID: AtomicU32 = AtomicU32::new(0);
+/// Whether the JAWS key (Insert) is held. Tracked here because the hook consumes Insert,
+/// so the system's asynchronous key state may not see it.
+static JAWS_KEY_HELD: AtomicBool = AtomicBool::new(false);
 
 pub struct WindowsKeyboardHook {
     running: ArcBool,
@@ -194,6 +197,9 @@ unsafe extern "system" fn low_level_keyboard_proc(
     }
 
     let vk_code = kbd.vkCode;
+    if vk_code == u32::from(VK_INSERT.0) {
+        JAWS_KEY_HELD.store(is_down, Ordering::Relaxed);
+    }
 
     // If key up was previously consumed on key down, consume key up too
     if is_up {
@@ -213,7 +219,7 @@ unsafe extern "system" fn low_level_keyboard_proc(
     let shift = (GetAsyncKeyState(VK_SHIFT.0 as i32) as u16 & 0x8000) != 0;
     let win = ((GetAsyncKeyState(0x5B) as u16 & 0x8000) != 0) // VK_LWIN
         || ((GetAsyncKeyState(0x5C) as u16 & 0x8000) != 0); // VK_RWIN
-    let insert = (GetAsyncKeyState(VK_INSERT.0 as i32) as u16 & 0x8000) != 0;
+    let insert = JAWS_KEY_HELD.load(Ordering::Relaxed);
 
     let modifiers = Modifiers {
         ctrl,
