@@ -72,12 +72,35 @@ fn chars(text: &str) -> Vec<char> {
     text.chars().collect()
 }
 
-/// The character at `caret`, or `None` at the end of the text or a line break.
+/// Whether `c` ends a line. Win32 edits use `\r\n`, RichEdit (Windows 11 Notepad, WordPad)
+/// a bare `\r`, browsers `\n`; Unicode adds its line and paragraph separators.
+pub fn is_line_break(c: char) -> bool {
+    matches!(c, '\n' | '\r' | '\u{2028}' | '\u{2029}')
+}
+
+/// `text` split into lines at any line break (`\r\n` counts once).
+pub fn text_lines(text: &str) -> Vec<String> {
+    let mut lines = Vec::new();
+    let mut line = String::new();
+    let mut chars = text.chars().peekable();
+    while let Some(c) = chars.next() {
+        if is_line_break(c) {
+            if c == '\r' && chars.peek() == Some(&'\n') {
+                chars.next();
+            }
+            lines.push(std::mem::take(&mut line));
+        } else {
+            line.push(c);
+        }
+    }
+    lines.push(line);
+    lines
+}
+
+/// The character at `caret` (a line break too, which JAWS's history records as an empty
+/// entry and speaks as "blank" [obs, 307/s36]), or `None` at the end of the text.
 fn char_at(context: &TextContext) -> Option<char> {
-    chars(&context.text)
-        .get(context.caret)
-        .copied()
-        .filter(|c| *c != '\r' && *c != '\n')
+    chars(&context.text).get(context.caret).copied()
 }
 
 /// The line containing the caret, without its line break.
@@ -86,11 +109,11 @@ pub fn line_at(context: &TextContext) -> String {
     let caret = context.caret.min(text.len());
     let start = text
         .get(..caret)
-        .and_then(|before| before.iter().rposition(|c| *c == '\n'))
+        .and_then(|before| before.iter().rposition(|c| is_line_break(*c)))
         .map_or(0, |i| i + 1);
     let end = text
         .get(caret..)
-        .and_then(|after| after.iter().position(|c| *c == '\n' || *c == '\r'))
+        .and_then(|after| after.iter().position(|c| is_line_break(*c)))
         .map_or(text.len(), |i| caret + i);
     text.get(start..end).unwrap_or_default().iter().collect()
 }
@@ -188,7 +211,9 @@ pub fn speech(
         }
         EditKey::SelectAll => {
             let selected = selected_text(after);
-            let first = selected.lines().find(|l| !l.trim().is_empty())?;
+            let first = text_lines(&selected)
+                .into_iter()
+                .find(|l| !l.trim().is_empty())?;
             format!("selected\n{}", first.trim())
         }
         EditKey::Copy => {
@@ -292,9 +317,25 @@ mod tests {
         assert_eq!(line_at(&ctx(text, 3, None)), "first line");
         assert_eq!(line_at(&ctx(text, 14, None)), "second line");
         assert_eq!(word_at(&ctx(text, 12, None)), "second");
+        // A line break is a character: an empty history entry, spoken "blank" [obs, 307/s36].
+        let at_break = speech(EditKey::Character, None, &ctx(text, 10, None), "");
+        assert_eq!(at_break.as_deref(), Some("\r"));
+        assert_eq!(crate::pronounce::character("\r"), "blank");
+    }
+
+    /// RichEdit (Windows 11 Notepad) separates lines with a bare `\r`: Up and Down must read
+    /// each line, not the first one.
+    #[test]
+    fn carriage_return_lines() {
+        let text = "fn main() {\r    let x = 1;\r}";
+        assert_eq!(line_at(&ctx(text, 0, None)), "fn main() {");
+        assert_eq!(line_at(&ctx(text, 12, None)), "    let x = 1;");
+        assert_eq!(line_at(&ctx(text, 27, None)), "}");
         assert_eq!(
-            speech(EditKey::Character, None, &ctx(text, 10, None), "").as_deref(),
-            Some("blank")
+            speech(EditKey::Line, None, &ctx(text, 12, None), "").as_deref(),
+            Some("let x = 1;")
         );
+        assert_eq!(text_lines(text), ["fn main() {", "    let x = 1;", "}"]);
+        assert_eq!(text_lines("a\r\nb\nc"), ["a", "b", "c"]);
     }
 }

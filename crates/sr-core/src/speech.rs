@@ -803,6 +803,13 @@ pub trait SpeechOutput: Send + Sync {
         self.speak(text, true);
     }
 
+    /// Speaks a character being read on its own (Left/Right, Delete). `text` is the character
+    /// as JAWS's speech history records it; the synthesizer is given its name, as JAWS names
+    /// spaces and symbols whatever its punctuation level ([`crate::pronounce`]).
+    fn speak_character(&mut self, text: &str, interrupt: bool) {
+        self.speak(&crate::pronounce::character(text), interrupt);
+    }
+
     /// Returns whether speech output is currently active.
     fn is_speaking(&self) -> bool {
         false

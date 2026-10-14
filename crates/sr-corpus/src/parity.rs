@@ -36,6 +36,18 @@ pub struct StepParity {
     /// Distinct transcripts JAWS produced for this step across successful trials.
     pub jaws_variants: Vec<String>,
     pub matched: bool,
+    /// The spoken layer, for evidence recorded through the speech recorder voice: what our
+    /// synthesizer is given, against what JAWS sent its synthesizer.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub spoken: Option<SpokenParity>,
+}
+
+/// One step's spoken-layer comparison ([`sr_core::pronounce`]).
+#[derive(Debug, Clone, Serialize)]
+pub struct SpokenParity {
+    pub engine: String,
+    pub jaws_variants: Vec<String>,
+    pub matched: bool,
 }
 
 #[derive(Debug, Default)]
@@ -49,6 +61,73 @@ impl ParityReport {
     pub fn matched(&self) -> usize {
         self.steps.iter().filter(|s| s.matched).count()
     }
+
+    /// Steps compared on the spoken layer: how many match, of how many.
+    pub fn spoken(&self) -> (usize, usize) {
+        let compared: Vec<&SpokenParity> = self
+            .steps
+            .iter()
+            .filter_map(|s| s.spoken.as_ref())
+            .collect();
+        (
+            compared.iter().filter(|s| s.matched).count(),
+            compared.len(),
+        )
+    }
+}
+
+/// What JAWS speaks for the capture tooling's own requests (clearing and copying its speech
+/// history around every step), which can fall inside a step's spoken window.
+const HARNESS_CONFIRMATIONS: [&str; 2] =
+    ["Speech history cleared", "Copy speech history to clipboard"];
+
+/// What JAWS sent its synthesizer per step, across successful trials, when the evidence was
+/// recorded through the speech recorder voice (`observation.spoken`); `None` otherwise.
+fn jaws_spoken_variants(evidence: &Value) -> Option<BTreeMap<String, Vec<String>>> {
+    let trials: Vec<&Value> = evidence
+        .get("trials")
+        .and_then(Value::as_array)?
+        .iter()
+        .filter(|t| t.get("trial_success").and_then(Value::as_bool) == Some(true))
+        .collect();
+    let steps = || {
+        trials.iter().flat_map(|t| {
+            t.get("step_results")
+                .and_then(Value::as_array)
+                .into_iter()
+                .flatten()
+        })
+    };
+    let recorded = steps().any(|s| {
+        s.pointer("/observation/spoken")
+            .and_then(Value::as_array)
+            .is_some_and(|a| !a.is_empty())
+    });
+    if !recorded {
+        return None;
+    }
+    let mut variants: BTreeMap<String, Vec<String>> = BTreeMap::new();
+    for step in steps() {
+        let Some(id) = step.get("step_id").and_then(Value::as_str) else {
+            continue;
+        };
+        let spoken = step
+            .pointer("/observation/spoken")
+            .and_then(Value::as_array)
+            .map(|a| {
+                a.iter()
+                    .filter_map(Value::as_str)
+                    .filter(|s| !HARNESS_CONFIRMATIONS.contains(&s.trim()))
+                    .collect::<Vec<_>>()
+                    .join(" ")
+            })
+            .unwrap_or_default();
+        let entry = variants.entry(id.to_owned()).or_default();
+        if !entry.contains(&spoken) {
+            entry.push(spoken);
+        }
+    }
+    Some(variants)
 }
 
 fn read_json(path: &Path) -> Result<Value, String> {
@@ -100,6 +179,7 @@ fn run_scenario(
         .join(format!("{}-evidence.json", scenario.id));
     let evidence = read_json(&evidence_path)?;
     let variants = jaws_variants(&evidence);
+    let spoken_variants = jaws_spoken_variants(&evidence);
 
     // Desktop scenarios have no document: the engine starts in native-app mode and its speech
     // comes from the replayed OS events. Browser scenarios load the captured document tree.
@@ -152,6 +232,7 @@ fn run_scenario(
         press(&mut engine, chord, 0)?;
     }
     spoken.take();
+    spoken.take_spoken();
 
     let replay = StepEvents::load(corpus_dir, &scenario.id, &evidence)?;
     // One converter for the whole run, as live: it tracks the focused object.
@@ -162,6 +243,7 @@ fn run_scenario(
         }
     }
     spoken.take();
+    spoken.take_spoken();
 
     let mut steps = Vec::new();
     for (index, step) in scenario.steps.iter().enumerate() {
@@ -226,12 +308,23 @@ fn run_scenario(
         }
         let normalized = normalize(&engine_speech);
         let matched = jaws.iter().any(|v| normalize(v) == normalized);
+        let engine_spoken = spoken.take_spoken().join(" ");
+        let spoken_parity = spoken_variants.as_ref().map(|all| {
+            let jaws_variants = all.get(&step.id).cloned().unwrap_or_default();
+            let ours = normalize(&engine_spoken);
+            SpokenParity {
+                matched: jaws_variants.iter().any(|v| normalize(v) == ours),
+                engine: engine_spoken,
+                jaws_variants,
+            }
+        });
         steps.push(StepParity {
             key: format!("{}/{}", scenario.id, step.id),
             command: step.command.clone(),
             engine: engine_speech,
             jaws_variants: jaws,
             matched,
+            spoken: spoken_parity,
         });
     }
     Ok(steps)
@@ -329,37 +422,64 @@ pub fn write_baseline(corpus_dir: &Path, report: &ParityReport) -> Result<(), St
     fs::write(corpus_dir.join(BASELINE_FILE), render_baseline(report)?).map_err(|e| e.to_string())
 }
 
-/// Speech sink that records every utterance, shared with the harness after the engine owns it.
+type Log = std::sync::Arc<std::sync::Mutex<Vec<String>>>;
+
+/// Speech sink that records every utterance twice, shared with the harness after the engine
+/// owns it: as JAWS's speech history would keep it, and as the synthesizer is asked to say it
+/// ([`sr_core::pronounce`]).
 #[derive(Debug, Clone, Default)]
-struct RecordingSpeech(std::sync::Arc<std::sync::Mutex<Vec<String>>>);
+struct RecordingSpeech {
+    history: Log,
+    spoken: Log,
+}
+
+fn append(log: &Log, text: String) {
+    if let Ok(mut log) = log.lock() {
+        log.push(text);
+    }
+}
+
+fn drain(log: &Log) -> Vec<String> {
+    log.lock()
+        .map(|mut log| std::mem::take(&mut *log))
+        .unwrap_or_default()
+}
 
 impl RecordingSpeech {
     fn is_empty(&self) -> bool {
-        self.0.lock().map(|log| log.is_empty()).unwrap_or(true)
+        self.history
+            .lock()
+            .map(|log| log.is_empty())
+            .unwrap_or(true)
     }
 
     fn push(&self, text: &str) {
-        if let Ok(mut log) = self.0.lock() {
-            log.push(text.to_owned());
-        }
+        append(&self.history, text.to_owned());
+        append(&self.spoken, sr_core::pronounce::text(text));
     }
 
     fn take(&self) -> Vec<String> {
-        self.0
-            .lock()
-            .map(|mut log| std::mem::take(&mut *log))
-            .unwrap_or_default()
+        drain(&self.history)
+    }
+
+    fn take_spoken(&self) -> Vec<String> {
+        drain(&self.spoken)
     }
 }
 
 impl sr_core::speech::SpeechOutput for RecordingSpeech {
-    /// JAWS's speech history has no typing echo, so the replay records none either.
-    fn speak_echo(&mut self, _text: &str) {}
+    /// JAWS's speech history has no typing echo, but its synthesizer speaks it.
+    fn speak_echo(&mut self, text: &str) {
+        append(&self.spoken, text.to_owned());
+    }
 
     fn speak(&mut self, text: &str, _interrupt: bool) {
-        if let Ok(mut log) = self.0.lock() {
-            log.push(text.to_owned());
-        }
+        self.push(text);
+    }
+
+    fn speak_character(&mut self, text: &str, _interrupt: bool) {
+        append(&self.history, text.to_owned());
+        append(&self.spoken, sr_core::pronounce::character(text));
     }
 
     fn stop(&mut self) {}

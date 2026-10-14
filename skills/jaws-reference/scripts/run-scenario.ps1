@@ -220,6 +220,9 @@ function Read-JawsSettings([string]$name) {
 }
 $jawsSettings = [ordered]@{ 'DEFAULT.JCF' = Read-JawsSettings 'DEFAULT.JCF' }
 if ($targetProc -eq 'chrome') { $jawsSettings['Chrome.JCF'] = Read-JawsSettings 'Chrome.JCF' }
+# Voice profiles hold the synthesizer, voice and punctuation level (e.g. Punctuation=0, None).
+Get-ChildItem (Join-Path $env:APPDATA 'Freedom Scientific\JAWS\2025\Settings\voiceprofiles') -Filter *.VPF -ErrorAction SilentlyContinue |
+    ForEach-Object { $jawsSettings["voiceprofiles/$($_.Name)"] = Read-JawsSettings "..\voiceprofiles\$($_.Name)" }
 
 $expectedTitle = $null
 if ($fixturePath -and (Test-Path $fixturePath)) {

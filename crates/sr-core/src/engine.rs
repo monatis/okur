@@ -1048,7 +1048,11 @@ impl ScreenReaderEngine {
         };
 
         if let Some(ref text) = speech {
-            if !text.is_empty() {
+            // Left/Right read a character, which the synthesizer names ("space").
+            let character = matches!(command, "{RIGHT}" | "{LEFT}") && text.chars().count() == 1;
+            if character {
+                self.speech.speak_character(text, true);
+            } else if !text.is_empty() {
                 self.speech.speak(text, true);
             }
         }
@@ -1091,6 +1095,12 @@ impl ScreenReaderEngine {
                 ViewerAction::Speak(speech) => {
                     if let Some(speech) = speech {
                         self.speech.speak(&speech, true);
+                    }
+                    return KeyAction::Consume;
+                }
+                ViewerAction::Character(text) => {
+                    if !text.is_empty() {
+                        self.speech.speak_character(&text, true);
                     }
                     return KeyAction::Consume;
                 }
@@ -1836,11 +1846,7 @@ impl ScreenReaderEngine {
                 if window {
                     lines.push(title);
                 }
-                lines.extend(
-                    text.text
-                        .lines()
-                        .map(|l| l.trim_end_matches('\r').to_owned()),
-                );
+                lines.extend(crate::editing::text_lines(&text.text));
                 return Some(lines);
             }
         }
@@ -1910,7 +1916,16 @@ impl ScreenReaderEngine {
         let field = self.text_field_line();
         let speech = crate::editing::speech(key, before.as_ref(), context, &field)?;
         tracing::debug!(?key, %speech, "edit speech");
-        self.speech.speak(&speech, true);
+        use crate::editing::EditKey;
+        let character = matches!(
+            key,
+            EditKey::Character | EditKey::DeleteForward | EditKey::DeleteBackward
+        ) && speech.chars().count() == 1;
+        if character {
+            self.speech.speak_character(&speech, true);
+        } else {
+            self.speech.speak(&speech, true);
+        }
         Some(speech)
     }
 

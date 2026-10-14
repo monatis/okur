@@ -23,6 +23,8 @@ use crate::input::{Key, KeyEvent};
 pub enum ViewerAction {
     /// The key was handled: speak this, if anything.
     Speak(Option<String>),
+    /// A character was read: speak it as a character (named when it is a space or symbol).
+    Character(String),
     /// Copy this text to the clipboard and speak the confirmation.
     Copy(String),
     /// Close the viewer.
@@ -211,7 +213,7 @@ impl VirtualViewer {
             Key::UpArrow if m.insert && !m.ctrl && !m.alt && !m.shift => speak(self.line_text()),
             Key::RightArrow | Key::LeftArrow if plain => {
                 self.all_selected = false;
-                speak(self.move_char(event.key == Key::RightArrow))
+                ViewerAction::Character(self.move_char(event.key == Key::RightArrow))
             }
             Key::RightArrow | Key::LeftArrow if ctrl_only => {
                 self.all_selected = false;
@@ -265,6 +267,7 @@ mod tests {
     fn said(action: ViewerAction) -> String {
         match action {
             ViewerAction::Speak(s) => s.unwrap_or_default(),
+            ViewerAction::Character(c) => c,
             other => format!("{other:?}"),
         }
     }

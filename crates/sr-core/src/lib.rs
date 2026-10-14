@@ -9,6 +9,7 @@ pub mod event;
 pub mod input;
 pub mod linearize;
 pub mod native_focus;
+pub mod pronounce;
 pub mod settings;
 pub mod speech;
 pub mod viewer;

@@ -233,6 +233,17 @@ impl sr_core::speech::SpeechOutput for TtsManager {
         let _ = self.speak(text, interrupt);
     }
 
+    /// The speech log keeps the character as JAWS's history would; the synthesizer says its
+    /// name.
+    fn speak_character(&mut self, text: &str, interrupt: bool) {
+        if let Some(log) = self.speech_log.as_mut() {
+            log.record(SpeechLogKind::Speak, text, interrupt);
+        }
+        let _ = self
+            .engine
+            .speak(&sr_core::pronounce::character(text), interrupt);
+    }
+
     fn stop(&mut self) {
         let _ = self.stop();
     }

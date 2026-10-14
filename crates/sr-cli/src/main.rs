@@ -76,6 +76,11 @@ enum Commands {
         /// Snapshot API to drive the engine with: ia2 (the ratchet's API) or uia
         #[arg(long)]
         api: Option<String>,
+
+        /// List spoken-layer differences (what the synthesizer is given, against what JAWS
+        /// sent its synthesizer in evidence recorded through the speech recorder voice)
+        #[arg(long)]
+        spoken: bool,
     },
     /// Act on the foreground browser page like Enter/Space would (Windows): find a control by
     /// name in the page's IA2 capture, request focus or its default action, then report the
@@ -797,6 +802,7 @@ async fn main() {
             all,
             write_baseline,
             api,
+            spoken,
         }) => {
             use sr_corpus::snapshots::{Api, PARITY_API};
             let dir = Path::new(&corpus_dir);
@@ -827,9 +833,28 @@ async fn main() {
                     }
                 }
             }
+            if spoken {
+                for step in &report.steps {
+                    let Some(s) = step.spoken.as_ref().filter(|s| all || !s.matched) else {
+                        continue;
+                    };
+                    let tag = if s.matched { "MATCH" } else { "DIFF " };
+                    println!("[{tag}] spoken {}  ({})", step.key, step.command);
+                    println!("    ours: {:?}", sr_corpus::parity::normalize(&s.engine));
+                    if !s.matched {
+                        for v in &s.jaws_variants {
+                            println!("    jaws: {:?}", sr_corpus::parity::normalize(v));
+                        }
+                    }
+                }
+            }
             for e in &report.errors {
                 println!("[ERROR] {e}");
             }
+            let (spoken_matched, spoken_total) = report.spoken();
+            println!(
+                "JAWS spoken parity: {spoken_matched}/{spoken_total} steps match exactly (evidence recorded through the speech recorder voice)"
+            );
             println!(
                 "JAWS parity ({api:?}): {}/{} steps match exactly ({} scenarios could not run)",
                 report.matched(),
