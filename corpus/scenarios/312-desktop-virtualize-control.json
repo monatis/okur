@@ -1,0 +1,28 @@
+{
+  "id": "312-desktop-virtualize-control",
+  "name": "Virtualize Current Control (Insert+Shift+V) and Virtualize Window on a multiline edit: reading by line and character, copying, closing",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-editor.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Editor Fixture" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+Shift+V" },
+    { "id": "s2", "type": "key", "command": "Down" },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Down" },
+    { "id": "s5", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s6", "type": "key", "command": "Right" },
+    { "id": "s7", "type": "key", "command": "Right" },
+    { "id": "s8", "type": "key", "command": "Right" },
+    { "id": "s9", "type": "key", "command": "Ctrl+A", "settle_max_ms": 30000 },
+    { "id": "s10", "type": "key", "command": "Ctrl+C", "capture_clipboard": true },
+    { "id": "s11", "type": "key", "command": "Escape" },
+    { "id": "s12", "type": "key", "command": "Insert+Alt+W" },
+    { "id": "s13", "type": "key", "command": "Down" },
+    { "id": "s14", "type": "key", "command": "Ctrl+A", "settle_max_ms": 30000 },
+    { "id": "s15", "type": "key", "command": "Ctrl+C", "capture_clipboard": true },
+    { "id": "s16", "type": "key", "command": "Escape" }
+  ]
+}

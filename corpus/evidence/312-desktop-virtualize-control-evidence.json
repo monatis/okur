@@ -1,0 +1,1442 @@
+{
+    "format_version":  2,
+    "scenario_id":  "312-desktop-virtualize-control",
+    "scenario_version":  "1.0.0",
+    "timestamp":  "2026-10-14T23:09:08.6834821+03:00",
+    "provenance":  {
+                       "capture_script_sha256":  "5392417977bb951de769f631535f9be146d4f534b96ef914322cc9919a9a11c9",
+                       "scenario_sha256":  "520d0137fc488a72cf591a4adc089d1511f41f6d672380750b3b3a00acac1bb9",
+                       "fixture_sha256":  "1714eada49baac05b6637982281b7fd0f226c29d4bae6e4868f1d8b9dd0802e8",
+                       "host":  "DESKTOP-DCNAKQQ",
+                       "os_build":  "Microsoft Windows [Version 10.0.19045.6456]",
+                       "keyboard_layout":  "Turkish Q",
+                       "culture":  "en-US",
+                       "utc_offset_minutes":  180,
+                       "chrome_version":  "155.0.8059.40",
+                       "jaws_version":  "2025.2505.43.400",
+                       "jaws_settings":  {
+                                             "DEFAULT.JCF":  {
+                                                                 "Options":  {
+                                                                                 "MigrationWizardDisplayed":  "1",
+                                                                                 "TypingEcho":  "0",
+                                                                                 "KeyboardType":  "Laptop",
+                                                                                 "LanguageDetection":  "0",
+                                                                                 "AutomaticNotificationOfUpdates":  "0",
+                                                                                 "EnableAdditionalVoiceProfiles":  "0",
+                                                                                 "DisplayStartupWizard":  "0",
+                                                                                 "ShowSoundMixerDiscoveryDialog":  "0"
+                                                                             },
+                                                                 "FormsMode":  {
+                                                                                   "AutoFormsMode":  "0"
+                                                                               },
+                                                                 "OutputModes":  {
+                                                                                     "ACCESS_KEY":  "0|0|0|Access Key"
+                                                                                 },
+                                                                 "FSCasts":  {
+                                                                                 "EnableNotifications":  "0"
+                                                                             },
+                                                                 "Braille":  {
+                                                                                 "SelectedBrailleTranslator":  ""
+                                                                             },
+                                                                 "Braille Profiles":  {
+                                                                                          "ENU":  "0|20|US_Unicode|US_Unicode|0|1|0"
+                                                                                      },
+                                                                 "MessageCenter":  {
+                                                                                       "PendingMessages":  "0"
+                                                                                   }
+                                                             }
+                                         }
+                   },
+    "environment":  {
+                        "os_version":  "Microsoft Windows NT 10.0.19045.0",
+                        "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
+                        "target_process":  "desktop",
+                        "interactive_session":  true
+                    },
+    "speech_recorder_log":  null,
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/desktop-editor.ps1",
+    "repetitions_requested":  3,
+    "trials":  [
+                   {
+                       "trial_index":  1,
+                       "timestamp":  "2026-10-14T23:09:08.8426051+03:00",
+                       "foreground_window_start":  "SR Editor Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792008561965,
+                                                "t_end_ms":  1792008565449,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+Shift+V",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Virtualizing current control\na !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2897,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792008567273,
+                                                "t_end_ms":  1792008569579,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "x  = 1.5; a.b end.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1905,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792008571392,
+                                                "t_end_ms":  1792008576318,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "é€—“”‘’…•→©°½çşğıİ×÷±≠≤λ",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4523,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792008578126,
+                                                "t_end_ms":  1792008583069,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "é€—“”‘’…•→©°½çşğıİ×÷±≠≤λ",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4554,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792008584877,
+                                                "t_end_ms":  1792008587533,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Home",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "a !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2194,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1792008589344,
+                                                "t_end_ms":  1792008591792,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  828,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  true,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1792008592840,
+                                                "t_end_ms":  1792008594163,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "!",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  930,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1792008595974,
+                                                "t_end_ms":  1792008597153,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "\"",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  785,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1792008598965,
+                                                "t_end_ms":  1792008614314,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+A",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "selected\na !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B \nx  = 1.5; a.b end.\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  14882,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1792008616125,
+                                                "t_end_ms":  1792008618032,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+C",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Copied selection to clipboard",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  "a !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B \r\nx  = 1.5; a.b end.\r\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ ",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1443,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1792008619840,
+                                                "t_end_ms":  1792008622789,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "a !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2547,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1792008624602,
+                                                "t_end_ms":  1792008627048,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+Alt+W",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Virtualizing current window\nSR Editor Fixture",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1885,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1792008628856,
+                                                "t_end_ms":  1792008631374,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "a !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2114,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "t_start_ms":  1792008633188,
+                                                "t_end_ms":  1792008649086,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+A",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "selected\nSR Editor Fixture\na !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B \nx  = 1.5; a.b end.\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  15427,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s15",
+                                                "t_start_ms":  1792008650877,
+                                                "t_end_ms":  1792008652768,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+C",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Copied selection to clipboard",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  "SR Editor Fixture\r\na !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B \r\nx  = 1.5; a.b end.\r\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ ",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1429,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s16",
+                                                "t_start_ms":  1792008654564,
+                                                "t_end_ms":  1792008657495,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "a !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2526,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "312-desktop-virtualize-control-trial1.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "695655280c645a31693ac6e3895a1ed0718605e01694a5838473f1a22d82ea54"
+                   },
+                   {
+                       "trial_index":  2,
+                       "timestamp":  "2026-10-14T23:10:57.5357063+03:00",
+                       "foreground_window_start":  "SR Editor Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792008671549,
+                                                "t_end_ms":  1792008675007,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+Shift+V",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Virtualizing current control\na !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2899,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792008676799,
+                                                "t_end_ms":  1792008679123,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "x  = 1.5; a.b end.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1948,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792008680938,
+                                                "t_end_ms":  1792008685892,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "é€—“”‘’…•→©°½çşğıİ×÷±≠≤λ",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4561,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792008687702,
+                                                "t_end_ms":  1792008692636,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "é€—“”‘’…•→©°½çşğıİ×÷±≠≤λ",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4542,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792008694427,
+                                                "t_end_ms":  1792008697094,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Home",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "a !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2198,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1792008698889,
+                                                "t_end_ms":  1792008701343,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  829,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  true,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1792008702390,
+                                                "t_end_ms":  1792008703709,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "!",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  932,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1792008705521,
+                                                "t_end_ms":  1792008706718,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "\"",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  788,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1792008708529,
+                                                "t_end_ms":  1792008723908,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+A",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "selected\na !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B \nx  = 1.5; a.b end.\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  14921,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1792008725719,
+                                                "t_end_ms":  1792008727607,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+C",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Copied selection to clipboard",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  "a !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B \r\nx  = 1.5; a.b end.\r\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ ",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1408,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1792008729394,
+                                                "t_end_ms":  1792008732339,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "a !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2557,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1792008734146,
+                                                "t_end_ms":  1792008736583,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+Alt+W",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Virtualizing current window\nSR Editor Fixture",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1889,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1792008738374,
+                                                "t_end_ms":  1792008740926,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "a !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2132,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "t_start_ms":  1792008742715,
+                                                "t_end_ms":  1792008758619,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+A",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "selected\nSR Editor Fixture\na !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B \nx  = 1.5; a.b end.\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  15453,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s15",
+                                                "t_start_ms":  1792008760411,
+                                                "t_end_ms":  1792008762306,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+C",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Copied selection to clipboard",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  "SR Editor Fixture\r\na !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B \r\nx  = 1.5; a.b end.\r\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ ",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1429,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s16",
+                                                "t_start_ms":  1792008764099,
+                                                "t_end_ms":  1792008767045,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "a !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2545,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "312-desktop-virtualize-control-trial2.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "b9f7856bed9948d0fbaacea27dc761324cff4f066f350d6b717fbf247e998c47"
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-14T23:12:47.1232103+03:00",
+                       "foreground_window_start":  "SR Editor Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792008781078,
+                                                "t_end_ms":  1792008784507,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+Shift+V",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Virtualizing current control\na !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2899,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792008786318,
+                                                "t_end_ms":  1792008788661,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "x  = 1.5; a.b end.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1904,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792008790452,
+                                                "t_end_ms":  1792008795370,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "é€—“”‘’…•→©°½çşğıİ×÷±≠≤λ",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4545,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792008797184,
+                                                "t_end_ms":  1792008802128,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "é€—“”‘’…•→©°½çşğıİ×÷±≠≤λ",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4534,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792008803917,
+                                                "t_end_ms":  1792008806572,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Home",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "a !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2210,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1792008808383,
+                                                "t_end_ms":  1792008810836,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  829,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  true,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1792008811880,
+                                                "t_end_ms":  1792008813217,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "!",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  933,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1792008815011,
+                                                "t_end_ms":  1792008816203,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "\"",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  789,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1792008818021,
+                                                "t_end_ms":  1792008833382,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+A",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "selected\na !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B \nx  = 1.5; a.b end.\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  14915,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1792008835196,
+                                                "t_end_ms":  1792008837080,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+C",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Copied selection to clipboard",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  "a !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B \r\nx  = 1.5; a.b end.\r\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ ",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1429,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1792008838868,
+                                                "t_end_ms":  1792008841805,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "a !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2535,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1792008843620,
+                                                "t_end_ms":  1792008846043,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+Alt+W",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Virtualizing current window\nSR Editor Fixture",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1910,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1792008847854,
+                                                "t_end_ms":  1792008850367,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "a !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2112,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "t_start_ms":  1792008852180,
+                                                "t_end_ms":  1792008868073,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+A",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "selected\nSR Editor Fixture\na !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B \nx  = 1.5; a.b end.\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  15423,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s15",
+                                                "t_start_ms":  1792008869871,
+                                                "t_end_ms":  1792008871757,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+C",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Copied selection to clipboard",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  "SR Editor Fixture\r\na !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B \r\nx  = 1.5; a.b end.\r\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ ",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1430,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s16",
+                                                "t_start_ms":  1792008873572,
+                                                "t_end_ms":  1792008876541,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "a !\"#$%\u0026\u0027()*+,-./:;\u003c=\u003e?@[\\]^_`{|}~ B",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2570,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "312-desktop-virtualize-control-trial3.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "b1e8cf1759aa088cb68d83964721e9a15bbd82a59723e81cf7b73f2cb04b51ff"
+                   }
+               ],
+    "total_elapsed_ms":  328287
+}
