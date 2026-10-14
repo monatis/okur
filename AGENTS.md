@@ -48,7 +48,7 @@ To ensure seamless context passing across autonomous sessions, all engineering w
 
 ### Active Plan for Current / Next Session
 - **Active Plan**: [`docs/plans/2026-10-14-verification-harness-rebuild.md`](docs/plans/2026-10-14-verification-harness-rebuild.md)
-- **Latest Handoff**: [`docs/handoff/2026-10-14-realistic-evidence-buffer-rewrite-ia2-traces.md`](docs/handoff/2026-10-14-realistic-evidence-buffer-rewrite-ia2-traces.md); read the audit [`docs/handoff/2026-10-14-full-audit-of-prior-development.md`](docs/handoff/2026-10-14-full-audit-of-prior-development.md) before trusting any earlier handoff
+- **Latest Handoff**: [`docs/handoff/2026-10-14-ia2-paragraphs-native-focus-actions.md`](docs/handoff/2026-10-14-ia2-paragraphs-native-focus-actions.md); read the audit [`docs/handoff/2026-10-14-full-audit-of-prior-development.md`](docs/handoff/2026-10-14-full-audit-of-prior-development.md) before trusting any earlier handoff
 
 
 ### Standard Session Execution Protocol

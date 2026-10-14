@@ -82,6 +82,19 @@ Status 2026-10-14 (evening):
 
 ## Phase 4: Make interaction real
 
+Status 2026-10-14, from the user's live reports:
+- **Done, each verified live on old-pc:**
+  - Enter on a page edit focuses it; forms mode follows.
+  - Enter or Space activates buttons, check boxes and links.
+  - Caret keys in edits read a character, word or line.
+  - Browse-mode Tab goes to the page.
+- **Mechanism:** `ApplicationActions`, with the IA2 uniqueID resolved by `accChild`.
+- **Still open from the list below:**
+  - Insert/CapsLock consumption.
+  - Event-driven buffer updates.
+  - Typing echo.
+  - The hook watchdog.
+
 - Browse-mode Tab, Space, Enter and forms mode act on the real application (UIA focus, invoke, toggle, and setting values).
 - Insert and CapsLock act as the JAWS key and are consumed, with laptop layout support.
 - Bind Say All (with cursor tracking), Say Line, Insert+Tab, Insert+T and the other core JAWS keys.
