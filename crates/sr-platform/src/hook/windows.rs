@@ -28,6 +28,26 @@ static HOOK_THREAD_ID: AtomicU32 = AtomicU32::new(0);
 static INSERT_HELD: AtomicBool = AtomicBool::new(false);
 static CAPS_LOCK_HELD: AtomicBool = AtomicBool::new(false);
 static SCROLL_LOCK_HELD: AtomicBool = AtomicBool::new(false);
+/// Modifiers whose press the engine consumed, as [`modifier_bit`]s. A modifier pressed while
+/// the JAWS key is held (Insert+Alt+W) is consumed, so the application never sees it (Alt
+/// alone would open its menu bar). The system's key state then says it is up, so it is held
+/// here until its release arrives.
+static CONSUMED_MODIFIERS: AtomicU32 = AtomicU32::new(0);
+const SHIFT_BIT: u32 = 1;
+const CTRL_BIT: u32 = 2;
+const ALT_BIT: u32 = 4;
+const WIN_BIT: u32 = 8;
+
+/// The modifier a virtual key is, either side, as a [`CONSUMED_MODIFIERS`] bit (0 for others).
+fn modifier_bit(vk: u32) -> u32 {
+    match vk {
+        0x10 | 0xA0 | 0xA1 => SHIFT_BIT,
+        0x11 | 0xA2 | 0xA3 => CTRL_BIT,
+        0x12 | 0xA4 | 0xA5 => ALT_BIT,
+        0x5B | 0x5C => WIN_BIT,
+        _ => 0,
+    }
+}
 
 pub struct WindowsKeyboardHook {
     running: ArcBool,
@@ -218,6 +238,7 @@ unsafe extern "system" fn low_level_keyboard_proc(
 
     // If key up was previously consumed on key down, consume key up too
     if is_up {
+        CONSUMED_MODIFIERS.fetch_and(!modifier_bit(vk_code), Ordering::Relaxed);
         if let Ok(mut consumed_guard) = CONSUMED_KEYS.lock() {
             if let Some(ref mut set) = *consumed_guard {
                 if set.remove(&vk_code) {
@@ -228,12 +249,16 @@ unsafe extern "system" fn low_level_keyboard_proc(
         return CallNextHookEx(None, ncode, wparam, lparam);
     }
 
-    // Determine modifier state
-    let ctrl = (GetAsyncKeyState(VK_CONTROL.0 as i32) as u16 & 0x8000) != 0;
-    let alt = (GetAsyncKeyState(VK_MENU.0 as i32) as u16 & 0x8000) != 0;
-    let shift = (GetAsyncKeyState(VK_SHIFT.0 as i32) as u16 & 0x8000) != 0;
+    // Determine modifier state: the system's, and the modifiers it never saw pressed.
+    let consumed = CONSUMED_MODIFIERS.load(Ordering::Relaxed);
+    let ctrl =
+        (GetAsyncKeyState(VK_CONTROL.0 as i32) as u16 & 0x8000) != 0 || consumed & CTRL_BIT != 0;
+    let alt = (GetAsyncKeyState(VK_MENU.0 as i32) as u16 & 0x8000) != 0 || consumed & ALT_BIT != 0;
+    let shift =
+        (GetAsyncKeyState(VK_SHIFT.0 as i32) as u16 & 0x8000) != 0 || consumed & SHIFT_BIT != 0;
     let win = ((GetAsyncKeyState(0x5B) as u16 & 0x8000) != 0) // VK_LWIN
-        || ((GetAsyncKeyState(0x5C) as u16 & 0x8000) != 0); // VK_RWIN
+        || ((GetAsyncKeyState(0x5C) as u16 & 0x8000) != 0) // VK_RWIN
+        || consumed & WIN_BIT != 0;
     let modifiers = Modifiers {
         ctrl,
         alt,
@@ -262,6 +287,7 @@ unsafe extern "system" fn low_level_keyboard_proc(
     }
 
     if action == KeyAction::Consume {
+        CONSUMED_MODIFIERS.fetch_or(modifier_bit(vk_code), Ordering::Relaxed);
         if let Ok(mut consumed_guard) = CONSUMED_KEYS.lock() {
             if let Some(ref mut set) = *consumed_guard {
                 set.insert(vk_code);
@@ -346,5 +372,21 @@ fn translate_vk_code(vk: u32) -> Key {
                 Key::Other(vk)
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn modifiers_on_either_side_share_a_bit() {
+        assert_eq!(modifier_bit(0xA4), ALT_BIT);
+        assert_eq!(modifier_bit(0xA5), ALT_BIT);
+        assert_eq!(modifier_bit(0x12), ALT_BIT);
+        assert_eq!(modifier_bit(0xA1), SHIFT_BIT);
+        assert_eq!(modifier_bit(0xA2), CTRL_BIT);
+        assert_eq!(modifier_bit(0x5C), WIN_BIT);
+        assert_eq!(modifier_bit(u32::from('W')), 0);
     }
 }
