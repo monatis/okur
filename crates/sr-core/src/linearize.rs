@@ -149,6 +149,8 @@ struct Builder<'a> {
     /// Names of enclosing tab lists, innermost last.
     tablists: Vec<String>,
     document_url: Option<&'a str>,
+    /// Per line: whether a paragraph ends after it (§25).
+    paragraph_ends: Vec<bool>,
 }
 
 impl<'a> Builder<'a> {
@@ -162,11 +164,31 @@ impl<'a> Builder<'a> {
             groups: Vec::new(),
             tablists: Vec::new(),
             document_url,
+            paragraph_ends: Vec::new(),
         }
     }
 
     fn offset(&self) -> usize {
         self.buffer.text.len()
+    }
+
+    /// §25: a paragraph ends after the last line emitted since `first_line`, when a block
+    /// element finishes. Inline content that does not finish its block (a link directly in
+    /// a banner, a graphic directly in an article) continues into the next paragraph.
+    fn end_paragraph_since(&mut self, first_line: usize) {
+        if self.paragraph_ends.len() > first_line {
+            if let Some(end) = self.paragraph_ends.last_mut() {
+                *end = true;
+            }
+        }
+    }
+
+    /// Emits a line that is a paragraph of its own: the title and container boundaries.
+    fn emit_boundary(&mut self, node_id: usize, role: Role, text: &str) -> usize {
+        let first_line = self.paragraph_ends.len();
+        let offset = self.emit(node_id, role, text, text.to_owned());
+        self.end_paragraph_since(first_line);
+        offset
     }
 
     /// Appends a line. `text` goes into the flat buffer (word/character navigation);
@@ -185,16 +207,9 @@ impl<'a> Builder<'a> {
             node_id,
             role: role.clone(),
             text: text.to_owned(),
-            speech: speech.clone(),
+            speech,
         });
-        self.buffer.paragraphs.push(BufferParagraph {
-            paragraph_index: self.buffer.paragraphs.len(),
-            start_offset: start,
-            end_offset: end,
-            node_id,
-            role: role.clone(),
-            text: text.to_owned(),
-        });
+        self.paragraph_ends.push(false);
         self.buffer.spans.push(BufferSpan {
             start_offset: start,
             end_offset: end,
@@ -217,19 +232,8 @@ impl<'a> Builder<'a> {
         }
         let node_id = run.node_id.unwrap_or_default();
         let role = run.role.unwrap_or(Role::Text);
-        let lines = wrap_lines(&text, MAX_LINE_LENGTH);
-        let first_paragraph = self.buffer.paragraphs.len();
-        for line in &lines {
-            self.emit(node_id, role.clone(), line, (*line).to_owned());
-        }
-        // A wrapped run is still one paragraph.
-        if lines.len() > 1 {
-            let end = self.offset();
-            self.buffer.paragraphs.truncate(first_paragraph + 1);
-            if let Some(p) = self.buffer.paragraphs.last_mut() {
-                p.end_offset = end;
-                p.text = text.clone();
-            }
+        for line in wrap_lines(&text, MAX_LINE_LENGTH) {
+            self.emit(node_id, role.clone(), line, line.to_owned());
         }
         self.last_text_line = Some(text);
     }
@@ -270,10 +274,6 @@ impl<'a> Builder<'a> {
             line.text.push_str(suffix);
             line.speech.push_str(suffix);
             line.end_offset = end;
-        }
-        if let Some(p) = self.buffer.paragraphs.last_mut() {
-            p.text.push_str(suffix);
-            p.end_offset = end;
         }
         if let Some(s) = self.buffer.spans.last_mut() {
             s.end_offset = end;
@@ -386,10 +386,11 @@ impl<'a> Builder<'a> {
                     self.tablists.pop();
                 }
                 self.flush();
+                self.end_paragraph_since(first_line);
             }
             Class::Container { start, end } => {
                 self.flush();
-                let start_offset = self.emit(node.id, node.role.clone(), &start, start.clone());
+                let start_offset = self.emit_boundary(node.id, node.role.clone(), &start);
                 match &node.role {
                     Role::Landmark { landmark_type } => {
                         self.buffer.landmarks.push(start_offset);
@@ -421,7 +422,7 @@ impl<'a> Builder<'a> {
                     self.groups.pop();
                 }
                 self.flush();
-                self.emit(node.id, node.role.clone(), &end, end.clone());
+                self.emit_boundary(node.id, node.role.clone(), &end);
                 self.record_container(node, start_offset);
             }
             Class::Heading(level) => {
@@ -432,6 +433,7 @@ impl<'a> Builder<'a> {
                 };
                 let speech = format!("{}{text}", role_marker(&format!("heading level {level}")));
                 let off = self.emit(node.id, node.role.clone(), &text, speech);
+                self.end_paragraph_since(first_line);
                 self.buffer.headings.push((off, level));
             }
             Class::Link => self.visit_link(node),
@@ -450,6 +452,7 @@ impl<'a> Builder<'a> {
                 self.push_own_text(node);
                 self.visit_children(node);
                 self.flush();
+                self.end_paragraph_since(first_line);
                 if let Some(line) = self.buffer.lines.get(first_line) {
                     self.buffer.list_items.push(line.start_offset);
                 }
@@ -672,14 +675,14 @@ impl<'a> Builder<'a> {
             String::new()
         };
         let start = format!("list of {items} items{nesting}");
-        let start_offset = self.emit(node.id, node.role.clone(), &start, start.clone());
+        let start_offset = self.emit_boundary(node.id, node.role.clone(), &start);
         self.buffer.lists.push(start_offset);
         self.list_depth += 1;
         self.visit_children(node);
         self.list_depth -= 1;
         self.flush();
         let end = format!("list end{nesting}");
-        self.emit(node.id, node.role.clone(), &end, end.clone());
+        self.emit_boundary(node.id, node.role.clone(), &end);
         self.record_container(node, start_offset);
     }
 
@@ -702,13 +705,13 @@ impl<'a> Builder<'a> {
             .max()
             .unwrap_or(0);
         let start = format!("table with {cols} columns and {} rows", rows.len());
-        let start_offset = self.emit(node.id, node.role.clone(), &start, start.clone());
+        let start_offset = self.emit_boundary(node.id, node.role.clone(), &start);
 
         let mut caption = None;
         // UIA names a table by its caption; without a caption element, the name is the caption.
         if node.children.iter().all(|c| c.role == Role::TableRow) {
             if let Some(name) = node.name.as_deref().map(squash).filter(|n| !n.is_empty()) {
-                self.emit(node.id, Role::Text, &name, name.clone());
+                self.emit_boundary(node.id, Role::Text, &name);
                 caption = Some(name);
             }
         }
@@ -738,6 +741,7 @@ impl<'a> Builder<'a> {
                     Some(line) => line.start_offset,
                     None => self.emit(cell.id, Role::TableCell, "", String::new()),
                 };
+                self.end_paragraph_since(before);
                 let text = self
                     .buffer
                     .lines
@@ -809,12 +813,7 @@ impl<'a> Builder<'a> {
         }
 
         self.flush();
-        self.emit(
-            node.id,
-            node.role.clone(),
-            "table end",
-            "table end".to_owned(),
-        );
+        self.emit_boundary(node.id, node.role.clone(), "table end");
         let end_offset = self.offset();
         self.buffer.table_offsets.push(start_offset);
         self.buffer.tables.push(TableGrid {
@@ -891,6 +890,34 @@ pub fn segment_words(text: &str) -> Vec<(usize, usize)> {
     words
 }
 
+/// §25: groups consecutive lines into paragraphs, each ending after a marked line.
+fn paragraphs(lines: &[BufferLine], ends: &[bool]) -> Vec<BufferParagraph> {
+    let mut out: Vec<BufferParagraph> = Vec::new();
+    let mut open = false;
+    for (line, &end) in lines.iter().zip(ends) {
+        match out.last_mut().filter(|_| open) {
+            Some(p) => {
+                p.end_offset = line.end_offset;
+                p.text.push(' ');
+                p.text.push_str(&line.text);
+                p.speech.push(' ');
+                p.speech.push_str(&line.speech);
+            }
+            None => out.push(BufferParagraph {
+                paragraph_index: out.len(),
+                start_offset: line.start_offset,
+                end_offset: line.end_offset,
+                node_id: line.node_id,
+                role: line.role.clone(),
+                text: line.text.clone(),
+                speech: line.speech.clone(),
+            }),
+        }
+        open = !end;
+    }
+    out
+}
+
 /// Builds the virtual buffer for `root` (a document, or any subtree).
 pub fn build(root: &AomNode) -> VirtualBuffer {
     let document_url = attr(root, "url");
@@ -901,15 +928,17 @@ pub fn build(root: &AomNode) -> VirtualBuffer {
     if root.role == Role::Document {
         let title = root.name.as_deref().map(squash).unwrap_or_default();
         if !title.is_empty() {
-            builder.emit(root.id, Role::Document, &title, title.clone());
+            builder.emit_boundary(root.id, Role::Document, &title);
         }
         builder.visit_children(root);
     } else {
         builder.visit(root, None);
     }
     builder.flush();
+    builder.end_paragraph_since(0);
 
     let mut buffer = builder.buffer;
+    buffer.paragraphs = paragraphs(&buffer.lines, &builder.paragraph_ends);
     let mut words = Vec::new();
     for line in &buffer.lines {
         for (s, e) in segment_words(&line.text) {

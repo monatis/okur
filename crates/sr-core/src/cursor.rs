@@ -554,10 +554,7 @@ impl VirtualCursor {
             }
             self.offset = next_p.start_offset;
             self.current_node_id = Some(next_p.node_id);
-            Some(SpeechFormatter::format_role_and_text(
-                &next_p.role,
-                &next_p.text,
-            ))
+            Some(next_p.speech.clone())
         } else {
             None
         }
@@ -578,10 +575,7 @@ impl VirtualCursor {
             }
             self.offset = prior_p.start_offset;
             self.current_node_id = Some(prior_p.node_id);
-            Some(SpeechFormatter::format_role_and_text(
-                &prior_p.role,
-                &prior_p.text,
-            ))
+            Some(prior_p.speech.clone())
         } else {
             None
         }

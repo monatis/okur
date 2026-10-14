@@ -92,10 +92,16 @@ line break within one step's speech history.
 
 ## 5. Paragraphs, Say All, Tab
 
-25. **Ctrl+Down / Ctrl+Up group lines into paragraphs** [obs, 112]:
-    - A container start line merges with the next link line: `‹ same page link › Riverside Gazette Primary navigation region`.
-    - A graphic merges with the following heading.
-    - A list item merges with the nested list start.
+25. **Ctrl+Down / Ctrl+Up move by paragraph: consecutive lines up to the end of a block** [obs, 112/s1–s23].
+    - A paragraph ends after:
+      - the title line;
+      - every container start or end line (`banner`, `list of 4 items`, `list end`, `main region`, `article`, …);
+      - the last line of every block element (a paragraph, heading, list item or table cell).
+    - Inline content that does not finish its block continues into the next paragraph:
+      - a link directly inside `header`, then the navigation start: `‹ same page link › Riverside Gazette Primary navigation region`;
+      - a graphic directly inside `article`, then the next heading: `Front entrance … ‹ Graphic › ‹ heading level 2 › What changes`;
+      - a list item's text, then its nested list: `• Weekend hours, which do not change: list of 2 items nesting level 1`.
+    - The speech is the paragraph's line speech joined with spaces. A `<p>` with a link reads as one paragraph (`By ‹ same page link › Maria Lopez, published March 14, 2026`), and a wrapped paragraph reads whole.
 26. **Insert+Down (Say All)** reads the line sequence from the current line to the end [obs, 111].
 27. **Tab** follows browser focus and speaks the focused control with hints (`To activate press Enter.`). On the first Tab into a form, JAWS varies between two phrasings, one of which includes `‹ MainRegion › | ‹ FormRegion ›` [obs, 204/s1]. Tab past the page moves into Chrome's toolbar.
 

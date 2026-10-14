@@ -89,6 +89,8 @@ pub struct BufferParagraph {
     pub node_id: usize,
     pub role: Role,
     pub text: String,
+    /// What JAWS speaks for the paragraph (Ctrl+Up/Down): its lines' speech, space-joined.
+    pub speech: String,
 }
 
 /// Detailed information for a table cell in a 2D grid.
