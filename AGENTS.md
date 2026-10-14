@@ -47,8 +47,8 @@ This is an **autonomous, agent-driven project with a "verification harness in th
 To ensure seamless context passing across autonomous sessions, all engineering work is orchestrated through the `docs/` tree:
 
 ### Active Plan for Current / Next Session
-- **Active Plan**: [`docs/plans/2026-10-14-full-ui-accessibility.md`](docs/plans/2026-10-14-full-ui-accessibility.md)
-- **Latest Handoff**: [`docs/handoff/2026-10-14-full-ui-accessibility-round-1.md`](docs/handoff/2026-10-14-full-ui-accessibility-round-1.md); read the audit [`docs/handoff/2026-10-14-full-audit-of-prior-development.md`](docs/handoff/2026-10-14-full-audit-of-prior-development.md) before trusting any earlier handoff
+- **Active Plan**: [`docs/plans/2026-10-15-jaws-feature-loop-round-2.md`](docs/plans/2026-10-15-jaws-feature-loop-round-2.md)
+- **Latest Handoff**: [`docs/handoff/2026-10-15-jaws-feature-loop-round-1.md`](docs/handoff/2026-10-15-jaws-feature-loop-round-1.md); read the audit [`docs/handoff/2026-10-14-full-audit-of-prior-development.md`](docs/handoff/2026-10-14-full-audit-of-prior-development.md) before trusting any earlier handoff
 
 
 ### Standard Session Execution Protocol
