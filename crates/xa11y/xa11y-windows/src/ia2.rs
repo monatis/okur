@@ -57,6 +57,14 @@ pub mod msaa_states {
     pub const STATE_SYSTEM_PROTECTED: u32 = 0x20000000;
 }
 
+/// A text object's text, caret and first selection, offsets in UTF-16 code units.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Ia2TextState {
+    pub text: String,
+    pub caret: i32,
+    pub selection: Option<(i32, i32)>,
+}
+
 /// One accessible object as exposed through MSAA + IA2.
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Ia2Node {
@@ -147,8 +155,8 @@ pub fn parse_attributes(raw: &str) -> BTreeMap<String, String> {
 
 #[cfg(target_os = "windows")]
 pub use com::capture::{
-    capture_chromium_document, chromium_caret_text, perform_chromium_action, Ia2Action,
-    Ia2CaptureError,
+    capture_chromium_document, chromium_caret_text, chromium_text_state, perform_chromium_action,
+    Ia2Action, Ia2CaptureError,
 };
 
 #[cfg(target_os = "windows")]
@@ -266,7 +274,7 @@ mod com {
 
     pub mod capture {
         use super::super::{
-            parse_attributes, Ia2Node, IA2_TEXT_BOUNDARY_LINE, IA2_TEXT_OFFSET_LENGTH,
+            parse_attributes, Ia2Node, Ia2TextState, IA2_TEXT_BOUNDARY_LINE, IA2_TEXT_OFFSET_LENGTH,
         };
         use super::{IAccessible2, IAccessibleText};
         use windows::core::{Interface, BSTR, PCWSTR};
@@ -521,6 +529,47 @@ mod com {
                 String::new()
             };
             Ok(Some((caret, unit)))
+        }
+
+        /// The focused object's text in a Chromium window's page, with its caret and first
+        /// selection. `Ok(None)` when the focused object has no text.
+        pub fn chromium_text_state(
+            top_level: HWND,
+        ) -> Result<Option<Ia2TextState>, Ia2CaptureError> {
+            let document = chromium_document(top_level)?;
+            // SAFETY: MSAA focus query on a valid IAccessible.
+            let focus = unsafe { document.accFocus() }.map_err(|e| err("accFocus", e))?;
+            let focused = dispatch_child(&focus).unwrap_or(document);
+            let Some(text) = ia2_of(&focused).and_then(|ia2| ia2.cast::<IAccessibleText>().ok())
+            else {
+                return Ok(None);
+            };
+            let mut all = BSTR::default();
+            let mut caret = 0i32;
+            let mut selections = 0i32;
+            // SAFETY: out-pointers to locals on a valid interface; BSTR ownership transfers.
+            unsafe {
+                text.get_text(0, IA2_TEXT_OFFSET_LENGTH, &mut all)
+                    .ok()
+                    .map_err(|e| err("text", e))?;
+                text.get_caretOffset(&mut caret)
+                    .ok()
+                    .map_err(|e| err("caretOffset", e))?;
+                let _ = text.get_nSelections(&mut selections);
+            }
+            let mut selection = None;
+            if selections > 0 {
+                let (mut start, mut end) = (0i32, 0i32);
+                // SAFETY: as above.
+                if unsafe { text.get_selection(0, &mut start, &mut end) }.is_ok() && start < end {
+                    selection = Some((start, end));
+                }
+            }
+            Ok(Some(Ia2TextState {
+                text: all.to_string(),
+                caret: caret.max(0),
+                selection,
+            }))
         }
 
         /// The MSAA client object of a Chromium window's web content.

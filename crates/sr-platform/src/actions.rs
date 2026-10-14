@@ -15,11 +15,12 @@ pub fn unique_id(node: &sr_core::AomNode) -> Option<i32> {
 }
 
 #[cfg(windows)]
-pub use windows_actions::{chromium_caret, read_at_caret_now, WindowsActions};
+pub use windows_actions::WindowsActions;
 
 #[cfg(windows)]
 mod windows_actions {
     use super::unique_id;
+    use crate::text_context::read_focused;
     use sr_core::{AccessibilityEvent, CaretUnit};
     use std::sync::mpsc::{channel, Sender};
     use std::sync::Mutex;
@@ -28,31 +29,27 @@ mod windows_actions {
     use windows::Win32::System::Com::{
         CoCreateInstance, CoInitializeEx, CLSCTX_INPROC_SERVER, COINIT_MULTITHREADED,
     };
-    use windows::Win32::UI::Accessibility::{
-        CUIAutomation8, IUIAutomation, IUIAutomationTextPattern, IUIAutomationTextRange,
-        TextPatternRangeEndpoint_End, TextPatternRangeEndpoint_Start, TextUnit, TextUnit_Character,
-        TextUnit_Line, TextUnit_Word, UIA_TextPatternId,
-    };
+    use windows::Win32::UI::Accessibility::{CUIAutomation8, IUIAutomation};
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
-    use xa11y_windows::ia2::{chromium_caret_text, perform_chromium_action, Ia2Action};
+    use xa11y_windows::ia2::{perform_chromium_action, Ia2Action};
 
-    /// How long to wait for the application to move its caret after a key.
-    const CARET_SETTLE: Duration = Duration::from_millis(250);
-    const CARET_POLL: Duration = Duration::from_millis(15);
+    /// How long to wait for the application to act on a key.
+    const SETTLE: Duration = Duration::from_millis(250);
+    const POLL: Duration = Duration::from_millis(15);
 
     enum Request {
         Object(i32, Ia2Action),
-        Caret(CaretUnit),
+        Text,
     }
 
     /// Acts on the foreground application from a COM worker thread: page objects by IA2
-    /// uniqueID, and text at the focused edit's caret through UIA TextPattern.
+    /// uniqueID, and the focused text field's text, caret and selection after edit keys.
     pub struct WindowsActions {
         requests: Mutex<Sender<Request>>,
     }
 
     impl WindowsActions {
-        /// `events` receives the caret text read after navigation keys.
+        /// `events` receives the text contexts read after edit keys.
         pub fn start(events: Option<UnboundedSender<AccessibilityEvent>>) -> Self {
             let (tx, rx) = channel::<Request>();
             std::thread::spawn(move || {
@@ -70,17 +67,15 @@ mod windows_actions {
                                 tracing::warn!("{action:?} on IA2 object {id} failed: {e}");
                             }
                         }
-                        Request::Caret(unit) => {
+                        Request::Text => {
                             let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref()) else {
-                                tracing::warn!(
-                                    "caret read impossible: no UIA client or no event channel"
-                                );
+                                tracing::warn!("text read impossible: no UIA client or channel");
                                 continue;
                             };
-                            let text = read_after_caret_move(uia, unit);
-                            tracing::debug!(?unit, ?text, "caret read");
-                            if let Some(text) = text {
-                                let _ = events.send(AccessibilityEvent::CaretText { unit, text });
+                            let context = read_after_key(uia);
+                            tracing::debug!(?context, "text context read");
+                            if let Some(context) = context {
+                                let _ = events.send(AccessibilityEvent::TextContext(context));
                             }
                         }
                     }
@@ -98,121 +93,21 @@ mod windows_actions {
         }
     }
 
-    /// The caret (the selection's start) of the focused element's text.
-    fn caret(uia: &IUIAutomation) -> Option<IUIAutomationTextRange> {
-        // SAFETY: UIA client calls on valid objects.
-        unsafe {
-            let focused = uia.GetFocusedElement().ok()?;
-            let text: IUIAutomationTextPattern =
-                focused.GetCurrentPatternAs(UIA_TextPatternId).ok()?;
-            text.GetSelection().ok()?.GetElement(0).ok()
-        }
-    }
-
-    fn same_caret(a: &IUIAutomationTextRange, b: &IUIAutomationTextRange) -> bool {
-        // SAFETY: comparing two ranges of the same text provider.
-        unsafe {
-            a.CompareEndpoints(
-                TextPatternRangeEndpoint_Start,
-                b,
-                TextPatternRangeEndpoint_Start,
-            )
-        }
-        .is_ok_and(|order| order == 0)
-    }
-
-    /// IA2 text boundary for a caret unit (`IA2_TEXT_BOUNDARY_CHAR`, `_WORD`, `_LINE`).
-    fn ia2_boundary(unit: CaretUnit) -> i32 {
-        match unit {
-            CaretUnit::Character => 0,
-            CaretUnit::Word => 1,
-            CaretUnit::Line => 4,
-        }
-    }
-
-    /// The caret in a Chromium page, through IA2: Chromium's UIA selection does not follow
-    /// the caret in form fields. `None` when the foreground window is not Chromium.
-    pub fn chromium_caret(unit: CaretUnit) -> Option<(i32, String)> {
-        // SAFETY: plain Win32 call with no preconditions.
-        let window = unsafe { GetForegroundWindow() };
-        chromium_caret_text(window, ia2_boundary(unit))
-            .ok()
-            .flatten()
-    }
-
-    /// Waits for the caret to move (or the settle time to pass, at a boundary the caret
-    /// stays put), then reads `unit` at the caret.
-    fn read_after_caret_move(uia: &IUIAutomation, unit: CaretUnit) -> Option<String> {
-        if let Some((before, mut text)) = chromium_caret(unit) {
-            let started = Instant::now();
-            while started.elapsed() < CARET_SETTLE {
-                std::thread::sleep(CARET_POLL);
-                let Some((now, now_text)) = chromium_caret(unit) else {
-                    break;
-                };
-                text = now_text;
-                if now != before {
-                    break;
-                }
-            }
-            return Some(text);
-        }
-        let before = caret(uia);
+    /// The field's state once the application has acted on the key: read as the key is
+    /// passed on, then polled until it changes or the settle time passes (a key at a
+    /// boundary changes nothing).
+    fn read_after_key(uia: &IUIAutomation) -> Option<sr_core::TextContext> {
+        let before = read_focused(uia);
         let started = Instant::now();
-        let mut now = caret(uia)?;
-        while started.elapsed() < CARET_SETTLE
-            && before.as_ref().is_some_and(|b| same_caret(b, &now))
-        {
-            std::thread::sleep(CARET_POLL);
-            now = caret(uia)?;
-        }
-        text_at(&now, unit)
-    }
-
-    /// The text of `unit` at a caret range. A character is the one after the caret: the
-    /// range's end is moved one character on (Chrome expands an empty range at the start
-    /// of a field to a line break). Words and lines are expanded around the caret.
-    fn text_at(caret: &IUIAutomationTextRange, unit: CaretUnit) -> Option<String> {
-        // SAFETY: UIA text range calls on a valid range.
-        unsafe {
-            let range = caret.Clone().ok()?;
-            match unit {
-                CaretUnit::Character => {
-                    range
-                        .MoveEndpointByRange(
-                            TextPatternRangeEndpoint_End,
-                            &range,
-                            TextPatternRangeEndpoint_Start,
-                        )
-                        .ok()?;
-                    range
-                        .MoveEndpointByUnit(TextPatternRangeEndpoint_End, TextUnit_Character, 1)
-                        .ok()?;
-                }
-                CaretUnit::Word | CaretUnit::Line => {
-                    let text_unit: TextUnit = if unit == CaretUnit::Word {
-                        TextUnit_Word
-                    } else {
-                        TextUnit_Line
-                    };
-                    range.ExpandToEnclosingUnit(text_unit).ok()?;
-                }
+        let mut now = before.clone();
+        while started.elapsed() < SETTLE {
+            std::thread::sleep(POLL);
+            now = read_focused(uia);
+            if now != before {
+                break;
             }
-            range.GetText(-1).ok().map(|s| s.to_string())
         }
-    }
-
-    /// Reads `unit` at the focused edit's caret right away, for harness checks.
-    pub fn read_at_caret_now(unit: CaretUnit) -> Option<String> {
-        // SAFETY: COM initialization; repeated initialization is tolerated.
-        let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
-        if let Some((_, text)) = chromium_caret(unit) {
-            return Some(text);
-        }
-        // SAFETY: in-process COM activation.
-        let uia: IUIAutomation =
-            unsafe { CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER) }.ok()?;
-        text_at(&caret(&uia)?, unit)
+        now
     }
 
     impl sr_core::actions::ApplicationActions for WindowsActions {
@@ -225,13 +120,29 @@ mod windows_actions {
                 .is_some_and(|id| self.send(Request::Object(id, Ia2Action::DefaultAction)))
         }
 
-        fn read_at_caret(&self, unit: CaretUnit) -> bool {
-            self.send(Request::Caret(unit))
+        fn read_at_caret(&self, _unit: CaretUnit) -> bool {
+            self.send(Request::Text)
         }
     }
 }
+
+/// The focused text field's text context right now, for harness checks (`sr-cli caret`).
+#[cfg(windows)]
+pub fn read_text_now() -> Option<sr_core::TextContext> {
+    use windows::Win32::System::Com::{
+        CoCreateInstance, CoInitializeEx, CLSCTX_INPROC_SERVER, COINIT_MULTITHREADED,
+    };
+    use windows::Win32::UI::Accessibility::{CUIAutomation8, IUIAutomation};
+    // SAFETY: COM initialization and in-process activation.
+    let uia: IUIAutomation = unsafe {
+        let _ = CoInitializeEx(None, COINIT_MULTITHREADED);
+        CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER)
+    }
+    .ok()?;
+    crate::text_context::read_focused(&uia)
+}
 /// Performs an action on a node's live object right away, on the calling thread, reporting
-/// why it failed. For harness checks; the engine goes through [`WindowsActions`].
+/// why it failed. For harness checks; the engine goes through `WindowsActions`.
 #[cfg(windows)]
 pub fn perform_now(node: &sr_core::AomNode, activate: bool) -> Result<(), String> {
     use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};

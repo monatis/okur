@@ -299,6 +299,8 @@ pub struct ScreenReaderEngine {
     pub shell_nav_state: Option<ShellNavState>,
     pub explorer_state: Option<NativeExplorerState>,
     pub last_window_title: Option<String>,
+    /// The active window's class, with `last_window_title` identifying the window.
+    last_window_kind: Option<String>,
     /// Container of the last focused native control; entering a new one announces it.
     native_focus: crate::native_focus::NativeFocus,
     /// The page node that last had focus, to drop repeated focus events on it.
@@ -306,6 +308,10 @@ pub struct ScreenReaderEngine {
     /// The last native focus outside menus, re-announced when menus close.
     last_native_focus: Option<FocusEvent>,
     menus: crate::native_focus::Menus,
+    /// The edit key whose effect is spoken when the field next reports its text.
+    pending_edit: Option<crate::editing::EditKey>,
+    /// The focused text field's last known text, caret and selection.
+    last_text: Option<crate::event::TextContext>,
     /// Actions on the real application (focus, default action); None when headless.
     actions: Option<Box<dyn crate::actions::ApplicationActions>>,
 }
@@ -322,10 +328,13 @@ impl ScreenReaderEngine {
             shell_nav_state: None,
             explorer_state: None,
             last_window_title: None,
+            last_window_kind: None,
             native_focus: crate::native_focus::NativeFocus::default(),
             last_page_focus: None,
             last_native_focus: None,
             menus: crate::native_focus::Menus::default(),
+            pending_edit: None,
+            last_text: None,
             actions: None,
         }
     }
@@ -441,6 +450,16 @@ impl ScreenReaderEngine {
     /// Executes a screen reader navigation command string (matching JAWS script names and keystrokes).
     /// Speaks the resulting announcement and returns the emitted speech text.
     pub fn execute_command(&mut self, command: &str) -> Option<String> {
+        if command == "SayWindowTitle" {
+            // [obs, 306/s12]: "Title is | SR Dialog Fixture".
+            let title = match self.app_mode {
+                AppMode::VirtualBuffer => self.cursor.buffer.document_title().map(str::to_owned),
+                _ => self.last_window_title.clone(),
+            }?;
+            let speech = format!("Title is\n{title}");
+            self.speech.speak(&speech, true);
+            return Some(speech);
+        }
         // Native desktop navigation mode handling
         if self.app_mode == AppMode::NativeDesktop {
             match command {
@@ -842,7 +861,7 @@ impl ScreenReaderEngine {
                         return Some(String::new());
                     }
                 }
-                self.cursor.toggle_active_control()
+                None
             }
             "{ENTER}" | "EnterFormsMode" | "ActivateLink" => {
                 let node = self.node_under_cursor();
@@ -1029,7 +1048,8 @@ impl ScreenReaderEngine {
             if event.key == Key::Escape {
                 self.forms_mode = false;
                 let _ = self.cursor.exit_forms_mode();
-                self.speech.speak("Virtual PC Cursor", true);
+                // [obs, 205/s11]
+                self.speech.speak("virtual PC Cursor", true);
                 return KeyAction::Consume;
             }
             // In forms mode, pass all typing and navigation through to the active control;
@@ -1140,11 +1160,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::Focus(focus) => self.handle_focus_event(focus),
             AccessibilityEvent::Menu(menu) => self.handle_menu_event(*menu),
             AccessibilityEvent::Change { kind, control } => self.handle_change(*kind, control),
-            AccessibilityEvent::CaretText { unit, text } => {
-                let speech = Self::caret_speech(*unit, text);
-                self.speech.speak(&speech, true);
-                Some(speech)
-            }
+            AccessibilityEvent::TextContext(context) => self.handle_text_context(context),
             AccessibilityEvent::LiveRegion(live) => self.handle_live_region_event(live),
             AccessibilityEvent::DocumentLoaded { title, root } => {
                 let buffer = VirtualBuffer::from_aom(root);
@@ -1174,6 +1190,10 @@ impl ScreenReaderEngine {
     /// Synchronizes cursor position, activates/deactivates forms mode,
     /// and emits canonical JAWS speech announcements.
     pub fn handle_focus_event(&mut self, focus: &FocusEvent) -> Option<String> {
+        if focus.role != Role::MenuItem {
+            self.last_text = focus.text.clone();
+            self.pending_edit = None;
+        }
         if focus.role == Role::MenuItem {
             let speech = self
                 .menus
@@ -1370,6 +1390,7 @@ impl ScreenReaderEngine {
             // browser (toolbar, address bar), so that focus does not announce a new window.
             if let Some(title) = &focus.window_title {
                 self.last_window_title = Some(title.clone());
+                self.last_window_kind = focus.window_kind.clone();
             }
 
             let target_id = self.page_node_for(focus);
@@ -1404,21 +1425,66 @@ impl ScreenReaderEngine {
 
             // Forms mode follows focus into edits silently: JAWS 2025 signals it with a
             // sound by default, and its speech history has no forms-mode text [obs, 204].
-            let is_edit = target_id
+            let target_role = target_id
                 .and_then(|id| self.cursor.buffer.node_map.get(&id))
-                .is_some_and(|n| n.role == Role::Edit)
-                || focus.role == Role::Edit;
-            self.forms_mode = is_edit;
-            self.cursor.forms_mode_active = is_edit;
+                .map(|n| n.role.clone());
+            if target_role == Some(Role::Document) {
+                // The page itself has focus: the next control focus enters the page.
+                self.last_page_focus = None;
+                return None;
+            }
+            // Forms mode follows focus into edits; a combo box keeps the forms mode Enter
+            // turned on [obs, 205/s8].
+            let is_edit = target_role == Some(Role::Edit) || focus.role == Role::Edit;
+            let in_forms_mode = is_edit || (target_role == Some(Role::ComboBox) && self.forms_mode);
+            self.forms_mode = in_forms_mode;
+            self.cursor.forms_mode_active = in_forms_mode;
             // Chrome can report focus on the same element again (while typing in it); JAWS
             // does not repeat the field.
             if target_id.is_some() && target_id == self.last_page_focus {
                 return None;
             }
+            // The first control focused after the page itself is preceded by the page title
+            // [obs, 205/s2; 204/s1 second variant].
+            let entering_page = self.last_page_focus.is_none();
+            // Group entry is judged from where focus was, not the virtual cursor [obs, 205/s6].
+            let previous_focus_offset = self
+                .last_page_focus
+                .and_then(|id| self.cursor.buffer.lines.iter().find(|l| l.node_id == id))
+                .map(|l| l.start_offset);
             self.last_page_focus = target_id;
-            let speech = target_id
+            // The focus event carries the live state; the buffer's copy may be older (Space
+            // just toggled the control) [obs, 205/s2, s6].
+            if let Some(id) = target_id {
+                let stale = self.cursor.buffer.node_map.get(&id).is_some_and(|n| {
+                    focus.states.checked.is_some() && n.states.checked != focus.states.checked
+                });
+                if stale {
+                    if let Some(rebuilt) = self
+                        .cursor
+                        .buffer
+                        .with_node_changed(id, |n| n.states.checked = focus.states.checked)
+                    {
+                        self.cursor.buffer = rebuilt;
+                    }
+                }
+            }
+            if let Some(offset) = previous_focus_offset {
+                self.cursor.offset = offset;
+            }
+            let mut speech = target_id
                 .and_then(|id| self.cursor.focus_node(id))
                 .or_else(|| focus.name.clone());
+            if target_role == Some(Role::ComboBox) && in_forms_mode {
+                // In forms mode a combo box gets its usage hint [obs, 205/s8].
+                speech =
+                    speech.map(|s| format!("{s}\nTo change the selection use the Arrow keys."));
+            }
+            if entering_page {
+                if let Some(title) = self.cursor.buffer.document_title() {
+                    speech = speech.map(|s| format!("{title}\n{s}"));
+                }
+            }
             if let Some(ref text) = speech {
                 if !text.is_empty() {
                     self.speech.speak(text, true);
@@ -1437,9 +1503,11 @@ impl ScreenReaderEngine {
         }
 
         let window_changed = if let Some(ref wt) = focus.window_title {
-            let changed = self.last_window_title.as_ref() != Some(wt);
+            let changed = self.last_window_title.as_ref() != Some(wt)
+                || (focus.window_kind.is_some() && self.last_window_kind != focus.window_kind);
             if changed {
                 self.last_window_title = Some(wt.clone());
+                self.last_window_kind = focus.window_kind.clone();
             }
             changed
         } else {
@@ -1453,11 +1521,18 @@ impl ScreenReaderEngine {
         self.last_native_focus = Some(focus.clone());
 
         let speech = if window_changed {
+            // A new active window: its title, then the control. A dialog box adds its role
+            // and its text [obs, 306/s1, s3, s10].
             let win = focus.window_title.as_deref().unwrap_or("");
+            let heading = match focus.dialog_text.as_deref() {
+                Some(text) if !text.is_empty() => format!("{win}  \u{1d} dialog \u{1e} \n{text}"),
+                Some(_) => format!("{win}  \u{1d} dialog \u{1e} "),
+                None => win.to_owned(),
+            };
             if control_speech.is_empty() || control_speech == win {
-                win.to_string()
+                heading
             } else {
-                format!("{}\n{}", win, control_speech)
+                format!("{heading}\n{control_speech}")
             }
         } else {
             control_speech
@@ -1509,7 +1584,10 @@ impl ScreenReaderEngine {
     /// Whether keys go to a text field: forms mode in a page, or a focused native edit or
     /// text document (Windows 11 Notepad, Word).
     fn editing_text(&self) -> bool {
-        self.forms_mode
+        (self.forms_mode
+            && self
+                .node_under_cursor()
+                .is_some_and(|n| n.role == Role::Edit))
             || (self.app_mode != AppMode::VirtualBuffer
                 && self
                     .last_native_focus
@@ -1517,14 +1595,11 @@ impl ScreenReaderEngine {
                     .is_some_and(|f| matches!(f.role, Role::Edit | Role::Document)))
     }
 
-    /// A JAWS key command (Insert+…). In a text field the reading commands read at the
-    /// caret; elsewhere they run as virtual cursor or application commands.
+    /// A JAWS key command (Insert+…). In a text field the reading commands read the field;
+    /// elsewhere they run as virtual cursor or application commands.
     fn jaws_key_command(&mut self, event: &KeyEvent) {
-        if self.editing_text() && event.key == Key::UpArrow && !event.modifiers.ctrl {
-            // Say Line (Insert+Up) reads the caret's line.
-            if let Some(actions) = &self.actions {
-                actions.read_at_caret(crate::event::CaretUnit::Line);
-            }
+        if self.editing_text() && crate::editing::EditKey::of(event).is_some() {
+            self.expect_text_change(crate::editing::EditKey::SayLine);
             return;
         }
         if let Some(cmd) = event.to_command_string() {
@@ -1532,34 +1607,13 @@ impl ScreenReaderEngine {
         }
     }
 
-    /// The text a caret movement key reads in an edit: Left/Right a character, Ctrl+Left/
-    /// Right a word, Up/Down a line, Home/End the character at the new caret.
-    fn caret_unit(event: &KeyEvent) -> Option<crate::event::CaretUnit> {
-        use crate::event::CaretUnit;
-        let m = &event.modifiers;
-        if m.alt || m.win || m.insert || m.shift {
-            return None;
-        }
-        match (&event.key, m.ctrl) {
-            (Key::LeftArrow | Key::RightArrow, false) => Some(CaretUnit::Character),
-            (Key::LeftArrow | Key::RightArrow, true) => Some(CaretUnit::Word),
-            (Key::UpArrow | Key::DownArrow, false) => Some(CaretUnit::Line),
-            (Key::Home | Key::End, false) => Some(CaretUnit::Character),
-            (Key::Home | Key::End, true) => Some(CaretUnit::Line),
-            (Key::PageUp | Key::PageDown, false) => Some(CaretUnit::Line),
-            _ => None,
-        }
-    }
-
-    /// Feedback for a key passed to a text field: caret movement keys read the text they
-    /// move over (once the application has moved its caret), and typed characters are
-    /// echoed, as JAWS does with its default typing echo (characters).
+    /// Feedback for a key passed to a text field: keys that move the caret, select or
+    /// delete are spoken once the application has handled them (from the field's text
+    /// before and after); typed characters are echoed, as JAWS does with its default typing
+    /// echo (characters).
     fn edit_key_feedback(&mut self, event: &KeyEvent) {
-        if let Some(unit) = Self::caret_unit(event) {
-            tracing::debug!(?unit, "caret read requested");
-            if let Some(actions) = &self.actions {
-                actions.read_at_caret(unit);
-            }
+        if let Some(key) = crate::editing::EditKey::of(event) {
+            self.expect_text_change(key);
         } else if let Some(c) = event.text {
             let echo = if c == ' ' {
                 "space".to_owned()
@@ -1567,30 +1621,43 @@ impl ScreenReaderEngine {
                 SpeechFormatter::format_char(c)
             };
             tracing::debug!(%echo, "typing echo");
-            self.speech.speak(&echo, true);
+            self.speech.speak_echo(&echo);
         }
     }
 
-    /// Speech for text read at the caret.
-    fn caret_speech(unit: crate::event::CaretUnit, text: &str) -> String {
-        use crate::event::CaretUnit;
-        let blank = || "blank".to_owned();
-        match unit {
-            CaretUnit::Character => match text.chars().next() {
-                None | Some('\r' | '\n') => blank(),
-                Some(c) => SpeechFormatter::format_char(c),
-            },
-            CaretUnit::Word | CaretUnit::Line => {
-                let t = text.trim_end_matches(['\r', '\n']).trim();
-                if t.is_empty() {
-                    blank()
-                } else {
-                    t.to_owned()
-                }
-            }
+    /// Remembers the edit key until the field reports its new text, and asks the platform
+    /// to read it (applications do not all report caret moves).
+    fn expect_text_change(&mut self, key: crate::editing::EditKey) {
+        tracing::debug!(?key, "edit key; reading the field");
+        self.pending_edit = Some(key);
+        if let Some(actions) = &self.actions {
+            actions.read_at_caret(crate::event::CaretUnit::Character);
         }
     }
 
+    /// The focused text field's text changed: speaks the pending edit key's effect.
+    fn handle_text_context(&mut self, context: &crate::event::TextContext) -> Option<String> {
+        let before = self.last_text.replace(context.clone());
+        let key = self.pending_edit.take()?;
+        let field = self.text_field_line();
+        let speech = crate::editing::speech(key, before.as_ref(), context, &field)?;
+        tracing::debug!(?key, %speech, "edit speech");
+        self.speech.speak(&speech, true);
+        Some(speech)
+    }
+
+    /// The focused text field's name and role, as Say Line speaks them.
+    fn text_field_line(&self) -> String {
+        let name = if self.forms_mode {
+            self.node_under_cursor().and_then(|n| n.name)
+        } else {
+            self.last_native_focus.as_ref().and_then(|f| f.name.clone())
+        };
+        format!(
+            "{}  \u{1d} Edit \u{1e} ",
+            name.as_deref().unwrap_or_default().trim()
+        )
+    }
     /// The node of the line under the virtual cursor.
     fn node_under_cursor(&self) -> Option<AomNode> {
         let line = self.cursor.buffer.line_at_offset(self.cursor.offset)?;
@@ -1607,11 +1674,12 @@ impl ScreenReaderEngine {
             Role::CheckBox | Role::RadioButton
                 if before.states.checked != control.states.checked =>
             {
-                if control.states.checked == Some(true) {
-                    "checked".to_owned()
+                let state = if control.states.checked == Some(true) {
+                    "checked"
                 } else {
-                    "not checked".to_owned()
-                }
+                    "not checked"
+                };
+                crate::linearize::state_marker(state)
             }
             Role::ComboBox if before.value != control.value => control.value.clone()?,
             _ => return None,
@@ -2088,8 +2156,8 @@ mod tests {
     /// caret's line instead of reaching the field.
     #[test]
     fn test_jaws_key_in_forms_mode_reads_the_caret_line() {
-        let empty_doc = AomNode::new(0, Role::Document);
-        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&empty_doc));
+        let mut cursor = VirtualCursor::new(create_test_buffer());
+        assert!(cursor.move_to_node_id(3), "the test page has an edit");
         let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
         let actions = crate::actions::RecordingActions::default();
         engine.set_actions(Box::new(actions.clone()));
@@ -2100,8 +2168,18 @@ mod tests {
         let mut say_line = KeyEvent::new(Key::UpArrow, Modifiers::none(), true);
         say_line.modifiers.insert = true;
         assert_eq!(engine.handle_key_event(&say_line), KeyAction::Consume);
-        let kinds: Vec<String> = actions.requests().into_iter().map(|(k, _)| k).collect();
-        assert_eq!(kinds, vec!["caret Line"]);
+        assert_eq!(actions.requests().len(), 1, "one read of the field");
+        let spoken = engine.handle_accessibility_event(&AccessibilityEvent::TextContext(
+            crate::event::TextContext {
+                text: "weather today".to_owned(),
+                caret: 3,
+                selection: None,
+            },
+        ));
+        assert_eq!(
+            spoken.as_deref(),
+            Some("Search Input  \u{1d} Edit \u{1e} \nweather today")
+        );
     }
 
     #[test]

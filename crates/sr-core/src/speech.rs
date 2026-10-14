@@ -788,6 +788,13 @@ pub trait SpeechOutput: Send + Sync {
     /// Immediately cancels ongoing speech.
     fn stop(&mut self);
 
+    /// Speaks typing echo (the character just typed). A separate channel because JAWS does
+    /// not record its echo in the speech history, so parity cannot compare it
+    /// [obs, 305/s10–s12: audio without history text].
+    fn speak_echo(&mut self, text: &str) {
+        self.speak(text, true);
+    }
+
     /// Returns whether speech output is currently active.
     fn is_speaking(&self) -> bool {
         false

@@ -175,45 +175,33 @@ mod tests {
         let typed = press(&mut engine, sr_core::Key::Alpha('a'));
         assert_eq!(typed, sr_core::input::KeyAction::PassThrough);
 
-        // Caret keys reach the field too, and ask for the text they moved over (the user
-        // reported arrow keys read nothing in an edit).
+        // Caret keys reach the field too; each asks the platform for the field's new text, and
+        // the speech comes from the text the field then reports (the user reported arrow keys
+        // read nothing in an edit).
+        use sr_core::{AccessibilityEvent, TextContext};
+        let report = |engine: &mut ScreenReaderEngine, text: &str, caret: usize| {
+            engine.handle_accessibility_event(&AccessibilityEvent::TextContext(TextContext {
+                text: text.to_owned(),
+                caret,
+                selection: None,
+            }))
+        };
+        report(&mut engine, "Zed", 3);
         let left = press(&mut engine, sr_core::Key::LeftArrow);
         assert_eq!(left, sr_core::input::KeyAction::PassThrough);
+        assert_eq!(report(&mut engine, "Zed", 2).as_deref(), Some("d"));
         let mut ctrl = Modifiers::none();
         ctrl.ctrl = true;
-        engine.handle_key_event(&KeyEvent::new(sr_core::Key::RightArrow, ctrl, true));
+        engine.handle_key_event(&KeyEvent::new(sr_core::Key::LeftArrow, ctrl, true));
+        assert_eq!(report(&mut engine, "Zed", 0).as_deref(), Some("Zed"));
         press(&mut engine, sr_core::Key::UpArrow);
+        assert_eq!(report(&mut engine, "Zed", 0).as_deref(), Some("Zed"));
+        // A report without a pending key (the application changed the text) is not spoken.
+        assert_eq!(report(&mut engine, "Zed!", 4), None);
         let kinds: Vec<String> = actions.requests().into_iter().map(|(k, _)| k).collect();
-        assert_eq!(
-            kinds,
-            vec!["focus", "caret Character", "caret Word", "caret Line"]
-        );
-
-        use sr_core::{AccessibilityEvent, CaretUnit};
-        let speak = |engine: &mut ScreenReaderEngine, unit, text: &str| {
-            engine.handle_accessibility_event(&AccessibilityEvent::CaretText {
-                unit,
-                text: text.to_owned(),
-            })
-        };
-        assert_eq!(
-            speak(&mut engine, CaretUnit::Character, "Z").as_deref(),
-            Some("Z")
-        );
-        assert_eq!(
-            speak(&mut engine, CaretUnit::Character, "").as_deref(),
-            Some("blank")
-        );
-        assert_eq!(
-            speak(&mut engine, CaretUnit::Word, "Zed ").as_deref(),
-            Some("Zed")
-        );
-        assert_eq!(
-            speak(&mut engine, CaretUnit::Line, "\r\n").as_deref(),
-            Some("blank")
-        );
+        assert_eq!(kinds.first().map(String::as_str), Some("focus"));
+        assert_eq!(kinds.len(), 4);
     }
-
     /// Every kind of text field maps to an edit through both APIs, so Enter enters forms
     /// mode and caret keys read text: input, textarea, a WhatsApp-style contenteditable with
     /// role=textbox, and a plain contenteditable (the user's WhatsApp Web report).

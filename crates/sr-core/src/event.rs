@@ -11,6 +11,17 @@ pub enum Politeness {
     Assertive,
 }
 
+/// The focused text field's text, caret and selection, as read through the platform.
+/// Offsets are in characters.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct TextContext {
+    pub text: String,
+    pub caret: usize,
+    /// The selection as `(start, end)`, when one exists.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub selection: Option<(usize, usize)>,
+}
+
 /// What changed on the focused control (MSAA `EVENT_OBJECT_STATECHANGE`, `VALUECHANGE`,
 /// `SELECTION`).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -69,6 +80,13 @@ pub struct FocusEvent {
     pub tree_level: Option<usize>,
     /// Number of child items (an expanded tree item's children).
     pub child_count: Option<usize>,
+    /// For a text field: its text, caret and selection when it got focus.
+    pub text: Option<TextContext>,
+    /// When the active window is a dialog box (Win32 `#32770`): its static text.
+    pub dialog_text: Option<String>,
+    /// The active window's class, which tells windows with the same title apart (a message
+    /// box titled like its main window).
+    pub window_kind: Option<String>,
     pub window_class: Option<String>,
     pub window_title: Option<String>,
     pub folder_name: Option<String>,
@@ -93,6 +111,9 @@ impl FocusEvent {
             dom_id: None,
             tree_level: None,
             child_count: None,
+            text: None,
+            dialog_text: None,
+            window_kind: None,
             window_class: None,
             window_title: None,
             folder_name: None,
@@ -197,11 +218,9 @@ pub enum AccessibilityEvent {
         kind: ChangeKind,
         control: FocusEvent,
     },
-    /// Text at the caret of the focused edit, read after a caret movement key.
-    CaretText {
-        unit: CaretUnit,
-        text: String,
-    },
+    /// The focused text field's text, caret or selection, read after a key moved or edited
+    /// it, or reported by the application.
+    TextContext(TextContext),
     LiveRegion(LiveRegionEvent),
     DocumentLoaded {
         title: String,

@@ -18,13 +18,16 @@ const UIA_DOCUMENT: i32 = 50030;
 /// Window classes that host web page content: Chromium (Chrome, Edge, Electron) and Firefox.
 const WEB_CONTENT_WINDOW_CLASSES: [&str; 2] = ["Chrome_RenderWidgetHostHWND", "MozillaWindowClass"];
 const UIA_TREEITEM: i32 = 50024;
+const UIA_TEXT: i32 = 50020;
+/// The window class of Win32 dialog boxes (message boxes, common dialogs).
+const WIN32_DIALOG_CLASS: &str = "#32770";
 /// MSAA `ROLE_SYSTEM_MENUITEM`.
 const MSAA_MENUITEM: i32 = 0x0C;
 /// MSAA `ROLE_SYSTEM_BUTTONMENU`.
 const MSAA_BUTTONMENU: i32 = 0x39;
 
 /// Bumped whenever the recorded fields or their meaning change.
-pub const TRACE_FORMAT_VERSION: u32 = 4;
+pub const TRACE_FORMAT_VERSION: u32 = 5;
 
 /// The MSAA view of an event's object (`AccessibleObjectFromEvent`).
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
@@ -73,6 +76,10 @@ pub struct TraceEvent {
     /// with a 0-based index, asked of the control itself.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub list_position: Option<[i32; 2]>,
+    /// For focus, caret and change events: the focused text field's text, caret and
+    /// selection (`text_context::read_focused`), from which edit keys are spoken.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub text_context: Option<sr_core::TextContext>,
 }
 
 /// The first line of a trace file.
@@ -224,17 +231,35 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent>
     }
     // The recorded window text belongs to the focused HWND (an edit's text is its content);
     // the window the user is in is the outermost element of the focus chain.
-    let top_window = event
+    // The active window is the innermost window in the chain (the focus itself, when a window
+    // has focus): UIA nests a dialog under the
+    // window that owns it [obs, 306/s1, s10].
+    let active_window = event
         .focus_chain
-        .first()
-        .filter(|w| w.control_type == UIA_WINDOW)
-        .and_then(|w| w.name.as_deref());
+        .iter()
+        .rev()
+        .find(|w| w.control_type == UIA_WINDOW);
+    let top_window = active_window.and_then(|w| w.name.as_deref());
     let mut focus = focus_event_from_chain(
         &event.focus_chain,
         event.window_class.as_deref(),
         top_window,
     )?;
     let focused = event.focus_chain.last()?;
+    focus.window_kind = active_window.and_then(|w| w.class_name.clone());
+    // A dialog box (Win32 #32770, as a message box is) is announced with its static text,
+    // which sits beside its buttons [obs, 306/s1]. Other windows are announced by title only
+    // (306/s10).
+    if active_window.and_then(|w| w.class_name.as_deref()) == Some(WIN32_DIALOG_CLASS) {
+        let text: Vec<&str> = event
+            .focus_siblings
+            .iter()
+            .filter(|s| s.control_type == UIA_TEXT)
+            .filter_map(|s| s.name.as_deref())
+            .filter(|n| !n.trim().is_empty())
+            .collect();
+        focus.dialog_text = Some(text.join("\n"));
+    }
     // JAWS names buttons by their MSAA role: ROLE_SYSTEM_BUTTONMENU is a "button menu"
     // even when UIA reports a plain button [obs, 204/s11–s12].
     if focus.role == sr_core::Role::Button
@@ -352,10 +377,18 @@ impl EventConverter {
                 if let Some(states) = event.object.as_ref().map(|o| o.states) {
                     apply_msaa_states(&mut focus, states);
                 }
+                focus.text = event.text_context.clone();
                 let name = event.object.as_ref().and_then(|o| o.name.clone());
                 self.focused = Some((event.hwnd, event.id_object, event.id_child, name));
                 self.last_focus = Some(focus.clone());
                 return Some(AccessibilityEvent::Focus(focus));
+            }
+            // The focused text field's caret moved or its text changed.
+            "caret" | "value_change" if event.text_context.is_some() => {
+                return event
+                    .text_context
+                    .clone()
+                    .map(AccessibilityEvent::TextContext);
             }
             "state_change" => ChangeKind::State,
             "value_change" => ChangeKind::Value,
@@ -608,6 +641,14 @@ mod capture {
             } else {
                 None
             };
+            let text_context = if name == "focus" || name == "caret" || changes_focus_context {
+                state
+                    .uia
+                    .as_ref()
+                    .and_then(crate::text_context::read_focused)
+            } else {
+                None
+            };
             let event = TraceEvent {
                 t_ms,
                 event: name.to_owned(),
@@ -623,6 +664,7 @@ mod capture {
                 focus_siblings,
                 focus_subtree,
                 list_position,
+                text_context,
             };
             (state.sink)(event);
             state.count += 1;
@@ -749,6 +791,7 @@ mod tests {
             focus_siblings: siblings,
             focus_subtree: None,
             list_position: None,
+            text_context: None,
         }
     }
 

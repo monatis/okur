@@ -813,24 +813,27 @@ async fn main() {
             }
         }
         Some(Commands::Caret { unit }) => {
-            let unit = match unit.as_str() {
-                "char" => sr_core::CaretUnit::Character,
-                "word" => sr_core::CaretUnit::Word,
-                "line" => sr_core::CaretUnit::Line,
+            use sr_core::editing::EditKey;
+            let key = match unit.as_str() {
+                "char" => EditKey::Character,
+                "word" => EditKey::Word,
+                "line" => EditKey::Line,
                 other => {
                     eprintln!("--unit must be char, word or line, not {other:?}");
                     std::process::exit(2);
                 }
             };
             #[cfg(windows)]
-            println!(
-                "{unit:?}: {:?} (Chromium IA2 caret: {:?})",
-                sr_platform::actions::read_at_caret_now(unit),
-                sr_platform::actions::chromium_caret(unit)
-            );
+            {
+                let context = sr_platform::actions::read_text_now();
+                let spoken = context
+                    .as_ref()
+                    .and_then(|c| sr_core::editing::speech(key, None, c, ""));
+                println!("{key:?}: {spoken:?} (field: {context:?})");
+            }
             #[cfg(not(windows))]
             {
-                let _ = unit;
+                let _ = key;
                 eprintln!("caret is only available on Windows");
             }
         }

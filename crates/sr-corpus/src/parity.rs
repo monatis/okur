@@ -134,6 +134,8 @@ fn run_scenario(
         }
     }
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(spoken.clone()));
+    // Actions succeed as they did live; their effects arrive as the recorded events.
+    engine.set_actions(Box::new(sr_core::actions::RecordingActions::default()));
     if desktop {
         engine.app_mode = sr_core::engine::AppMode::NativeControl;
     }
@@ -318,6 +320,9 @@ impl RecordingSpeech {
 }
 
 impl sr_core::speech::SpeechOutput for RecordingSpeech {
+    /// JAWS's speech history has no typing echo, so the replay records none either.
+    fn speak_echo(&mut self, _text: &str) {}
+
     fn speak(&mut self, text: &str, _interrupt: bool) {
         if let Ok(mut log) = self.0.lock() {
             log.push(text.to_owned());
@@ -342,7 +347,7 @@ fn replayable(event: &TraceEvent) -> bool {
     menu_event_from_trace(event).is_some()
         || (matches!(
             event.event.as_str(),
-            "focus" | "foreground" | "state_change" | "value_change" | "selection"
+            "focus" | "foreground" | "caret" | "state_change" | "value_change" | "selection"
         ) && (!event.focus_chain.is_empty() || event.object.is_some()))
 }
 

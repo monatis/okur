@@ -2,6 +2,7 @@ pub mod actions;
 pub mod aom;
 pub mod buffer;
 pub mod cursor;
+pub mod editing;
 pub mod engine;
 pub mod event;
 pub mod input;
@@ -18,6 +19,7 @@ pub use cursor::{SearchState, VirtualCursor};
 pub use engine::{ActiveElementList, ScreenReaderEngine};
 pub use event::{
     AccessibilityEvent, CaretUnit, ChangeKind, FocusEvent, LiveRegionEvent, MenuEvent, Politeness,
+    TextContext,
 };
 pub use input::{Key, KeyAction, KeyEvent, Modifiers};
 pub use speech::{MockSpeechOutput, SpeechFormatter, SpeechOutput};

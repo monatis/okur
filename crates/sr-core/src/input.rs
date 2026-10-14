@@ -148,6 +148,13 @@ impl KeyEvent {
             Key::Escape if m.is_empty() => Some("{ESC}".to_string()),
             Key::Space if m.is_empty() => Some("{SPACE}".to_string()),
 
+            // Say Window Title (Insert+T)
+            Key::Alpha(c)
+                if c.eq_ignore_ascii_case(&'T') && m.insert && !m.ctrl && !m.alt && !m.shift =>
+            {
+                Some("SayWindowTitle".to_string())
+            }
+
             // Font formatting query (Insert+F)
             Key::Alpha(c)
                 if c.eq_ignore_ascii_case(&'F') && m.insert && !m.ctrl && !m.alt && !m.shift =>

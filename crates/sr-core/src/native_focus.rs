@@ -79,6 +79,12 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<String> {
     let mut lines = Vec::new();
     match focus.role {
         Role::Edit => {
+            // [hyp] An unlabelled edit takes the window title as its name (306/s5).
+            let name = if name.is_empty() {
+                named(focus.window_title.as_deref().unwrap_or_default())
+            } else {
+                name
+            };
             lines.push(format!("{name}{}", role_marker("Edit")));
             lines.extend(value);
             lines.push("Type in text.".to_owned());
@@ -154,6 +160,8 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<String> {
             lines.push(format!("{name}{}", role_marker("Button")));
             lines.push("To activate press spacebar.".to_owned());
         }
+        // A window taking focus is announced by its title alone (the window change).
+        Role::Window => {}
         _ => {
             lines.push(name);
             lines.extend(value);
