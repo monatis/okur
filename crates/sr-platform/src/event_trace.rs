@@ -32,6 +32,17 @@ const MSAA_BUTTONMENU: i32 = 0x39;
 /// Bumped whenever the recorded fields or their meaning change.
 pub const TRACE_FORMAT_VERSION: u32 = 7;
 
+/// Foreground windows whose focus moves only through UIA: no WinEvent reports it. The task
+/// switcher (Alt+Tab) focuses each window's item as Tab is pressed with Alt held (the same
+/// items NVDA's explorer module handles: `MultitaskingViewFrame` on Windows 10,
+/// `XamlExplorerHostIslandWindow` on Windows 11, which also hosts Task View).
+pub const UIA_FOCUS_WINDOWS: [&str; 2] = ["MultitaskingViewFrame", "XamlExplorerHostIslandWindow"];
+
+/// Whether a recorded event is a focus change, from a WinEvent or from UIA.
+pub fn is_focus(event: &TraceEvent) -> bool {
+    matches!(event.event.as_str(), "focus" | "uia_focus")
+}
+
 /// The MSAA view of an event's object (`AccessibleObjectFromEvent`).
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct TraceObject {
@@ -49,9 +60,10 @@ pub struct TraceObject {
 pub struct TraceEvent {
     /// Unix time in milliseconds when the event was received.
     pub t_ms: u128,
-    /// Short event name (`focus`, `foreground`, `name_change`, …).
+    /// Short event name (`focus`, `foreground`, `name_change`, …). `uia_focus` is a UIA
+    /// focus change in a window whose focus no WinEvent reports ([`UIA_FOCUS_WINDOWS`]).
     pub event: String,
-    /// Raw `EVENT_*` id.
+    /// Raw `EVENT_*` id; for `uia_focus`, the UIA event id.
     pub win_event: u32,
     pub hwnd: isize,
     pub id_object: i32,
@@ -417,8 +429,12 @@ impl EventConverter {
                     control: combo,
                 });
             }
-            "focus" => {
+            "focus" | "uia_focus" => {
                 let mut focus = focus_event_from_trace(event)?;
+                // UIA repeats a focus change some WinEvent may also have reported.
+                if event.event == "uia_focus" && self.last_focus.as_ref() == Some(&focus) {
+                    return None;
+                }
                 if let Some(states) = event.object.as_ref().map(|o| o.states) {
                     apply_msaa_states(&mut focus, states);
                 }
@@ -541,15 +557,19 @@ fn apply_msaa_states(control: &mut sr_core::FocusEvent, states: u32) {
 
 #[cfg(windows)]
 mod capture {
-    use super::{event_name, TraceEvent, TraceHeader, TraceObject, TRACE_FORMAT_VERSION};
+    use super::{
+        event_name, TraceEvent, TraceHeader, TraceObject, TRACE_FORMAT_VERSION, UIA_FOCUS_WINDOWS,
+    };
     use crate::uia_snapshot::capture::{
         automation, focus_chain, focus_context, focus_subtree_of, window_text,
     };
     use crate::PlatformError;
     use std::cell::RefCell;
     use std::io::Write;
+    use windows::core::implement;
     use windows::Win32::Foundation::{CloseHandle, HWND};
     use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
+    use windows::Win32::System::Threading::GetCurrentThreadId;
     use windows::Win32::System::Threading::{
         OpenProcess, QueryFullProcessImageNameW, PROCESS_NAME_WIN32,
         PROCESS_QUERY_LIMITED_INFORMATION,
@@ -558,6 +578,10 @@ mod capture {
     use windows::Win32::UI::Accessibility::{
         AccessibleObjectFromEvent, IAccessible, IUIAutomation, SetWinEventHook, UnhookWinEvent,
         HWINEVENTHOOK,
+    };
+    use windows::Win32::UI::Accessibility::{
+        IUIAutomationElement, IUIAutomationFocusChangedEventHandler,
+        IUIAutomationFocusChangedEventHandler_Impl,
     };
     use windows::Win32::UI::WindowsAndMessaging::{
         DispatchMessageW, GetWindowThreadProcessId, MsgWaitForMultipleObjects, PeekMessageW,
@@ -694,8 +718,9 @@ mod capture {
     }
 
     /// The events the live screen reader consumes ([`EventConverter`]).
-    const LIVE_EVENTS: [&str; 12] = [
+    const LIVE_EVENTS: [&str; 13] = [
         "focus",
+        "uia_focus",
         "foreground",
         "caret",
         "text_selection_change",
@@ -771,6 +796,55 @@ mod capture {
         let Some(name) = event_name(win_event, id_object) else {
             return;
         };
+        record(name, win_event, hwnd, id_object, id_child);
+    }
+
+    /// UIA's focus-changed event id.
+    const UIA_FOCUS_CHANGED: u32 = 20005;
+    /// Posted to the tracer thread by [`UiaFocusHandler`].
+    const WM_UIA_FOCUS: u32 = windows::Win32::UI::WindowsAndMessaging::WM_APP + 1;
+
+    /// Wakes the tracer thread on UIA focus changes in [`UIA_FOCUS_WINDOWS`]. UIA calls it on
+    /// its own threads, and it also reports every WinEvent focus (UIA bridges MSAA), so it
+    /// only checks the foreground window's class, a call that crosses no process.
+    #[implement(IUIAutomationFocusChangedEventHandler)]
+    struct UiaFocusHandler {
+        thread: u32,
+    }
+
+    impl IUIAutomationFocusChangedEventHandler_Impl for UiaFocusHandler_Impl {
+        fn HandleFocusChangedEvent(
+            &self,
+            _sender: windows::core::Ref<IUIAutomationElement>,
+        ) -> windows::core::Result<()> {
+            use windows::Win32::Foundation::{LPARAM, WPARAM};
+            use windows::Win32::UI::WindowsAndMessaging::{
+                GetClassNameW, GetForegroundWindow, PostThreadMessageW,
+            };
+            let mut class = [0u16; 64];
+            // SAFETY: plain Win32 queries with a valid buffer; the post targets a thread
+            // that pumps messages until the handler is removed.
+            unsafe {
+                let length = GetClassNameW(GetForegroundWindow(), &mut class);
+                let class = String::from_utf16_lossy(class.get(..length as usize).unwrap_or(&[]));
+                if UIA_FOCUS_WINDOWS.contains(&class.as_str()) {
+                    let _ = PostThreadMessageW(self.thread, WM_UIA_FOCUS, WPARAM(0), LPARAM(0));
+                }
+            }
+            Ok(())
+        }
+    }
+
+    /// Records the focus UIA reports, on the tracer thread.
+    fn record_uia_focus() {
+        use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+        // SAFETY: plain Win32 call with no preconditions.
+        let foreground = unsafe { GetForegroundWindow() };
+        record("uia_focus", UIA_FOCUS_CHANGED, foreground, 0, 0);
+    }
+
+    /// Records one event through the sink, with what the engine needs read now.
+    fn record(name: &'static str, win_event: u32, hwnd: HWND, id_object: i32, id_child: i32) {
         let t_ms = now_ms();
         let (title, class) = if hwnd.is_invalid() {
             (String::new(), String::new())
@@ -782,6 +856,7 @@ mod capture {
             let Some(state) = state.as_mut() else { return };
             // A change to the focused control (check box toggled, tree item expanded, combo
             // box value) is spoken with the same context as a focus landing on it.
+            let focused = matches!(name, "focus" | "uia_focus");
             let changes_focus_context =
                 matches!(name, "state_change" | "value_change" | "selection");
             // Live, every cross-process read on this thread delays the events behind it: drop
@@ -793,23 +868,23 @@ mod capture {
             {
                 return;
             }
-            let focus = if matches!(name, "focus" | "foreground") || changes_focus_context {
+            let focus = if focused || name == "foreground" || changes_focus_context {
                 state.uia.as_ref().map(focus_chain).unwrap_or_default()
             } else {
                 Vec::new()
             };
             let (focus_siblings, focus_subtree) = match (name, state.uia.as_ref()) {
-                ("focus", Some(uia)) => focus_context(uia),
+                (_, Some(uia)) if focused => focus_context(uia),
                 (_, Some(uia)) if changes_focus_context => (Vec::new(), focus_subtree_of(uia)),
                 _ => (Vec::new(), None),
             };
-            let list_position = if name == "focus" || changes_focus_context {
+            let list_position = if focused || changes_focus_context {
                 win32_list_position(hwnd, &class)
             } else {
                 None
             };
             let (top_window_title, virtual_desktop) =
-                if matches!(name, "focus" | "foreground") && !hwnd.is_invalid() {
+                if (focused || name == "foreground") && !hwnd.is_invalid() {
                     top_window(hwnd)
                 } else {
                     (None, None)
@@ -824,7 +899,7 @@ mod capture {
             // Reading here too would race it with a half-updated state (a selection still
             // being extended), and whichever arrived first would be spoken.
             let caret_moved = matches!(name, "caret" | "text_selection_change");
-            let text_context = if (name == "focus" || changes_focus_context || caret_moved)
+            let text_context = if (focused || changes_focus_context || caret_moved)
                 && !(state.live && caret_moved)
             {
                 let read = || {
@@ -856,7 +931,10 @@ mod capture {
                 window_class: Some(class).filter(|s| !s.is_empty()),
                 window_title: Some(title).filter(|s| !s.is_empty()),
                 process: process_name(hwnd),
-                object: msaa_object(hwnd, id_object, id_child),
+                // A UIA focus has no MSAA object: the focused item is UIA's.
+                object: (name != "uia_focus")
+                    .then(|| msaa_object(hwnd, id_object, id_child))
+                    .flatten(),
                 focus_chain: focus,
                 focus_siblings,
                 focus_subtree,
@@ -943,18 +1021,42 @@ mod capture {
             ]
         };
 
+        // SAFETY: plain Win32 call with no preconditions.
+        let thread = unsafe { GetCurrentThreadId() };
+        let uia_focus: IUIAutomationFocusChangedEventHandler = UiaFocusHandler { thread }.into();
+        let uia = STATE.with(|s| s.borrow().as_ref().and_then(|s| s.uia.clone()));
+        let uia_focus_added = uia.as_ref().is_some_and(|uia| {
+            // SAFETY: a system-wide UIA handler, removed before this thread stops pumping.
+            unsafe { uia.AddFocusChangedEventHandler(None, &uia_focus) }
+                .inspect_err(|e| tracing::warn!("UIA focus handler not added: {e}"))
+                .is_ok()
+        });
+
         let mut msg = MSG::default();
         while keep_running() {
             // SAFETY: standard message pump; waits at most 50 ms between stop checks.
             unsafe {
                 let _ = MsgWaitForMultipleObjects(None, false, 50, QS_ALLINPUT);
+                let mut uia_focused = false;
                 while PeekMessageW(&mut msg, None, 0, 0, PM_REMOVE).as_bool() {
+                    if msg.hwnd.is_invalid() && msg.message == WM_UIA_FOCUS {
+                        // Several focus changes queued meanwhile: the focus now is read once.
+                        uia_focused = true;
+                        continue;
+                    }
                     let _ = TranslateMessage(&msg);
                     DispatchMessageW(&msg);
+                }
+                if uia_focused {
+                    record_uia_focus();
                 }
             }
         }
 
+        if let (Some(uia), true) = (uia.as_ref(), uia_focus_added) {
+            // SAFETY: removes the handler added above.
+            let _ = unsafe { uia.RemoveFocusChangedEventHandler(&uia_focus) };
+        }
         for hook in hooks {
             if !hook.is_invalid() {
                 // SAFETY: hooks installed above.
@@ -1027,5 +1129,30 @@ mod tests {
     fn no_siblings_means_no_position() {
         let focus = focus_event_from_trace(&focus_event(Vec::new()));
         assert_eq!(focus.map(|f| f.item_index), Some(None));
+    }
+
+    /// The task switcher's items take focus through UIA only (Alt+Tab with Alt held).
+    #[test]
+    fn uia_focus_is_a_focus_once() {
+        const LIST_ITEM: i32 = 50007;
+        let switcher = |name: &str| TraceEvent {
+            event: "uia_focus".to_owned(),
+            win_event: 20005,
+            window_class: Some("XamlExplorerHostIslandWindow".to_owned()),
+            focus_chain: vec![node(LIST_ITEM, name, true)],
+            ..focus_event(Vec::new())
+        };
+        let mut converter = EventConverter::default();
+        let first = converter.convert(&switcher("Untitled - Notepad"));
+        assert!(
+            matches!(first.as_slice(), [sr_core::AccessibilityEvent::Focus(f)]
+                if f.name.as_deref() == Some("Untitled - Notepad")),
+            "{first:?}"
+        );
+        // A focus UIA repeats changes nothing.
+        assert!(converter
+            .convert(&switcher("Untitled - Notepad"))
+            .is_empty());
+        assert_eq!(converter.convert(&switcher("Downloads")).len(), 1);
     }
 }

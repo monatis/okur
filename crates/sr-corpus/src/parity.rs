@@ -13,7 +13,7 @@ use serde::Serialize;
 use serde_json::Value;
 use sr_core::clock::{FixedClock, LocalDateTime, LocaleFormats};
 use sr_core::{Modifiers, ScreenReaderEngine, VirtualBuffer, VirtualCursor};
-use sr_platform::event_trace::{menu_event_from_trace, EventConverter, TraceEvent};
+use sr_platform::event_trace::{is_focus, menu_event_from_trace, EventConverter, TraceEvent};
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -571,6 +571,7 @@ fn replayable(event: &TraceEvent) -> bool {
         || (matches!(
             event.event.as_str(),
             "focus"
+                | "uia_focus"
                 | "foreground"
                 | "caret"
                 | "text_selection_change"
@@ -623,7 +624,7 @@ impl StepEvents {
             .unwrap_or(0);
         let setup = events
             .iter()
-            .filter(|e| e.event == "focus" && e.t_ms < first_start && replayable(e))
+            .filter(|e| is_focus(e) && e.t_ms < first_start && replayable(e))
             .cloned()
             .collect();
         for step in steps {

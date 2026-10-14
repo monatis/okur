@@ -84,7 +84,7 @@ fn deliver(
     refresh: &std::sync::mpsc::Sender<()>,
 ) {
     let events = converter.convert(event);
-    if events.is_empty() && event.event == "focus" {
+    if events.is_empty() && crate::event_trace::is_focus(event) {
         tracing::debug!(class = ?event.window_class, "focus event without a usable focus chain");
     }
     for converted in events {
