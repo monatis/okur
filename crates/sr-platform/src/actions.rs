@@ -1,9 +1,9 @@
 //! [`sr_core::actions::ApplicationActions`] for Chromium pages, through MSAA/IA2.
 //!
 //! Buffer nodes mapped from IA2 carry the object's IA2 `uniqueID`
-//! ([`UNIQUE_ID_ATTR`]). An action resolves it with `accChild(-uniqueID)` on the
-//! foreground window's document and calls `accSelect(SELFLAG_TAKEFOCUS)` or
-//! `accDoDefaultAction`. The calls cross into the browser process, so they run on a worker
+//! ([`UNIQUE_ID_ATTR`]). An action resolves it with `accChild(uniqueID)` on the foreground
+//! window's document (Chromium's IDs are negative, which makes them valid child ids) and
+//! calls `accSelect(SELFLAG_TAKEFOCUS)` or `accDoDefaultAction`. The calls cross into the browser process, so they run on a worker
 //! thread: the engine calls actions from the keyboard hook, which must return at once.
 
 /// AOM attribute holding a node's IA2 `uniqueID`.
@@ -69,6 +69,26 @@ mod chromium {
             self.request(node, Ia2Action::DefaultAction)
         }
     }
+}
+
+/// Performs an action on a node's live object right away, on the calling thread, reporting
+/// why it failed. For harness checks; the engine goes through [`ChromiumActions`].
+#[cfg(windows)]
+pub fn perform_now(node: &sr_core::AomNode, activate: bool) -> Result<(), String> {
+    use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
+    use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+    use xa11y_windows::ia2::{perform_chromium_action, Ia2Action};
+    let id = unique_id(node).ok_or("node has no IA2 uniqueID")?;
+    let action = if activate {
+        Ia2Action::DefaultAction
+    } else {
+        Ia2Action::Focus
+    };
+    // SAFETY: COM initialization; repeated initialization is tolerated.
+    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+    // SAFETY: plain Win32 call with no preconditions.
+    let window = unsafe { GetForegroundWindow() };
+    perform_chromium_action(window, id, action).map_err(|e| format!("IA2 object {id}: {e}"))
 }
 
 /// Captures the foreground Chromium window's page through IA2 and maps it with

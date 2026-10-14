@@ -704,9 +704,9 @@ async fn main() {
         Some(Commands::Act { name, action }) => {
             #[cfg(windows)]
             {
-                use sr_core::actions::ApplicationActions;
                 fn find<'a>(node: &'a AomNode, name: &str) -> Option<&'a AomNode> {
                     if node.name.as_deref().map(str::trim) == Some(name)
+                        && node.role != Role::Text
                         && sr_platform::actions::unique_id(node).is_some()
                     {
                         return Some(node);
@@ -724,10 +724,9 @@ async fn main() {
                     eprintln!("No control named {name:?} with an IA2 uniqueID in the page");
                     std::process::exit(1);
                 };
-                let actions = sr_platform::actions::ChromiumActions::start();
                 let requested = match action.as_str() {
-                    "focus" => actions.focus(target),
-                    "activate" => actions.activate(target),
+                    "focus" => sr_platform::actions::perform_now(target, false),
+                    "activate" => sr_platform::actions::perform_now(target, true),
                     other => {
                         eprintln!("--action must be focus or activate, not {other:?}");
                         std::process::exit(2);
@@ -736,7 +735,7 @@ async fn main() {
                 std::thread::sleep(std::time::Duration::from_millis(500));
                 let focused = sr_platform::uia_snapshot::focused_element_summary();
                 println!(
-                    "{action} {name:?} ({:?}): requested={requested}; keyboard focus now: {focused}",
+                    "{action} {name:?} ({:?}): {requested:?}; keyboard focus now: {focused}",
                     target.role
                 );
             }

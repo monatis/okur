@@ -80,7 +80,7 @@ pub struct Ia2Node {
     /// IA2 state bits (`IA2_STATE_*`).
     pub ia2_states: i32,
     /// `IAccessible2::uniqueID`: identifies the live object within its window, where
-    /// `accChild(-unique_id)` on the document resolves it again (focus, default action).
+    /// `accChild` on the document resolves it again (focus, default action).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub unique_id: Option<i32>,
     /// Parsed IA2 object attributes (`tag`, `display`, `xml-roles`, `level`, …).
@@ -449,14 +449,17 @@ mod com {
         }
 
         /// Performs `action` on the object with IA2 `unique_id` in the document of a Chromium
-        /// top-level window. Chromium resolves `accChild(-uniqueID)` on any of its objects.
+        /// top-level window, through `accChild` on its document with the (negative) uniqueID.
         pub fn perform_chromium_action(
             top_level: HWND,
             unique_id: i32,
             action: Ia2Action,
         ) -> Result<(), Ia2CaptureError> {
             let document = chromium_document(top_level)?;
-            let child = VARIANT::from(unique_id.checked_neg().unwrap_or(unique_id));
+            // Chromium hands out negative uniqueIDs, which are valid child ids as they are;
+            // a positive one is negated, as the IA2 spec describes.
+            let child_id = if unique_id < 0 { unique_id } else { -unique_id };
+            let child = VARIANT::from(child_id);
             // SAFETY: MSAA child lookup on a valid IAccessible; Chromium returns an object.
             let target: IAccessible = unsafe { document.get_accChild(&child) }
                 .map_err(|e| err("accChild", e))?
