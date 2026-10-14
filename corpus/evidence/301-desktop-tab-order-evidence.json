@@ -2,9 +2,9 @@
     "format_version":  2,
     "scenario_id":  "301-desktop-tab-order",
     "scenario_version":  "1.0.0",
-    "timestamp":  "2026-10-14T17:12:06.7241430+03:00",
+    "timestamp":  "2026-10-14T17:58:02.2359268+03:00",
     "provenance":  {
-                       "capture_script_sha256":  "7c7ca8f250860890474771443be947508e82ba9c7800009fff366d661e4683d5",
+                       "capture_script_sha256":  "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
                        "scenario_sha256":  "51ca82348f8df552bf2bfecf9f805ffeb30f819cab62b1a2d65502278422ea1e",
                        "fixture_sha256":  "467dede4cfb8fc4fca76a13343cb3d3d8bba0feb038228ea37e745608bf01b0d",
                        "host":  "DESKTOP-DCNAKQQ",
@@ -24,14 +24,14 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-14T17:12:06.8629076+03:00",
+                       "timestamp":  "2026-10-14T17:58:02.3835337+03:00",
                        "foreground_window_start":  "SR Desktop Fixture",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1791987132179,
-                                                "t_end_ms":  1791987134146,
+                                                "t_start_ms":  1791989888384,
+                                                "t_end_ms":  1791989890346,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -41,7 +41,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1474,
+                                                                    "settle_ms":  1490,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -50,8 +50,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1791987135944,
-                                                "t_end_ms":  1791987139028,
+                                                "t_start_ms":  1791989892133,
+                                                "t_end_ms":  1791989895240,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -61,7 +61,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2692,
+                                                                    "settle_ms":  2713,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -70,8 +70,8 @@
                                             },
                                             {
                                                 "step_id":  "s3",
-                                                "t_start_ms":  1791987140840,
-                                                "t_end_ms":  1791987143449,
+                                                "t_start_ms":  1791989897049,
+                                                "t_end_ms":  1791989899680,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -81,7 +81,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2197,
+                                                                    "settle_ms":  2244,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -90,8 +90,8 @@
                                             },
                                             {
                                                 "step_id":  "s4",
-                                                "t_start_ms":  1791987145282,
-                                                "t_end_ms":  1791987148817,
+                                                "t_start_ms":  1791989901475,
+                                                "t_end_ms":  1791989904938,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -101,7 +101,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3124,
+                                                                    "settle_ms":  3050,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -110,8 +110,8 @@
                                             },
                                             {
                                                 "step_id":  "s5",
-                                                "t_start_ms":  1791987150608,
-                                                "t_end_ms":  1791987154057,
+                                                "t_start_ms":  1791989906750,
+                                                "t_end_ms":  1791989910258,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -121,7 +121,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3045,
+                                                                    "settle_ms":  3114,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -130,8 +130,8 @@
                                             },
                                             {
                                                 "step_id":  "s6",
-                                                "t_start_ms":  1791987155869,
-                                                "t_end_ms":  1791987159185,
+                                                "t_start_ms":  1791989912065,
+                                                "t_end_ms":  1791989915274,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -141,7 +141,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2902,
+                                                                    "settle_ms":  2816,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -150,8 +150,8 @@
                                             },
                                             {
                                                 "step_id":  "s7",
-                                                "t_start_ms":  1791987161000,
-                                                "t_end_ms":  1791987164571,
+                                                "t_start_ms":  1791989917091,
+                                                "t_end_ms":  1791989920663,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -161,7 +161,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3188,
+                                                                    "settle_ms":  3174,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -170,8 +170,8 @@
                                             },
                                             {
                                                 "step_id":  "s8",
-                                                "t_start_ms":  1791987166383,
-                                                "t_end_ms":  1791987170275,
+                                                "t_start_ms":  1791989922495,
+                                                "t_end_ms":  1791989926408,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -181,7 +181,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3490,
+                                                                    "settle_ms":  3520,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -190,8 +190,8 @@
                                             },
                                             {
                                                 "step_id":  "s9",
-                                                "t_start_ms":  1791987172088,
-                                                "t_end_ms":  1791987175149,
+                                                "t_start_ms":  1791989928219,
+                                                "t_end_ms":  1791989931271,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -201,7 +201,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2655,
+                                                                    "settle_ms":  2650,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -210,8 +210,8 @@
                                             },
                                             {
                                                 "step_id":  "s10",
-                                                "t_start_ms":  1791987176962,
-                                                "t_end_ms":  1791987179255,
+                                                "t_start_ms":  1791989933087,
+                                                "t_end_ms":  1791989935354,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -221,7 +221,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1902,
+                                                                    "settle_ms":  1883,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -230,8 +230,8 @@
                                             },
                                             {
                                                 "step_id":  "s11",
-                                                "t_start_ms":  1791987181070,
-                                                "t_end_ms":  1791987183429,
+                                                "t_start_ms":  1791989937166,
+                                                "t_end_ms":  1791989939541,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -241,7 +241,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1967,
+                                                                    "settle_ms":  1969,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -250,8 +250,8 @@
                                             },
                                             {
                                                 "step_id":  "s12",
-                                                "t_start_ms":  1791987185241,
-                                                "t_end_ms":  1791987187279,
+                                                "t_start_ms":  1791989941348,
+                                                "t_end_ms":  1791989943370,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -261,7 +261,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1638,
+                                                                    "settle_ms":  1637,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -270,8 +270,8 @@
                                             },
                                             {
                                                 "step_id":  "s13",
-                                                "t_start_ms":  1791987189089,
-                                                "t_end_ms":  1791987190985,
+                                                "t_start_ms":  1791989945186,
+                                                "t_end_ms":  1791989947089,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -281,7 +281,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1492,
+                                                                    "settle_ms":  1510,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -290,8 +290,8 @@
                                             },
                                             {
                                                 "step_id":  "s14",
-                                                "t_start_ms":  1791987192800,
-                                                "t_end_ms":  1791987194822,
+                                                "t_start_ms":  1791989948899,
+                                                "t_end_ms":  1791989950940,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Shift+Tab"
@@ -301,7 +301,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1537,
+                                                                    "settle_ms":  1580,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -310,8 +310,8 @@
                                             },
                                             {
                                                 "step_id":  "s15",
-                                                "t_start_ms":  1791987196629,
-                                                "t_end_ms":  1791987198959,
+                                                "t_start_ms":  1791989952754,
+                                                "t_end_ms":  1791989955161,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Shift+Tab"
@@ -321,7 +321,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1844,
+                                                                    "settle_ms":  1947,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -330,20 +330,20 @@
                                             }
                                         ],
                        "trial_success":  true,
-                       "page_load_settled":  true,
                        "trace_file":  "301-desktop-tab-order-trial1.jsonl",
-                       "trace_sha256":  "8d10fc7855172a9e3e8408dcc516f55f8e4feda8a969d35374662757874cb153"
+                       "page_load_settled":  true,
+                       "trace_sha256":  "c72072071fea66b31ae4d558bc187989c868b3fc6e03e1f1c0fea4d6a6ea6c17"
                    },
                    {
                        "trial_index":  2,
-                       "timestamp":  "2026-10-14T17:13:19.0106926+03:00",
+                       "timestamp":  "2026-10-14T17:59:15.2469224+03:00",
                        "foreground_window_start":  "SR Desktop Fixture",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1791987209087,
-                                                "t_end_ms":  1791987210994,
+                                                "t_start_ms":  1791989965179,
+                                                "t_end_ms":  1791989967122,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -353,7 +353,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1511,
+                                                                    "settle_ms":  1534,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -362,8 +362,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1791987212811,
-                                                "t_end_ms":  1791987215917,
+                                                "t_start_ms":  1791989968935,
+                                                "t_end_ms":  1791989972016,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -373,7 +373,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2716,
+                                                                    "settle_ms":  2674,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -382,8 +382,8 @@
                                             },
                                             {
                                                 "step_id":  "s3",
-                                                "t_start_ms":  1791987217728,
-                                                "t_end_ms":  1791987220326,
+                                                "t_start_ms":  1791989973833,
+                                                "t_end_ms":  1791989976460,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -393,7 +393,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2197,
+                                                                    "settle_ms":  2220,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -402,8 +402,8 @@
                                             },
                                             {
                                                 "step_id":  "s4",
-                                                "t_start_ms":  1791987222137,
-                                                "t_end_ms":  1791987225593,
+                                                "t_start_ms":  1791989978272,
+                                                "t_end_ms":  1791989981811,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -413,7 +413,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3067,
+                                                                    "settle_ms":  3127,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -422,8 +422,8 @@
                                             },
                                             {
                                                 "step_id":  "s5",
-                                                "t_start_ms":  1791987227410,
-                                                "t_end_ms":  1791987230929,
+                                                "t_start_ms":  1791989983622,
+                                                "t_end_ms":  1791989987148,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -433,7 +433,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3130,
+                                                                    "settle_ms":  3109,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -442,8 +442,8 @@
                                             },
                                             {
                                                 "step_id":  "s6",
-                                                "t_start_ms":  1791987232744,
-                                                "t_end_ms":  1791987236078,
+                                                "t_start_ms":  1791989988958,
+                                                "t_end_ms":  1791989992275,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -453,7 +453,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2924,
+                                                                    "settle_ms":  2925,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -462,8 +462,8 @@
                                             },
                                             {
                                                 "step_id":  "s7",
-                                                "t_start_ms":  1791987237885,
-                                                "t_end_ms":  1791987241460,
+                                                "t_start_ms":  1791989994088,
+                                                "t_end_ms":  1791989997683,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -482,944 +482,8 @@
                                             },
                                             {
                                                 "step_id":  "s8",
-                                                "t_start_ms":  1791987243268,
-                                                "t_end_ms":  1791987247181,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  " \u001d List view \u001e \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3503,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s9",
-                                                "t_start_ms":  1791987248990,
-                                                "t_end_ms":  1791987252042,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "General  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2658,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s10",
-                                                "t_start_ms":  1791987253857,
-                                                "t_end_ms":  1791987256132,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "OK  \u001d Button \u001e \nTo activate press spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1886,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s11",
-                                                "t_start_ms":  1791987257943,
-                                                "t_end_ms":  1791987260313,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Cancel  \u001d Button \u001e \nTo activate press spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1972,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s12",
-                                                "t_start_ms":  1791987262128,
-                                                "t_end_ms":  1791987264165,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Name:  \u001d Edit \u001e \nAda\nType in text.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1658,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s13",
-                                                "t_start_ms":  1791987265981,
-                                                "t_end_ms":  1791987267888,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Notes:  \u001d Edit \u001e \nType in text.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1495,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s14",
-                                                "t_start_ms":  1791987269699,
-                                                "t_end_ms":  1791987271717,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Shift+Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Name:  \u001d Edit \u001e \nAda\nType in text.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1537,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s15",
-                                                "t_start_ms":  1791987273535,
-                                                "t_end_ms":  1791987275949,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Shift+Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Cancel  \u001d Button \u001e \nTo activate press spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1949,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            }
-                                        ],
-                       "trial_success":  true,
-                       "page_load_settled":  true,
-                       "trace_file":  "301-desktop-tab-order-trial2.jsonl",
-                       "trace_sha256":  "69a2d287bd9baaac73af131f6ed7c3ca6ef7d6aef29909559691d694e56ac721"
-                   },
-                   {
-                       "trial_index":  3,
-                       "timestamp":  "2026-10-14T17:14:36.0263031+03:00",
-                       "foreground_window_start":  "SR Desktop Fixture",
-                       "setup_settled":  true,
-                       "step_results":  [
-                                            {
-                                                "step_id":  "s1",
-                                                "t_start_ms":  1791987286081,
-                                                "t_end_ms":  1791987288017,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Notes:  \u001d Edit \u001e \nType in text.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1510,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s2",
-                                                "t_start_ms":  1791987289835,
-                                                "t_end_ms":  1791987292958,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Subscribe to updates  \u001d check box \u001e   \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2698,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s3",
-                                                "t_start_ms":  1791987294726,
-                                                "t_end_ms":  1791987297364,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Remember me  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2221,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s4",
-                                                "t_start_ms":  1791987299157,
-                                                "t_end_ms":  1791987302696,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Plan \nPro  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3149,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s5",
-                                                "t_start_ms":  1791987304506,
-                                                "t_end_ms":  1791987307914,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Country:  \u001d Combo box \u001e \nGermany\n2 of 3\nTo change the selection use the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3028,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
-                                                "t_start_ms":  1791987309726,
-                                                "t_end_ms":  1791987312961,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Fruit:  \u001d List box \u001e \nBananas \n2 of 3\nTo move to an item press the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2842,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s7",
-                                                "t_start_ms":  1791987314771,
-                                                "t_end_ms":  1791987318364,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3175,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s8",
-                                                "t_start_ms":  1791987320175,
-                                                "t_end_ms":  1791987324091,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  " \u001d List view \u001e \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3505,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s9",
-                                                "t_start_ms":  1791987325900,
-                                                "t_end_ms":  1791987328947,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "General  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2658,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s10",
-                                                "t_start_ms":  1791987330759,
-                                                "t_end_ms":  1791987333027,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "OK  \u001d Button \u001e \nTo activate press spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1864,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s11",
-                                                "t_start_ms":  1791987334841,
-                                                "t_end_ms":  1791987337212,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Cancel  \u001d Button \u001e \nTo activate press spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1971,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s12",
-                                                "t_start_ms":  1791987339021,
-                                                "t_end_ms":  1791987341056,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Name:  \u001d Edit \u001e \nAda\nType in text.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1640,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s13",
-                                                "t_start_ms":  1791987342864,
-                                                "t_end_ms":  1791987344801,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Notes:  \u001d Edit \u001e \nType in text.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1511,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s14",
-                                                "t_start_ms":  1791987346593,
-                                                "t_end_ms":  1791987348716,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Shift+Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Name:  \u001d Edit \u001e \nAda\nType in text.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1636,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s15",
-                                                "t_start_ms":  1791987350524,
-                                                "t_end_ms":  1791987352959,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Shift+Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Cancel  \u001d Button \u001e \nTo activate press spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1964,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            }
-                                        ],
-                       "trial_success":  true,
-                       "page_load_settled":  true,
-                       "trace_file":  "301-desktop-tab-order-trial3.jsonl",
-                       "trace_sha256":  "3c5afd649daff44e1debf5ef66e2f83f5a13da3c0d5a50a7ab62ffb29b00df15"
-                   },
-                   {
-                       "trial_index":  4,
-                       "timestamp":  "2026-10-14T17:15:53.0225474+03:00",
-                       "foreground_window_start":  "SR Desktop Fixture",
-                       "setup_settled":  true,
-                       "step_results":  [
-                                            {
-                                                "step_id":  "s1",
-                                                "t_start_ms":  1791987363078,
-                                                "t_end_ms":  1791987364992,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Notes:  \u001d Edit \u001e \nType in text.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1510,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s2",
-                                                "t_start_ms":  1791987366824,
-                                                "t_end_ms":  1791987369923,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Subscribe to updates  \u001d check box \u001e   \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2699,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s3",
-                                                "t_start_ms":  1791987371732,
-                                                "t_end_ms":  1791987374337,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Remember me  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2200,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s4",
-                                                "t_start_ms":  1791987376151,
-                                                "t_end_ms":  1791987379595,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Plan \nPro  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3049,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s5",
-                                                "t_start_ms":  1791987381383,
-                                                "t_end_ms":  1791987384823,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Country:  \u001d Combo box \u001e \nGermany\n2 of 3\nTo change the selection use the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3046,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
-                                                "t_start_ms":  1791987386633,
-                                                "t_end_ms":  1791987389970,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Fruit:  \u001d List box \u001e \nBananas \n2 of 3\nTo move to an item press the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2921,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s7",
-                                                "t_start_ms":  1791987391780,
-                                                "t_end_ms":  1791987395353,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3170,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s8",
-                                                "t_start_ms":  1791987397184,
-                                                "t_end_ms":  1791987401088,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  " \u001d List view \u001e \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3498,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s9",
-                                                "t_start_ms":  1791987402911,
-                                                "t_end_ms":  1791987405949,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "General  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2634,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s10",
-                                                "t_start_ms":  1791987407759,
-                                                "t_end_ms":  1791987410133,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "OK  \u001d Button \u001e \nTo activate press spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1991,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s11",
-                                                "t_start_ms":  1791987411949,
-                                                "t_end_ms":  1791987414313,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Cancel  \u001d Button \u001e \nTo activate press spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1972,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s12",
-                                                "t_start_ms":  1791987416126,
-                                                "t_end_ms":  1791987418207,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Name:  \u001d Edit \u001e \nAda\nType in text.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1659,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s13",
-                                                "t_start_ms":  1791987419998,
-                                                "t_end_ms":  1791987421850,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Notes:  \u001d Edit \u001e \nType in text.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1473,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s14",
-                                                "t_start_ms":  1791987423664,
-                                                "t_end_ms":  1791987425749,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Shift+Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Name:  \u001d Edit \u001e \nAda\nType in text.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1573,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s15",
-                                                "t_start_ms":  1791987427561,
-                                                "t_end_ms":  1791987429961,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Shift+Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Cancel  \u001d Button \u001e \nTo activate press spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1945,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            }
-                                        ],
-                       "trial_success":  true,
-                       "page_load_settled":  true,
-                       "trace_file":  "301-desktop-tab-order-trial4.jsonl",
-                       "trace_sha256":  "54b8044a10bddcaf46d77e3ce1030fa420e11f70409d49d730f5ce2f0f1aae2e"
-                   },
-                   {
-                       "trial_index":  5,
-                       "timestamp":  "2026-10-14T17:17:09.9950031+03:00",
-                       "foreground_window_start":  "SR Desktop Fixture",
-                       "setup_settled":  true,
-                       "step_results":  [
-                                            {
-                                                "step_id":  "s1",
-                                                "t_start_ms":  1791987440092,
-                                                "t_end_ms":  1791987442005,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Notes:  \u001d Edit \u001e \nType in text.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1512,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s2",
-                                                "t_start_ms":  1791987443797,
-                                                "t_end_ms":  1791987446897,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Subscribe to updates  \u001d check box \u001e   \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2695,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s3",
-                                                "t_start_ms":  1791987448712,
-                                                "t_end_ms":  1791987451340,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Remember me  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2245,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s4",
-                                                "t_start_ms":  1791987453149,
-                                                "t_end_ms":  1791987456592,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Plan \nPro  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3048,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s5",
-                                                "t_start_ms":  1791987458399,
-                                                "t_end_ms":  1791987461831,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Country:  \u001d Combo box \u001e \nGermany\n2 of 3\nTo change the selection use the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3007,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
-                                                "t_start_ms":  1791987463625,
-                                                "t_end_ms":  1791987466948,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Fruit:  \u001d List box \u001e \nBananas \n2 of 3\nTo move to an item press the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2919,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s7",
-                                                "t_start_ms":  1791987468758,
-                                                "t_end_ms":  1791987472350,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3193,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s8",
-                                                "t_start_ms":  1791987474165,
-                                                "t_end_ms":  1791987478073,
+                                                "t_start_ms":  1791989999499,
+                                                "t_end_ms":  1791990003412,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -1438,8 +502,8 @@
                                             },
                                             {
                                                 "step_id":  "s9",
-                                                "t_start_ms":  1791987479888,
-                                                "t_end_ms":  1791987482988,
+                                                "t_start_ms":  1791990005226,
+                                                "t_end_ms":  1791990008279,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -1449,7 +513,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2678,
+                                                                    "settle_ms":  2636,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1458,8 +522,8 @@
                                             },
                                             {
                                                 "step_id":  "s10",
-                                                "t_start_ms":  1791987484761,
-                                                "t_end_ms":  1791987487026,
+                                                "t_start_ms":  1791990010088,
+                                                "t_end_ms":  1791990012396,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -1469,7 +533,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1882,
+                                                                    "settle_ms":  1890,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1478,11 +542,403 @@
                                             },
                                             {
                                                 "step_id":  "s11",
-                                                "t_start_ms":  1791987488838,
-                                                "t_end_ms":  1791987491186,
+                                                "t_start_ms":  1791990014186,
+                                                "t_end_ms":  1791990016530,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Cancel  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1947,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791990018342,
+                                                "t_end_ms":  1791990020399,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Name:  \u001d Edit \u001e \nAda\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1640,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1791990022214,
+                                                "t_end_ms":  1791990024084,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Notes:  \u001d Edit \u001e \nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1492,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "t_start_ms":  1791990025919,
+                                                "t_end_ms":  1791990027933,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Name:  \u001d Edit \u001e \nAda\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1532,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s15",
+                                                "t_start_ms":  1791990029725,
+                                                "t_end_ms":  1791990032074,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Cancel  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1845,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "301-desktop-tab-order-trial2.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "13629e91b42d09059051d2fb1ea2c159f9d64eb534c9fc72f0c3bcc2003ebb38"
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-14T18:00:32.1553873+03:00",
+                       "foreground_window_start":  "SR Desktop Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791990042077,
+                                                "t_end_ms":  1791990044011,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Notes:  \u001d Edit \u001e \nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1536,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791990045827,
+                                                "t_end_ms":  1791990048920,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Subscribe to updates  \u001d check box \u001e   \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2697,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791990050730,
+                                                "t_end_ms":  1791990053335,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Remember me  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2197,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791990055146,
+                                                "t_end_ms":  1791990058591,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Plan \nPro  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3041,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791990060401,
+                                                "t_end_ms":  1791990063835,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Country:  \u001d Combo box \u001e \nGermany\n2 of 3\nTo change the selection use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3025,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791990065644,
+                                                "t_end_ms":  1791990068945,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Fruit:  \u001d List box \u001e \nBananas \n2 of 3\nTo move to an item press the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2920,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791990070752,
+                                                "t_end_ms":  1791990074342,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3193,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791990076148,
+                                                "t_end_ms":  1791990080091,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d List view \u001e \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3550,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791990081904,
+                                                "t_end_ms":  1791990084942,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "General  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2635,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791990086733,
+                                                "t_end_ms":  1791990089040,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "OK  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1908,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791990090850,
+                                                "t_end_ms":  1791990093210,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Cancel  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1964,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791990095018,
+                                                "t_end_ms":  1791990097079,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Name:  \u001d Edit \u001e \nAda\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1662,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1791990098892,
+                                                "t_end_ms":  1791990100778,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Notes:  \u001d Edit \u001e \nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1496,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "t_start_ms":  1791990102590,
+                                                "t_end_ms":  1791990104636,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Name:  \u001d Edit \u001e \nAda\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1554,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s15",
+                                                "t_start_ms":  1791990106446,
+                                                "t_end_ms":  1791990108878,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+Tab"
                                                            },
                                                 "observation":  {
                                                                     "speech_raw":  "Cancel  \u001d Button \u001e \nTo activate press spacebar.",
@@ -1495,31 +951,23 @@
                                                                     "baseline_settled":  true
                                                                 },
                                                 "step_success":  true
-                                            },
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "301-desktop-tab-order-trial3.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "0579d200e372c6c16b4f9acae5456076c43396910386ad63ae8d63051f4a080c"
+                   },
+                   {
+                       "trial_index":  4,
+                       "timestamp":  "2026-10-14T18:01:48.9104822+03:00",
+                       "foreground_window_start":  "SR Desktop Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
                                             {
-                                                "step_id":  "s12",
-                                                "t_start_ms":  1791987492998,
-                                                "t_end_ms":  1791987495055,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Name:  \u001d Edit \u001e \nAda\nType in text.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1657,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s13",
-                                                "t_start_ms":  1791987496861,
-                                                "t_end_ms":  1791987498765,
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791990119715,
+                                                "t_end_ms":  1791990121690,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -1529,7 +977,247 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1491,
+                                                                    "settle_ms":  1554,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791990123481,
+                                                "t_end_ms":  1791990126562,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Subscribe to updates  \u001d check box \u001e   \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2680,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791990128356,
+                                                "t_end_ms":  1791990131018,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Remember me  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2258,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791990132829,
+                                                "t_end_ms":  1791990136384,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Plan \nPro  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3152,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791990138181,
+                                                "t_end_ms":  1791990141599,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Country:  \u001d Combo box \u001e \nGermany\n2 of 3\nTo change the selection use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3031,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791990143392,
+                                                "t_end_ms":  1791990146641,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Fruit:  \u001d List box \u001e \nBananas \n2 of 3\nTo move to an item press the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2843,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791990148453,
+                                                "t_end_ms":  1791990152013,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3151,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791990153841,
+                                                "t_end_ms":  1791990157759,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d List view \u001e \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3521,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791990159570,
+                                                "t_end_ms":  1791990162618,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "General  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2657,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791990164428,
+                                                "t_end_ms":  1791990166704,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "OK  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1866,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791990168514,
+                                                "t_end_ms":  1791990170857,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Cancel  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1942,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791990172668,
+                                                "t_end_ms":  1791990174754,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Name:  \u001d Edit \u001e \nAda\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1681,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1791990176545,
+                                                "t_end_ms":  1791990178472,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Notes:  \u001d Edit \u001e \nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1494,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1538,8 +1226,8 @@
                                             },
                                             {
                                                 "step_id":  "s14",
-                                                "t_start_ms":  1791987500580,
-                                                "t_end_ms":  1791987502631,
+                                                "t_start_ms":  1791990180264,
+                                                "t_end_ms":  1791990182306,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Shift+Tab"
@@ -1549,7 +1237,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1556,
+                                                                    "settle_ms":  1557,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1558,8 +1246,8 @@
                                             },
                                             {
                                                 "step_id":  "s15",
-                                                "t_start_ms":  1791987504422,
-                                                "t_end_ms":  1791987506751,
+                                                "t_start_ms":  1791990184126,
+                                                "t_end_ms":  1791990186524,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Shift+Tab"
@@ -1569,7 +1257,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1841,
+                                                                    "settle_ms":  1913,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1578,10 +1266,322 @@
                                             }
                                         ],
                        "trial_success":  true,
+                       "trace_file":  "301-desktop-tab-order-trial4.jsonl",
                        "page_load_settled":  true,
+                       "trace_sha256":  "0b72b3028e4b72d63fefb3c93c8d928ceb3453c4262a594e27e44209511add0a"
+                   },
+                   {
+                       "trial_index":  5,
+                       "timestamp":  "2026-10-14T18:03:06.6060626+03:00",
+                       "foreground_window_start":  "SR Desktop Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791990196546,
+                                                "t_end_ms":  1791990198466,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Notes:  \u001d Edit \u001e \nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1508,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791990200279,
+                                                "t_end_ms":  1791990203354,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Subscribe to updates  \u001d check box \u001e   \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2697,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791990205167,
+                                                "t_end_ms":  1791990207794,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Remember me  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2218,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791990209603,
+                                                "t_end_ms":  1791990213051,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Plan \nPro  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3047,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791990214842,
+                                                "t_end_ms":  1791990218275,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Country:  \u001d Combo box \u001e \nGermany\n2 of 3\nTo change the selection use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3046,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791990220087,
+                                                "t_end_ms":  1791990223419,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Fruit:  \u001d List box \u001e \nBananas \n2 of 3\nTo move to an item press the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2924,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791990225232,
+                                                "t_end_ms":  1791990228814,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d Tree view \u001e \nDocuments  \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3177,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791990230625,
+                                                "t_end_ms":  1791990234514,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d List view \u001e \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3505,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791990236341,
+                                                "t_end_ms":  1791990239388,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "General  \u001d Tab \u001e   \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2637,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791990241202,
+                                                "t_end_ms":  1791990243477,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "OK  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1883,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791990245292,
+                                                "t_end_ms":  1791990247654,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Cancel  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1969,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791990249472,
+                                                "t_end_ms":  1791990251509,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Name:  \u001d Edit \u001e \nAda\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1635,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1791990253323,
+                                                "t_end_ms":  1791990255234,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Notes:  \u001d Edit \u001e \nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1494,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "t_start_ms":  1791990257026,
+                                                "t_end_ms":  1791990259083,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Name:  \u001d Edit \u001e \nAda\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1597,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s15",
+                                                "t_start_ms":  1791990260893,
+                                                "t_end_ms":  1791990263317,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Shift+Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Cancel  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1909,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
                        "trace_file":  "301-desktop-tab-order-trial5.jsonl",
-                       "trace_sha256":  "2ad7224ede0a3d0a83cfa4a7360aa6233d9c922208e6749be146614f3dda3dae"
+                       "page_load_settled":  true,
+                       "trace_sha256":  "695f856c77f3921f13e1ff4a2745bca0289965100d841c58bfe5be68e8f46551"
                    }
                ],
-    "total_elapsed_ms":  380587
+    "total_elapsed_ms":  381558
 }

@@ -711,8 +711,8 @@
       "scenario_id": "301-desktop-tab-order",
       "fixture": "desktop-forms.ps1",
       "evidence": {
-        "sha256": "65ff30a51b175b4e0622db34f3d6c4e6ca6ee9ff6108bfbf8ce5cc4b046055a9",
-        "capture_script_sha256": "7c7ca8f250860890474771443be947508e82ba9c7800009fff366d661e4683d5",
+        "sha256": "da7b7ccdffa88dbc1c9af9450cb356a74ecf57dc87b1dce002d74cc521bdd96b",
+        "capture_script_sha256": "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 5,
@@ -725,12 +725,12 @@
       "scenario_id": "302-desktop-menu-bar",
       "fixture": "desktop-forms.ps1",
       "evidence": {
-        "sha256": "c46939418e3a7a82464f09cb1ca2ad883efa439f90be220a890d00bf1e0d6131",
-        "capture_script_sha256": "7c7ca8f250860890474771443be947508e82ba9c7800009fff366d661e4683d5",
+        "sha256": "b3120585c84c0b0b2d2da9ef2d957224b836d087fbd23546c40d6e9fc42647b8",
+        "capture_script_sha256": "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 5,
-        "successful_trials": 4,
+        "successful_trials": 5,
         "deterministic": true,
         "summary_consistent": true
       }
@@ -739,8 +739,8 @@
       "scenario_id": "303-desktop-lists-and-trees",
       "fixture": "desktop-forms.ps1",
       "evidence": {
-        "sha256": "1111f0fb641a69a92e9c23d45b3f955fa00f5350aa195992bdc903f66f06079b",
-        "capture_script_sha256": "7c7ca8f250860890474771443be947508e82ba9c7800009fff366d661e4683d5",
+        "sha256": "7cfc95b40d7d5ceac8583a66b346e37a1a4e882cc12ea419bf197eb418f52c67",
+        "capture_script_sha256": "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 5,
@@ -754,7 +754,7 @@
     "scenarios": 51,
     "scenarios_with_evidence": 51,
     "total_trials": 255,
-    "successful_trials": 254,
+    "successful_trials": 255,
     "deterministic_scenarios": 46
   }
 }
