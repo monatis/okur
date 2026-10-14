@@ -1,0 +1,27 @@
+{
+  "id": "301-desktop-tab-order",
+  "name": "Tab through a native WinForms window, wrapping, then Shift+Tab",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-forms.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Desktop Fixture" },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Tab" },
+    { "id": "s2", "type": "key", "command": "Tab" },
+    { "id": "s3", "type": "key", "command": "Tab" },
+    { "id": "s4", "type": "key", "command": "Tab" },
+    { "id": "s5", "type": "key", "command": "Tab" },
+    { "id": "s6", "type": "key", "command": "Tab" },
+    { "id": "s7", "type": "key", "command": "Tab" },
+    { "id": "s8", "type": "key", "command": "Tab" },
+    { "id": "s9", "type": "key", "command": "Tab" },
+    { "id": "s10", "type": "key", "command": "Tab" },
+    { "id": "s11", "type": "key", "command": "Tab" },
+    { "id": "s12", "type": "key", "command": "Tab" },
+    { "id": "s13", "type": "key", "command": "Tab" },
+    { "id": "s14", "type": "key", "command": "Shift+Tab" },
+    { "id": "s15", "type": "key", "command": "Shift+Tab" }
+  ]
+}

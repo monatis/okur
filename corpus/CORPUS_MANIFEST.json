@@ -372,6 +372,20 @@
       }
     },
     {
+      "scenario_id": "114-article-list-items",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "4f6be85c696cc4c1903b618123b941b39d3dc0a15b172b6a1e92e75eda6c679c",
+        "capture_script_sha256": "7c7ca8f250860890474771443be947508e82ba9c7800009fff366d661e4683d5",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 5,
+        "successful_trials": 5,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "12-struct-heading-level-2",
       "fixture": "structural-navigation.html",
       "evidence": {
@@ -692,13 +706,55 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "301-desktop-tab-order",
+      "fixture": "desktop-forms.ps1",
+      "evidence": {
+        "sha256": "65ff30a51b175b4e0622db34f3d6c4e6ca6ee9ff6108bfbf8ce5cc4b046055a9",
+        "capture_script_sha256": "7c7ca8f250860890474771443be947508e82ba9c7800009fff366d661e4683d5",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 5,
+        "successful_trials": 5,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "302-desktop-menu-bar",
+      "fixture": "desktop-forms.ps1",
+      "evidence": {
+        "sha256": "c46939418e3a7a82464f09cb1ca2ad883efa439f90be220a890d00bf1e0d6131",
+        "capture_script_sha256": "7c7ca8f250860890474771443be947508e82ba9c7800009fff366d661e4683d5",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 5,
+        "successful_trials": 4,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "303-desktop-lists-and-trees",
+      "fixture": "desktop-forms.ps1",
+      "evidence": {
+        "sha256": "1111f0fb641a69a92e9c23d45b3f955fa00f5350aa195992bdc903f66f06079b",
+        "capture_script_sha256": "7c7ca8f250860890474771443be947508e82ba9c7800009fff366d661e4683d5",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 5,
+        "successful_trials": 5,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 47,
-    "scenarios_with_evidence": 47,
-    "total_trials": 235,
-    "successful_trials": 235,
-    "deterministic_scenarios": 42
+    "scenarios": 51,
+    "scenarios_with_evidence": 51,
+    "total_trials": 255,
+    "successful_trials": 254,
+    "deterministic_scenarios": 46
   }
 }

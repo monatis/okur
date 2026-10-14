@@ -1,0 +1,887 @@
+{
+    "format_version":  2,
+    "scenario_id":  "302-desktop-menu-bar",
+    "scenario_version":  "1.0.0",
+    "timestamp":  "2026-10-14T17:18:27.7081693+03:00",
+    "provenance":  {
+                       "capture_script_sha256":  "7c7ca8f250860890474771443be947508e82ba9c7800009fff366d661e4683d5",
+                       "scenario_sha256":  "01e5d54b3f0c89a33794caf59368312db814b02ab27fd267ebc097214332d8d0",
+                       "fixture_sha256":  "467dede4cfb8fc4fca76a13343cb3d3d8bba0feb038228ea37e745608bf01b0d",
+                       "host":  "DESKTOP-DCNAKQQ",
+                       "os_build":  "Microsoft Windows [Version 10.0.19045.6456]",
+                       "keyboard_layout":  "Turkish Q",
+                       "chrome_version":  "154.0.8037.98",
+                       "jaws_version":  "2025.2505.43.400"
+                   },
+    "environment":  {
+                        "os_version":  "Microsoft Windows NT 10.0.19045.0",
+                        "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
+                        "target_process":  "desktop",
+                        "interactive_session":  true
+                    },
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/desktop-forms.ps1",
+    "repetitions_requested":  5,
+    "trials":  [
+                   {
+                       "trial_index":  1,
+                       "timestamp":  "2026-10-14T17:18:27.8721296+03:00",
+                       "foreground_window_start":  "SR Desktop Fixture",
+                       "setup_settled":  false,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791987518854,
+                                                "t_end_ms":  1791987521494,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d Menu bar \u001e \nFile \nTo navigate press Left or Right Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2167,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791987523290,
+                                                "t_end_ms":  1791987526171,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "  \u001d menu \u001e \n  \nFile menu\nNew \nTo move through items press up or down arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2484,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791987527964,
+                                                "t_end_ms":  1791987529299,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Open...",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  929,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791987531095,
+                                                "t_end_ms":  1791987532459,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Exit",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  953,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791987534247,
+                                                "t_end_ms":  1791987535919,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Edit menu\nCopy",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1284,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791987537714,
+                                                "t_end_ms":  1791987539015,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Paste",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  893,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791987540826,
+                                                "t_end_ms":  1791987542834,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Edit\n \u001dsub menu\u001e \nEdit  \u001dsub menu\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1614,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791987544626,
+                                                "t_end_ms":  1791987547091,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Leaving menus\nName:  \u001d Edit \u001e \nAda\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2051,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  false,
+                       "page_load_settled":  false,
+                       "trace_file":  "302-desktop-menu-bar-trial1.jsonl",
+                       "trace_sha256":  "59bf1e033bf42278e208801688ef59467e6117503f6df1aeca2deee6df1dc38b"
+                   },
+                   {
+                       "trial_index":  2,
+                       "timestamp":  "2026-10-14T17:19:07.1738488+03:00",
+                       "foreground_window_start":  "SR Desktop Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791987557188,
+                                                "t_end_ms":  1791987559789,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d Menu bar \u001e \nFile \nTo navigate press Left or Right Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2173,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791987561561,
+                                                "t_end_ms":  1791987564479,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "  \u001d menu \u001e \n  \nFile menu\nNew \nTo move through items press up or down arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2502,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791987566267,
+                                                "t_end_ms":  1791987567688,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Open...",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1037,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791987569501,
+                                                "t_end_ms":  1791987570853,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Exit",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  956,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791987572648,
+                                                "t_end_ms":  1791987574313,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Edit menu\nCopy",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1245,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791987576104,
+                                                "t_end_ms":  1791987577440,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Paste",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  890,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791987579214,
+                                                "t_end_ms":  1791987581253,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Edit\n \u001dsub menu\u001e \nEdit  \u001dsub menu\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1621,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791987583024,
+                                                "t_end_ms":  1791987585476,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Leaving menus\nName:  \u001d Edit \u001e \nAda\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2050,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  true,
+                       "trace_file":  "302-desktop-menu-bar-trial2.jsonl",
+                       "trace_sha256":  "d057c85c8092428fb444d80a30f210818950105d55f9f85ce55e6a7d45b8c4f8"
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-14T17:19:45.5556269+03:00",
+                       "foreground_window_start":  "SR Desktop Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791987595601,
+                                                "t_end_ms":  1791987598148,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d Menu bar \u001e \nFile \nTo navigate press Left or Right Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2131,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791987599961,
+                                                "t_end_ms":  1791987602874,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "  \u001d menu \u001e \n  \nFile menu\nNew \nTo move through items press up or down arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2505,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791987604665,
+                                                "t_end_ms":  1791987606099,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Open...",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1016,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791987607890,
+                                                "t_end_ms":  1791987609230,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Exit",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  932,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791987611037,
+                                                "t_end_ms":  1791987612705,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Edit menu\nCopy",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1284,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791987614515,
+                                                "t_end_ms":  1791987615897,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Paste",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  979,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791987617711,
+                                                "t_end_ms":  1791987619725,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Edit\n \u001dsub menu\u001e \nEdit  \u001dsub menu\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1622,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791987621516,
+                                                "t_end_ms":  1791987623960,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Leaving menus\nName:  \u001d Edit \u001e \nAda\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2051,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  true,
+                       "trace_file":  "302-desktop-menu-bar-trial3.jsonl",
+                       "trace_sha256":  "14936f86b622d472b4d445ec7a3145307618356cc127cbf939efd2d620808bc4"
+                   },
+                   {
+                       "trial_index":  4,
+                       "timestamp":  "2026-10-14T17:20:23.9913565+03:00",
+                       "foreground_window_start":  "SR Desktop Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791987634079,
+                                                "t_end_ms":  1791987636655,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d Menu bar \u001e \nFile \nTo navigate press Left or Right Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2178,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791987638446,
+                                                "t_end_ms":  1791987641369,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "  \u001d menu \u001e \n  \nFile menu\nNew \nTo move through items press up or down arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2526,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791987643182,
+                                                "t_end_ms":  1791987644568,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Open...",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  992,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791987646378,
+                                                "t_end_ms":  1791987647731,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Exit",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  955,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791987649541,
+                                                "t_end_ms":  1791987651207,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Edit menu\nCopy",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1243,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791987652995,
+                                                "t_end_ms":  1791987654290,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Paste",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  913,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791987656102,
+                                                "t_end_ms":  1791987658086,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Edit\n \u001dsub menu\u001e \nEdit  \u001dsub menu\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1599,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791987659872,
+                                                "t_end_ms":  1791987662251,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Leaving menus\nName:  \u001d Edit \u001e \nAda\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1972,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  true,
+                       "trace_file":  "302-desktop-menu-bar-trial4.jsonl",
+                       "trace_sha256":  "91731c8e52bd1eb54a65b5e3fd552ca13d99b1ad0a13a51916610512ecf62136"
+                   },
+                   {
+                       "trial_index":  5,
+                       "timestamp":  "2026-10-14T17:21:02.3159187+03:00",
+                       "foreground_window_start":  "SR Desktop Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791987672355,
+                                                "t_end_ms":  1791987674956,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d Menu bar \u001e \nFile \nTo navigate press Left or Right Arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2189,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791987676742,
+                                                "t_end_ms":  1791987679649,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "  \u001d menu \u001e \n  \nFile menu\nNew \nTo move through items press up or down arrow.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2502,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791987681440,
+                                                "t_end_ms":  1791987682743,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Open...",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  914,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791987684557,
+                                                "t_end_ms":  1791987685922,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Exit",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  973,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791987687716,
+                                                "t_end_ms":  1791987689382,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Right"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Edit menu\nCopy",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1247,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791987691194,
+                                                "t_end_ms":  1791987692584,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Paste",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  998,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791987694395,
+                                                "t_end_ms":  1791987696385,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Edit\n \u001dsub menu\u001e \nEdit  \u001dsub menu\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1599,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791987698198,
+                                                "t_end_ms":  1791987700641,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Leaving menus\nName:  \u001d Edit \u001e \nAda\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2033,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  true,
+                       "trace_file":  "302-desktop-menu-bar-trial5.jsonl",
+                       "trace_sha256":  "98dfc93c62b2d074e0eedd2dc1cfb9ee86d8775f193fda8a4cb608adcb0364c2"
+                   }
+               ],
+    "total_elapsed_ms":  193476
+}
