@@ -294,8 +294,9 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         $transcript = Read-SpeechHistoryOnce
         $tEnd = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
         if ($transcript -match "unknown script call" -or $transcript -match "unhandled script call") { $dispatchOk = $false }
-        # A leaked copy confirmation means the history was contaminated: fail, never trim.
-        $contaminated = $transcript.Contains($CopyConfirmation)
+        # A leaked copy confirmation, or a Windows notification JAWS announced mid-step (seen
+        # in 105 v2 trial 1), means the history was contaminated: fail, never trim.
+        $contaminated = $transcript.Contains($CopyConfirmation) -or $transcript.Contains('New notification from')
         # Audio with an empty history entry is recorded, not failed: JAWS speaks a space
         # character aloud but logs an empty history entry (verified 2026-10-14, 107). The
         # silent baseline above is what prevents the copy from racing ahead of speech.
