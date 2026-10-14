@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p sr-cli -- parity --write-baseline",
-  "matched_steps": 511,
-  "total_steps": 521,
+  "matched_steps": 533,
+  "total_steps": 544,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -447,6 +447,17 @@
     "204-form-tab-order/s7": "match",
     "204-form-tab-order/s8": "match",
     "204-form-tab-order/s9": "match",
+    "205-form-state-changes/s1": "match",
+    "205-form-state-changes/s10": "match",
+    "205-form-state-changes/s11": "match",
+    "205-form-state-changes/s2": "match",
+    "205-form-state-changes/s3": "match",
+    "205-form-state-changes/s4": "match",
+    "205-form-state-changes/s5": "match",
+    "205-form-state-changes/s6": "match",
+    "205-form-state-changes/s7": "match",
+    "205-form-state-changes/s8": "match",
+    "205-form-state-changes/s9": "match",
     "21-table-next-table/s1": "match",
     "22-table-cell-right/s1": "match",
     "22-table-cell-right/s2": "match",
@@ -524,6 +535,18 @@
     "304-desktop-state-changes/s6": "match",
     "304-desktop-state-changes/s7": "match",
     "304-desktop-state-changes/s8": "match",
-    "304-desktop-state-changes/s9": "match"
+    "304-desktop-state-changes/s9": "match",
+    "306-desktop-dialogs-and-windows/s1": "match",
+    "306-desktop-dialogs-and-windows/s10": "match",
+    "306-desktop-dialogs-and-windows/s11": "match",
+    "306-desktop-dialogs-and-windows/s12": "match",
+    "306-desktop-dialogs-and-windows/s2": "match",
+    "306-desktop-dialogs-and-windows/s3": "match",
+    "306-desktop-dialogs-and-windows/s4": "match",
+    "306-desktop-dialogs-and-windows/s5": "match",
+    "306-desktop-dialogs-and-windows/s6": "match",
+    "306-desktop-dialogs-and-windows/s7": "mismatch",
+    "306-desktop-dialogs-and-windows/s8": "match",
+    "306-desktop-dialogs-and-windows/s9": "match"
   }
 }

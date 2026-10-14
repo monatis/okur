@@ -1,0 +1,1287 @@
+{
+    "format_version":  2,
+    "scenario_id":  "306-desktop-dialogs-and-windows",
+    "scenario_version":  "1.0.0",
+    "timestamp":  "2026-10-14T20:11:35.3443445+03:00",
+    "provenance":  {
+                       "capture_script_sha256":  "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
+                       "scenario_sha256":  "db49afbd5fe6dc196ba2f5631754d77f09c5007978fcb297767b0962cc6b82e9",
+                       "fixture_sha256":  "8f1a7824d4171b14b66b3a97d4469f8ff25d4f9ef4dcf5618757296570829c66",
+                       "host":  "DESKTOP-DCNAKQQ",
+                       "os_build":  "Microsoft Windows [Version 10.0.19045.6456]",
+                       "keyboard_layout":  "Turkish Q",
+                       "chrome_version":  "155.0.8059.40",
+                       "jaws_version":  "2025.2505.43.400"
+                   },
+    "environment":  {
+                        "os_version":  "Microsoft Windows NT 10.0.19045.0",
+                        "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
+                        "target_process":  "desktop",
+                        "interactive_session":  true
+                    },
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/desktop-dialogs.ps1",
+    "repetitions_requested":  5,
+    "trials":  [
+                   {
+                       "trial_index":  1,
+                       "timestamp":  "2026-10-14T20:11:35.4798872+03:00",
+                       "foreground_window_start":  "SR Dialog Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791997904900,
+                                                "t_end_ms":  1791997909006,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture  \u001d dialog \u001e \nSave changes to the document?\nYes  \u001d Button \u001e  \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3652,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791997910809,
+                                                "t_end_ms":  1791997912945,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "No  \u001d Button \u001e  \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1766,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791997914760,
+                                                "t_end_ms":  1791997917741,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nSave...  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2571,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791997919553,
+                                                "t_end_ms":  1791997922242,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Open second window  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2284,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791997924057,
+                                                "t_end_ms":  1791997927571,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Second Window \nSR Second Window  \u001d Edit \u001e \nSecond window notes\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3125,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791997929382,
+                                                "t_end_ms":  1791997932797,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nOpen second window  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2922,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791997934607,
+                                                "t_end_ms":  1791997939359,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Task Switching\nTo move to an item press the Arrow keys.\nSR Second Window \nSR Second Window  \u001d Edit \u001e \nSecond window notes\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4276,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791997941170,
+                                                "t_end_ms":  1791997944594,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+F4"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nOpen second window  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2941,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791997946408,
+                                                "t_end_ms":  1791997948742,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "About...  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1946,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791997950552,
+                                                "t_end_ms":  1791997953794,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "About SR Dialog Fixture \nOK  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2835,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791997955609,
+                                                "t_end_ms":  1791997958616,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nAbout...  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2595,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791997960426,
+                                                "t_end_ms":  1791997962436,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+T"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Title is\nSR Dialog Fixture",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1534,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "306-desktop-dialogs-and-windows-trial1.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "9179bc1e9dc64c18a2d88eb4c5db8266cd5ee37f462cc4ce8925d430a9e05072"
+                   },
+                   {
+                       "trial_index":  2,
+                       "timestamp":  "2026-10-14T20:12:42.4874651+03:00",
+                       "foreground_window_start":  "SR Dialog Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791997972734,
+                                                "t_end_ms":  1791997976797,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture  \u001d dialog \u001e \nSave changes to the document?\nYes  \u001d Button \u001e  \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3663,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791997978608,
+                                                "t_end_ms":  1791997980799,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "No  \u001d Button \u001e  \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1785,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791997982609,
+                                                "t_end_ms":  1791997985670,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nSave...  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2644,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791997987484,
+                                                "t_end_ms":  1791997990192,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Open second window  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2275,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791997991987,
+                                                "t_end_ms":  1791997995509,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Second Window \nSR Second Window  \u001d Edit \u001e \nSecond window notes\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3113,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791997997327,
+                                                "t_end_ms":  1791998000724,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nOpen second window  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2904,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791998002535,
+                                                "t_end_ms":  1791998007303,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Task Switching\nTo move to an item press the Arrow keys.\nSR Second Window \nSR Second Window  \u001d Edit \u001e \nSecond window notes\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4245,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791998009093,
+                                                "t_end_ms":  1791998012507,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+F4"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nOpen second window  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2922,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791998014336,
+                                                "t_end_ms":  1791998016669,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "About...  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1931,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791998018477,
+                                                "t_end_ms":  1791998021610,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "About SR Dialog Fixture \nOK  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2710,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791998023426,
+                                                "t_end_ms":  1791998026445,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nAbout...  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2609,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791998028239,
+                                                "t_end_ms":  1791998030254,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+T"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Title is\nSR Dialog Fixture",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1555,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "306-desktop-dialogs-and-windows-trial2.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "0d1b5c7a8c14b83bed80f7d6454c851cfdb27de07dd5a13c34d1dd3fa808eff8"
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-14T20:13:50.3015862+03:00",
+                       "foreground_window_start":  "SR Dialog Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791998040543,
+                                                "t_end_ms":  1791998044618,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture  \u001d dialog \u001e \nSave changes to the document?\nYes  \u001d Button \u001e  \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3667,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791998046428,
+                                                "t_end_ms":  1791998048588,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "No  \u001d Button \u001e  \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1782,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791998050397,
+                                                "t_end_ms":  1791998053467,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nSave...  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2650,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791998055277,
+                                                "t_end_ms":  1791998057867,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Open second window  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2195,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791998059673,
+                                                "t_end_ms":  1791998063089,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Second Window \nSR Second Window  \u001d Edit \u001e \nSecond window notes\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3005,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791998064901,
+                                                "t_end_ms":  1791998068311,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nOpen second window  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2895,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791998070120,
+                                                "t_end_ms":  1791998075046,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Second Window\nTo move to an item press the Arrow keys.\nSR Second Window \nSR Second Window  \u001d Edit \u001e \nSecond window notes\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4419,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791998076860,
+                                                "t_end_ms":  1791998080225,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+F4"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nOpen second window  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2866,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791998082021,
+                                                "t_end_ms":  1791998084368,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "About...  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1947,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791998086184,
+                                                "t_end_ms":  1791998089295,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "About SR Dialog Fixture \nOK  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2699,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791998091101,
+                                                "t_end_ms":  1791998094159,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nAbout...  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2631,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791998095957,
+                                                "t_end_ms":  1791998097980,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+T"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Title is\nSR Dialog Fixture",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1552,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "306-desktop-dialogs-and-windows-trial3.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "b1a987ccb3e4f6545f1a43982ab7b347d4073914f01f590373701ca525fe1587"
+                   },
+                   {
+                       "trial_index":  4,
+                       "timestamp":  "2026-10-14T20:14:58.0455688+03:00",
+                       "foreground_window_start":  "SR Dialog Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791998108262,
+                                                "t_end_ms":  1791998112330,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture  \u001d dialog \u001e \nSave changes to the document?\nYes  \u001d Button \u001e  \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3645,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791998114142,
+                                                "t_end_ms":  1791998116319,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "No  \u001d Button \u001e  \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1765,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791998118113,
+                                                "t_end_ms":  1791998121173,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nSave...  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2652,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791998122968,
+                                                "t_end_ms":  1791998125554,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Open second window  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2173,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791998127363,
+                                                "t_end_ms":  1791998130780,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Second Window \nSR Second Window  \u001d Edit \u001e \nSecond window notes\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2988,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791998132593,
+                                                "t_end_ms":  1791998136012,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nOpen second window  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2915,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791998137822,
+                                                "t_end_ms":  1791998142757,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Second Window\nTo move to an item press the Arrow keys.\nSR Second Window \nSR Second Window  \u001d Edit \u001e \nSecond window notes\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4430,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791998144570,
+                                                "t_end_ms":  1791998147922,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+F4"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nOpen second window  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2833,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791998149733,
+                                                "t_end_ms":  1791998152085,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "About...  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1944,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791998153894,
+                                                "t_end_ms":  1791998157121,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "About SR Dialog Fixture \nOK  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2808,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791998158934,
+                                                "t_end_ms":  1791998161945,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nAbout...  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2612,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791998163774,
+                                                "t_end_ms":  1791998165778,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+T"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Title is\nSR Dialog Fixture",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1554,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "306-desktop-dialogs-and-windows-trial4.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "e45c9ad08ddbfc74fc6cb5dc389a931f0f4fc380258158dd799d9dfd1cf6ecc3"
+                   },
+                   {
+                       "trial_index":  5,
+                       "timestamp":  "2026-10-14T20:16:05.8268808+03:00",
+                       "foreground_window_start":  "SR Dialog Fixture",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791998176081,
+                                                "t_end_ms":  1791998180122,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture  \u001d dialog \u001e \nSave changes to the document?\nYes  \u001d Button \u001e  \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3631,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791998181932,
+                                                "t_end_ms":  1791998184129,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "No  \u001d Button \u001e  \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1785,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791998185916,
+                                                "t_end_ms":  1791998188993,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nSave...  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2693,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791998190806,
+                                                "t_end_ms":  1791998193497,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Open second window  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2261,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791998195287,
+                                                "t_end_ms":  1791998198719,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Second Window \nSR Second Window  \u001d Edit \u001e \nSecond window notes\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3023,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791998200510,
+                                                "t_end_ms":  1791998203952,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nOpen second window  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2939,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791998205763,
+                                                "t_end_ms":  1791998210520,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Task Switching\nTo move to an item press the Arrow keys.\nSR Second Window \nSR Second Window  \u001d Edit \u001e \nSecond window notes\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4242,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791998212293,
+                                                "t_end_ms":  1791998215632,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+F4"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nOpen second window  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2838,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791998217439,
+                                                "t_end_ms":  1791998219765,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "About...  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1943,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791998221577,
+                                                "t_end_ms":  1791998224738,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "About SR Dialog Fixture \nOK  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2734,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791998226532,
+                                                "t_end_ms":  1791998229550,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Enter"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "SR Dialog Fixture \nAbout...  \u001d Button \u001e \nTo activate press spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2612,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791998231340,
+                                                "t_end_ms":  1791998233353,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+T"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Title is\nSR Dialog Fixture",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1551,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "306-desktop-dialogs-and-windows-trial5.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "88e3667e858ec8f84dd0640a764d3d7a51e1e962fa1f2ae13a70ca486d60a9d3"
+                   }
+               ],
+    "total_elapsed_ms":  338414
+}

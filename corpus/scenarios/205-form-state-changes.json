@@ -1,0 +1,22 @@
+{
+  "id": "205-form-state-changes",
+  "name": "Space on check boxes and radios in browse mode; a combo box value change",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "X" },
+    { "id": "s2", "type": "key", "command": "Space" },
+    { "id": "s3", "type": "key", "command": "Space" },
+    { "id": "s4", "type": "key", "command": "A" },
+    { "id": "s5", "type": "key", "command": "A" },
+    { "id": "s6", "type": "key", "command": "Space" },
+    { "id": "s7", "type": "key", "command": "C" },
+    { "id": "s8", "type": "key", "command": "Enter" },
+    { "id": "s9", "type": "key", "command": "Down" },
+    { "id": "s10", "type": "key", "command": "Up" },
+    { "id": "s11", "type": "key", "command": "Escape" }
+  ]
+}
