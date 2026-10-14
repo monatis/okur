@@ -332,8 +332,26 @@ impl EventConverter {
             return Some(AccessibilityEvent::Menu(menu));
         }
         let kind = match event.event.as_str() {
+            "focus" if is_drop_down_item(event) => {
+                // Arrow keys in an open combo box move focus into its drop-down list; JAWS
+                // speaks that as the combo box's new value [obs, 304/s12].
+                let mut combo = self
+                    .last_focus
+                    .clone()
+                    .filter(|f| f.role == sr_core::Role::ComboBox)?;
+                combo.value = event.object.as_ref().and_then(|o| o.name.clone());
+                combo.item_index = usize::try_from(event.id_child).ok().filter(|&i| i > 0);
+                self.last_focus = Some(combo.clone());
+                return Some(AccessibilityEvent::Change {
+                    kind: ChangeKind::Value,
+                    control: combo,
+                });
+            }
             "focus" => {
-                let focus = focus_event_from_trace(event)?;
+                let mut focus = focus_event_from_trace(event)?;
+                if let Some(states) = event.object.as_ref().map(|o| o.states) {
+                    apply_msaa_states(&mut focus, states);
+                }
                 let name = event.object.as_ref().and_then(|o| o.name.clone());
                 self.focused = Some((event.hwnd, event.id_object, event.id_child, name));
                 self.last_focus = Some(focus.clone());
@@ -354,19 +372,35 @@ impl EventConverter {
         }
         // The control as UIA reports it now; without a focus chain (a failed UIA read), the
         // last focus with the event object's MSAA states.
-        let control = match focus_event_from_trace(event) {
+        let mut control = match focus_event_from_trace(event) {
             Some(control) => control,
-            None => {
-                let mut control = self.last_focus.clone()?;
-                if let Some(states) = event.object.as_ref().map(|o| o.states) {
-                    apply_msaa_states(&mut control, states);
-                }
-                control
-            }
+            None => self.last_focus.clone()?,
         };
+        // The event object is the focused control: its MSAA states are current, and they
+        // carry what UIA may not report (a WinForms combo box's expanded state, 304/s11).
+        if same_object {
+            if let Some(states) = event.object.as_ref().map(|o| o.states) {
+                apply_msaa_states(&mut control, states);
+            }
+        }
+        // A change event carries no siblings to count a position from; the control is the
+        // one last focused, whose position it keeps [obs, 304/s17].
+        if control.item_index.is_none() {
+            if let Some(last) = self.last_focus.as_ref().filter(|l| l.name == control.name) {
+                control.item_index = last.item_index;
+                control.item_count = last.item_count;
+            }
+        }
         self.last_focus = Some(control.clone());
         Some(AccessibilityEvent::Change { kind, control })
     }
+}
+
+/// A focus on an item of a Win32 combo box's drop-down list (`ComboLBox`).
+fn is_drop_down_item(event: &TraceEvent) -> bool {
+    const MSAA_LISTITEM: i32 = 0x22;
+    event.window_class.as_deref() == Some("ComboLBox")
+        && event.object.as_ref().and_then(|o| o.role) == Some(MSAA_LISTITEM)
 }
 
 /// Updates the states a change can carry from MSAA state bits (`STATE_SYSTEM_*`).

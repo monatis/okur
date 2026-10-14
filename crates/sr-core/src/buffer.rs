@@ -174,6 +174,8 @@ pub struct TabInfo {
 /// and structural indices for quick navigation keys.
 #[derive(Debug, Clone, Default)]
 pub struct VirtualBuffer {
+    /// The node the buffer was built from (the page); its subtree is in `node_map`.
+    pub root_id: Option<usize>,
     pub text: String,
     pub spans: Vec<BufferSpan>,
     pub lines: Vec<BufferLine>,
@@ -217,6 +219,24 @@ impl VirtualBuffer {
     /// Creates a VirtualBuffer from an AOM root node.
     pub fn from_aom(root: &AomNode) -> Self {
         crate::linearize::build(root)
+    }
+
+    /// The buffer rebuilt from its page with one node changed, as when the page reports a
+    /// check box toggled or a value changed. `None` when the node is not in the page.
+    pub fn with_node_changed(
+        &self,
+        node_id: usize,
+        change: impl FnOnce(&mut AomNode),
+    ) -> Option<VirtualBuffer> {
+        fn find(node: &mut AomNode, id: usize) -> Option<&mut AomNode> {
+            if node.id == id {
+                return Some(node);
+            }
+            node.children.iter_mut().find_map(|c| find(c, id))
+        }
+        let mut root = self.node_map.get(&self.root_id?)?.clone();
+        change(find(&mut root, node_id)?);
+        Some(VirtualBuffer::from_aom(&root))
     }
 
     /// Returns the character at the specified byte/char offset.

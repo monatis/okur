@@ -1372,32 +1372,7 @@ impl ScreenReaderEngine {
                 self.last_window_title = Some(title.clone());
             }
 
-            // Find the buffer node: by node id, then by DOM id, then by role and name.
-            let matched_node_id = focus
-                .node_id
-                .filter(|id| self.cursor.buffer.node_map.contains_key(id))
-                .or_else(|| {
-                    let dom_id = focus.dom_id.as_deref()?;
-                    self.cursor.buffer.node_map.values().find_map(|node| {
-                        (node.attributes.get("id").map(String::as_str) == Some(dom_id))
-                            .then_some(node.id)
-                    })
-                });
-
-            let target_id = matched_node_id.or_else(|| {
-                self.cursor.buffer.node_map.values().find_map(|node| {
-                    if node.role == focus.role {
-                        let ev_name = focus.name.as_deref();
-                        let node_name = node.name.as_deref().or(node.text.as_deref());
-                        if let (Some(en), Some(nn)) = (ev_name, node_name) {
-                            if en.eq_ignore_ascii_case(nn) {
-                                return Some(node.id);
-                            }
-                        }
-                    }
-                    None
-                })
-            });
+            let target_id = self.page_node_for(focus);
 
             // If focus target is a dialog, enter modal confinement and announce Dialog <Title>
             if matches!(focus.role, Role::Dialog | Role::AlertDialog) {
@@ -1622,6 +1597,66 @@ impl ScreenReaderEngine {
         self.cursor.buffer.node_map.get(&line.node_id).cloned()
     }
 
+    /// A page control changed (Space toggled a check box, a combo box took a new value): the
+    /// buffer is rebuilt with the new state, the virtual cursor stays on the control, and the
+    /// change is spoken.
+    fn page_change(&mut self, control: &FocusEvent) -> Option<String> {
+        let id = self.page_node_for(control)?;
+        let before = self.cursor.buffer.node_map.get(&id)?.clone();
+        let speech = match control.role {
+            Role::CheckBox | Role::RadioButton
+                if before.states.checked != control.states.checked =>
+            {
+                if control.states.checked == Some(true) {
+                    "checked".to_owned()
+                } else {
+                    "not checked".to_owned()
+                }
+            }
+            Role::ComboBox if before.value != control.value => control.value.clone()?,
+            _ => return None,
+        };
+        let rebuilt = self.cursor.buffer.with_node_changed(id, |node| {
+            node.states.checked = control.states.checked;
+            if control.value.is_some() {
+                node.value = control.value.clone();
+            }
+        })?;
+        self.cursor.buffer = rebuilt;
+        self.cursor.move_to_node_id(id);
+        self.speech.speak(&speech, true);
+        Some(speech)
+    }
+
+    /// The buffer node a page event concerns: by node id, then by DOM id, then by role and
+    /// name. Candidates are taken in document order, so repeated names resolve to the first.
+    fn page_node_for(&self, focus: &FocusEvent) -> Option<usize> {
+        let map = &self.cursor.buffer.node_map;
+        if let Some(id) = focus.node_id.filter(|id| map.contains_key(id)) {
+            return Some(id);
+        }
+        let mut ids: Vec<usize> = map.keys().copied().collect();
+        ids.sort_unstable();
+        let node = |id: &usize| map.get(id);
+        if let Some(dom_id) = focus.dom_id.as_deref() {
+            if let Some(id) = ids.iter().find(|id| {
+                node(id).is_some_and(|n| n.attributes.get("id").map(String::as_str) == Some(dom_id))
+            }) {
+                return Some(*id);
+            }
+        }
+        let name = focus.name.as_deref()?;
+        ids.into_iter().find(|id| {
+            node(id).is_some_and(|n| {
+                n.role == focus.role
+                    && n.name
+                        .as_deref()
+                        .or(n.text.as_deref())
+                        .is_some_and(|nn| nn.eq_ignore_ascii_case(name))
+            })
+        })
+    }
+
     /// The focused control changed without focus moving (Space on a check box, a tree item
     /// expanded, a combo box value). Speaks what changed, as JAWS does.
     pub fn handle_change(
@@ -1631,7 +1666,7 @@ impl ScreenReaderEngine {
     ) -> Option<String> {
         tracing::debug!(?kind, role = ?control.role, name = ?control.name, "control changed");
         if control.in_document {
-            return None;
+            return self.page_change(control);
         }
         let before = self.last_native_focus.replace(control.clone())?;
         let speech = crate::native_focus::change_speech(&before, control)?;

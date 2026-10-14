@@ -929,6 +929,7 @@ pub fn build(root: &AomNode) -> VirtualBuffer {
     let document_url = attr(root, "url");
     let mut builder = Builder::new(document_url);
     builder.buffer.node_map.insert(root.id, root.clone());
+    builder.buffer.root_id = Some(root.id);
 
     // §1: line 0 is the page title.
     if root.role == Role::Document {

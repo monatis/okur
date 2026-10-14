@@ -248,11 +248,20 @@ pub fn focus_speech(focus: &FocusEvent, previous: Option<&ContainerKey>) -> Stri
 pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<String> {
     let name = named(after.name.as_deref().unwrap_or_default());
     match after.role {
-        Role::CheckBox | Role::RadioButton if before.states.checked != after.states.checked => {
+        Role::CheckBox if before.states.checked != after.states.checked => {
+            Some(checked(after).trim().to_owned())
+        }
+        // Arrow keys in a radio group uncheck the old radio before focus moves to the new
+        // one; JAWS speaks only the radio that becomes checked [obs, 304/s6–s7].
+        Role::RadioButton
+            if before.states.checked != after.states.checked
+                && after.states.checked == Some(true) =>
+        {
             Some(checked(after).trim().to_owned())
         }
         Role::TreeItem if before.states.expanded != after.states.expanded => {
-            // [obs, 303/s7]: "Documents | ‹open› | 2 items".
+            // [obs, 303/s7, 304/s16–s17]: "Documents | ‹open› | 2 items",
+            // "Documents | ‹closed› | 1 of 2".
             Some(match after.states.expanded {
                 Some(true) => {
                     let mut s = format!("{name}\n{}", state_marker("open"));
@@ -261,8 +270,28 @@ pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<String> 
                     }
                     s
                 }
-                _ => format!("{name}\n{}", state_marker("closed")),
+                _ => {
+                    let mut lines = vec![name, state_marker("closed")];
+                    lines.extend(position(after));
+                    lines.join("\n")
+                }
             })
+        }
+        // A combo box reports no expanded state through UIA while collapsed.
+        Role::ComboBox
+            if before.states.expanded.unwrap_or(false)
+                != after.states.expanded.unwrap_or(false) =>
+        {
+            if after.states.expanded == Some(true) {
+                // Alt+Down [obs, 304/s11]: "Open List Box | Germany | 2 of 3".
+                let mut lines = vec!["Open List Box".to_owned()];
+                lines.extend(after.value.iter().map(|v| named(v)));
+                lines.extend(position(after));
+                Some(lines.join("\n"))
+            } else {
+                // Closing it re-announces the combo box as on focus [obs, 304/s13].
+                Some(focus_speech(after, None))
+            }
         }
         Role::ComboBox if before.value != after.value => {
             let mut lines: Vec<String> = after.value.iter().map(|v| named(v)).collect();
