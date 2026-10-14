@@ -1,0 +1,1114 @@
+{
+    "format_version":  2,
+    "scenario_id":  "209-web-title-and-font",
+    "scenario_version":  "1.0.0",
+    "timestamp":  "2026-10-14T23:32:40.2325657+03:00",
+    "provenance":  {
+                       "capture_script_sha256":  "c031f9a98bc4343bdab00d562102b25562c8e623e4ad50de072424f5e824e467",
+                       "scenario_sha256":  "2d14f8f03b83dcc973357b2971ed749c376e82d00f66a72504d83cd584fbaf9e",
+                       "fixture_sha256":  "b3567efa1f8f22dfc3fbc0347978c42909d2921a59b1559fdb51dac6120b0fa4",
+                       "host":  "DESKTOP-DCNAKQQ",
+                       "os_build":  "Microsoft Windows [Version 10.0.19045.6456]",
+                       "keyboard_layout":  "Turkish Q",
+                       "culture":  "en-US",
+                       "utc_offset_minutes":  180,
+                       "chrome_version":  "155.0.8059.40",
+                       "jaws_version":  "2025.2505.43.400",
+                       "jaws_settings":  {
+                                             "DEFAULT.JCF":  {
+                                                                 "Options":  {
+                                                                                 "MigrationWizardDisplayed":  "1",
+                                                                                 "TypingEcho":  "0",
+                                                                                 "KeyboardType":  "Laptop",
+                                                                                 "LanguageDetection":  "0",
+                                                                                 "AutomaticNotificationOfUpdates":  "0",
+                                                                                 "EnableAdditionalVoiceProfiles":  "0",
+                                                                                 "DisplayStartupWizard":  "0",
+                                                                                 "ShowSoundMixerDiscoveryDialog":  "0"
+                                                                             },
+                                                                 "FormsMode":  {
+                                                                                   "AutoFormsMode":  "0"
+                                                                               },
+                                                                 "OutputModes":  {
+                                                                                     "ACCESS_KEY":  "0|0|0|Access Key"
+                                                                                 },
+                                                                 "FSCasts":  {
+                                                                                 "EnableNotifications":  "0"
+                                                                             },
+                                                                 "Braille":  {
+                                                                                 "SelectedBrailleTranslator":  ""
+                                                                             },
+                                                                 "Braille Profiles":  {
+                                                                                          "ENU":  "0|20|US_Unicode|US_Unicode|0|1|0"
+                                                                                      },
+                                                                 "MessageCenter":  {
+                                                                                       "PendingMessages":  "0"
+                                                                                   }
+                                                             },
+                                             "Chrome.JCF":  {
+                                                                "VirtualCursorVerbosity":  {
+                                                                                               "VirtualCursorVerbosityLevel":  "2"
+                                                                                           },
+                                                                "options":  {
+                                                                                "AllowWebAppReservedKeystrokes":  "0"
+                                                                            }
+                                                            }
+                                         }
+                   },
+    "environment":  {
+                        "os_version":  "Microsoft Windows NT 10.0.19045.0",
+                        "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
+                        "target_process":  "chrome",
+                        "interactive_session":  true
+                    },
+    "speech_recorder_log":  null,
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+    "repetitions_requested":  3,
+    "trials":  [
+                   {
+                       "trial_index":  1,
+                       "timestamp":  "2026-10-14T23:32:43.9752926+03:00",
+                       "foreground_window_start":  "Program Manager",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792009971511,
+                                                "t_end_ms":  1792009973337,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+T",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Title is\nDesktop 1",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1316,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792009975134,
+                                                "t_end_ms":  1792009979096,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2334,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  true,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792009980145,
+                                                "t_end_ms":  1792009981480,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "No font",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  872,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792009983288,
+                                                "t_end_ms":  1792009985748,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  false,
+                                                                    "settle_ms":  809,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792009985942,
+                                                "t_end_ms":  1792009988454,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  false,
+                                                                    "settle_ms":  809,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1792009990660,
+                                                "t_end_ms":  1792009993230,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Brosur_yeni2.docx\n3 of 41",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2175,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1792009995027,
+                                                "t_end_ms":  1792009996630,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F",
+                                                               "repeat":  2
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "No font\nNo font",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  892,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1792009998442,
+                                                "t_end_ms":  1792010000692,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "M. Yusuf - Chrome\n4 of 41",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1824,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1792010002502,
+                                                "t_end_ms":  1792010005012,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "JAWS 2025\n5 of 41",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2111,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1792010006822,
+                                                "t_end_ms":  1792010009059,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Microsoft Edge\n6 of 41",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1845,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1792010010873,
+                                                "t_end_ms":  1792010013296,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  false,
+                                                                    "settle_ms":  806,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1792010014336,
+                                                "t_end_ms":  1792010016071,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F12",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "11:33 PM",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1263,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  false,
+                       "trace_file":  "209-web-title-and-font-trial1.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "52c90ef97e5fe16b713add9226c95083c277245e867c3e54d74247427136e658"
+                   },
+                   {
+                       "trial_index":  2,
+                       "timestamp":  "2026-10-14T23:33:36.1233908+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792010023720,
+                                                "t_end_ms":  1792010027121,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+T",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Title is\nCity Library Expands Evening Hours - Riverside Gazette - Google Chrome - M. Yusuf",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2944,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792010028932,
+                                                "t_end_ms":  1792010031459,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2136,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792010033272,
+                                                "t_end_ms":  1792010035583,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Font is bold  Times New Roman 24 point",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1848,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792010037389,
+                                                "t_end_ms":  1792010038564,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "By",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  764,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792010040355,
+                                                "t_end_ms":  1792010042343,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Font is Times New Roman 12 point",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1497,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1792010044152,
+                                                "t_end_ms":  1792010045959,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Maria Lopez,",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1411,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1792010047765,
+                                                "t_end_ms":  1792010052465,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F",
+                                                               "repeat":  2
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Font is underline  Times New Roman 12 point\nFont information: \nunderline  Times New Roman 12 point \n \u001d Link \u001e List JAWS Hot Keys \nPress ESCAPE to close this message. \nmessage",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3957,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1792010054278,
+                                                "t_end_ms":  1792010056092,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Press ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1411,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1792010057886,
+                                                "t_end_ms":  1792010059724,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Press ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1451,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1792010061516,
+                                                "t_end_ms":  1792010063321,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Press ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1427,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1792010065132,
+                                                "t_end_ms":  1792010067357,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Maria Lopez,",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1806,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1792010069147,
+                                                "t_end_ms":  1792010070885,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F12",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "11:34 PM",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1288,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "209-web-title-and-font-trial2.jsonl",
+                       "page_load_settled":  false,
+                       "trace_sha256":  "6dccc102eebe2bf4896c43da6651dc483cfb0956d8a45b502fd383b0e2e8c01a"
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-14T23:34:30.9626613+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792010078486,
+                                                "t_end_ms":  1792010081906,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+T",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Title is\nCity Library Expands Evening Hours - Riverside Gazette - Google Chrome - M. Yusuf",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2961,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792010083705,
+                                                "t_end_ms":  1792010086224,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "H",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2136,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792010088032,
+                                                "t_end_ms":  1792010090337,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Font is bold  Times New Roman 24 point",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1864,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792010092149,
+                                                "t_end_ms":  1792010093315,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "By",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  770,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792010095106,
+                                                "t_end_ms":  1792010097119,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Font is Times New Roman 12 point",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1538,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1792010098931,
+                                                "t_end_ms":  1792010100748,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Maria Lopez,",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1426,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1792010102564,
+                                                "t_end_ms":  1792010107316,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F",
+                                                               "repeat":  2
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Font is underline  Times New Roman 12 point\nFont information: \nunderline  Times New Roman 12 point \n \u001d Link \u001e List JAWS Hot Keys \nPress ESCAPE to close this message. \nmessage",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3954,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1792010109089,
+                                                "t_end_ms":  1792010110924,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Press ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1424,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1792010112717,
+                                                "t_end_ms":  1792010114557,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Press ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1432,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1792010116352,
+                                                "t_end_ms":  1792010118193,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Press ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1430,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1792010119980,
+                                                "t_end_ms":  1792010122213,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  " \u001d same page link \u001e Maria Lopez,",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1842,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1792010124020,
+                                                "t_end_ms":  1792010125794,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F12",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "11:35 PM",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1284,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "209-web-title-and-font-trial3.jsonl",
+                       "page_load_settled":  false,
+                       "trace_sha256":  "6f8a50a865781c175b04bf9cf300a01e9d5b7cbf46afedfb33cf386cc84e15b0"
+                   }
+               ],
+    "total_elapsed_ms":  166370
+}

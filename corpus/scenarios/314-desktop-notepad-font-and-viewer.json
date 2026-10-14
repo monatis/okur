@@ -1,0 +1,28 @@
+{
+  "id": "314-desktop-notepad-font-and-viewer",
+  "name": "Notepad: Say Font (Insert+F), twice quickly in the Virtual Viewer; Virtualize Window and Current Control",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "sr-notepad-fixture.txt - Notepad" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+F" },
+    { "id": "s2", "type": "key", "command": "Insert+F", "repeat": 2 },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Down" },
+    { "id": "s5", "type": "key", "command": "Down" },
+    { "id": "s6", "type": "key", "command": "Ctrl+A", "settle_max_ms": 30000 },
+    { "id": "s7", "type": "key", "command": "Ctrl+C", "capture_clipboard": true },
+    { "id": "s8", "type": "key", "command": "Escape" },
+    { "id": "s9", "type": "key", "command": "Insert+Alt+W" },
+    { "id": "s10", "type": "key", "command": "Down" },
+    { "id": "s11", "type": "key", "command": "Ctrl+A", "settle_max_ms": 30000 },
+    { "id": "s12", "type": "key", "command": "Ctrl+C", "capture_clipboard": true },
+    { "id": "s13", "type": "key", "command": "Escape" },
+    { "id": "s14", "type": "key", "command": "Insert+Shift+V" },
+    { "id": "s15", "type": "key", "command": "Down" },
+    { "id": "s16", "type": "key", "command": "Escape" }
+  ]
+}

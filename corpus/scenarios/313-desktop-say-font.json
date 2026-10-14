@@ -1,0 +1,21 @@
+{
+  "id": "313-desktop-say-font",
+  "name": "Say Font (Insert+F) in a native edit, and twice quickly in the Virtual Viewer",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-editor.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Editor Fixture" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+F" },
+    { "id": "s2", "type": "key", "command": "Insert+F", "repeat": 2 },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Down" },
+    { "id": "s5", "type": "key", "command": "Down" },
+    { "id": "s6", "type": "key", "command": "Down" },
+    { "id": "s7", "type": "key", "command": "Ctrl+A" },
+    { "id": "s8", "type": "key", "command": "Ctrl+C", "capture_clipboard": true },
+    { "id": "s9", "type": "key", "command": "Escape" }
+  ]
+}

@@ -1,0 +1,1442 @@
+{
+    "format_version":  2,
+    "scenario_id":  "314-desktop-notepad-font-and-viewer",
+    "scenario_version":  "1.0.0",
+    "timestamp":  "2026-10-14T23:39:06.3527778+03:00",
+    "provenance":  {
+                       "capture_script_sha256":  "c031f9a98bc4343bdab00d562102b25562c8e623e4ad50de072424f5e824e467",
+                       "scenario_sha256":  "7726da2891880bcd19f761dcdc48f3977ffa6ffcf254007cfa05b68e13fa89b4",
+                       "fixture_sha256":  "7251969f618fc1cd11ab31e5f8a61bdbde2ee05504c78ebad69f23658dcdfe8e",
+                       "host":  "DESKTOP-DCNAKQQ",
+                       "os_build":  "Microsoft Windows [Version 10.0.19045.6456]",
+                       "keyboard_layout":  "Turkish Q",
+                       "culture":  "en-US",
+                       "utc_offset_minutes":  180,
+                       "chrome_version":  "155.0.8059.40",
+                       "jaws_version":  "2025.2505.43.400",
+                       "jaws_settings":  {
+                                             "DEFAULT.JCF":  {
+                                                                 "Options":  {
+                                                                                 "MigrationWizardDisplayed":  "1",
+                                                                                 "TypingEcho":  "0",
+                                                                                 "KeyboardType":  "Laptop",
+                                                                                 "LanguageDetection":  "0",
+                                                                                 "AutomaticNotificationOfUpdates":  "0",
+                                                                                 "EnableAdditionalVoiceProfiles":  "0",
+                                                                                 "DisplayStartupWizard":  "0",
+                                                                                 "ShowSoundMixerDiscoveryDialog":  "0"
+                                                                             },
+                                                                 "FormsMode":  {
+                                                                                   "AutoFormsMode":  "0"
+                                                                               },
+                                                                 "OutputModes":  {
+                                                                                     "ACCESS_KEY":  "0|0|0|Access Key"
+                                                                                 },
+                                                                 "FSCasts":  {
+                                                                                 "EnableNotifications":  "0"
+                                                                             },
+                                                                 "Braille":  {
+                                                                                 "SelectedBrailleTranslator":  ""
+                                                                             },
+                                                                 "Braille Profiles":  {
+                                                                                          "ENU":  "0|20|US_Unicode|US_Unicode|0|1|0"
+                                                                                      },
+                                                                 "MessageCenter":  {
+                                                                                       "PendingMessages":  "0"
+                                                                                   }
+                                                             }
+                                         }
+                   },
+    "environment":  {
+                        "os_version":  "Microsoft Windows NT 10.0.19045.0",
+                        "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
+                        "target_process":  "desktop",
+                        "interactive_session":  true
+                    },
+    "speech_recorder_log":  null,
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+    "repetitions_requested":  3,
+    "trials":  [
+                   {
+                       "trial_index":  1,
+                       "timestamp":  "2026-10-14T23:39:06.5112697+03:00",
+                       "foreground_window_start":  "sr-notepad-fixture.txt - Notepad",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792010354709,
+                                                "t_end_ms":  1792010356786,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Font is Consolas 22 point",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1569,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792010358566,
+                                                "t_end_ms":  1792010362913,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F",
+                                                               "repeat":  2
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Font is Consolas 22 point\nFont information: \nConsolas 22 point \n \u001d Link \u001e List JAWS Hot Keys \nPress ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3642,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792010364723,
+                                                "t_end_ms":  1792010367662,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Press ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2529,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792010369433,
+                                                "t_end_ms":  1792010372327,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Press ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2485,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792010374089,
+                                                "t_end_ms":  1792010376959,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Press ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2465,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1792010378733,
+                                                "t_end_ms":  1792010383193,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+A",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "selected\nFont information:\nConsolas 22 point\n\n\n \u001d Link \u001e List JAWS Hot Keys\nPress ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4018,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1792010385012,
+                                                "t_end_ms":  1792010386912,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+C",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Copied selection to clipboard",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  "Font information:\r\nConsolas 22 point\r\n\r\n\r\nList JAWS Hot Keys\r\nPress ESCAPE to close this message. ",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1425,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1792010388701,
+                                                "t_end_ms":  1792010390502,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "fn main() {",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1410,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1792010392313,
+                                                "t_end_ms":  1792010395503,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+Alt+W",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Virtualizing current window\nsr-notepad-fixture.txt - Notepad",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2616,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1792010397291,
+                                                "t_end_ms":  1792010399074,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "File Edit Format View Help",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1383,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1792010400887,
+                                                "t_end_ms":  1792010413178,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+A",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "selected\nsr-notepad-fixture.txt - Notepad\nFile Edit Format View Help\nfn main() {\n    let total = price * 1.5; // tax\n    println!(\"{total}\");\n}\n  Ln 1, Col 1  100%  Windows (CRLF)  UTF-8",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  11808,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1792010415011,
+                                                "t_end_ms":  1792010416899,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+C",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Copied selection to clipboard",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  "sr-notepad-fixture.txt - Notepad\r\nFile Edit Format View Help\r\nfn main() {\r\n    let total = price * 1.5; // tax\r\n    println!(\"{total}\");\r\n}\r\n  Ln 1, Col 1  100%  Windows (CRLF)  UTF-8 ",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1428,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1792010418693,
+                                                "t_end_ms":  1792010420481,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "fn main() {",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1388,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "t_start_ms":  1792010422275,
+                                                "t_end_ms":  1792010424559,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+Shift+V",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Virtualizing current control\nfn main() {",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1721,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s15",
+                                                "t_start_ms":  1792010426373,
+                                                "t_end_ms":  1792010428771,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "    let total = price * 1.5; // tax",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2004,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s16",
+                                                "t_start_ms":  1792010430579,
+                                                "t_end_ms":  1792010432382,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "fn main() {",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1387,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "314-desktop-notepad-font-and-viewer-trial1.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "61a4caf43410fb74504a51bab46b3212e6fbb3ae668520fe34d2422963329ea9"
+                   },
+                   {
+                       "trial_index":  2,
+                       "timestamp":  "2026-10-14T23:40:32.4237082+03:00",
+                       "foreground_window_start":  "sr-notepad-fixture.txt - Notepad",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792010440031,
+                                                "t_end_ms":  1792010442049,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Font is Consolas 22 point",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1570,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792010443860,
+                                                "t_end_ms":  1792010448194,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F",
+                                                               "repeat":  2
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Font is Consolas 22 point\nFont information: \nConsolas 22 point \n \u001d Link \u001e List JAWS Hot Keys \nPress ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3630,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792010449985,
+                                                "t_end_ms":  1792010452710,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Press ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2338,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792010454480,
+                                                "t_end_ms":  1792010457188,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Press ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2322,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792010458959,
+                                                "t_end_ms":  1792010461650,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Press ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2301,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1792010463418,
+                                                "t_end_ms":  1792010467893,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+A",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "selected\nFont information:\nConsolas 22 point\n\n\n \u001d Link \u001e List JAWS Hot Keys\nPress ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4020,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1792010469702,
+                                                "t_end_ms":  1792010471602,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+C",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Copied selection to clipboard",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  "Font information:\r\nConsolas 22 point\r\n\r\n\r\nList JAWS Hot Keys\r\nPress ESCAPE to close this message. ",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1431,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1792010473395,
+                                                "t_end_ms":  1792010475167,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "fn main() {",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1384,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1792010476976,
+                                                "t_end_ms":  1792010480134,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+Alt+W",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Virtualizing current window\nsr-notepad-fixture.txt - Notepad",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2609,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1792010481943,
+                                                "t_end_ms":  1792010483726,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "File Edit Format View Help",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1368,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1792010485533,
+                                                "t_end_ms":  1792010497862,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+A",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "selected\nsr-notepad-fixture.txt - Notepad\nFile Edit Format View Help\nfn main() {\n    let total = price * 1.5; // tax\n    println!(\"{total}\");\n}\n  Ln 1, Col 1  100%  Windows (CRLF)  UTF-8",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  11850,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1792010499651,
+                                                "t_end_ms":  1792010501538,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+C",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Copied selection to clipboard",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  "sr-notepad-fixture.txt - Notepad\r\nFile Edit Format View Help\r\nfn main() {\r\n    let total = price * 1.5; // tax\r\n    println!(\"{total}\");\r\n}\r\n  Ln 1, Col 1  100%  Windows (CRLF)  UTF-8 ",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1426,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1792010503326,
+                                                "t_end_ms":  1792010505120,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "fn main() {",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1408,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "t_start_ms":  1792010506932,
+                                                "t_end_ms":  1792010509201,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+Shift+V",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Virtualizing current control\nfn main() {",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1718,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s15",
+                                                "t_start_ms":  1792010511006,
+                                                "t_end_ms":  1792010513377,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "    let total = price * 1.5; // tax",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1991,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s16",
+                                                "t_start_ms":  1792010515194,
+                                                "t_end_ms":  1792010517009,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "fn main() {",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1407,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "314-desktop-notepad-font-and-viewer-trial2.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "121165cc6e12e30b7e5bf3a018ef803e0233a03f23e081ee5e95fba8419893c6"
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-14T23:41:57.0571220+03:00",
+                       "foreground_window_start":  "sr-notepad-fixture.txt - Notepad",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792010524678,
+                                                "t_end_ms":  1792010526698,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Font is Consolas 22 point",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1575,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792010528513,
+                                                "t_end_ms":  1792010532925,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+F",
+                                                               "repeat":  2
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Font is Consolas 22 point\nFont information: \nConsolas 22 point \n \u001d Link \u001e List JAWS Hot Keys \nPress ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3627,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792010534691,
+                                                "t_end_ms":  1792010537428,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Press ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2326,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792010539180,
+                                                "t_end_ms":  1792010541884,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Press ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2297,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792010543650,
+                                                "t_end_ms":  1792010546363,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Press ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2296,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1792010548114,
+                                                "t_end_ms":  1792010552587,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+A",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "selected\nFont information:\nConsolas 22 point\n\n\n \u001d Link \u001e List JAWS Hot Keys\nPress ESCAPE to close this message.",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  4021,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1792010554396,
+                                                "t_end_ms":  1792010556300,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+C",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Copied selection to clipboard",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  "Font information:\r\nConsolas 22 point\r\n\r\n\r\nList JAWS Hot Keys\r\nPress ESCAPE to close this message. ",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1428,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1792010558068,
+                                                "t_end_ms":  1792010559852,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "fn main() {",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1409,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1792010561684,
+                                                "t_end_ms":  1792010564859,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+Alt+W",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Virtualizing current window\nsr-notepad-fixture.txt - Notepad",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2611,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1792010566673,
+                                                "t_end_ms":  1792010568444,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "File Edit Format View Help",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1391,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1792010570261,
+                                                "t_end_ms":  1792010582562,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+A",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "selected\nsr-notepad-fixture.txt - Notepad\nFile Edit Format View Help\nfn main() {\n    let total = price * 1.5; // tax\n    println!(\"{total}\");\n}\n  Ln 1, Col 1  100%  Windows (CRLF)  UTF-8",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  11846,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1792010584371,
+                                                "t_end_ms":  1792010586256,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+C",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Copied selection to clipboard",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  "sr-notepad-fixture.txt - Notepad\r\nFile Edit Format View Help\r\nfn main() {\r\n    let total = price * 1.5; // tax\r\n    println!(\"{total}\");\r\n}\r\n  Ln 1, Col 1  100%  Windows (CRLF)  UTF-8 ",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1431,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1792010588061,
+                                                "t_end_ms":  1792010589851,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "fn main() {",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1386,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s14",
+                                                "t_start_ms":  1792010591659,
+                                                "t_end_ms":  1792010593937,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+Shift+V",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Virtualizing current control\nfn main() {",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1722,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s15",
+                                                "t_start_ms":  1792010595746,
+                                                "t_end_ms":  1792010598132,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Down",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "    let total = price * 1.5; // tax",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1992,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s16",
+                                                "t_start_ms":  1792010599945,
+                                                "t_end_ms":  1792010601747,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Escape",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "fn main() {",
+                                                                    "spoken":  [
+
+                                                                               ],
+                                                                    "spoken_records":  {
+
+                                                                                       },
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1411,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "314-desktop-notepad-font-and-viewer-trial3.jsonl",
+                       "page_load_settled":  true,
+                       "trace_sha256":  "77a213b4c2d7f1e07705f86a9b410ca9d5aafa8497c6729097320d851929a381"
+                   }
+               ],
+    "total_elapsed_ms":  255812
+}
