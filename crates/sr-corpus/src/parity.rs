@@ -143,6 +143,12 @@ fn run_scenario(
     spoken.take();
 
     let replay = StepEvents::load(corpus_dir, &scenario.id, &read_json(&evidence_path)?)?;
+    for event in &replay.setup {
+        if let Some(focus) = focus_event_from_trace(event) {
+            let _ = engine.handle_focus_event(&focus);
+        }
+    }
+    spoken.take();
 
     let mut steps = Vec::new();
     for step in &scenario.steps {
@@ -330,6 +336,9 @@ fn press(engine: &mut ScreenReaderEngine, chord: &str) -> Result<(), String> {
 #[derive(Default)]
 struct StepEvents {
     by_step: std::collections::HashMap<String, Vec<sr_platform::event_trace::TraceEvent>>,
+    /// Focus events before the first step (launch and reset), replayed silently so the
+    /// engine knows the window and focus JAWS saw when step 1 began.
+    setup: Vec<sr_platform::event_trace::TraceEvent>,
 }
 
 impl StepEvents {
@@ -353,6 +362,17 @@ impl StepEvents {
             .and_then(Value::as_array)
             .cloned()
             .unwrap_or_default();
+        let first_start = steps
+            .first()
+            .and_then(|s| s.get("t_start_ms"))
+            .and_then(Value::as_u64)
+            .map(u128::from)
+            .unwrap_or(0);
+        let setup = events
+            .iter()
+            .filter(|e| e.event == "focus" && e.t_ms < first_start && !e.focus_chain.is_empty())
+            .cloned()
+            .collect();
         for step in steps {
             let (Some(id), Some(start), Some(end)) = (
                 step.get("step_id").and_then(Value::as_str),
@@ -375,7 +395,7 @@ impl StepEvents {
                 .collect();
             by_step.insert(id.to_owned(), window);
         }
-        Ok(Self { by_step })
+        Ok(Self { by_step, setup })
     }
 
     fn for_step(&self, step_id: &str) -> Vec<sr_platform::event_trace::TraceEvent> {

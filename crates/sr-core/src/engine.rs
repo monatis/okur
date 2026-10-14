@@ -299,6 +299,8 @@ pub struct ScreenReaderEngine {
     pub shell_nav_state: Option<ShellNavState>,
     pub explorer_state: Option<NativeExplorerState>,
     pub last_window_title: Option<String>,
+    /// Container of the last focused native control; entering a new one announces it.
+    native_container: Option<crate::native_focus::ContainerKey>,
 }
 
 impl ScreenReaderEngine {
@@ -313,6 +315,7 @@ impl ScreenReaderEngine {
             shell_nav_state: None,
             explorer_state: None,
             last_window_title: None,
+            native_container: None,
         }
     }
 
@@ -1423,26 +1426,13 @@ impl ScreenReaderEngine {
             false
         };
 
-        let name = focus.name.as_deref().unwrap_or("");
-        let control_speech = match focus.role {
-            Role::Button => SpeechFormatter::format_button(name),
-            Role::CheckBox => {
-                SpeechFormatter::format_checkbox(name, focus.states.checked.unwrap_or(false))
-            }
-            Role::Edit => {
-                let val = focus.value.as_deref();
-                SpeechFormatter::format_edit(name, val)
-            }
-            Role::Tab => format!("{} tab", name),
-            Role::ListItem => {
-                if let (Some(idx), Some(cnt)) = (focus.item_index, focus.item_count) {
-                    format!("{}\n{} of {}", name, idx, cnt)
-                } else {
-                    name.to_string()
-                }
-            }
-            _ => name.to_string(),
+        let previous_container = if window_changed {
+            None
+        } else {
+            self.native_container.take()
         };
+        let control_speech = crate::native_focus::focus_speech(focus, previous_container.as_ref());
+        self.native_container = crate::native_focus::ContainerKey::of(focus);
 
         let speech = if window_changed {
             let win = focus.window_title.as_deref().unwrap_or("");

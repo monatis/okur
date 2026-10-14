@@ -11,6 +11,10 @@
 use crate::uia_snapshot::UiaNode;
 use serde::{Deserialize, Serialize};
 
+/// UIA control type ids used to read focus context.
+const UIA_LISTITEM: i32 = 50007;
+const UIA_WINDOW: i32 = 50032;
+
 /// Bumped whenever the recorded fields or their meaning change.
 pub const TRACE_FORMAT_VERSION: u32 = 2;
 
@@ -161,6 +165,7 @@ pub fn focus_event_from_chain(
             && a.name.as_deref().is_some_and(|n| !n.trim().is_empty()));
         if is_container {
             event.container_name = a.name.clone();
+            event.container_class = a.class_name.clone();
             event.container_role = Some(role);
             break;
         }
@@ -174,13 +179,44 @@ pub fn focus_event_from_chain(
 /// Without a provider PositionInSet (WinForms and most Win32 controls report none), the
 /// position is counted among the focused element's siblings of the same control type.
 pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent> {
+    // The recorded window text belongs to the focused HWND (an edit's text is its content);
+    // the window the user is in is the outermost element of the focus chain.
+    let top_window = event
+        .focus_chain
+        .first()
+        .filter(|w| w.control_type == UIA_WINDOW)
+        .and_then(|w| w.name.as_deref());
     let mut focus = focus_event_from_chain(
         &event.focus_chain,
         event.window_class.as_deref(),
-        event.window_title.as_deref(),
+        top_window,
     )?;
-    if focus.item_index.is_none() {
-        let focused = event.focus_chain.last()?;
+    let focused = event.focus_chain.last()?;
+    if let Some(subtree) = &event.focus_subtree {
+        // A list-view item's further columns are its text children after the name.
+        if focus.role == sr_core::Role::ListItem {
+            focus.columns = subtree
+                .children
+                .iter()
+                .filter_map(|c| c.name.clone())
+                .filter(|n| !n.trim().is_empty() && Some(n) != focused.name.as_ref())
+                .collect();
+        }
+        // A combo box's position is its selected item's, among its list items.
+        if focus.role == sr_core::Role::ComboBox && focus.item_index.is_none() {
+            let items: Vec<&UiaNode> = subtree
+                .children
+                .iter()
+                .flat_map(|c| std::iter::once(c).chain(c.children.iter()))
+                .filter(|n| n.control_type == UIA_LISTITEM)
+                .collect();
+            if let Some(i) = items.iter().position(|n| n.is_selected == Some(true)) {
+                focus.item_index = Some(i + 1);
+                focus.item_count = Some(items.len());
+            }
+        }
+    }
+    if focus.item_index.is_none() && focus.role != sr_core::Role::ComboBox {
         let peers: Vec<&UiaNode> = event
             .focus_siblings
             .iter()

@@ -20,11 +20,11 @@ use crate::buffer::{
 const RS: char = '\u{1d}';
 const RE: char = '\u{1e}';
 
-fn role_marker(name: &str) -> String {
+pub(crate) fn role_marker(name: &str) -> String {
     format!(" {RS} {name} {RE} ")
 }
 
-fn state_marker(name: &str) -> String {
+pub(crate) fn state_marker(name: &str) -> String {
     format!(" {RS}{name}{RE} ")
 }
 

@@ -64,6 +64,22 @@ Fix the audit's critical buffer findings, driven by the invariants and the parit
 
 Then re-record scenarios 31–65, starting with those that use only real keystrokes, using the capture tooling.
 
+Status 2026-10-14 (evening):
+- **Data source.** Parity now runs on IA2 snapshots, as JAWS reads Chrome (`sr_corpus::snapshots::PARITY_API`). UIA stays available through `sr-cli parity --api uia`.
+- **Done:**
+  - Line wrapping (JAWS `MaxLineLength=150`).
+  - The paragraph model.
+  - Block quotes.
+- **Open, with the evidence or experiment each needs:**
+  - `I` skips the descendants of the current list item (108/s8). Scenario 114 discriminates between the possible rules.
+  - Level keys (`1`–`6`) from the top also speak the enclosing h1 (104/s1, 12/s1). This needs a fixture with two h1 sections.
+  - Say All capture boundaries (01, 111).
+- **Desktop.** Native focus speech is the next engine work, against 301–303:
+  - Rewrite `handle_focus_event` as a generic, evidence-driven module.
+  - It currently holds about 50 Explorer/Desktop/Widgets special cases from unverified legacy work, which rule 7 forbids.
+  - The phrasing for edits, check boxes, radios, combo boxes, list boxes, tree views, list views, tabs and buttons is recorded in 301.
+  - Menus are recorded in 302.
+
 ## Phase 4: Make interaction real
 
 - Browse-mode Tab, Space, Enter and forms mode act on the real application (UIA focus, invoke, toggle, and setting values).

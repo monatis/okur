@@ -23,6 +23,10 @@ pub struct FocusEvent {
     pub item_count: Option<usize>,
     pub container_role: Option<Role>,
     pub container_name: Option<String>,
+    /// Window class of the container (`SysListView32` makes a list a list view).
+    pub container_class: Option<String>,
+    /// Further columns of a list-view item, after its name.
+    pub columns: Vec<String>,
     pub window_class: Option<String>,
     pub window_title: Option<String>,
     pub folder_name: Option<String>,
@@ -41,6 +45,8 @@ impl FocusEvent {
             item_count: None,
             container_role: None,
             container_name: None,
+            container_class: None,
+            columns: Vec::new(),
             window_class: None,
             window_title: None,
             folder_name: None,
