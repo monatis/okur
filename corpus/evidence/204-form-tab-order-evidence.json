@@ -2,9 +2,9 @@
     "format_version":  2,
     "scenario_id":  "204-form-tab-order",
     "scenario_version":  "1.0.0",
-    "timestamp":  "2026-10-14T16:25:12.6406487+03:00",
+    "timestamp":  "2026-10-14T17:05:50.6340517+03:00",
     "provenance":  {
-                       "capture_script_sha256":  "36f71d307a6e5eeef10482390896d1c804c025acab8329e753933d42695792eb",
+                       "capture_script_sha256":  "7c7ca8f250860890474771443be947508e82ba9c7800009fff366d661e4683d5",
                        "scenario_sha256":  "3bed82e3f14e52637b67c8d7ae24124f55f162eb94bbabbbe614c0fbb052c7c6",
                        "fixture_sha256":  "141f98219e00ce80559e312fdf548a7b3b9f41087250648d09b6040c6433badf",
                        "host":  "DESKTOP-DCNAKQQ",
@@ -24,12 +24,14 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-14T16:25:14.8898269+03:00",
+                       "timestamp":  "2026-10-14T17:05:52.8926601+03:00",
                        "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
+                                                "t_start_ms":  1791986759645,
+                                                "t_end_ms":  1791986763582,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -39,7 +41,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3504,
+                                                                    "settle_ms":  3502,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -48,6 +50,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
+                                                "t_start_ms":  1791986765380,
+                                                "t_end_ms":  1791986768286,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -57,7 +61,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2531,
+                                                                    "settle_ms":  2486,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -66,6 +70,8 @@
                                             },
                                             {
                                                 "step_id":  "s3",
+                                                "t_start_ms":  1791986770057,
+                                                "t_end_ms":  1791986772116,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -75,7 +81,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1698,
+                                                                    "settle_ms":  1663,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -84,6 +90,8 @@
                                             },
                                             {
                                                 "step_id":  "s4",
+                                                "t_start_ms":  1791986773923,
+                                                "t_end_ms":  1791986776688,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -93,7 +101,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2325,
+                                                                    "settle_ms":  2360,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -102,6 +110,8 @@
                                             },
                                             {
                                                 "step_id":  "s5",
+                                                "t_start_ms":  1791986778482,
+                                                "t_end_ms":  1791986780740,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -111,7 +121,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1836,
+                                                                    "settle_ms":  1860,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -120,6 +130,8 @@
                                             },
                                             {
                                                 "step_id":  "s6",
+                                                "t_start_ms":  1791986782551,
+                                                "t_end_ms":  1791986784621,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -129,7 +141,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1655,
+                                                                    "settle_ms":  1680,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -138,6 +150,8 @@
                                             },
                                             {
                                                 "step_id":  "s7",
+                                                "t_start_ms":  1791986786434,
+                                                "t_end_ms":  1791986789601,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -147,7 +161,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2887,
+                                                                    "settle_ms":  2756,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -156,6 +170,8 @@
                                             },
                                             {
                                                 "step_id":  "s8",
+                                                "t_start_ms":  1791986791396,
+                                                "t_end_ms":  1791986794320,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -165,7 +181,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2528,
+                                                                    "settle_ms":  2548,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -174,6 +190,8 @@
                                             },
                                             {
                                                 "step_id":  "s9",
+                                                "t_start_ms":  1791986796134,
+                                                "t_end_ms":  1791986798684,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -183,7 +201,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2218,
+                                                                    "settle_ms":  2137,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -192,6 +210,8 @@
                                             },
                                             {
                                                 "step_id":  "s10",
+                                                "t_start_ms":  1791986800474,
+                                                "t_end_ms":  1791986802780,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -201,7 +221,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1908,
+                                                                    "settle_ms":  1902,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -210,6 +230,8 @@
                                             },
                                             {
                                                 "step_id":  "s11",
+                                                "t_start_ms":  1791986804570,
+                                                "t_end_ms":  1791986808171,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -219,7 +241,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3186,
+                                                                    "settle_ms":  3210,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -228,6 +250,8 @@
                                             },
                                             {
                                                 "step_id":  "s12",
+                                                "t_start_ms":  1791986809988,
+                                                "t_end_ms":  1791986813260,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -246,6 +270,8 @@
                                             },
                                             {
                                                 "step_id":  "s13",
+                                                "t_start_ms":  1791986815056,
+                                                "t_end_ms":  1791986819153,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -255,7 +281,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3695,
+                                                                    "settle_ms":  3706,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -264,16 +290,20 @@
                                             }
                                         ],
                        "trial_success":  true,
-                       "page_load_settled":  false
+                       "page_load_settled":  false,
+                       "trace_file":  "204-form-tab-order-trial1.jsonl",
+                       "trace_sha256":  "2445ffbfee0388e70669a2cd18e6ff2e319b03b81edbf7ffad033f1b0acd33d3"
                    },
                    {
                        "trial_index":  2,
-                       "timestamp":  "2026-10-14T16:26:21.4427778+03:00",
+                       "timestamp":  "2026-10-14T17:06:59.1927391+03:00",
                        "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
+                                                "t_start_ms":  1791986825878,
+                                                "t_end_ms":  1791986828651,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -283,7 +313,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2422,
+                                                                    "settle_ms":  2376,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -292,6 +322,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
+                                                "t_start_ms":  1791986830469,
+                                                "t_end_ms":  1791986833341,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -301,7 +333,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2451,
+                                                                    "settle_ms":  2467,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -310,6 +342,8 @@
                                             },
                                             {
                                                 "step_id":  "s3",
+                                                "t_start_ms":  1791986835135,
+                                                "t_end_ms":  1791986837230,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -319,7 +353,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1695,
+                                                                    "settle_ms":  1698,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -328,6 +362,8 @@
                                             },
                                             {
                                                 "step_id":  "s4",
+                                                "t_start_ms":  1791986839039,
+                                                "t_end_ms":  1791986841761,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -337,7 +373,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2443,
+                                                                    "settle_ms":  2327,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -346,6 +382,8 @@
                                             },
                                             {
                                                 "step_id":  "s5",
+                                                "t_start_ms":  1791986843565,
+                                                "t_end_ms":  1791986845820,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -355,7 +393,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1822,
+                                                                    "settle_ms":  1863,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -364,738 +402,8 @@
                                             },
                                             {
                                                 "step_id":  "s6",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Accessibility needs \u001d edit \u001e \n  \nblank",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1678,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s7",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e  \nTo clear checkmark press Spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2799,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s8",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e  \nTo check press Spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2486,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s9",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "terms of use  \u001d same page link \u001e  \nTo activate press Enter.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2136,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s10",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Create account  \u001d Button \u001e  \nTo activate press Enter.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1884,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s11",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Sekme araması  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3262,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s12",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Dosya  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2926,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s13",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Adres ve arama çubuğu  \u001d Edit \u001e  \nC:/Users/ailabs/corpus/fixtures/signup-form.html\nType in text.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3790,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            }
-                                        ],
-                       "trial_success":  true,
-                       "page_load_settled":  false
-                   },
-                   {
-                       "trial_index":  3,
-                       "timestamp":  "2026-10-14T16:27:26.8516743+03:00",
-                       "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
-                       "setup_settled":  true,
-                       "step_results":  [
-                                            {
-                                                "step_id":  "s1",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Create Your Account - Riverside Library\nFull name  \u001d Edit \u001e   \u001dRequired\u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2421,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s2",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Email address  \u001d Edit \u001e  \nsam@example.com\nWe never share your email.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2484,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s3",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Password  \u001d password edit \u001e   \u001dRequired\u001e  \u001d\u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1719,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s4",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Membership type  \u001d group \u001e   \nAdult  \u001d radio button \u001e   \u001dchecked\u001e  \n1 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2362,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s5",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Home branch  \u001d Combo box \u001e  \nNorthside",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1822,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Accessibility needs \u001d edit \u001e \n  \nblank",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1658,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s7",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e  \nTo clear checkmark press Spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2748,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s8",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e  \nTo check press Spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2546,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s9",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "terms of use  \u001d same page link \u001e  \nTo activate press Enter.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2115,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s10",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Create account  \u001d Button \u001e  \nTo activate press Enter.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1926,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s11",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Sekme araması  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3272,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s12",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Dosya  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2899,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s13",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Adres ve arama çubuğu  \u001d Edit \u001e  \nC:/Users/ailabs/corpus/fixtures/signup-form.html\nType in text.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3689,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            }
-                                        ],
-                       "trial_success":  true,
-                       "page_load_settled":  false
-                   },
-                   {
-                       "trial_index":  4,
-                       "timestamp":  "2026-10-14T16:28:32.0468141+03:00",
-                       "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
-                       "setup_settled":  true,
-                       "step_results":  [
-                                            {
-                                                "step_id":  "s1",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Create Your Account - Riverside Library\nFull name  \u001d Edit \u001e   \u001dRequired\u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2360,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s2",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Email address  \u001d Edit \u001e  \nsam@example.com\nWe never share your email.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2462,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s3",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Password  \u001d password edit \u001e   \u001dRequired\u001e  \u001d\u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1701,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s4",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Membership type  \u001d group \u001e   \nAdult  \u001d radio button \u001e   \u001dchecked\u001e  \n1 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2346,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s5",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Home branch  \u001d Combo box \u001e  \nNorthside",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1807,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Accessibility needs \u001d edit \u001e \n  \nblank",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1717,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s7",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e  \nTo clear checkmark press Spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2872,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s8",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e  \nTo check press Spacebar.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2528,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s9",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "terms of use  \u001d same page link \u001e  \nTo activate press Enter.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2161,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s10",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Create account  \u001d Button \u001e  \nTo activate press Enter.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1905,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s11",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Sekme araması  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3173,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s12",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Dosya  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2881,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s13",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Adres ve arama çubuğu  \u001d Edit \u001e  \nC:/Users/ailabs/corpus/fixtures/signup-form.html\nType in text.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  3675,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            }
-                                        ],
-                       "trial_success":  true,
-                       "page_load_settled":  false
-                   },
-                   {
-                       "trial_index":  5,
-                       "timestamp":  "2026-10-14T16:29:37.1160833+03:00",
-                       "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
-                       "setup_settled":  true,
-                       "step_results":  [
-                                            {
-                                                "step_id":  "s1",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Create Your Account - Riverside Library\nFull name  \u001d Edit \u001e   \u001dRequired\u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2424,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s2",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Email address  \u001d Edit \u001e  \nsam@example.com\nWe never share your email.",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2468,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s3",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Password  \u001d password edit \u001e   \u001dRequired\u001e  \u001d\u001e",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1701,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s4",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Membership type  \u001d group \u001e   \nAdult  \u001d radio button \u001e   \u001dchecked\u001e  \n1 of 3",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  2443,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s5",
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Tab"
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Home branch  \u001d Combo box \u001e  \nNorthside",
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1843,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
+                                                "t_start_ms":  1791986847631,
+                                                "t_end_ms":  1791986849698,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -1114,6 +422,8 @@
                                             },
                                             {
                                                 "step_id":  "s7",
+                                                "t_start_ms":  1791986851510,
+                                                "t_end_ms":  1791986854652,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -1123,7 +433,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2799,
+                                                                    "settle_ms":  2735,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1132,6 +442,8 @@
                                             },
                                             {
                                                 "step_id":  "s8",
+                                                "t_start_ms":  1791986856467,
+                                                "t_end_ms":  1791986859397,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -1141,7 +453,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2508,
+                                                                    "settle_ms":  2529,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1150,6 +462,8 @@
                                             },
                                             {
                                                 "step_id":  "s9",
+                                                "t_start_ms":  1791986861207,
+                                                "t_end_ms":  1791986863768,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -1159,7 +473,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2132,
+                                                                    "settle_ms":  2152,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1168,6 +482,280 @@
                                             },
                                             {
                                                 "step_id":  "s10",
+                                                "t_start_ms":  1791986865555,
+                                                "t_end_ms":  1791986867856,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Create account  \u001d Button \u001e  \nTo activate press Enter.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1911,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791986869645,
+                                                "t_end_ms":  1791986873252,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Sekme araması  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3216,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791986875064,
+                                                "t_end_ms":  1791986878353,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Dosya  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2897,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1791986880170,
+                                                "t_end_ms":  1791986884319,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Adres ve arama çubuğu  \u001d Edit \u001e  \nC:/Users/ailabs/corpus/fixtures/signup-form.html\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3776,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false,
+                       "trace_file":  "204-form-tab-order-trial2.jsonl",
+                       "trace_sha256":  "722532ac495cb793db3a740391fa86e8fbdd6ce86c10ea6595092b491f60e7be"
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-14T17:08:04.3672260+03:00",
+                       "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791986891022,
+                                                "t_end_ms":  1791986893834,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Create Your Account - Riverside Library\nFull name  \u001d Edit \u001e   \u001dRequired\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2401,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791986895642,
+                                                "t_end_ms":  1791986898526,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Email address  \u001d Edit \u001e  \nsam@example.com\nWe never share your email.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2463,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791986900316,
+                                                "t_end_ms":  1791986902413,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Password  \u001d password edit \u001e   \u001dRequired\u001e  \u001d\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1699,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791986904227,
+                                                "t_end_ms":  1791986907057,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Membership type  \u001d group \u001e   \nAdult  \u001d radio button \u001e   \u001dchecked\u001e  \n1 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2442,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791986908870,
+                                                "t_end_ms":  1791986911083,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Home branch  \u001d Combo box \u001e  \nNorthside",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1802,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791986912897,
+                                                "t_end_ms":  1791986914978,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Accessibility needs \u001d edit \u001e \n  \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1696,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791986916795,
+                                                "t_end_ms":  1791986919963,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e  \nTo clear checkmark press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2778,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791986921773,
+                                                "t_end_ms":  1791986924737,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e  \nTo check press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2554,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791986926527,
+                                                "t_end_ms":  1791986929061,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "terms of use  \u001d same page link \u001e  \nTo activate press Enter.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2136,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791986930872,
+                                                "t_end_ms":  1791986933168,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -1186,6 +774,8 @@
                                             },
                                             {
                                                 "step_id":  "s11",
+                                                "t_start_ms":  1791986934962,
+                                                "t_end_ms":  1791986938533,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -1195,7 +785,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3208,
+                                                                    "settle_ms":  3153,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1204,6 +794,8 @@
                                             },
                                             {
                                                 "step_id":  "s12",
+                                                "t_start_ms":  1791986940321,
+                                                "t_end_ms":  1791986943649,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -1213,7 +805,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2876,
+                                                                    "settle_ms":  2940,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1222,6 +814,8 @@
                                             },
                                             {
                                                 "step_id":  "s13",
+                                                "t_start_ms":  1791986945458,
+                                                "t_end_ms":  1791986949509,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Tab"
@@ -1231,7 +825,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3683,
+                                                                    "settle_ms":  3666,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1240,8 +834,554 @@
                                             }
                                         ],
                        "trial_success":  true,
-                       "page_load_settled":  false
+                       "page_load_settled":  false,
+                       "trace_file":  "204-form-tab-order-trial3.jsonl",
+                       "trace_sha256":  "1187c4579250fc71d18f886ffa73dc5be8110af8ff7fe9537a1f9ad34eb72eac"
+                   },
+                   {
+                       "trial_index":  4,
+                       "timestamp":  "2026-10-14T17:09:09.5866396+03:00",
+                       "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791986956223,
+                                                "t_end_ms":  1791986959026,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Create Your Account - Riverside Library\nFull name  \u001d Edit \u001e   \u001dRequired\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2396,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791986960834,
+                                                "t_end_ms":  1791986963715,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Email address  \u001d Edit \u001e  \nsam@example.com\nWe never share your email.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2464,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791986965511,
+                                                "t_end_ms":  1791986967590,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Password  \u001d password edit \u001e   \u001dRequired\u001e  \u001d\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1698,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791986969423,
+                                                "t_end_ms":  1791986972269,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Membership type  \u001d group \u001e   \nAdult  \u001d radio button \u001e   \u001dchecked\u001e  \n1 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2427,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791986974061,
+                                                "t_end_ms":  1791986976294,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Home branch  \u001d Combo box \u001e  \nNorthside",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1848,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791986978101,
+                                                "t_end_ms":  1791986980207,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Accessibility needs \u001d edit \u001e \n  \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1681,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791986981995,
+                                                "t_end_ms":  1791986985257,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e  \nTo clear checkmark press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2883,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791986987072,
+                                                "t_end_ms":  1791986990008,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e  \nTo check press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2522,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791986991820,
+                                                "t_end_ms":  1791986994338,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "terms of use  \u001d same page link \u001e  \nTo activate press Enter.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2115,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791986996148,
+                                                "t_end_ms":  1791986998462,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Create account  \u001d Button \u001e  \nTo activate press Enter.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1913,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791987000271,
+                                                "t_end_ms":  1791987003946,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Sekme araması  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3256,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791987005763,
+                                                "t_end_ms":  1791987009039,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Dosya  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2880,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1791987010851,
+                                                "t_end_ms":  1791987015039,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Adres ve arama çubuğu  \u001d Edit \u001e  \nC:/Users/ailabs/corpus/fixtures/signup-form.html\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3693,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false,
+                       "trace_file":  "204-form-tab-order-trial4.jsonl",
+                       "trace_sha256":  "4d6d0165c79d09fe13faf267cdd474bdb257b5c024f3b1db9ccbd0cd1761b071"
+                   },
+                   {
+                       "trial_index":  5,
+                       "timestamp":  "2026-10-14T17:10:15.1017146+03:00",
+                       "foreground_window_start":  "Create Your Account - Riverside Library - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1791987021773,
+                                                "t_end_ms":  1791987024558,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Create Your Account - Riverside Library\nFull name  \u001d Edit \u001e   \u001dRequired\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2384,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1791987026374,
+                                                "t_end_ms":  1791987029232,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Email address  \u001d Edit \u001e  \nsam@example.com\nWe never share your email.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2469,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1791987031028,
+                                                "t_end_ms":  1791987033144,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Password  \u001d password edit \u001e   \u001dRequired\u001e  \u001d\u001e",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1701,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1791987034941,
+                                                "t_end_ms":  1791987037663,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Membership type  \u001d group \u001e   \nAdult  \u001d radio button \u001e   \u001dchecked\u001e  \n1 of 3",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2325,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1791987039472,
+                                                "t_end_ms":  1791987041725,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Home branch  \u001d Combo box \u001e  \nNorthside",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1846,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1791987043540,
+                                                "t_end_ms":  1791987045607,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Accessibility needs \u001d edit \u001e \n  \nblank",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1679,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1791987047420,
+                                                "t_end_ms":  1791987050702,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e  \nTo clear checkmark press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2878,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s8",
+                                                "t_start_ms":  1791987052508,
+                                                "t_end_ms":  1791987055442,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e  \nTo check press Spacebar.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2506,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s9",
+                                                "t_start_ms":  1791987057232,
+                                                "t_end_ms":  1791987059779,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "terms of use  \u001d same page link \u001e  \nTo activate press Enter.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2137,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s10",
+                                                "t_start_ms":  1791987061591,
+                                                "t_end_ms":  1791987063870,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Create account  \u001d Button \u001e  \nTo activate press Enter.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1871,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s11",
+                                                "t_start_ms":  1791987065681,
+                                                "t_end_ms":  1791987069266,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Sekme araması  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3174,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s12",
+                                                "t_start_ms":  1791987071082,
+                                                "t_end_ms":  1791987074349,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Dosya  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  2881,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s13",
+                                                "t_start_ms":  1791987076162,
+                                                "t_end_ms":  1791987080259,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Tab"
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Adres ve arama çubuğu  \u001d Edit \u001e  \nC:/Users/ailabs/corpus/fixtures/signup-form.html\nType in text.",
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  3708,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "page_load_settled":  false,
+                       "trace_file":  "204-form-tab-order-trial5.jsonl",
+                       "trace_sha256":  "b06e02ba08442bd78a70b8ec9b1d498ac0e35fc9ba38cb7d6174a627f520e10a"
                    }
                ],
-    "total_elapsed_ms":  330367
+    "total_elapsed_ms":  330407
 }
