@@ -1616,7 +1616,18 @@ impl ScreenReaderEngine {
     /// elsewhere they run as virtual cursor or application commands.
     fn jaws_key_command(&mut self, event: &KeyEvent) {
         if self.editing_text() && crate::editing::EditKey::of(event).is_some() {
-            self.expect_text_change(crate::editing::EditKey::SayLine);
+            // Say Line does not change the field, so no report follows: speak the field's
+            // last known text now, or read it when none is known [obs, 305/s9, s15].
+            let key = crate::editing::EditKey::SayLine;
+            match self.last_text.clone() {
+                Some(context) => {
+                    let field = self.text_field_line();
+                    if let Some(speech) = crate::editing::speech(key, None, &context, &field) {
+                        self.speech.speak(&speech, true);
+                    }
+                }
+                None => self.expect_text_change(key),
+            }
             return;
         }
         if let Some(cmd) = event.to_command_string() {
