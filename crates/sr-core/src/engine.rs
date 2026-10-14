@@ -1279,6 +1279,15 @@ impl ScreenReaderEngine {
         }
     }
 
+    /// Records the focused control's top-level window as the active one, for Insert+T and
+    /// for announcing the next window change.
+    fn note_window(title: &mut Option<String>, kind: &mut Option<String>, focus: &FocusEvent) {
+        if let Some(window) = &focus.window_title {
+            *title = Some(window.clone());
+            *kind = focus.window_kind.clone();
+        }
+    }
+
     /// Handles an OS-level focus changed event.
     /// Synchronizes cursor position, activates/deactivates forms mode,
     /// and emits canonical JAWS speech announcements.
@@ -1338,6 +1347,13 @@ impl ScreenReaderEngine {
             let is_first_entry = prev_mode != AppMode::NativeDesktop || !ds.entered;
             ds.entered = true;
             self.app_mode = AppMode::NativeDesktop;
+            // Insert+T on the desktop speaks the virtual desktop's name, not the window
+            // focused before it (user report).
+            Self::note_window(
+                &mut self.last_window_title,
+                &mut self.last_window_kind,
+                focus,
+            );
 
             if let Some(ref mut es) = self.explorer_state {
                 es.entered = false;
@@ -1395,6 +1411,11 @@ impl ScreenReaderEngine {
             let is_first_entry = prev_mode != AppMode::NativeExplorer || !es.entered;
             es.entered = true;
             self.app_mode = AppMode::NativeExplorer;
+            Self::note_window(
+                &mut self.last_window_title,
+                &mut self.last_window_kind,
+                focus,
+            );
 
             if let Some(ref mut ds) = self.desktop_state {
                 ds.entered = false;
@@ -1629,7 +1650,13 @@ impl ScreenReaderEngine {
         let speech = if window_changed {
             // A new active window: its title, then the control. A dialog box adds its role
             // and its text [obs, 306/s1, s3, s10].
-            let win = focus.window_title.as_deref().unwrap_or("");
+            // The desktop is announced as "Desktop"; its title (Insert+T) is the virtual
+            // desktop's name (user report; JAWS: "Desktop | FolderView list view").
+            let win = if focus.window_kind.as_deref() == Some("Progman") {
+                "Desktop"
+            } else {
+                focus.window_title.as_deref().unwrap_or("")
+            };
             let heading = match focus.dialog_text.as_deref() {
                 Some(text) if !text.is_empty() => format!("{win}  \u{1d} dialog \u{1e} \n{text}"),
                 Some(_) => format!("{win}  \u{1d} dialog \u{1e} "),
@@ -2449,7 +2476,7 @@ mod tests {
             .with_item_index(7)
             .with_item_count(11);
         let s1 = engine.handle_focus_event(&focus_entry).unwrap_or_default();
-        assert!(s1.contains("FolderView    List view"));
+        assert!(s1.starts_with("Desktop\nFolderView    List view"));
         assert!(s1.contains("Dropbox"));
         assert!(s1.contains("7 of 11"));
         assert!(s1.contains("To move to items use the Arrow keys."));
@@ -2485,6 +2512,38 @@ mod tests {
             .handle_focus_event(&focus_recycle)
             .unwrap_or_default();
         assert_eq!(s4, "Recycle Bin\n1 of 11");
+    }
+
+    #[test]
+    fn window_title_on_the_desktop_is_the_virtual_desktop() {
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+        let edit = FocusEvent::new(Role::Edit)
+            .with_window_title("Untitled - Notepad")
+            .with_window_class("Edit");
+        engine.handle_focus_event(&edit);
+        assert_eq!(
+            engine.execute_command("SayWindowTitle").as_deref(),
+            Some("Title is\nUntitled - Notepad")
+        );
+        // Win+M: the desktop's list takes focus; the tracer names the window after the
+        // virtual desktop.
+        let desktop = FocusEvent::new(Role::ListItem)
+            .with_container_name("FolderView")
+            .with_window_class("SysListView32")
+            .with_window_title("Desktop 1")
+            .with_name("Recycle Bin")
+            .with_item_index(1)
+            .with_item_count(3);
+        let entry = engine.handle_focus_event(&desktop).unwrap_or_default();
+        assert!(entry.starts_with("Desktop\n"), "{entry:?}");
+        assert_eq!(
+            engine.execute_command("SayWindowTitle").as_deref(),
+            Some("Title is\nDesktop 1")
+        );
+        // Back in Notepad, its window is announced again.
+        let back = engine.handle_focus_event(&edit).unwrap_or_default();
+        assert!(back.starts_with("Untitled - Notepad"), "{back:?}");
     }
 
     #[test]

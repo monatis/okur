@@ -22,13 +22,15 @@ const UIA_TEXT: i32 = 50020;
 const UIA_BUTTON: i32 = 50000;
 /// The window class of Win32 dialog boxes (message boxes, common dialogs).
 const WIN32_DIALOG_CLASS: &str = "#32770";
+/// The window kind of focus on the desktop ([`sr_core::FocusEvent::window_kind`]).
+pub const DESKTOP_KIND: &str = "Progman";
 /// MSAA `ROLE_SYSTEM_MENUITEM`.
 const MSAA_MENUITEM: i32 = 0x0C;
 /// MSAA `ROLE_SYSTEM_BUTTONMENU`.
 const MSAA_BUTTONMENU: i32 = 0x39;
 
 /// Bumped whenever the recorded fields or their meaning change.
-pub const TRACE_FORMAT_VERSION: u32 = 6;
+pub const TRACE_FORMAT_VERSION: u32 = 7;
 
 /// The MSAA view of an event's object (`AccessibleObjectFromEvent`).
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
@@ -88,6 +90,14 @@ pub struct TraceEvent {
     /// the virtual buffer is refreshed.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub page: Option<crate::ia2_snapshot::Ia2Node>,
+    /// The title of the event window's top-level window, for focus outside any UIA window
+    /// (the desktop's list view).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub top_window_title: Option<String>,
+    /// When the top-level window is the desktop (`Progman`, `WorkerW`): the current virtual
+    /// desktop's name, which JAWS gives as the desktop's title ("Desktop 1").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub virtual_desktop: Option<String>,
 }
 
 /// The first line of a trace file.
@@ -247,14 +257,27 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent>
         .iter()
         .rev()
         .find(|w| w.control_type == UIA_WINDOW);
-    let top_window = active_window.and_then(|w| w.name.as_deref());
+    // Without a UIA window around the focus, the window is the top-level one: the desktop is
+    // named by its virtual desktop ("Desktop 1"), as JAWS does; anything else by its title.
+    // Without either (older traces), the last window title stays, as before.
+    let top_window = active_window
+        .and_then(|w| w.name.as_deref())
+        .or(event.virtual_desktop.as_deref())
+        .or(event.top_window_title.as_deref());
     let mut focus = focus_event_from_chain(
         &event.focus_chain,
         event.window_class.as_deref(),
         top_window,
     )?;
     let focused = event.focus_chain.last()?;
-    focus.window_kind = active_window.and_then(|w| w.class_name.clone());
+    focus.window_kind = active_window
+        .and_then(|w| w.class_name.clone())
+        .or_else(|| {
+            event
+                .virtual_desktop
+                .as_ref()
+                .map(|_| DESKTOP_KIND.to_owned())
+        });
     // A dialog box (Win32 #32770, as a message box is) is announced with its static text,
     // which sits beside its buttons [obs, 306/s1]. Other windows are announced by title only
     // (306/s10).
@@ -655,6 +678,21 @@ mod capture {
         )
     }
 
+    /// The title of `hwnd`'s top-level window, and the virtual desktop's name when that
+    /// window is the desktop.
+    fn top_window(hwnd: HWND) -> (Option<String>, Option<String>) {
+        use windows::Win32::UI::WindowsAndMessaging::{GetAncestor, GA_ROOT};
+        // SAFETY: plain Win32 query on a window handle.
+        let top = unsafe { GetAncestor(hwnd, GA_ROOT) };
+        if top.is_invalid() {
+            return (None, None);
+        }
+        let (title, class) = window_text(top);
+        let desktop = matches!(class.as_str(), "Progman" | "WorkerW")
+            .then(crate::virtual_desktop::current_name);
+        (Some(title).filter(|t| !t.is_empty()), desktop)
+    }
+
     /// The events the live screen reader consumes ([`EventConverter`]).
     const LIVE_EVENTS: [&str; 12] = [
         "focus",
@@ -770,6 +808,12 @@ mod capture {
             } else {
                 None
             };
+            let (top_window_title, virtual_desktop) =
+                if matches!(name, "focus" | "foreground") && !hwnd.is_invalid() {
+                    top_window(hwnd)
+                } else {
+                    (None, None)
+                };
             let (region, page) = if name == "live_region_change" {
                 // Live, the page after the change is captured by the listener's page worker.
                 chromium_live_region(hwnd, &class, id_child, !state.live)
@@ -820,6 +864,8 @@ mod capture {
                 text_context,
                 region,
                 page,
+                top_window_title,
+                virtual_desktop,
             };
             (state.sink)(event);
             state.count += 1;
@@ -956,6 +1002,8 @@ mod tests {
             text_context: None,
             region: None,
             page: None,
+            top_window_title: None,
+            virtual_desktop: None,
         }
     }
 
