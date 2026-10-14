@@ -326,6 +326,10 @@ pub struct ScreenReaderEngine {
     clock: Option<Box<dyn crate::clock::Clock>>,
     /// The last JAWS-key command and when it was pressed, to tell a double press.
     last_press: Option<(String, u64)>,
+    /// User settings (JAWS defaults unless configured).
+    pub settings: crate::settings::Settings,
+    /// Caps Lock's state as toggled through the JAWS key, when the platform does not report it.
+    caps_lock_on: bool,
 }
 
 impl ScreenReaderEngine {
@@ -352,6 +356,8 @@ impl ScreenReaderEngine {
             actions: None,
             clock: None,
             last_press: None,
+            settings: crate::settings::Settings::default(),
+            caps_lock_on: false,
         }
     }
 
@@ -1046,6 +1052,9 @@ impl ScreenReaderEngine {
         if !event.is_down {
             return KeyAction::PassThrough;
         }
+        // Which held keys act as the JAWS key depends on the keyboard settings.
+        let resolved = self.settings.keyboard.resolve(event);
+        let event = &resolved;
         self.apply_pending_page();
 
         // 1. Any key press interrupts speech immediately (NVDA & JAWS standard behavior)
@@ -1056,12 +1065,16 @@ impl ScreenReaderEngine {
             return KeyAction::PassThrough;
         }
 
-        // The JAWS key (Insert) and every combination with it are JAWS commands: they never
-        // reach the application, bound or not, in any mode.
-        if event.key == Key::Insert || event.modifiers.insert {
-            if event.key != Key::Insert {
-                self.jaws_key_command(event);
+        // The JAWS key (Insert, or CapsLock in the laptop layout) and every combination with
+        // it are JAWS commands: they never reach the application, bound or not, in any mode.
+        if self.settings.keyboard.is_jaws_key(event.key) {
+            if event.key == Key::CapsLock && !event.is_repeat {
+                return self.caps_lock_press(event);
             }
+            return KeyAction::Consume;
+        }
+        if event.modifiers.insert {
+            self.jaws_key_command(event);
             return KeyAction::Consume;
         }
 
@@ -1673,8 +1686,27 @@ impl ScreenReaderEngine {
         match cmd.as_str() {
             "SaySystemTime" => "SaySystemDate".to_owned(),
             "SaySystemTimeWithSeconds" => "SayWeekNumber".to_owned(),
+            "CapsLock" => "ToggleCapsLock".to_owned(),
             _ => cmd,
         }
+    }
+
+    /// CapsLock as the JAWS key: a single press is the JAWS key; pressed twice quickly it
+    /// toggles Caps Lock (the second press reaches the system), which JAWS announces
+    /// [obs, 310: "Caps lock on", then "Caps lock off"].
+    fn caps_lock_press(&mut self, event: &KeyEvent) -> KeyAction {
+        if self.repeated_command("CapsLock".to_owned(), event.time_ms) != "ToggleCapsLock" {
+            return KeyAction::Consume;
+        }
+        let was_on = event.caps_lock_on.unwrap_or(self.caps_lock_on);
+        self.caps_lock_on = !was_on;
+        let speech = if was_on {
+            "Caps lock off"
+        } else {
+            "Caps lock on"
+        };
+        self.speech.speak(speech, true);
+        KeyAction::PassThrough
     }
 
     /// Say System Time and its variants, from the clock in the user's locale formats.
@@ -2370,6 +2402,47 @@ mod tests {
                 .map(|mut s| s.drain(..).collect())
                 .unwrap_or_default()
         }
+    }
+
+    /// In the laptop layout CapsLock is the JAWS key and Insert works as well; CapsLock
+    /// pressed twice quickly toggles Caps Lock [obs, 309, 310].
+    #[test]
+    fn test_caps_lock_as_the_jaws_key() {
+        let empty_doc = AomNode::new(0, Role::Document);
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&empty_doc));
+        let speech = SharedSpeech::default();
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+        engine.app_mode = AppMode::NativeControl;
+        engine.last_window_title = Some("SR Editor Fixture".to_owned());
+
+        let caps = |time_ms: u64, repeat: bool| {
+            let mut key = KeyEvent::new(Key::CapsLock, Modifiers::none(), true);
+            key.modifiers.caps_lock = true;
+            key.time_ms = time_ms;
+            key.is_repeat = repeat;
+            key
+        };
+        let mut caps_t = KeyEvent::new(Key::Alpha('T'), Modifiers::none(), true);
+        caps_t.modifiers.caps_lock = true;
+
+        // Desktop layout (the default): CapsLock is an ordinary key.
+        assert_eq!(engine.handle_key_event(&caps(1_000, false)), KeyAction::PassThrough);
+        assert_ne!(engine.handle_key_event(&caps_t), KeyAction::Consume);
+        assert!(speech.take().is_empty());
+
+        engine.settings = crate::settings::Settings::reference_machine();
+        assert_eq!(engine.handle_key_event(&caps(5_000, false)), KeyAction::Consume);
+        // Held down, the key repeats: that is not a second press.
+        assert_eq!(engine.handle_key_event(&caps(5_100, true)), KeyAction::Consume);
+        assert_eq!(engine.handle_key_event(&caps_t), KeyAction::Consume);
+        assert_eq!(speech.take(), ["Title is\nSR Editor Fixture"]);
+
+        assert_eq!(engine.handle_key_event(&caps(9_000, false)), KeyAction::Consume);
+        assert_eq!(engine.handle_key_event(&caps(9_300, false)), KeyAction::PassThrough);
+        assert_eq!(speech.take(), ["Caps lock on"]);
+        assert_eq!(engine.handle_key_event(&caps(12_000, false)), KeyAction::Consume);
+        assert_eq!(engine.handle_key_event(&caps(12_300, false)), KeyAction::PassThrough);
+        assert_eq!(speech.take(), ["Caps lock off"]);
     }
 
     /// Insert+F12 speaks the time; pressed twice quickly, the time and then the date. With

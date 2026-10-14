@@ -26,6 +26,8 @@ fn key_from_name(name: &str) -> Option<Key> {
         "backspace" => Key::Backspace,
         "delete" => Key::Delete,
         "insert" => Key::Insert,
+        "capslock" => Key::CapsLock,
+        "scrolllock" => Key::ScrollLock,
         "alt" => Key::Alt,
         "ctrl" | "control" => Key::Control,
         "semicolon" => Key::Semicolon,
@@ -57,6 +59,8 @@ pub fn parse_chord(chord: &str) -> Result<KeyEvent, String> {
             "alt" => modifiers.alt = true,
             "shift" => modifiers.shift = true,
             "insert" => modifiers.insert = true,
+            "capslock" => modifiers.caps_lock = true,
+            "scrolllock" => modifiers.scroll_lock = true,
             "win" => modifiers.win = true,
             other => return Err(format!("unknown modifier {other:?} in {chord:?}")),
         }

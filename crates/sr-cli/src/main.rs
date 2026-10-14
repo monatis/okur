@@ -48,6 +48,16 @@ enum Commands {
         /// to this file, for diagnosing live sessions (off by default)
         #[arg(long)]
         debug_log: Option<String>,
+
+        /// JAWS keyboard layout: desktop (default; Insert is the JAWS key) or laptop (CapsLock
+        /// is the JAWS key, and Insert works as well)
+        #[arg(long, default_value = "desktop")]
+        keyboard_layout: String,
+
+        /// The JAWS key for the layout: insert, capslock or scrolllock (default: the
+        /// layout's own)
+        #[arg(long)]
+        jaws_key: Option<String>,
     },
     /// Compare engine speech with recorded JAWS speech for every genuine corpus scenario
     Parity {
@@ -347,6 +357,37 @@ fn print_evidence(evidence: &str, trial: usize) -> Result<(), String> {
     Ok(())
 }
 
+/// The JAWS keyboard settings named on the command line (`--keyboard-layout`, `--jaws-key`).
+fn keyboard_settings(
+    layout: &str,
+    jaws_key: Option<&str>,
+) -> Result<sr_core::settings::KeyboardSettings, String> {
+    use sr_core::settings::{JawsKey, KeyboardLayout, KeyboardSettings};
+    let layout = match layout.to_ascii_lowercase().as_str() {
+        "desktop" => KeyboardLayout::Desktop,
+        "laptop" => KeyboardLayout::Laptop,
+        other => {
+            return Err(format!(
+                "unknown keyboard layout {other:?} (desktop, laptop)"
+            ))
+        }
+    };
+    let mut settings = KeyboardSettings::for_layout(layout);
+    if let Some(key) = jaws_key {
+        settings.jaws_key = match key.to_ascii_lowercase().as_str() {
+            "insert" => JawsKey::Insert,
+            "capslock" => JawsKey::CapsLock,
+            "scrolllock" => JawsKey::ScrollLock,
+            other => {
+                return Err(format!(
+                    "unknown JAWS key {other:?} (insert, capslock, scrolllock)"
+                ))
+            }
+        };
+    }
+    Ok(settings)
+}
+
 /// Logs to stderr at the RUST_LOG level, or, for `run --debug-log <file>`, everything from
 /// the screen reader's crates at debug level to that file.
 fn init_logging(cli: &Cli) {
@@ -386,7 +427,14 @@ async fn main() {
             fixture,
             speech_log,
             debug_log: _,
+            keyboard_layout,
+            jaws_key,
         }) => {
+            let keyboard =
+                keyboard_settings(&keyboard_layout, jaws_key.as_deref()).unwrap_or_else(|e| {
+                    eprintln!("Error: {e}");
+                    std::process::exit(1);
+                });
             let engine_type = TtsEngineType::from_str(&engine).unwrap_or_else(|e| {
                 eprintln!("Error: {}", e);
                 std::process::exit(1);
@@ -464,6 +512,7 @@ async fn main() {
             engine.set_actions(Box::new(sr_platform::actions::WindowsActions::start(Some(
                 event_tx.clone(),
             ))));
+            engine.settings.keyboard = keyboard;
             // Say System Time (Insert+F12) in the user's locale formats.
             #[cfg(windows)]
             engine.set_clock(Box::new(sr_platform::clock::WindowsClock));

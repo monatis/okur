@@ -18,6 +18,8 @@ pub enum Key {
     Backspace,
     Delete,
     Insert,
+    CapsLock,
+    ScrollLock,
 
     Alpha(char),
     Digit(u8),
@@ -40,7 +42,13 @@ pub struct Modifiers {
     pub alt: bool,
     pub shift: bool,
     pub win: bool,
+    /// The JAWS key is held. Platform hooks report Insert here; the engine resolves which
+    /// held keys act as the JAWS key ([`crate::settings::KeyboardSettings::resolve`]).
     pub insert: bool,
+    /// CapsLock is held (a JAWS key in the laptop layout).
+    pub caps_lock: bool,
+    /// ScrollLock is held.
+    pub scroll_lock: bool,
 }
 
 impl Modifiers {
@@ -66,6 +74,8 @@ pub struct KeyEvent {
     /// When the key was pressed, in milliseconds on the OS input clock (0 when unknown).
     /// Tells a command pressed twice quickly from two separate presses.
     pub time_ms: u64,
+    /// Whether Caps Lock was toggled on when the key was pressed, when the platform knows.
+    pub caps_lock_on: Option<bool>,
 }
 
 impl KeyEvent {
@@ -77,6 +87,7 @@ impl KeyEvent {
             is_repeat: false,
             text: None,
             time_ms: 0,
+            caps_lock_on: None,
         }
     }
 

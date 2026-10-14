@@ -9,6 +9,7 @@ pub mod event;
 pub mod input;
 pub mod linearize;
 pub mod native_focus;
+pub mod settings;
 pub mod speech;
 
 pub use aom::{AomNode, NodeStates, Role};

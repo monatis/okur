@@ -138,6 +138,8 @@ fn run_scenario(
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(spoken.clone()));
     // Actions succeed as they did live; their effects arrive as the recorded events.
     engine.set_actions(Box::new(sr_core::actions::RecordingActions::default()));
+    // JAWS's settings when the evidence was recorded.
+    engine.settings = replay_settings(&evidence);
     if desktop {
         engine.app_mode = sr_core::engine::AppMode::NativeControl;
     }
@@ -381,6 +383,25 @@ fn replay_clock(evidence: &Value) -> Result<Option<(FixedClock, i32)>, String> {
         .unwrap_or(0);
     let clock = FixedClock::new(LocalDateTime::from_unix_ms(0, offset), formats);
     Ok(Some((clock, offset)))
+}
+
+/// The settings JAWS ran with: from the evidence's recorded `DEFAULT.JCF` options, else the
+/// reference machine's configuration (unchanged since before any evidence was recorded).
+fn replay_settings(evidence: &Value) -> sr_core::settings::Settings {
+    use sr_core::settings::{KeyboardLayout, KeyboardSettings, Settings};
+    let mut settings = Settings::reference_machine();
+    let options = evidence.pointer("/provenance/jaws_settings/DEFAULT.JCF/Options");
+    if let Some(options) = options {
+        // JAWS writes only changed options: no KeyboardType means the desktop layout.
+        let layout = options.get("KeyboardType").and_then(Value::as_str);
+        let layout = if layout.is_some_and(|l| l.eq_ignore_ascii_case("Laptop")) {
+            KeyboardLayout::Laptop
+        } else {
+            KeyboardLayout::Desktop
+        };
+        settings.keyboard = KeyboardSettings::for_layout(layout);
+    }
+    settings
 }
 
 /// Presses and releases `chord` at `time_ms` (0: unknown) through the engine's live

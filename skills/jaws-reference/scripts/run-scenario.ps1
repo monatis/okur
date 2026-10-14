@@ -86,7 +86,8 @@ $KeyTable = @{
     'insert'=@(0x2D,$true); 'delete'=@(0x2E,$true); 'tab'=@(0x09,$false); 'enter'=@(0x0D,$false);
     'escape'=@(0x1B,$false); 'esc'=@(0x1B,$false); 'space'=@(0x20,$false); 'backspace'=@(0x08,$false);
     'semicolon'=@(0xBA,$false); 'apostrophe'=@(0xDE,$false);
-    'ctrl'=@(0xA2,$false); 'alt'=@(0xA4,$false); 'shift'=@(0xA0,$false); 'win'=@(0x5B,$true)
+    'ctrl'=@(0xA2,$false); 'alt'=@(0xA4,$false); 'shift'=@(0xA0,$false); 'win'=@(0x5B,$true);
+    'capslock'=@(0x14,$false); 'scrolllock'=@(0x91,$false)
 }
 
 function Resolve-Key([string]$name) {
@@ -199,6 +200,26 @@ $fixturePath = $null
 if ($scenario.fixture -match '^file:///(.+)$') { $fixturePath = [uri]::UnescapeDataString($Matches[1]) -replace '/', '\' }
 $chromeExe = @("C:\Program Files\Google\Chrome\Application\chrome.exe", "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe") | Where-Object { Test-Path $_ } | Select-Object -First 1
 $jfwExe = "C:\Program Files\Freedom Scientific\JAWS\2025\jfw.exe"
+
+# JAWS's user settings files, as sections of key=value pairs. A JCF holds only the options
+# changed from JAWS's defaults, so the evidence says which non-default settings were active
+# (e.g. KeyboardType=Laptop, TypingEcho=0, AutoFormsMode=0 on old-pc).
+function Read-JawsSettings([string]$name) {
+    $path = Join-Path $env:APPDATA "Freedom Scientific\JAWS\2025\Settings\enu\$name"
+    if (-not (Test-Path $path)) { return $null }
+    $ini = [ordered]@{}
+    $section = $null
+    foreach ($line in Get-Content $path -Encoding UTF8) {
+        $t = $line.Trim()
+        if ($t -eq '' -or $t.StartsWith(';')) { continue }
+        if ($t -match '^\[(.+)\]$') { $section = [ordered]@{}; $ini[$Matches[1]] = $section; continue }
+        if ($null -ne $section -and $t -match '^([^=]+)=(.*)$') { $section[$Matches[1]] = $Matches[2] }
+    }
+    return $ini
+}
+$jawsSettings = [ordered]@{ 'DEFAULT.JCF' = Read-JawsSettings 'DEFAULT.JCF' }
+if ($targetProc -eq 'chrome') { $jawsSettings['Chrome.JCF'] = Read-JawsSettings 'Chrome.JCF' }
+
 $expectedTitle = $null
 if ($fixturePath -and (Test-Path $fixturePath)) {
     $html = Get-Content -Raw $fixturePath
@@ -222,6 +243,7 @@ $evidence = [ordered]@{
         utc_offset_minutes = [int][TimeZoneInfo]::Local.GetUtcOffset((Get-Date)).TotalMinutes
         chrome_version = if ($chromeExe) { (Get-Item $chromeExe).VersionInfo.FileVersion } else { $null }
         jaws_version = if (Test-Path $jfwExe) { (Get-Item $jfwExe).VersionInfo.ProductVersion } else { $null }
+        jaws_settings = $jawsSettings
     }
     environment = [ordered]@{
         os_version = [System.Environment]::OSVersion.VersionString

@@ -9,9 +9,9 @@ use windows::Win32::Foundation::{LPARAM, LRESULT, WPARAM};
 use windows::Win32::System::Com::{CoInitializeEx, CoUninitialize, COINIT_MULTITHREADED};
 use windows::Win32::System::Threading::GetCurrentThreadId;
 use windows::Win32::UI::Input::KeyboardAndMouse::{
-    GetAsyncKeyState, VIRTUAL_KEY, VK_BACK, VK_CONTROL, VK_DELETE, VK_DOWN, VK_END, VK_ESCAPE,
-    VK_HOME, VK_INSERT, VK_LEFT, VK_MENU, VK_NEXT, VK_OEM_1, VK_OEM_7, VK_PRIOR, VK_RETURN,
-    VK_RIGHT, VK_SHIFT, VK_SPACE, VK_TAB, VK_UP,
+    GetAsyncKeyState, GetKeyState, VIRTUAL_KEY, VK_BACK, VK_CAPITAL, VK_CONTROL, VK_DELETE,
+    VK_DOWN, VK_END, VK_ESCAPE, VK_HOME, VK_INSERT, VK_LEFT, VK_MENU, VK_NEXT, VK_OEM_1, VK_OEM_7,
+    VK_PRIOR, VK_RETURN, VK_RIGHT, VK_SCROLL, VK_SHIFT, VK_SPACE, VK_TAB, VK_UP,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
     CallNextHookEx, DispatchMessageW, GetMessageW, PostThreadMessageW, SetWindowsHookExW,
@@ -22,9 +22,12 @@ use windows::Win32::UI::WindowsAndMessaging::{
 static ACTIVE_CALLBACK: Mutex<Option<HookCallback>> = Mutex::new(None);
 static CONSUMED_KEYS: Mutex<Option<HashSet<u32>>> = Mutex::new(None);
 static HOOK_THREAD_ID: AtomicU32 = AtomicU32::new(0);
-/// Whether the JAWS key (Insert) is held. Tracked here because the hook consumes Insert,
-/// so the system's asynchronous key state may not see it.
-static JAWS_KEY_HELD: AtomicBool = AtomicBool::new(false);
+/// Whether the keys that can be the JAWS key (Insert, CapsLock, ScrollLock) are held. Tracked
+/// here because the engine consumes the JAWS key, so the system's asynchronous key state may
+/// not see it.
+static INSERT_HELD: AtomicBool = AtomicBool::new(false);
+static CAPS_LOCK_HELD: AtomicBool = AtomicBool::new(false);
+static SCROLL_LOCK_HELD: AtomicBool = AtomicBool::new(false);
 
 pub struct WindowsKeyboardHook {
     running: ArcBool,
@@ -197,8 +200,20 @@ unsafe extern "system" fn low_level_keyboard_proc(
     }
 
     let vk_code = kbd.vkCode;
-    if vk_code == u32::from(VK_INSERT.0) {
-        JAWS_KEY_HELD.store(is_down, Ordering::Relaxed);
+    // A down event for a key already held is the keyboard's auto-repeat: holding CapsLock
+    // as the JAWS key must not count as pressing it twice.
+    let mut is_repeat = false;
+    let held_flag = match vk_code {
+        v if v == u32::from(VK_INSERT.0) => Some(&INSERT_HELD),
+        v if v == u32::from(VK_CAPITAL.0) => Some(&CAPS_LOCK_HELD),
+        v if v == u32::from(VK_SCROLL.0) => Some(&SCROLL_LOCK_HELD),
+        _ => None,
+    };
+    if let Some(flag) = held_flag {
+        is_repeat = is_down && flag.swap(is_down, Ordering::Relaxed);
+        if !is_down {
+            flag.store(false, Ordering::Relaxed);
+        }
     }
 
     // If key up was previously consumed on key down, consume key up too
@@ -219,19 +234,22 @@ unsafe extern "system" fn low_level_keyboard_proc(
     let shift = (GetAsyncKeyState(VK_SHIFT.0 as i32) as u16 & 0x8000) != 0;
     let win = ((GetAsyncKeyState(0x5B) as u16 & 0x8000) != 0) // VK_LWIN
         || ((GetAsyncKeyState(0x5C) as u16 & 0x8000) != 0); // VK_RWIN
-    let insert = JAWS_KEY_HELD.load(Ordering::Relaxed);
-
     let modifiers = Modifiers {
         ctrl,
         alt,
         shift,
         win,
-        insert,
+        insert: INSERT_HELD.load(Ordering::Relaxed),
+        caps_lock: CAPS_LOCK_HELD.load(Ordering::Relaxed),
+        scroll_lock: SCROLL_LOCK_HELD.load(Ordering::Relaxed),
     };
+    let insert = modifiers.insert || modifiers.caps_lock || modifiers.scroll_lock;
 
     let key = translate_vk_code(vk_code);
     let mut event = KeyEvent::new(key, modifiers, is_down);
     event.time_ms = u64::from(kbd.time);
+    event.is_repeat = is_repeat;
+    event.caps_lock_on = Some(GetKeyState(i32::from(VK_CAPITAL.0)) & 1 != 0);
     if !ctrl && !alt && !win && !insert {
         event.text = typed_char(vk_code, kbd.scanCode, shift);
     }
@@ -259,9 +277,7 @@ unsafe extern "system" fn low_level_keyboard_proc(
 /// echo. Flag 0x4 keeps `ToUnicodeEx` from changing the keyboard state, so dead keys still
 /// compose in the application.
 fn typed_char(vk: u32, scan: u32, shift: bool) -> Option<char> {
-    use windows::Win32::UI::Input::KeyboardAndMouse::{
-        GetKeyState, GetKeyboardLayout, ToUnicodeEx,
-    };
+    use windows::Win32::UI::Input::KeyboardAndMouse::{GetKeyboardLayout, ToUnicodeEx};
     use windows::Win32::UI::WindowsAndMessaging::{GetForegroundWindow, GetWindowThreadProcessId};
     let mut state = [0u8; 256];
     if shift {
@@ -302,6 +318,8 @@ fn translate_vk_code(vk: u32) -> Key {
         VK_BACK => Key::Backspace,
         VK_DELETE => Key::Delete,
         VK_INSERT => Key::Insert,
+        VK_CAPITAL => Key::CapsLock,
+        VK_SCROLL => Key::ScrollLock,
 
         // Physical-key bindings, as JAWS does: the key at the US ";" and "'" positions,
         // whatever character the active layout prints on it.
