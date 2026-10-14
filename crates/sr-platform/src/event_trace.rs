@@ -276,13 +276,15 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent>
         .iter()
         .rev()
         .find(|w| w.control_type == UIA_WINDOW);
-    // Without a UIA window around the focus, the window is the top-level one: the desktop is
-    // named by its virtual desktop ("Desktop 1"), as JAWS does; anything else by its title.
-    // Without either (older traces), the last window title stays, as before.
-    let top_window = active_window
-        .and_then(|w| w.name.as_deref())
-        .or(event.virtual_desktop.as_deref())
-        .or(event.top_window_title.as_deref());
+    // The window is named as JAWS names it: the desktop by its virtual desktop ("Desktop 1"),
+    // anything else by its top-level window's caption, which for Chrome names the profile the
+    // UIA name leaves out [obs, 209/s1: "... - Google Chrome - <profile>"]. Traces from before
+    // the caption was recorded (format 7) fall back to the UIA window's name.
+    let top_window = event
+        .virtual_desktop
+        .as_deref()
+        .or(event.top_window_title.as_deref())
+        .or(active_window.and_then(|w| w.name.as_deref()));
     let mut focus = focus_event_from_chain(
         &event.focus_chain,
         event.window_class.as_deref(),
@@ -1136,6 +1138,30 @@ mod tests {
     fn no_siblings_means_no_position() {
         let focus = focus_event_from_trace(&focus_event(Vec::new()));
         assert_eq!(focus.map(|f| f.item_index), Some(None));
+    }
+
+    /// Chrome's caption names the profile; its UIA window name does not.
+    #[test]
+    fn window_is_named_by_its_caption() {
+        const WINDOW: i32 = 50032;
+        const DOCUMENT: i32 = 50030;
+        let event = TraceEvent {
+            focus_chain: vec![
+                node(WINDOW, "Page - Google Chrome", false),
+                node(DOCUMENT, "Page", true),
+            ],
+            top_window_title: Some("Page - Google Chrome - Profile".to_owned()),
+            ..focus_event(Vec::new())
+        };
+        let focus = focus_event_from_trace(&event).and_then(|f| f.window_title);
+        assert_eq!(focus.as_deref(), Some("Page - Google Chrome - Profile"));
+        // Older traces: the UIA window's name.
+        let older = TraceEvent {
+            top_window_title: None,
+            ..event
+        };
+        let focus = focus_event_from_trace(&older).and_then(|f| f.window_title);
+        assert_eq!(focus.as_deref(), Some("Page - Google Chrome"));
     }
 
     /// The task switcher's items take focus through UIA only (Alt+Tab with Alt held).
