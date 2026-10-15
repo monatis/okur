@@ -1,69 +1,285 @@
-# Open-Source Rust Screen Reader
+# An open screen reader that keeps your JAWS muscle memory
 
-A lightweight, modern, open-source, and cross-platform screen reader implemented in Rust, designed for behavioral parity with **Freedom Scientific JAWS 2025**.
+A modern, open-source screen reader written in Rust. It speaks, navigates and behaves like
+**JAWS 2025**, down to its keystrokes, phrasing and reading of web pages and Windows
+applications. It is being built by AI agents in a **clean room**: they never see JAWS's
+code, only what JAWS says when keys are pressed on a separate lab machine. Every behavior
+they implement must match recorded JAWS evidence before it counts.
 
-This is an autonomous, agent-driven project using **[clean-room software engineering](https://en.wikipedia.org/wiki/Cleanroom_software_engineering)** and **[clean-room design](https://en.wikipedia.org/wiki/Clean-room_design)**, to be verified through a closed-loop automated harness against speech and interaction observations from live JAWS on Windows 10.
+> **Status (October 2026):** on Windows it is approaching everyday use. Web pages in Chrome,
+> File Explorer, Notepad, Windows Terminal, dialog boxes, the desktop, Alt+Tab and Windows
+> search are read as JAWS reads them. macOS and Linux have their accessibility layer; their keyboard and event plumbing
+> comes next. All figures below are tool output, not estimates.
 
-> **Project status (2026-10-14)**: early and not yet usable as a daily screen reader. An audit found that earlier parity claims were not backed by a real comparison against JAWS; see [`docs/handoff/2026-10-14-full-audit-of-prior-development.md`](docs/handoff/2026-10-14-full-audit-of-prior-development.md). The verification harness is being rebuilt first.
-
----
-
-## Clean-Room Software Engineering & Legal Interoperability
-
-This project adheres strictly to **clean-room software engineering** principles:
-- **No Proprietary Code or Binaries**: No source code from Freedom Scientific JAWS is ever copied, decompiled, disassembled, or reverse-engineered. The codebase is implemented entirely from scratch in modern, memory-safe, cross-platform Rust.
-- **Black-Box Functional Observation**: The verification harness observes JAWS strictly as a black box (keystroke inputs in, speech/braille announcements out) across synthetic HTML and application fixtures on an external reference machine.
-- **Interoperability & Fair Use**: Observing software behavior to create an interoperable, compatible implementation is protected fair use. Decades of user muscle memory—keystrokes, navigation shortcuts, announcement phrasing, and functional interaction patterns—constitute functional methods of operation and operational interfaces designed for the convenience and accessibility of screen reader users.
-
----
-
-## Architecture & Crates
-
-This project is organized as a Cargo workspace with modular crates:
-
-- **[`crates/sr-core`](file:///c:/Users/Gigabyte/screen-reader/crates/sr-core)**: Core semantic data structures, Accessibility Object Model (AOM), virtual buffer linearization, cursor navigation, interaction modes (Browse mode vs. Forms mode), and speech presentation formatting.
-- **[`crates/sr-platform`](file:///c:/Users/Gigabyte/screen-reader/crates/sr-platform)**: OS-level accessibility bridge adapters (Windows UIA/IA2, Linux AT-SPI2, macOS NSAccessibility) and input injection hooks.
-- **[`crates/sr-corpus`](file:///c:/Users/Gigabyte/screen-reader/crates/sr-corpus)**: Corpus scenario runner, evidence loader, and generated corpus manifest. (A real differential comparison against recorded JAWS speech is under construction; see `corpus/README.md`.)
-- **[`crates/sr-cli`](file:///c:/Users/Gigabyte/screen-reader/crates/sr-cli)**: Command-line interface and daemon runner for interactive accessibility execution and differential regression testing.
+| Measure | Result | Command |
+|---|---|---|
+| Steps matching JAWS's speech history, word for word | **818 of 844** | `sr-cli parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **171 of 172** | `sr-cli parity` |
+| Recorded JAWS scenarios / trials | **65 / 307** | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **877 passed, 0 failed** | `cargo test --workspace` |
+| Virtual buffer invariant violations | **0** | `sr-cli invariants` |
+| `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | pre-commit gate |
 
 ---
 
-## Corpus & Differential Testing
+## Why re-implement JAWS?
 
-Reference speech data and behavioral scenarios are located in the [`corpus/`](file:///c:/Users/Gigabyte/screen-reader/corpus/) directory:
-- `corpus/scenarios/`: Declarative JSON test scenarios.
-- `corpus/fixtures/`: Synthetic HTML/web test fixtures.
-- `corpus/evidence/`: JAWS 2025 speech transcripts recorded on `old-pc` by the capture tooling (scenarios 01–30, 5 trials each).
-- `corpus/unverified/`: Quarantined scenarios 31–65 whose evidence was not produced by the capture tooling.
-- `corpus/CORPUS_MANIFEST.json`: Generated catalog of scenarios, evidence statistics, and fixture SHA-256 hashes (never hand-edited).
-- `corpus/quality-report.md`: Report of the 2026-10-12 capture run for scenarios 01–30.
-- `corpus/evidence-v1.0.0/`: Preserved archive of initial pre-audit reference traces.
+People who are blind and use a screen reader learn it the way a pianist learns scales. After
+years at a keyboard, Insert+F7 lists links, H jumps to the next heading, Insert+T says the
+window title, CapsLock+Alt+W opens a Virtual Viewer, and none of it needs a thought. JAWS has
+shaped that muscle memory for three decades.
+
+Changing screen readers means unlearning it. The alternatives are good, but they speak in
+another vocabulary: other keys, other phrasing, other ideas of where the cursor is. So people
+stay with what their hands know, and today that is a commercial product that runs only on
+Windows.
+
+This project keeps the muscle memory and replaces everything underneath:
+- **Open source.**
+- **Memory-safe and fast**, written in Rust.
+- **Built to run on Windows and macOS** as first-class platforms, with Linux as a second tier.
+
+The keystrokes, the announcements and the navigation model are the interface people rely on,
+so they follow JAWS, checked step by step against recordings of it. Everything behind them is
+our own.
 
 ---
 
-## Documentation & Session Workflow (`docs/`)
+## How can AI agents build a screen reader?
 
-Engineering sessions are documented continuously in `docs/`:
-- **`docs/plans/`**: Milestone implementation plans for upcoming sessions.
-- **`docs/handoff/`**: Dated session handoff summaries with verification evidence.
-- **`docs/references/`**: User-facing documentation and architectural specifications.
+Clean-room design is an old idea: one team describes what a system does, and another, which has
+never seen its insides, builds a new one from that description. Here the description is not a
+document. It is **JAWS itself, observed as a black box**, and the builders are AI coding
+agents (Claude Code, among others) working in a loop with a verification harness.
 
-See [`AGENTS.md`](file:///c:/Users/Gigabyte/screen-reader/AGENTS.md) for the active session plan and agent development protocol.
+That only works if the agents' claims can be checked. An agent can confidently report "parity
+achieved" about code that does nothing of the kind, and on 2026-10-14 an audit of this project
+found exactly that: parity claims no tool had ever computed. Since then, the rule is simple.
+**Talk is cheap; the harness decides.** No behavior counts until a tool compares it with
+recorded JAWS evidence, and every number in a commit or handoff is pasted tool output
+([`AGENTS.md`](AGENTS.md), "Verification Integrity Rules").
+
+### The lab: two machines
+
+- **The development machine** builds and tests the code, replays recorded evidence, and runs
+  the screen reader live.
+- **`old-pc`, the reference lab:** a separate Windows 10 machine running **JAWS
+  2025.2505.43.400** with Chrome, used only as a black box. No JAWS code, script or binary is
+  ever copied, decompiled or read; the harness only presses keys there and records what JAWS
+  says.
+
+The agents reach the lab through **[OpenDesk](https://github.com/monatis/opendesk)**, our own
+open-source remote-desktop harness for AI agents. It runs commands on a remote machine, sends
+input, and reads its screen and UI, over a paired connection (`opendesk exec --peer old-pc
+"..."`). Files move between the machines through a shared folder, and every transfer is
+checked by hash.
+
+### Hearing exactly what JAWS says
+
+JAWS's speech history keeps text before JAWS processes symbols, so it is not quite what a user
+hears. To capture the real thing, the project includes the **SR Speech Recorder**
+([`crates/sr-sapi-recorder`](crates/sr-sapi-recorder)). It is a SAPI 5 voice that JAWS speaks
+through on the lab machine:
+- it logs every utterance JAWS sends it, with pitch changes such as JAWS's higher pitch for
+  capital letters;
+- it hands the text on to a real voice, so speech stays audible and its timing realistic.
+
+Scenarios recorded since the voice was installed keep both layers, the speech history and the
+spoken text. A tracer also records the accessibility events Windows raised during each trial,
+so replay feeds the engine the same events JAWS saw.
+
+### The loop
+
+Every feature goes around the same loop
+([`docs/references/verification-loop.md`](docs/references/verification-loop.md) has the full
+lifecycle):
+
+1. **Discover.** Start from a gap the user reports, a JAWS manual or keystroke list, or JAWS's
+   observed behavior, and write down what JAWS should say.
+2. **Record the reference.** Write a fixture (a web page or a small Windows app) and a
+   scenario of keystrokes, run it on `old-pc` several times, and keep JAWS's speech,
+   synthesizer text, event traces and provenance (OS, JAWS version, settings, script hash).
+3. **Implement** the behavior from scratch in Rust, with per-application behavior in named
+   modules, as JAWS keeps it in application scripts.
+4. **Test.** Replay every recorded scenario through the engine (`sr-cli parity`) and compare
+   each step with JAWS, on both layers. Results are ratcheted: a baseline file records them,
+   and a test fails if any step that matched stops matching.
+5. **Prove it live.** Run the screen reader against real applications with a debug log, and
+   measure its responsiveness (`sr-cli latency`).
+
+Each round ends with a dated handoff and the next plan in [`docs/`](docs/), so the next agent
+session starts where this one stopped.
+
+### Integrity rules
+
+From [`AGENTS.md`](AGENTS.md), enforced by tests and the commit gate where a machine can
+enforce them:
+1. Evidence is written only by capture tooling on the lab machine; never by hand.
+2. Evidence and engine code never land in the same commit.
+3. Generated artifacts (the corpus manifest, the parity and invariant baselines) are
+   regenerated, never edited.
+4. Every parity number or "verified" claim quotes the command that produced it.
+5. `cargo test` is hermetic: no live UI, speech, audio or network. Live checks are separate.
+6. A known but unimplemented JAWS behavior becomes a test asserting it, marked as a known gap.
+7. No fixture-shaped special cases: code never branches on a test page's text or a machine's
+   window titles.
 
 ---
 
-## Build, Test & Quality Gates
+## Rust, safety and quality gates
+
+A screen reader that crashes leaves a blind user without a computer, so crashing is treated as
+the worst possible bug.
+
+- **No panics in the screen reader's own crates.** `unwrap`, `expect`, `panic!`, `todo!`,
+  `unimplemented!` and `dbg!` are rejected at commit, in tests too. Unchecked indexing and string
+  slicing are clippy errors (`indexing_slicing`, `string_slice`).
+- **The vendored accessibility layer is held to the same standard.** Its production code
+  denies panicking calls in production code through each crate's `[lints]` table; only its
+  tests may panic.
+- **A gate on every agent commit.** `git commit` runs clippy with warnings denied, the
+  full test suite (which includes the parity and manifest checks), and the evidence/code
+  separation check. A stop hook keeps an agent from finishing its turn with code that is
+  unformatted or fails clippy.
+- **Responsive by construction.**
+  - The keyboard hook never waits more than 150 ms for the engine.
+  - Slow work (building a page's buffer, reading text, writing logs, printing to the console)
+    runs off the engine lock and off the event loop.
+  - A test fails if building a page's buffer stops being linear in its depth.
+
+### Performance, measured
+
+Measured on the development machine with `sr-cli latency` (from a live run's debug log) and
+`buffer_bench`, release build:
+
+| What | Before | After |
+|---|---|---|
+| Reading a focus change in a 300-item list (median) | 1,792 ms | **55 ms** |
+| The same, slowest 10% | 2,086 ms | **78 ms** |
+| Switching to a Windows Terminal window | 6.6 s stall | **no stall** |
+| Building a 9,866-node page's virtual buffer | 59 ms | **14 ms** |
+| A streamed chat reply (37 live-region updates) | a page capture per update (by design) | **2 captures** |
+| Speak call to audio reaching the device (OneCore, median) | | **5 ms** |
+| The engine handling a key (90th percentile) | | **0.1 ms or less** |
+
+Most of the gain came from measuring before optimizing. Each stage of an accessibility event
+read is timed in the debug log, which showed exactly where the cross-process calls went.
+
+---
+
+## What it does today (Windows)
+
+- **Web pages in browse mode** with the JAWS Virtual PC Cursor:
+  - quick navigation keys (headings and levels, links, form fields, tables, lists, landmarks,
+    and more);
+  - element lists, tables and complex headers, frames, single-page-app route changes;
+  - forms mode, automatic or manual.
+- **Live regions** announced as JAWS does. Streamed chat replies are read once, in phrases
+  paced by speech, rather than reread whole on every update (JAWS's own way remains available
+  with `--live-region-whole-text`).
+- **Windows applications** announced in JAWS's words:
+  - dialogs with their text and buttons;
+  - lists, combo boxes, trees, menus, the desktop, the Alt+Tab switcher, Windows search, File
+    Explorer;
+  - editing in text fields, with characters, words, lines, selections and Say Font.
+- **Virtual Viewer** (Insert+Alt+W) for windows, controls and consoles, including Windows
+  Terminal's text.
+- **Both keyboard layouts**, desktop and laptop, with Insert or CapsLock as the JAWS key.
+- **OneCore and SAPI 5 voices.**
+
+Reference documentation for these behaviors is in
+[`docs/references/`](docs/references/).
+
+---
+
+## Cross-platform
+
+| Platform | Tier | Status |
+|---|---|---|
+| Windows 10/11 | 1 | Runs today: UI Automation, IAccessible2, MSAA and WinEvents; low-level keyboard hook; OneCore and SAPI 5 speech |
+| macOS | 1 | The accessibility layer (AXUIElement) is in place; the keyboard event tap, event listener and speech are next |
+| Linux | 2 | The accessibility layer (AT-SPI2) is in place; best effort |
+
+Every OS-dependent part is a trait in the core (keyboard hook, speech output, accessibility
+events, application actions), with a mock implementation for tests. The engine never knows
+which platform it runs on.
+
+The cross-platform accessibility layer is **[xa11y](https://github.com/xa11y/xa11y)**,
+vendored in [`crates/xa11y`](crates/xa11y) and extended here
+([`VENDORED.md`](crates/xa11y/VENDORED.md)). Platform patterns were learned from NVDA's open
+source code; everything the user hears follows JAWS.
+
+---
+
+## Getting started
+
+Requires a recent stable Rust, on Windows 10 or 11.
 
 ```bash
-# Code formatting check
-cargo fmt --check
-
-# Strict lint check (must pass with 0 warnings)
-cargo clippy --all-targets --all-features -- -D warnings
-
-# Run all test suites
-cargo test
-
-# Run screen reader CLI
-cargo run --bin sr-cli -- --help
+cargo build --release --bin sr-cli
 ```
+
+Run the screen reader (stop it with Ctrl+C in its console):
+
+```bash
+target/release/sr-cli run --keyboard-layout laptop
+```
+
+Useful options:
+
+| Option | Effect |
+|---|---|
+| `--engine onecore` or `--engine sapi5` | the speech engine (default: OneCore, else SAPI 5) |
+| `--keyboard-layout desktop` or `laptop` | the JAWS keyboard layout |
+| `--live-region-whole-text` | read growing live regions as JAWS does |
+| `--debug-log <file>` | log keys, events and timings; summarize them with `sr-cli latency <file>` |
+
+Developer commands:
+
+```bash
+cargo fmt --check
+cargo clippy --all-targets --all-features -- -D warnings
+cargo test --workspace
+cargo run --bin sr-cli -- parity
+```
+
+---
+
+## Repository map
+
+- [`crates/sr-core`](crates/sr-core): the engine. It holds the accessibility object model and
+  the virtual buffer, and handles keys, focus and live regions, with speech in JAWS's phrasing.
+- [`crates/sr-platform`](crates/sr-platform): Windows (and future macOS and Linux) bindings.
+  These are the event tracer, keyboard hook, speech engines and application actions.
+- [`crates/sr-corpus`](crates/sr-corpus): parity replay, invariants, the corpus manifest and
+  the latency summary.
+- [`crates/sr-cli`](crates/sr-cli): the screen reader and every harness command (`run`,
+  `parity`, `evidence`, `trace`, `snapshot`, `latency`, `keys`, `jaws-history`, and more).
+- [`crates/sr-sapi-recorder`](crates/sr-sapi-recorder): the SR Speech Recorder voice.
+- [`crates/xa11y`](crates/xa11y): the vendored cross-platform accessibility layer.
+- [`corpus/`](corpus): fixtures, scenarios, recorded JAWS evidence, event traces, snapshots,
+  and the generated manifest and baselines.
+- [`skills/jaws-reference/`](skills/jaws-reference): the recording toolkit that runs on the
+  lab machine.
+- [`docs/`](docs): plans, handoffs and references. Start with [`AGENTS.md`](AGENTS.md) and the
+  [verification loop](docs/references/verification-loop.md).
+
+---
+
+## Clean room and interoperability
+
+- No source code, scripts, binaries or decompiled code from Freedom Scientific are copied,
+  bundled or examined. Everything here was written from scratch.
+- JAWS is observed only from the outside: keystrokes in, speech out, on fixtures this project
+  wrote.
+- The project's position is that keystrokes, announcement phrasing and navigation models are
+  functional methods of operation, an interoperability interface users depend on, and that
+  observing a program's behavior to build a compatible one is legitimate.
+
+JAWS is a trademark of Freedom Scientific (Vispero). This project is independent and is not
+affiliated with or endorsed by them.
+
+## License
+
+The workspace declares `MIT OR Apache-2.0` in [`Cargo.toml`](Cargo.toml). The vendored
+xa11y crates are MIT licensed ([`crates/xa11y/LICENSE`](crates/xa11y/LICENSE)).
