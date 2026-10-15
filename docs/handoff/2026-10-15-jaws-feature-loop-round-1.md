@@ -18,8 +18,10 @@ Buffer invariants: 0 violation(s)
 $ sr-cli corpus-manifest
 Corpus manifest is current.
 $ cargo test --workspace  (summed test-result lines)
-tests: 834 passed, 0 failed, 198 ignored
+tests: 847 passed, 0 failed, 198 ignored
 ```
+(After the dev-box session below; the parity lines did not change in it. Run with the
+untracked scenarios parked: each one without evidence counts as "could not run".)
 
 At the start of the round: 561/569, and no spoken layer.
 
@@ -96,20 +98,50 @@ Each item started from a user report or from the loop's discovery.
 ### New evidence
 Scenarios 207, 209, 307, 308, 309, 311, 312, 313 and 314 (see their `corpus:` commits).
 
+## Dev-box session (02:20–03:30, after old-pc went offline)
+
+The user allowed using the dev box (Windows 11 26200, JAWS 2025 running) while they slept.
+
+**Driving the dev box safely:**
+- **Keys:** scratchpad C# classes sent keys with SendInput, only while a named process owned the foreground. Before using them again, copy them into the skill as a proper tool.
+- **JAWS's speech:** read through FSAPI `CopySpeechHistoryToClipboard`, with the user's clipboard saved and restored.
+- **sr-cli:** ran with `--engine no-speech --speech-log --debug-log`, and was stopped after each test.
+- **Windows:** Win+M was undone with Win+Shift+M, and the fixture Chrome windows were closed.
+
+**These observations are research, not evidence.** Evidence comes only from old-pc. Each behavior the engine takes from them is marked "observed on the dev box" in the code, and has a scenario for old-pc (316, 317, 318, 319).
+
+**Fixed and checked live** (speech log against JAWS's history, same machine):
+
+| Commit | What | Live result |
+|---|---|---|
+| af27edc | A modifier pressed after the JAWS key was consumed, so the system saw Alt up and Insert+Alt+W became Insert+W. The hook now keeps consumed modifiers held. | Insert+Alt+W, CapsLock+Alt+W, Insert+Shift+V work |
+| f01d064 | `sr-cli run` started on a guessed page (Notepad was read as a web page). The tracer now records the current focus at start. | Starting with Notepad in front announces it |
+| ad27ba6 | Virtualize in a page | "The current location is already in a virtual view", as JAWS says |
+| b21cd19 | Alt+Tab held. UIA's focus event names the switcher's item while `GetFocusedElement` returns its input pane, so the item is read from the event's sender. New `sr_core::apps::task_switcher`. | "Claude \| To move to an item press the Arrow keys.", "JAWS Professional", "Command Prompt": identical to JAWS. The first switch after starting can miss item 1. |
+| 971afe1, 5a58fd0 | The desktop heading is lowercase "desktop", announced once | Identical to JAWS |
+| d03af8b | Virtualize Window on a dialog box: screen rows from the Win32 controls, with static text wrapped by GDI measurement at real DPI | Run dialog: 5 lines identical to JAWS |
+| 79cac42 | A dialog's own text, and "edit combo" (value, list position from the combo box, hint, access key) | Run dialog announcement identical to JAWS |
+| 5dde68c | Insert+Tab (Say Current Focus); Notepad's document as "edit \| Contains text" | Identical to JAWS for Notepad, the Run combo box, and OK |
+| 2f1fc62 | Native Say Font adds "Paragraph formatting left justified" | Identical to JAWS (the user's report) |
+
+**Still differing on the dev box:**
+- In the font viewer, JAWS moved through its lines; old-pc's evidence stays on the last line, as ours does.
+- The Claude app announces twice on arrival (focus, then page load).
+
 ## Not finished
 
 - **old-pc has been offline since about 01:30** (`rendezvous error: target_offline`). These are written but not recorded, and sit untracked in the working tree:
   - `corpus/scenarios/208-web-textarea-character-review.json` (re-record with the fixed tracer);
   - `315-desktop-richedit-lines-and-font.json`, with fixture `corpus/fixtures/desktop-richedit.ps1`;
   - `316-desktop-show-desktop.json`;
-  - `317-desktop-alt-tab-hold.json`.
+  - `317-desktop-alt-tab-hold.json`;
+  - `318-web-virtualize-in-browse-mode.json`;
+  - `319-desktop-run-dialog-viewer.json`.
 
   A scenario without evidence counts as "could not run", so they are committed only with their evidence.
-- **Native Say Font's paragraph formatting.** The user reports JAWS in Notepad: "font is: consolas 11 point, paragraph formatting: left justified". The exact tokens come from 315.
-- **Not yet verified live, needing the user's Windows 11 or old-pc:**
-  - Alt+Tab with Alt held;
-  - Win+M ("Desktop");
-  - Insert+T on the desktop.
+- **The dev box's research needs old-pc evidence.** Alt+Tab, Win+M, Insert+T on the desktop, Say Font in Notepad, the Run dialog, and Insert+Tab now match JAWS live on Windows 11, but old-pc (Windows 10) has to record them before they count as parity.
+- **Classic Notepad's font size** (314/s1, JAWS: "22 point").
+- **Alignments other than "left justified"** in Say Font.
 
 ## Lab notes (old-pc)
 - **JAWS uses the "SAPI 5X 64" voice profile with the SR Speech Recorder voice, not the original Eloquence profile.** Settings: punctuation Most, rate 11, Upper Case Pitch Change 20.
