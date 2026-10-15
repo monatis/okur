@@ -74,14 +74,6 @@ pub enum ChangeKind {
     Selection,
 }
 
-/// How much text around the caret a navigation key reads in an edit.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-pub enum CaretUnit {
-    Character,
-    Word,
-    Line,
-}
-
 /// Menu mode transitions (MSAA `EVENT_SYSTEM_MENU*`). Focus within menus arrives as focus
 /// events on [`Role::MenuItem`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]

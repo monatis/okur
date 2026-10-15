@@ -43,7 +43,7 @@ impl ScreenReaderEngine {
             // Keep the field's known text current (no speech follows), so the next edit key
             // (Backspace) is spoken from the text as typed.
             if let Some(actions) = &self.actions {
-                actions.read_at_caret(crate::event::CaretUnit::Character);
+                actions.read_at_caret(self.last_text.as_ref());
             }
         }
     }
@@ -54,7 +54,7 @@ impl ScreenReaderEngine {
         tracing::debug!(?key, "edit key; reading the field");
         self.pending_edit = Some(key);
         if let Some(actions) = &self.actions {
-            actions.read_at_caret(crate::event::CaretUnit::Character);
+            actions.read_at_caret(self.last_text.as_ref());
         }
     }
 

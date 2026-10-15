@@ -21,7 +21,7 @@ pub use windows_actions::WindowsActions;
 mod windows_actions {
     use super::unique_id;
     use crate::text_context::read_focused;
-    use okur_core::{AccessibilityEvent, CaretUnit};
+    use okur_core::{AccessibilityEvent, TextContext};
     use std::sync::mpsc::{channel, Sender};
     use std::sync::Mutex;
     use std::time::{Duration, Instant};
@@ -36,11 +36,15 @@ mod windows_actions {
     /// How long to wait for the application to act on a key.
     const SETTLE: Duration = Duration::from_millis(250);
     const POLL: Duration = Duration::from_millis(15);
+    /// The application's head start on the first read: an idle application has acted on a
+    /// key within a millisecond or two of the hook passing it on.
+    const HEAD_START: Duration = Duration::from_millis(3);
 
     enum Request {
         Object(i32, Ia2Action),
-        /// The field's text once the application has acted on a key.
-        Text,
+        /// The field's text once the application has acted on a key, compared with the
+        /// field as the engine last knew it.
+        Text(Option<TextContext>),
         /// The focused text as it is now, answered even when there is none.
         TextNow,
         /// A chord of virtual keys, sent marked as the screen reader's own.
@@ -90,9 +94,9 @@ mod windows_actions {
                     // the latest key. Page actions still run, in order.
                     let mut batch = vec![first];
                     batch.extend(rx.try_iter());
-                    let last_text = batch.iter().rposition(|r| matches!(r, Request::Text));
+                    let last_text = batch.iter().rposition(|r| matches!(r, Request::Text(_)));
                     let batch = batch.into_iter().enumerate().filter_map(|(i, r)| {
-                        (!matches!(r, Request::Text) || Some(i) == last_text).then_some(r)
+                        (!matches!(r, Request::Text(_)) || Some(i) == last_text).then_some(r)
                     });
                     for request in batch {
                         match request {
@@ -112,7 +116,7 @@ mod windows_actions {
                                     tracing::warn!("{action:?} on IA2 object {id} failed: {e}");
                                 }
                             }
-                            Request::Text => {
+                            Request::Text(before) => {
                                 let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref())
                                 else {
                                     tracing::warn!(
@@ -121,7 +125,7 @@ mod windows_actions {
                                     continue;
                                 };
                                 let started = Instant::now();
-                                let context = read_after_key(uia);
+                                let context = read_after_key(uia, before);
                                 // Offsets, not the text: a document's whole text on every key
                                 // made the debug log huge.
                                 tracing::debug!(
@@ -199,28 +203,41 @@ mod windows_actions {
         }
     }
 
-    /// The field's state once the application has acted on the key: read as the key is
-    /// passed on, then polled until it changes or the settle time passes (a key at a
-    /// boundary changes nothing).
-    fn read_after_key(uia: &IUIAutomation) -> Option<okur_core::TextContext> {
-        let before = read_focused(uia);
+    /// The field's state once the application has acted on the key.
+    ///
+    /// An idle application acts on a key before a read made as the key is passed on can
+    /// reach it, so such a read is no "before": with it, an arrow key often waited the whole
+    /// settle time for a change that had already happened (p90 280 ms, `okur latency`). The
+    /// field as the engine last knew it (`known`) is the "before". After a short head start
+    /// the field is read; unchanged, it is polled until it changes or the settle time passes
+    /// (a key at a boundary changes nothing). Without a known state, a first read is the
+    /// "before", as it was.
+    fn read_after_key(uia: &IUIAutomation, known: Option<TextContext>) -> Option<TextContext> {
         let started = Instant::now();
-        let mut now = before.clone();
-        while started.elapsed() < SETTLE {
+        let (before, mut now) = match known {
+            Some(known) => {
+                std::thread::sleep(HEAD_START);
+                (Some(known), read_focused(uia))
+            }
+            None => {
+                let before = read_focused(uia);
+                (before.clone(), before)
+            }
+        };
+        while now == before && started.elapsed() < SETTLE {
             std::thread::sleep(POLL);
             now = read_focused(uia);
-            if now != before {
-                // Changed: wait until two reads agree, so a selection still being extended
-                // (Ctrl+Shift+End over many lines) is read whole.
-                loop {
-                    std::thread::sleep(POLL);
-                    let again = read_focused(uia);
-                    if again == now || started.elapsed() >= SETTLE * 2 {
-                        break;
-                    }
-                    now = again;
+        }
+        // A selection still being extended (Ctrl+Shift+End over many lines) is read once two
+        // reads agree; a caret move is read at once.
+        if now != before && now.as_ref().is_some_and(|c| c.selection.is_some()) {
+            loop {
+                std::thread::sleep(POLL);
+                let again = read_focused(uia);
+                if again == now || started.elapsed() >= SETTLE * 2 {
+                    break;
                 }
-                break;
+                now = again;
             }
         }
         now
@@ -236,8 +253,8 @@ mod windows_actions {
                 .is_some_and(|id| self.send(Request::Object(id, Ia2Action::DefaultAction)))
         }
 
-        fn read_at_caret(&self, _unit: CaretUnit) -> bool {
-            self.send(Request::Text)
+        fn read_at_caret(&self, before: Option<&TextContext>) -> bool {
+            self.send(Request::Text(before.cloned()))
         }
 
         fn read_text(&self) -> bool {

@@ -16,11 +16,13 @@ pub trait ApplicationActions: Send {
     /// Requests the element's default action (click a button or link, toggle a check box).
     fn activate(&self, node: &AomNode) -> bool;
 
-    /// Asks for the text at the focused edit's caret once the application has handled the
-    /// navigation key being passed to it. The text arrives later as
+    /// Asks for the focused field's text, caret and selection once the application has
+    /// handled the key being passed to it. `before` is the field as the engine last knew it:
+    /// the application may act on the key before the platform's first read, so the read
+    /// compares with it to see the key's effect. The text arrives later as
     /// [`crate::event::AccessibilityEvent::TextContext`]. Returns false when unsupported.
-    fn read_at_caret(&self, unit: crate::event::CaretUnit) -> bool {
-        let _ = unit;
+    fn read_at_caret(&self, before: Option<&crate::event::TextContext>) -> bool {
+        let _ = before;
         false
     }
 
@@ -99,9 +101,9 @@ impl ApplicationActions for RecordingActions {
         self.record("activate", node)
     }
 
-    fn read_at_caret(&self, unit: crate::event::CaretUnit) -> bool {
+    fn read_at_caret(&self, _before: Option<&crate::event::TextContext>) -> bool {
         if let Ok(mut log) = self.log.lock() {
-            log.push((format!("caret {unit:?}"), 0));
+            log.push(("caret".to_owned(), 0));
         }
         true
     }
