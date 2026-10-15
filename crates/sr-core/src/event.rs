@@ -23,6 +23,12 @@ pub struct TextContext {
     /// The font at the caret, when the field reports one (Say Font).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub font: Option<FontInfo>,
+    /// The word around the caret as `(start, end)`, by the field's own word unit (UIA), where
+    /// its words differ from runs between spaces: Windows 11 Notepad stops Ctrl+Right at a
+    /// comma, which JAWS reads as a word of its own ("line", ",", "with"; dev box). `None`
+    /// where the field reports no word unit (Win32 edits): words then end at whitespace.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub word: Option<(usize, usize)>,
 }
 
 /// The font at a text field's caret, as UIA text attributes or a rich edit report it.

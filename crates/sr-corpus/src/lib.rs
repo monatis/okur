@@ -185,6 +185,7 @@ mod tests {
                 caret,
                 selection: None,
                 font: None,
+                word: None,
             }))
         };
         report(&mut engine, "Zed", 3);

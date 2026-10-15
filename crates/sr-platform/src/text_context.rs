@@ -49,6 +49,7 @@ mod reader {
                 }),
                 text: state.text,
                 font: None,
+                word: None,
             }),
             // A Chromium page whose focused object has no text.
             Ok(None) => None,
@@ -118,6 +119,7 @@ mod reader {
                     .then(|| (utf16_to_chars(&text, start), utf16_to_chars(&text, end))),
                 text,
                 font: win32_font(hwnd),
+                word: None,
             })
         }
     }
@@ -156,11 +158,28 @@ mod reader {
             let selection = pattern.GetSelection().ok()?.GetElement(0).ok()?;
             let start = offset_of(&document, &selection, TextPatternRangeEndpoint_Start)?;
             let end = offset_of(&document, &selection, TextPatternRangeEndpoint_End)?;
+            // The word at the caret by the field's own word unit.
+            let word = selection.Clone().ok().and_then(|range| {
+                use windows::Win32::UI::Accessibility::TextUnit_Word;
+                range
+                    .MoveEndpointByRange(
+                        TextPatternRangeEndpoint_End,
+                        &range,
+                        TextPatternRangeEndpoint_Start,
+                    )
+                    .ok()?;
+                range.ExpandToEnclosingUnit(TextUnit_Word).ok()?;
+                Some((
+                    offset_of(&document, &range, TextPatternRangeEndpoint_Start)?,
+                    offset_of(&document, &range, TextPatternRangeEndpoint_End)?,
+                ))
+            });
             Some(TextContext {
                 text,
                 caret: start,
                 selection: (start < end).then_some((start, end)),
                 font: uia_font(&selection),
+                word,
             })
         }
     }

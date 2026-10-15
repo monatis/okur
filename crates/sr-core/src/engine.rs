@@ -2538,6 +2538,7 @@ mod tests {
                 alignment: Some("left".to_owned()),
                 ..Default::default()
             }),
+            word: None,
         });
         engine.handle_focus_event(&focus);
         assert_eq!(
@@ -2934,6 +2935,7 @@ mod tests {
             caret: 2,
             selection: None,
             font: None,
+            word: None,
         });
         engine.handle_focus_event(&notepad);
         speech.take();
@@ -3096,6 +3098,7 @@ mod tests {
                 caret: 3,
                 selection: None,
                 font: None,
+                word: None,
             },
         ));
         assert_eq!(

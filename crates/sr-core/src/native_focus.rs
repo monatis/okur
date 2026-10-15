@@ -770,6 +770,7 @@ mod tests {
             caret: 0,
             selection: None,
             font: None,
+            word: None,
         });
         assert_eq!(
             norm(&focus_speech(&notepad, None)),

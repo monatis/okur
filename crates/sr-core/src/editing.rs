@@ -120,19 +120,40 @@ pub fn line_at(context: &TextContext) -> String {
     text.get(start..end).unwrap_or_default().iter().collect()
 }
 
-/// The word starting at the caret (where Ctrl+Left/Right leave it).
+/// The field's own word around the caret, when it reports one that holds the caret.
+fn field_word(context: &TextContext) -> Option<(usize, usize)> {
+    context
+        .word
+        .filter(|&(start, end)| start <= context.caret && context.caret < end)
+}
+
+/// The word starting at the caret (where Ctrl+Left/Right leave it): to the end of the
+/// field's word, or to the next space.
 fn word_at(context: &TextContext) -> String {
-    chars(&context.text)
-        .get(context.caret..)
+    let text = chars(&context.text);
+    if let Some((_, end)) = field_word(context) {
+        let word: String = text
+            .get(context.caret..end)
+            .unwrap_or_default()
+            .iter()
+            .collect();
+        return word.trim().to_owned();
+    }
+    text.get(context.caret..)
         .unwrap_or_default()
         .iter()
         .take_while(|c| !c.is_whitespace())
         .collect()
 }
 
-/// The word around the caret, whole (Say Word reads it wherever in the word the caret is).
+/// The word around the caret, whole (Say Word reads it wherever in the word the caret is):
+/// the field's word, or the run between spaces.
 pub fn word_around(context: &TextContext) -> String {
     let text = chars(&context.text);
+    if let Some((start, end)) = field_word(context) {
+        let word: String = text.get(start..end).unwrap_or_default().iter().collect();
+        return word.trim().to_owned();
+    }
     let caret = context.caret.min(text.len());
     let start = text
         .get(..caret)
@@ -263,7 +284,24 @@ mod tests {
             caret,
             selection,
             font: None,
+            word: None,
         }
+    }
+
+    /// Windows 11 Notepad's words (UIA): Ctrl+Right stops at "line", then at "," alone
+    /// (JAWS on the dev box: "line", ",", "with").
+    #[test]
+    fn a_fields_own_word_unit_decides_words() {
+        let text = "Second line, with";
+        let at = |caret: usize, word: (usize, usize)| TextContext {
+            word: Some(word),
+            ..ctx(text, caret, None)
+        };
+        assert_eq!(word_at(&at(7, (7, 11))), "line");
+        assert_eq!(word_at(&at(11, (11, 13))), ",");
+        assert_eq!(word_around(&at(9, (7, 11))), "line");
+        // Without a word unit, a word runs to the next space.
+        assert_eq!(word_at(&ctx(text, 7, None)), "line,");
     }
 
     // The 305 sequence on the field "Ada" (caret at the end after the reset End key).
