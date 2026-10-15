@@ -534,6 +534,8 @@ pub struct EventConverter {
     focused: Option<(isize, i32, i32, Option<String>)>,
     /// The last focus as the engine received it.
     last_focus: Option<okur_core::FocusEvent>,
+    /// The focused control's own name, from the last focus event's focus chain.
+    focused_control: Option<String>,
 }
 
 impl EventConverter {
@@ -582,6 +584,7 @@ impl EventConverter {
                 focus.text = event.text_context.clone();
                 let name = event.object.as_ref().and_then(|o| o.name.clone());
                 self.focused = Some((event.hwnd, event.id_object, event.id_child, name));
+                self.focused_control = focus.name.clone();
                 self.last_focus = Some(focus.clone());
                 return Some(AccessibilityEvent::Focus(focus));
             }
@@ -600,8 +603,14 @@ impl EventConverter {
         let (hwnd, id_object, id_child, name) = self.focused.as_ref()?;
         let same_object =
             event.hwnd == *hwnd && event.id_object == *id_object && event.id_child == *id_child;
-        let same_name =
-            name.is_some() && event.object.as_ref().and_then(|o| o.name.as_ref()) == name.as_ref();
+        // The focus event's MSAA object can be the browser window while the focused control is
+        // a page button (focus left on it, then Space expanded it, GitHub): the control's own
+        // name, from the focus chain, is compared too.
+        let object_name = event.object.as_ref().and_then(|o| o.name.as_ref());
+        let control_name = self.focused_control.as_ref();
+        let focus_on_window = control_name.is_some() && name.as_ref() != control_name;
+        let same_name = object_name.is_some()
+            && (object_name == name.as_ref() || (focus_on_window && object_name == control_name));
         if !(same_object || same_name) {
             return None;
         }
@@ -1856,6 +1865,49 @@ mod tests {
                 if item.item_index == Some(1) && item.item_count == Some(5)),
             "{events:?}"
         );
+    }
+
+    /// Focus reported on the browser window while a page button is focused, then the button
+    /// expanded with Space (GitHub's "Solutions", dev box): the change is the focused
+    /// control's, so it is passed on. Another object's change is not.
+    #[test]
+    fn a_change_of_the_control_focused_inside_a_window_is_passed_on() {
+        const BUTTON: i32 = 50000;
+        let object = |name: &str| {
+            Some(TraceObject {
+                role: None,
+                name: Some(name.to_owned()),
+                value: None,
+                states: 0,
+            })
+        };
+        let solutions = UiaNode {
+            expand_collapse_state: Some(1),
+            ..node(BUTTON, "Solutions", true)
+        };
+        let focus = TraceEvent {
+            object: object("Page - Google Chrome"),
+            focus_chain: vec![solutions.clone()],
+            ..focus_event(Vec::new())
+        };
+        let change = |name: &str| TraceEvent {
+            event: "state_change".to_owned(),
+            hwnd: 7,
+            id_child: -16936,
+            object: object(name),
+            focus_chain: vec![solutions.clone()],
+            ..focus_event(Vec::new())
+        };
+        let mut converter = EventConverter::default();
+        assert_eq!(converter.convert(&focus).len(), 1);
+        assert!(
+            matches!(
+                converter.convert(&change("Solutions")).as_slice(),
+                [okur_core::AccessibilityEvent::Change { .. }]
+            ),
+            "the focused button's change"
+        );
+        assert!(converter.convert(&change("Pricing")).is_empty());
     }
 
     /// Chrome's caption names the profile; its UIA window name does not.

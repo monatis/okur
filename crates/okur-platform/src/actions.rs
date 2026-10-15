@@ -249,7 +249,13 @@ mod windows_actions {
         match action {
             // SAFETY: a UIA call on a valid element.
             Ia2Action::Focus => unsafe { element.SetFocus() }.map_err(|e| e.to_string()),
-            Ia2Action::DefaultAction => do_default_action(&element).map_err(|e| e.to_string()),
+            // Focus first, as IA2's default action leaves it on the object: its state
+            // changes are then the focused control's, which are read.
+            Ia2Action::DefaultAction => {
+                // SAFETY: a UIA call on a valid element.
+                let _ = unsafe { element.SetFocus() };
+                do_default_action(&element).map_err(|e| e.to_string())
+            }
         }
     }
 

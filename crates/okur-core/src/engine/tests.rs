@@ -21,6 +21,45 @@ fn create_test_buffer() -> VirtualBuffer {
     VirtualBuffer::from_aom(&aom)
 }
 
+/// Space on a page's disclosure button opens it: JAWS 2025 says "expanded", then
+/// "collapsed" when it closes (dev box, GitHub's "Solutions" menu button).
+#[test]
+fn a_page_buttons_expanded_state_is_spoken() {
+    let mut button = AomNode::new(2, Role::Button).with_name("Solutions");
+    button.states.expanded = Some(false);
+    let page = AomNode::new(0, Role::Document)
+        .with_name("GitHub")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Site"),
+            button,
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let changed = |expanded: bool| {
+        let mut control = FocusEvent::new(Role::Button)
+            .with_node_id(2)
+            .with_name("Solutions");
+        control.in_document = true;
+        control.states.expanded = Some(expanded);
+        AccessibilityEvent::Change {
+            kind: crate::event::ChangeKind::State,
+            control,
+        }
+    };
+    assert_eq!(
+        engine.handle_accessibility_event(&changed(true)).as_deref(),
+        Some(" \u{1d}expanded\u{1e} ")
+    );
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&changed(false))
+            .as_deref(),
+        Some(" \u{1d}collapsed\u{1e} ")
+    );
+    // The same state again says nothing.
+    assert_eq!(engine.handle_accessibility_event(&changed(false)), None);
+}
+
 /// A page captured again (read quickly first, then in full; or after a live region grew
 /// above the cursor) keeps the virtual cursor on its line, found by its text.
 #[test]

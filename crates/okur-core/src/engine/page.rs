@@ -98,9 +98,22 @@ impl ScreenReaderEngine {
             {
                 crate::linearize::state_marker("selected")
             }
+            // A disclosure button opened or closed (Space or Enter on it): JAWS 2025 says the
+            // new state (dev box, GitHub's "Solutions" menu button: " expanded ").
+            Role::Button | Role::MenuButton
+                if control.states.expanded.is_some()
+                    && before.states.expanded != control.states.expanded =>
+            {
+                crate::linearize::state_marker(if control.states.expanded == Some(true) {
+                    "expanded"
+                } else {
+                    "collapsed"
+                })
+            }
             _ => return None,
         };
         let rebuilt = self.cursor.buffer.with_node_changed(id, |node| {
+            node.states.expanded = control.states.expanded.or(node.states.expanded);
             node.states.checked = control.states.checked;
             node.states.selected = control.states.selected;
             if control.value.is_some() {
