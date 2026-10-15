@@ -130,6 +130,21 @@ fn word_at(context: &TextContext) -> String {
         .collect()
 }
 
+/// The word around the caret, whole (Say Word reads it wherever in the word the caret is).
+pub fn word_around(context: &TextContext) -> String {
+    let text = chars(&context.text);
+    let caret = context.caret.min(text.len());
+    let start = text
+        .get(..caret)
+        .and_then(|before| before.iter().rposition(|c| c.is_whitespace()))
+        .map_or(0, |i| i + 1);
+    let end = text
+        .get(caret..)
+        .and_then(|after| after.iter().position(|c| c.is_whitespace()))
+        .map_or(text.len(), |i| caret + i);
+    text.get(start..end).unwrap_or_default().iter().collect()
+}
+
 fn selected_text(context: &TextContext) -> String {
     let text = chars(&context.text);
     match context.selection {

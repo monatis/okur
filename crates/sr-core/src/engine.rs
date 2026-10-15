@@ -1786,14 +1786,27 @@ impl ScreenReaderEngine {
     /// A JAWS key command (Insert+…). In a text field the reading commands read the field;
     /// elsewhere they run as virtual cursor or application commands.
     fn jaws_key_command(&mut self, event: &KeyEvent) {
-        if self.editing_text() && crate::editing::EditKey::of(event).is_some() {
+        let layout_command = self.settings.keyboard.layout_command(event);
+        let say_line =
+            layout_command == Some("SayLine") || crate::editing::EditKey::of(event).is_some();
+        if self.editing_text() && say_line {
             // Say Line does not change the field, so no report follows: speak the field's
-            // last known text now, or read it when none is known [obs, 305/s9, s15].
+            // last known text now, or read it when none is known [obs, 305/s9, s15]. A
+            // multi-line document (Notepad) gives the line alone (JAWS, dev box).
             let key = crate::editing::EditKey::SayLine;
             match self.last_text.clone() {
                 Some(context) => {
-                    let field = self.text_field_line();
-                    if let Some(speech) = crate::editing::speech(key, None, &context, &field) {
+                    let document = self
+                        .last_native_focus
+                        .as_ref()
+                        .is_some_and(|f| f.role == Role::Document);
+                    let speech = if document {
+                        Some(crate::editing::line_at(&context).trim().to_owned())
+                            .filter(|l| !l.is_empty())
+                    } else {
+                        crate::editing::speech(key, None, &context, &self.text_field_line())
+                    };
+                    if let Some(speech) = speech {
                         self.speech.speak(&speech, true);
                     }
                 }
@@ -1801,7 +1814,21 @@ impl ScreenReaderEngine {
             }
             return;
         }
-        if let Some(cmd) = event.to_command_string() {
+        if self.editing_text() && layout_command == Some("SayWord") {
+            let word = self
+                .last_text
+                .as_ref()
+                .map(crate::editing::word_around)
+                .unwrap_or_default();
+            if !word.trim().is_empty() {
+                self.speech.speak(word.trim(), true);
+            }
+            return;
+        }
+        if let Some(cmd) = layout_command
+            .map(str::to_owned)
+            .or_else(|| event.to_command_string())
+        {
             let cmd = self.repeated_command(cmd, event.time_ms);
             let _ = self.execute_command(&cmd);
         }
@@ -2867,6 +2894,46 @@ mod tests {
                 .map(|mut s| s.drain(..).collect())
                 .unwrap_or_default()
         }
+    }
+
+    /// The laptop layout's reading keys in Windows 11 Notepad (JAWS 2025 on the dev box):
+    /// CapsLock+I "First line of the viewer test", CapsLock+K "First", and Insert+Up the
+    /// line alone in a multi-line document.
+    #[test]
+    fn laptop_reading_keys_in_a_document() {
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+        let speech = SharedSpeech::default();
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+        engine.settings = crate::settings::Settings::reference_machine();
+        let mut notepad = FocusEvent::new(Role::Document)
+            .with_name("Text editor")
+            .with_window_title("viewer-test.txt - Notepad");
+        notepad.text = Some(crate::event::TextContext {
+            text: "First line of the viewer test\rSecond line".to_owned(),
+            caret: 2,
+            selection: None,
+            font: None,
+        });
+        engine.handle_focus_event(&notepad);
+        speech.take();
+        let caps = |key| {
+            let mut event = KeyEvent::new(key, Modifiers::none(), true);
+            event.modifiers.caps_lock = true;
+            event
+        };
+        engine.handle_key_event(&caps(Key::Alpha('I')));
+        engine.handle_key_event(&caps(Key::Alpha('K')));
+        let mut say_line = KeyEvent::new(Key::UpArrow, Modifiers::none(), true);
+        say_line.modifiers.insert = true;
+        engine.handle_key_event(&say_line);
+        assert_eq!(
+            speech.take(),
+            [
+                "First line of the viewer test",
+                "First",
+                "First line of the viewer test"
+            ]
+        );
     }
 
     /// In the laptop layout CapsLock is the JAWS key and Insert works as well; CapsLock

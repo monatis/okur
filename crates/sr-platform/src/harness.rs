@@ -41,6 +41,10 @@ pub fn virtual_key(name: &str) -> Option<u16> {
         "enter" => 0x0D,
         "space" => 0x20,
         "backspace" => 0x08,
+        "comma" | "," => 0xBC,
+        "period" | "." => 0xBE,
+        "semicolon" | ";" => 0xBA,
+        "apostrophe" | "'" => 0xDE,
         other => {
             let mut chars = other.chars();
             return match (chars.next(), chars.next()) {

@@ -63,6 +63,22 @@ impl KeyboardSettings {
         }
     }
 
+    /// The reading command a JAWS-key chord is in this layout, where the layout has its own:
+    /// the laptop layout reads the current line with CapsLock+I and the current word with
+    /// CapsLock+K (JAWS 2025, laptop layout, observed on the dev box: "First line of the
+    /// viewer test", "First"). `event` is resolved (`modifiers.insert` is the JAWS key).
+    pub fn layout_command(&self, event: &KeyEvent) -> Option<&'static str> {
+        let m = &event.modifiers;
+        if self.layout != KeyboardLayout::Laptop || !m.insert || m.ctrl || m.alt || m.shift {
+            return None;
+        }
+        match event.key {
+            Key::Alpha(c) if c.eq_ignore_ascii_case(&'I') => Some("SayLine"),
+            Key::Alpha(c) if c.eq_ignore_ascii_case(&'K') => Some("SayWord"),
+            _ => None,
+        }
+    }
+
     /// `event` with the JAWS modifier (`modifiers.insert`) set when any JAWS key is held,
     /// and cleared when only a key that is not a JAWS key is held.
     pub fn resolve(&self, event: &KeyEvent) -> KeyEvent {
