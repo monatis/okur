@@ -143,6 +143,46 @@ pub fn line_at(context: &TextContext) -> String {
     text.get(start..end).unwrap_or_default().iter().collect()
 }
 
+/// A page field's word around `caret` (in characters), as Chrome moves by words and JAWS
+/// reads them (dev box, 2026-10-16): letters, digits and `_` make a word, and so does a run
+/// of punctuation ("dog", ","; "std", "::", "collections"); an apostrophe between letters
+/// and a point or comma between digits stay inside ("can't", "3.5"). `None` on a space.
+pub fn web_word_at(text: &str, caret: usize) -> Option<(usize, usize)> {
+    let text = chars(text);
+    let at = |i: usize| text.get(i).copied();
+    let joins = |i: usize| {
+        let (before, after) = (i.checked_sub(1).and_then(at), at(i + 1));
+        match at(i) {
+            Some('\'' | '\u{2019}') => {
+                before.is_some_and(char::is_alphabetic) && after.is_some_and(char::is_alphabetic)
+            }
+            Some('.' | ',') => {
+                before.is_some_and(|c| c.is_ascii_digit())
+                    && after.is_some_and(|c| c.is_ascii_digit())
+            }
+            _ => false,
+        }
+    };
+    // Some(true) for a word character, Some(false) for punctuation, None for a space.
+    let class = |i: usize| -> Option<bool> {
+        let c = at(i)?;
+        if c.is_whitespace() {
+            None
+        } else {
+            Some(c.is_alphanumeric() || c == '_' || joins(i))
+        }
+    };
+    let kind = class(caret)?;
+    let start = (0..caret)
+        .rev()
+        .find(|&i| class(i) != Some(kind))
+        .map_or(0, |i| i + 1);
+    let end = (caret..text.len())
+        .find(|&i| class(i) != Some(kind))
+        .unwrap_or(text.len());
+    Some((start, end))
+}
+
 /// The field's own word around the caret, when it reports one that holds the caret.
 fn field_word(context: &TextContext) -> Option<(usize, usize)> {
     context
@@ -460,6 +500,37 @@ mod tests {
             .as_deref(),
             Some("Notes:  \u{1d} Edit \u{1e} ")
         );
+    }
+
+    /// Ctrl+Right in a page's text area and in vscode.dev's editor, JAWS on the dev box:
+    /// "lazy", "dog", ",", "then"; "use", "std", "::", "collections", "::", "HashMap", ";".
+    #[test]
+    fn a_page_fields_words_stop_at_punctuation() {
+        let word = |text: &str, caret: usize| {
+            let at = |c: usize| TextContext {
+                word: web_word_at(text, c),
+                ..ctx(text, c, None)
+            };
+            word_at(&at(caret))
+        };
+        let prose = "the lazy dog, then";
+        assert_eq!(word(prose, 9), "dog");
+        assert_eq!(word(prose, 12), ",");
+        assert_eq!(word(prose, 14), "then");
+        let code = "use std::collections::HashMap;";
+        let stops: Vec<String> = [0, 4, 7, 9, 20, 22, 29]
+            .iter()
+            .map(|&c| word(code, c))
+            .collect();
+        assert_eq!(
+            stops,
+            ["use", "std", "::", "collections", "::", "HashMap", ";"]
+        );
+        assert_eq!(word("    let mut counts: usize", 12), "counts");
+        assert_eq!(word("I can't stop", 2), "can't");
+        assert_eq!(word("rose 3.5% last", 5), "3.5");
+        assert_eq!(word("rose 3.5% last", 8), "%");
+        assert_eq!(web_word_at("a b", 1), None);
     }
 
     #[test]

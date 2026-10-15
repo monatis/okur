@@ -47,19 +47,21 @@ mod reader {
         }
     }
 
-    /// A Chromium text object's state, its UTF-16 offsets made character offsets.
+    /// A Chromium text object's state, its UTF-16 offsets made character offsets. Its word
+    /// is a page field's, which stops at punctuation as Chrome's word moves do.
     pub fn from_ia2(state: xa11y_windows::ia2::Ia2TextState) -> TextContext {
+        let caret = utf16_to_chars(&state.text, state.caret);
         TextContext {
-            caret: utf16_to_chars(&state.text, state.caret),
+            caret,
             selection: state.selection.map(|(s, e)| {
                 (
                     utf16_to_chars(&state.text, s),
                     utf16_to_chars(&state.text, e),
                 )
             }),
+            word: okur_core::editing::web_word_at(&state.text, caret),
             text: state.text,
             font: None,
-            word: None,
         }
     }
 
