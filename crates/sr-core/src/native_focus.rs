@@ -276,6 +276,54 @@ pub fn focus_speech(focus: &FocusEvent, previous: Option<&ContainerKey>) -> Stri
 
 /// The focused control's own line (name, role and state, without its hint), as JAWS reads
 /// it again when the Virtual Viewer closes [obs, 311/s12: "Save... Button"].
+/// Say Window (Insert+B) for a dialog box: its title and "dialog", then each control in
+/// reading order as its name, a lowercase type word, its state and its value. JAWS 2025 on
+/// the Run dialog, observed on the dev box (research): "Run | dialog | Type the name of a
+/// program, … | Open: | Open: | combo box | collapsed | C: | Open: | edit | C: | Open |
+/// button | OK | button | Cancel | button | Browse... | button".
+pub fn say_window(title: &str, items: &[crate::event::WindowItem]) -> String {
+    let mut lines = vec![title.to_owned(), "dialog".to_owned()];
+    let checked = |c: Option<bool>| {
+        if c == Some(true) {
+            "checked"
+        } else {
+            "not checked"
+        }
+    };
+    for item in items {
+        let name = item.name.trim().to_owned();
+        let mut parts = vec![name];
+        match item.role {
+            Role::ComboBox => {
+                parts.push("combo box".to_owned());
+                parts.push(
+                    if item.expanded == Some(true) {
+                        "expanded"
+                    } else {
+                        "collapsed"
+                    }
+                    .to_owned(),
+                );
+            }
+            Role::Edit => parts.push("edit".to_owned()),
+            Role::Button => parts.push("button".to_owned()),
+            Role::CheckBox => {
+                parts.push("check box".to_owned());
+                parts.push(checked(item.checked).to_owned());
+            }
+            Role::RadioButton => {
+                parts.push("radio button".to_owned());
+                parts.push(checked(item.checked).to_owned());
+            }
+            Role::Link { .. } => parts.push("link".to_owned()),
+            _ => {}
+        }
+        parts.extend(item.value.clone());
+        lines.extend(parts.into_iter().filter(|p| !p.is_empty()));
+    }
+    lines.join("\n")
+}
+
 /// The hint for a combo box's text field.
 const EDIT_COMBO_HINT: &str = "To set the value use the Arrow keys or type the value.";
 /// Said for a text document with text when focus arrives, in place of its text.
@@ -730,6 +778,35 @@ mod tests {
         assert_eq!(
             norm(&say_focus(&notepad)),
             norm("Text editor  \u{1d} edit \u{1e} ")
+        );
+    }
+
+    /// The Run dialog's controls, as JAWS's Say Window read them on the dev box.
+    #[test]
+    fn say_window_reads_a_dialog_in_order() {
+        use crate::event::WindowItem;
+        let item = |role: Role, name: &str, value: Option<&str>| WindowItem {
+            role,
+            name: name.to_owned(),
+            value: value.map(str::to_owned),
+            expanded: None,
+            checked: None,
+        };
+        let items = [
+            item(Role::Text, "Type the name of a program.", None),
+            item(Role::Text, "Open:", None),
+            WindowItem {
+                expanded: Some(false),
+                ..item(Role::ComboBox, "Open:", Some("C:"))
+            },
+            item(Role::Edit, "Open:", Some("C:")),
+            item(Role::Button, "Open", None),
+            item(Role::Button, "OK", None),
+        ];
+        assert_eq!(
+            say_window("Run", &items),
+            "Run\ndialog\nType the name of a program.\nOpen:\nOpen:\ncombo box\ncollapsed\nC:\n\
+             Open:\nedit\nC:\nOpen\nbutton\nOK\nbutton"
         );
     }
 }

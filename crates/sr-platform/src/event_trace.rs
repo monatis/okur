@@ -130,6 +130,35 @@ pub struct TraceEvent {
     /// For focus in that dialog box: its static text that labels no field, top to bottom.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub dialog_text: Vec<String>,
+    /// For focus in that dialog box: its control tree, without the title bar (Say Window).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub dialog_tree: Option<UiaNode>,
+}
+
+/// A dialog's controls in reading order (depth first), below the dialog itself: what Say
+/// Window reads. Nameless containers (panes, groups) are passed through.
+fn window_items(tree: &UiaNode) -> Vec<sr_core::WindowItem> {
+    fn walk(node: &UiaNode, items: &mut Vec<sr_core::WindowItem>) {
+        for child in &node.children {
+            let mut leaf = child.clone();
+            leaf.children.clear();
+            let aom = crate::uia_snapshot::to_aom(&leaf);
+            let name = child.name.clone().unwrap_or_default();
+            if !name.trim().is_empty() || aom.value.is_some() {
+                items.push(sr_core::WindowItem {
+                    role: aom.role.clone(),
+                    name,
+                    value: aom.value.clone().filter(|v| !v.is_empty()),
+                    expanded: aom.states.expanded,
+                    checked: aom.states.checked,
+                });
+            }
+            walk(child, items);
+        }
+    }
+    let mut items = Vec::new();
+    walk(tree, &mut items);
+    items
 }
 
 /// The first line of a trace file.
@@ -359,6 +388,11 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent>
             .collect();
     }
     focus.dialog_lines = event.dialog_lines.clone();
+    focus.window_items = event
+        .dialog_tree
+        .as_ref()
+        .map(window_items)
+        .unwrap_or_default();
     // JAWS names buttons by their MSAA role: ROLE_SYSTEM_BUTTONMENU is a "button menu"
     // even when UIA reports a plain button [obs, 204/s11–s12].
     if focus.role == sr_core::Role::Button
@@ -616,7 +650,7 @@ mod capture {
     };
     use crate::uia_snapshot::capture::{
         automation, focus_chain, focus_chain_from, focus_context, focus_context_of,
-        focus_subtree_of, window_text,
+        focus_subtree_of, window_subtree, window_text,
     };
     use crate::PlatformError;
     use std::cell::RefCell;
@@ -1060,12 +1094,20 @@ mod capture {
                 } else {
                     (None, None, None)
                 };
-            let dialog = if focused && top_window_class.as_deref() == Some("#32770") {
+            let (dialog, dialog_tree) = if focused && top_window_class.as_deref() == Some("#32770")
+            {
                 use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
                 // SAFETY: plain Win32 call with no preconditions.
-                crate::screen_lines::dialog_layout(unsafe { GetForegroundWindow() })
+                let window = unsafe { GetForegroundWindow() };
+                (
+                    crate::screen_lines::dialog_layout(window),
+                    state
+                        .uia
+                        .as_ref()
+                        .and_then(|uia| window_subtree(uia, window)),
+                )
             } else {
-                crate::screen_lines::DialogLayout::default()
+                (crate::screen_lines::DialogLayout::default(), None)
             };
             stages.push(("window", clock.elapsed().as_millis()));
             let (region, page) = if name == "live_region_change" {
@@ -1132,6 +1174,7 @@ mod capture {
                 virtual_desktop,
                 dialog_lines: dialog.rows,
                 dialog_text: dialog.text,
+                dialog_tree,
             };
             (state.sink)(event);
             state.count += 1;
@@ -1299,6 +1342,7 @@ mod tests {
             virtual_desktop: None,
             dialog_lines: Vec::new(),
             dialog_text: Vec::new(),
+            dialog_tree: None,
         }
     }
 

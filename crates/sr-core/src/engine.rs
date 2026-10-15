@@ -481,6 +481,19 @@ impl ScreenReaderEngine {
     /// Executes a screen reader navigation command string (matching JAWS script names and keystrokes).
     /// Speaks the resulting announcement and returns the emitted speech text.
     pub fn execute_command(&mut self, command: &str) -> Option<String> {
+        if command == "SayWindow" {
+            // Dialog boxes; other windows are not read this way yet.
+            let focus = self
+                .last_native_focus
+                .as_ref()
+                .filter(|f| !f.window_items.is_empty())?;
+            let speech = crate::native_focus::say_window(
+                focus.window_title.as_deref().unwrap_or_default(),
+                &focus.window_items,
+            );
+            self.speech.speak(&speech, true);
+            return Some(speech);
+        }
         if command == "SayCurrentFocus" {
             // Native controls; a page's focus is not read this way yet.
             let speech = self

@@ -679,6 +679,29 @@ pub(crate) mod capture {
         }
     }
 
+    /// Nodes recorded for a window's control tree, at most.
+    const MAX_WINDOW_TREE: usize = 300;
+
+    /// A window's control-view tree to depth 6, without its title bar (the system menu and
+    /// caption buttons, which Say Window does not read).
+    pub(crate) fn window_subtree(
+        uia: &IUIAutomation,
+        hwnd: windows::Win32::Foundation::HWND,
+    ) -> Option<UiaNode> {
+        const UIA_TITLEBAR: i32 = 50037;
+        // SAFETY: UIA client queries on a valid automation object.
+        let (walker, window) = unsafe {
+            (
+                uia.ControlViewWalker().ok()?,
+                uia.ElementFromHandle(hwnd).ok()?,
+            )
+        };
+        let mut budget = MAX_WINDOW_TREE;
+        let mut tree = read_subtree(uia, &walker, &window, 6, &mut budget)?;
+        tree.children.retain(|c| c.control_type != UIA_TITLEBAR);
+        Some(tree)
+    }
+
     fn read_subtree(
         uia: &IUIAutomation,
         walker: &IUIAutomationTreeWalker,

@@ -163,6 +163,13 @@ impl KeyEvent {
             Key::Escape if m.is_empty() => Some("{ESC}".to_string()),
             Key::Space if m.is_empty() => Some("{SPACE}".to_string()),
 
+            // Say Window (Insert+B)
+            Key::Alpha(c)
+                if c.eq_ignore_ascii_case(&'B') && m.insert && !m.ctrl && !m.alt && !m.shift =>
+            {
+                Some("SayWindow".to_string())
+            }
+
             // Say Current Focus (Insert+Tab)
             Key::Tab if m.insert && !m.ctrl && !m.alt && !m.shift => {
                 Some("SayCurrentFocus".to_string())

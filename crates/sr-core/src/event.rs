@@ -90,6 +90,16 @@ pub enum MenuEvent {
     PopupEnd,
 }
 
+/// One control of a window, as Say Window (Insert+B) reads it.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct WindowItem {
+    pub role: Role,
+    pub name: String,
+    pub value: Option<String>,
+    pub expanded: Option<bool>,
+    pub checked: Option<bool>,
+}
+
 /// Event representing OS-level keyboard focus changes across applications and controls.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct FocusEvent {
@@ -124,6 +134,9 @@ pub struct FocusEvent {
     /// When a dialog box is in front: its text by screen rows, below its title (the Virtual
     /// Viewer's lines for Virtualize Window).
     pub dialog_lines: Vec<String>,
+    /// When a dialog box is in front: its controls in reading order, below the dialog itself
+    /// (Say Window, Insert+B).
+    pub window_items: Vec<WindowItem>,
     /// The active window's class, which tells windows with the same title apart (a message
     /// box titled like its main window).
     pub window_kind: Option<String>,
@@ -157,6 +170,7 @@ impl FocusEvent {
             dialog_text: None,
             dialog_buttons: Vec::new(),
             dialog_lines: Vec::new(),
+            window_items: Vec::new(),
             window_kind: None,
             window_class: None,
             window_title: None,
