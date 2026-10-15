@@ -73,6 +73,42 @@ when old-pc is offline, and interleaved with recording when it is back:
    - Profile `sr-cli parity` and the live focus path (debug-log stage timings) before
      optimizing anything.
 
+## Done on branch `code-quality` (2026-10-15), and what is left
+
+Done, each commit through the gate with tests and parity unchanged:
+- xa11y production code denies panicking calls (clippy `[lints]`); the gate denies string
+  slicing.
+- Nothing slow runs under the engine lock or on the event loop; the page buffer is built
+  before the lock, in linear time (4× faster on deep pages).
+- `engine.rs` is split by concern (3,271 lines to 397).
+- Live latency is measured: `sr-cli latency <debug-log>`; every event read logs its stages.
+- Focus reads: 1,792 ms to 55 ms per item in a 300-item list view (p50, `sr-cli latency`).
+  - The position comes from the list view.
+  - Siblings are read only when needed, and subtrees only where announcements use them.
+  - Repeated focus events and a list's echo events are not read.
+- Windows Terminal: no 6.6 s stall when it comes to the front; the Virtual Viewer shows a
+  console's text.
+- Live regions: the page is captured again once changes settle, not once per change.
+
+Left, in order of expected effect:
+1. **UIA focus events instead of `GetFocusedElement`.** The largest part of a focus read now
+   (24 of 55 ms in the list view) is asking UIA which element has the focus. A UIA
+   focus-changed handler registered with a cache request delivers the element with its
+   properties, as NVDA does.
+   - Check WinForms menus first: UIA keeps naming the control behind the menu [obs, 302].
+   - Check Chrome's first focus too.
+2. **Speech start.** OneCore synthesizes a whole chunk before playing it. Stream the audio as
+   it is produced, and measure first-audio latency with `sr-cli speak --measure-latency`.
+3. **Release profile:** `lto` and `codegen-units = 1`, measured with `buffer_bench` and
+   `sr-cli latency`.
+4. **Responsiveness guarded like parity:** a recorded baseline for `buffer_bench` and the
+   replay time of `sr-cli parity`, with a check that fails on a large slowdown.
+5. **Incremental page updates:** patch a changed live region's subtree into the buffer
+   instead of capturing the page again.
+   - Observed on the dev box: JAWS 2025 speaks a growing live region's whole text on every
+     change (a 40-word stream gave the paragraph 37 times in its history), as the engine
+     does.
+
 ## Work items for old-pc, in order
 
 1. **Record what round 1 left unrecorded** (old-pc was offline). The scenarios wait in `corpus/pending/` (see its README); move each into `corpus/scenarios/` (and its fixture into `corpus/fixtures/`) before pushing it.
