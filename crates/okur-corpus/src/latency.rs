@@ -62,7 +62,45 @@ fn message(line: &str) -> Option<String> {
     Some(words.join(" "))
 }
 
+/// A log line's time of day in microseconds (`2026-10-15T07:34:25.053673Z ...`).
+fn time_of_day(line: &str) -> Option<u64> {
+    let stamp = line.split_whitespace().next()?;
+    let time = stamp.split_once('T')?.1.trim_end_matches('Z');
+    let (hms, fraction) = time.split_once('.').unwrap_or((time, "0"));
+    let mut parts = hms.split(':').map(|p| p.parse::<u64>().ok());
+    let (h, m, s) = (parts.next()??, parts.next()??, parts.next()??);
+    // Microseconds: the fraction's first six digits, padded.
+    let digits: String = fraction
+        .chars()
+        .chain(std::iter::repeat('0'))
+        .take(6)
+        .collect();
+    Some(((h * 60 + m) * 60 + s) * 1_000_000 + digits.parse::<u64>().ok()?)
+}
+
+/// A key line's chord: `Ctrl+RightArrow`, `LeftArrow`.
+fn chord(line: &str) -> String {
+    let mut name = String::new();
+    for (modifier, label) in [("ctrl", "Ctrl+"), ("shift", "Shift+"), ("alt", "Alt+")] {
+        if field(line, modifier) == Some("true") {
+            name.push_str(label);
+        }
+    }
+    if field(line, "insert") == Some("true") {
+        name.push_str("Insert+");
+    }
+    name.push_str(field(line, "key").unwrap_or("?"));
+    name
+}
+
+/// Longest time from a key to the speech it caused: later audio belongs to something else.
+const KEY_TO_SPEECH_LIMIT_US: u64 = 2_000_000;
+
 /// The timed steps in `log`, by kind, in the order kinds first appear.
+///
+/// "key to speech audio" is the whole wait a user hears: from the key reaching the hook to
+/// the first audio of the next utterance reaching the device, by chord, when that audio
+/// starts before another key.
 pub fn summarize(log: &str) -> Vec<Category> {
     let mut categories: Vec<Category> = Vec::new();
     let mut add = |name: String, micros: u64| match categories.iter_mut().find(|c| c.name == name) {
@@ -72,6 +110,7 @@ pub fn summarize(log: &str) -> Vec<Category> {
             micros: vec![micros],
         }),
     };
+    let mut last_key: Option<(u64, String)> = None;
     for line in log.lines() {
         let Some(message) = message(line) else {
             continue;
@@ -79,10 +118,25 @@ pub fn summarize(log: &str) -> Vec<Category> {
         let event = || field(line, "event").unwrap_or("?");
         match message.as_str() {
             "key" => {
-                if let (Some(waited), Some(held)) =
-                    (number(line, "waited_us"), number(line, "held_us"))
-                {
+                let waited = number(line, "waited_us").unwrap_or(0);
+                let held = number(line, "held_us").unwrap_or(0);
+                if field(line, "held_us").is_some() {
                     add("key: wait + engine".to_owned(), waited + held);
+                }
+                // Logged once handled: the key arrived its wait and handling earlier.
+                last_key =
+                    time_of_day(line).map(|at| (at.saturating_sub(waited + held), chord(line)));
+            }
+            "speech audio started" => {
+                if let Some(ms) = number(line, "ms") {
+                    add(message.clone(), ms * 1000);
+                }
+                if let (Some((at, chord)), Some(now)) = (last_key.take(), time_of_day(line)) {
+                    // A run that crosses midnight (UTC) wraps the time of day.
+                    let elapsed = now.checked_sub(at).unwrap_or(now + 86_400_000_000 - at);
+                    if elapsed <= KEY_TO_SPEECH_LIMIT_US {
+                        add(format!("key to speech audio: {chord}"), elapsed);
+                    }
                 }
             }
             "event read" => {
@@ -95,11 +149,7 @@ pub fn summarize(log: &str) -> Vec<Category> {
                     add(format!("event handled: {}", event()), us);
                 }
             }
-            "page loaded"
-            | "page refreshed"
-            | "page buffer built"
-            | "focused text read"
-            | "speech audio started"
+            "page loaded" | "page refreshed" | "page buffer built" | "focused text read"
             | "text context read" => {
                 if let Some(ms) = number(line, "ms") {
                     add(message.clone(), ms * 1000);
@@ -169,6 +219,36 @@ mod tests {
         assert_eq!(
             categories.last().map(|c| c.micros.clone()),
             Some(vec![820_000])
+        );
+    }
+
+    /// A key is paired with the next speech audio, by chord; audio after another key, or
+    /// with no key before it, is not.
+    #[test]
+    fn keys_are_timed_to_their_speech_audio() {
+        let log = "\
+2026-10-15T07:00:00.000000Z DEBUG okur: key key=RightArrow text=None ctrl=true shift=false alt=false insert=false action=PassThrough mode=NativeControl forms=false waited_us=0 held_us=100
+2026-10-15T07:00:00.042500Z DEBUG okur_platform::tts::onecore: speech audio started ms=5 synthesis_ms=4
+2026-10-15T07:00:00.500000Z DEBUG okur_platform::tts::onecore: speech audio started ms=5 synthesis_ms=4
+2026-10-15T07:00:01.000000Z DEBUG okur: key key=LeftArrow text=None ctrl=false shift=false alt=false insert=false action=PassThrough mode=NativeControl forms=false waited_us=0 held_us=100
+2026-10-15T07:00:01.000000Z DEBUG okur: key key=LeftArrow text=None ctrl=false shift=false alt=false insert=false action=PassThrough mode=NativeControl forms=false waited_us=0 held_us=100
+2026-10-15T07:00:01.030000Z DEBUG okur_platform::tts::onecore: speech audio started ms=5 synthesis_ms=4
+";
+        let categories = summarize(log);
+        let timed = |name: &str| {
+            categories
+                .iter()
+                .find(|c| c.name == name)
+                .map(|c| c.micros.clone())
+        };
+        assert_eq!(
+            timed("key to speech audio: Ctrl+RightArrow"),
+            Some(vec![42_600])
+        );
+        assert_eq!(timed("key to speech audio: LeftArrow"), Some(vec![30_100]));
+        assert_eq!(
+            timed("speech audio started"),
+            Some(vec![5_000, 5_000, 5_000])
         );
     }
 
