@@ -64,7 +64,7 @@ impl VirtualCursor {
     /// Returns the active AOM node at the cursor's current position.
     pub fn current_node(&self) -> Option<&AomNode> {
         if let Some(id) = self.current_node_id {
-            if let Some(node) = self.buffer.node_map.get(&id) {
+            if let Some(node) = self.buffer.node(id) {
                 return Some(node);
             }
         }
@@ -334,7 +334,7 @@ impl VirtualCursor {
         if !line.speech.is_empty() || line.text.is_empty() {
             return line.speech.clone();
         }
-        if let Some(node) = self.buffer.node_map.get(&line.node_id) {
+        if let Some(node) = self.buffer.node(line.node_id) {
             match node.role {
                 Role::TreeItem => {
                     let name = node
@@ -675,7 +675,7 @@ impl VirtualCursor {
     pub fn focus_node(&mut self, node_id: usize) -> Option<String> {
         let previous = self.offset;
         self.move_to_node_id(node_id);
-        let node = self.buffer.node_map.get(&node_id)?;
+        let node = self.buffer.node(node_id)?;
         let attr = |k: &str| node.attributes.get(k).map(String::as_str);
         let name = node.name.as_deref().unwrap_or_default().trim();
         let mut speech = match &node.role {
@@ -739,7 +739,7 @@ impl VirtualCursor {
         let Some(node) = self
             .buffer
             .line_at_offset(offset)
-            .and_then(|l| self.buffer.node_map.get(&l.node_id))
+            .and_then(|l| self.buffer.node(l.node_id))
         else {
             return String::new();
         };
@@ -886,7 +886,7 @@ impl VirtualCursor {
                             && s.end_offset >= current_offset
                             && matches!(s.role, Role::Link { .. })
                     })
-                    .and_then(|s| self.buffer.node_map.get(&s.node_id))
+                    .and_then(|s| self.buffer.node(s.node_id))
             });
 
         if let Some(node) = link_node {
@@ -1153,8 +1153,7 @@ impl VirtualCursor {
             self.forms_mode_active = true;
             let doc_title = self
                 .buffer
-                .node_map
-                .values()
+                .nodes()
                 .find(|n| n.role == Role::Document)
                 .and_then(|n| n.name.as_deref())
                 .unwrap_or("");
@@ -1191,13 +1190,12 @@ impl VirtualCursor {
         match role {
             Role::CheckBox => {
                 let new_checked = !current_checked;
-                if let Some(node) = self.buffer.node_map.get_mut(&node_id) {
+                if let Some(node) = self.buffer.node_mut(node_id) {
                     node.states.checked = Some(new_checked);
                 }
                 let doc_title = self
                     .buffer
-                    .node_map
-                    .values()
+                    .nodes()
                     .find(|n| n.role == Role::Document)
                     .and_then(|n| n.name.as_deref())
                     .unwrap_or("");
@@ -1208,19 +1206,15 @@ impl VirtualCursor {
                 ))
             }
             Role::Tab => {
-                for node in self.buffer.node_map.values_mut() {
+                self.buffer.for_each_node_mut(|node| {
                     if node.role == Role::Tab {
-                        if node.id == node_id {
-                            node.states.selected = Some(true);
-                        } else {
-                            node.states.selected = Some(false);
-                        }
+                        node.states.selected = Some(node.id == node_id);
                     }
-                }
+                });
                 Some(" \u{001d}selected\u{001e}".to_string())
             }
             Role::ComboBox => {
-                if let Some(node) = self.buffer.node_map.get_mut(&node_id) {
+                if let Some(node) = self.buffer.node_mut(node_id) {
                     let is_exp = node.states.expanded.unwrap_or(false);
                     node.states.expanded = Some(!is_exp);
                     if !is_exp {
@@ -1240,7 +1234,7 @@ impl VirtualCursor {
     /// Expands the active combobox (`Alt+DownArrow`).
     pub fn expand_combobox(&mut self) -> Option<String> {
         let node_id = self.current_node()?.id;
-        let node = self.buffer.node_map.get_mut(&node_id)?;
+        let node = self.buffer.node_mut(node_id)?;
         if node.role == Role::ComboBox {
             node.states.expanded = Some(true);
             Some("expanded".to_string())
@@ -1252,7 +1246,7 @@ impl VirtualCursor {
     /// Collapses the active combobox (`Escape` or `Alt+UpArrow`).
     pub fn collapse_combobox(&mut self) -> Option<String> {
         let node_id = self.current_node()?.id;
-        let node = self.buffer.node_map.get_mut(&node_id)?;
+        let node = self.buffer.node_mut(node_id)?;
         if node.role == Role::ComboBox {
             node.states.expanded = Some(false);
             Some("collapsed".to_string())
@@ -1273,7 +1267,7 @@ impl VirtualCursor {
     /// Selects the next option in an active combobox popup (`{DOWN}`).
     pub fn combobox_next_option(&mut self) -> Option<String> {
         let node_id = self.current_node()?.id;
-        let node = self.buffer.node_map.get(&node_id)?.clone();
+        let node = self.buffer.node(node_id)?.clone();
         if node.role != Role::ComboBox || node.children.is_empty() {
             return None;
         }
@@ -1296,7 +1290,7 @@ impl VirtualCursor {
             .or_else(|| next_child.text.clone())
             .unwrap_or_default();
 
-        if let Some(mut_node) = self.buffer.node_map.get_mut(&node_id) {
+        if let Some(mut_node) = self.buffer.node_mut(node_id) {
             mut_node.value = Some(next_val.clone());
         }
 
@@ -1306,7 +1300,7 @@ impl VirtualCursor {
     /// Selects the prior option in an active combobox popup (`{UP}`).
     pub fn combobox_prior_option(&mut self) -> Option<String> {
         let node_id = self.current_node()?.id;
-        let node = self.buffer.node_map.get(&node_id)?.clone();
+        let node = self.buffer.node(node_id)?.clone();
         if node.role != Role::ComboBox || node.children.is_empty() {
             return None;
         }
@@ -1329,7 +1323,7 @@ impl VirtualCursor {
             .or_else(|| prior_child.text.clone())
             .unwrap_or_default();
 
-        if let Some(mut_node) = self.buffer.node_map.get_mut(&node_id) {
+        if let Some(mut_node) = self.buffer.node_mut(node_id) {
             mut_node.value = Some(prior_val.clone());
         }
 
@@ -1345,7 +1339,7 @@ impl VirtualCursor {
 
         match node.states.expanded {
             Some(false) => {
-                if let Some(mut_node) = self.buffer.node_map.get_mut(&node.id) {
+                if let Some(mut_node) = self.buffer.node_mut(node.id) {
                     mut_node.states.expanded = Some(true);
                 }
                 Some("expanded".to_string())
@@ -1382,7 +1376,7 @@ impl VirtualCursor {
         }
 
         if node.states.expanded == Some(true) {
-            if let Some(mut_node) = self.buffer.node_map.get_mut(&node.id) {
+            if let Some(mut_node) = self.buffer.node_mut(node.id) {
                 mut_node.states.expanded = Some(false);
             }
             Some("collapsed".to_string())
@@ -1390,7 +1384,7 @@ impl VirtualCursor {
             // Jump to parent tree item
             let parent_id = self.buffer.tree_parents.get(&node.id).copied()?;
             self.move_to_node_id(parent_id);
-            let parent_node = self.buffer.node_map.get(&parent_id)?.clone();
+            let parent_node = self.buffer.node(parent_id)?.clone();
             let name = parent_node
                 .name
                 .as_deref()
@@ -1408,7 +1402,7 @@ impl VirtualCursor {
     /// Increases slider value (`{RIGHT}` or `{UP}` on Slider).
     pub fn slider_increase(&mut self) -> Option<String> {
         let node_id = self.current_node()?.id;
-        let node = self.buffer.node_map.get(&node_id)?.clone();
+        let node = self.buffer.node(node_id)?.clone();
         if node.role != Role::Slider {
             return None;
         }
@@ -1418,7 +1412,7 @@ impl VirtualCursor {
         let current = node.value_now.unwrap_or(0.0);
         let new_val = (current + step).min(max);
 
-        if let Some(mut_node) = self.buffer.node_map.get_mut(&node_id) {
+        if let Some(mut_node) = self.buffer.node_mut(node_id) {
             mut_node.value_now = Some(new_val);
         }
 
@@ -1428,7 +1422,7 @@ impl VirtualCursor {
     /// Decreases slider value (`{LEFT}` or `{DOWN}` on Slider).
     pub fn slider_decrease(&mut self) -> Option<String> {
         let node_id = self.current_node()?.id;
-        let node = self.buffer.node_map.get(&node_id)?.clone();
+        let node = self.buffer.node(node_id)?.clone();
         if node.role != Role::Slider {
             return None;
         }
@@ -1438,7 +1432,7 @@ impl VirtualCursor {
         let current = node.value_now.unwrap_or(0.0);
         let new_val = (current - step).max(min);
 
-        if let Some(mut_node) = self.buffer.node_map.get_mut(&node_id) {
+        if let Some(mut_node) = self.buffer.node_mut(node_id) {
             mut_node.value_now = Some(new_val);
         }
 
@@ -1534,7 +1528,7 @@ impl VirtualCursor {
             self.offset = span.start_offset;
             self.current_node_id = Some(node_id);
             true
-        } else if self.buffer.node_map.contains_key(&node_id) {
+        } else if self.buffer.contains_node(node_id) {
             self.current_node_id = Some(node_id);
             true
         } else {
@@ -1563,7 +1557,7 @@ impl VirtualCursor {
                         (1, 1, None)
                     };
                 let prev_was_tab = prev_node_id
-                    .and_then(|id| self.buffer.node_map.get(&id))
+                    .and_then(|id| self.buffer.node(id))
                     .map(|n| n.role == Role::Tab)
                     .unwrap_or(false);
                 let announce_group = !prev_was_tab;

@@ -403,7 +403,7 @@ impl<'a> Builder<'a> {
         if is_hidden(node) {
             return;
         }
-        self.buffer.node_map.insert(node.id, node.clone());
+        self.buffer.mark_readable(node.id);
         let first_line = self.buffer.lines.len();
 
         match self.classify(node, parent) {
@@ -553,7 +553,7 @@ impl<'a> Builder<'a> {
         let same_page = self.is_same_page(href);
         let kind = if same_page { "same page link" } else { "link" };
         if same_page {
-            if let Some(n) = self.buffer.node_map.get_mut(&node.id) {
+            if let Some(n) = self.buffer.node_mut(node.id) {
                 n.attributes
                     .insert("same_page".to_owned(), "true".to_owned());
             }
@@ -572,14 +572,14 @@ impl<'a> Builder<'a> {
         // cursor enters the group (§17).
         if node.role == Role::RadioButton {
             if let Some((group_id, group_name)) = self.groups.last() {
-                let mut annotated = node.clone();
-                annotated
-                    .attributes
-                    .insert("group_id".to_owned(), group_id.to_string());
-                annotated
-                    .attributes
-                    .insert("group_name".to_owned(), group_name.clone());
-                self.buffer.node_map.insert(node.id, annotated);
+                let (group_id, group_name) = (group_id.to_string(), group_name.clone());
+                self.buffer.mark_readable(node.id);
+                if let Some(annotated) = self.buffer.node_mut(node.id) {
+                    annotated.attributes.insert("group_id".to_owned(), group_id);
+                    annotated
+                        .attributes
+                        .insert("group_name".to_owned(), group_name);
+                }
             }
         }
         // Flush first: an inline label in the same block is still pending in the run.
@@ -769,13 +769,13 @@ impl<'a> Builder<'a> {
                 }
                 continue;
             }
-            self.buffer.node_map.insert(child.id, child.clone());
+            self.buffer.mark_readable(child.id);
             let row_index = grid.len() + 1;
             let mut row_cells = Vec::new();
             for cell in child.children.iter().filter(|c| c.role == Role::TableCell) {
                 self.flush();
                 let before = self.buffer.lines.len();
-                self.buffer.node_map.insert(cell.id, cell.clone());
+                self.buffer.mark_readable(cell.id);
                 self.push_own_text(cell);
                 for c in &cell.children {
                     self.visit(c, Some(cell));
@@ -966,8 +966,8 @@ fn paragraphs(lines: &[BufferLine], ends: &[bool]) -> Vec<BufferParagraph> {
 pub fn build(root: &AomNode) -> VirtualBuffer {
     let document_url = attr(root, "url");
     let mut builder = Builder::new(document_url);
-    builder.buffer.node_map.insert(root.id, root.clone());
-    builder.buffer.root_id = Some(root.id);
+    builder.buffer.set_page(root.clone());
+    builder.buffer.mark_readable(root.id);
 
     // §1: line 0 is the page title.
     if root.role == Role::Document {

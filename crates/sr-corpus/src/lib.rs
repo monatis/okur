@@ -168,7 +168,7 @@ mod tests {
             return;
         };
         assert_eq!(kind, "focus");
-        let node = engine.cursor.buffer.node_map.get(node_id);
+        let node = engine.cursor.buffer.node(*node_id);
         assert_eq!(node.and_then(|n| n.name.as_deref()), Some("Full name"));
 
         // In forms mode, typing reaches the page.

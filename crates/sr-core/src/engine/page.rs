@@ -68,7 +68,7 @@ impl ScreenReaderEngine {
     /// The node of the line under the virtual cursor.
     pub(super) fn node_under_cursor(&self) -> Option<AomNode> {
         let line = self.cursor.buffer.line_at_offset(self.cursor.offset)?;
-        self.cursor.buffer.node_map.get(&line.node_id).cloned()
+        self.cursor.buffer.node(line.node_id).cloned()
     }
 
     /// A page control changed (Space toggled a check box, a combo box took a new value): the
@@ -76,7 +76,7 @@ impl ScreenReaderEngine {
     /// change is spoken.
     fn page_change(&mut self, control: &FocusEvent) -> Option<String> {
         let id = self.page_node_for(control)?;
-        let before = self.cursor.buffer.node_map.get(&id)?.clone();
+        let before = self.cursor.buffer.node(id)?.clone();
         let speech = match control.role {
             Role::CheckBox | Role::RadioButton
                 if before.states.checked != control.states.checked =>
@@ -129,7 +129,7 @@ impl ScreenReaderEngine {
             .cursor
             .buffer
             .root_id
-            .and_then(|r| self.cursor.buffer.node_map.get(&r))
+            .and_then(|r| self.cursor.buffer.node(r))
         else {
             return String::new();
         };
@@ -157,13 +157,13 @@ impl ScreenReaderEngine {
     /// The buffer node a page event concerns: by node id, then by DOM id, then by role and
     /// name. Candidates are taken in document order, so repeated names resolve to the first.
     pub(super) fn page_node_for(&self, focus: &FocusEvent) -> Option<usize> {
-        let map = &self.cursor.buffer.node_map;
-        if let Some(id) = focus.node_id.filter(|id| map.contains_key(id)) {
+        let buffer = &self.cursor.buffer;
+        if let Some(id) = focus.node_id.filter(|id| buffer.contains_node(*id)) {
             return Some(id);
         }
-        let mut ids: Vec<usize> = map.keys().copied().collect();
+        let mut ids: Vec<usize> = buffer.node_ids().collect();
         ids.sort_unstable();
-        let node = |id: &usize| map.get(id);
+        let node = |id: &usize| buffer.node(*id);
         if let Some(dom_id) = focus.dom_id.as_deref() {
             if let Some(id) = ids.iter().find(|id| {
                 node(id).is_some_and(|n| n.attributes.get("id").map(String::as_str) == Some(dom_id))
@@ -292,12 +292,13 @@ impl ScreenReaderEngine {
                 texts(child, out);
             }
         }
-        let map = &self.cursor.buffer.node_map;
-        let mut ids: Vec<usize> = map.keys().copied().collect();
+        let buffer = &self.cursor.buffer;
+        let mut ids: Vec<usize> = buffer.node_ids().collect();
         ids.sort_unstable();
         let region = live.region_id.as_deref().and_then(|dom_id| {
             ids.iter().find_map(|id| {
-                map.get(id)
+                buffer
+                    .node(*id)
                     .filter(|n| n.attributes.get("id").map(String::as_str) == Some(dom_id))
             })
         });

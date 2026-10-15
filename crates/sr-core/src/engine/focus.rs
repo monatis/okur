@@ -251,7 +251,7 @@ impl ScreenReaderEngine {
         let is_in_document = focus.in_document
             || focus
                 .node_id
-                .is_some_and(|id| self.cursor.buffer.node_map.contains_key(&id));
+                .is_some_and(|id| self.cursor.buffer.contains_node(id));
 
         if is_in_document {
             self.app_mode = AppMode::VirtualBuffer;
@@ -295,7 +295,7 @@ impl ScreenReaderEngine {
             // Forms mode follows focus into edits silently: JAWS 2025 signals it with a
             // sound by default, and its speech history has no forms-mode text [obs, 204].
             let target_role = target_id
-                .and_then(|id| self.cursor.buffer.node_map.get(&id))
+                .and_then(|id| self.cursor.buffer.node(id))
                 .map(|n| n.role.clone());
             if target_role == Some(Role::Document) {
                 // The page itself has focus: the next control focus enters the page.
@@ -325,7 +325,7 @@ impl ScreenReaderEngine {
             // The focus event carries the live state; the buffer's copy may be older (Space
             // just toggled the control) [obs, 205/s2, s6].
             if let Some(id) = target_id {
-                let stale = self.cursor.buffer.node_map.get(&id).is_some_and(|n| {
+                let stale = self.cursor.buffer.node(id).is_some_and(|n| {
                     focus.states.checked.is_some() && n.states.checked != focus.states.checked
                 });
                 if stale {

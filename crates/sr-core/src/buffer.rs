@@ -1,5 +1,5 @@
 use crate::aom::{AomNode, Role, TextFormatting};
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 /// Information about an inline frame or embedded frame container.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -174,7 +174,7 @@ pub struct TabInfo {
 /// and structural indices for quick navigation keys.
 #[derive(Debug, Clone, Default)]
 pub struct VirtualBuffer {
-    /// The node the buffer was built from (the page); its subtree is in `node_map`.
+    /// The node the buffer was built from (the page).
     pub root_id: Option<usize>,
     pub text: String,
     pub spans: Vec<BufferSpan>,
@@ -212,7 +212,25 @@ pub struct VirtualBuffer {
     pub frame_offsets: Vec<usize>,
     pub math_blocks: Vec<usize>,
     pub target_anchors: HashMap<String, usize>,
-    pub node_map: HashMap<usize, AomNode>,
+    /// The page the buffer was built from (`root_id`), with what the buffer adds to it:
+    /// radio buttons' groups, same-page links, and state changes made through the buffer.
+    /// Nodes are read through [`VirtualBuffer::node`].
+    page: Option<AomNode>,
+    /// Where each page node sits, so a node is found without copying it: one slot per node,
+    /// pointing at its parent's slot.
+    slots: Vec<NodeSlot>,
+    /// Each node id's slot (for an id the page repeats, its last node in document order).
+    slot_of: HashMap<usize, usize>,
+    /// The page nodes the buffer reads; hidden ones are not.
+    readable: HashSet<usize>,
+}
+
+/// A page node's place: its parent's slot (none for the page itself) and its index among
+/// the parent's children.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+struct NodeSlot {
+    parent: Option<usize>,
+    index: usize,
 }
 
 impl VirtualBuffer {
@@ -234,9 +252,115 @@ impl VirtualBuffer {
             }
             node.children.iter_mut().find_map(|c| find(c, id))
         }
-        let mut root = self.node_map.get(&self.root_id?)?.clone();
+        let mut root = self.page.clone()?;
         change(find(&mut root, node_id)?);
         Some(VirtualBuffer::from_aom(&root))
+    }
+
+    /// Makes `page` the page the buffer reads its nodes from, and indexes where its nodes
+    /// sit (the linearizer then marks the ones it reads).
+    pub(crate) fn set_page(&mut self, page: AomNode) {
+        self.slots.clear();
+        self.slot_of.clear();
+        self.readable.clear();
+        self.root_id = Some(page.id);
+        self.slots.push(NodeSlot {
+            parent: None,
+            index: 0,
+        });
+        // Document order, so that an id the page repeats keeps its last node, as the
+        // linearizer meets them.
+        let mut stack = vec![(&page, 0_usize)];
+        while let Some((node, slot)) = stack.pop() {
+            self.slot_of.insert(node.id, slot);
+            for (index, child) in node.children.iter().enumerate().rev() {
+                self.slots.push(NodeSlot {
+                    parent: Some(slot),
+                    index,
+                });
+                stack.push((child, self.slots.len() - 1));
+            }
+        }
+        self.page = Some(page);
+    }
+
+    /// Marks page node `id` as one the buffer reads.
+    pub(crate) fn mark_readable(&mut self, id: usize) {
+        self.readable.insert(id);
+    }
+
+    /// Child indexes from the page down to the node in `slot`.
+    fn path_to(&self, slot: usize) -> Option<Vec<usize>> {
+        let mut path = Vec::new();
+        let mut current = self.slots.get(slot)?;
+        while let Some(parent) = current.parent {
+            path.push(current.index);
+            current = self.slots.get(parent)?;
+        }
+        path.reverse();
+        Some(path)
+    }
+
+    /// The page node `id`, with its subtree, if the buffer reads it.
+    pub fn node(&self, id: usize) -> Option<&AomNode> {
+        if !self.readable.contains(&id) {
+            return None;
+        }
+        let mut node = self.page.as_ref()?;
+        for index in self.path_to(*self.slot_of.get(&id)?)? {
+            node = node.children.get(index)?;
+        }
+        Some(node)
+    }
+
+    /// The page node `id`, to change what the buffer knows of it (a combo box's value, a
+    /// tree item's expansion).
+    pub fn node_mut(&mut self, id: usize) -> Option<&mut AomNode> {
+        if !self.readable.contains(&id) {
+            return None;
+        }
+        let path = self.path_to(*self.slot_of.get(&id)?)?;
+        let mut node = self.page.as_mut()?;
+        for index in path {
+            node = node.children.get_mut(index)?;
+        }
+        Some(node)
+    }
+
+    /// Whether the buffer reads page node `id`.
+    pub fn contains_node(&self, id: usize) -> bool {
+        self.readable.contains(&id)
+    }
+
+    /// The ids of the page nodes the buffer reads, in no particular order.
+    pub fn node_ids(&self) -> impl Iterator<Item = usize> + '_ {
+        self.readable.iter().copied()
+    }
+
+    /// The page nodes the buffer reads, in document order.
+    pub fn nodes(&self) -> impl Iterator<Item = &AomNode> + '_ {
+        let mut stack: Vec<&AomNode> = self.page.iter().collect();
+        std::iter::from_fn(move || {
+            while let Some(node) = stack.pop() {
+                stack.extend(node.children.iter().rev());
+                if self.readable.contains(&node.id) {
+                    return Some(node);
+                }
+            }
+            None
+        })
+    }
+
+    /// Applies `change` to every page node the buffer reads.
+    pub fn for_each_node_mut(&mut self, mut change: impl FnMut(&mut AomNode)) {
+        let readable = &self.readable;
+        let mut stack: Vec<&mut AomNode> = self.page.iter_mut().collect();
+        while let Some(node) = stack.pop() {
+            if readable.contains(&node.id) {
+                change(node);
+            }
+            stack.extend(node.children.iter_mut());
+        }
     }
 
     /// Returns the character at the specified byte/char offset.
@@ -561,7 +685,7 @@ impl VirtualBuffer {
         self.spans
             .iter()
             .find(|s| s.start_offset == offset && matches!(s.role, Role::ComboBox))
-            .and_then(|s| self.node_map.get(&s.node_id))
+            .and_then(|s| self.node(s.node_id))
     }
 
     /// Returns the next slider offset after the given offset.
@@ -585,7 +709,7 @@ impl VirtualBuffer {
         self.spans
             .iter()
             .find(|s| s.start_offset == offset && matches!(s.role, Role::Slider))
-            .and_then(|s| self.node_map.get(&s.node_id))
+            .and_then(|s| self.node(s.node_id))
     }
 
     /// Returns the next tree item offset after the given offset.
@@ -612,7 +736,7 @@ impl VirtualBuffer {
         self.spans
             .iter()
             .find(|s| s.start_offset == offset && matches!(s.role, Role::TreeItem))
-            .and_then(|s| self.node_map.get(&s.node_id))
+            .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for a form control starting at `offset`.
@@ -631,7 +755,7 @@ impl VirtualBuffer {
                             | Role::ProgressBar
                     )
             })
-            .and_then(|s| self.node_map.get(&s.node_id))
+            .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for a button starting at `offset`.
@@ -639,7 +763,7 @@ impl VirtualBuffer {
         self.spans
             .iter()
             .find(|s| s.start_offset == offset && matches!(s.role, Role::Button))
-            .and_then(|s| self.node_map.get(&s.node_id))
+            .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for an edit box starting at `offset`.
@@ -647,7 +771,7 @@ impl VirtualBuffer {
         self.spans
             .iter()
             .find(|s| s.start_offset == offset && matches!(s.role, Role::Edit))
-            .and_then(|s| self.node_map.get(&s.node_id))
+            .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for a checkbox starting at `offset`.
@@ -655,7 +779,7 @@ impl VirtualBuffer {
         self.spans
             .iter()
             .find(|s| s.start_offset == offset && matches!(s.role, Role::CheckBox))
-            .and_then(|s| self.node_map.get(&s.node_id))
+            .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for a heading starting at `offset`.
@@ -663,7 +787,7 @@ impl VirtualBuffer {
         self.spans
             .iter()
             .find(|s| s.start_offset == offset && matches!(s.role, Role::Heading { .. }))
-            .and_then(|s| self.node_map.get(&s.node_id))
+            .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for a link starting at `offset`.
@@ -671,7 +795,7 @@ impl VirtualBuffer {
         self.spans
             .iter()
             .find(|s| s.start_offset == offset && matches!(s.role, Role::Link { .. }))
-            .and_then(|s| self.node_map.get(&s.node_id))
+            .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for a list starting at `offset`.
@@ -679,7 +803,7 @@ impl VirtualBuffer {
         self.spans
             .iter()
             .find(|s| s.start_offset == offset && matches!(s.role, Role::List))
-            .and_then(|s| self.node_map.get(&s.node_id))
+            .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for a list item starting at `offset`.
@@ -687,7 +811,7 @@ impl VirtualBuffer {
         self.spans
             .iter()
             .find(|s| s.start_offset == offset && matches!(s.role, Role::ListItem))
-            .and_then(|s| self.node_map.get(&s.node_id))
+            .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for a landmark starting at `offset`.
@@ -695,7 +819,7 @@ impl VirtualBuffer {
         self.spans
             .iter()
             .find(|s| s.start_offset == offset && matches!(s.role, Role::Landmark { .. }))
-            .and_then(|s| self.node_map.get(&s.node_id))
+            .and_then(|s| self.node(s.node_id))
     }
 
     /// Returns the next table starting after the given offset.
@@ -726,7 +850,7 @@ impl VirtualBuffer {
         self.spans
             .iter()
             .find(|s| s.start_offset == offset && matches!(s.role, Role::Table))
-            .and_then(|s| self.node_map.get(&s.node_id))
+            .and_then(|s| self.node(s.node_id))
     }
 
     /// Returns the next math block starting after the given offset.
@@ -762,7 +886,7 @@ impl VirtualBuffer {
             .iter()
             .filter(|s| offset >= s.start_offset && offset <= s.end_offset)
             .min_by_key(|s| s.end_offset - s.start_offset)
-            .and_then(|s| self.node_map.get(&s.node_id))
+            .and_then(|s| self.node(s.node_id))
     }
 
     /// Returns the dialog covering the given offset, if any.
@@ -808,7 +932,7 @@ impl VirtualBuffer {
         self.spans
             .iter()
             .find(|s| s.start_offset == offset && matches!(s.role, Role::IFrame))
-            .and_then(|s| self.node_map.get(&s.node_id))
+            .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves font formatting attributes at the given buffer offset.
@@ -817,7 +941,7 @@ impl VirtualBuffer {
             .iter()
             .filter(|s| offset >= s.start_offset && offset <= s.end_offset)
             .min_by_key(|s| s.end_offset - s.start_offset)
-            .and_then(|s| self.node_map.get(&s.node_id))
+            .and_then(|s| self.node(s.node_id))
             .and_then(|n| n.formatting.clone())
             .or_else(|| {
                 self.node_at_offset(offset)
@@ -894,5 +1018,71 @@ impl VirtualBuffer {
             }
         }
         items
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::VirtualBuffer;
+    use crate::aom::{AomNode, NodeStates, Role};
+
+    fn page() -> AomNode {
+        let hidden = AomNode::new(4, Role::Paragraph)
+            .with_text("Hidden")
+            .with_states(NodeStates {
+                hidden: true,
+                ..NodeStates::default()
+            });
+        AomNode::new(0, Role::Document)
+            .with_name("Page")
+            .with_children(vec![
+                AomNode::new(1, Role::List).with_children(vec![
+                    AomNode::new(2, Role::ListItem).with_text("One"),
+                    AomNode::new(3, Role::ListItem).with_text("Two"),
+                ]),
+                hidden,
+            ])
+    }
+
+    fn text(buffer: Option<&VirtualBuffer>, id: usize) -> Option<&str> {
+        buffer?.node(id)?.text.as_deref()
+    }
+
+    #[test]
+    fn nodes_are_read_with_their_subtrees_and_hidden_ones_are_not() {
+        let buffer = VirtualBuffer::from_aom(&page());
+        assert_eq!(buffer.node(1).map(|list| list.children.len()), Some(2));
+        assert_eq!(text(Some(&buffer), 3), Some("Two"));
+        assert!(!buffer.contains_node(4));
+        assert!(buffer.node(4).is_none());
+        let order: Vec<usize> = buffer.nodes().map(|node| node.id).collect();
+        assert_eq!(order, vec![0, 1, 2, 3]);
+    }
+
+    #[test]
+    fn a_change_made_through_the_buffer_is_part_of_the_page_and_survives_a_rebuild() {
+        let mut buffer = VirtualBuffer::from_aom(&page());
+        if let Some(item) = buffer.node_mut(2) {
+            item.text = Some("First".to_owned());
+        }
+        let first_item = buffer.node(1).and_then(|list| list.children.first());
+        assert_eq!(
+            first_item.and_then(|item| item.text.as_deref()),
+            Some("First")
+        );
+
+        let rebuilt = buffer.with_node_changed(3, |item| item.text = Some("Second".to_owned()));
+        assert_eq!(text(rebuilt.as_ref(), 2), Some("First"));
+        assert_eq!(text(rebuilt.as_ref(), 3), Some("Second"));
+    }
+
+    #[test]
+    fn a_repeated_id_reads_its_last_node_in_document_order() {
+        let page = AomNode::new(0, Role::Document).with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Earlier"),
+            AomNode::new(1, Role::Paragraph).with_text("Later"),
+        ]);
+        let buffer = VirtualBuffer::from_aom(&page);
+        assert_eq!(text(Some(&buffer), 1), Some("Later"));
     }
 }
