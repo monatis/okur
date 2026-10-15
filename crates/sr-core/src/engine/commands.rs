@@ -35,6 +35,14 @@ impl ScreenReaderEngine {
             return Some(speech);
         }
         if command == "SayWindowTitle" {
+            // The Virtual Viewer is a window of its own: JAWS names it, whatever it shows
+            // ("Virtual Viewer", without "Title is"; dev box, Windows Terminal and Notepad,
+            // 2026-10-15).
+            if self.viewer.is_some() {
+                let speech = "Virtual Viewer".to_owned();
+                self.speech.speak(&speech, true);
+                return Some(speech);
+            }
             // [obs, 306/s12]: "Title is | SR Dialog Fixture". In a browser it is the browser
             // window's title, not the page's [obs, 209/s1: "... - Google Chrome - <profile>"].
             let title = self.last_window_title.clone().or_else(|| {
@@ -821,13 +829,52 @@ impl ScreenReaderEngine {
             self.speech.speak(&speech, true);
             return Some(speech);
         }
+        // A console's text is its buffer as it is now: it is read fresh, and the viewer opens
+        // when it arrives (`open_console_viewer`).
+        let console = self
+            .last_native_focus
+            .as_ref()
+            .is_some_and(crate::apps::terminal::owns);
+        if console && self.actions.as_ref().is_some_and(|a| a.read_text()) {
+            self.pending_viewer = Some(window);
+            return None;
+        }
         let lines = self.virtualized_lines(window)?;
-        let viewer = crate::viewer::VirtualViewer::new(lines);
+        self.open_viewer(crate::viewer::VirtualViewer::new(lines), window)
+    }
+
+    /// Opens `viewer` and speaks what JAWS speaks: what was virtualized, and the line the
+    /// viewer is on.
+    fn open_viewer(
+        &mut self,
+        viewer: crate::viewer::VirtualViewer,
+        window: bool,
+    ) -> Option<String> {
         let what = if window { "window" } else { "control" };
         let speech = format!("Virtualizing current {what}\n{}", viewer.line_text());
         self.viewer = Some(viewer);
         self.speech.speak(&speech, true);
         Some(speech)
+    }
+
+    /// Opens the Virtual Viewer that waits for a console's text (`pending_viewer`), at the
+    /// cursor's line. Returns `None` when no viewer is waiting.
+    pub(super) fn open_console_viewer(
+        &mut self,
+        context: &crate::event::TextContext,
+    ) -> Option<Option<String>> {
+        let window = self.pending_viewer.take()?;
+        self.last_text = Some(context.clone());
+        let (lines, line) = crate::apps::terminal::viewer_lines(&context.text, context.caret);
+        if lines.is_empty() {
+            // Nothing read: the viewer shows the control, as for any other.
+            let lines = self.virtualized_lines(window);
+            return Some(lines.and_then(|lines| {
+                self.open_viewer(crate::viewer::VirtualViewer::new(lines), window)
+            }));
+        }
+        let viewer = crate::viewer::VirtualViewer::at_line(lines, line);
+        Some(self.open_viewer(viewer, window))
     }
 
     /// The Virtual Viewer's lines for the focused native control or its window:
@@ -878,7 +925,17 @@ impl ScreenReaderEngine {
     /// What JAWS reads when the Virtual Viewer closes: the text field's line, or the focused
     /// control's name and type [obs, 311/s12, s23; 312/s11].
     pub(super) fn speak_focus_again(&mut self) {
-        let speech = if self.editing_text() {
+        let console = self
+            .last_native_focus
+            .as_ref()
+            .is_some_and(crate::apps::terminal::owns);
+        let speech = if console {
+            // A console: its cursor's line, as last read (JAWS on the dev box, closing the
+            // viewer: "C:\Users\Gigabyte>").
+            self.last_text
+                .as_ref()
+                .map(|text| crate::apps::terminal::cursor_line(&text.text, text.caret))
+        } else if self.editing_text() {
             let line = self.last_text.as_ref().map(crate::editing::line_at);
             // A combo box's field adds its list position (JAWS on the Run dialog, dev box:
             // "C: | 1 of 6").

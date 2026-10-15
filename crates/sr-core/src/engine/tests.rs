@@ -854,3 +854,73 @@ fn test_engine_window_change_announcement_in_native_control() {
     let s3 = engine.handle_focus_event(&cmd_focus).unwrap_or_default();
     assert!(s3.contains("Command Prompt"));
 }
+
+/// Windows Terminal (JAWS 2025 on the dev box, 2026-10-15): the Virtual Viewer shows the
+/// console's text, opens at the prompt, and is titled "Virtual Viewer".
+#[test]
+fn a_console_is_virtualized_from_its_text_at_the_prompt() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut focus = FocusEvent::new(Role::Text)
+        .with_name("Command Prompt")
+        .with_window_title("Command Prompt");
+    focus.element_class = Some("TermControl".to_owned());
+    engine.handle_focus_event(&focus);
+
+    // Nothing is spoken until the console's text is read.
+    assert_eq!(engine.execute_command("VirtualizeWindow"), None);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(request, _)| request == "read text"));
+    let text = "Hello from the console     \r\n\
+                Second line                \r\n\
+                C:\\Users\\Gigabyte>         \r\n\
+                \x20                          \r\n";
+    let caret = text.find("C:\\").unwrap_or_default() + "C:\\Users\\Gigabyte>".len();
+    let context = crate::event::TextContext {
+        text: text.to_owned(),
+        caret,
+        selection: None,
+        font: None,
+        word: None,
+    };
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&AccessibilityEvent::TextContext(context))
+            .as_deref(),
+        Some("Virtualizing current window\nC:\\Users\\Gigabyte>")
+    );
+    assert_eq!(
+        engine.execute_command("SayWindowTitle").as_deref(),
+        Some("Virtual Viewer")
+    );
+    let home = KeyEvent::new(
+        Key::Home,
+        Modifiers {
+            ctrl: true,
+            ..Modifiers::none()
+        },
+        true,
+    );
+    speech.take();
+    engine.handle_key_event(&home);
+    let up = KeyEvent::new(Key::UpArrow, Modifiers::none(), true);
+    engine.handle_key_event(&up);
+    let down = KeyEvent::new(Key::DownArrow, Modifiers::none(), true);
+    engine.handle_key_event(&down);
+    let spoken = speech.take();
+    assert!(
+        spoken.iter().any(|s| s == "Hello from the console"),
+        "{spoken:?}"
+    );
+    assert!(spoken.iter().any(|s| s == "Second line"), "{spoken:?}");
+
+    // Escape closes the viewer and reads the console's cursor line again.
+    let escape = KeyEvent::new(Key::Escape, Modifiers::none(), true);
+    engine.handle_key_event(&escape);
+    assert_eq!(speech.take(), vec!["C:\\Users\\Gigabyte>".to_owned()]);
+}

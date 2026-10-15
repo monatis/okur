@@ -19,6 +19,7 @@ To record one:
 | 318 | Virtualize Window (Insert+Alt+W) in a page | `news-article.html` |
 | 319 | The Run dialog: its announcement and Virtualize Window | `desktop-editor.ps1` |
 | 320 | Notepad, laptop layout: CapsLock+I, K, O, L, J, M, U, Insert+Up, Ctrl+Right | `desktop-notepad.ps1` |
+| 321 | Virtualize Window in a console: opening line, Insert+T ("Virtual Viewer"), first and last lines, Escape | `desktop-console.ps1` (here) |
 
 The plan `docs/plans/2026-10-15-jaws-feature-loop-round-2.md` (work item 1) lists what to
 check in each recording.

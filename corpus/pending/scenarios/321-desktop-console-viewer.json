@@ -1,0 +1,19 @@
+{
+  "id": "321-desktop-console-viewer",
+  "name": "Virtualize Window in a console: the viewer's opening line (the cursor's), its title (Insert+T), its first and last lines, and closing it",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-console.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Console Fixture" },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+Alt+W" },
+    { "id": "s2", "type": "key", "command": "Insert+T" },
+    { "id": "s3", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s4", "type": "key", "command": "Down" },
+    { "id": "s5", "type": "key", "command": "Down" },
+    { "id": "s6", "type": "key", "command": "Ctrl+End" },
+    { "id": "s7", "type": "key", "command": "Escape" }
+  ]
+}

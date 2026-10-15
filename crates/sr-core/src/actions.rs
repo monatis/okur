@@ -24,6 +24,14 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Asks for the focused element's text, caret and selection as they are now (a
+    /// console's buffer, for the Virtual Viewer). It arrives later as
+    /// [`crate::event::AccessibilityEvent::TextContext`], always: with empty text when the
+    /// focus has none. Returns false when unsupported.
+    fn read_text(&self) -> bool {
+        false
+    }
+
     /// Puts `text` on the system clipboard (the Virtual Viewer's Ctrl+C). Returns false when
     /// unsupported.
     fn copy_text(&self, text: &str) -> bool {
@@ -73,6 +81,13 @@ impl ApplicationActions for RecordingActions {
     fn read_at_caret(&self, unit: crate::event::CaretUnit) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push((format!("caret {unit:?}"), 0));
+        }
+        true
+    }
+
+    fn read_text(&self) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push(("read text".to_owned(), 0));
         }
         true
     }

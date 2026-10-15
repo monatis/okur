@@ -62,13 +62,19 @@ fn class(c: char) -> Class {
 impl VirtualViewer {
     /// A viewer over `lines`, at the start of the first.
     pub fn new(lines: Vec<String>) -> Self {
+        Self::at_line(lines, 0)
+    }
+
+    /// A viewer over `lines`, at the start of `line` (a console's: the cursor's line).
+    pub fn at_line(lines: Vec<String>, line: usize) -> Self {
         let mut lines: Vec<Vec<char>> = lines.iter().map(|l| l.chars().collect()).collect();
         if lines.is_empty() {
             lines.push(Vec::new());
         }
+        let line = line.min(lines.len() - 1);
         Self {
             lines,
-            line: 0,
+            line,
             column: 0,
             all_selected: false,
         }

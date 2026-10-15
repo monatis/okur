@@ -63,6 +63,10 @@ impl ScreenReaderEngine {
         &mut self,
         context: &crate::event::TextContext,
     ) -> Option<String> {
+        // A Virtual Viewer waiting for a console's text takes it.
+        if let Some(spoken) = self.open_console_viewer(context) {
+            return spoken;
+        }
         let before = self.last_text.replace(context.clone());
         let key = self.pending_edit.take()?;
         let field = self.text_field_line();

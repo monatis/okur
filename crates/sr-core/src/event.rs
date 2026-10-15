@@ -157,6 +157,9 @@ pub struct FocusEvent {
     pub read_only: Option<bool>,
     /// The executable of the focus's window ("SearchHost.exe"), for application behavior.
     pub process: Option<String>,
+    /// The focused element's own class (UIA ClassName: Windows Terminal's text area is a
+    /// "TermControl"), for application behavior.
+    pub element_class: Option<String>,
 }
 
 impl FocusEvent {
@@ -190,6 +193,7 @@ impl FocusEvent {
             access_key: None,
             read_only: None,
             process: None,
+            element_class: None,
         }
     }
 

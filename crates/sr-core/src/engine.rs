@@ -72,6 +72,9 @@ pub struct ScreenReaderEngine {
     caps_lock_on: bool,
     /// The Virtual Viewer, while it is open (it takes the keys).
     viewer: Option<crate::viewer::VirtualViewer>,
+    /// A Virtual Viewer waiting for the focused text to be read (a console): `Some(window)`
+    /// for Virtualize Window, `Some(false)` for Virtualize Current Control.
+    pending_viewer: Option<bool>,
     /// Alt+Tab's task switcher, read as JAWS reads it.
     task_switcher: crate::apps::task_switcher::TaskSwitcher,
     /// Each live region's lines when it last changed, by DOM id.
@@ -105,6 +108,7 @@ impl ScreenReaderEngine {
             settings: crate::settings::Settings::default(),
             caps_lock_on: false,
             viewer: None,
+            pending_viewer: None,
             task_switcher: Default::default(),
             last_live_text: std::collections::HashMap::new(),
         }

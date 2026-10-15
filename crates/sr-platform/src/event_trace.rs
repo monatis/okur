@@ -272,6 +272,7 @@ pub fn focus_event_from_chain(
         .is_some_and(|c| c == CHROMIUM_TOP_WINDOW || WEB_CONTENT_WINDOW_CLASSES.contains(&c));
     event.in_document = in_browser && chain.iter().any(|a| a.control_type == UIA_DOCUMENT);
     event.read_only = focused.value_is_read_only;
+    event.element_class = focused.class_name.clone().filter(|c| !c.is_empty());
     if event.in_document {
         event.dom_id = focused.automation_id.clone().filter(|id| !id.is_empty());
     }

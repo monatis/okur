@@ -39,7 +39,10 @@ mod windows_actions {
 
     enum Request {
         Object(i32, Ia2Action),
+        /// The field's text once the application has acted on a key.
         Text,
+        /// The focused text as it is now, answered even when there is none.
+        TextNow,
         /// A chord of virtual keys, sent marked as the screen reader's own.
         Keys(Vec<u16>),
     }
@@ -120,6 +123,28 @@ mod windows_actions {
                                     let _ = events.send(AccessibilityEvent::TextContext(context));
                                 }
                             }
+                            Request::TextNow => {
+                                let Some(events) = events.as_ref() else {
+                                    tracing::warn!("text read impossible: no event channel");
+                                    continue;
+                                };
+                                let started = Instant::now();
+                                let context = uia.as_ref().and_then(read_focused);
+                                tracing::debug!(
+                                    chars = context.as_ref().map(|c| c.text.chars().count()),
+                                    ms = started.elapsed().as_millis(),
+                                    "focused text read"
+                                );
+                                // Answered even when empty: the engine waits for it.
+                                let context = context.unwrap_or(sr_core::TextContext {
+                                    text: String::new(),
+                                    caret: 0,
+                                    selection: None,
+                                    font: None,
+                                    word: None,
+                                });
+                                let _ = events.send(AccessibilityEvent::TextContext(context));
+                            }
                         }
                     }
                 }
@@ -175,6 +200,10 @@ mod windows_actions {
 
         fn read_at_caret(&self, _unit: CaretUnit) -> bool {
             self.send(Request::Text)
+        }
+
+        fn read_text(&self) -> bool {
+            self.send(Request::TextNow)
         }
 
         fn press(&self, chord: &[sr_core::Key]) -> bool {

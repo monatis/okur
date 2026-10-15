@@ -83,6 +83,7 @@ when old-pc is offline, and interleaved with recording when it is back:
      - **318**, Virtualize in a page.
      - **319**, the Run dialog: its announcement, Virtualize Window, and Insert+Tab could join.
      - **320**, Notepad in the laptop layout: CapsLock+I, K, O, L, J, M, U, Insert+Up, and Ctrl+Right over code punctuation. It settles classic Notepad's word breaks against the UIA word unit used on Windows 11.
+     - **321**, Virtualize Window in a console (Windows 10's classic console on old-pc): the opening line (the cursor's), Insert+T ("Virtual Viewer"), the first and last lines, and Escape. JAWS 2025 in Windows Terminal on the dev box gave "Virtualizing current window | C:UsersGigabyte>", "Virtual Viewer", the first output line, and the prompt line on Ctrl+End and on Escape.
      - **315**, a RichEdit field: lines and Say Font with paragraph formatting.
      - **208**, a web textarea, character by character (the fixed tracer).
    - Re-record **306**, **314** and **209** with trace format 7, which closes the steps whose traces predate it.
