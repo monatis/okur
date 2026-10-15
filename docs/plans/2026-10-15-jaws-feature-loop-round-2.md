@@ -22,6 +22,7 @@ Live usability gaps the user reports come first.
      - **316**, Win+M.
      - **318**, Virtualize in a page.
      - **319**, the Run dialog: its announcement, Virtualize Window, and Insert+Tab could join.
+     - **320**, Notepad in the laptop layout: CapsLock+I, K, O, L, J, M, U, Insert+Up, and Ctrl+Right over code punctuation. It settles classic Notepad's word breaks against the UIA word unit used on Windows 11.
      - **315**, a RichEdit field: lines and Say Font with paragraph formatting.
      - **208**, a web textarea, character by character (the fixed tracer).
    - Re-record **306**, **314** and **209** with trace format 7, which closes the steps whose traces predate it.

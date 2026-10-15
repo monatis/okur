@@ -142,7 +142,8 @@ The user allowed using the dev box (Windows 11 26200, JAWS 2025 running) while t
   - `316-desktop-show-desktop.json`;
   - `317-desktop-alt-tab-hold.json`;
   - `318-web-virtualize-in-browse-mode.json`;
-  - `319-desktop-run-dialog-viewer.json`.
+  - `319-desktop-run-dialog-viewer.json`;
+  - `320-desktop-notepad-laptop-reading-keys.json`.
 
   A scenario without evidence counts as "could not run", so they are committed only with their evidence.
 - **The dev box's research needs old-pc evidence.** Alt+Tab, Win+M, Insert+T on the desktop, Say Font in Notepad, the Run dialog, and Insert+Tab now match JAWS live on Windows 11, but old-pc (Windows 10) has to record them before they count as parity.
