@@ -91,7 +91,7 @@ pub fn parse_step(text: &str) -> Result<KeyStep, String> {
 
 #[cfg(windows)]
 pub use windows_harness::{
-    foreground_process, foreground_title, jaws_history, send_key, send_steps,
+    bring_to_front, foreground_process, foreground_title, jaws_history, send_key, send_steps,
 };
 
 #[cfg(windows)]
@@ -176,6 +176,69 @@ mod windows_harness {
         let size = i32::try_from(std::mem::size_of::<INPUT>()).unwrap_or(0);
         // SAFETY: one well-formed keyboard input.
         unsafe { SendInput(&[input], size) };
+    }
+
+    /// Brings the visible top-level window whose title contains `title` (case-insensitive)
+    /// to the front, restoring it if minimized, and returns its whole title. The input of
+    /// the window in front is attached for the switch, as Windows lets only the foreground
+    /// thread hand the foreground on.
+    pub fn bring_to_front(title: &str) -> Result<String, String> {
+        use windows::core::BOOL;
+        use windows::Win32::Foundation::{HWND, LPARAM};
+        use windows::Win32::System::Threading::{AttachThreadInput, GetCurrentThreadId};
+        use windows::Win32::UI::WindowsAndMessaging::{
+            BringWindowToTop, EnumWindows, GetForegroundWindow, GetWindowTextW,
+            GetWindowThreadProcessId, IsIconic, IsWindowVisible, SetForegroundWindow,
+            ShowWindow, SW_RESTORE,
+        };
+        struct Search {
+            wanted: String,
+            found: Option<(HWND, String)>,
+        }
+        unsafe extern "system" fn visit(hwnd: HWND, data: LPARAM) -> BOOL {
+            // SAFETY: `data` is the `Search` passed to EnumWindows below, alive for the call.
+            let search = unsafe { &mut *(data.0 as *mut Search) };
+            let mut buf = [0u16; 512];
+            // SAFETY: plain Win32 queries into a buffer of the given size.
+            let (visible, len) =
+                unsafe { (IsWindowVisible(hwnd).as_bool(), GetWindowTextW(hwnd, &mut buf)) };
+            let text =
+                String::from_utf16_lossy(buf.get(..usize::try_from(len).unwrap_or(0)).unwrap_or_default());
+            if visible && text.to_lowercase().contains(&search.wanted) {
+                search.found = Some((hwnd, text));
+                return BOOL(0);
+            }
+            BOOL(1)
+        }
+        let mut search = Search {
+            wanted: title.to_lowercase(),
+            found: None,
+        };
+        // SAFETY: the callback reads `search` only during the call.
+        let _ = unsafe { EnumWindows(Some(visit), LPARAM(&mut search as *mut Search as isize)) };
+        let (hwnd, text) = search
+            .found
+            .ok_or_else(|| format!("no visible window's title contains {title:?}"))?;
+        // SAFETY: plain Win32 window calls; the thread input is detached again below.
+        unsafe {
+            if IsIconic(hwnd).as_bool() {
+                let _ = ShowWindow(hwnd, SW_RESTORE);
+            }
+            let front = GetWindowThreadProcessId(GetForegroundWindow(), None);
+            let ours = GetCurrentThreadId();
+            let attached = front != ours && AttachThreadInput(ours, front, true).as_bool();
+            let _ = BringWindowToTop(hwnd);
+            let _ = SetForegroundWindow(hwnd);
+            if attached {
+                let _ = AttachThreadInput(ours, front, false);
+            }
+        }
+        std::thread::sleep(Duration::from_millis(300));
+        if foreground_title() == text {
+            Ok(text)
+        } else {
+            Err(format!("{text:?} did not come to the front"))
+        }
     }
 
     /// The foreground window's title.

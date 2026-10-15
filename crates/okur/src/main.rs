@@ -141,6 +141,12 @@ enum Commands {
         #[arg(required = true)]
         steps: Vec<String>,
     },
+    /// Bring the visible window whose title contains this text (case-insensitive) to the
+    /// front, for live checks: prints its whole title (Windows)
+    Front {
+        /// Text the window's title contains
+        title: String,
+    },
     /// Print JAWS's speech history (through FSAPI; the clipboard's text is put back)
     JawsHistory {
         /// Empty the history after reading it
@@ -1291,6 +1297,22 @@ async fn main() {
             if let Err(e) = result {
                 eprintln!("{e}");
                 std::process::exit(1);
+            }
+        }
+        Some(Commands::Front { title }) => {
+            #[cfg(windows)]
+            let result = okur_platform::harness::bring_to_front(&title);
+            #[cfg(not(windows))]
+            let result: Result<String, String> = {
+                let _ = title;
+                Err("bringing a window to the front is only available on Windows".to_owned())
+            };
+            match result {
+                Ok(title) => println!("{title}"),
+                Err(e) => {
+                    eprintln!("{e}");
+                    std::process::exit(1);
+                }
             }
         }
         Some(Commands::JawsHistory { clear }) => {

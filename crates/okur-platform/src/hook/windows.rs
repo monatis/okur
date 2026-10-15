@@ -35,17 +35,30 @@ static SCROLL_LOCK_HELD: AtomicBool = AtomicBool::new(false);
 static CONSUMED_MODIFIERS: AtomicU32 = AtomicU32::new(0);
 /// `dwExtraInfo` of the keys the screen reader sends itself ("OKUR").
 pub const INJECTED_MARK: usize = 0x4F4B_5552;
-/// The last keys the screen reader sent itself, as `(virtual key, hook time in ms)`. JAWS
-/// sends its copies after the whole chord (Ctrl, Right, then Ctrl's and Right's copies).
-static RECENT_OURS: Mutex<[(u32, u32); 4]> = Mutex::new([(0, 0); 4]);
-/// How long after a key the screen reader sent an injected key like it is JAWS's copy.
-const COPY_WINDOW_MS: u32 = 200;
+/// The last keys pressed that the engine saw, as `(virtual key, hook time in ms)`. JAWS,
+/// running alongside, takes navigation keys and sends its own copies (injected, marked)
+/// after the whole chord (Ctrl, Right, then Ctrl's and Right's copies).
+static RECENT_KEYS: Mutex<[(u32, u32); 4]> = Mutex::new([(0, 0); 4]);
+/// How long after a key JAWS's copy of it can come (about 5 ms on the dev box).
+const COPY_WINDOW_MS: u32 = 50;
 /// `KBDLLHOOKSTRUCT::flags`: the event was injected.
 const LLKHF_INJECTED: u32 = 0x10;
 const SHIFT_BIT: u32 = 1;
 const CTRL_BIT: u32 = 2;
 const ALT_BIT: u32 = 4;
 const WIN_BIT: u32 = 8;
+
+/// Whether `vk` was pressed within [`COPY_WINDOW_MS`] before `time`: the press is then
+/// forgotten, as each original has one copy.
+fn take_recent(vk: u32, time: u32) -> bool {
+    RECENT_KEYS.lock().is_ok_and(|mut recent| {
+        recent
+            .iter_mut()
+            .find(|(key, at)| *key == vk && time.wrapping_sub(*at) <= COPY_WINDOW_MS)
+            .map(|entry| *entry = (0, 0))
+            .is_some()
+    })
+}
 
 /// The modifier a virtual key is, either side, as a [`CONSUMED_MODIFIERS`] bit (0 for others).
 fn modifier_bit(vk: u32) -> u32 {
@@ -261,26 +274,25 @@ unsafe extern "system" fn low_level_keyboard_proc(
     // Determine modifier state: the system's, and the modifiers it never saw pressed. Keys
     // the screen reader sends itself (a reading command's arrow key, sent while the JAWS key
     // is still held) are plain keys: only the modifiers they carry count.
-    // JAWS takes navigation keys and sends its own copy (unmarked, but injected): a copy of
-    // the key the screen reader just sent is the screen reader's too, or it would read as a
-    // JAWS chord while the JAWS key is still held and be swallowed (seen live on the dev box).
+    // JAWS, running alongside, takes navigation keys and sends its own copies: injected, with
+    // its own nonzero `dwExtraInfo` (0x45789400 on the dev box), a few milliseconds after the
+    // original. A copy goes on to the application without the engine seeing the key twice
+    // (an edit key read the field twice, a key at a boundary spoke twice), and without
+    // reading as a JAWS chord while the JAWS key is still held (both seen live on the dev box).
+    // Keys other tools inject (an on-screen keyboard, voice control) carry no mark, so a
+    // letter they type twice is never taken for a copy.
     let marked = kbd.dwExtraInfo == INJECTED_MARK;
-    let copy = !marked
-        && kbd.flags.0 & LLKHF_INJECTED != 0
-        && RECENT_OURS.lock().is_ok_and(|recent| {
-            recent
-                .iter()
-                .any(|&(vk, time)| vk == vk_code && kbd.time.wrapping_sub(time) <= COPY_WINDOW_MS)
-        });
-    if marked {
-        if let Ok(mut recent) = RECENT_OURS.lock() {
-            recent.rotate_right(1);
-            if let Some(first) = recent.first_mut() {
-                *first = (vk_code, kbd.time);
-            }
+    let foreign_mark = kbd.dwExtraInfo != 0 && !marked;
+    if foreign_mark && kbd.flags.0 & LLKHF_INJECTED != 0 && take_recent(vk_code, kbd.time) {
+        return CallNextHookEx(None, ncode, wparam, lparam);
+    }
+    if let Ok(mut recent) = RECENT_KEYS.lock() {
+        recent.rotate_right(1);
+        if let Some(first) = recent.first_mut() {
+            *first = (vk_code, kbd.time);
         }
     }
-    let ours = marked || copy;
+    let ours = marked;
     let consumed = if ours {
         0
     } else {
