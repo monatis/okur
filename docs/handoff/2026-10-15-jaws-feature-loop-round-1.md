@@ -18,7 +18,7 @@ Buffer invariants: 0 violation(s)
 $ sr-cli corpus-manifest
 Corpus manifest is current.
 $ cargo test --workspace  (summed test-result lines)
-tests: 849 passed, 0 failed, 198 ignored
+tests: 851 passed, 0 failed, 198 ignored
 ```
 (After the dev-box session below; the parity lines did not change in it. Run with the
 untracked scenarios parked: each one without evidence counts as "could not run".)
@@ -98,7 +98,7 @@ Each item started from a user report or from the loop's discovery.
 ### New evidence
 Scenarios 207, 209, 307, 308, 309, 311, 312, 313 and 314 (see their `corpus:` commits).
 
-## Dev-box session (02:20–03:50, after old-pc went offline)
+## Dev-box session (02:20–04:05, after old-pc went offline)
 
 The user allowed using the dev box (Windows 11 26200, JAWS 2025 running) while they slept.
 
@@ -126,6 +126,9 @@ The user allowed using the dev box (Windows 11 26200, JAWS 2025 running) while t
 | 5e822a2 | Say Window (Insert+B) for dialog boxes: the dialog's UIA tree, read as name, type word, state and value | Run dialog: identical to JAWS |
 | b2a0ecf | `sr-cli keys` (foreground-checked chords) and `sr-cli jaws-history` (FSAPI, clipboard put back) replace the scratchpad C# | Used for the checks after it |
 | 2320f9e | The switcher's first item on its first opening: queued UIA focus elements, and a UIA focus read by its chain alone (its context took 2.8 s) | Two runs right after start: all items spoken |
+| d4ed970 | Laptop layout: CapsLock+I (Say Line) and CapsLock+K (Say Word). Say Line in a multi-line document reads the line alone. | Identical to JAWS in Notepad |
+| df40cb7 | Laptop layout: CapsLock+O/U/L/J/M move, then read. In pages they are virtual cursor commands. In native controls the application's arrow key is sent, marked as ours. JAWS's unmarked copy of it also counts as ours, so it is not read as a JAWS chord while CapsLock is held. | Identical to JAWS in Notepad. CapsLock+Comma and CapsLock+Period were typed into the document by JAWS here, so they are left alone. |
+| 6e863aa | Words in a text field follow the field's UIA word unit (Notepad: "line", ",", "with") | Identical to JAWS |
 
 **Still differing on the dev box:**
 - In the font viewer, JAWS moved through its lines; old-pc's evidence stays on the last line, as ours does.
