@@ -550,7 +550,12 @@ impl<'a> Builder<'a> {
             _ => None,
         };
         let same_page = self.is_same_page(href);
-        let kind = if same_page { "same page link" } else { "Link" };
+        // aria-roledescription takes the role's place in reading ("‹ chip › Rust").
+        let kind = match node.role_description() {
+            Some(description) => description,
+            None if same_page => "same page link",
+            None => "Link",
+        };
         if same_page {
             if let Some(n) = self.buffer.node_mut(node.id) {
                 n.attributes
@@ -603,7 +608,7 @@ impl<'a> Builder<'a> {
                 let kind = if attr(node, "password") == Some("true") {
                     "password edit"
                 } else {
-                    "Edit"
+                    node.role_description().unwrap_or("Edit")
                 };
                 let mut s = String::new();
                 if !labelled {
@@ -635,7 +640,7 @@ impl<'a> Builder<'a> {
             }
             Role::CheckBox => format!(
                 "{name}{}{}",
-                role_marker("check box"),
+                role_marker(node.role_description().unwrap_or("check box")),
                 state_marker(checked(node.states.checked))
             ),
             Role::RadioButton => {
@@ -651,7 +656,8 @@ impl<'a> Builder<'a> {
             }
             // "Platform ‹ Button › ‹collapsed›", "Overview ‹ Button › ‹Current Page›".
             Role::Button => {
-                let mut s = format!("{name}{}", role_marker("Button"));
+                let role = node.role_description().unwrap_or("Button");
+                let mut s = format!("{name}{}", role_marker(role));
                 match node.states.expanded {
                     Some(true) => s.push_str(&state_marker("expanded")),
                     Some(false) => s.push_str(&state_marker("collapsed")),
@@ -1182,5 +1188,49 @@ mod tests {
             cursor.focus_node(2).as_deref(),
             Some("Name \u{1d} Edit \u{1e} \nAda")
         );
+    }
+
+    /// aria-roledescription on the dev box (JAWS, 2026-10-16): said in place of a button's,
+    /// link's, check box's and edit's role in reading; on focus, a link keeps its own role.
+    #[test]
+    fn a_role_description_takes_the_roles_place() {
+        let described = |node: AomNode, description: &str| {
+            let mut node = node;
+            node.attributes
+                .insert("roledescription".to_owned(), description.to_owned());
+            node
+        };
+        let root = AomNode::new(0, Role::Document).with_children(vec![
+            described(
+                AomNode::new(1, Role::Button).with_name("Next slide"),
+                "slide control",
+            ),
+            described(link(2, "#x", "Rust", None), "chip"),
+            described(
+                AomNode::new(3, Role::CheckBox).with_name("Wrap"),
+                "toggle",
+            ),
+        ]);
+        let buffer = crate::buffer::VirtualBuffer::from_aom(&root);
+        let speech: Vec<&str> = buffer.lines.iter().map(|l| l.speech.as_str()).collect();
+        assert_eq!(
+            speech,
+            vec![
+                format!("Next slide{}", role_marker("slide control")),
+                format!("{}Rust", role_marker("chip")),
+                format!(
+                    "Wrap{}{}",
+                    role_marker("toggle"),
+                    state_marker("not checked")
+                ),
+            ]
+        );
+        let mut cursor = crate::cursor::VirtualCursor::new(buffer);
+        assert!(cursor
+            .focus_node(1)
+            .is_some_and(|s| s.starts_with("Next slide  \u{1d} slide control \u{1e}")));
+        assert!(cursor
+            .focus_node(2)
+            .is_some_and(|s| s.starts_with("Rust  \u{1d} same page link \u{1e}")));
     }
 }

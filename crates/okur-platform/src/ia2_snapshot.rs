@@ -355,6 +355,10 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     if let Some(current) = attr("current").filter(|c| c != "false") {
         set_attr("current", current);
     }
+    // aria-roledescription, said in place of some roles.
+    if let Some(description) = attr("roledescription") {
+        set_attr("roledescription", description);
+    }
     // The live object behind the node, for actions (focus, default action).
     if let Some(unique_id) = node.unique_id {
         set_attr(crate::actions::UNIQUE_ID_ATTR, unique_id.to_string());

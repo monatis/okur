@@ -304,6 +304,8 @@ impl SpeechFormatter {
                 let password = attr("password") == Some("true");
                 let kind = if password {
                     "password edit"
+                } else if let Some(description) = node.role_description() {
+                    description
                 } else if attr("multiline") == Some("true") {
                     "edit"
                 } else {
@@ -359,7 +361,8 @@ impl SpeechFormatter {
                 s
             }
             Role::CheckBox => format!(
-                "{name}  \u{1d} check box \u{1e}   \u{1d}{}\u{1e}",
+                "{name}  \u{1d} {} \u{1e}   \u{1d}{}\u{1e}",
+                node.role_description().unwrap_or("check box"),
                 checked(node.states.checked)
             ),
             Role::Button => {
@@ -373,7 +376,8 @@ impl SpeechFormatter {
                     .current_phrase()
                     .map(|c| format!(" \u{1d}{c}\u{1e}"))
                     .unwrap_or_default();
-                format!("{name}  \u{1d} Button \u{1e}{state}{current}")
+                let role = node.role_description().unwrap_or("Button");
+                format!("{name}  \u{1d} {role} \u{1e}{state}{current}")
             }
             _ => name.to_owned(),
         }

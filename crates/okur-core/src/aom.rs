@@ -273,6 +273,15 @@ impl AomNode {
         self.children.push(child);
     }
 
+    /// The node's aria-roledescription, which JAWS says in place of a button's, check box's
+    /// or edit's role, and of a link's in reading ("Next slide slide control").
+    pub fn role_description(&self) -> Option<&str> {
+        self.attributes
+            .get("roledescription")
+            .map(String::as_str)
+            .filter(|r| !r.trim().is_empty())
+    }
+
     /// What JAWS says for the node's aria-current (the `current` attribute): "Current Page"
     /// for `page`, "Current" for `true`, nothing for `false` or no attribute.
     pub fn current_phrase(&self) -> Option<&'static str> {
