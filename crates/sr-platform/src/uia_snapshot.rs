@@ -629,6 +629,16 @@ pub(crate) mod capture {
         chain
     }
 
+    /// Whether `element` is the desktop (UIA's root element).
+    fn is_root(uia: &IUIAutomation, element: &IUIAutomationElement) -> bool {
+        // SAFETY: UIA client queries on valid automation objects.
+        unsafe {
+            uia.GetRootElement()
+                .and_then(|root| uia.CompareElements(element, &root))
+                .is_ok_and(|same| same.as_bool())
+        }
+    }
+
     /// Siblings recorded around a focused element, at most.
     const MAX_FOCUS_SIBLINGS: usize = 200;
     /// Nodes recorded below a focused element, at most.
@@ -661,7 +671,15 @@ pub(crate) mod capture {
                 );
             }
             let mut siblings = Vec::new();
-            if let Ok(parent) = walker.GetParentElement(focused) {
+            // A top-level window's siblings are every window on the desktop, each read across
+            // processes, and no announcement counts them: Windows Terminal reports its window
+            // focused before its text area, and reading them held every event for 6.6 s
+            // (dev box, 2026-10-15).
+            let parent = walker
+                .GetParentElement(focused)
+                .ok()
+                .filter(|parent| !is_root(uia, parent));
+            if let Some(parent) = parent {
                 let mut current = walker.GetFirstChildElement(&parent).ok();
                 while let Some(el) = current {
                     if siblings.len() >= MAX_FOCUS_SIBLINGS {
