@@ -159,6 +159,8 @@ mod engine {
             /// The pitch change, on SAPI's scale.
             pitch: i32,
             generation: u64,
+            /// When the engine was asked to speak it, for the debug log's latency.
+            asked: Instant,
         },
         Voice(String),
         Rate(f64),
@@ -280,6 +282,7 @@ mod engine {
         output: &mut Option<Output>,
         chunks: &[String],
         cancelled: &dyn Fn() -> bool,
+        asked: Instant,
     ) {
         let started = Instant::now();
         let mut next = chunks.first().and_then(|c| start(synth, c));
@@ -295,9 +298,6 @@ mod engine {
                 continue;
             };
             let pcm = trim_leading_silence(pcm, format, SILENCE_THRESHOLD);
-            if index == 0 {
-                tracing::debug!(ms = started.elapsed().as_millis(), "OneCore first chunk");
-            }
             if output.as_ref().is_none_or(|o| o.format != format) {
                 if let Some(old) = output.take() {
                     old.stop();
@@ -309,6 +309,15 @@ mod engine {
             let Some(out) = output.as_ref() else {
                 break;
             };
+            if index == 0 {
+                // From the speak call to the first audio handed to the device (`sr-cli
+                // latency`): queueing, synthesis and opening the output.
+                tracing::debug!(
+                    ms = asked.elapsed().as_millis(),
+                    synthesis_ms = started.elapsed().as_millis(),
+                    "speech audio started"
+                );
+            }
             let last = index + 1 == chunks.len();
             if let Err(e) = out.play(pcm, cancelled, last) {
                 tracing::warn!("audio playback: {e}");
@@ -473,6 +482,7 @@ mod engine {
                     text,
                     pitch,
                     generation,
+                    asked,
                 } => {
                     let cancelled = || shared.generation.load(Ordering::SeqCst) != generation;
                     if cancelled() {
@@ -488,7 +498,13 @@ mod engine {
                     if pitch != 0 {
                         set_pitch(audio_pitch(pitch));
                     }
-                    speak_chunks(&synth, &mut output, &speech_chunks(&text), &cancelled);
+                    speak_chunks(
+                        &synth,
+                        &mut output,
+                        &speech_chunks(&text),
+                        &cancelled,
+                        asked,
+                    );
                     if pitch != 0 {
                         set_pitch(1.0);
                     }
@@ -552,6 +568,7 @@ mod engine {
                 text: clean,
                 pitch,
                 generation,
+                asked: Instant::now(),
             });
             if sent.is_err() {
                 self.shared.pending.fetch_sub(1, Ordering::SeqCst);

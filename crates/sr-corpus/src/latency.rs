@@ -8,7 +8,9 @@
 //! - `event handled` (`event`, `us`): the engine handling it;
 //! - `page loaded`, `page refreshed` (`ms`): capturing a page; `page buffer built` (`ms`);
 //! - `focused text read` (`ms`): a text read for the Virtual Viewer; `text context read`
-//!   (`ms`): an edit key's text, read once the application has acted.
+//!   (`ms`): an edit key's text, read once the application has acted;
+//! - `speech audio started` (`ms`): from a speak call to its first audio handed to the
+//!   device (OneCore).
 
 /// Timings of one kind of step, in microseconds.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -93,7 +95,11 @@ pub fn summarize(log: &str) -> Vec<Category> {
                     add(format!("event handled: {}", event()), us);
                 }
             }
-            "page loaded" | "page refreshed" | "page buffer built" | "focused text read"
+            "page loaded"
+            | "page refreshed"
+            | "page buffer built"
+            | "focused text read"
+            | "speech audio started"
             | "text context read" => {
                 if let Some(ms) = number(line, "ms") {
                     add(message.clone(), ms * 1000);
