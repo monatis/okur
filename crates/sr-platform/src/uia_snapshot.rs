@@ -709,20 +709,36 @@ pub(crate) mod capture {
                 .then(|| walker.GetParentElement(focused).ok())
                 .flatten()
                 .filter(|parent| !is_root(uia, parent));
-            if let Some(parent) = parent {
-                let mut current = walker
-                    .GetFirstChildElementBuildCache(&parent, &request)
-                    .ok();
-                while let Some(el) = current {
+            let clock = std::time::Instant::now();
+            // All of them in one call, with only what is read of them: one call per sibling
+            // took 85 ms for 24 items of a WPF list (dev box, 2026-10-15).
+            let fetched = parent.and_then(|parent| {
+                let request = request_for(uia, AutomationElementMode_None, SIBLING_PROPERTIES)?;
+                let condition = uia.ControlViewCondition().ok()?;
+                parent
+                    .FindAllBuildCache(TreeScope_Children, &condition, &request)
+                    .ok()
+            });
+            if let Some(siblings) = fetched {
+                let count = siblings.Length().unwrap_or(0);
+                for index in 0..count {
                     if found.len() >= MAX_FOCUS_SIBLINGS {
                         break;
                     }
-                    found.push(read_node(&el, usize::MAX));
-                    current = walker.GetNextSiblingElementBuildCache(&el, &request).ok();
+                    if let Ok(el) = siblings.GetElement(index) {
+                        found.push(read_node(&el, usize::MAX));
+                    }
                 }
             }
+            let siblings_ms = clock.elapsed().as_millis();
             let depth = subtree_depth(control_type.unwrap_or_default());
             let subtree = read_levels(uia, focused, depth);
+            tracing::debug!(
+                siblings = found.len(),
+                siblings_ms,
+                subtree_ms = clock.elapsed().as_millis() - siblings_ms,
+                "focus context read"
+            );
             (found, subtree)
         }
     }
@@ -750,6 +766,15 @@ pub(crate) mod capture {
             read_levels(uia, &focused, depth)
         }
     }
+
+    /// What is read of a focused element's siblings: positions are counted among the
+    /// siblings of its type that have the focus or its name, and a dialog box's text and
+    /// buttons are its siblings' names.
+    const SIBLING_PROPERTIES: &[UIA_PROPERTY_ID] = &[
+        UIA_ControlTypePropertyId,
+        UIA_NamePropertyId,
+        UIA_HasKeyboardFocusPropertyId,
+    ];
 
     /// What announcements read of a focused element's children (list-view columns, tree
     /// items, a combo box's list and items): fewer properties, because a Win32 control behind
