@@ -72,11 +72,23 @@ impl KeyboardSettings {
         if self.layout != KeyboardLayout::Laptop || !m.insert || m.ctrl || m.alt || m.shift {
             return None;
         }
-        match event.key {
-            Key::Alpha(c) if c.eq_ignore_ascii_case(&'I') => Some("SayLine"),
-            Key::Alpha(c) if c.eq_ignore_ascii_case(&'K') => Some("SayWord"),
-            _ => None,
-        }
+        // The commands that move first (next or prior line, word, character) move the caret
+        // as the arrow keys do, then read [JAWS on the dev box: CapsLock+O "Second line, with
+        // punctuation: a.b", CapsLock+L "line", CapsLock+J "Second", CapsLock+U "First line
+        // of the viewer test"].
+        let Key::Alpha(c) = event.key else {
+            return None;
+        };
+        Some(match c.to_ascii_uppercase() {
+            'I' => "SayLine",
+            'K' => "SayWord",
+            'O' => "SayNextLine",
+            'U' => "SayPriorLine",
+            'L' => "SayNextWord",
+            'J' => "SayPriorWord",
+            'M' => "SayPriorCharacter",
+            _ => return None,
+        })
     }
 
     /// `event` with the JAWS modifier (`modifiers.insert`) set when any JAWS key is held,

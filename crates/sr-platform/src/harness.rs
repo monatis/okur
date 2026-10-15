@@ -90,7 +90,7 @@ pub fn parse_step(text: &str) -> Result<KeyStep, String> {
 }
 
 #[cfg(windows)]
-pub use windows_harness::{foreground_process, jaws_history, send_steps};
+pub use windows_harness::{foreground_process, jaws_history, send_key, send_steps};
 
 #[cfg(windows)]
 mod windows_harness {
@@ -144,6 +144,12 @@ mod windows_harness {
     }
 
     fn key(vk: u16, up: bool) {
+        send_key(vk, up, 0);
+        std::thread::sleep(KEY_GAP);
+    }
+
+    /// Sends one key event, scan-coded, with `extra` as its `dwExtraInfo`.
+    pub fn send_key(vk: u16, up: bool, extra: usize) {
         // SAFETY: a scan-code lookup with no preconditions.
         let scan = unsafe { MapVirtualKeyW(u32::from(vk), MAPVK_VK_TO_VSC) };
         let mut flags = KEYBD_EVENT_FLAGS(0);
@@ -161,14 +167,13 @@ mod windows_harness {
                     wScan: u16::try_from(scan).unwrap_or(0),
                     dwFlags: flags,
                     time: 0,
-                    dwExtraInfo: 0,
+                    dwExtraInfo: extra,
                 },
             },
         };
         let size = i32::try_from(std::mem::size_of::<INPUT>()).unwrap_or(0);
         // SAFETY: one well-formed keyboard input.
         unsafe { SendInput(&[input], size) };
-        std::thread::sleep(KEY_GAP);
     }
 
     /// Sends `steps`, each only while the foreground application is one of `allowed`

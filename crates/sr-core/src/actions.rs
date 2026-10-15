@@ -30,6 +30,15 @@ pub trait ApplicationActions: Send {
         let _ = text;
         false
     }
+
+    /// Sends a key chord to the application, pressed in order and released in reverse: a
+    /// reading command that moves the caret is the application's own key (the laptop
+    /// layout's CapsLock+O is Down). The keys come back through the keyboard hook marked as
+    /// the screen reader's, so they are read as plain keys. Returns false when unsupported.
+    fn press(&self, chord: &[crate::input::Key]) -> bool {
+        let _ = chord;
+        false
+    }
 }
 
 /// Records requested actions; for tests and headless runs.
@@ -71,6 +80,13 @@ impl ApplicationActions for RecordingActions {
     fn copy_text(&self, text: &str) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push((format!("copy {text}"), 0));
+        }
+        true
+    }
+
+    fn press(&self, chord: &[crate::input::Key]) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((format!("press {chord:?}"), 0));
         }
         true
     }

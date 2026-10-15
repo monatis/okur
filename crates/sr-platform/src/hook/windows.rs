@@ -33,6 +33,15 @@ static SCROLL_LOCK_HELD: AtomicBool = AtomicBool::new(false);
 /// alone would open its menu bar). The system's key state then says it is up, so it is held
 /// here until its release arrives.
 static CONSUMED_MODIFIERS: AtomicU32 = AtomicU32::new(0);
+/// `dwExtraInfo` of the keys the screen reader sends itself ("SRKY").
+pub const INJECTED_MARK: usize = 0x5352_4B59;
+/// The last keys the screen reader sent itself, as `(virtual key, hook time in ms)`. JAWS
+/// sends its copies after the whole chord (Ctrl, Right, then Ctrl's and Right's copies).
+static RECENT_OURS: Mutex<[(u32, u32); 4]> = Mutex::new([(0, 0); 4]);
+/// How long after a key the screen reader sent an injected key like it is JAWS's copy.
+const COPY_WINDOW_MS: u32 = 200;
+/// `KBDLLHOOKSTRUCT::flags`: the event was injected.
+const LLKHF_INJECTED: u32 = 0x10;
 const SHIFT_BIT: u32 = 1;
 const CTRL_BIT: u32 = 2;
 const ALT_BIT: u32 = 4;
@@ -249,8 +258,34 @@ unsafe extern "system" fn low_level_keyboard_proc(
         return CallNextHookEx(None, ncode, wparam, lparam);
     }
 
-    // Determine modifier state: the system's, and the modifiers it never saw pressed.
-    let consumed = CONSUMED_MODIFIERS.load(Ordering::Relaxed);
+    // Determine modifier state: the system's, and the modifiers it never saw pressed. Keys
+    // the screen reader sends itself (a reading command's arrow key, sent while the JAWS key
+    // is still held) are plain keys: only the modifiers they carry count.
+    // JAWS takes navigation keys and sends its own copy (unmarked, but injected): a copy of
+    // the key the screen reader just sent is the screen reader's too, or it would read as a
+    // JAWS chord while the JAWS key is still held and be swallowed (seen live on the dev box).
+    let marked = kbd.dwExtraInfo == INJECTED_MARK;
+    let copy = !marked
+        && kbd.flags.0 & LLKHF_INJECTED != 0
+        && RECENT_OURS.lock().is_ok_and(|recent| {
+            recent
+                .iter()
+                .any(|&(vk, time)| vk == vk_code && kbd.time.wrapping_sub(time) <= COPY_WINDOW_MS)
+        });
+    if marked {
+        if let Ok(mut recent) = RECENT_OURS.lock() {
+            recent.rotate_right(1);
+            if let Some(first) = recent.first_mut() {
+                *first = (vk_code, kbd.time);
+            }
+        }
+    }
+    let ours = marked || copy;
+    let consumed = if ours {
+        0
+    } else {
+        CONSUMED_MODIFIERS.load(Ordering::Relaxed)
+    };
     let ctrl =
         (GetAsyncKeyState(VK_CONTROL.0 as i32) as u16 & 0x8000) != 0 || consumed & CTRL_BIT != 0;
     let alt = (GetAsyncKeyState(VK_MENU.0 as i32) as u16 & 0x8000) != 0 || consumed & ALT_BIT != 0;
@@ -264,9 +299,9 @@ unsafe extern "system" fn low_level_keyboard_proc(
         alt,
         shift,
         win,
-        insert: INSERT_HELD.load(Ordering::Relaxed),
-        caps_lock: CAPS_LOCK_HELD.load(Ordering::Relaxed),
-        scroll_lock: SCROLL_LOCK_HELD.load(Ordering::Relaxed),
+        insert: !ours && INSERT_HELD.load(Ordering::Relaxed),
+        caps_lock: !ours && CAPS_LOCK_HELD.load(Ordering::Relaxed),
+        scroll_lock: !ours && SCROLL_LOCK_HELD.load(Ordering::Relaxed),
     };
     let insert = modifiers.insert || modifiers.caps_lock || modifiers.scroll_lock;
 

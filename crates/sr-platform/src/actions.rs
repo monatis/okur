@@ -40,6 +40,26 @@ mod windows_actions {
     enum Request {
         Object(i32, Ia2Action),
         Text,
+        /// A chord of virtual keys, sent marked as the screen reader's own.
+        Keys(Vec<u16>),
+    }
+
+    /// The virtual key of a key the screen reader sends for a reading command.
+    fn virtual_key(key: &sr_core::Key) -> Option<u16> {
+        use sr_core::Key;
+        Some(match key {
+            Key::UpArrow => 0x26,
+            Key::DownArrow => 0x28,
+            Key::LeftArrow => 0x25,
+            Key::RightArrow => 0x27,
+            Key::Home => 0x24,
+            Key::End => 0x23,
+            Key::PageUp => 0x21,
+            Key::PageDown => 0x22,
+            Key::Control => 0x11,
+            Key::Shift => 0x10,
+            _ => return None,
+        })
     }
 
     /// Acts on the foreground application from a COM worker thread: page objects by IA2
@@ -70,6 +90,15 @@ mod windows_actions {
                     });
                     for request in batch {
                         match request {
+                            Request::Keys(keys) => {
+                                use crate::hook::windows::INJECTED_MARK;
+                                for &vk in &keys {
+                                    crate::harness::send_key(vk, false, INJECTED_MARK);
+                                }
+                                for &vk in keys.iter().rev() {
+                                    crate::harness::send_key(vk, true, INJECTED_MARK);
+                                }
+                            }
                             Request::Object(id, action) => {
                                 // SAFETY: plain Win32 call with no preconditions.
                                 let window = unsafe { GetForegroundWindow() };
@@ -146,6 +175,11 @@ mod windows_actions {
 
         fn read_at_caret(&self, _unit: CaretUnit) -> bool {
             self.send(Request::Text)
+        }
+
+        fn press(&self, chord: &[sr_core::Key]) -> bool {
+            let keys: Option<Vec<u16>> = chord.iter().map(virtual_key).collect();
+            keys.is_some_and(|keys| self.send(Request::Keys(keys)))
         }
 
         fn copy_text(&self, text: &str) -> bool {

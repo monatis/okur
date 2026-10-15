@@ -1814,6 +1814,27 @@ impl ScreenReaderEngine {
             }
             return;
         }
+        // A reading command that moves first is the matching arrow key: the application's
+        // own in a native control (sent, then read as any arrow key is), the virtual
+        // cursor's in a page.
+        let moving = layout_command.and_then(|command| {
+            Some(match command {
+                "SayNextLine" => (vec![Key::DownArrow], "{DOWN}"),
+                "SayPriorLine" => (vec![Key::UpArrow], "{UP}"),
+                "SayNextWord" => (vec![Key::Control, Key::RightArrow], "^{RIGHT}"),
+                "SayPriorWord" => (vec![Key::Control, Key::LeftArrow], "^{LEFT}"),
+                "SayPriorCharacter" => (vec![Key::LeftArrow], "{LEFT}"),
+                _ => return None,
+            })
+        });
+        if let Some((chord, page_command)) = moving {
+            if self.app_mode == AppMode::VirtualBuffer && !self.forms_mode {
+                let _ = self.execute_command(page_command);
+            } else if let Some(actions) = &self.actions {
+                actions.press(&chord);
+            }
+            return;
+        }
         if self.editing_text() && layout_command == Some("SayWord") {
             let word = self
                 .last_text
@@ -2933,6 +2954,22 @@ mod tests {
                 "First",
                 "First line of the viewer test"
             ]
+        );
+        // The commands that move first send the application its arrow key, which comes
+        // back through the hook and is read as one.
+        let actions = crate::actions::RecordingActions::default();
+        engine.set_actions(Box::new(actions.clone()));
+        engine.handle_key_event(&caps(Key::Alpha('O')));
+        engine.handle_key_event(&caps(Key::Alpha('L')));
+        let pressed: Vec<String> = actions
+            .requests()
+            .into_iter()
+            .map(|(action, _)| action)
+            .filter(|a| a.starts_with("press"))
+            .collect();
+        assert_eq!(
+            pressed,
+            ["press [DownArrow]", "press [Control, RightArrow]"]
         );
     }
 
