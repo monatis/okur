@@ -55,7 +55,7 @@ To ensure seamless context passing across autonomous sessions, all engineering w
 ### Active Plan for Current / Next Session
 - **Active Plan**: [`docs/plans/2026-10-15-structure-for-macos-and-extensions.md`](docs/plans/2026-10-15-structure-for-macos-and-extensions.md) while old-pc is offline. Its old-pc work items are in [`docs/plans/2026-10-15-jaws-feature-loop-round-2.md`](docs/plans/2026-10-15-jaws-feature-loop-round-2.md).
 - **Future goal**: an extension SDK, after Okur is stable on Windows and macOS ([`docs/references/extension-sdk-vision.md`](docs/references/extension-sdk-vision.md)).
-- **Latest Handoff**: [`docs/handoff/2026-10-15-virtual-viewer.md`](docs/handoff/2026-10-15-virtual-viewer.md), after [`docs/handoff/2026-10-15-jaws-feature-loop-round-1.md`](docs/handoff/2026-10-15-jaws-feature-loop-round-1.md); read the audit [`docs/handoff/2026-10-14-full-audit-of-prior-development.md`](docs/handoff/2026-10-14-full-audit-of-prior-development.md) before trusting any earlier handoff
+- **Latest Handoff**: [`docs/handoff/2026-10-15-structure-round-1.md`](docs/handoff/2026-10-15-structure-round-1.md), after [`docs/handoff/2026-10-15-virtual-viewer.md`](docs/handoff/2026-10-15-virtual-viewer.md) and [`docs/handoff/2026-10-15-jaws-feature-loop-round-1.md`](docs/handoff/2026-10-15-jaws-feature-loop-round-1.md); read the audit [`docs/handoff/2026-10-14-full-audit-of-prior-development.md`](docs/handoff/2026-10-14-full-audit-of-prior-development.md) before trusting any earlier handoff
 - **Loop lifecycle**: [`docs/references/verification-loop.md`](docs/references/verification-loop.md): the machines, OpenDesk and `old-pc`, recording JAWS evidence, importing it, dev-box live checks, and pitfalls. Read it before touching `old-pc` or the corpus.
 
 

@@ -13,6 +13,34 @@ Restructuring now is cheaper than later.
 **Still pending for old-pc**: the work items in
 [`2026-10-15-jaws-feature-loop-round-2.md`](2026-10-15-jaws-feature-loop-round-2.md).
 
+## Status (2026-10-15, end of the first session)
+
+| Step | State | Commits |
+|---|---|---|
+| Dead code first | done: the simulated desktop and five unused formatters | `5a87202` |
+| 1. Commands and keys | done | `0a94da5` |
+| 2. Platform-neutral windows | done | `6185a8e` |
+| 3. Application modules | done | `2fc61b5` |
+| 4. Announcements as data | started: the `Announcement` type, native focus speech | `8cf7ffd` |
+| 5. Separate fixes | Q bound to the main region; key help no longer calls K a link key; `Insert+F` dead arm and unused formatters gone with the refactors | `88eff63`, `e696275` |
+
+Next for step 4:
+1. The window heading in `engine/focus.rs`: title, "dialog", text and page as lines.
+2. Application modules return announcements instead of strings.
+3. `SpeechFormatter`, module by module.
+4. The virtual buffer's lines.
+
+Spacing around the marks differs between places ("  ‹ dialog › ", " ‹ X › ",
+" ‹X› "). Parity normalizes whitespace, but unit tests pin exact strings. Two ways forward:
+- reproduce each place's spacing with the adjacent text, as `native_focus` already shares
+  one spacing;
+- unify the spacing in one commit that changes only whitespace in test expectations,
+  checked against how JAWS's own speech history spaces them in the evidence.
+
+Still open from step 5:
+- Insert+F3 (JAWS's list of virtual HTML features) is bound to nothing.
+- `FocusEvent::folder_name` is never set by the platform.
+
 ## The rule for every step: nothing the user hears changes
 
 Each step is a refactor. Its commit must show, with the tool output:
