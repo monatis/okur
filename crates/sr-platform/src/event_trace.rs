@@ -17,6 +17,8 @@ const UIA_WINDOW: i32 = 50032;
 const UIA_DOCUMENT: i32 = 50030;
 /// Window classes that host web page content: Chromium (Chrome, Edge, Electron) and Firefox.
 const WEB_CONTENT_WINDOW_CLASSES: [&str; 2] = ["Chrome_RenderWidgetHostHWND", "MozillaWindowClass"];
+/// The top-level window class of Chromium browsers and Electron apps.
+const CHROMIUM_TOP_WINDOW: &str = "Chrome_WidgetWin_1";
 const UIA_TREEITEM: i32 = 50024;
 const UIA_TEXT: i32 = 50020;
 const UIA_BUTTON: i32 = 50000;
@@ -257,9 +259,14 @@ pub fn focus_event_from_chain(
     event.window_title = window_title.map(str::to_owned);
     // Inside a browser document, Chrome reports the DOM id as AutomationId.
     // A page: a document in a browser's web content window. Documents elsewhere (Windows 11
-    // Notepad, Word) are native text controls, read by caret, not by the virtual cursor.
-    event.in_document = window_class.is_some_and(|c| WEB_CONTENT_WINDOW_CLASSES.contains(&c))
-        && chain.iter().any(|a| a.control_type == UIA_DOCUMENT);
+    // Notepad, Word) are native text controls, read by caret, not by the virtual cursor. A
+    // browser coming to the front reports its focus first from its top-level window
+    // (Chromium's `Chrome_WidgetWin_1`, Electron apps alike), then from the page's window;
+    // both are the page (seen live on the dev box).
+    let in_browser = window_class
+        .is_some_and(|c| c == CHROMIUM_TOP_WINDOW || WEB_CONTENT_WINDOW_CLASSES.contains(&c));
+    event.in_document = in_browser && chain.iter().any(|a| a.control_type == UIA_DOCUMENT);
+    event.read_only = focused.value_is_read_only;
     if event.in_document {
         event.dom_id = focused.automation_id.clone().filter(|id| !id.is_empty());
     }
@@ -649,8 +656,8 @@ mod capture {
         event_name, TraceEvent, TraceHeader, TraceObject, TRACE_FORMAT_VERSION, UIA_FOCUS_WINDOWS,
     };
     use crate::uia_snapshot::capture::{
-        automation, focus_chain, focus_chain_from, focus_context, focus_subtree_of, window_subtree,
-        window_text,
+        automation, focus_chain_from, focus_context_of, focus_subtree_of, focused_element,
+        window_subtree, window_text,
     };
     use crate::PlatformError;
     use std::cell::RefCell;
@@ -1073,14 +1080,19 @@ mod capture {
             // an event holds the thread up (a UIA call waiting out its timeout).
             let clock = std::time::Instant::now();
             let mut stages: Vec<(&str, u128)> = Vec::new();
-            let focus = if focused || name == "foreground" || changes_focus_context {
-                match (state.uia.as_ref(), element) {
-                    (Some(uia), Some(element)) => focus_chain_from(uia, element),
-                    (Some(uia), None) => focus_chain(uia),
-                    (None, _) => Vec::new(),
-                }
-            } else {
-                Vec::new()
+            // The focused element is asked for once: chain and context are read around the
+            // same element. A second GetFocusedElement right after a window switch could
+            // block for seconds while UIA's focus settled (7 s into Windows 11 Notepad, dev
+            // box), and could answer with another element than the chain's.
+            let reads_focus = focused || name == "foreground" || changes_focus_context;
+            let asked = match (element, state.uia.as_ref()) {
+                (None, Some(uia)) if reads_focus => focused_element(uia),
+                _ => None,
+            };
+            let element = element.or(asked.as_ref());
+            let focus = match (state.uia.as_ref(), element) {
+                (Some(uia), Some(element)) if reads_focus => focus_chain_from(uia, element),
+                _ => Vec::new(),
             };
             stages.push(("chain", clock.elapsed().as_millis()));
             let (focus_siblings, focus_subtree) = match (name, state.uia.as_ref()) {
@@ -1088,7 +1100,10 @@ mod capture {
                 // switcher's first opening its tree answers slowly, and reading around the item
                 // held the thread for seconds while the next items went by (dev box).
                 (_, Some(_)) if name == "uia_focus" => (Vec::new(), None),
-                (_, Some(uia)) if focused => focus_context(uia),
+                (_, Some(uia)) if focused => match element {
+                    Some(element) => focus_context_of(uia, element),
+                    None => (Vec::new(), None),
+                },
                 (_, Some(uia)) if changes_focus_context => (Vec::new(), focus_subtree_of(uia)),
                 _ => (Vec::new(), None),
             };

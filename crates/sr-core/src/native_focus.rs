@@ -91,7 +91,7 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<String> {
         // A native text document (Windows 11 Notepad's RichEdit, MSAA "editable text"): an
         // edit whose text is not read on arrival. JAWS 2025, dev box: "viewer-test.txt -
         // Notepad | Text editor edit | Contains text".
-        Role::Document if !focus.in_document && focus.text.is_some() => {
+        Role::Document if !focus.in_document && focus.read_only == Some(false) => {
             lines.push(format!("{name}{}", role_marker("edit")));
             if focus
                 .text
@@ -765,6 +765,7 @@ mod tests {
             norm("OK  \u{1d} Button \u{1e} \nTo activate press spacebar.")
         );
         let mut notepad = event(Role::Document, "Text editor");
+        notepad.read_only = Some(false);
         notepad.text = Some(crate::event::TextContext {
             text: "fn main() {}".to_owned(),
             caret: 0,

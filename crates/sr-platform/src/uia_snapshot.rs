@@ -579,6 +579,12 @@ pub(crate) mod capture {
 
     /// The focused element and its control-view ancestors, outermost first (the desktop
     /// root is omitted). This is the context a screen reader announces on focus changes.
+    /// UIA's focused element.
+    pub(crate) fn focused_element(uia: &IUIAutomation) -> Option<IUIAutomationElement> {
+        // SAFETY: UIA client query on a valid automation object.
+        unsafe { uia.GetFocusedElement() }.ok()
+    }
+
     pub(crate) fn focus_chain(uia: &IUIAutomation) -> Vec<UiaNode> {
         // SAFETY: UIA client query on a valid automation object.
         unsafe { uia.GetFocusedElement() }
@@ -632,23 +638,28 @@ pub(crate) mod capture {
     /// control-view siblings (without children), from which positions such as "2 of 3" are
     /// counted when the provider reports no PositionInSet, and the element's own control-view
     /// subtree to depth 2 (list-view columns, a combo box's items).
-    pub(crate) fn focus_context(uia: &IUIAutomation) -> (Vec<UiaNode>, Option<UiaNode>) {
-        // SAFETY: UIA client query on a valid automation object.
-        unsafe { uia.GetFocusedElement() }
-            .map(|focused| focus_context_of(uia, &focused))
-            .unwrap_or_default()
-    }
-
-    /// [`focus_context`] around `focused`.
     pub(crate) fn focus_context_of(
         uia: &IUIAutomation,
         focused: &IUIAutomationElement,
     ) -> (Vec<UiaNode>, Option<UiaNode>) {
+        const UIA_EDIT: i32 = 50004;
+        const UIA_DOCUMENT: i32 = 50030;
         // SAFETY: UIA client queries on a valid automation object.
         unsafe {
             let Ok(walker) = uia.ControlViewWalker() else {
                 return (Vec::new(), None);
             };
+            let control_type = focused.CurrentControlType().map(|t| t.0);
+            // A document needs nothing around it: no position, no dialog text. Its siblings
+            // in Windows 11 Notepad (tabs, bars) took 7 s to read right after the window came
+            // to the front, holding up every event behind it (dev box).
+            if control_type == Ok(UIA_DOCUMENT) {
+                let mut budget = MAX_FOCUS_SUBTREE;
+                return (
+                    Vec::new(),
+                    read_subtree(uia, &walker, focused, 0, &mut budget),
+                );
+            }
             let mut siblings = Vec::new();
             if let Ok(parent) = walker.GetParentElement(focused) {
                 let mut current = walker.GetFirstChildElement(&parent).ok();
@@ -662,8 +673,10 @@ pub(crate) mod capture {
                     current = walker.GetNextSiblingElement(&el).ok();
                 }
             }
+            // A text field's subtree is its content, which no announcement reads.
             let mut budget = MAX_FOCUS_SUBTREE;
-            let subtree = read_subtree(uia, &walker, focused, 2, &mut budget);
+            let depth = if control_type == Ok(UIA_EDIT) { 0 } else { 2 };
+            let subtree = read_subtree(uia, &walker, focused, depth, &mut budget);
             (siblings, subtree)
         }
     }

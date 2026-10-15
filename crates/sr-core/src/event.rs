@@ -152,6 +152,9 @@ pub struct FocusEvent {
     pub help_text: Option<String>,
     /// The keys that reach the control from anywhere in its window ("Alt+o").
     pub access_key: Option<String>,
+    /// Whether the control's value is read-only (UIA), where it reports one: an editable
+    /// document is a text field.
+    pub read_only: Option<bool>,
 }
 
 impl FocusEvent {
@@ -183,6 +186,7 @@ impl FocusEvent {
             folder_name: None,
             help_text: None,
             access_key: None,
+            read_only: None,
         }
     }
 
