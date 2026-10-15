@@ -85,8 +85,21 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<String> {
             lines.push(format!("{name}{}", role_marker("edit combo")));
             lines.extend(value);
             lines.extend(position(focus));
-            lines.push("To set the value use the Arrow keys or type the value.".to_owned());
+            lines.push(EDIT_COMBO_HINT.to_owned());
             lines.extend(focus.access_key.clone());
+        }
+        // A native text document (Windows 11 Notepad's RichEdit, MSAA "editable text"): an
+        // edit whose text is not read on arrival. JAWS 2025, dev box: "viewer-test.txt -
+        // Notepad | Text editor edit | Contains text".
+        Role::Document if !focus.in_document && focus.text.is_some() => {
+            lines.push(format!("{name}{}", role_marker("edit")));
+            if focus
+                .text
+                .as_ref()
+                .is_some_and(|t| !t.text.trim().is_empty())
+            {
+                lines.push(CONTAINS_TEXT.to_owned());
+            }
         }
         Role::Edit => {
             // [hyp] An unlabelled edit takes the window title as its name (306/s5).
@@ -263,6 +276,24 @@ pub fn focus_speech(focus: &FocusEvent, previous: Option<&ContainerKey>) -> Stri
 
 /// The focused control's own line (name, role and state, without its hint), as JAWS reads
 /// it again when the Virtual Viewer closes [obs, 311/s12: "Save... Button"].
+/// The hint for a combo box's text field.
+const EDIT_COMBO_HINT: &str = "To set the value use the Arrow keys or type the value.";
+/// Said for a text document with text when focus arrives, in place of its text.
+const CONTAINS_TEXT: &str = "Contains text";
+
+/// Say Current Focus (Insert+Tab): the focused control's lines again, without what JAWS
+/// says only as focus arrives (a text field's hint and access key, "Contains text"); a
+/// button keeps its hint. JAWS 2025 on the dev box (research): "Open: edit combo | C: |
+/// 1 of 6", "OK Button | To activate press spacebar.", "Text editor edit".
+pub fn say_focus(focus: &FocusEvent) -> String {
+    let access_key = focus.access_key.as_deref();
+    control_lines(focus, false)
+        .into_iter()
+        .filter(|l| l != EDIT_COMBO_HINT && l != CONTAINS_TEXT && Some(l.as_str()) != access_key)
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
 pub fn focus_line(focus: &FocusEvent) -> String {
     control_lines(focus, false)
         .into_iter()
@@ -665,6 +696,40 @@ mod tests {
                 "Open:  \u{1d} edit combo \u{1e} \nC:\n1 of 6\n\
                  To set the value use the Arrow keys or type the value.\nAlt+o"
             )
+        );
+    }
+
+    /// Insert+Tab leaves out what JAWS says only as focus arrives.
+    #[test]
+    fn say_focus_repeats_the_control_without_arrival_hints() {
+        let mut field = event(Role::Edit, "Open:");
+        field.value = Some("C:".to_owned());
+        field.container_role = Some(Role::ComboBox);
+        field.item_index = Some(1);
+        field.item_count = Some(6);
+        field.access_key = Some("Alt+o".to_owned());
+        assert_eq!(
+            norm(&say_focus(&field)),
+            norm("Open:  \u{1d} edit combo \u{1e} \nC:\n1 of 6")
+        );
+        assert_eq!(
+            norm(&say_focus(&event(Role::Button, "OK"))),
+            norm("OK  \u{1d} Button \u{1e} \nTo activate press spacebar.")
+        );
+        let mut notepad = event(Role::Document, "Text editor");
+        notepad.text = Some(crate::event::TextContext {
+            text: "fn main() {}".to_owned(),
+            caret: 0,
+            selection: None,
+            font: None,
+        });
+        assert_eq!(
+            norm(&focus_speech(&notepad, None)),
+            norm("Text editor  \u{1d} edit \u{1e} \nContains text")
+        );
+        assert_eq!(
+            norm(&say_focus(&notepad)),
+            norm("Text editor  \u{1d} edit \u{1e} ")
         );
     }
 }

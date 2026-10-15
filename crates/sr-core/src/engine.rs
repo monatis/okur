@@ -481,6 +481,17 @@ impl ScreenReaderEngine {
     /// Executes a screen reader navigation command string (matching JAWS script names and keystrokes).
     /// Speaks the resulting announcement and returns the emitted speech text.
     pub fn execute_command(&mut self, command: &str) -> Option<String> {
+        if command == "SayCurrentFocus" {
+            // Native controls; a page's focus is not read this way yet.
+            let speech = self
+                .last_native_focus
+                .as_ref()
+                .filter(|_| self.app_mode == AppMode::NativeControl)
+                .map(crate::native_focus::say_focus)
+                .filter(|s| !s.is_empty())?;
+            self.speech.speak(&speech, true);
+            return Some(speech);
+        }
         if command == "SayWindowTitle" {
             // [obs, 306/s12]: "Title is | SR Dialog Fixture". In a browser it is the browser
             // window's title, not the page's [obs, 209/s1: "... - Google Chrome - <profile>"].
