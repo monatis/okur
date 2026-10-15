@@ -306,7 +306,7 @@ mod com {
 
     pub mod capture {
         use super::super::{
-            parse_attributes, Ia2Node, Ia2TextRun, Ia2TextPosition, Ia2TextState, FONT_ATTRIBUTES,
+            parse_attributes, Ia2Node, Ia2TextPosition, Ia2TextRun, Ia2TextState, FONT_ATTRIBUTES,
             IA2_TEXT_BOUNDARY_LINE, IA2_TEXT_OFFSET_LENGTH,
         };
         use super::{IAccessible2, IAccessibleText};

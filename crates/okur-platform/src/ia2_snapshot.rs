@@ -94,6 +94,7 @@ mod msaa_role {
     pub const RADIOBUTTON: i32 = 0x2D;
     pub const COMBOBOX: i32 = 0x2E;
     pub const PROGRESSBAR: i32 = 0x30;
+    pub const BUTTONMENU: i32 = 0x39;
     pub const SLIDER: i32 = 0x33;
     pub const EQUATION: i32 = 0x37;
     pub const PAGETABLIST: i32 = 0x3C;
@@ -208,6 +209,12 @@ fn map_role(node: &Ia2Node) -> okur_core::Role {
         msaa_role::STATICTEXT => Role::Text,
         msaa_role::TEXT if editable => Role::Edit,
         msaa_role::PUSHBUTTON => Role::Button,
+        // Chromium makes a button with any popup but a dialog a "button menu"; JAWS says
+        // "button menu" only for a menu ("Pick one Button Has Popup listbox", dev box).
+        msaa_role::BUTTONMENU if matches!(attr("haspopup"), None | Some("menu")) => {
+            Role::MenuButton
+        }
+        msaa_role::BUTTONMENU => Role::Button,
         msaa_role::CHECKBUTTON => Role::CheckBox,
         msaa_role::RADIOBUTTON => Role::RadioButton,
         msaa_role::COMBOBOX => Role::ComboBox,
@@ -354,6 +361,12 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     // aria-current: "page", "step", "location", "date", "time" or "true".
     if let Some(current) = attr("current").filter(|c| c != "false") {
         set_attr("current", current);
+    }
+    // A button's popup other than a menu ("listbox", "dialog"); a menu makes a menu button.
+    if let Some(popup) =
+        attr("haspopup").filter(|p| !matches!(p.as_str(), "false" | "true" | "menu"))
+    {
+        set_attr("haspopup", popup);
     }
     // aria-roledescription, said in place of some roles.
     if let Some(description) = attr("roledescription") {

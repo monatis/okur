@@ -56,6 +56,11 @@ impl ScreenReaderEngine {
             }
 
             let target_id = self.page_node_for(focus);
+            tracing::debug!(
+                ?target_id,
+                target = ?target_id.and_then(|id| self.cursor.buffer.node(id)).map(|n| (&n.role, &n.name)),
+                "page focus target"
+            );
 
             // If focus target is a dialog, enter modal confinement and announce Dialog <Title>
             if matches!(focus.role, Role::Dialog | Role::AlertDialog) {
@@ -93,6 +98,7 @@ impl ScreenReaderEngine {
             if target_role == Some(Role::Document) {
                 // The page itself has focus: the next control focus enters the page.
                 self.last_page_focus = None;
+                self.tab_start = None;
                 return None;
             }
             // Forms mode follows focus into edits; a combo box keeps the forms mode Enter
@@ -115,6 +121,7 @@ impl ScreenReaderEngine {
                 .and_then(|id| self.cursor.buffer.lines.iter().find(|l| l.node_id == id))
                 .map(|l| l.start_offset);
             self.last_page_focus = target_id;
+            self.tab_start = target_id;
             // The focus event carries the live state; the buffer's copy may be older (Space
             // just toggled the control) [obs, 205/s2, s6].
             if let Some(id) = target_id {
@@ -171,6 +178,7 @@ impl ScreenReaderEngine {
 
         // Native control / application window handling
         self.last_page_focus = None;
+        self.tab_start = None;
         self.app_mode = AppMode::NativeControl;
         if self.forms_mode {
             self.forms_mode = false;

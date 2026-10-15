@@ -60,6 +60,8 @@ pub struct ScreenReaderEngine {
     native_focus: crate::native_focus::NativeFocus,
     /// The page node that last had focus, to drop repeated focus events on it.
     last_page_focus: Option<usize>,
+    /// The page node the browser starts Tab from: the focus, or where Tab was last sent from.
+    tab_start: Option<usize>,
     /// The last native focus outside menus, re-announced when menus close.
     last_native_focus: Option<FocusEvent>,
     menus: crate::native_focus::Menus,
@@ -105,6 +107,7 @@ impl ScreenReaderEngine {
             last_window_kind: None,
             native_focus: crate::native_focus::NativeFocus::default(),
             last_page_focus: None,
+            tab_start: None,
             last_native_focus: None,
             menus: crate::native_focus::Menus::default(),
             pending_edit: None,
@@ -253,8 +256,12 @@ impl ScreenReaderEngine {
         }
 
         // 6. Tab and Shift+Tab belong to the page: the browser moves focus, and the focus
-        //    event moves the virtual cursor and speaks [obs, 204].
+        //    event moves the virtual cursor and speaks [obs, 204]. Away from the focus, the
+        //    virtual cursor is where the browser moves on from, as with JAWS (dev box).
         if event.key == Key::Tab && !event.modifiers.ctrl && !event.modifiers.alt {
+            if self.tab_from_virtual_cursor(event.modifiers.shift) {
+                return KeyAction::Consume;
+            }
             return KeyAction::PassThrough;
         }
 
@@ -284,6 +291,61 @@ impl ScreenReaderEngine {
         }
 
         KeyAction::PassThrough
+    }
+
+    /// Tab (or Shift+Tab) with the virtual cursor outside the element the browser would start
+    /// from: the page's next (or prior) tab stop after the cursor's line is focused, as NVDA's
+    /// browse mode does. JAWS on the dev box (2026-10-16): with focus on a button and the
+    /// virtual cursor moved past a link to a group's end, Tab went to the field after the
+    /// group. A browser starts Tab from its focus whatever the page's caret, so the key alone
+    /// cannot do it. In a dialog, or past the page's last stop, the key goes to the browser.
+    fn tab_from_virtual_cursor(&mut self, backwards: bool) -> bool {
+        if self.cursor.is_in_modal() {
+            return false;
+        }
+        let buffer = &self.cursor.buffer;
+        let Some(line) = buffer.line_at_offset(self.cursor.offset) else {
+            return false;
+        };
+        let within_start = self
+            .tab_start
+            .and_then(|id| buffer.node(id))
+            .is_some_and(|start| start.find_by_id(line.node_id).is_some());
+        if within_start {
+            return false;
+        }
+        let stop = if backwards {
+            buffer.tab_stops.iter().rfind(|&&s| s < line.start_offset)
+        } else {
+            buffer.tab_stops.iter().find(|&&s| s > line.start_offset)
+        };
+        let Some(node) = stop
+            .and_then(|&s| buffer.line_at_offset(s))
+            .and_then(|l| buffer.node(l.node_id))
+        else {
+            return false;
+        };
+        let focused = self
+            .actions
+            .as_ref()
+            .is_some_and(|actions| actions.focus(node));
+        if !focused {
+            return false;
+        }
+        let (id, is_edit) = (node.id, node.role == crate::aom::Role::Edit);
+        self.tab_start = Some(id);
+        // Focus already there brings no focus event: the element is said here, as JAWS
+        // says it (GitHub's current README tab, dev box).
+        if self.last_page_focus == Some(id) {
+            if is_edit {
+                self.forms_mode = true;
+                self.cursor.forms_mode_active = true;
+            }
+            if let Some(speech) = self.cursor.focus_node(id) {
+                self.speech.speak(&speech, true);
+            }
+        }
+        true
     }
 
     /// Handles an incoming accessibility event from the OS event listener.

@@ -1295,3 +1295,58 @@ fn a_fast_stream_is_read_in_phrases_as_speech_frees() {
     engine.on_idle();
     assert_eq!(speech.said.take(), vec!["few"]);
 }
+
+/// Tab with the virtual cursor moved away from the focus moves on from the cursor, as JAWS's
+/// does (dev box, 2026-10-16): the page's next tab stop is focused; Shift+Tab, the prior one.
+#[test]
+fn tab_moves_on_from_the_virtual_cursor() {
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Slides")
+        .with_children(vec![
+            AomNode::new(1, Role::Button).with_name("Next slide"),
+            AomNode::new(
+                2,
+                Role::Link {
+                    href: Some("#x".to_owned()),
+                },
+            )
+            .with_name("Rust"),
+            AomNode::new(3, Role::Heading { level: 2 }).with_text("Inside"),
+            AomNode::new(4, Role::Edit).with_name("Code"),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut focus = FocusEvent::new(Role::Button)
+        .with_node_id(1)
+        .with_name("Next slide");
+    focus.in_document = true;
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(focus));
+    let key = |key: Key, shift: bool| {
+        let modifiers = Modifiers {
+            shift,
+            ..Modifiers::none()
+        };
+        KeyEvent::new(key, modifiers, true)
+    };
+    // On the focused button, Tab is the browser's.
+    assert_eq!(
+        engine.handle_key_event(&key(Key::Tab, false)),
+        KeyAction::PassThrough
+    );
+    engine.handle_key_event(&key(Key::DownArrow, false));
+    engine.handle_key_event(&key(Key::DownArrow, false));
+    assert_eq!(
+        engine.handle_key_event(&key(Key::Tab, false)),
+        KeyAction::Consume
+    );
+    assert_eq!(
+        engine.handle_key_event(&key(Key::Tab, true)),
+        KeyAction::Consume
+    );
+    assert_eq!(
+        actions.requests(),
+        vec![("focus".to_owned(), 4), ("focus".to_owned(), 2)]
+    );
+}

@@ -301,6 +301,17 @@ impl VirtualBuffer {
         Some(path)
     }
 
+    /// The page node that had keyboard focus when the page was captured (the innermost).
+    pub fn focused_node(&self) -> Option<usize> {
+        fn find(node: &AomNode) -> Option<usize> {
+            node.children
+                .iter()
+                .find_map(find)
+                .or(node.states.focused.then_some(node.id))
+        }
+        self.page.as_ref().and_then(find)
+    }
+
     /// The page node `id`, with its subtree, if the buffer reads it.
     pub fn node(&self, id: usize) -> Option<&AomNode> {
         if !self.readable.contains(&id) {
@@ -762,7 +773,7 @@ impl VirtualBuffer {
     pub fn find_button_node(&self, offset: usize) -> Option<&AomNode> {
         self.spans
             .iter()
-            .find(|s| s.start_offset == offset && matches!(s.role, Role::Button))
+            .find(|s| s.start_offset == offset && matches!(s.role, Role::Button | Role::MenuButton))
             .and_then(|s| self.node(s.node_id))
     }
 
@@ -965,7 +976,10 @@ impl VirtualBuffer {
                     _ => None,
                 };
                 // The linearizer marks same page links.
-                let is_same_page = node.attributes.get("same_page").is_some_and(|v| v == "true");
+                let is_same_page = node
+                    .attributes
+                    .get("same_page")
+                    .is_some_and(|v| v == "true");
                 items.push(LinkListItem {
                     node_id: node.id,
                     text,

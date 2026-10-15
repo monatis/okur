@@ -376,8 +376,18 @@ impl SpeechFormatter {
                     .current_phrase()
                     .map(|c| format!(" \u{1d}{c}\u{1e}"))
                     .unwrap_or_default();
+                let popup = node
+                    .attributes
+                    .get("haspopup")
+                    .map(|p| format!(" \u{1d}Has Popup {p}\u{1e}"))
+                    .unwrap_or_default();
                 let role = node.role_description().unwrap_or("Button");
-                format!("{name}  \u{1d} {role} \u{1e}{state}{current}")
+                format!("{name}  \u{1d} {role} \u{1e}{state}{popup}{current}")
+            }
+            // On focus a menu button says no state and no hint (JAWS on the dev box).
+            Role::MenuButton => {
+                let role = node.role_description().unwrap_or("button menu");
+                format!("{name}  \u{1d} {role} \u{1e} ")
             }
             _ => name.to_owned(),
         }
@@ -409,7 +419,11 @@ impl SpeechFormatter {
             .current_phrase()
             .map(|c| format!(" \u{1d}{c}\u{1e} "))
             .unwrap_or_default();
-        if node.attributes.get("same_page").is_some_and(|v| v == "true") {
+        if node
+            .attributes
+            .get("same_page")
+            .is_some_and(|v| v == "true")
+        {
             format!("{name}  \u{1d} same page link \u{1e} {current}")
         } else {
             format!("{name}{current}  \u{1d} Link \u{1e} ")

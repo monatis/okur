@@ -188,8 +188,8 @@ mod windows_harness {
         use windows::Win32::System::Threading::{AttachThreadInput, GetCurrentThreadId};
         use windows::Win32::UI::WindowsAndMessaging::{
             BringWindowToTop, EnumWindows, GetForegroundWindow, GetWindowTextW,
-            GetWindowThreadProcessId, IsIconic, IsWindowVisible, SetForegroundWindow,
-            ShowWindow, SW_RESTORE,
+            GetWindowThreadProcessId, IsIconic, IsWindowVisible, SetForegroundWindow, ShowWindow,
+            SW_RESTORE,
         };
         struct Search {
             wanted: String,
@@ -200,10 +200,16 @@ mod windows_harness {
             let search = unsafe { &mut *(data.0 as *mut Search) };
             let mut buf = [0u16; 512];
             // SAFETY: plain Win32 queries into a buffer of the given size.
-            let (visible, len) =
-                unsafe { (IsWindowVisible(hwnd).as_bool(), GetWindowTextW(hwnd, &mut buf)) };
-            let text =
-                String::from_utf16_lossy(buf.get(..usize::try_from(len).unwrap_or(0)).unwrap_or_default());
+            let (visible, len) = unsafe {
+                (
+                    IsWindowVisible(hwnd).as_bool(),
+                    GetWindowTextW(hwnd, &mut buf),
+                )
+            };
+            let text = String::from_utf16_lossy(
+                buf.get(..usize::try_from(len).unwrap_or(0))
+                    .unwrap_or_default(),
+            );
             if visible && text.to_lowercase().contains(&search.wanted) {
                 search.found = Some((hwnd, text));
                 return BOOL(0);

@@ -57,6 +57,7 @@ impl ScreenReaderEngine {
         }
         self.pending_page = None;
         self.last_page_focus = None;
+        self.tab_start = None;
         self.last_live_text.clear();
         self.live_streams.clear();
         self.load_buffer(buffer);
@@ -189,7 +190,7 @@ impl ScreenReaderEngine {
         let name = focus.name.as_deref()?;
         ids.into_iter().find(|id| {
             node(id).is_some_and(|n| {
-                n.role == focus.role
+                same_role(&n.role, &focus.role)
                     && n.name
                         .as_deref()
                         .or(n.text.as_deref())
@@ -255,7 +256,9 @@ impl ScreenReaderEngine {
                 None => offset,
             }
             .min(self.cursor.buffer.len());
-            self.last_page_focus = None;
+            // Node ids are the capture's own: the focus is found again by its state.
+            self.last_page_focus = self.cursor.buffer.focused_node();
+            self.tab_start = self.last_page_focus;
         }
     }
 
@@ -493,6 +496,17 @@ pub(super) struct LiveStream {
     spoken: usize,
     /// Quiet ticks since it last changed.
     quiet: u8,
+}
+
+/// Whether a focus event's role is the page node's: a button opening a menu is a menu button
+/// to MSAA, which focus events follow, and a plain button to UIA, which a page's quick first
+/// capture reads.
+fn same_role(node: &Role, focus: &Role) -> bool {
+    node == focus
+        || matches!(
+            (node, focus),
+            (Role::Button, Role::MenuButton) | (Role::MenuButton, Role::Button)
+        )
 }
 
 /// Where a line with `text` starts in `buffer`, the one nearest to `near`: the cursor's line in

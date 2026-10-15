@@ -315,6 +315,7 @@ impl<'a> Builder<'a> {
             | Role::RadioButton
             | Role::ComboBox
             | Role::Button
+            | Role::MenuButton
             | Role::Slider
             | Role::ProgressBar
             | Role::Tab => Class::Control,
@@ -529,7 +530,8 @@ impl<'a> Builder<'a> {
             return false;
         };
         !fragment.is_empty()
-            && (base.is_empty() || self.document_url.and_then(|d| d.split('#').next()) == Some(base))
+            && (base.is_empty()
+                || self.document_url.and_then(|d| d.split('#').next()) == Some(base))
     }
 
     /// §4: a link is its own line. Text already on the line is flushed first, except a
@@ -663,11 +665,26 @@ impl<'a> Builder<'a> {
                     Some(false) => s.push_str(&state_marker("collapsed")),
                     None => {}
                 }
+                // Any other popup: "Pick one ‹ Button › ‹Has Popup listbox›" (dev box).
+                if let Some(popup) = attr(node, "haspopup") {
+                    s.push_str(&state_marker(&format!("Has Popup {popup}")));
+                }
                 if let Some(current) = node.current_phrase() {
                     s.push_str(&state_marker(current));
                 }
                 if node.states.disabled {
                     s.push_str(&state_marker("Unavailable"));
+                }
+                s
+            }
+            // A button opening a menu: "Actions ‹ button menu › ‹collapsed›" (JAWS on the dev box).
+            Role::MenuButton => {
+                let role = node.role_description().unwrap_or("button menu");
+                let mut s = format!("{name}{}", role_marker(role));
+                match node.states.expanded {
+                    Some(true) => s.push_str(&state_marker("expanded")),
+                    Some(false) => s.push_str(&state_marker("collapsed")),
+                    None => {}
                 }
                 s
             }
@@ -680,8 +697,8 @@ impl<'a> Builder<'a> {
         let off = self.emit(node.id, node.role.clone(), &text, speech);
 
         match &node.role {
-            Role::Button if node.states.disabled => {}
-            Role::Button => {
+            Role::Button | Role::MenuButton if node.states.disabled => {}
+            Role::Button | Role::MenuButton => {
                 self.buffer.buttons.push(off);
                 self.buffer.form_controls.push(off);
             }
@@ -1118,13 +1135,20 @@ mod tests {
 
     fn github_tabs() -> crate::buffer::VirtualBuffer {
         let mut root = AomNode::new(0, Role::Document).with_children(vec![
-            link(1, "https://github.com/monatis/okur#", "README", Some("page")),
+            link(
+                1,
+                "https://github.com/monatis/okur#",
+                "README",
+                Some("page"),
+            ),
             link(2, "https://github.com/monatis/okur#start", "Skip", None),
             link(3, "#b", "Step two", Some("step")),
             link(4, "https://example.com/", "Today", Some("true")),
         ]);
-        root.attributes
-            .insert("url".to_owned(), "https://github.com/monatis/okur".to_owned());
+        root.attributes.insert(
+            "url".to_owned(),
+            "https://github.com/monatis/okur".to_owned(),
+        );
         crate::buffer::VirtualBuffer::from_aom(&root)
     }
 
@@ -1206,10 +1230,7 @@ mod tests {
                 "slide control",
             ),
             described(link(2, "#x", "Rust", None), "chip"),
-            described(
-                AomNode::new(3, Role::CheckBox).with_name("Wrap"),
-                "toggle",
-            ),
+            described(AomNode::new(3, Role::CheckBox).with_name("Wrap"), "toggle"),
         ]);
         let buffer = crate::buffer::VirtualBuffer::from_aom(&root);
         let speech: Vec<&str> = buffer.lines.iter().map(|l| l.speech.as_str()).collect();
@@ -1232,5 +1253,40 @@ mod tests {
         assert!(cursor
             .focus_node(2)
             .is_some_and(|s| s.starts_with("Rust  \u{1d} same page link \u{1e}")));
+    }
+
+    /// Buttons with popups, JAWS on the dev box (2026-10-16): a menu's says "button menu" and,
+    /// in reading, its state; any other popup is a Button that "Has Popup".
+    #[test]
+    fn a_menu_button_and_a_popup_button() {
+        let mut actions = AomNode::new(1, Role::MenuButton).with_name("Actions");
+        actions.states.expanded = Some(false);
+        let mut pick = AomNode::new(2, Role::Button).with_name("Pick one");
+        pick.attributes
+            .insert("haspopup".to_owned(), "listbox".to_owned());
+        let root = AomNode::new(0, Role::Document).with_children(vec![actions, pick]);
+        let buffer = crate::buffer::VirtualBuffer::from_aom(&root);
+        let speech: Vec<&str> = buffer.lines.iter().map(|l| l.speech.as_str()).collect();
+        assert_eq!(
+            speech,
+            vec![
+                format!(
+                    "Actions{}{}",
+                    role_marker("button menu"),
+                    state_marker("collapsed")
+                ),
+                format!(
+                    "Pick one{}{}",
+                    role_marker("Button"),
+                    state_marker("Has Popup listbox")
+                ),
+            ]
+        );
+        assert_eq!(buffer.tab_stops.len(), 2);
+        let mut cursor = crate::cursor::VirtualCursor::new(buffer);
+        assert_eq!(
+            cursor.focus_node(1).as_deref(),
+            Some("Actions  \u{1d} button menu \u{1e} ")
+        );
     }
 }
