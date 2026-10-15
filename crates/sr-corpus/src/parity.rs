@@ -611,6 +611,7 @@ fn replayable(event: &TraceEvent) -> bool {
             event.event.as_str(),
             "focus"
                 | "uia_focus"
+                | "uia_selected"
                 | "foreground"
                 | "caret"
                 | "text_selection_change"

@@ -49,6 +49,11 @@ pub const UIA_FOCUS_WINDOWS: [&str; 3] = [
     "ForegroundStaging",
 ];
 
+/// Processes in front whose list selections are read while focus stays in a field: Windows
+/// 11 search selects a result as the search box's text changes, and moves the selection on
+/// Down, with UIA ElementSelected events only (probed on the dev box).
+pub const UIA_SELECTION_PROCESSES: [&str; 1] = ["SearchHost.exe"];
+
 /// Whether a recorded event is a focus change, from a WinEvent or from UIA.
 pub fn is_focus(event: &TraceEvent) -> bool {
     matches!(event.event.as_str(), "focus" | "uia_focus")
@@ -395,6 +400,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent>
             .collect();
     }
     focus.dialog_lines = event.dialog_lines.clone();
+    focus.process = event.process.clone();
     focus.window_items = event
         .dialog_tree
         .as_ref()
@@ -509,6 +515,10 @@ impl EventConverter {
             return Some(AccessibilityEvent::Menu(menu));
         }
         let kind = match event.event.as_str() {
+            // A list item selected while the focus stays in a field (Windows search).
+            "uia_selected" => {
+                return focus_event_from_trace(event).map(AccessibilityEvent::Selected);
+            }
             "focus" if is_drop_down_item(event) => {
                 // Arrow keys in an open combo box move focus into its drop-down list; JAWS
                 // speaks that as the combo box's new value [obs, 304/s12].
@@ -654,6 +664,7 @@ fn apply_msaa_states(control: &mut sr_core::FocusEvent, states: u32) {
 mod capture {
     use super::{
         event_name, TraceEvent, TraceHeader, TraceObject, TRACE_FORMAT_VERSION, UIA_FOCUS_WINDOWS,
+        UIA_SELECTION_PROCESSES,
     };
     use crate::uia_snapshot::capture::{
         automation, focus_chain_from, focus_context_of, focus_subtree_of, focused_element,
@@ -676,8 +687,9 @@ mod capture {
         HWINEVENTHOOK,
     };
     use windows::Win32::UI::Accessibility::{
-        IUIAutomationElement, IUIAutomationFocusChangedEventHandler,
-        IUIAutomationFocusChangedEventHandler_Impl,
+        IUIAutomationElement, IUIAutomationEventHandler, IUIAutomationEventHandler_Impl,
+        IUIAutomationFocusChangedEventHandler, IUIAutomationFocusChangedEventHandler_Impl,
+        TreeScope_Subtree, UIA_SelectionItem_ElementSelectedEventId,
     };
     use windows::Win32::UI::WindowsAndMessaging::{
         DispatchMessageW, GetWindowThreadProcessId, MsgWaitForMultipleObjects, PeekMessageW,
@@ -848,9 +860,10 @@ mod capture {
     }
 
     /// The events the live screen reader consumes ([`EventConverter`]).
-    const LIVE_EVENTS: [&str; 13] = [
+    const LIVE_EVENTS: [&str; 14] = [
         "focus",
         "uia_focus",
+        "uia_selected",
         "foreground",
         "caret",
         "text_selection_change",
@@ -1043,6 +1056,75 @@ mod capture {
         }
     }
 
+    /// UIA's element-selected event id.
+    const UIA_ELEMENT_SELECTED: u32 = 20012;
+    /// Posted to the tracer thread by [`UiaSelectedHandler`].
+    const WM_UIA_SELECTED: u32 = windows::Win32::UI::WindowsAndMessaging::WM_APP + 2;
+    /// Selected elements not yet recorded, oldest first.
+    static UIA_SELECTED: std::sync::Mutex<std::collections::VecDeque<MtaElement>> =
+        std::sync::Mutex::new(std::collections::VecDeque::new());
+
+    /// Wakes the tracer thread on UIA element selections in [`UIA_SELECTION_PROCESSES`] in
+    /// front. Selections everywhere reach it (it is registered on the desktop), so it only
+    /// looks up the foreground window's process before anything else.
+    #[implement(IUIAutomationEventHandler)]
+    struct UiaSelectedHandler {
+        thread: u32,
+    }
+
+    impl IUIAutomationEventHandler_Impl for UiaSelectedHandler_Impl {
+        fn HandleAutomationEvent(
+            &self,
+            sender: windows::core::Ref<IUIAutomationElement>,
+            _event: windows::Win32::UI::Accessibility::UIA_EVENT_ID,
+        ) -> windows::core::Result<()> {
+            use windows::Win32::Foundation::{LPARAM, WPARAM};
+            use windows::Win32::UI::WindowsAndMessaging::{
+                GetForegroundWindow, PostThreadMessageW,
+            };
+            // SAFETY: plain Win32 call with no preconditions.
+            let process = process_name(unsafe { GetForegroundWindow() }).unwrap_or_default();
+            if !UIA_SELECTION_PROCESSES
+                .iter()
+                .any(|p| p.eq_ignore_ascii_case(&process))
+            {
+                return Ok(());
+            }
+            if let (Some(element), Ok(mut queue)) = (sender.as_ref(), UIA_SELECTED.lock()) {
+                if queue.len() >= MAX_UIA_FOCUSED {
+                    queue.pop_front();
+                }
+                queue.push_back(MtaElement(element.clone()));
+            }
+            // SAFETY: the post targets a thread that pumps messages until the handler is
+            // removed.
+            let _ =
+                unsafe { PostThreadMessageW(self.thread, WM_UIA_SELECTED, WPARAM(0), LPARAM(0)) };
+            Ok(())
+        }
+    }
+
+    /// Records the selections UIA reported, on the tracer thread.
+    fn record_uia_selected() {
+        use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+        let elements: Vec<MtaElement> = UIA_SELECTED
+            .lock()
+            .map(|mut queue| queue.drain(..).collect())
+            .unwrap_or_default();
+        // SAFETY: plain Win32 call with no preconditions.
+        let foreground = unsafe { GetForegroundWindow() };
+        for element in &elements {
+            record(
+                "uia_selected",
+                UIA_ELEMENT_SELECTED,
+                foreground,
+                0,
+                0,
+                Some(&element.0),
+            );
+        }
+    }
+
     /// Records one event through the sink, with what the engine needs read now. `element`
     /// is the focused element when the event names it (UIA); otherwise UIA's focus is read.
     fn record(
@@ -1084,7 +1166,9 @@ mod capture {
             // same element. A second GetFocusedElement right after a window switch could
             // block for seconds while UIA's focus settled (7 s into Windows 11 Notepad, dev
             // box), and could answer with another element than the chain's.
-            let reads_focus = focused || name == "foreground" || changes_focus_context;
+            let uia_named = matches!(name, "uia_focus" | "uia_selected");
+            let reads_focus =
+                focused || name == "foreground" || changes_focus_context || name == "uia_selected";
             let asked = match (element, state.uia.as_ref()) {
                 (None, Some(uia)) if reads_focus => focused_element(uia),
                 _ => None,
@@ -1099,7 +1183,7 @@ mod capture {
                 // A focus UIA names (the task switcher's items) is read by name alone: on the
                 // switcher's first opening its tree answers slowly, and reading around the item
                 // held the thread for seconds while the next items went by (dev box).
-                (_, Some(_)) if name == "uia_focus" => (Vec::new(), None),
+                (_, Some(_)) if uia_named => (Vec::new(), None),
                 (_, Some(uia)) if focused => match element {
                     Some(element) => focus_context_of(uia, element),
                     None => (Vec::new(), None),
@@ -1156,7 +1240,7 @@ mod capture {
             // being extended), and whichever arrived first would be spoken.
             let caret_moved = matches!(name, "caret" | "text_selection_change");
             let text_context = if (focused || changes_focus_context || caret_moved)
-                && name != "uia_focus"
+                && !uia_named
                 && !(state.live && caret_moved)
             {
                 let read = || {
@@ -1180,7 +1264,7 @@ mod capture {
             };
             stages.push(("text", clock.elapsed().as_millis()));
             // A UIA focus has no MSAA object: the focused item is UIA's.
-            let object = (name != "uia_focus")
+            let object = (!uia_named)
                 .then(|| msaa_object(hwnd, id_object, id_child))
                 .flatten();
             stages.push(("msaa", clock.elapsed().as_millis()));
@@ -1298,6 +1382,26 @@ mod capture {
                 .inspect_err(|e| tracing::warn!("UIA focus handler not added: {e}"))
                 .is_ok()
         });
+        let uia_selected: IUIAutomationEventHandler = UiaSelectedHandler { thread }.into();
+        // SAFETY: UIA client query on a valid automation object.
+        let root = uia
+            .as_ref()
+            .and_then(|uia| unsafe { uia.GetRootElement() }.ok());
+        let uia_selected_added = match (uia.as_ref(), root.as_ref()) {
+            // SAFETY: a desktop-wide UIA handler, removed before this thread stops pumping.
+            (Some(uia), Some(root)) => unsafe {
+                uia.AddAutomationEventHandler(
+                    UIA_SelectionItem_ElementSelectedEventId,
+                    root,
+                    TreeScope_Subtree,
+                    None,
+                    &uia_selected,
+                )
+            }
+            .inspect_err(|e| tracing::warn!("UIA selection handler not added: {e}"))
+            .is_ok(),
+            _ => false,
+        };
         // Where focus is already, as JAWS reads it when it starts: no event will report it.
         record_current_focus();
 
@@ -1307,10 +1411,15 @@ mod capture {
             unsafe {
                 let _ = MsgWaitForMultipleObjects(None, false, 50, QS_ALLINPUT);
                 let mut uia_focused = false;
+                let mut uia_selected_queued = false;
                 while PeekMessageW(&mut msg, None, 0, 0, PM_REMOVE).as_bool() {
                     if msg.hwnd.is_invalid() && msg.message == WM_UIA_FOCUS {
                         // Several focus changes queued meanwhile: the focus now is read once.
                         uia_focused = true;
+                        continue;
+                    }
+                    if msg.hwnd.is_invalid() && msg.message == WM_UIA_SELECTED {
+                        uia_selected_queued = true;
                         continue;
                     }
                     let _ = TranslateMessage(&msg);
@@ -1319,7 +1428,20 @@ mod capture {
                 if uia_focused {
                     record_uia_focus();
                 }
+                if uia_selected_queued {
+                    record_uia_selected();
+                }
             }
+        }
+        if let (Some(uia), Some(root), true) = (uia.as_ref(), root.as_ref(), uia_selected_added) {
+            // SAFETY: removes the handler added above.
+            let _ = unsafe {
+                uia.RemoveAutomationEventHandler(
+                    UIA_SelectionItem_ElementSelectedEventId,
+                    root,
+                    &uia_selected,
+                )
+            };
         }
 
         if let (Some(uia), true) = (uia.as_ref(), uia_focus_added) {
@@ -1432,6 +1554,32 @@ mod tests {
                 Some(1),
                 Some(6)
             ))
+        );
+    }
+
+    /// Windows search's result, selected while focus stays in the search box.
+    #[test]
+    fn a_uia_selection_is_a_selected_item() {
+        let result = UiaNode {
+            position_in_set: Some(1),
+            size_of_set: Some(5),
+            ..node(
+                UIA_LISTITEM,
+                "Notepad, App, Press right to view options",
+                false,
+            )
+        };
+        let event = TraceEvent {
+            event: "uia_selected".to_owned(),
+            win_event: 20012,
+            focus_chain: vec![result],
+            ..focus_event(Vec::new())
+        };
+        let events = EventConverter::default().convert(&event);
+        assert!(
+            matches!(events.as_slice(), [sr_core::AccessibilityEvent::Selected(item)]
+                if item.item_index == Some(1) && item.item_count == Some(5)),
+            "{events:?}"
         );
     }
 

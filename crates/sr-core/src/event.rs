@@ -155,6 +155,8 @@ pub struct FocusEvent {
     /// Whether the control's value is read-only (UIA), where it reports one: an editable
     /// document is a text field.
     pub read_only: Option<bool>,
+    /// The executable of the focus's window ("SearchHost.exe"), for application behavior.
+    pub process: Option<String>,
 }
 
 impl FocusEvent {
@@ -187,6 +189,7 @@ impl FocusEvent {
             help_text: None,
             access_key: None,
             read_only: None,
+            process: None,
         }
     }
 
@@ -295,6 +298,9 @@ pub enum AccessibilityEvent {
     /// The focused text field's text, caret or selection, read after a key moved or edited
     /// it, or reported by the application.
     TextContext(TextContext),
+    /// An item selected in a list while the focus stays elsewhere: Windows search's results
+    /// as the search box's text changes, or as Down moves through them.
+    Selected(FocusEvent),
     LiveRegion(LiveRegionEvent),
     DocumentLoaded {
         title: String,

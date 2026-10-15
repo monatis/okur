@@ -1279,6 +1279,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::Menu(menu) => self.handle_menu_event(*menu),
             AccessibilityEvent::Change { kind, control } => self.handle_change(*kind, control),
             AccessibilityEvent::TextContext(context) => self.handle_text_context(context),
+            AccessibilityEvent::Selected(item) => self.handle_selected(item),
             AccessibilityEvent::LiveRegion(live) => self.handle_live_region_event(live),
             AccessibilityEvent::DocumentLoaded { title, root } => {
                 let buffer = VirtualBuffer::from_aom(root);
@@ -1702,7 +1703,7 @@ impl ScreenReaderEngine {
         let control_speech = self.native_focus.focus(focus)?;
         self.last_native_focus = Some(focus.clone());
 
-        let speech = if window_changed {
+        let speech = if window_changed && crate::apps::windows_search::names_window(focus) {
             // A new active window: its title, then the control. A dialog box adds its role
             // and its text [obs, 306/s1, s3, s10].
             // The desktop is announced as "desktop"; its title (Insert+T) is the virtual
@@ -2064,6 +2065,14 @@ impl ScreenReaderEngine {
     /// before and after); typed characters are echoed, as JAWS does with its default typing
     /// echo (characters).
     fn edit_key_feedback(&mut self, event: &KeyEvent) {
+        // Windows search's box: Up and Down select results, read as they are selected.
+        if self
+            .last_native_focus
+            .as_ref()
+            .is_some_and(|f| crate::apps::windows_search::arrows_select(f, event))
+        {
+            return;
+        }
         if let Some(key) = crate::editing::EditKey::of(event) {
             // A multi-line native document (Windows 11 Notepad) reads some keys otherwise.
             let document = !self.forms_mode
@@ -2266,6 +2275,26 @@ impl ScreenReaderEngine {
         }
         let before = self.last_native_focus.replace(control.clone())?;
         let speech = crate::native_focus::change_speech(&before, control)?;
+        self.speech.speak(&speech, true);
+        Some(speech)
+    }
+
+    /// An item selected in a list while the focus stays in a field (Windows search's results,
+    /// JAWS 2025 on Windows 11, dev box: typing "note" gives "Notepad, App, Press right to view
+    /// options | 1 of 5", Down "notepad, See more search results, Press right to switch preview
+    /// | 2 of 5"): its name and position. The field's edit key that led to it is not read: its
+    /// effect was the selection.
+    fn handle_selected(&mut self, item: &FocusEvent) -> Option<String> {
+        let name = item
+            .name
+            .as_deref()
+            .map(str::trim)
+            .filter(|n| !n.is_empty())?;
+        self.pending_edit = None;
+        let speech = match (item.item_index, item.item_count) {
+            (Some(i), Some(n)) => format!("{name}\n{i} of {n}"),
+            _ => name.to_owned(),
+        };
         self.speech.speak(&speech, true);
         Some(speech)
     }
@@ -2747,6 +2776,38 @@ mod tests {
         // Back in Notepad, its window is announced again.
         let back = engine.handle_focus_event(&edit).unwrap_or_default();
         assert!(back.starts_with("Untitled - Notepad"), "{back:?}");
+    }
+
+    /// Windows search (JAWS on the dev box): Down in the search box selects the next result,
+    /// which is read with its position; the search box's line is not.
+    #[test]
+    fn a_selected_result_replaces_the_fields_read() {
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+        let mut search_box = FocusEvent::new(Role::Edit).with_name("Search box");
+        search_box.window_title = Some("Search".to_owned());
+        engine.handle_focus_event(&search_box);
+        let down = KeyEvent::new(Key::DownArrow, Modifiers::none(), true);
+        engine.handle_key_event(&down);
+        let result = FocusEvent::new(Role::ListItem)
+            .with_name(" notepad, See more search results, Press right to switch preview")
+            .with_item_index(2)
+            .with_item_count(5);
+        assert_eq!(
+            engine
+                .handle_accessibility_event(&AccessibilityEvent::Selected(result))
+                .as_deref(),
+            Some("notepad, See more search results, Press right to switch preview\n2 of 5")
+        );
+        // The field's text read after Down speaks nothing now.
+        let read = AccessibilityEvent::TextContext(crate::event::TextContext {
+            text: "note".to_owned(),
+            caret: 4,
+            selection: None,
+            font: None,
+            word: None,
+        });
+        assert_eq!(engine.handle_accessibility_event(&read), None);
     }
 
     /// Windows 11 sends the desktop's focus several times, the first from no window class
