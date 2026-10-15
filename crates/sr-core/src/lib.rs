@@ -9,6 +9,7 @@ pub mod engine;
 pub mod event;
 pub mod input;
 pub mod linearize;
+pub mod live_text;
 pub mod native_focus;
 pub mod pronounce;
 pub mod settings;

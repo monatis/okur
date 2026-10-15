@@ -105,18 +105,34 @@ impl KeyboardSettings {
     }
 }
 
+/// What a live region's change speaks when text was appended to what it already said.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub enum LiveRegionAppend {
+    /// Only the appended text, from the start of a word the old text ended in: a streamed
+    /// chat reply is read as it grows, once.
+    #[default]
+    Appended,
+    /// The region's whole text again on every change, as JAWS 2025 does: a 40-word stream
+    /// gave its growing paragraph 37 times (dev box, 2026-10-15). Appended lines (a new chat
+    /// message) are read alone in both modes [obs, 206/s2-s3].
+    WholeText,
+}
+
 /// All user settings.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct Settings {
     pub keyboard: KeyboardSettings,
+    pub live_region_append: LiveRegionAppend,
 }
 
 impl Settings {
     /// The reference machine's JAWS configuration (`old-pc`'s `DEFAULT.JCF`, unchanged since
-    /// 2025-08-19, before any evidence was recorded): `KeyboardType=Laptop`.
+    /// 2025-08-19, before any evidence was recorded): `KeyboardType=Laptop`; and JAWS's own
+    /// reading of growing live regions, so replay compares like with like.
     pub fn reference_machine() -> Self {
         Self {
             keyboard: KeyboardSettings::for_layout(KeyboardLayout::Laptop),
+            live_region_append: LiveRegionAppend::WholeText,
         }
     }
 }

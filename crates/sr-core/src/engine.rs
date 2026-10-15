@@ -79,6 +79,8 @@ pub struct ScreenReaderEngine {
     task_switcher: crate::apps::task_switcher::TaskSwitcher,
     /// Each live region's lines when it last changed, by DOM id.
     last_live_text: std::collections::HashMap<String, Vec<String>>,
+    /// Live regions being read as they grow, by DOM id (`LiveRegionAppend::Appended`).
+    live_streams: std::collections::HashMap<String, page::LiveStream>,
 }
 
 impl ScreenReaderEngine {
@@ -111,6 +113,7 @@ impl ScreenReaderEngine {
             pending_viewer: None,
             task_switcher: Default::default(),
             last_live_text: std::collections::HashMap::new(),
+            live_streams: std::collections::HashMap::new(),
         }
     }
 

@@ -924,3 +924,124 @@ fn a_console_is_virtualized_from_its_text_at_the_prompt() {
     engine.handle_key_event(&escape);
     assert_eq!(speech.take(), vec!["C:\\Users\\Gigabyte>".to_owned()]);
 }
+
+/// A live region event for region `reply` with `text`, named "Reply", polite.
+fn reply_region(text: &str) -> LiveRegionEvent {
+    let mut live = LiveRegionEvent::new(text, Politeness::Polite).with_container("Reply");
+    live.region_id = Some("reply".to_owned());
+    live
+}
+
+fn engine_with_speech() -> (ScreenReaderEngine, SharedSpeech) {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    (engine, speech)
+}
+
+/// A streamed reply is read once, piece by piece: the region's name before the first piece,
+/// each piece from where the last ended, and a word still growing only once it is whole.
+#[test]
+fn a_streamed_live_region_is_read_as_it_grows() {
+    let (mut engine, speech) = engine_with_speech();
+    for text in [
+        "This",
+        "This reply arr",
+        "This reply arrives a",
+        "This reply arrives a few words.",
+    ] {
+        engine.handle_live_region_event(&reply_region(text));
+    }
+    assert_eq!(
+        speech.take(),
+        vec!["Reply\nThis", "reply", "arrives", "a few words."]
+    );
+}
+
+/// The last word of a reply that stops inside it is read once the region has been quiet.
+#[test]
+fn a_streamed_reply_ends_with_its_held_back_word_when_quiet() {
+    let (mut engine, speech) = engine_with_speech();
+    engine.handle_live_region_event(&reply_region("Hello"));
+    engine.handle_live_region_event(&reply_region("Hello wor"));
+    engine.handle_live_region_event(&reply_region("Hello world"));
+    assert_eq!(speech.take(), vec!["Reply\nHello"]);
+    for _ in 0..3 {
+        engine.on_idle();
+    }
+    assert_eq!(speech.take(), vec!["world"]);
+    // Read once: more quiet says nothing more.
+    engine.on_idle();
+    assert!(speech.take().is_empty());
+}
+
+/// A new message on a line of its own is read whole at once, its last word included.
+#[test]
+fn a_new_message_in_a_live_region_is_read_whole() {
+    let (mut engine, speech) = engine_with_speech();
+    engine.handle_live_region_event(&reply_region("You: Message 1"));
+    engine.handle_live_region_event(&reply_region("You: Message 1\nYou: Message 2"));
+    assert_eq!(
+        speech.take(),
+        vec!["Reply\nYou: Message 1", "You: Message 2"]
+    );
+}
+
+/// JAWS reads a growing region's whole text on every change (dev box, 2026-10-15); the
+/// reference machine's settings keep that, so replay compares with JAWS.
+#[test]
+fn jaws_mode_reads_a_growing_region_whole_each_time() {
+    let (mut engine, speech) = engine_with_speech();
+    engine.settings = crate::settings::Settings::reference_machine();
+    engine.handle_live_region_event(&reply_region("This"));
+    engine.handle_live_region_event(&reply_region("This reply"));
+    assert_eq!(speech.take(), vec!["Reply\nThis", "Reply\nThis reply"]);
+}
+
+/// Speech that reports itself busy while the test says so.
+#[derive(Clone, Default)]
+struct BusySpeech {
+    said: SharedSpeech,
+    busy: std::sync::Arc<std::sync::atomic::AtomicBool>,
+}
+
+impl SpeechOutput for BusySpeech {
+    fn speak(&mut self, text: &str, interrupt: bool) {
+        self.said.speak(text, interrupt);
+    }
+    fn stop(&mut self) {}
+    fn is_speaking(&self) -> bool {
+        self.busy.load(std::sync::atomic::Ordering::SeqCst)
+    }
+}
+
+/// While a piece is still being spoken, the stream gathers, and is read as one phrase once
+/// speech is free.
+#[test]
+fn a_fast_stream_is_read_in_phrases_as_speech_frees() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = BusySpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.handle_live_region_event(&reply_region("This"));
+    assert_eq!(speech.said.take(), vec!["Reply\nThis"]);
+
+    speech.busy.store(true, std::sync::atomic::Ordering::SeqCst);
+    for text in [
+        "This reply",
+        "This reply arrives",
+        "This reply arrives a few",
+    ] {
+        engine.handle_live_region_event(&reply_region(text));
+    }
+    engine.on_idle();
+    assert!(speech.said.take().is_empty());
+
+    speech
+        .busy
+        .store(false, std::sync::atomic::Ordering::SeqCst);
+    engine.on_idle();
+    assert_eq!(speech.said.take(), vec!["reply arrives a"]);
+    engine.on_idle();
+    engine.on_idle();
+    assert_eq!(speech.said.take(), vec!["few"]);
+}

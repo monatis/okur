@@ -61,6 +61,11 @@ enum Commands {
         /// layout's own)
         #[arg(long)]
         jaws_key: Option<String>,
+
+        /// Read a growing live region's whole text again on every change, as JAWS does
+        /// (default: only what was appended, so a streamed chat reply is read once)
+        #[arg(long)]
+        live_region_whole_text: bool,
     },
     /// Compare engine speech with recorded JAWS speech for every genuine corpus scenario
     Parity {
@@ -622,6 +627,7 @@ async fn main() {
             debug_log: _,
             keyboard_layout,
             jaws_key,
+            live_region_whole_text,
         }) => {
             let keyboard =
                 keyboard_settings(&keyboard_layout, jaws_key.as_deref()).unwrap_or_else(|e| {
@@ -704,6 +710,9 @@ async fn main() {
                 event_tx.clone(),
             ))));
             engine.settings.keyboard = keyboard;
+            if live_region_whole_text {
+                engine.settings.live_region_append = sr_core::settings::LiveRegionAppend::WholeText;
+            }
             // Say System Time (Insert+F12) in the user's locale formats.
             #[cfg(windows)]
             engine.set_clock(Box::new(sr_platform::clock::WindowsClock));

@@ -5,6 +5,7 @@ use super::{AppMode, ScreenReaderEngine};
 use crate::aom::{AomNode, Role};
 use crate::buffer::VirtualBuffer;
 use crate::event::{AccessibilityEvent, FocusEvent, LiveRegionEvent, Politeness};
+use crate::settings::LiveRegionAppend;
 use crate::speech::SpeechFormatter;
 
 impl ScreenReaderEngine {
@@ -57,6 +58,7 @@ impl ScreenReaderEngine {
         self.pending_page = None;
         self.last_page_focus = None;
         self.last_live_text.clear();
+        self.live_streams.clear();
         self.load_buffer(buffer);
         self.app_mode = AppMode::VirtualBuffer;
         self.last_window_title = Some(title.to_owned());
@@ -246,39 +248,149 @@ impl ScreenReaderEngine {
     /// event supersedes it (a closed popup menu, unless focus moved on).
     pub fn on_idle(&mut self) -> Option<String> {
         self.apply_pending_page();
-        let speech = self.menus.idle()?;
-        self.speech.speak(&speech, true);
-        Some(speech)
+        let menu = self.menus.idle();
+        if let Some(speech) = &menu {
+            self.speech.speak(speech, true);
+        }
+        let streamed = self.finish_live_streams();
+        menu.or(streamed)
     }
 
     /// Handles an ARIA live region announcement event with politeness consideration.
     pub fn handle_live_region_event(&mut self, live: &LiveRegionEvent) -> Option<String> {
-        // JAWS speaks what was added to the region, after the region's name: "Messages |
-        // You: Message 1" [obs, 206/s2-s3]. The region's previous text is in the buffer.
-        let added = self.live_region_additions(live);
+        if live.politeness == Politeness::Off {
+            // Kept current, never spoken.
+            self.live_region_additions(live);
+            return None;
+        }
+        let (added, continues) = match self.settings.live_region_append {
+            LiveRegionAppend::Appended => self.live_stream_piece(live),
+            LiveRegionAppend::WholeText => (self.live_region_additions(live), false),
+        };
         if added.trim().is_empty() {
             return None;
         }
+        // JAWS speaks what was added to the region, after the region's name: "Messages |
+        // You: Message 1" [obs, 206/s2-s3]. A growing region's later pieces follow on from
+        // its first without the name, queued: a piece never cuts off the one before it.
         let text = match live.container_name.as_deref() {
-            Some(name) => format!("{name}\n{added}"),
-            None => added,
+            Some(name) if !continues => format!("{name}\n{added}"),
+            _ => added,
         };
-        match live.politeness {
-            Politeness::Assertive => {
-                self.speech.stop();
-                self.speech.speak(&text, true);
-                Some(text)
-            }
-            Politeness::Polite => {
-                self.speech.speak(&text, false);
-                Some(text)
-            }
-            Politeness::Off => None,
+        if live.politeness == Politeness::Assertive && !continues {
+            self.speech.stop();
+            self.speech.speak(&text, true);
+        } else {
+            self.speech.speak(&text, false);
         }
+        Some(text)
     }
 
-    /// The lines of a live region's text that its previous text in the buffer lacked.
-    fn live_region_additions(&mut self, live: &LiveRegionEvent) -> String {
+    /// What a live region's change adds to what was spoken of it, and whether it continues a
+    /// growing region ([`LiveRegionAppend::Appended`]). Text appended to the spoken text is
+    /// read from the start of the word the spoken text ended in; while the region grows
+    /// within a line, its last word waits until it is whole ([`Self::finish_live_streams`]
+    /// reads it when the region goes quiet). Any other change reads the lines the region
+    /// lacked, as [`LiveRegionAppend::WholeText`] does.
+    fn live_stream_piece(&mut self, live: &LiveRegionEvent) -> (String, bool) {
+        let key = live.region_id.clone().unwrap_or_default();
+        let new_text = live.text.clone();
+        let (spoken_text, existed) = match self.live_streams.get(&key) {
+            Some(stream) => (
+                stream
+                    .text
+                    .get(..stream.spoken)
+                    .unwrap_or_default()
+                    .to_owned(),
+                true,
+            ),
+            None => (self.region_old_lines(live).join("\n"), false),
+        };
+        if !new_text.starts_with(&spoken_text) {
+            let added = self.live_region_additions(live);
+            let spoken = new_text.len();
+            self.live_streams.insert(
+                key,
+                LiveStream {
+                    text: new_text,
+                    spoken,
+                    quiet: 0,
+                },
+            );
+            return (added, false);
+        }
+        self.note_live_text(live);
+        let continues = existed && !spoken_text.is_empty();
+        // While the last piece is still being spoken, what arrives gathers, and is read as one
+        // phrase once speech is free: a fast stream is read in phrases, not word by word.
+        if continues && self.speech.is_speaking() {
+            if let Some(stream) = self.live_streams.get_mut(&key) {
+                stream.text = new_text;
+                stream.quiet = 0;
+            }
+            return (String::new(), true);
+        }
+        let appended_on_line = !new_text
+            .get(spoken_text.len()..)
+            .unwrap_or_default()
+            .starts_with('\n');
+        let start = crate::live_text::word_start(&new_text, spoken_text.len());
+        let end = if continues && appended_on_line {
+            crate::live_text::complete_end(&new_text, start)
+        } else {
+            new_text.len()
+        };
+        let piece = new_text
+            .get(start..end)
+            .unwrap_or_default()
+            .trim()
+            .to_owned();
+        self.live_streams.insert(
+            key,
+            LiveStream {
+                text: new_text,
+                spoken: end,
+                quiet: 0,
+            },
+        );
+        (piece, continues)
+    }
+
+    /// Reads what growing live regions have gathered once speech is free: their whole words
+    /// so far, and once a region has been quiet for a moment, the rest too (the end of a
+    /// streamed reply, whose last word no later piece completes).
+    fn finish_live_streams(&mut self) -> Option<String> {
+        if self.speech.is_speaking() {
+            return None;
+        }
+        let mut pieces = Vec::new();
+        for stream in self.live_streams.values_mut() {
+            if stream.spoken >= stream.text.len() {
+                continue;
+            }
+            stream.quiet = stream.quiet.saturating_add(1);
+            let start = crate::live_text::word_start(&stream.text, stream.spoken);
+            let end = if stream.quiet < LIVE_STREAM_QUIET_TICKS {
+                crate::live_text::complete_end(&stream.text, start)
+            } else {
+                stream.text.len()
+            };
+            let piece = stream.text.get(start..end).unwrap_or_default().trim();
+            if !piece.is_empty() {
+                pieces.push(piece.to_owned());
+            }
+            stream.spoken = stream.spoken.max(end);
+        }
+        if pieces.is_empty() {
+            return None;
+        }
+        let speech = pieces.join("\n");
+        self.speech.speak(&speech, false);
+        Some(speech)
+    }
+
+    /// A live region's text before this change: as last reported, or in the page.
+    fn region_old_lines(&self, live: &LiveRegionEvent) -> Vec<String> {
         fn texts(node: &AomNode, out: &mut Vec<String>) {
             if let Some(t) = node
                 .text
@@ -291,6 +403,16 @@ impl ScreenReaderEngine {
             for child in &node.children {
                 texts(child, out);
             }
+        }
+        // The region's text when it last changed, if newer than the page: the page is
+        // refreshed after the change, so two quick changes (two chat messages) would otherwise
+        // compare the second with a page that lacks the first.
+        if let Some(last) = live
+            .region_id
+            .as_ref()
+            .and_then(|id| self.last_live_text.get(id))
+        {
+            return last.clone();
         }
         let buffer = &self.cursor.buffer;
         let mut ids: Vec<usize> = buffer.node_ids().collect();
@@ -306,20 +428,21 @@ impl ScreenReaderEngine {
         if let Some(region) = region {
             texts(region, &mut old);
         }
-        // The region's text when it last changed, if newer than the page: the page is
-        // refreshed after the change, so two quick changes (two chat messages) would otherwise
-        // compare the second with a page that lacks the first.
-        if let Some(last) = live
-            .region_id
-            .as_ref()
-            .and_then(|id| self.last_live_text.get(id))
-        {
-            old = last.clone();
-        }
+        old
+    }
+
+    /// Remembers a live region's text as this change left it.
+    fn note_live_text(&mut self, live: &LiveRegionEvent) {
         if let Some(id) = &live.region_id {
             self.last_live_text
                 .insert(id.clone(), live.text.lines().map(str::to_owned).collect());
         }
+    }
+
+    /// The lines of a live region's text that its previous text in the buffer lacked.
+    fn live_region_additions(&mut self, live: &LiveRegionEvent) -> String {
+        let old = self.region_old_lines(live);
+        self.note_live_text(live);
         let new: Vec<&str> = live.text.lines().collect();
         let added = if old.len() <= new.len() && old.iter().zip(&new).all(|(o, n)| o.as_str() == *n)
         {
@@ -329,4 +452,19 @@ impl ScreenReaderEngine {
         };
         added.join("\n")
     }
+}
+
+/// Quiet ticks (the live screen reader's are 150 ms apart) before a growing live region's
+/// held-back word is read.
+const LIVE_STREAM_QUIET_TICKS: u8 = 3;
+
+/// A live region being read as it grows ([`LiveRegionAppend::Appended`]).
+#[derive(Debug, Clone)]
+pub(super) struct LiveStream {
+    /// The region's text now.
+    text: String,
+    /// How much of it has been spoken, in bytes.
+    spoken: usize,
+    /// Quiet ticks since it last changed.
+    quiet: u8,
 }
