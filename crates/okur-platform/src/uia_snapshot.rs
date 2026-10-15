@@ -337,6 +337,10 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> okur_core::AomNode {
     if node.is_password {
         set_attr("password", "true".to_owned());
     }
+    // A read-only field (GitHub's code view is a read-only text area).
+    if aom.role == okur_core::Role::Edit && node.value_is_read_only == Some(true) {
+        set_attr("readonly", "true".to_owned());
+    }
     if aria_property(node, "multiline") == Some("true") {
         set_attr("multiline", "true".to_owned());
     }

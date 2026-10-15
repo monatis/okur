@@ -132,8 +132,8 @@ impl ScreenReaderEngine {
             // Into a page's application region (ARIA role "application"): its name, and every
             // key goes to the page, as JAWS does (dev box, 2026-10-16: "Workbench | First tool
             // Button").
-            let entering_application = focus.web_application.is_some()
-                && focus.web_application != self.web_application;
+            let entering_application =
+                focus.web_application.is_some() && focus.web_application != self.web_application;
             self.web_application = focus.web_application.clone();
             if target_role == Some(Role::Document) {
                 // The page itself has focus: the next control focus enters the page.
@@ -144,9 +144,8 @@ impl ScreenReaderEngine {
             // Forms mode follows focus into edits; a combo box keeps the forms mode Enter
             // turned on [obs, 205/s8].
             let is_edit = target_role == Some(Role::Edit) || focus.role == Role::Edit;
-            self.page_focus_is_field = is_edit
-                || focus.role == Role::ComboBox
-                || target_role == Some(Role::ComboBox);
+            self.page_focus_is_field =
+                is_edit || focus.role == Role::ComboBox || target_role == Some(Role::ComboBox);
             let in_forms_mode = is_edit
                 || (target_role == Some(Role::ComboBox) && self.forms_mode)
                 || self.web_application.is_some();

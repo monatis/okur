@@ -261,8 +261,8 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     use okur_core::{AomNode, NodeStates, Role};
     use xa11y_windows::ia2::msaa_states::{
         STATE_SYSTEM_CHECKED, STATE_SYSTEM_COLLAPSED, STATE_SYSTEM_EXPANDED, STATE_SYSTEM_FOCUSED,
-        STATE_SYSTEM_INVISIBLE, STATE_SYSTEM_PROTECTED, STATE_SYSTEM_SELECTED,
-        STATE_SYSTEM_TRAVERSED, STATE_SYSTEM_UNAVAILABLE,
+        STATE_SYSTEM_INVISIBLE, STATE_SYSTEM_PROTECTED, STATE_SYSTEM_READONLY,
+        STATE_SYSTEM_SELECTED, STATE_SYSTEM_TRAVERSED, STATE_SYSTEM_UNAVAILABLE,
     };
 
     let id = *next_id;
@@ -341,6 +341,10 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
         Some("pre" | "listing" | "xmp" | "plaintext")
     ) {
         set_attr("preformatted", "true".to_owned());
+    }
+    // A read-only field (GitHub's code view is a read-only text area).
+    if role == Role::Edit && has(STATE_SYSTEM_READONLY) {
+        set_attr("readonly", "true".to_owned());
     }
     if has(STATE_SYSTEM_PROTECTED) {
         set_attr("password", "true".to_owned());

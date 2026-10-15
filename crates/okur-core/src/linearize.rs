@@ -649,6 +649,39 @@ impl<'a> Builder<'a> {
         self.absorb_punctuation_into = Some(self.buffer.lines.len() - 1);
     }
 
+    /// A read-only text area with text (GitHub's code view): its lines are read with the
+    /// virtual cursor, as JAWS reads them (dev box, 2026-10-16: "file content read only edit",
+    /// then "resolver = "2"", "members= ["). The first carries its name and role. Returns
+    /// false for any other control.
+    fn visit_read_only_text(&mut self, node: &AomNode) -> bool {
+        let text = node.value.as_deref().unwrap_or_default();
+        if node.role != Role::Edit
+            || attr(node, "readonly") != Some("true")
+            || attr(node, "multiline") != Some("true")
+            || text.is_empty()
+        {
+            return false;
+        }
+        let name = node.name.as_deref().map(squash).unwrap_or_default();
+        let lines = crate::editing::text_lines(text);
+        let mut first = None;
+        for (i, line) in lines.iter().enumerate() {
+            let speech = if i == 0 {
+                format!("{name}{}{line}", role_marker("read only edit"))
+            } else {
+                line.clone()
+            };
+            let off = self.emit(node.id, node.role.clone(), line, speech);
+            first.get_or_insert(off);
+        }
+        if let Some(off) = first {
+            self.buffer.edits.push(off);
+            self.buffer.form_controls.push(off);
+            self.buffer.tab_stops.push(off);
+        }
+        true
+    }
+
     /// §10: one line per form control, in JAWS's line-reading phrasing.
     fn visit_control(&mut self, node: &AomNode) {
         // Radio buttons remember their enclosing group, which focus speech names when the
@@ -667,6 +700,9 @@ impl<'a> Builder<'a> {
         }
         // Flush first: an inline label in the same block is still pending in the run.
         self.flush();
+        if self.visit_read_only_text(node) {
+            return;
+        }
         let labelled_by_previous_line = self.last_text_line.clone();
         let labelled = labelled_by_previous_line.is_some()
             && labelled_by_previous_line.as_deref() == node.name.as_deref().map(squash).as_deref();
@@ -684,6 +720,8 @@ impl<'a> Builder<'a> {
             Role::Edit => {
                 let kind = if attr(node, "password") == Some("true") {
                     "password edit"
+                } else if attr(node, "readonly") == Some("true") {
+                    "read only edit"
                 } else {
                     node.role_description().unwrap_or("Edit")
                 };
@@ -1412,5 +1450,30 @@ mod tests {
         let heading_line = buffer.lines.get(2).map(|l| (l.node_id, l.start_offset));
         assert_eq!(heading_line.map(|(node, _)| node), Some(4));
         assert!(heading_line.is_some_and(|(_, off)| buffer.tab_stops.contains(&off)));
+    }
+
+    /// GitHub's code view is a read-only text area; JAWS reads its lines with the virtual
+    /// cursor (dev box, 2026-10-16), the first with its name and role.
+    #[test]
+    fn a_read_only_text_area_reads_by_lines() {
+        let mut code = AomNode::new(1, Role::Edit)
+            .with_name("file content")
+            .with_value("[workspace]\nresolver = \"2\"\n\nmembers = []");
+        for (key, value) in [("readonly", "true"), ("multiline", "true")] {
+            code.attributes.insert(key.to_owned(), value.to_owned());
+        }
+        let root = AomNode::new(0, Role::Document).with_children(vec![code]);
+        let buffer = crate::buffer::VirtualBuffer::from_aom(&root);
+        let speech: Vec<&str> = buffer.lines.iter().map(|l| l.speech.as_str()).collect();
+        assert_eq!(
+            speech,
+            vec![
+                format!("file content{}[workspace]", role_marker("read only edit")),
+                "resolver = \"2\"".to_owned(),
+                String::new(),
+                "members = []".to_owned(),
+            ]
+        );
+        assert_eq!(buffer.edits.len(), 1);
     }
 }

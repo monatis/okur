@@ -306,6 +306,8 @@ impl SpeechFormatter {
                     "password edit"
                 } else if let Some(description) = node.role_description() {
                     description
+                } else if attr("readonly") == Some("true") {
+                    "read only edit"
                 } else if attr("multiline") == Some("true") {
                     "edit"
                 } else {

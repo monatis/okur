@@ -1465,8 +1465,9 @@ fn focus_names_the_lists_and_regions_it_enters() {
         },
     )
     .with_name("Repository files")
-    .with_children(vec![AomNode::new(3, Role::List)
-        .with_children(vec![AomNode::new(5, Role::ListItem).with_children(vec![link])])]);
+    .with_children(vec![AomNode::new(3, Role::List).with_children(vec![
+        AomNode::new(5, Role::ListItem).with_children(vec![link]),
+    ])]);
     let page = AomNode::new(0, Role::Document)
         .with_name("Repo")
         .with_children(vec![
