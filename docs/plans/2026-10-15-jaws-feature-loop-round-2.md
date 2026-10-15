@@ -28,16 +28,24 @@ Live usability gaps the user reports come first.
    - Re-record **306**, **314** and **209** with trace format 7, which closes the steps whose traces predate it.
    - Commit the evidence, then regenerate the manifest and baselines. Evidence and code never share a commit.
    - Where Windows 10 JAWS differs from what the dev box showed, the old-pc evidence decides, unless the behavior is specific to Windows 11 (`apps::task_switcher`, Notepad's RichEdit).
-2. **Make the dev-box tools a harness tool.** The scratchpad C# key sender (foreground-checked) and the FSAPI speech history reader should become a script in `skills/jaws-reference/`, with the user's clipboard saved and restored. It is for checks the user allows on their own machine.
-3. **Virtualize Window in Notepad:** JAWS includes the menu bar and status bar (314/s10, s11).
-4. **Discovery,** from the JAWS keystroke list. Candidates:
+2. ~~Make the dev-box tools a harness tool~~: done (`sr-cli keys`, `sr-cli jaws-history`, b2a0ecf).
+3. **Windows 11 XAML menus** (Notepad's menu bar). UIA's MenuItem control type maps to `Generic`, so ours reads bare names ("Edit", "Undo"). JAWS 2025 on the dev box:
+   - Alt: "menu | | File | 1 of 3 | To move through items press left or right arrow. | Alt followed by F"
+   - Down: "Leaving menus | Text editor edit | Contains text | Context Menu | | New window Ctrl+Shift+N | 2 of 13 | To move through items press up or down arrow. | Alt followed by W"
+   - Down: "New Markdown tab | 3 of 13 | Alt followed by M"
+   - Right: "Undo Ctrl+Z | 1 of 15 | Alt followed by U"
+   - Escape: "Leaving menus"
+
+   Mapping MenuItem also changes web pages' buffers, so check it against parity, and against 302's Win32 menu evidence on old-pc.
+4. **Virtualize Window in Notepad:** JAWS includes the menu bar and status bar (314/s10, s11).
+5. **Discovery,** from the JAWS keystroke list. Candidates:
    - Insert+Tab in pages;
    - Insert+B in windows other than dialog boxes;
    - Insert+Num5, Say Character, pressed twice (phonetic), three times (character value);
    - Insert+Up pressed twice (spell the line);
    - Say All by line;
    - Insert+Ctrl+Up and Insert+Ctrl+Down for the speech rate.
-5. **Gaps without an explanation yet:**
+6. **Gaps without an explanation yet:**
    - 312's missing `·😀`;
    - 207/s87's location after the title;
    - 303/s6;
