@@ -649,8 +649,8 @@ mod capture {
         event_name, TraceEvent, TraceHeader, TraceObject, TRACE_FORMAT_VERSION, UIA_FOCUS_WINDOWS,
     };
     use crate::uia_snapshot::capture::{
-        automation, focus_chain, focus_chain_from, focus_context, focus_context_of,
-        focus_subtree_of, window_subtree, window_text,
+        automation, focus_chain, focus_chain_from, focus_context, focus_subtree_of, window_subtree,
+        window_text,
     };
     use crate::PlatformError;
     use std::cell::RefCell;
@@ -935,10 +935,15 @@ mod capture {
     // called from any thread.
     unsafe impl Send for MtaElement {}
 
-    /// The element of the latest UIA focus change, for the tracer thread: on Windows 11 the
-    /// task switcher's items are named only by the event, while `GetFocusedElement` answers
-    /// with the switcher's input pane (seen live on the dev box, 2026-10-15).
-    static UIA_FOCUSED: std::sync::Mutex<Option<MtaElement>> = std::sync::Mutex::new(None);
+    /// The elements of UIA focus changes not yet recorded, oldest first, for the tracer
+    /// thread: on Windows 11 the task switcher's items are named only by the event, while
+    /// `GetFocusedElement` answers with the switcher's input pane (seen live on the dev box,
+    /// 2026-10-15). Each is recorded: keeping only the latest lost the first item to the
+    /// switcher window's own focus right after it.
+    static UIA_FOCUSED: std::sync::Mutex<std::collections::VecDeque<MtaElement>> =
+        std::sync::Mutex::new(std::collections::VecDeque::new());
+    /// Focus changes kept for the tracer thread at most (Tab held down repeats fast).
+    const MAX_UIA_FOCUSED: usize = 8;
 
     /// Wakes the tracer thread on UIA focus changes in [`UIA_FOCUS_WINDOWS`]. UIA calls it on
     /// its own threads, and it also reports every WinEvent focus (UIA bridges MSAA), so it
@@ -964,8 +969,11 @@ mod capture {
                 let length = GetClassNameW(GetForegroundWindow(), &mut class);
                 let class = String::from_utf16_lossy(class.get(..length as usize).unwrap_or(&[]));
                 if UIA_FOCUS_WINDOWS.contains(&class.as_str()) {
-                    if let (Some(element), Ok(mut slot)) = (sender.as_ref(), UIA_FOCUSED.lock()) {
-                        *slot = Some(MtaElement(element.clone()));
+                    if let (Some(element), Ok(mut queue)) = (sender.as_ref(), UIA_FOCUSED.lock()) {
+                        if queue.len() >= MAX_UIA_FOCUSED {
+                            queue.pop_front();
+                        }
+                        queue.push_back(MtaElement(element.clone()));
                     }
                     let _ = PostThreadMessageW(self.thread, WM_UIA_FOCUS, WPARAM(0), LPARAM(0));
                 }
@@ -1010,11 +1018,22 @@ mod capture {
     /// Records the focus UIA reported last, on the tracer thread.
     fn record_uia_focus() {
         use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
-        let element = UIA_FOCUSED.lock().ok().and_then(|mut slot| slot.take());
+        let elements: Vec<MtaElement> = UIA_FOCUSED
+            .lock()
+            .map(|mut queue| queue.drain(..).collect())
+            .unwrap_or_default();
         // SAFETY: plain Win32 call with no preconditions.
         let foreground = unsafe { GetForegroundWindow() };
-        let element = element.as_ref().map(|e| &e.0);
-        record("uia_focus", UIA_FOCUS_CHANGED, foreground, 0, 0, element);
+        for element in &elements {
+            record(
+                "uia_focus",
+                UIA_FOCUS_CHANGED,
+                foreground,
+                0,
+                0,
+                Some(&element.0),
+            );
+        }
     }
 
     /// Records one event through the sink, with what the engine needs read now. `element`
@@ -1065,10 +1084,11 @@ mod capture {
             };
             stages.push(("chain", clock.elapsed().as_millis()));
             let (focus_siblings, focus_subtree) = match (name, state.uia.as_ref()) {
-                (_, Some(uia)) if focused => match element {
-                    Some(element) => focus_context_of(uia, element),
-                    None => focus_context(uia),
-                },
+                // A focus UIA names (the task switcher's items) is read by name alone: on the
+                // switcher's first opening its tree answers slowly, and reading around the item
+                // held the thread for seconds while the next items went by (dev box).
+                (_, Some(_)) if name == "uia_focus" => (Vec::new(), None),
+                (_, Some(uia)) if focused => focus_context(uia),
                 (_, Some(uia)) if changes_focus_context => (Vec::new(), focus_subtree_of(uia)),
                 _ => (Vec::new(), None),
             };
@@ -1121,6 +1141,7 @@ mod capture {
             // being extended), and whichever arrived first would be spoken.
             let caret_moved = matches!(name, "caret" | "text_selection_change");
             let text_context = if (focused || changes_focus_context || caret_moved)
+                && name != "uia_focus"
                 && !(state.live && caret_moved)
             {
                 let read = || {
