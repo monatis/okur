@@ -15,7 +15,7 @@ This is an **autonomous, agent-driven project with a "verification harness in th
 1. **Parity Through Autonomous Verification ("Verification Harness in the Loop")**:
    - Talk is cheap; demonstrable behavior verified against evidence is ground truth.
    - Every reading command, virtual cursor movement, mode transition, and speech announcement must be verified automatically against canonical transcripts in [`corpus/evidence/`](file:///c:/Users/Gigabyte/screen-reader/corpus/evidence/).
-   - The agent autonomously discovers features and behavior of JAWS, chooses a task, implements it, conducts research (online, JAWS documentation, help manuals, JAWS scripts, NVDA repository, OS accessibility API documentation), records reference trials from live JAWS on `old-pc`, and implements code until full functional parity is verified.
+   - The agent autonomously discovers features and behavior of JAWS, chooses a task, implements it, conducts research (online, JAWS documentation, help manuals and keystroke lists, NVDA repository, OS accessibility API documentation), records reference trials from live JAWS on `old-pc`, and implements code until full functional parity is verified.
 
 2. **User-Facing Parity Target: JAWS**:
    - While internal architecture and algorithms may borrow best practices from other screen readers (e.g., NVDA), **all user-facing behavior must match JAWS**.
@@ -36,7 +36,13 @@ This is an **autonomous, agent-driven project with a "verification harness in th
 
 4. **Agent-Driven Clean-Room Software Engineering & Legal Interoperability**:
    - This project strictly follows **[Clean-room design](https://en.wikipedia.org/wiki/Clean-room_design)** and **[Cleanroom software engineering](https://en.wikipedia.org/wiki/Cleanroom_software_engineering)** methodologies.
-   - **Zero Proprietary Ingestion**: No source code, scripts, binaries, or decompiled/disassembled bytecodes from Freedom Scientific or JAWS are ever copied, bundled, or disassembled. All code is written from scratch in modern, memory-safe Rust.
+   - **Zero Proprietary Ingestion**: No source code, scripts, binaries, or decompiled/disassembled bytecodes from Freedom Scientific or JAWS are ever read, copied, bundled, or disassembled. All code is written from scratch in modern, memory-safe Rust.
+     - **May be read**:
+       - JAWS's public documentation and help, including its keystroke lists;
+       - its key map (`.jkm`): key assignments and command names, as Keyboard Manager shows them;
+       - user settings files (`.jcf`, `.vpf`), recorded as the reference machine's configuration;
+       - what JAWS does: speech, braille, and FSAPI calls of scripts by name.
+     - **Never read**: script source (`.jss`, `.jsh`), compiled scripts (`.jsb`), script documentation (`.jsd`), or any other JAWS program file. A JAWS script is known only by its name and by what it does.
    - **Black-Box Functional Observation**: The verification harness observes JAWS strictly as a black box (keystrokes in -> spoken announcements / braille output out) across synthetic fixtures on an external reference machine (`old-pc`).
    - **Interoperability, Fair Use & Decades of Muscle Memory**: Observing software behavior to create an interoperable, compatible implementation is protected fair use. Decades of user muscle memory—keystrokes, shortcuts, announcement messages, speech tokens, and document navigation models—are functional methods of operation and interoperability interfaces that cannot be copyrighted. Our mission is to preserve this familiarity so screen reader users have an accessible, modern, cross-platform alternative.
 
@@ -47,7 +53,8 @@ This is an **autonomous, agent-driven project with a "verification harness in th
 To ensure seamless context passing across autonomous sessions, all engineering work is orchestrated through the `docs/` tree:
 
 ### Active Plan for Current / Next Session
-- **Active Plan**: [`docs/plans/2026-10-15-jaws-feature-loop-round-2.md`](docs/plans/2026-10-15-jaws-feature-loop-round-2.md)
+- **Active Plan**: [`docs/plans/2026-10-15-structure-for-macos-and-extensions.md`](docs/plans/2026-10-15-structure-for-macos-and-extensions.md) while old-pc is offline. Its old-pc work items are in [`docs/plans/2026-10-15-jaws-feature-loop-round-2.md`](docs/plans/2026-10-15-jaws-feature-loop-round-2.md).
+- **Future goal**: an extension SDK, after Okur is stable on Windows and macOS ([`docs/references/extension-sdk-vision.md`](docs/references/extension-sdk-vision.md)).
 - **Latest Handoff**: [`docs/handoff/2026-10-15-virtual-viewer.md`](docs/handoff/2026-10-15-virtual-viewer.md), after [`docs/handoff/2026-10-15-jaws-feature-loop-round-1.md`](docs/handoff/2026-10-15-jaws-feature-loop-round-1.md); read the audit [`docs/handoff/2026-10-14-full-audit-of-prior-development.md`](docs/handoff/2026-10-14-full-audit-of-prior-development.md) before trusting any earlier handoff
 - **Loop lifecycle**: [`docs/references/verification-loop.md`](docs/references/verification-loop.md): the machines, OpenDesk and `old-pc`, recording JAWS evidence, importing it, dev-box live checks, and pitfalls. Read it before touching `old-pc` or the corpus.
 
@@ -58,7 +65,7 @@ Every agent session must follow this exact loop:
    - Read this `AGENTS.md` file and inspect the **Active Plan** linked above.
    - Review the prerequisite handoff document in [`docs/handoff/`](file:///c:/Users/Gigabyte/screen-reader/docs/handoff/).
 2. **Autonomous Research & Discovery**:
-   - Investigate JAWS behavior using documentation, scripts (`Default.jss`, `Default.jkm`), the NVDA codebase, or OS accessibility specifications.
+   - Investigate JAWS behavior through its documentation, help and key assignments, and by observing it as a black box (§1.4 lists what may and may not be read). Learn platform APIs from the NVDA codebase and OS accessibility specifications.
    - When necessary, connect to `old-pc` via OpenDesk to test commands or capture new reference evidence.
 3. **Implementation & In-Loop Verification**:
    - Implement the planned features in the appropriate crates.
