@@ -24,15 +24,16 @@ they implement must match recorded JAWS evidence before it counts.
 
 ## Why re-implement JAWS?
 
-People who are blind and use a screen reader learn it the way a pianist learns scales. After
-years at a keyboard, Insert+F7 lists links, H jumps to the next heading, Insert+T says the
-window title, CapsLock+Alt+W opens a Virtual Viewer, and none of it needs a thought. JAWS has
-shaped that muscle memory for three decades.
+Blind people use the computer with the keyboard. With daily use, the keystrokes become instant:
+Insert+F7 for the list of links, H for the next heading, Insert+T for the window title,
+CapsLock+Alt+W for the Virtual Viewer. Nobody thinks about them, just as sighted people don't
+think about using the mouse.
 
-Changing screen readers means unlearning it. The alternatives are good, but they speak in
-another vocabulary: other keys, other phrasing, other ideas of where the cursor is. So people
-stay with what their hands know, and today that is a commercial product that runs only on
-Windows.
+Now suppose someone changed your mouse overnight, and it behaved differently from what you
+were used to. That is how changing screen readers feels after years, often decades, of daily
+use. The alternatives are good, but they use other keys, other phrasing and other ideas of
+where the cursor is. So people stay with what they know, and for many that is JAWS: a
+commercial product, three decades old, that runs only on Windows.
 
 This project keeps the muscle memory and replaces everything underneath:
 - **Open source.**
