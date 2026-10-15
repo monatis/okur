@@ -6,6 +6,7 @@ pub mod event_trace;
 pub mod events;
 pub mod hook;
 pub mod ia2_snapshot;
+pub mod screen_lines;
 pub mod text_context;
 pub mod tts;
 pub mod uia_snapshot;

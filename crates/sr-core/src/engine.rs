@@ -1893,6 +1893,12 @@ impl ScreenReaderEngine {
         let title = focus.window_title.clone().unwrap_or_default();
         if window && focus.window_kind.as_deref() == Some("#32770") {
             let mut lines = vec![title];
+            // As laid out on screen: wrapped text by its rows, a label beside its field
+            // (JAWS on the Run dialog: "Open: C:", "OK Cancel Browse...").
+            if !focus.dialog_lines.is_empty() {
+                lines.extend(focus.dialog_lines.iter().cloned());
+                return Some(lines);
+            }
             lines.extend(
                 focus
                     .dialog_text

@@ -121,6 +121,10 @@ pub struct TraceEvent {
     /// desktop's name, which JAWS gives as the desktop's title ("Desktop 1").
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub virtual_desktop: Option<String>,
+    /// For focus in a dialog box (`#32770`) in front: its text by screen rows
+    /// ([`crate::screen_lines`]), for the Virtual Viewer.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub dialog_lines: Vec<String>,
 }
 
 /// The first line of a trace file.
@@ -324,6 +328,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent>
             .filter_map(|s| s.name.clone())
             .collect();
     }
+    focus.dialog_lines = event.dialog_lines.clone();
     // JAWS names buttons by their MSAA role: ROLE_SYSTEM_BUTTONMENU is a "button menu"
     // even when UIA reports a plain button [obs, 204/s11–s12].
     if focus.role == sr_core::Role::Button
@@ -979,6 +984,13 @@ mod capture {
                 } else {
                     (None, None, None)
                 };
+            let dialog_lines = if focused && top_window_class.as_deref() == Some("#32770") {
+                use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+                // SAFETY: plain Win32 call with no preconditions.
+                crate::screen_lines::dialog_lines(unsafe { GetForegroundWindow() })
+            } else {
+                Vec::new()
+            };
             stages.push(("window", clock.elapsed().as_millis()));
             let (region, page) = if name == "live_region_change" {
                 // Live, the page after the change is captured by the listener's page worker.
@@ -1042,6 +1054,7 @@ mod capture {
                 top_window_title,
                 top_window_class,
                 virtual_desktop,
+                dialog_lines,
             };
             (state.sink)(event);
             state.count += 1;
@@ -1207,6 +1220,7 @@ mod tests {
             top_window_title: None,
             top_window_class: None,
             virtual_desktop: None,
+            dialog_lines: Vec::new(),
         }
     }
 
