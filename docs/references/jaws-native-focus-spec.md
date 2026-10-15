@@ -2,8 +2,8 @@
 
 Observed black-box behavior of JAWS 2025.2505.43.400 on Windows 10 (`old-pc`) in the WinForms
 fixture `corpus/fixtures/desktop-forms.ps1`. Each rule cites `scenario/step`. View a
-transcript with `cargo run -p sr-cli -- evidence <scenario-id>`. Implemented in
-`crates/sr-core/src/native_focus.rs`.
+transcript with `cargo run -p okur -- evidence <scenario-id>`. Implemented in
+`crates/okur-core/src/native_focus.rs`.
 
 Notation is the same as `jaws-virtual-buffer-spec.md`: `‹ ›` stand for JAWS's role markers
 and `|` for a line break in one step's speech. **[obs]** is deterministic across 5 trials;
@@ -97,7 +97,7 @@ WinForms reports a combo box's expanded state only through MSAA, so the converte
 
 ## 7. Editing text [obs, 305]
 
-Implemented in `sr-core::editing`. JAWS speaks after the application handled the key, from the field's text, caret and selection (`TextContext`) before and after it.
+Implemented in `okur-core::editing`. JAWS speaks after the application handled the key, from the field's text, caret and selection (`TextContext`) before and after it.
 
 | Key | Speech |
 |---|---|
@@ -125,7 +125,7 @@ Implemented in `sr-core::editing`. JAWS speaks after the application handled the
   JAWS's defaults are the desktop layout, character echo and Auto forms mode. Evidence since 2026-10-14 records these files as `provenance.jaws_settings`. Replay uses them, falling back to `Settings::reference_machine()`.
 - **Desktop layout:** Insert is the JAWS key.
 - **Laptop layout:** CapsLock is the JAWS key, and Insert works as well (`CapsLock+T` and `Insert+T` both speak the title).
-- **Choosing the JAWS key:** Settings Center can choose Insert, CapsLock or ScrollLock for a layout (`sr-cli run --keyboard-layout`, `--jaws-key`).
+- **Choosing the JAWS key:** Settings Center can choose Insert, CapsLock or ScrollLock for a layout (`okur run --keyboard-layout`, `--jaws-key`).
 - **CapsLock as the JAWS key, pressed twice quickly:** toggles Caps Lock and says `Caps lock on` or `Caps lock off`. Auto-repeat while it is held is not a second press.
 
 ## 9. Time and date [obs, 308]
@@ -170,9 +170,9 @@ Keys in the viewer:
 
 ## 11. What is spoken: the speech history versus the synthesizer [obs, 307, 207]
 
-JAWS's speech history keeps text from *before* its symbol processing: `(`, or an empty entry for a space, tab or line break. The synthesizer is then given the processed text. The harness records it with the **SR Speech Recorder** SAPI voice (`crates/sr-sapi-recorder`, `observation.spoken`). `sr-cli parity` compares both layers ("JAWS spoken parity").
+JAWS's speech history keeps text from *before* its symbol processing: `(`, or an empty entry for a space, tab or line break. The synthesizer is then given the processed text. The harness records it with the **SR Speech Recorder** SAPI voice (`crates/okur-speech-recorder`, `observation.spoken`). `okur parity` compares both layers ("JAWS spoken parity").
 
-**A character read on its own (Left/Right, Delete, the Virtual Viewer)** is always named, whatever the punctuation level. These are the exact strings JAWS sends a SAPI 5 voice (`sr-core::pronounce`):
+**A character read on its own (Left/Right, Delete, the Virtual Viewer)** is always named, whatever the punctuation level. These are the exact strings JAWS sends a SAPI 5 voice (`okur-core::pronounce`):
 - **Whitespace:** `space` (also a no-break space), `tab`, `blank` (a line break).
 - **Names that keep the symbol:** `exclaim!`, `comma,`, `period.`, `question?`.
 - **Other ASCII symbols:** `quote`, `number`, `dollar`, `percent`, `and`, `apostrophe`, `left paren`, `right paren`, `star`, `plus`, `dash`, `slash`, `colon`, `semi colon`, `less`, `equals`, `greater`, `at`, `left bracket`, `back slash`, `right bracket`.

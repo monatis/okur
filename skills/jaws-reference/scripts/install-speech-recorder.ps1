@@ -6,7 +6,7 @@
 .DESCRIPTION
     JAWS's speech history holds text from before JAWS's symbol and punctuation processing,
     so it cannot show what the user hears ("$" instead of "dollar"). This voice
-    (crates/sr-sapi-recorder) appends every text fragment it is asked to speak to a
+    (crates/okur-speech-recorder) appends every text fragment it is asked to speak to a
     JSON-lines log, then lets a real voice (-Delegate, Microsoft David by default) speak it.
     run-scenario.ps1 reads the log per step into the evidence's "spoken" field.
 

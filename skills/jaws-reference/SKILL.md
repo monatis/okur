@@ -76,7 +76,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\skills\jaws-reference\scri
 
 ---
 ### Workflow F: Capture the Chrome UIA Snapshot of a Fixture
-The differential parity harness (`sr-cli parity`) drives our engine over the exact UIA tree Chrome
+The differential parity harness (`okur parity`) drives our engine over the exact UIA tree Chrome
 exposed for the fixture JAWS was recorded on. Capture it on the reference machine with the same
 page-loading mechanism as `run-scenario.ps1`:
 
@@ -84,7 +84,7 @@ page-loading mechanism as `run-scenario.ps1`:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\skills\jaws-reference\scripts\capture-snapshot.ps1 `
     -Fixture C:\Users\ailabs\corpus\fixtures\doc-reading.html `
     -OutputPath C:\Users\ailabs\Dropbox\sr-harness\snapshots\doc-reading.chrome.uia.json `
-    -SrCli C:\Users\ailabs\sr-harness\bin\sr-cli.exe
+    -Okur C:\Users\ailabs\sr-harness\bin\okur.exe
 ```
 
 The snapshot's `provenance` records the fixture SHA-256 and Chrome version; the parity harness
@@ -95,11 +95,11 @@ refuses snapshots whose fixture hash differs from `corpus/fixtures/`. Copy snaps
 JAWS's speech history holds text from *before* its symbol and punctuation processing: a Right
 Arrow onto `$` records `$`, and onto a space records an empty entry, while the user hears
 "dollar" and "space". To capture what is spoken, JAWS on old-pc speaks through **SR Speech
-Recorder** (`crates/sr-sapi-recorder`), a SAPI 5 voice that appends every text fragment it is
+Recorder** (`crates/okur-speech-recorder`), a SAPI 5 voice that appends every text fragment it is
 asked to speak to `C:\Users\ailabs\sr-harness\recorder\spoken.jsonl` and hands the call to
 Microsoft David, so speech stays audible and timed for silence detection.
 
-1. Build and deploy: `cargo build --release -p sr-sapi-recorder` (x64) and with
+1. Build and deploy: `cargo build --release -p okur-speech-recorder` (x64) and with
    `--target i686-pc-windows-msvc` (x86), then `lab-push.ps1 -Recorder <x64 dll> -Recorder32
    <x86 dll>` and `lab-pull.ps1` on old-pc. Stop JAWS first if it has the voice loaded.
 2. Register once, elevated (SAPI lists voices only from HKLM; JAWS runs elevated):
@@ -113,12 +113,12 @@ next to `speech_raw`. The log is read before the history copy, whose confirmatio
 ### Workflow H: Quick Live Checks Without a Scenario
 For a quick look at what JAWS says, and what ours says, on a machine where that is allowed
 (old-pc always; the user's dev box only when the user says so):
-- `sr-cli keys --allow notepad,explorer "Insert+Alt+W" "down:Alt" Tab "up:Alt" "wait:500"`
+- `okur keys --allow notepad,explorer "Insert+Alt+W" "down:Alt" Tab "up:Alt" "wait:500"`
   sends scan-coded chords. Each chord or key-down is sent only while one of the `--allow`
   processes is in front; otherwise the command refuses and releases any held key.
-- `sr-cli jaws-history --clear` prints JAWS's speech history (FSAPI
+- `okur jaws-history --clear` prints JAWS's speech history (FSAPI
   `CopySpeechHistoryToClipboard`), empties it, and puts the clipboard's text back.
-- `sr-cli run --engine no-speech --speech-log <file> --debug-log <file>` gives ours. Stop it
+- `okur run --engine no-speech --speech-log <file> --debug-log <file>` gives ours. Stop it
   when done: it reads whatever is in front.
 
 These are research, never evidence. Evidence comes only from `run-scenario.ps1` on old-pc.

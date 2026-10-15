@@ -35,7 +35,7 @@ opendesk exec --peer old-pc --timeout 120 "powershell -NoProfile -ExecutionPolic
 `opendesk exec` runs as `ailabs` in the interactive session, which FSAPI requires.
 
 `opendesk exec` stops waiting after `--timeout` seconds (default **30**). A scenario run is
-cut off mid-trial, which leaves its fixture app and `sr-cli trace` running on `old-pc`. Pass
+cut off mid-trial, which leaves its fixture app and `okur trace` running on `old-pc`. Pass
 `--timeout 900` for single runs. For anything longer, launch `run-batch.ps1` detached
 (`Start-Process`) and poll `batch.log` in the shared Dropbox.
 
@@ -55,7 +55,7 @@ cut off mid-trial, which leaves its fixture app and `sr-cli trace` running on `o
 Build locally, then push and pull with the hash-verified pair:
 
 ```bash
-cargo build -p sr-cli
+cargo build -p okur
 powershell -NoProfile -ExecutionPolicy Bypass -File skills/jaws-reference/scripts/lab-push.ps1   # prints PushId
 ```
 then on old-pc (via `opendesk_exec`):

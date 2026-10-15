@@ -1,23 +1,25 @@
-# An open screen reader that keeps your JAWS muscle memory
+# Okur
 
-A modern, open-source screen reader written in Rust. It speaks, navigates and behaves like
-**JAWS 2025**, down to its keystrokes, phrasing and reading of web pages and Windows
-applications. It is being built by AI agents in a **clean room**: they never see JAWS's
-code, only what JAWS says when keys are pressed on a separate lab machine. Every behavior
-they implement must match recorded JAWS evidence before it counts.
+**An open screen reader that keeps your JAWS muscle memory.**
+
+Okur ("reader" in Turkish) is a modern, open-source screen reader written in Rust. It speaks,
+navigates and behaves like **JAWS 2025**, down to its keystrokes, phrasing and reading of web
+pages and Windows applications. It is being built by AI agents in a **clean room**: they
+never see JAWS's code, only what JAWS says when keys are pressed on a separate lab machine.
+Every behavior they implement must match recorded JAWS evidence before it counts.
 
 > **Status (October 2026):** on Windows it is approaching everyday use. Web pages in Chrome,
 > File Explorer, Notepad, Windows Terminal, dialog boxes, the desktop, Alt+Tab and Windows
-> search are read as JAWS reads them. macOS and Linux have their accessibility layer; their keyboard and event plumbing
-> comes next. All figures below are tool output, not estimates.
+> search are read as JAWS reads them. macOS and Linux have their accessibility layer; their
+> keyboard and event plumbing comes next. All figures below are tool output, not estimates.
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **818 of 844** | `sr-cli parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **171 of 172** | `sr-cli parity` |
+| Steps matching JAWS's speech history, word for word | **818 of 844** | `okur parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **171 of 172** | `okur parity` |
 | Recorded JAWS scenarios / trials | **65 / 307** | `corpus/CORPUS_MANIFEST.json` |
 | Tests | **877 passed, 0 failed** | `cargo test --workspace` |
-| Virtual buffer invariant violations | **0** | `sr-cli invariants` |
+| Virtual buffer invariant violations | **0** | `okur invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | pre-commit gate |
 
 ---
@@ -35,7 +37,7 @@ use. The alternatives are good, but they use other keys, other phrasing and othe
 where the cursor is. So people stay with what they know, and for many that is JAWS: a
 commercial product, three decades old, that runs only on Windows.
 
-This project keeps the muscle memory and replaces everything underneath:
+Okur keeps the muscle memory and replaces everything underneath:
 - **Open source.**
 - **Memory-safe and fast**, written in Rust.
 - **Built to run on Windows and macOS** as first-class platforms, with Linux as a second tier.
@@ -79,7 +81,7 @@ checked by hash.
 
 JAWS's speech history keeps text before JAWS processes symbols, so it is not quite what a user
 hears. To capture the real thing, the project includes the **SR Speech Recorder**
-([`crates/sr-sapi-recorder`](crates/sr-sapi-recorder)). It is a SAPI 5 voice that JAWS speaks
+([`crates/okur-speech-recorder`](crates/okur-speech-recorder)). It is a SAPI 5 voice that JAWS speaks
 through on the lab machine:
 - it logs every utterance JAWS sends it, with pitch changes such as JAWS's higher pitch for
   capital letters;
@@ -102,11 +104,11 @@ lifecycle):
    synthesizer text, event traces and provenance (OS, JAWS version, settings, script hash).
 3. **Implement** the behavior from scratch in Rust, with per-application behavior in named
    modules, as JAWS keeps it in application scripts.
-4. **Test.** Replay every recorded scenario through the engine (`sr-cli parity`) and compare
+4. **Test.** Replay every recorded scenario through the engine (`okur parity`) and compare
    each step with JAWS, on both layers. Results are ratcheted: a baseline file records them,
    and a test fails if any step that matched stops matching.
 5. **Prove it live.** Run the screen reader against real applications with a debug log, and
-   measure its responsiveness (`sr-cli latency`).
+   measure its responsiveness (`okur latency`).
 
 Each round ends with a dated handoff and the next plan in [`docs/`](docs/), so the next agent
 session starts where this one stopped.
@@ -150,7 +152,7 @@ the worst possible bug.
 
 ### Performance, measured
 
-Measured on the development machine with `sr-cli latency` (from a live run's debug log) and
+Measured on the development machine with `okur latency` (from a live run's debug log) and
 `buffer_bench`, release build:
 
 | What | Before | After |
@@ -217,13 +219,13 @@ source code; everything the user hears follows JAWS.
 Requires a recent stable Rust, on Windows 10 or 11.
 
 ```bash
-cargo build --release --bin sr-cli
+cargo build --release --bin okur
 ```
 
 Run the screen reader (stop it with Ctrl+C in its console):
 
 ```bash
-target/release/sr-cli run --keyboard-layout laptop
+target/release/okur run --keyboard-layout laptop
 ```
 
 Useful options:
@@ -233,7 +235,7 @@ Useful options:
 | `--engine onecore` or `--engine sapi5` | the speech engine (default: OneCore, else SAPI 5) |
 | `--keyboard-layout desktop` or `laptop` | the JAWS keyboard layout |
 | `--live-region-whole-text` | read growing live regions as JAWS does |
-| `--debug-log <file>` | log keys, events and timings; summarize them with `sr-cli latency <file>` |
+| `--debug-log <file>` | log keys, events and timings; summarize them with `okur latency <file>` |
 
 Developer commands:
 
@@ -241,22 +243,22 @@ Developer commands:
 cargo fmt --check
 cargo clippy --all-targets --all-features -- -D warnings
 cargo test --workspace
-cargo run --bin sr-cli -- parity
+cargo run --bin okur -- parity
 ```
 
 ---
 
 ## Repository map
 
-- [`crates/sr-core`](crates/sr-core): the engine. It holds the accessibility object model and
+- [`crates/okur-core`](crates/okur-core): the engine. It holds the accessibility object model and
   the virtual buffer, and handles keys, focus and live regions, with speech in JAWS's phrasing.
-- [`crates/sr-platform`](crates/sr-platform): Windows (and future macOS and Linux) bindings.
+- [`crates/okur-platform`](crates/okur-platform): Windows (and future macOS and Linux) bindings.
   These are the event tracer, keyboard hook, speech engines and application actions.
-- [`crates/sr-corpus`](crates/sr-corpus): parity replay, invariants, the corpus manifest and
+- [`crates/okur-corpus`](crates/okur-corpus): parity replay, invariants, the corpus manifest and
   the latency summary.
-- [`crates/sr-cli`](crates/sr-cli): the screen reader and every harness command (`run`,
+- [`crates/okur`](crates/okur): the screen reader and every harness command (`run`,
   `parity`, `evidence`, `trace`, `snapshot`, `latency`, `keys`, `jaws-history`, and more).
-- [`crates/sr-sapi-recorder`](crates/sr-sapi-recorder): the SR Speech Recorder voice.
+- [`crates/okur-speech-recorder`](crates/okur-speech-recorder): the SR Speech Recorder voice.
 - [`crates/xa11y`](crates/xa11y): the vendored cross-platform accessibility layer.
 - [`corpus/`](corpus): fixtures, scenarios, recorded JAWS evidence, event traces, snapshots,
   and the generated manifest and baselines.
@@ -277,7 +279,7 @@ cargo run --bin sr-cli -- parity
   functional methods of operation, an interoperability interface users depend on, and that
   observing a program's behavior to build a compatible one is legitimate.
 
-JAWS is a trademark of Freedom Scientific (Vispero). This project is independent and is not
+JAWS is a trademark of Freedom Scientific (Vispero). Okur is independent and is not
 affiliated with or endorsed by them.
 
 ## License

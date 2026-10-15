@@ -1,6 +1,6 @@
 # User & Architecture Guide: Interactive Screen Reader Daemon
 
-This document details the architecture and operational usage of the interactive screen reader daemon (`sr-cli run`), covering low-level keyboard interception, speech synthesis coordination, and mode transitions.
+This document details the architecture and operational usage of the interactive screen reader daemon (`okur run`), covering low-level keyboard interception, speech synthesis coordination, and mode transitions.
 
 ---
 
@@ -43,13 +43,13 @@ Start the interactive screen reader daemon with:
 
 ```bash
 # Start daemon with default auto-detected TTS engine (SAPI 5 on Windows, NoSpeech fallback)
-cargo run --bin sr-cli -- run
+cargo run --bin okur -- run
 
 # Start daemon with specific TTS engine, speech rate, and volume
-cargo run --bin sr-cli -- run --engine sapi5 --rate 2 --volume 90
+cargo run --bin okur -- run --engine sapi5 --rate 2 --volume 90
 
 # Start daemon loaded with a specific test document fixture
-cargo run --bin sr-cli -- run --fixture corpus/fixtures/boundaries-dynamic.html
+cargo run --bin okur -- run --fixture corpus/fixtures/boundaries-dynamic.html
 ```
 
 To stop the daemon cleanly, press `Ctrl+C`.

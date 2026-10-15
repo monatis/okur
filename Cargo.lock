@@ -826,6 +826,73 @@ dependencies = [
 ]
 
 [[package]]
+name = "okur"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "okur-core",
+ "okur-corpus",
+ "okur-platform",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "okur-core"
+version = "0.1.0"
+dependencies = [
+ "regex",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tracing",
+ "unicode_names2",
+]
+
+[[package]]
+name = "okur-corpus"
+version = "0.1.0"
+dependencies = [
+ "okur-core",
+ "okur-platform",
+ "serde",
+ "serde_json",
+ "sha2",
+ "thiserror",
+ "tracing",
+]
+
+[[package]]
+name = "okur-platform"
+version = "0.1.0"
+dependencies = [
+ "okur-core",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tokio",
+ "tracing",
+ "windows",
+ "windows-core",
+ "windows-future",
+ "xa11y",
+ "xa11y-windows",
+]
+
+[[package]]
+name = "okur-speech-recorder"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "windows",
+ "windows-core",
+]
+
+[[package]]
 name = "once_cell"
 version = "1.21.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1256,73 +1323,6 @@ checksum = "c3d1e2c7f27f8d4cb10542a02c49005dbd6e93095799d6f3be745fae9f8fedd4"
 dependencies = [
  "libc",
  "windows-sys",
-]
-
-[[package]]
-name = "sr-cli"
-version = "0.1.0"
-dependencies = [
- "clap",
- "serde",
- "serde_json",
- "sr-core",
- "sr-corpus",
- "sr-platform",
- "tokio",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
-name = "sr-core"
-version = "0.1.0"
-dependencies = [
- "regex",
- "serde",
- "serde_json",
- "thiserror",
- "tracing",
- "unicode_names2",
-]
-
-[[package]]
-name = "sr-corpus"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde_json",
- "sha2",
- "sr-core",
- "sr-platform",
- "thiserror",
- "tracing",
-]
-
-[[package]]
-name = "sr-platform"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde_json",
- "sr-core",
- "thiserror",
- "tokio",
- "tracing",
- "windows",
- "windows-core",
- "windows-future",
- "xa11y",
- "xa11y-windows",
-]
-
-[[package]]
-name = "sr-sapi-recorder"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde_json",
- "windows",
- "windows-core",
 ]
 
 [[package]]

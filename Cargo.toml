@@ -1,11 +1,11 @@
 [workspace]
 resolver = "2"
 members= [
-    "crates/sr-core",
-    "crates/sr-platform",
-    "crates/sr-corpus",
-    "crates/sr-cli",
-    "crates/sr-sapi-recorder",
+    "crates/okur-core",
+    "crates/okur-platform",
+    "crates/okur-corpus",
+    "crates/okur",
+    "crates/okur-speech-recorder",
     "crates/xa11y/xa11y",
     "crates/xa11y/xa11y-core",
     "crates/xa11y/xa11y-windows",
@@ -20,9 +20,9 @@ authors = ["ALTAI"]
 license = "MIT OR Apache-2.0"
 
 [workspace.dependencies]
-sr-core = { path = "crates/sr-core" }
-sr-platform = { path = "crates/sr-platform" }
-sr-corpus = { path = "crates/sr-corpus" }
+okur-core = { path = "crates/okur-core" }
+okur-platform = { path = "crates/okur-platform" }
+okur-corpus = { path = "crates/okur-corpus" }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 thiserror = "2.0"

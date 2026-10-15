@@ -5,19 +5,19 @@
 .DESCRIPTION
     Runs on the reference machine (old-pc). Opens the fixture with the same mechanism as
     run-scenario.ps1 (Process.Start chrome <file URL>), foregrounds Chrome, verifies the
-    foreground window shows the fixture's <title>, then invokes `sr-cli snapshot`, which
+    foreground window shows the fixture's <title>, then invokes `okur snapshot`, which
     records the fixture SHA-256 and Chrome version in the snapshot's provenance block.
     Output snapshots must never be edited by hand.
 
 .EXAMPLE
     .\capture-snapshot.ps1 -Fixture C:\Users\ailabs\corpus\fixtures\doc-reading.html `
         -OutputPath C:\Users\ailabs\Dropbox\sr-harness\snapshots\doc-reading.chrome.uia.json `
-        -SrCli C:\Users\ailabs\sr-harness\bin\sr-cli.exe
+        -Okur C:\Users\ailabs\sr-harness\bin\okur.exe
 #>
 param(
     [Parameter(Mandatory = $true)][string]$Fixture,
     [Parameter(Mandatory = $true)][string]$OutputPath,
-    [Parameter(Mandatory = $true)][string]$SrCli,
+    [Parameter(Mandatory = $true)][string]$Okur,
     [ValidateSet("uia", "ia2")][string]$Api = "uia",
     [int]$LoadWaitMs = 2500,
     [int]$SettleMs = 750
@@ -70,8 +70,8 @@ if ($outDir -and -not (Test-Path $outDir)) { New-Item -ItemType Directory -Path 
 
 $cliArgs = @('snapshot', '--api', $Api, '--out', $OutputPath, '--fixture', $fixturePath)
 if ($chromeVersion) { $cliArgs += @('--process-version', $chromeVersion) }
-& $SrCli @cliArgs
-if ($LASTEXITCODE -ne 0) { throw "sr-cli snapshot failed with exit code $LASTEXITCODE" }
+& $Okur @cliArgs
+if ($LASTEXITCODE -ne 0) { throw "okur snapshot failed with exit code $LASTEXITCODE" }
 
 # Close the tab this capture opened (every capture opens a new one), but only while the
 # fixture is still the foreground tab, so no other window receives Ctrl+W.

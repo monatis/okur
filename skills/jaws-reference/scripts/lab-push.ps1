@@ -5,20 +5,20 @@
 
 .DESCRIPTION
     Runs on the development machine from the repository root. Stages:
-      bin/sr-cli.exe                       <- -SrCli (default target/debug/sr-cli.exe), if built
+      bin/okur.exe                       <- -Okur (default target/debug/okur.exe), if built
       scripts/*.ps1                        <- skills/jaws-reference/scripts/*.ps1
       fixtures/*.html                      <- corpus/fixtures/*.html
       scenarios/*.json                     <- corpus/scenarios/*.json
-      recorder/sr_sapi_recorder64.dll      <- -Recorder (x64 build of crates/sr-sapi-recorder), if given
+      recorder/sr_sapi_recorder64.dll      <- -Recorder (x64 build of crates/okur-speech-recorder), if given
       recorder/sr_sapi_recorder32.dll      <- -Recorder32 (i686 build), if given
     then writes manifest.json last, so a partially synced folder never verifies.
 #>
 param(
     [string]$Dropbox = (Join-Path $env:USERPROFILE "Dropbox\sr-harness"),
     [string]$RepoRoot = (Get-Location).Path,
-    # The sr-cli build to stage; use another target dir while target\debug is locked.
-    [string]$SrCli = (Join-Path $RepoRoot 'target\debug\sr-cli.exe'),
-    # The recording SAPI voice (crates/sr-sapi-recorder), 64- and 32-bit builds. JAWS must not
+    # The okur build to stage; use another target dir while target\debug is locked.
+    [string]$Okur = (Join-Path $RepoRoot 'target\debug\okur.exe'),
+    # The recording SAPI voice (crates/okur-speech-recorder), 64- and 32-bit builds. JAWS must not
     # have the voice loaded when lab-pull installs it.
     [string]$Recorder,
     [string]$Recorder32
@@ -26,13 +26,13 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $sets = @(
-    @{ dest = 'bin';       files = @(Get-Item $SrCli -ErrorAction SilentlyContinue) },
+    @{ dest = 'bin';       files = @(Get-Item $Okur -ErrorAction SilentlyContinue) },
     @{ dest = 'scripts';   files = @(Get-ChildItem (Join-Path $RepoRoot 'skills\jaws-reference\scripts\*.ps1')) },
     @{ dest = 'fixtures';  files = @(Get-ChildItem (Join-Path $RepoRoot 'corpus\fixtures\*') -Include *.html, *.ps1) },
     @{ dest = 'scenarios'; files = @(Get-ChildItem (Join-Path $RepoRoot 'corpus\scenarios\*.json')) }
 )
 # The two recorder builds share a file name, so they are staged under bitness-specific names.
-$recorderStage = Join-Path $env:TEMP 'sr-recorder-stage'
+$recorderStage = Join-Path $env:TEMP 'okur-recorder-stage'
 Remove-Item $recorderStage -Recurse -Force -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Force -Path $recorderStage | Out-Null
 $recorderFiles = @()

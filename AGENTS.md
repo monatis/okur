@@ -1,6 +1,6 @@
 # AGENTS.md - Developer & Autonomous Agent Guide
 
-This repository hosts an open-source, modern, cross-platform screen reader implemented in Rust. The screen reader's user-facing behavior, announcements, keyboard shortcuts, and document interaction patterns are designed to match **Freedom Scientific JAWS 2025**, validated through differential testing.
+This repository hosts **Okur** ("reader" in Turkish), an open-source, modern, cross-platform screen reader implemented in Rust. The screen reader's user-facing behavior, announcements, keyboard shortcuts, and document interaction patterns are designed to match **Freedom Scientific JAWS 2025**, validated through differential testing.
 
 This is an **autonomous, agent-driven project with a "verification harness in the loop"**.
 
@@ -90,22 +90,22 @@ When developing or verifying screen reader behavior against canonical JAWS execu
 
 ### Harness Engineering Is the Core Work
 
-Building evidence collection and verification tooling is the real engineering in this project. Improve `skills/jaws-reference/` as you learn, and add utility scripts, binaries, and `sr-cli` commands whenever they make evidence more trustworthy or debugging faster (capture, snapshots, focus/OS event tracing, debug logs). Harness tools today:
-- `sr-cli snapshot` / `capture-snapshot.ps1`: raw Chrome UIA tree of a fixture on `old-pc`.
-- `run-scenario.ps1` (format 2): scan-coded keys, audio-silence settling (`sr-cli wait-silence`), provenance.
+Building evidence collection and verification tooling is the real engineering in this project. Improve `skills/jaws-reference/` as you learn, and add utility scripts, binaries, and `okur` commands whenever they make evidence more trustworthy or debugging faster (capture, snapshots, focus/OS event tracing, debug logs). Harness tools today:
+- `okur snapshot` / `capture-snapshot.ps1`: raw Chrome UIA tree of a fixture on `old-pc`.
+- `run-scenario.ps1` (format 2): scan-coded keys, audio-silence settling (`okur wait-silence`), provenance.
 - `lab-push.ps1` / `lab-pull.ps1`: hash-verified deployment of binaries, scripts, fixtures and scenarios to `old-pc` via Dropbox.
-- `sr-cli parity`, `sr-cli invariants`, `sr-cli corpus-manifest`: generated, ratcheted verification results.
-- `sr-cli snapshot --api ia2`: IAccessible2 view of a Chromium document (attributes, states, hypertext, rendered line ranges).
-- `sr-cli trace` / `run-scenario.ps1 -TraceDir`: per-trial accessibility event traces, replayed into the engine by `sr-cli parity`.
-- `sr-cli evidence <scenario-id> [--trace]`: readable view of recorded JAWS transcripts and trial variants; `--trace` lists the accessibility events traced during each step.
-- `sr-cli keys --allow <process>` and `sr-cli jaws-history`: quick live checks (skill Workflow H). Chords are sent only while an allowed application is in front, and JAWS's speech history is read through FSAPI with the clipboard put back. Research, never evidence.
+- `okur parity`, `okur invariants`, `okur corpus-manifest`: generated, ratcheted verification results.
+- `okur snapshot --api ia2`: IAccessible2 view of a Chromium document (attributes, states, hypertext, rendered line ranges).
+- `okur trace` / `run-scenario.ps1 -TraceDir`: per-trial accessibility event traces, replayed into the engine by `okur parity`.
+- `okur evidence <scenario-id> [--trace]`: readable view of recorded JAWS transcripts and trial variants; `--trace` lists the accessibility events traced during each step.
+- `okur keys --allow <process>` and `okur jaws-history`: quick live checks (skill Workflow H). Chords are sent only while an allowed application is in front, and JAWS's speech history is read through FSAPI with the clipboard put back. Research, never evidence.
 
 ### Verification Integrity Rules (non-negotiable)
 
 These exist because an audit (2026-10-14) found parity claims that no tool had ever computed.
 1. **Evidence is written only by capture tooling** run on `old-pc`. Never hand-write, edit, or "repair" an evidence file. Wrong evidence is deleted and re-recorded.
 2. **Evidence and engine code never land in the same commit** (enforced by the pre-commit gate).
-3. **Generated artifacts are never hand-edited**: `corpus/CORPUS_MANIFEST.json` (`sr-cli corpus-manifest --write`) and, once it exists, the parity baseline. Tests fail when they are stale.
+3. **Generated artifacts are never hand-edited**: `corpus/CORPUS_MANIFEST.json` (`okur corpus-manifest --write`) and, once it exists, the parity baseline. Tests fail when they are stale.
 4. **Claims quote tools**: any parity number or "verified" statement in a handoff must be pasted output of a repo command, named next to it. No unbacked adjectives ("100% parity", "fully verified").
 5. **Hermetic `cargo test`**: no live UI, speech, audio, or network. Live tests are `#[ignore = "live: ..."]` and run with `cargo test -- --ignored`.
 6. **Known gaps are tests**: when the correct JAWS behavior is known but unimplemented, add a test asserting the JAWS behavior marked `#[ignore = "known gap: ..."]`. Never write assertions that cannot fail.
@@ -141,10 +141,10 @@ These exist because an audit (2026-10-14) found parity claims that no tool had e
 
 ## 6. Repository Structure
 
-- `crates/sr-core/`: AOM, virtual buffer, virtual cursor, reading commands, mode transitions.
-- `crates/sr-platform/`: Platform accessibility bindings (xa11y, UIA, AXUIElement).
-- `crates/sr-corpus/`: Test harness, normalizer, differential comparison engine.
-- `crates/sr-cli/`: CLI daemon and regression test binary.
+- `crates/okur-core/`: AOM, virtual buffer, virtual cursor, reading commands, mode transitions.
+- `crates/okur-platform/`: Platform accessibility bindings (xa11y, UIA, AXUIElement).
+- `crates/okur-corpus/`: Test harness, normalizer, differential comparison engine.
+- `crates/okur/`: CLI daemon and regression test binary.
 - `crates/xa11y/`: our accessibility-API layer, vendored from xa11y 0.15.2 (MIT) and extended in-tree. See `crates/xa11y/VENDORED.md` for import changes, the hardening ratchet, and planned extensions.
 - `corpus/`: Reference speech corpus (manifest, fixtures, scenarios, evidence, quality report). `corpus/pending/` holds scenarios written but not yet recorded; the manifest and parity ignore it.
 - `skills/jaws-reference/`: Reusable automation skill for JAWS COM and speech extraction.
@@ -166,5 +166,5 @@ cargo clippy --all-targets --all-features -- -D warnings
 cargo test
 
 # Run CLI
-cargo run --bin sr-cli -- --help
+cargo run --bin okur -- --help
 ```

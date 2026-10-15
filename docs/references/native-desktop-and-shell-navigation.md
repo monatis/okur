@@ -24,7 +24,7 @@ On the native Windows desktop (represented by `Progman` / `WorkerW` hosting the 
 
 ## 2. Modes of Operation (`AppMode`)
 
-The core engine supports the following operating modes (`crates/sr-core/src/engine.rs`):
+The core engine supports the following operating modes (`crates/okur-core/src/engine.rs`):
 - `AppMode::VirtualBuffer`: Active in web documents and complex virtualized areas. Single-key quick navigation is enabled.
 - `AppMode::NativeDesktop`: Active when focus is in `FolderView` (`SysListView32` within `Progman`/`WorkerW`). Alphanumeric keys trigger initial letter jumps; arrows move grid items; web quick-nav is suppressed.
 - `AppMode::NativeShell`: Active when navigating taskbar and shell bar controls. Tab and Shift+Tab traverse buttons; Space/Enter activates them.

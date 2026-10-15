@@ -5,8 +5,8 @@ param(
     [int]$Repetitions = 5,
     [string]$OutputPath,
     [string]$TargetProcess,
-    [string]$SrCli = (Join-Path $env:USERPROFILE "sr-harness\bin\sr-cli.exe"),
-    # When set, each trial records an accessibility event trace (sr-cli trace) to
+    [string]$Okur = (Join-Path $env:USERPROFILE "sr-harness\bin\okur.exe"),
+    # When set, each trial records an accessibility event trace (okur trace) to
     # <TraceDir>\<scenario-id>-trial<N>.jsonl, aligned with steps by unix-ms timestamps.
     [string]$TraceDir,
     # The recording SAPI voice's log (install-speech-recorder.ps1). While JAWS speaks through that
@@ -30,7 +30,7 @@ Step types:
                Tabs); key_up releases it. Held keys are released when a trial ends.
   keyboard     Legacy .NET SendKeys string (kept so scenarios 01-30 stay reproducible).
 
-Settling: after each action the default audio endpoint is metered (sr-cli wait-silence; JAWS is
+Settling: after each action the default audio endpoint is metered (okur wait-silence; JAWS is
 the only audio source on the reference machine) until it has been silent for quiet_ms (default
 500) after speech, or no speech started within 800 ms, or settle_max_ms (default 10000) elapses.
 The speech history is then copied exactly once; polling it is impossible because JAWS speaks and
@@ -129,11 +129,11 @@ $jaws = New-Object -ComObject "FreedomSci.JawsApi"
 
 $CopyConfirmation = 'Copy speech history to clipboard'
 
-# Blocks until JAWS's audio output is silent (sr-cli wait-silence on the default endpoint;
+# Blocks until JAWS's audio output is silent (okur wait-silence on the default endpoint;
 # JAWS is the only audio source on the reference machine). Returns the parsed SilenceReport.
 function Wait-Silence([int]$OnsetMs = 800, [int]$QuietMs = 500, [int]$MaxMs = 4000) {
-    $out = & $SrCli wait-silence --onset-ms $OnsetMs --quiet-ms $QuietMs --max-ms $MaxMs
-    if ($LASTEXITCODE -ne 0) { throw "sr-cli wait-silence failed: $out" }
+    $out = & $Okur wait-silence --onset-ms $OnsetMs --quiet-ms $QuietMs --max-ms $MaxMs
+    if ($LASTEXITCODE -ne 0) { throw "okur wait-silence failed: $out" }
     return ($out | Select-Object -Last 1 | ConvertFrom-Json)
 }
 
@@ -340,7 +340,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         New-Item -ItemType Directory -Force -Path $TraceDir | Out-Null
         $tracePath = Join-Path $TraceDir "$scenarioId-trial$t.jsonl"
         $traceStop = Join-Path $env:TEMP "sr-trace-stop-$([guid]::NewGuid().ToString('N'))"
-        $traceProc = Start-Process -FilePath $SrCli -ArgumentList @('trace', '--out', $tracePath, '--stop-file', $traceStop) -WindowStyle Hidden -PassThru
+        $traceProc = Start-Process -FilePath $Okur -ArgumentList @('trace', '--out', $tracePath, '--stop-file', $traceStop) -WindowStyle Hidden -PassThru
         Start-Sleep -Milliseconds 400
         $trialResult.trace_file = Split-Path -Leaf $tracePath
     }

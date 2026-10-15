@@ -2,7 +2,7 @@
 
 Observed black-box behavior of JAWS 2025.2505.43.400 with Chrome 154 on Windows 10 (`old-pc`),
 derived only from recorded evidence in `corpus/evidence/`. Each rule cites
-`scenario/step`; view a transcript with `cargo run -p sr-cli -- evidence <scenario-id>`.
+`scenario/step`; view a transcript with `cargo run -p okur -- evidence <scenario-id>`.
 
 In transcripts below, `‹ ›` stand for JAWS's `\u{1d}`/`\u{1e}` role markers and `|` for a
 line break within one step's speech history.

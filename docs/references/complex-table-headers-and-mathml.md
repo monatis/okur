@@ -1,6 +1,6 @@
 # Reference: Complex Table Headers, Coordinates & MathML Linearization
 
-**Status**: Verified & Implemented in `sr-core`  
+**Status**: Verified & Implemented in `okur-core`  
 **Parity Target**: Freedom Scientific JAWS 2025  
 
 ---

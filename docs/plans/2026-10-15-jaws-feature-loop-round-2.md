@@ -9,7 +9,7 @@ Keep the loop running:
 1. Discover a JAWS feature.
 2. Record it on old-pc.
 3. Implement it.
-4. Prove it with `sr-cli parity` (both layers) and live.
+4. Prove it with `okur parity` (both layers) and live.
 
 Live usability gaps the user reports come first.
 
@@ -42,11 +42,11 @@ when old-pc is offline, and interleaved with recording when it is back:
      `xa11y-core/src/{element,locator,app,selector}.rs`, then `xa11y-macos`.
    - Return `Result` and use `get()` instead of indexing; lower the baseline in the same commit.
    - The CLI and MCP front ends (`xa11y/src/cli.rs`, `xa11y/src/mcp/`, the `cli` feature) are not used by
-     `sr-cli run`, so they come last or are dropped from the vendored tree.
+     `okur run`, so they come last or are dropped from the vendored tree.
    - Finally remove the crate-level `indexing_slicing` allowance (`VENDORED.md`, "Hardening
      ratchet").
 3. **Review the async machinery so nothing blocks the event loop or the keyboard hook.** What is
-   there today (`crates/sr-cli/src/main.rs`, `run`):
+   there today (`crates/okur/src/main.rs`, `run`):
    - The hook thread waits up to 150 ms for the engine's `std::sync::Mutex`, polling every 1 ms,
      then passes the key through ("engine busy: key passed through" in the debug log).
    - The accessibility-event task is a `tokio::spawn` task that takes the same blocking mutex
@@ -64,13 +64,13 @@ when old-pc is offline, and interleaved with recording when it is back:
    - The tracer's reads (`event_trace.rs`) already log "slow event read" past 250 ms; give the
      live listener (`events/windows.rs`) the same instrumentation.
 4. **Code quality, refactoring, performance.**
-   - `sr-core/src/engine.rs` keeps growing. Split by concern: keys, events, window
+   - `okur-core/src/engine.rs` keeps growing. Split by concern: keys, events, window
      announcements, and layout commands into modules beside `editing.rs` and `native_focus.rs`,
      without changing behavior. Parity and the tests must stay identical, and the commit says
      so with the tool output.
-   - Look for duplicated UIA code between `sr-platform::uia_snapshot`, `event_trace` and xa11y
+   - Look for duplicated UIA code between `okur-platform::uia_snapshot`, `event_trace` and xa11y
      (VENDORED.md, "Planned extensions"), and move it into xa11y.
-   - Profile `sr-cli parity` and the live focus path (debug-log stage timings) before
+   - Profile `okur parity` and the live focus path (debug-log stage timings) before
      optimizing anything.
 
 ## Done on branch `code-quality` (2026-10-15), and what is left
@@ -81,8 +81,8 @@ Done, each commit through the gate with tests and parity unchanged:
 - Nothing slow runs under the engine lock or on the event loop; the page buffer is built
   before the lock, in linear time (4× faster on deep pages).
 - `engine.rs` is split by concern (3,271 lines to 397).
-- Live latency is measured: `sr-cli latency <debug-log>`; every event read logs its stages.
-- Focus reads: 1,792 ms to 55 ms per item in a 300-item list view (p50, `sr-cli latency`).
+- Live latency is measured: `okur latency <debug-log>`; every event read logs its stages.
+- Focus reads: 1,792 ms to 55 ms per item in a 300-item list view (p50, `okur latency`).
   - The position comes from the list view.
   - Siblings are read only when needed, and subtrees only where announcements use them.
   - Repeated focus events and a list's echo events are not read.
@@ -104,8 +104,8 @@ Also done:
 
 Measured and dropped:
 - **Streaming speech audio:** in the running screen reader, speech reaches the device 5 ms
-  after the speak call (p50; p90 8 ms; `sr-cli latency`, "speech audio started"). The
-  ~250 ms of `sr-cli speak --measure-latency` is a fresh process opening the device.
+  after the speak call (p50; p90 8 ms; `okur latency`, "speech audio started"). The
+  ~250 ms of `okur speak --measure-latency` is a fresh process opening the device.
 - **`lto = "fat"`, `codegen-units = 1`:** `buffer_bench` 13.8 to 13.5 ms (noise), while a
   release rebuild went from 19 s to 92 s.
 
@@ -129,9 +129,9 @@ Left:
 ## Work items for old-pc, in order
 
 1. **Record what round 1 left unrecorded** (old-pc was offline). The scenarios wait in `corpus/pending/` (see its README); move each into `corpus/scenarios/` (and its fixture into `corpus/fixtures/`) before pushing it.
-   - Deploy a release `sr-cli` built with trace format 7 and the UIA focus handler: `lab-push.ps1 -SrCli`, then `lab-pull.ps1` on old-pc.
+   - Deploy a release `okur` (the binary was `sr-cli` before the rename; the scripts now call `bin\okur.exe`, so the first push must include it): `lab-push.ps1 -Okur target/agent/release/okur.exe`, then `lab-pull.ps1` on old-pc.
    - Record:
-     - **317**, Alt held while Tab is pressed three times. Check `sr-cli evidence 317 --trace` for `uia_focus` events. On Windows 10 the switcher (`MultitaskingViewFrame`) sits behind `ForegroundStaging`.
+     - **317**, Alt held while Tab is pressed three times. Check `okur evidence 317 --trace` for `uia_focus` events. On Windows 10 the switcher (`MultitaskingViewFrame`) sits behind `ForegroundStaging`.
      - **316**, Win+M.
      - **318**, Virtualize in a page.
      - **319**, the Run dialog: its announcement, Virtualize Window, and Insert+Tab could join.
@@ -142,7 +142,7 @@ Left:
    - Re-record **306**, **314** and **209** with trace format 7, which closes the steps whose traces predate it.
    - Commit the evidence, then regenerate the manifest and baselines. Evidence and code never share a commit.
    - Where Windows 10 JAWS differs from what the dev box showed, the old-pc evidence decides, unless the behavior is specific to Windows 11 (`apps::task_switcher`, Notepad's RichEdit).
-2. ~~Make the dev-box tools a harness tool~~: done (`sr-cli keys`, `sr-cli jaws-history`, b2a0ecf).
+2. ~~Make the dev-box tools a harness tool~~: done (`okur keys`, `okur jaws-history`, b2a0ecf).
 3. **Windows 11 XAML menus** (Notepad's menu bar). UIA's MenuItem control type maps to `Generic`, so ours reads bare names ("Edit", "Undo"). JAWS 2025 on the dev box:
    - Alt: "menu | | File | 1 of 3 | To move through items press left or right arrow. | Alt followed by F"
    - Down: "Leaving menus | Text editor edit | Contains text | Context Menu | | New window Ctrl+Shift+N | 2 of 13 | To move through items press up or down arrow. | Alt followed by W"

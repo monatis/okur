@@ -2,7 +2,7 @@
 
 These scenarios and fixtures were written while `old-pc` was offline (2026-10-15). They wait
 here because a scenario in `corpus/scenarios/` without evidence fails the parity test, and the
-corpus manifest and `sr-cli parity` read only `corpus/scenarios/` and `corpus/fixtures/`.
+corpus manifest and `okur parity` read only `corpus/scenarios/` and `corpus/fixtures/`.
 
 To record one:
 1. Move it into `corpus/scenarios/`, and its fixture (if it is here) into `corpus/fixtures/`.
