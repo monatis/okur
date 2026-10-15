@@ -90,24 +90,41 @@ Done, each commit through the gate with tests and parity unchanged:
   console's text.
 - Live regions: the page is captured again once changes settle, not once per change.
 
-Left, in order of expected effect:
-1. **UIA focus events instead of `GetFocusedElement`.** The largest part of a focus read now
-   (24 of 55 ms in the list view) is asking UIA which element has the focus. A UIA
-   focus-changed handler registered with a cache request delivers the element with its
-   properties, as NVDA does.
+Also done:
+- **Streamed live regions** are read once, in phrases paced by speech
+  (`LiveRegionAppend::Appended`). JAWS's whole-text rereading stays available with
+  `--live-region-whole-text`, and the reference machine uses it for replay. Observed on the dev
+  box: JAWS 2025 speaks a growing region's whole text on every change; a 40-word stream gave
+  the paragraph 37 times in its history.
+- **A focus's siblings** are read in one call, with three properties. In a WPF list the focus
+  read went from 100 to 70 ms. JAWS counts only the items WPF created ("2 of 33" in a
+  300-item list), as the engine does.
+- **A test guards linear buffer building** (`building_a_buffer_does_not_grow_with_wrapping_depth`).
+  It measures a ratio, so machine speed does not matter.
+
+Measured and dropped:
+- **Streaming speech audio:** in the running screen reader, speech reaches the device 5 ms
+  after the speak call (p50; p90 8 ms; `sr-cli latency`, "speech audio started"). The
+  ~250 ms of `sr-cli speak --measure-latency` is a fresh process opening the device.
+- **`lto = "fat"`, `codegen-units = 1`:** `buffer_bench` 13.8 to 13.5 ms (noise), while a
+  release rebuild went from 19 s to 92 s.
+
+Left:
+1. **UIA focus events instead of `GetFocusedElement`.** This helps where UIA reaches controls
+   through its MSAA proxy (WinForms, Win32): 24 of 55 ms of a list-view focus read. In WPF
+   the call takes 1-2 ms. A UIA focus-changed handler with a cache request would deliver the
+   element and its properties at once.
    - Check WinForms menus first: UIA keeps naming the control behind the menu [obs, 302].
    - Check Chrome's first focus too.
-2. **Speech start.** OneCore synthesizes a whole chunk before playing it. Stream the audio as
-   it is produced, and measure first-audio latency with `sr-cli speak --measure-latency`.
-3. **Release profile:** `lto` and `codegen-units = 1`, measured with `buffer_bench` and
-   `sr-cli latency`.
-4. **Responsiveness guarded like parity:** a recorded baseline for `buffer_bench` and the
-   replay time of `sr-cli parity`, with a check that fails on a large slowdown.
-5. **Incremental page updates:** patch a changed live region's subtree into the buffer
-   instead of capturing the page again.
-   - Observed on the dev box: JAWS 2025 speaks a growing live region's whole text on every
-     change (a 40-word stream gave the paragraph 37 times in its history), as the engine
-     does.
+2. **WPF lists:** the remaining 50 ms per item is WPF answering the siblings' properties on
+   its UI thread. The count needs them, since JAWS counts realized items too. Only a cheaper
+   source of the same count would help.
+3. **Incremental page updates:** patch a changed live region's subtree into the buffer
+   instead of capturing the page again. Since captures now wait for quiet, this matters
+   less.
+4. **Windows 11 File Explorer:** keys sent after activating its window with a script did not
+   reach the file view (JAWS said nothing either). Measure it after a click, or find out how
+   focus enters the view.
 
 ## Work items for old-pc, in order
 
@@ -119,7 +136,7 @@ Left, in order of expected effect:
      - **318**, Virtualize in a page.
      - **319**, the Run dialog: its announcement, Virtualize Window, and Insert+Tab could join.
      - **320**, Notepad in the laptop layout: CapsLock+I, K, O, L, J, M, U, Insert+Up, and Ctrl+Right over code punctuation. It settles classic Notepad's word breaks against the UIA word unit used on Windows 11.
-     - **321**, Virtualize Window in a console (Windows 10's classic console on old-pc): the opening line (the cursor's), Insert+T ("Virtual Viewer"), the first and last lines, and Escape. JAWS 2025 in Windows Terminal on the dev box gave "Virtualizing current window | C:UsersGigabyte>", "Virtual Viewer", the first output line, and the prompt line on Ctrl+End and on Escape.
+     - **321**, Virtualize Window in a console (Windows 10's classic console on old-pc): the opening line (the cursor's), Insert+T ("Virtual Viewer"), the first and last lines, and Escape. JAWS 2025 in Windows Terminal on the dev box gave "Virtualizing current window | C:\Users\Gigabyte>", "Virtual Viewer", the first output line, and the prompt line on Ctrl+End and on Escape.
      - **315**, a RichEdit field: lines and Say Font with paragraph formatting.
      - **208**, a web textarea, character by character (the fixed tracer).
    - Re-record **306**, **314** and **209** with trace format 7, which closes the steps whose traces predate it.
