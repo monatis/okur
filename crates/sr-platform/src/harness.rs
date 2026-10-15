@@ -90,7 +90,9 @@ pub fn parse_step(text: &str) -> Result<KeyStep, String> {
 }
 
 #[cfg(windows)]
-pub use windows_harness::{foreground_process, jaws_history, send_key, send_steps};
+pub use windows_harness::{
+    foreground_process, foreground_title, jaws_history, send_key, send_steps,
+};
 
 #[cfg(windows)]
 mod windows_harness {
@@ -176,17 +178,38 @@ mod windows_harness {
         unsafe { SendInput(&[input], size) };
     }
 
+    /// The foreground window's title.
+    pub fn foreground_title() -> String {
+        use windows::Win32::UI::WindowsAndMessaging::{GetForegroundWindow, GetWindowTextW};
+        let mut buf = [0u16; 512];
+        // SAFETY: plain Win32 queries into a buffer of the given size.
+        let len = unsafe { GetWindowTextW(GetForegroundWindow(), &mut buf) };
+        let len = usize::try_from(len).unwrap_or(0);
+        String::from_utf16_lossy(buf.get(..len).unwrap_or_default())
+    }
+
     /// Sends `steps`, each only while the foreground application is one of `allowed`
-    /// (process names, case-insensitive). A held key is released before a refusal returns.
-    pub fn send_steps(steps: &[KeyStep], allowed: &[String]) -> Result<(), String> {
+    /// (process names, case-insensitive) and, with `title`, while the foreground window's
+    /// title contains it: one process can own both the user's windows and the test's
+    /// (Windows Terminal). A held key is released before a refusal returns.
+    pub fn send_steps(
+        steps: &[KeyStep],
+        allowed: &[String],
+        title: Option<&str>,
+    ) -> Result<(), String> {
         let mut held: Vec<u16> = Vec::new();
         let check = || {
             let process = foreground_process();
-            if allowed.iter().any(|a| a.eq_ignore_ascii_case(&process)) {
-                Ok(())
-            } else {
-                Err(format!("refused: {process:?} is in front"))
+            if !allowed.iter().any(|a| a.eq_ignore_ascii_case(&process)) {
+                return Err(format!("refused: {process:?} is in front"));
             }
+            if let Some(title) = title {
+                let current = foreground_title();
+                if !current.to_lowercase().contains(&title.to_lowercase()) {
+                    return Err(format!("refused: the window in front is {current:?}"));
+                }
+            }
+            Ok(())
         };
         let result = steps.iter().try_for_each(|step| match step {
             KeyStep::Chord(keys) => {

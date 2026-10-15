@@ -184,7 +184,7 @@ Write down what JAWS should say before writing code.
 | `sr-cli trace --out <f>` | Records accessibility events (format 7: focus chains, UIA focus and selection events, captions, dialog layouts, text and fonts) |
 | `sr-cli snapshot --api ia2\|uia` | A page's accessibility tree |
 | `sr-cli run [--engine onecore\|sapi5\|no-speech] [--keyboard-layout laptop] [--speech-log] [--debug-log]` | The live screen reader |
-| `sr-cli keys --allow <processes> <steps>` | Sends scan-coded chords ("Insert+Alt+W", "down:Alt", "wait:500"), each only while an allowed application is in front |
+| `sr-cli keys --allow <processes> [--title <text>] <steps>` | Sends scan-coded chords ("Insert+Alt+W", "down:Alt", "wait:500"), each only while an allowed application (and, with `--title`, a window whose title contains the text) is in front |
 | `sr-cli jaws-history [--clear]` | JAWS's speech history through FSAPI; the clipboard's text is put back |
 | `sr-cli wait-silence`, `sr-cli speak`, `sr-cli voices` | Audio settling, speech checks |
 | `run-scenario.ps1`, `run-batch.ps1` | Recording on old-pc (skill workflows D, G) |
@@ -209,10 +209,17 @@ Write down what JAWS should say before writing code.
 The night of 2026-10-15, with old-pc offline, the user allowed the dev box to be used until
 the morning. This is how it was done; it needs fresh permission each time.
 
-- **Never stop, restart or reconfigure the user's JAWS.** They wake up to it.
+- **Never stop, restart or reconfigure the user's JAWS** unless they say so for that occasion
+  (on 2026-10-15 they allowed exiting it). They depend on it.
 - **Keys:**
   - send them only with `sr-cli keys --allow <process>`, never into the Claude window or a
-    window of the user's;
+    window of the user's. Add `--title <text>` when one process owns the user's windows and
+    yours (Windows Terminal runs every terminal window in one process);
+  - the dev box's keyboard layout is Turkish Q: keys are sent by position, so the `I` key types
+    a dotless "ı" and the key named `apostrophe` types "i" (`e x apostrophe t` types "exit");
+  - our screen reader takes JAWS-key chords while it runs, from the user too: keep each live
+    run short, stop it right after, and bring the test window to the front before starting it
+    (it reads whatever window is in front, the Claude window included);
   - undo what you change (Win+Shift+M after Win+M; restore and save a test file you edited);
   - close every window you opened, checking its title first: Alt+F4 with the desktop in front
     opens the shutdown dialog.

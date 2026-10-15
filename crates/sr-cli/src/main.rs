@@ -124,6 +124,11 @@ enum Commands {
         #[arg(long, value_delimiter = ',', required = true)]
         allow: Vec<String>,
 
+        /// Text the foreground window's title must contain (case-insensitive), for an
+        /// application whose process also owns the user's windows (Windows Terminal)
+        #[arg(long)]
+        title: Option<String>,
+
         /// Steps, in order
         #[arg(required = true)]
         steps: Vec<String>,
@@ -1192,7 +1197,11 @@ async fn main() {
                 std::process::exit(1);
             }
         }
-        Some(Commands::Keys { allow, steps }) => {
+        Some(Commands::Keys {
+            allow,
+            title,
+            steps,
+        }) => {
             let parsed: Result<Vec<_>, _> = steps
                 .iter()
                 .map(|s| sr_platform::harness::parse_step(s))
@@ -1200,11 +1209,11 @@ async fn main() {
             let result = parsed.and_then(|steps| {
                 #[cfg(windows)]
                 {
-                    sr_platform::harness::send_steps(&steps, &allow)
+                    sr_platform::harness::send_steps(&steps, &allow, title.as_deref())
                 }
                 #[cfg(not(windows))]
                 {
-                    let _ = (steps, allow);
+                    let _ = (steps, allow, title);
                     Err("sending keys is only available on Windows".to_owned())
                 }
             });
