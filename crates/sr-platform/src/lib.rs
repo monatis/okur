@@ -4,6 +4,7 @@ pub mod bridge;
 pub mod clock;
 pub mod event_trace;
 pub mod events;
+pub mod harness;
 pub mod hook;
 pub mod ia2_snapshot;
 pub mod screen_lines;

@@ -110,6 +110,19 @@ Microsoft David, so speech stays audible and timed for silence detection.
 call) and `observation.spoken_records` (fragments with SAPI action, pitch, rate and volume)
 next to `speech_raw`. The log is read before the history copy, whose confirmation JAWS speaks.
 
+### Workflow H: Quick Live Checks Without a Scenario
+For a quick look at what JAWS says, and what ours says, on a machine where that is allowed
+(old-pc always; the user's dev box only when the user says so):
+- `sr-cli keys --allow notepad,explorer "Insert+Alt+W" "down:Alt" Tab "up:Alt" "wait:500"`
+  sends scan-coded chords. Each chord or key-down is sent only while one of the `--allow`
+  processes is in front; otherwise the command refuses and releases any held key.
+- `sr-cli jaws-history --clear` prints JAWS's speech history (FSAPI
+  `CopySpeechHistoryToClipboard`), empties it, and puts the clipboard's text back.
+- `sr-cli run --engine no-speech --speech-log <file> --debug-log <file>` gives ours. Stop it
+  when done: it reads whatever is in front.
+
+These are research, never evidence. Evidence comes only from `run-scenario.ps1` on old-pc.
+
 ## 4. Quick Command Reference Table
 
 | Operation | JAWS COM Script | Quick Nav Key | Keyboard Equivalent | Context |

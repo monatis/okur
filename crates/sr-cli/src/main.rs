@@ -114,6 +114,24 @@ enum Commands {
         #[arg(long, default_value_t = 600_000)]
         max_ms: u64,
     },
+    /// Send key chords to the application in front, each only while it is one of --allow:
+    /// for live checks on a machine the user lets the agent drive ("Insert+Alt+W",
+    /// "down:Alt", "up:Alt", "wait:500")
+    Keys {
+        /// Process names allowed in front (comma-separated, without .exe)
+        #[arg(long, value_delimiter = ',', required = true)]
+        allow: Vec<String>,
+
+        /// Steps, in order
+        #[arg(required = true)]
+        steps: Vec<String>,
+    },
+    /// Print JAWS's speech history (through FSAPI; the clipboard's text is put back)
+    JawsHistory {
+        /// Empty the history after reading it
+        #[arg(long)]
+        clear: bool,
+    },
     /// Print an evidence file's steps and JAWS transcripts readably
     Evidence {
         /// Evidence file path, or a scenario id looked up in corpus/evidence
@@ -1056,6 +1074,43 @@ async fn main() {
             {
                 let _ = (out, stop_file, max_ms);
                 eprintln!("Event traces are only available on Windows");
+                std::process::exit(1);
+            }
+        }
+        Some(Commands::Keys { allow, steps }) => {
+            let parsed: Result<Vec<_>, _> = steps
+                .iter()
+                .map(|s| sr_platform::harness::parse_step(s))
+                .collect();
+            let result = parsed.and_then(|steps| {
+                #[cfg(windows)]
+                {
+                    sr_platform::harness::send_steps(&steps, &allow)
+                }
+                #[cfg(not(windows))]
+                {
+                    let _ = (steps, allow);
+                    Err("sending keys is only available on Windows".to_owned())
+                }
+            });
+            if let Err(e) = result {
+                eprintln!("{e}");
+                std::process::exit(1);
+            }
+        }
+        Some(Commands::JawsHistory { clear }) => {
+            #[cfg(windows)]
+            match sr_platform::harness::jaws_history(clear) {
+                Ok(history) => println!("{history}"),
+                Err(e) => {
+                    eprintln!("{e}");
+                    std::process::exit(1);
+                }
+            }
+            #[cfg(not(windows))]
+            {
+                let _ = clear;
+                eprintln!("JAWS runs only on Windows");
                 std::process::exit(1);
             }
         }

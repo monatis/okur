@@ -97,6 +97,7 @@ Building evidence collection and verification tooling is the real engineering in
 - `sr-cli snapshot --api ia2`: IAccessible2 view of a Chromium document (attributes, states, hypertext, rendered line ranges).
 - `sr-cli trace` / `run-scenario.ps1 -TraceDir`: per-trial accessibility event traces, replayed into the engine by `sr-cli parity`.
 - `sr-cli evidence <scenario-id> [--trace]`: readable view of recorded JAWS transcripts and trial variants; `--trace` lists the accessibility events traced during each step.
+- `sr-cli keys --allow <process>` and `sr-cli jaws-history`: quick live checks (skill Workflow H). Chords are sent only while an allowed application is in front, and JAWS's speech history is read through FSAPI with the clipboard put back. Research, never evidence.
 
 ### Verification Integrity Rules (non-negotiable)
 
