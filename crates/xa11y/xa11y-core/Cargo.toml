@@ -35,3 +35,11 @@ serde_json = { workspace = true }
 [lints.clippy]
 exhaustive_enums = "warn"
 exhaustive_structs = "warn"
+# A screen reader must never crash: production code returns errors instead of panicking.
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+todo = "deny"
+unimplemented = "deny"
+unreachable = "deny"
+indexing_slicing = "deny"

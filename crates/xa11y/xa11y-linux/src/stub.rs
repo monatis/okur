@@ -29,28 +29,28 @@ impl LinuxInputProvider {
 
 impl InputProvider for LinuxInputProvider {
     fn pointer_move(&self, _: Point) -> Result<()> {
-        unreachable!()
+        Err(unavailable())
     }
     fn pointer_down(&self, _: MouseButton) -> Result<()> {
-        unreachable!()
+        Err(unavailable())
     }
     fn pointer_up(&self, _: MouseButton) -> Result<()> {
-        unreachable!()
+        Err(unavailable())
     }
     fn pointer_click(&self, _: Point, _: MouseButton, _: u32) -> Result<()> {
-        unreachable!()
+        Err(unavailable())
     }
     fn pointer_scroll(&self, _: Point, _: ScrollDelta) -> Result<()> {
-        unreachable!()
+        Err(unavailable())
     }
     fn key_down(&self, _: &Key) -> Result<()> {
-        unreachable!()
+        Err(unavailable())
     }
     fn key_up(&self, _: &Key) -> Result<()> {
-        unreachable!()
+        Err(unavailable())
     }
     fn type_text(&self, _: &str) -> Result<()> {
-        unreachable!()
+        Err(unavailable())
     }
 }
 
@@ -67,10 +67,10 @@ impl LinuxScreenshot {
 
 impl ScreenshotProvider for LinuxScreenshot {
     fn capture_full(&self) -> Result<(Screenshot, Point)> {
-        unreachable!()
+        Err(unavailable())
     }
     fn capture_region(&self, _: Rect) -> Result<Screenshot> {
-        unreachable!()
+        Err(unavailable())
     }
 }
 

@@ -19,9 +19,17 @@ our cross-platform accessibility API layer. Upstream changes are not tracked aut
 - Unit tests in `xa11y-windows/src/uia.rs` that query the live desktop's UI Automation tree (`try_provider()`) are `#[ignore = "live: ..."]`, to keep `cargo test` hermetic. Run them with `--ignored`.
 - `xa11y-windows/src/screenshot.rs`: `chunks_exact_mut(4)` became `as_chunks_mut::<4>()`, to satisfy a newer clippy lint.
 
-## Hardening ratchet
+## Hardening
 
-The pre-commit gate exempts this directory from the zero-`unwrap`/zero-`panic!` rules and instead enforces [`gate-baseline.json`](gate-baseline.json): the counts may only go down. New code must not add unchecked indexing, `unwrap`/`expect` or panicking macros. When hardening a module, remove its violations, lower the baseline, and eventually drop the crate-level `indexing_slicing` allowance.
+**Production code may not panic.** Every crate's `Cargo.toml` denies `clippy::unwrap_used`, `expect_used`, `panic`, `todo`, `unimplemented` and `unreachable`; `xa11y-core`, `xa11y-windows` and `xa11y` also deny `indexing_slicing`. Tests are exempt: unit tests through [`clippy.toml`](clippy.toml) (`allow-*-in-tests`), integration tests through a crate-level `#![allow]`, and two unit-test modules that use `unreachable!()` through `#[allow(clippy::unreachable)]`. Deliberate exceptions carry an `#[allow(..., reason = "...")]`:
+- `xa11y-core::role::unknown_role` panics under the test-only `strict-roles` feature;
+- `xa11y-core::mock` (the `test-support` feature) indexes its fixed tree.
+
+The non-native stubs (`WindowsProvider` off Windows, the macOS and Linux providers elsewhere) return `Error::Unsupported` or `Error::Platform` instead of `unreachable!()`: they can be built through `Default`, so their methods are reachable.
+
+**Still to do:** `xa11y-macos` and `xa11y-linux` keep a crate-level `#![allow(clippy::indexing_slicing)]`. Their native code compiles only on their own platforms, so remove the allowance and fix what clippy reports there. Clippy has not been run on macOS or Linux since these lints were added (2026-10-15). A grep found no `unwrap`/`expect`/panicking macro outside their test modules, but clippy on those platforms is the check.
+
+**The line-count ratchet** in [`gate-baseline.json`](gate-baseline.json) still runs in the pre-commit gate: it counts every non-comment line in this directory, tests included, and the counts may only go down. It measures mostly test code now; the lints above are what guard production code.
 
 ## Planned extensions (phase 4)
 

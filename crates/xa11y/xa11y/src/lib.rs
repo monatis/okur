@@ -1,6 +1,5 @@
-// Vendored from xa11y 0.15.2: exempt from the workspace bounds-safety gate until hardened
-// (tracked in crates/xa11y/VENDORED.md). New code here must still avoid unchecked indexing.
-#![allow(clippy::indexing_slicing)]
+// Production code here must not panic: `unwrap`/`expect`, panicking macros and unchecked
+// indexing are denied by this crate's `[lints]`; test code is exempt (`crates/xa11y/clippy.toml`).
 //! xa11y — Cross-Platform Accessibility Client Library
 //!
 //! Provides a unified API for reading and interacting with accessibility trees
@@ -426,9 +425,14 @@ fn reconcile_skipped(
     legend: &mut Vec<LegendEntry>,
     omitted: &mut Vec<Omission>,
 ) -> Result<()> {
-    for i in skipped.iter().rev() {
-        let entry = legend.remove(*i);
-        let rect = annotations[*i].rect;
+    for &i in skipped.iter().rev() {
+        let Some(rect) = annotations.get(i).map(|annotation| annotation.rect) else {
+            continue;
+        };
+        if i >= legend.len() {
+            continue;
+        }
+        let entry = legend.remove(i);
         let mapped_zero_area = if shot.mapping_available() {
             let parts = shot.desktop_rect_to_image(rect)?;
             !parts.is_empty() && parts.iter().all(|part| part.width == 0 || part.height == 0)
@@ -470,9 +474,9 @@ fn resolve_groups(groups: &[Locator]) -> Result<(Vec<Resolved>, usize)> {
     let mut out = Vec::new();
     let mut truncated = 0_usize;
 
-    for (g, locator) in groups.iter().enumerate() {
+    let colors = screenshot::ANNOTATION_PALETTE.iter().copied().cycle();
+    for ((g, locator), color) in groups.iter().enumerate().zip(colors) {
         let group = g + 1;
-        let color = screenshot::ANNOTATION_PALETTE[g % screenshot::ANNOTATION_PALETTE.len()];
         let base = locator.selector().trim();
         // Both of these run before the tree read, so a group that cannot
         // produce a round-tripping selector costs neither a walk nor pixels.
@@ -500,7 +504,9 @@ fn resolve_groups(groups: &[Locator]) -> Result<(Vec<Resolved>, usize)> {
                 truncated += 1;
                 continue;
             }
-            let element = &elements[i];
+            let Some(element) = elements.get(i) else {
+                continue;
+            };
             let (index, selector) = entry_at(base, scheme, i);
             out.push(Resolved {
                 group,

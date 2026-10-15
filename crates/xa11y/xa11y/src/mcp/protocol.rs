@@ -31,14 +31,14 @@ pub(crate) const MODERN_VERSION: &str = "2026-07-28";
 /// and `tools/call` are identical across these, and this server uses no
 /// feature that differs between them, so supporting the range is honest
 /// rather than aspirational.
-pub(crate) const LEGACY_VERSIONS: &[&str] = &["2025-11-25", "2025-06-18", "2025-03-26"];
+pub(crate) const LEGACY_VERSIONS: [&str; 3] = ["2025-11-25", "2025-06-18", "2025-03-26"];
 
 /// Every revision this server accepts, newest first. Advertised verbatim in
 /// `server/discover` and in the `data.supported` of an unsupported-version
 /// error, so a client can always pick a workable revision from one reply.
 pub(crate) fn supported_versions() -> Vec<&'static str> {
     let mut all = vec![MODERN_VERSION];
-    all.extend_from_slice(LEGACY_VERSIONS);
+    all.extend_from_slice(&LEGACY_VERSIONS);
     all
 }
 

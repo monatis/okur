@@ -1,4 +1,11 @@
-#![allow(clippy::indexing_slicing)] // Vendored xa11y test; see crates/xa11y/VENDORED.md.
+// Tests fail by panicking; the crate's no-panic lints are for its production code.
+#![allow(
+    clippy::indexing_slicing,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::panic,
+    clippy::unreachable
+)]
 //! Wire-level tests for the Windows `SendInput` backend.
 //!
 //! Drives [`xa11y_windows::WindowsInputProvider`] through its public

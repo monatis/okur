@@ -1,0 +1,6 @@
+# The xa11y crates deny panicking calls and unchecked indexing in production code through
+# their `[lints]` tables; tests may still use them to fail.
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true
+allow-panic-in-tests = true
+allow-indexing-slicing-in-tests = true

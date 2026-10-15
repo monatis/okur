@@ -200,22 +200,26 @@ pub fn run_main(args: &[String]) -> i32 {
 /// on failure. Most callers want [`run_main`], which renders the error and
 /// produces the exit code.
 pub fn run(args: &[String]) -> CliResult<()> {
-    match args.first().map(|s| s.as_str()) {
+    let (command, rest) = match args.split_first() {
+        Some((command, rest)) => (Some(command.as_str()), rest),
+        None => (None, args),
+    };
+    match command {
         Some("apps") => cmd_apps(),
-        Some("shell") => cmd_shell(&args[1..]),
-        Some("windows") => cmd_windows(&args[1..]),
-        Some("tree") => cmd_tree(&args[1..]),
-        Some("find") => cmd_find(&args[1..]),
-        Some("action") => cmd_action(&args[1..]),
-        Some("events") => cmd_events(&args[1..]),
-        Some("click") => cmd_click(&args[1..]),
-        Some("move") => cmd_move(&args[1..]),
-        Some("drag") => cmd_drag(&args[1..]),
-        Some("scroll") => cmd_scroll(&args[1..]),
-        Some("key") => cmd_key(&args[1..]),
-        Some("type") => cmd_type(&args[1..]),
-        Some("screenshot") => cmd_screenshot(&args[1..]),
-        Some("mcp") => crate::mcp::serve(&args[1..]),
+        Some("shell") => cmd_shell(rest),
+        Some("windows") => cmd_windows(rest),
+        Some("tree") => cmd_tree(rest),
+        Some("find") => cmd_find(rest),
+        Some("action") => cmd_action(rest),
+        Some("events") => cmd_events(rest),
+        Some("click") => cmd_click(rest),
+        Some("move") => cmd_move(rest),
+        Some("drag") => cmd_drag(rest),
+        Some("scroll") => cmd_scroll(rest),
+        Some("key") => cmd_key(rest),
+        Some("type") => cmd_type(rest),
+        Some("screenshot") => cmd_screenshot(rest),
+        Some("mcp") => crate::mcp::serve(rest),
         _ => {
             print_usage();
             Ok(())
@@ -455,8 +459,8 @@ pub(crate) fn parse_opts(args: &[String]) -> CliResult<(Opts, Vec<String>)> {
     let mut opts = Opts::default();
     let mut positional = Vec::new();
     let mut i = 0;
-    while i < args.len() {
-        match args[i].as_str() {
+    while let Some(arg) = args.get(i) {
+        match arg.as_str() {
             "--app" => {
                 i += 1;
                 opts.app = Some(flag_value(args, i, "--app")?.to_string());
@@ -561,17 +565,17 @@ fn missing(what: &str) -> CliError {
 
 pub(crate) fn parse_point_arg(s: &str, ctx: &str) -> CliResult<Point> {
     let parts: Vec<&str> = s.split(',').collect();
-    if parts.len() != 2 {
+    let [x_text, y_text] = parts.as_slice() else {
         return Err(CliError::Usage(format!("{ctx} must be X,Y (got: {s})")));
-    }
-    let x: i32 = parts[0]
+    };
+    let x: i32 = x_text
         .trim()
         .parse()
-        .map_err(|_| CliError::Usage(format!("invalid X in {ctx}: {}", parts[0])))?;
-    let y: i32 = parts[1]
+        .map_err(|_| CliError::Usage(format!("invalid X in {ctx}: {x_text}")))?;
+    let y: i32 = y_text
         .trim()
         .parse()
-        .map_err(|_| CliError::Usage(format!("invalid Y in {ctx}: {}", parts[1])))?;
+        .map_err(|_| CliError::Usage(format!("invalid Y in {ctx}: {y_text}")))?;
     Ok(Point::new(x, y))
 }
 
@@ -579,17 +583,17 @@ pub(crate) fn parse_point_arg(s: &str, ctx: &str) -> CliResult<Point> {
 /// must be positive — a 0-sized window is not a valid resize request.
 pub(crate) fn parse_size_arg(s: &str, ctx: &str) -> CliResult<(u32, u32)> {
     let parts: Vec<&str> = s.split(',').collect();
-    if parts.len() != 2 {
+    let [w_text, h_text] = parts.as_slice() else {
         return Err(CliError::Usage(format!("{ctx} must be W,H (got: {s})")));
-    }
-    let width: u32 = parts[0]
+    };
+    let width: u32 = w_text
         .trim()
         .parse()
-        .map_err(|_| CliError::Usage(format!("invalid W in {ctx}: {}", parts[0])))?;
-    let height: u32 = parts[1]
+        .map_err(|_| CliError::Usage(format!("invalid W in {ctx}: {w_text}")))?;
+    let height: u32 = h_text
         .trim()
         .parse()
-        .map_err(|_| CliError::Usage(format!("invalid H in {ctx}: {}", parts[1])))?;
+        .map_err(|_| CliError::Usage(format!("invalid H in {ctx}: {h_text}")))?;
     if width == 0 || height == 0 {
         return Err(CliError::Usage(format!(
             "{ctx} must be W,H with positive values (got: {s})"
@@ -600,27 +604,27 @@ pub(crate) fn parse_size_arg(s: &str, ctx: &str) -> CliResult<(u32, u32)> {
 
 pub(crate) fn parse_region_arg(s: &str) -> CliResult<Rect> {
     let parts: Vec<&str> = s.split(',').collect();
-    if parts.len() != 4 {
+    let [x_text, y_text, w_text, h_text] = parts.as_slice() else {
         return Err(CliError::Usage(format!(
             "--region must be X,Y,W,H (got: {s})"
         )));
-    }
-    let x: i32 = parts[0]
+    };
+    let x: i32 = x_text
         .trim()
         .parse()
-        .map_err(|_| CliError::Usage(format!("invalid X in --region: {}", parts[0])))?;
-    let y: i32 = parts[1]
+        .map_err(|_| CliError::Usage(format!("invalid X in --region: {x_text}")))?;
+    let y: i32 = y_text
         .trim()
         .parse()
-        .map_err(|_| CliError::Usage(format!("invalid Y in --region: {}", parts[1])))?;
-    let width: u32 = parts[2]
+        .map_err(|_| CliError::Usage(format!("invalid Y in --region: {y_text}")))?;
+    let width: u32 = w_text
         .trim()
         .parse()
-        .map_err(|_| CliError::Usage(format!("invalid W in --region: {}", parts[2])))?;
-    let height: u32 = parts[3]
+        .map_err(|_| CliError::Usage(format!("invalid W in --region: {w_text}")))?;
+    let height: u32 = h_text
         .trim()
         .parse()
-        .map_err(|_| CliError::Usage(format!("invalid H in --region: {}", parts[3])))?;
+        .map_err(|_| CliError::Usage(format!("invalid H in --region: {h_text}")))?;
     Ok(Rect {
         x,
         y,
@@ -1425,15 +1429,13 @@ fn format_center_opt(el: &ElementData) -> Option<String> {
 
 fn cmd_action(args: &[String]) -> CliResult<()> {
     let (opts, positional) = parse_opts(args)?;
-    if positional.len() < 2 {
+    let [action_name, selector, ..] = positional.as_slice() else {
         return Err(CliError::Usage(
             "usage: xa11y action ACTION SELECTOR [--app NAME | --pid PID | --shell KIND] \
              [--value V] [--at X,Y] [--size W,H]"
                 .into(),
         ));
-    }
-    let action_name = &positional[0];
-    let selector = &positional[1];
+    };
     let value = opts.value.clone();
 
     // Parse the payload before resolving the target: a missing or malformed
@@ -1492,8 +1494,8 @@ pub(crate) const ACTIONS_REQUIRING_VALUE: &[&str] =
 
 /// Actions that require a geometry argument: `--at X,Y` (MCP: `at`) for
 /// `move-to`, `--size W,H` (MCP: `size`) for `resize-to`.
-pub(crate) const ACTIONS_REQUIRING_AT: &[&str] = &["move-to"];
-pub(crate) const ACTIONS_REQUIRING_SIZE: &[&str] = &["resize-to"];
+pub(crate) const ACTIONS_REQUIRING_AT: [&str; 1] = ["move-to"];
+pub(crate) const ACTIONS_REQUIRING_SIZE: [&str; 1] = ["resize-to"];
 
 /// Parsed action payload, built up front by [`parse_action_args`] so the
 /// callers can validate it before resolving the target.
@@ -1714,18 +1716,18 @@ fn relabel_action_error(err: CliError, verb: &str) -> CliError {
 /// Parse a `START,END` character range for `select-text`.
 pub(crate) fn parse_text_range(raw: &str) -> CliResult<(u32, u32)> {
     let parts: Vec<&str> = raw.split(',').collect();
-    if parts.len() != 2 {
+    let [start_text, end_text] = parts.as_slice() else {
         return Err(CliError::Usage(format!(
             "select-text value must be START,END (e.g. 0,5), got: {raw}"
         )));
-    }
-    let start: u32 = parts[0].trim().parse().map_err(|_| {
-        CliError::Usage(format!("invalid START in select-text value: {}", parts[0]))
+    };
+    let start: u32 = start_text.trim().parse().map_err(|_| {
+        CliError::Usage(format!("invalid START in select-text value: {start_text}"))
     })?;
-    let end: u32 = parts[1]
+    let end: u32 = end_text
         .trim()
         .parse()
-        .map_err(|_| CliError::Usage(format!("invalid END in select-text value: {}", parts[1])))?;
+        .map_err(|_| CliError::Usage(format!("invalid END in select-text value: {end_text}")))?;
     Ok((start, end))
 }
 
@@ -2211,9 +2213,9 @@ fn render_legend_text(selectors: &[String], annotated: &crate::Annotated) -> Str
     let selector_w = selectors.iter().map(String::len).max().unwrap_or(0);
     let first_capped = first_capped_group(annotated);
 
-    for (g, selector) in selectors.iter().enumerate() {
+    let colors = screenshot::ANNOTATION_PALETTE.iter().copied().cycle();
+    for (((g, selector), color), letter) in selectors.iter().enumerate().zip(colors).zip(&letters) {
         let group = g + 1;
-        let color = screenshot::ANNOTATION_PALETTE[g % screenshot::ANNOTATION_PALETTE.len()];
         let drawn = annotated.legend.iter().filter(|e| e.group == group).count();
         let note = match (first_capped.is_some_and(|first| group >= first), drawn) {
             (false, _) => "",
@@ -2225,7 +2227,7 @@ fn render_legend_text(selectors: &[String], annotated: &crate::Annotated) -> Str
         };
         out.push_str(&format!(
             "{:<letter_w$}  {:<selector_w$}  {}  {} annotated{}\n",
-            letters[g],
+            letter,
             selector,
             hex_color(color),
             drawn,
@@ -2260,18 +2262,20 @@ fn render_legend_text(selectors: &[String], annotated: &crate::Annotated) -> Str
         let bounds_w = bounds.iter().map(String::len).max().unwrap_or(0);
 
         out.push('\n');
-        for (i, entry) in annotated.legend.iter().enumerate() {
+        for ((entry, name), bound) in annotated.legend.iter().zip(&names).zip(&bounds) {
             out.push_str(&format!(
                 "{:<tag_w$}  {:<role_w$}  {:<name_w$}  {:<bounds_w$}  {}\n",
-                entry.tag, entry.role, names[i], bounds[i], entry.selector
+                entry.tag, entry.role, name, bound, entry.selector
             ));
         }
     }
 
     if !annotated.omitted.is_empty() {
         let shown = annotated.omitted.len().min(MAX_LEGEND_OMISSION_DETAILS);
-        let mut details: Vec<String> = annotated.omitted[..shown]
+        let mut details: Vec<String> = annotated
+            .omitted
             .iter()
+            .take(shown)
             .map(|o| {
                 format!(
                     "{}: {} {}",
@@ -2323,12 +2327,13 @@ fn render_legend_text(selectors: &[String], annotated: &crate::Annotated) -> Str
 /// checking a length against a cap it has to know.
 fn render_legend_json(selectors: &[String], annotated: &crate::Annotated) -> CliResult<String> {
     let first_capped = first_capped_group(annotated);
+    let colors = screenshot::ANNOTATION_PALETTE.iter().copied().cycle();
     let groups: Vec<serde_json::Value> = selectors
         .iter()
         .enumerate()
-        .map(|(g, selector)| {
+        .zip(colors)
+        .map(|((g, selector), color)| {
             let group = g + 1;
-            let color = screenshot::ANNOTATION_PALETTE[g % screenshot::ANNOTATION_PALETTE.len()];
             serde_json::json!({
                 "group": group,
                 "letter": group_letter(group),
@@ -3406,10 +3411,10 @@ mod tests {
         }
         // The geometry-requiring verbs (move-to / resize-to) are advertised
         // the same way.
-        for verb in ACTIONS_REQUIRING_AT {
+        for verb in &ACTIONS_REQUIRING_AT {
             assert!(ACTION_NAMES.contains(verb), "{verb} is not an action");
         }
-        for verb in ACTIONS_REQUIRING_SIZE {
+        for verb in &ACTIONS_REQUIRING_SIZE {
             assert!(ACTION_NAMES.contains(verb), "{verb} is not an action");
         }
     }

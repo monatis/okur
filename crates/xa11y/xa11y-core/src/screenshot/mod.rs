@@ -392,7 +392,10 @@ impl Screenshot {
             let start =
                 ((crop.y as usize + row as usize) * self.width as usize + crop.x as usize) * 4;
             let end = start + crop.width as usize * 4;
-            pixels.extend_from_slice(&self.pixels[start..end]);
+            let Some(row_pixels) = self.pixels.get(start..end) else {
+                return Err(buffer_mismatch(self));
+            };
+            pixels.extend_from_slice(row_pixels);
         }
         let mapping = self.mapping.clone().map(|mut mapping| {
             mapping.origin.0 += f64::from(crop.x) / mapping.image_scale.0;
@@ -428,7 +431,12 @@ impl Screenshot {
                 let sx = (u64::from(x) * u64::from(self.width) / u64::from(width)) as u32;
                 let src = (sy as usize * self.width as usize + sx as usize) * 4;
                 let dst = (y as usize * width as usize + x as usize) * 4;
-                pixels[dst..dst + 4].copy_from_slice(&self.pixels[src..src + 4]);
+                let (Some(to), Some(from)) =
+                    (pixels.get_mut(dst..dst + 4), self.pixels.get(src..src + 4))
+                else {
+                    return Err(buffer_mismatch(self));
+                };
+                to.copy_from_slice(from);
             }
         }
         let mapping = self.mapping.clone().map(|mut mapping| {

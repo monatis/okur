@@ -1190,7 +1190,7 @@ fn process_image_name(pid: u32) -> Option<String> {
     if !ok {
         return None;
     }
-    let path = String::from_utf16_lossy(&buf[..size as usize]);
+    let path = String::from_utf16_lossy(buf.get(..size as usize)?);
     Some(path)
 }
 
@@ -2330,7 +2330,10 @@ impl Provider for WindowsProvider {
                             }
                         }
                     }
-                    Combinator::Descendant => {
+                    // A root combinator past the first segment (only a hand-built
+                    // selector has one; the parser rejects it) reads like the first
+                    // segment's: a search below the candidate.
+                    Combinator::Descendant | Combinator::Root => {
                         // Walk level-by-level to avoid provider-activation boundary
                         // issues with FindAllBuildCache(Subtree) on fragment elements.
                         let sub_selector = Selector {
@@ -2348,7 +2351,6 @@ impl Provider for WindowsProvider {
                         )?;
                         next_candidates.append(&mut sub_results);
                     }
-                    Combinator::Root => unreachable!(),
                 }
             }
             let mut seen = std::collections::HashSet::new();
@@ -2414,14 +2416,10 @@ impl Provider for WindowsProvider {
         // multiple clauses, phase-1 must collect the full union before
         // truncating because cross-clause doc-order can promote later-clause
         // hits ahead of earlier ones.
-        let phase1_limit = if group.clauses.len() == 1 {
-            let first = &group.clauses[0].segments[0].simple;
-            let outer = if group.clauses[0].segments.len() == 1 {
-                limit
-            } else {
-                None
-            };
-            match (outer, first.nth) {
+        let phase1_limit = if let [Selector { segments }] = group.clauses.as_slice() {
+            let first_nth = segments.first().and_then(|s| s.simple.nth);
+            let outer = if segments.len() == 1 { limit } else { None };
+            match (outer, first_nth) {
                 (Some(l), Some(n)) => Some(l.max(n)),
                 (_, Some(n)) => Some(n),
                 (l, None) => l,
@@ -2486,8 +2484,12 @@ impl Provider for WindowsProvider {
                 continue;
             };
 
-            for (idx, clause) in group.clauses.iter().enumerate() {
-                if matches_simple(&data, &clause.segments[0].simple) {
+            for (clause, clause_hits) in group.clauses.iter().zip(by_clause.iter_mut()) {
+                let head_matches = clause
+                    .segments
+                    .first()
+                    .is_some_and(|head| matches_simple(&data, &head.simple));
+                if head_matches {
                     // Keep the live UIA element alongside the ElementData
                     // only when we'll need it for narrowing — saves a clone
                     // per match on the hot all-single-segment path.
@@ -2496,13 +2498,13 @@ impl Provider for WindowsProvider {
                     } else {
                         None
                     };
-                    by_clause[idx].push((i as usize, data.clone(), live));
+                    clause_hits.push((i as usize, data.clone(), live));
                     // N=1 phase-1 limit short-circuit (see comment at the
                     // top of this method). Only safe for single-clause
                     // groups; otherwise cross-clause doc-order would be
                     // wrong.
                     if let Some(cap) = phase1_limit {
-                        if by_clause[idx].len() >= cap {
+                        if clause_hits.len() >= cap {
                             break 'walk;
                         }
                     }
@@ -2514,16 +2516,18 @@ impl Provider for WindowsProvider {
         // Each narrowed result keeps its phase-1 ancestor's walk position
         // for the global doc-order merge.
         let mut merged: Vec<(usize, ElementData)> = Vec::new();
-        for (clause_idx, hits) in by_clause.into_iter().enumerate() {
+        for (clause, hits) in group.clauses.iter().zip(by_clause) {
             if hits.is_empty() {
                 continue;
             }
-            let clause = &group.clauses[clause_idx];
-            if clause.segments.len() == 1 {
+            let Some((head, rest)) = clause.segments.split_first() else {
+                continue;
+            };
+            if rest.is_empty() {
                 // Apply per-clause `:nth` before merging.
                 let mut hits: Vec<(usize, ElementData)> =
                     hits.into_iter().map(|(p, d, _)| (p, d)).collect();
-                if let Some(nth) = clause.segments[0].simple.nth {
+                if let Some(nth) = head.simple.nth {
                     if nth <= hits.len() {
                         let kept = hits.remove(nth - 1);
                         hits.clear();
@@ -2536,13 +2540,9 @@ impl Provider for WindowsProvider {
                 continue;
             }
 
-            for (anchor_pos, head, _live) in hits {
-                let narrowed = self.narrow_multi_segment(
-                    vec![head],
-                    &clause.segments[1..],
-                    max_depth_val,
-                    None,
-                )?;
+            for (anchor_pos, anchor, _live) in hits {
+                let narrowed =
+                    self.narrow_multi_segment(vec![anchor], rest, max_depth_val, None)?;
                 for n in narrowed {
                     merged.push((anchor_pos, n));
                 }

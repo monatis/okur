@@ -305,12 +305,12 @@ impl Locator {
             if roots.is_empty() {
                 return self.provider.find_elements_group(root, group, limit, None);
             }
-            if roots.len() == 1 {
+            if let [single] = roots {
                 // Preserve the native backend's limit pushdown for the common
                 // single-root case (including first-match auto-wait actions).
                 return self
                     .provider
-                    .find_elements_group(&roots[0], group, limit, None);
+                    .find_elements_group(single, group, limit, None);
             }
             // Evaluate selectors once over the process's combined children.
             // Applying :nth independently to each registration returns the
@@ -375,7 +375,7 @@ impl Locator {
                 let max_depth_val = crate::MAX_TREE_DEPTH;
                 let narrowed = self.provider.narrow_multi_segment(
                     vec![app.clone()],
-                    &clause.segments[1..],
+                    clause.segments.get(1..).unwrap_or_default(),
                     max_depth_val,
                     None,
                 )?;

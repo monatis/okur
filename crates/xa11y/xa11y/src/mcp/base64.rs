@@ -15,25 +15,32 @@ pub(crate) fn encode(input: &[u8]) -> String {
     for chunk in input.chunks(3) {
         // Pack up to three bytes into one 24-bit group, left-aligned, so the
         // six-bit extractions below are uniform regardless of chunk length.
-        let b0 = chunk[0] as u32;
+        let b0 = *chunk.first().unwrap_or(&0) as u32;
         let b1 = *chunk.get(1).unwrap_or(&0) as u32;
         let b2 = *chunk.get(2).unwrap_or(&0) as u32;
         let group = (b0 << 16) | (b1 << 8) | b2;
 
-        out.push(ALPHABET[(group >> 18) as usize & 0x3F] as char);
-        out.push(ALPHABET[(group >> 12) as usize & 0x3F] as char);
+        out.push(sextet(group, 18));
+        out.push(sextet(group, 12));
         out.push(if chunk.len() > 1 {
-            ALPHABET[(group >> 6) as usize & 0x3F] as char
+            sextet(group, 6)
         } else {
             PAD as char
         });
         out.push(if chunk.len() > 2 {
-            ALPHABET[group as usize & 0x3F] as char
+            sextet(group, 0)
         } else {
             PAD as char
         });
     }
     out
+}
+
+/// The alphabet character for the six bits of `group` starting at `shift`.
+fn sextet(group: u32, shift: u32) -> char {
+    let index = ((group >> shift) & 0x3F) as usize;
+    // The mask keeps `index` below 64, the alphabet's length.
+    ALPHABET.get(index).map_or(PAD as char, |&b| b as char)
 }
 
 #[cfg(test)]

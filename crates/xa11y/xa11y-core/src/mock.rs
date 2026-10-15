@@ -42,6 +42,10 @@
 //! Call [`build_provider`] to get an `Arc<dyn Provider>`. The provider records
 //! actions into an internal log; use [`MockProviderHandle::actions`] to inspect
 //! them from tests.
+#![allow(
+    clippy::indexing_slicing,
+    reason = "test support only (the `test-support` feature): the fixed mock tree is indexed by construction"
+)]
 
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};

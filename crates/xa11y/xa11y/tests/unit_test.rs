@@ -1,4 +1,11 @@
-#![allow(clippy::indexing_slicing)] // Vendored xa11y test; see crates/xa11y/VENDORED.md.
+// Tests fail by panicking; the crate's no-panic lints are for its production code.
+#![allow(
+    clippy::indexing_slicing,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::panic,
+    clippy::unreachable
+)]
 //! Unit tests for xa11y core types, selector engine, and locator.
 //!
 //! These tests exercise the public API without requiring platform accessibility

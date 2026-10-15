@@ -655,6 +655,7 @@ impl std::fmt::Debug for App {
 }
 
 #[cfg(test)]
+#[allow(clippy::unreachable, reason = "tests fail by panicking")]
 mod tests {
     use super::*;
     use crate::mock::build_provider;

@@ -94,6 +94,10 @@ impl Role {
 /// the `strict-roles` feature is enabled. Platform backends call this in their
 /// catch-all mapping arms so that integration tests surface unmapped roles.
 #[inline]
+#[allow(
+    clippy::panic,
+    reason = "strict-roles is a test-build feature that makes unmapped roles fail tests; no product enables it"
+)]
 pub fn unknown_role(context: &str) -> Role {
     if cfg!(feature = "strict-roles") {
         panic!("strict-roles: unmapped platform role — {context}");

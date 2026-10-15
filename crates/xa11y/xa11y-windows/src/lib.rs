@@ -1,6 +1,5 @@
-// Vendored from xa11y 0.15.2: exempt from the workspace bounds-safety gate until hardened
-// (tracked in crates/xa11y/VENDORED.md). New code here must still avoid unchecked indexing.
-#![allow(clippy::indexing_slicing)]
+// Production code here must not panic: `unwrap`/`expect`, panicking macros and unchecked
+// indexing are denied by this crate's `[lints]`; test code is exempt (`crates/xa11y/clippy.toml`).
 //! Windows accessibility backend using UI Automation (UIA).
 //!
 //! This backend implements the `Provider` trait using the Windows UI Automation API.

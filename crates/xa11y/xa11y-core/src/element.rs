@@ -1012,6 +1012,7 @@ impl TreeNode {
 }
 
 #[cfg(test)]
+#[allow(clippy::unreachable, reason = "tests fail by panicking")]
 mod tests {
     //! Unit tests for `Element` action methods. Verifies each action records the
     //! expected entry in the mock provider's action log and that validation

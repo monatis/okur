@@ -43,3 +43,13 @@ x11rb = { version = "0.14", default-features = false }
 # the real client dispatch code over a socket, hermetically (no compositor).
 wayland-server = "0.31"
 wayland-protocols = { version = "0.32", features = ["client", "server", "unstable"] }
+
+# A screen reader must never crash: production code returns errors instead of panicking.
+# Unchecked indexing is still allowed at the crate root until it is hardened on this platform.
+[lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+todo = "deny"
+unimplemented = "deny"
+unreachable = "deny"

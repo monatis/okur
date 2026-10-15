@@ -268,7 +268,10 @@ pub trait Provider: Send + Sync {
                             }
                         }
                     }
-                    Combinator::Descendant => {
+                    // A root combinator past the first segment (only a hand-built
+                    // selector has one; the parser rejects it) reads like the first
+                    // segment's: a search below the candidate.
+                    Combinator::Descendant | Combinator::Root => {
                         let sub_selector = Selector {
                             segments: vec![SelectorSegment {
                                 combinator: Combinator::Root,
@@ -279,7 +282,6 @@ pub trait Provider: Send + Sync {
                             self.find_elements(candidate, &sub_selector, None, Some(max_depth))?;
                         next_candidates.append(&mut sub_results);
                     }
-                    Combinator::Root => unreachable!(),
                 }
             }
             let mut seen = std::collections::HashSet::new();

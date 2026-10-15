@@ -150,6 +150,16 @@ pub enum MatchOp {
     EndsWith,
 }
 
+/// The character at `pos`, if there is one.
+fn char_at(chars: &[char], pos: usize) -> Option<char> {
+    chars.get(pos).copied()
+}
+
+/// The characters in `start..end` as a string (empty when the range is out of bounds).
+fn text_between(chars: &[char], start: usize, end: usize) -> String {
+    chars.get(start..end).unwrap_or_default().iter().collect()
+}
+
 impl Selector {
     /// Parse a selector string into a Selector.
     pub fn parse(input: &str) -> Result<Self> {
@@ -206,15 +216,15 @@ impl Selector {
 
     fn parse_combinator(chars: &[char], mut pos: usize) -> (Combinator, usize) {
         let mut has_space = false;
-        while pos < chars.len() && chars[pos] == ' ' {
+        while char_at(chars, pos) == Some(' ') {
             has_space = true;
             pos += 1;
         }
 
-        if pos < chars.len() && chars[pos] == '>' {
+        if char_at(chars, pos) == Some('>') {
             pos += 1;
             // Skip trailing spaces after >
-            while pos < chars.len() && chars[pos] == ' ' {
+            while char_at(chars, pos) == Some(' ') {
                 pos += 1;
             }
             (Combinator::Child, pos)
@@ -251,11 +261,11 @@ impl Selector {
             // Try to parse role name. Normalized roles are snake_case (e.g., `button`).
             // Platform roles may include uppercase (e.g., `AXButton`, `PUSH_BUTTON`).
             let start = pos;
-            while pos < chars.len() && (chars[pos].is_ascii_alphanumeric() || chars[pos] == '_') {
+            while char_at(chars, pos).is_some_and(|c| c.is_ascii_alphanumeric() || c == '_') {
                 pos += 1;
             }
             if pos > start {
-                let role_str: String = chars[start..pos].iter().collect();
+                let role_str = text_between(chars, start, pos);
                 match Role::from_snake_case(&role_str) {
                     Some(r) => role = Some(RoleMatch::Normalized(r)),
                     None => {
@@ -267,27 +277,27 @@ impl Selector {
         }
 
         // Parse attribute filters
-        while pos < chars.len() && chars[pos] == '[' {
+        while char_at(chars, pos) == Some('[') {
             let (filter, new_pos) = Self::parse_attr_filter(chars, pos, input)?;
             filters.push(filter);
             pos = new_pos;
         }
 
         // Parse :nth() pseudo
-        if pos + 4 < chars.len() && chars[pos] == ':' {
+        if pos + 4 < chars.len() && char_at(chars, pos) == Some(':') {
             pos += 1;
             let kw_start = pos;
-            while pos < chars.len() && chars[pos].is_ascii_alphabetic() {
+            while char_at(chars, pos).is_some_and(|c| c.is_ascii_alphabetic()) {
                 pos += 1;
             }
-            let kw: String = chars[kw_start..pos].iter().collect();
-            if kw == "nth" && pos < chars.len() && chars[pos] == '(' {
+            let kw = text_between(chars, kw_start, pos);
+            if kw == "nth" && char_at(chars, pos) == Some('(') {
                 pos += 1; // skip (
                 let num_start = pos;
-                while pos < chars.len() && chars[pos].is_ascii_digit() {
+                while char_at(chars, pos).is_some_and(|c| c.is_ascii_digit()) {
                     pos += 1;
                 }
-                let num_str: String = chars[num_start..pos].iter().collect();
+                let num_str = text_between(chars, num_start, pos);
                 let n: usize = num_str.parse().map_err(|_| Error::InvalidSelector {
                     selector: input.to_string(),
                     message: format!("invalid number in :nth({})", num_str),
@@ -298,7 +308,7 @@ impl Selector {
                         message: ":nth() is 1-based, got 0".to_string(),
                     });
                 }
-                if pos < chars.len() && chars[pos] == ')' {
+                if char_at(chars, pos) == Some(')') {
                     pos += 1;
                     nth = Some(n);
                 } else {
@@ -335,10 +345,10 @@ impl Selector {
 
         // Parse attribute name (allows snake_case: [a-z0-9_]+)
         let attr_start = pos;
-        while pos < chars.len() && (chars[pos].is_ascii_alphanumeric() || chars[pos] == '_') {
+        while char_at(chars, pos).is_some_and(|c| c.is_ascii_alphanumeric() || c == '_') {
             pos += 1;
         }
-        let attr: String = chars[attr_start..pos].iter().collect();
+        let attr = text_between(chars, attr_start, pos);
         if attr.is_empty() {
             return Err(Error::InvalidSelector {
                 selector: input.to_string(),
@@ -347,28 +357,34 @@ impl Selector {
         }
 
         // Parse operator
-        let op = if pos + 1 < chars.len() && chars[pos] == '*' && chars[pos + 1] == '=' {
-            pos += 2;
-            MatchOp::Contains
-        } else if pos + 1 < chars.len() && chars[pos] == '^' && chars[pos + 1] == '=' {
-            pos += 2;
-            MatchOp::StartsWith
-        } else if pos + 1 < chars.len() && chars[pos] == '$' && chars[pos + 1] == '=' {
-            pos += 2;
-            MatchOp::EndsWith
-        } else if pos < chars.len() && chars[pos] == '=' {
-            pos += 1;
-            MatchOp::Exact
-        } else {
-            return Err(Error::InvalidSelector {
-                selector: input.to_string(),
-                message: "expected operator (=, *=, ^=, $=)".to_string(),
-            });
+        let op = match (char_at(chars, pos), char_at(chars, pos + 1)) {
+            (Some('*'), Some('=')) => {
+                pos += 2;
+                MatchOp::Contains
+            }
+            (Some('^'), Some('=')) => {
+                pos += 2;
+                MatchOp::StartsWith
+            }
+            (Some('$'), Some('=')) => {
+                pos += 2;
+                MatchOp::EndsWith
+            }
+            (Some('='), _) => {
+                pos += 1;
+                MatchOp::Exact
+            }
+            _ => {
+                return Err(Error::InvalidSelector {
+                    selector: input.to_string(),
+                    message: "expected operator (=, *=, ^=, $=)".to_string(),
+                });
+            }
         };
 
         // Parse quoted value (single or double quotes)
-        let quote = match chars.get(pos) {
-            Some(&'"') | Some(&'\'') => chars[pos],
+        let quote = match char_at(chars, pos) {
+            Some(quote @ ('"' | '\'')) => quote,
             _ => {
                 return Err(Error::InvalidSelector {
                     selector: input.to_string(),
@@ -378,7 +394,7 @@ impl Selector {
         };
         pos += 1; // skip opening quote
         let val_start = pos;
-        while pos < chars.len() && chars[pos] != quote {
+        while char_at(chars, pos).is_some_and(|c| c != quote) {
             pos += 1;
         }
         if pos >= chars.len() {
@@ -387,11 +403,11 @@ impl Selector {
                 message: "unterminated string in attribute value".to_string(),
             });
         }
-        let value: String = chars[val_start..pos].iter().collect();
+        let value = text_between(chars, val_start, pos);
         pos += 1; // skip closing quote
 
         // Skip ]
-        if pos >= chars.len() || chars[pos] != ']' {
+        if char_at(chars, pos) != Some(']') {
             return Err(Error::InvalidSelector {
                 selector: input.to_string(),
                 message: "expected ']' to close attribute filter".to_string(),
@@ -688,14 +704,14 @@ pub fn find_elements_in_tree(
     limit: Option<usize>,
     max_depth: Option<u32>,
 ) -> Result<Vec<ElementData>> {
-    if selector.segments.is_empty() {
+    let Some((first, rest)) = selector.segments.split_first() else {
         return Ok(vec![]);
-    }
+    };
 
     let max_depth = max_depth.unwrap_or(crate::MAX_TREE_DEPTH);
 
     // Phase 1: Find all matches for the first segment (DFS from root)
-    let first = &selector.segments[0].simple;
+    let first = &first.simple;
     let mut candidates = Vec::new();
     // Pass limit to enable early termination when possible
     let phase1_limit = if selector.segments.len() == 1 {
@@ -740,7 +756,7 @@ pub fn find_elements_in_tree(
     apply_nth(&mut candidates, first.nth);
 
     // Phase 2: For each subsequent segment, narrow candidates
-    for segment in &selector.segments[1..] {
+    for segment in rest {
         let mut next_candidates = Vec::new();
         for candidate in &candidates {
             match segment.combinator {
@@ -752,7 +768,10 @@ pub fn find_elements_in_tree(
                         }
                     }
                 }
-                Combinator::Descendant => {
+                // A root combinator past the first segment (only a hand-built
+                // selector has one; the parser rejects it) reads like the first
+                // segment's: a search below the candidate.
+                Combinator::Descendant | Combinator::Root => {
                     collect_matching(
                         &get_children_fn,
                         Some(candidate),
@@ -763,7 +782,6 @@ pub fn find_elements_in_tree(
                         None,
                     )?;
                 }
-                Combinator::Root => unreachable!(),
             }
         }
         // Deduplicate by handle, preserving order
@@ -808,8 +826,8 @@ pub fn find_elements_in_tree_group<F>(
 where
     F: Fn(Option<&ElementData>) -> Result<Vec<ElementData>>,
 {
-    if group.clauses.len() == 1 {
-        return find_elements_in_tree(get_children_fn, root, &group.clauses[0], limit, max_depth);
+    if let [only] = group.clauses.as_slice() {
+        return find_elements_in_tree(get_children_fn, root, only, limit, max_depth);
     }
 
     // Reusing fetched children is important on cross-process backends: a
@@ -873,12 +891,12 @@ pub fn find_elements_in_tree_with_paths<F>(
 where
     F: Fn(Option<&ElementData>) -> Result<Vec<ElementData>>,
 {
-    if selector.segments.is_empty() {
+    let Some((first, rest)) = selector.segments.split_first() else {
         return Ok(vec![]);
-    }
+    };
 
     let max_depth = max_depth.unwrap_or(crate::MAX_TREE_DEPTH);
-    let first = &selector.segments[0].simple;
+    let first = &first.simple;
 
     // Phase 1: collect all matches for the first segment (DFS from root).
     let phase1_depth = if root.is_none()
@@ -907,7 +925,7 @@ where
     // Phase 2: narrow through remaining segments. Each phase-2 descendant's
     // path extends its phase-1 ancestor's path — so the resulting paths are
     // still rooted at the original `root`.
-    for segment in &selector.segments[1..] {
+    for segment in rest {
         let mut next: Vec<(Vec<u32>, ElementData)> = Vec::new();
         for (cand_path, candidate) in &candidates {
             match segment.combinator {
@@ -921,7 +939,10 @@ where
                         }
                     }
                 }
-                Combinator::Descendant => {
+                // A root combinator past the first segment (only a hand-built
+                // selector has one; the parser rejects it) reads like the first
+                // segment's: a search below the candidate.
+                Combinator::Descendant | Combinator::Root => {
                     let mut sub: Vec<(Vec<u32>, ElementData)> = Vec::new();
                     let mut sub_path = Vec::new();
                     collect_matching_with_paths(
@@ -939,7 +960,6 @@ where
                         next.push((p, se));
                     }
                 }
-                Combinator::Root => unreachable!(),
             }
         }
         // Dedup by path, preserving order — same shape as

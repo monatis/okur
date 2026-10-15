@@ -1,4 +1,11 @@
-#![allow(clippy::indexing_slicing)] // Vendored xa11y test; see crates/xa11y/VENDORED.md.
+// Tests fail by panicking; the crate's no-panic lints are for its production code.
+#![allow(
+    clippy::indexing_slicing,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::panic,
+    clippy::unreachable
+)]
 //! End-to-end uinput input-sim tests.
 //!
 //! Drives `xa11y_linux::LinuxInputProvider` through its public API on a

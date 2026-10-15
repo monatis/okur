@@ -58,10 +58,14 @@ impl WindowsScreenshot {
 #[cfg(not(target_os = "windows"))]
 impl ScreenshotProvider for WindowsScreenshot {
     fn capture_full(&self) -> Result<(Screenshot, Point)> {
-        unreachable!()
+        Err(Error::Unsupported {
+            feature: "Windows screenshots on this platform".into(),
+        })
     }
     fn capture_region(&self, _: Rect) -> Result<Screenshot> {
-        unreachable!()
+        Err(Error::Unsupported {
+            feature: "Windows screenshots on this platform".into(),
+        })
     }
 }
 

@@ -16,3 +16,13 @@ rayon = "1"
 
 [target.'cfg(target_os = "macos")'.build-dependencies]
 cc = "1"
+
+# A screen reader must never crash: production code returns errors instead of panicking.
+# Unchecked indexing is still allowed at the crate root until it is hardened on this platform.
+[lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+todo = "deny"
+unimplemented = "deny"
+unreachable = "deny"

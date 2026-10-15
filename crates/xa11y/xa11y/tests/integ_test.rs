@@ -1,4 +1,11 @@
-#![allow(clippy::indexing_slicing)] // Vendored xa11y test; see crates/xa11y/VENDORED.md.
+// Tests fail by panicking; the crate's no-panic lints are for its production code.
+#![allow(
+    clippy::indexing_slicing,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::panic,
+    clippy::unreachable
+)]
 //! Cross-platform integration tests for xa11y.
 //!
 //! These tests require a running test application (xa11y-test-app) with an

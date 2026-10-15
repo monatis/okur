@@ -246,7 +246,9 @@ impl Screenshot {
         let mut visible = vec![false; annotations.len()];
         for (fragment, owner) in owners.iter().enumerate() {
             if !fragment_skips.contains(&fragment) {
-                visible[*owner] = true;
+                if let Some(owner_visible) = visible.get_mut(*owner) {
+                    *owner_visible = true;
+                }
             }
         }
         for (index, is_visible) in visible.into_iter().enumerate() {
@@ -474,10 +476,9 @@ impl Canvas {
         let Some(end) = index.checked_add(4) else {
             return;
         };
-        if end > self.pixels.len() {
-            return;
+        if let Some(pixel) = self.pixels.get_mut(index..end) {
+            pixel.copy_from_slice(&[rgb[0], rgb[1], rgb[2], 255]);
         }
-        self.pixels[index..end].copy_from_slice(&[rgb[0], rgb[1], rgb[2], 255]);
     }
 
     /// Fill `rect`, clipped to the image. A rect entirely outside costs one

@@ -1,4 +1,11 @@
-#![allow(clippy::indexing_slicing)] // Vendored xa11y test; see crates/xa11y/VENDORED.md.
+// Tests fail by panicking; the crate's no-panic lints are for its production code.
+#![allow(
+    clippy::indexing_slicing,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::panic,
+    clippy::unreachable
+)]
 //! Smoke test for [`xa11y_linux::LinuxInputProvider`] against a live X server.
 //!
 //! Requires an X display — run under `xvfb-run`. Marked `#[ignore]` so it
