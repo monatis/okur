@@ -1348,6 +1348,13 @@ impl ScreenReaderEngine {
                 || (focus.window_class.as_deref() == Some("SysListView32")
                     && focus.container_name.as_deref() != Some("Items View")
                     && focus.container_name.as_deref() != Some("Items view"))
+                // An item in the desktop's window, whatever window the event came from (on
+                // Windows 11 the first of the desktop's focus events has none, seen live).
+                || (focus.role == Role::ListItem
+                    && focus
+                        .window_kind
+                        .as_deref()
+                        .is_some_and(|k| matches!(k, "Progman" | "WorkerW")))
                 // An item still on the desktop; not one in another window (the task
                 // switcher's, after Win+M then Alt+Tab).
                 || (focus.role == Role::ListItem
@@ -2606,6 +2613,40 @@ mod tests {
         // Back in Notepad, its window is announced again.
         let back = engine.handle_focus_event(&edit).unwrap_or_default();
         assert!(back.starts_with("Untitled - Notepad"), "{back:?}");
+    }
+
+    /// Windows 11 sends the desktop's focus several times, the first from no window class
+    /// and with the list named "Desktop": it is announced once, as the desktop.
+    #[test]
+    fn the_desktop_is_announced_once() {
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+        let item = |class: Option<&str>, container: &str| {
+            let mut focus = FocusEvent::new(Role::ListItem)
+                .with_container_name(container)
+                .with_window_title("Desktop 1")
+                .with_name("Microsoft Edge")
+                .with_item_index(9)
+                .with_item_count(11);
+            focus.window_class = class.map(str::to_owned);
+            focus.window_kind = Some("Progman".to_owned());
+            focus
+        };
+        let first = engine
+            .handle_focus_event(&item(None, "Desktop"))
+            .unwrap_or_default();
+        assert!(
+            first.starts_with("desktop\nFolderView    List view"),
+            "{first:?}"
+        );
+        assert_eq!(
+            engine.handle_focus_event(&item(Some("Progman"), "FolderView")),
+            None
+        );
+        assert_eq!(
+            engine.handle_focus_event(&item(Some("SysListView32"), "FolderView")),
+            None
+        );
     }
 
     #[test]
