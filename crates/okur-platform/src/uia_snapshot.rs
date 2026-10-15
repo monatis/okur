@@ -352,6 +352,10 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> okur_core::AomNode {
     if let Some(id) = &node.automation_id {
         set_attr("id", id.clone());
     }
+    // aria-current: "page", "step", "location", "date", "time" or "true".
+    if let Some(current) = aria_property(node, "current").filter(|c| *c != "false") {
+        set_attr("current", current.to_owned());
+    }
     if let (Some(pos), Some(size)) = (node.position_in_set, node.size_of_set) {
         set_attr("posinset", pos.to_string());
         set_attr("setsize", size.to_string());

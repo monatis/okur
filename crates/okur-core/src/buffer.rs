@@ -964,7 +964,8 @@ impl VirtualBuffer {
                     Role::Link { ref href } => href.clone(),
                     _ => None,
                 };
-                let is_same_page = href.as_deref().map(|h| h.starts_with('#')).unwrap_or(false);
+                // The linearizer marks same page links.
+                let is_same_page = node.attributes.get("same_page").is_some_and(|v| v == "true");
                 items.push(LinkListItem {
                     node_id: node.id,
                     text,

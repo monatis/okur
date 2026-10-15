@@ -351,6 +351,10 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     if let Some(dom_id) = attr("id") {
         set_attr("id", dom_id);
     }
+    // aria-current: "page", "step", "location", "date", "time" or "true".
+    if let Some(current) = attr("current").filter(|c| c != "false") {
+        set_attr("current", current);
+    }
     // The live object behind the node, for actions (focus, default action).
     if let Some(unique_id) = node.unique_id {
         set_attr(crate::actions::UNIQUE_ID_ATTR, unique_id.to_string());

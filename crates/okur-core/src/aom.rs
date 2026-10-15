@@ -273,6 +273,20 @@ impl AomNode {
         self.children.push(child);
     }
 
+    /// What JAWS says for the node's aria-current (the `current` attribute): "Current Page"
+    /// for `page`, "Current" for `true`, nothing for `false` or no attribute.
+    pub fn current_phrase(&self) -> Option<&'static str> {
+        match self.attributes.get("current")?.as_str() {
+            "page" => Some("Current Page"),
+            "step" => Some("Current Step"),
+            "location" => Some("Current Location"),
+            "date" => Some("Current Date"),
+            "time" => Some("Current Time"),
+            "true" => Some("Current"),
+            _ => None,
+        }
+    }
+
     pub fn find_by_id(&self, target_id: usize) -> Option<&AomNode> {
         if self.id == target_id {
             return Some(self);

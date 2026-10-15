@@ -22,7 +22,7 @@ impl SpeechFormatter {
                 if is_same_page {
                     format!(" \u{001d} same page link \u{001e} {}", text)
                 } else {
-                    format!("link {}", text)
+                    format!(" \u{001d} Link \u{001e} {}", text)
                 }
             }
             Role::Button => format!("button {}", text),
@@ -364,7 +364,11 @@ impl SpeechFormatter {
                     Some(false) => " \u{1d}collapsed\u{1e}",
                     None => "",
                 };
-                format!("{name}  \u{1d} Button \u{1e}{state}")
+                let current = node
+                    .current_phrase()
+                    .map(|c| format!(" \u{1d}{c}\u{1e}"))
+                    .unwrap_or_default();
+                format!("{name}  \u{1d} Button \u{1e}{state}{current}")
             }
             _ => name.to_owned(),
         }
@@ -389,12 +393,17 @@ impl SpeechFormatter {
         format!("{}\n \u{001d} heading level {} \u{001e}", text, level)
     }
 
-    /// Formats a link announcement for quick navigation (`U` / `K`).
-    pub fn format_link(text: &str, is_same_page: bool) -> String {
-        if is_same_page {
-            format!("•  \u{001d} same page link \u{001e} {}", text)
+    /// A link taking focus: "Page one ‹ same page link › ‹Current Page›". aria-current comes
+    /// before a plain link's role: "README ‹Current Page› ‹ Link ›".
+    pub fn format_link_focus(name: &str, node: &AomNode) -> String {
+        let current = node
+            .current_phrase()
+            .map(|c| format!(" \u{1d}{c}\u{1e} "))
+            .unwrap_or_default();
+        if node.attributes.get("same_page").is_some_and(|v| v == "true") {
+            format!("{name}  \u{1d} same page link \u{1e} {current}")
         } else {
-            format!(" \u{001d} link \u{001e} {}", text)
+            format!("{name}{current}  \u{1d} Link \u{1e} ")
         }
     }
 

@@ -522,15 +522,14 @@ impl<'a> Builder<'a> {
         }
     }
 
+    /// A link to a place in this document: a fragment, alone or after this document's
+    /// address. An empty fragment (`href="#"`, a link a script handles) is a plain "Link".
     fn is_same_page(&self, href: Option<&str>) -> bool {
-        let Some(href) = href else { return false };
-        if href.starts_with('#') {
-            return true;
-        }
-        match (href.split_once('#'), self.document_url) {
-            (Some((base, _)), Some(doc)) => doc.split('#').next() == Some(base),
-            _ => false,
-        }
+        let Some((base, fragment)) = href.and_then(|h| h.split_once('#')) else {
+            return false;
+        };
+        !fragment.is_empty()
+            && (base.is_empty() || self.document_url.and_then(|d| d.split('#').next()) == Some(base))
     }
 
     /// §4: a link is its own line. Text already on the line is flushed first, except a
@@ -551,14 +550,16 @@ impl<'a> Builder<'a> {
             _ => None,
         };
         let same_page = self.is_same_page(href);
-        let kind = if same_page { "same page link" } else { "link" };
+        let kind = if same_page { "same page link" } else { "Link" };
         if same_page {
             if let Some(n) = self.buffer.node_mut(node.id) {
                 n.attributes
                     .insert("same_page".to_owned(), "true".to_owned());
             }
         }
-        let speech = format!("{prefix}{}{text}", role_marker(kind));
+        // aria-current follows the role: "‹ Link › ‹Current Page› README".
+        let current = node.current_phrase().map(state_marker).unwrap_or_default();
+        let speech = format!("{prefix}{}{current}{text}", role_marker(kind));
         let line_text = squash(&format!("{prefix} {text}"));
         let off = self.emit(node.id, node.role.clone(), &line_text, speech);
         self.buffer.links.push(off);
@@ -648,8 +649,17 @@ impl<'a> Builder<'a> {
                 }
                 s
             }
+            // "Platform ‹ Button › ‹collapsed›", "Overview ‹ Button › ‹Current Page›".
             Role::Button => {
                 let mut s = format!("{name}{}", role_marker("Button"));
+                match node.states.expanded {
+                    Some(true) => s.push_str(&state_marker("expanded")),
+                    Some(false) => s.push_str(&state_marker("collapsed")),
+                    None => {}
+                }
+                if let Some(current) = node.current_phrase() {
+                    s.push_str(&state_marker(current));
+                }
                 if node.states.disabled {
                     s.push_str(&state_marker("Unavailable"));
                 }
@@ -1083,5 +1093,68 @@ mod tests {
         assert!(is_list_marker("12."));
         assert!(!is_list_marker("New"));
         assert!(!is_list_marker(""));
+    }
+
+    fn link(id: usize, href: &str, name: &str, current: Option<&str>) -> AomNode {
+        let mut node = AomNode::new(
+            id,
+            Role::Link {
+                href: Some(href.to_owned()),
+            },
+        )
+        .with_name(name);
+        if let Some(current) = current {
+            node.attributes
+                .insert("current".to_owned(), current.to_owned());
+        }
+        node
+    }
+
+    fn github_tabs() -> crate::buffer::VirtualBuffer {
+        let mut root = AomNode::new(0, Role::Document).with_children(vec![
+            link(1, "https://github.com/monatis/okur#", "README", Some("page")),
+            link(2, "https://github.com/monatis/okur#start", "Skip", None),
+            link(3, "#b", "Step two", Some("step")),
+            link(4, "https://example.com/", "Today", Some("true")),
+        ]);
+        root.attributes
+            .insert("url".to_owned(), "https://github.com/monatis/okur".to_owned());
+        crate::buffer::VirtualBuffer::from_aom(&root)
+    }
+
+    /// JAWS on Chrome, observed on the dev box (GitHub's README tab and a test page,
+    /// 2026-10-16): aria-current is said after the link's role, and a link to `#` alone is a
+    /// plain "Link", not a same page link.
+    #[test]
+    fn a_current_link_says_so_after_its_role() {
+        let buffer = github_tabs();
+        let speech: Vec<&str> = buffer.lines.iter().map(|l| l.speech.as_str()).collect();
+        let (link, same_page) = (role_marker("Link"), role_marker("same page link"));
+        assert_eq!(
+            speech,
+            vec![
+                format!("{link}{}README", state_marker("Current Page")),
+                format!("{same_page}Skip"),
+                format!("{same_page}{}Step two", state_marker("Current Step")),
+                format!("{link}{}Today", state_marker("Current")),
+            ]
+        );
+    }
+
+    /// Tab to a current link (dev box, as above): a same page link says the state after its
+    /// role, a plain link before it.
+    #[test]
+    fn a_focused_current_link_says_so() {
+        let mut cursor = crate::cursor::VirtualCursor::new(github_tabs());
+        assert_eq!(
+            cursor.focus_node(1).as_deref(),
+            Some("README \u{1d}Current Page\u{1e}   \u{1d} Link \u{1e} \nTo activate press Enter.")
+        );
+        assert_eq!(
+            cursor.focus_node(3).as_deref(),
+            Some(
+                "Step two  \u{1d} same page link \u{1e}  \u{1d}Current Step\u{1e} \nTo activate press Enter."
+            )
+        );
     }
 }

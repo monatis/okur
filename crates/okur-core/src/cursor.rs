@@ -363,19 +363,6 @@ impl VirtualCursor {
                     let name = node.name.as_deref().unwrap_or(&line.text);
                     return SpeechFormatter::format_frame(name);
                 }
-                Role::Link { ref href } => {
-                    let is_same_page = href.as_deref().map(|h| h.starts_with('#')).unwrap_or(false);
-                    let text = node
-                        .name
-                        .as_deref()
-                        .or(node.text.as_deref())
-                        .unwrap_or(&line.text);
-                    if is_same_page {
-                        return format!(" \u{001d} same page link \u{001e} {}", text);
-                    } else {
-                        return format!(" \u{001d} link \u{001e} {}", text);
-                    }
-                }
                 _ => {}
             }
         }
@@ -679,14 +666,7 @@ impl VirtualCursor {
                 "{name}  \u{1d} Combo box \u{1e}  \n{}",
                 node.value.as_deref().unwrap_or_default()
             ),
-            Role::Link { .. } => {
-                let kind = if attr("same_page") == Some("true") {
-                    "same page link"
-                } else {
-                    "link"
-                };
-                format!("{name}  \u{1d} {kind} \u{1e} ")
-            }
+            Role::Link { .. } => SpeechFormatter::format_link_focus(name, node),
             // A tab: its tab list as a group when focus enters it, then name, position and
             // selection [obs, 29/s2-s3].
             Role::Tab => {
@@ -1598,7 +1578,7 @@ impl VirtualCursor {
             }
             Role::Link { .. } => {
                 let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
-                SpeechFormatter::format_link(name, false)
+                SpeechFormatter::format_link_focus(name, node)
             }
             _ => node
                 .name
@@ -2113,14 +2093,10 @@ impl VirtualCursor {
         }
         if let Some(link) = self.buffer.find_link_node(offset) {
             self.current_node_id = Some(link.id);
-            let is_same_page = match link.role {
-                Role::Link {
-                    href: Some(ref h), ..
-                } => h.starts_with('#'),
-                _ => false,
-            };
-            let text = link.name.as_deref().or(link.text.as_deref()).unwrap_or("");
-            return SpeechFormatter::format_link(text, is_same_page);
+            // The link's line, as reading speaks it ("•  ‹ same page link › News").
+            if let Some(line) = self.buffer.line_at_offset(offset) {
+                return self.format_line_announcement(line);
+            }
         }
         if let Some(fc) = self.buffer.find_form_control_node(offset) {
             self.current_node_id = Some(fc.id);
