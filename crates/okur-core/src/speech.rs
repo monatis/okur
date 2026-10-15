@@ -52,16 +52,6 @@ impl SpeechFormatter {
         }
     }
 
-    /// Formats an inline frame exit announcement matching JAWS conventions: `"<Name> frame end"`.
-    pub fn format_frame_end(name: &str) -> String {
-        let trimmed = name.trim();
-        if trimmed.is_empty() {
-            "frame end".to_string()
-        } else {
-            format!("{} frame end", trimmed)
-        }
-    }
-
     /// Formats page title update or SPA route transition matching JAWS.
     pub fn format_page_title_change(title: &str) -> String {
         format!("Page has loaded: {}", title.trim())
@@ -408,31 +398,6 @@ impl SpeechFormatter {
         }
     }
 
-    /// Formats a list container announcement (`L`).
-    pub fn format_list(item_count: usize) -> String {
-        format!("List of {} items", item_count)
-    }
-
-    /// Formats a list item announcement (`I`).
-    pub fn format_list_item(text: &str, has_link: bool) -> String {
-        if has_link {
-            format!("•  \u{001d} same page link \u{001e} {}", text)
-        } else {
-            text.to_string()
-        }
-    }
-
-    /// Formats an ARIA landmark / region announcement (`R` / `;`).
-    pub fn format_landmark(landmark_type: &str, name: Option<&str>) -> String {
-        if let Some(n) = name {
-            format!("{} {} region", n, landmark_type)
-        } else if landmark_type == "banner" {
-            "banner".to_string()
-        } else {
-            format!("{} region", landmark_type)
-        }
-    }
-
     /// Formats a single word for speech.
     pub fn format_word(word: &str) -> String {
         word.to_string()
@@ -590,11 +555,6 @@ impl SpeechFormatter {
             }
         }
         format!("Row {}", row)
-    }
-
-    /// Formats mathematical equation announcement matching JAWS conventions.
-    pub fn format_math(math_text: &str) -> String {
-        format!("math {}", math_text)
     }
 
     /// The font part of Say Font: attributes, then family and size, e.g. `bold  Times New

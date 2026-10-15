@@ -7,7 +7,6 @@
 //! `text_feedback` (what edit keys say), `page` (pages, changes, selections, live regions) and
 //! `state` (list, desktop, taskbar and File Explorer navigation state).
 
-use crate::aom::{AomNode, Role};
 use crate::buffer::VirtualBuffer;
 use crate::cursor::VirtualCursor;
 use crate::event::{AccessibilityEvent, FocusEvent};
@@ -26,10 +25,7 @@ mod state;
 mod tests;
 mod text_feedback;
 
-pub use state::{
-    ActiveElementList, AppMode, DesktopItem, NativeDesktopState, NativeExplorerState, ShellElement,
-    ShellNavState,
-};
+pub use state::{ActiveElementList, AppMode, DesktopItem, NativeDesktopState, NativeExplorerState};
 
 /// A Virtual Viewer that opens once its text is read; `window` is Virtualize Window, not
 /// Virtualize Current Control.
@@ -50,7 +46,6 @@ pub struct ScreenReaderEngine {
     pub active_element_list: Option<ActiveElementList>,
     pub app_mode: AppMode,
     pub desktop_state: Option<NativeDesktopState>,
-    pub shell_nav_state: Option<ShellNavState>,
     pub explorer_state: Option<NativeExplorerState>,
     pub last_window_title: Option<String>,
     /// The active window's class, with `last_window_title` identifying the window.
@@ -101,7 +96,6 @@ impl ScreenReaderEngine {
             active_element_list: None,
             app_mode: AppMode::VirtualBuffer,
             desktop_state: None,
-            shell_nav_state: None,
             explorer_state: None,
             last_window_title: None,
             last_window_kind: None,
@@ -133,105 +127,6 @@ impl ScreenReaderEngine {
         self.forms_mode = false;
         self.active_element_list = None;
         self.app_mode = AppMode::VirtualBuffer;
-    }
-
-    /// Inspects an AOM tree and loads native desktop and shell navigation state if present.
-    pub fn load_desktop_from_aom(&mut self, root: &AomNode) {
-        fn find_desktop_list(node: &AomNode) -> Option<&AomNode> {
-            if node.role == Role::List
-                && (node.name.as_deref() == Some("FolderView")
-                    || node.attributes.get("class").map(|s| s.as_str()) == Some("SysListView32")
-                    || node.attributes.get("window_type").map(|s| s.as_str()) == Some("desktop"))
-            {
-                return Some(node);
-            }
-            for child in &node.children {
-                if let Some(found) = find_desktop_list(child) {
-                    return Some(found);
-                }
-            }
-            None
-        }
-
-        fn find_taskbar_buttons(node: &AomNode, out: &mut Vec<ShellElement>) {
-            if node.role == Role::Button {
-                out.push(ShellElement {
-                    node_id: node.id,
-                    name: node.name.clone().unwrap_or_default(),
-                    role: node.role.clone(),
-                    container: node.attributes.get("container").cloned(),
-                    help: node.attributes.get("help").cloned(),
-                });
-            }
-            for child in &node.children {
-                find_taskbar_buttons(child, out);
-            }
-        }
-
-        fn find_taskbar_window(node: &AomNode) -> Option<&AomNode> {
-            if node.role == Role::Window
-                && (node.name.as_deref() == Some("Taskbar")
-                    || node.attributes.get("class").map(|s| s.as_str()) == Some("Shell_TrayWnd"))
-            {
-                return Some(node);
-            }
-            for child in &node.children {
-                if let Some(found) = find_taskbar_window(child) {
-                    return Some(found);
-                }
-            }
-            None
-        }
-
-        if let Some(list_node) = find_desktop_list(root) {
-            let container_name = list_node
-                .name
-                .clone()
-                .unwrap_or_else(|| "FolderView".to_string());
-            let mut items = Vec::new();
-            let total_count = list_node.children.len();
-            for (idx, child) in list_node.children.iter().enumerate() {
-                if child.role == Role::ListItem {
-                    let index = child
-                        .attributes
-                        .get("item_index")
-                        .and_then(|s| s.parse().ok())
-                        .unwrap_or(idx + 1);
-                    let total = child
-                        .attributes
-                        .get("item_count")
-                        .and_then(|s| s.parse().ok())
-                        .unwrap_or(total_count);
-                    items.push(DesktopItem {
-                        node_id: child.id,
-                        name: child.name.clone().unwrap_or_default(),
-                        index,
-                        total,
-                    });
-                }
-            }
-
-            if !items.is_empty() {
-                self.app_mode = AppMode::NativeDesktop;
-                self.desktop_state = Some(NativeDesktopState {
-                    container_name,
-                    items,
-                    current_index: 0,
-                    entered: false,
-                });
-            }
-        }
-
-        let mut shell_elements = Vec::new();
-        if let Some(tb) = find_taskbar_window(root) {
-            find_taskbar_buttons(tb, &mut shell_elements);
-        }
-        if !shell_elements.is_empty() {
-            self.shell_nav_state = Some(ShellNavState {
-                elements: shell_elements,
-                current_index: 0,
-            });
-        }
     }
 
     /// Handles a live keyboard event from the low-level hook.
