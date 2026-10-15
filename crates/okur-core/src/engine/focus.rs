@@ -191,7 +191,7 @@ impl ScreenReaderEngine {
         if window_changed {
             self.native_focus.reset();
         }
-        let control_speech = self.native_focus.focus(focus)?;
+        let control_speech = self.native_focus.focus(focus)?.render();
         self.last_native_focus = Some(focus.clone());
 
         let app = self.app_for(focus);
@@ -252,7 +252,7 @@ impl ScreenReaderEngine {
                 let mut speech = "Leaving menus".to_owned();
                 if let Some(focus) = &self.last_native_focus {
                     speech.push('\n');
-                    speech.push_str(&crate::native_focus::focus_speech(focus, None));
+                    speech.push_str(&crate::native_focus::focus_speech(focus, None).render());
                 }
                 self.speech.speak(&speech, true);
                 Some(speech)

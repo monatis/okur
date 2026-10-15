@@ -1,4 +1,5 @@
 pub mod actions;
+pub mod announcement;
 pub mod aom;
 pub mod apps;
 pub mod buffer;

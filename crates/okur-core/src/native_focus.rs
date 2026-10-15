@@ -10,6 +10,7 @@
 //!
 //! Lines are separated by `\n`, as in JAWS's speech history.
 
+use crate::announcement::{Announcement, Line, Part};
 use crate::aom::Role;
 use crate::event::FocusEvent;
 use crate::linearize::{role_marker, state_marker};
@@ -34,65 +35,81 @@ fn named(name: &str) -> String {
     name.trim().to_owned()
 }
 
+fn text(text: impl Into<String>) -> Part {
+    Part::Text(text.into())
+}
+
+fn role(role: &str) -> Part {
+    Part::Role(role.to_owned())
+}
+
+fn state(state: &str) -> Part {
+    Part::State(state.to_owned())
+}
+
 /// The entry line for the focused control's container, or `None` when the container has
 /// none (windows, panes, unnamed groups).
-fn container_entry(focus: &FocusEvent) -> Option<String> {
+fn container_entry(focus: &FocusEvent) -> Option<Line> {
     let name = named(focus.container_name.as_deref().unwrap_or_default());
-    match focus.container_role.as_ref()? {
-        Role::Group if !name.is_empty() => Some(name),
-        Role::List if focus.container_is_list_view => {
-            Some(format!("{name}{}", role_marker("List view")))
-        }
-        Role::List => Some(format!("{name}{}", role_marker("List box"))),
-        Role::Tree => Some(format!("{name}{}", role_marker("Tree view"))),
-        _ => None,
-    }
+    let kind = match focus.container_role.as_ref()? {
+        Role::Group if !name.is_empty() => return Some(Line::text(name)),
+        Role::List if focus.container_is_list_view => "List view",
+        Role::List => "List box",
+        Role::Tree => "Tree view",
+        _ => return None,
+    };
+    Some(Line::new(vec![text(name), role(kind)]))
 }
 
-fn position(focus: &FocusEvent) -> Option<String> {
+fn position(focus: &FocusEvent) -> Option<Line> {
     match (focus.item_index, focus.item_count) {
-        (Some(i), Some(n)) => Some(format!("{i} of {n}")),
+        (Some(i), Some(n)) => Some(Line::text(format!("{i} of {n}"))),
         _ => None,
     }
 }
 
-fn checked(focus: &FocusEvent) -> String {
+fn checked(focus: &FocusEvent) -> Part {
     if focus.states.checked == Some(true) {
-        state_marker("checked")
+        state("checked")
     } else {
-        state_marker("not checked")
+        state("not checked")
     }
 }
 
 /// The control's own lines (2–4 above).
 /// `entering` is false when focus moved within the same container (arrow keys in a list),
 /// where JAWS speaks the item without the container's usage hint [obs, 303/s1, s10–s11].
-fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<String> {
+fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
     let name = named(focus.name.as_deref().unwrap_or_default());
-    let value = focus.value.as_deref().map(named).filter(|v| !v.is_empty());
+    let value = focus
+        .value
+        .as_deref()
+        .map(named)
+        .filter(|v| !v.is_empty())
+        .map(Line::text);
     let mut lines = Vec::new();
     match focus.role {
         // A combo box's text field. JAWS 2025 on the Run dialog's Open field, observed on the
         // dev box (2026-10-15; research): "Open: edit combo | C: | 1 of 6 | To set the
         // value use the Arrow keys or type the value. | Alt+o".
         Role::Edit if focus.container_role == Some(Role::ComboBox) => {
-            lines.push(format!("{name}{}", role_marker("edit combo")));
+            lines.push(Line::new(vec![text(name), role("edit combo")]));
             lines.extend(value);
             lines.extend(position(focus));
-            lines.push(EDIT_COMBO_HINT.to_owned());
-            lines.extend(focus.access_key.clone());
+            lines.push(Line::text(EDIT_COMBO_HINT).on_arrival());
+            lines.extend(focus.access_key.clone().map(|k| Line::text(k).on_arrival()));
         }
         // A native text document (Windows 11 Notepad's RichEdit, MSAA "editable text"): an
         // edit whose text is not read on arrival. JAWS 2025, dev box: "viewer-test.txt -
         // Notepad | Text editor edit | Contains text".
         Role::Document if !focus.in_document && focus.read_only == Some(false) => {
-            lines.push(format!("{name}{}", role_marker("edit")));
+            lines.push(Line::new(vec![text(name), role("edit")]));
             if focus
                 .text
                 .as_ref()
                 .is_some_and(|t| !t.text.trim().is_empty())
             {
-                lines.push(CONTAINS_TEXT.to_owned());
+                lines.push(Line::text(CONTAINS_TEXT).on_arrival());
             }
         }
         Role::Edit => {
@@ -102,85 +119,90 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<String> {
             } else {
                 name
             };
-            lines.push(format!("{name}{}", role_marker("Edit")));
+            lines.push(Line::new(vec![text(name), role("Edit")]));
             lines.extend(value);
-            lines.push("Type in text.".to_owned());
+            lines.push(Line::text("Type in text."));
         }
         Role::CheckBox => {
-            lines.push(format!(
-                "{name}{}{}",
-                role_marker("check box"),
-                checked(focus)
-            ));
-            lines.push(if focus.states.checked == Some(true) {
-                "To clear checkmark press Spacebar.".to_owned()
+            lines.push(Line::new(vec![
+                text(name),
+                role("check box"),
+                checked(focus),
+            ]));
+            lines.push(Line::text(if focus.states.checked == Some(true) {
+                "To clear checkmark press Spacebar."
             } else {
-                "To check press Spacebar.".to_owned()
-            });
+                "To check press Spacebar."
+            }));
         }
         Role::RadioButton => {
-            lines.push(format!(
-                "{name}{}{}",
-                role_marker("radio button"),
-                checked(focus)
-            ));
+            lines.push(Line::new(vec![
+                text(name),
+                role("radio button"),
+                checked(focus),
+            ]));
             lines.extend(position(focus));
-            lines.push("To change the selection press Up or Down Arrow.".to_owned());
+            lines.push(Line::text(
+                "To change the selection press Up or Down Arrow.",
+            ));
         }
         Role::ComboBox => {
-            lines.push(format!("{name}{}", role_marker("Combo box")));
+            lines.push(Line::new(vec![text(name), role("Combo box")]));
             lines.extend(value);
             lines.extend(position(focus));
-            lines.push("To change the selection use the Arrow keys.".to_owned());
+            lines.push(Line::text("To change the selection use the Arrow keys."));
         }
         Role::ListItem => {
-            lines.push(name);
-            lines.extend(focus.columns.iter().map(|c| named(c)));
+            lines.push(Line::text(name));
+            lines.extend(focus.columns.iter().map(|c| Line::text(named(c))));
             lines.extend(position(focus));
             if entering {
-                lines.push(if focus.container_is_list_view {
-                    "To move to items use the Arrow keys.".to_owned()
+                lines.push(Line::text(if focus.container_is_list_view {
+                    "To move to items use the Arrow keys."
                 } else {
-                    "To move to an item press the Arrow keys.".to_owned()
-                });
+                    "To move to an item press the Arrow keys."
+                }));
             }
         }
         Role::TreeItem => {
             // Expanded items say "open" [obs, 303/s7]. Moving up to an already visited
             // parent drops the position (303/s6); that rule is not known yet.
-            let state = match focus.states.expanded {
-                Some(true) => state_marker("open"),
-                Some(false) => state_marker("closed"),
-                None => String::new(),
-            };
-            lines.push(format!("{name}{state}"));
+            let mut parts = vec![text(name)];
+            match focus.states.expanded {
+                Some(true) => parts.push(state("open")),
+                Some(false) => parts.push(state("closed")),
+                None => {}
+            }
+            lines.push(Line::new(parts));
             lines.extend(position(focus));
             if entering {
-                lines.push("To move through or expand items use the Arrow keys.".to_owned());
+                lines.push(Line::text(
+                    "To move through or expand items use the Arrow keys.",
+                ));
             }
         }
         Role::Tab => {
-            let selected = if focus.states.selected == Some(true) {
-                state_marker("selected")
-            } else {
-                String::new()
-            };
-            lines.push(format!("{name}{}{selected}", role_marker("Tab")));
-            lines.push("To switch pages, press Control+PageDown.".to_owned());
+            let mut parts = vec![text(name), role("Tab")];
+            if focus.states.selected == Some(true) {
+                parts.push(state("selected"));
+            }
+            lines.push(Line::new(parts));
+            lines.push(Line::text("To switch pages, press Control+PageDown."));
         }
         Role::MenuButton => {
-            lines.push(format!("{name}{}", role_marker("button menu")));
-            lines
-                .push("Press space to activate the menu, then navigate with arrow keys".to_owned());
+            lines.push(Line::new(vec![text(name), role("button menu")]));
+            lines.push(Line::text(
+                "Press space to activate the menu, then navigate with arrow keys",
+            ));
         }
         Role::Button => {
-            lines.push(format!("{name}{}", role_marker("Button")));
-            lines.push("To activate press spacebar.".to_owned());
+            lines.push(Line::new(vec![text(name), role("Button")]));
+            lines.push(Line::text("To activate press spacebar."));
         }
         // A window taking focus is announced by its title alone (the window change).
         Role::Window => {}
         _ => {
-            lines.push(name);
+            lines.push(Line::text(name));
             lines.extend(value);
         }
     }
@@ -225,7 +247,7 @@ impl NativeFocus {
     }
 
     /// Speech for a focus event, or `None` for a repeat of the previous one.
-    pub fn focus(&mut self, focus: &FocusEvent) -> Option<String> {
+    pub fn focus(&mut self, focus: &FocusEvent) -> Option<Announcement> {
         let key = FocusKey::of(focus);
         if self.last.as_ref() == Some(&key) {
             return None;
@@ -240,7 +262,7 @@ impl NativeFocus {
                 // Arrow keys in a tree announce a level different from the last one
                 // announced [obs, 303/s5, s8]; Tab into the tree does not (303/s4).
                 if self.tree_level != Some(level) {
-                    speech = format!("level {level}\n{speech}");
+                    speech.lines.insert(0, Line::text(format!("level {level}")));
                 }
                 self.tree_level = Some(level);
             }
@@ -253,19 +275,15 @@ impl NativeFocus {
 
 /// Speech for focus landing on a native control. `previous` is the container of the
 /// previously focused control; the container is announced only when it differs.
-pub fn focus_speech(focus: &FocusEvent, previous: Option<&ContainerKey>) -> String {
+pub fn focus_speech(focus: &FocusEvent, previous: Option<&ContainerKey>) -> Announcement {
     let mut lines = Vec::new();
     let container = ContainerKey::of(focus);
     let within = container.is_some() && container.as_ref() == previous;
     if !within {
         lines.extend(container_entry(focus));
     }
-    lines.extend(
-        control_lines(focus, !within)
-            .into_iter()
-            .filter(|l| !l.is_empty()),
-    );
-    lines.join("\n")
+    lines.extend(control_lines(focus, !within));
+    Announcement::new(lines)
 }
 
 /// The focused control's own line (name, role and state, without its hint), as JAWS reads
@@ -328,17 +346,18 @@ const CONTAINS_TEXT: &str = "Contains text";
 /// button keeps its hint. JAWS 2025 on the dev box (research): "Open: edit combo | C: |
 /// 1 of 6", "OK Button | To activate press spacebar.", "Text editor edit".
 pub fn say_focus(focus: &FocusEvent) -> String {
-    let access_key = focus.access_key.as_deref();
     control_lines(focus, false)
-        .into_iter()
-        .filter(|l| l != EDIT_COMBO_HINT && l != CONTAINS_TEXT && Some(l.as_str()) != access_key)
+        .iter()
+        .filter(|l| !l.on_arrival)
+        .map(Line::render)
         .collect::<Vec<_>>()
         .join("\n")
 }
 
 pub fn focus_line(focus: &FocusEvent) -> String {
     control_lines(focus, false)
-        .into_iter()
+        .iter()
+        .map(Line::render)
         .find(|l| !l.is_empty())
         .unwrap_or_default()
 }
@@ -357,13 +376,22 @@ pub fn role_word(role: &Role) -> Option<&'static str> {
     })
 }
 
+/// Lines joined as they are, empty ones included.
+fn joined(lines: Vec<Line>) -> String {
+    lines
+        .iter()
+        .map(Line::render)
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
 /// Speech for a change of the focused native control, given its state before and after.
 /// `None` when nothing JAWS speaks changed (Windows fires several events per change).
 pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<String> {
     let name = named(after.name.as_deref().unwrap_or_default());
     match after.role {
         Role::CheckBox if before.states.checked != after.states.checked => {
-            Some(checked(after).trim().to_owned())
+            Some(checked(after).render().trim().to_owned())
         }
         // Arrow keys in a radio group uncheck the old radio before focus moves to the new
         // one; JAWS speaks only the radio that becomes checked [obs, 304/s6–s7].
@@ -371,25 +399,23 @@ pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<String> 
             if before.states.checked != after.states.checked
                 && after.states.checked == Some(true) =>
         {
-            Some(checked(after).trim().to_owned())
+            Some(checked(after).render().trim().to_owned())
         }
         Role::TreeItem if before.states.expanded != after.states.expanded => {
             // [obs, 303/s7, 304/s16–s17]: "Documents | ‹open› | 2 items",
             // "Documents | ‹closed› | 1 of 2".
-            Some(match after.states.expanded {
+            let mut lines = vec![Line::text(name)];
+            match after.states.expanded {
                 Some(true) => {
-                    let mut s = format!("{name}\n{}", state_marker("open"));
-                    if let Some(n) = after.child_count {
-                        s.push_str(&format!("\n{n} items"));
-                    }
-                    s
+                    lines.push(Line::new(vec![state("open")]));
+                    lines.extend(after.child_count.map(|n| Line::text(format!("{n} items"))));
                 }
                 _ => {
-                    let mut lines = vec![name, state_marker("closed")];
+                    lines.push(Line::new(vec![state("closed")]));
                     lines.extend(position(after));
-                    lines.join("\n")
                 }
-            })
+            }
+            Some(joined(lines))
         }
         // A combo box reports no expanded state through UIA while collapsed.
         Role::ComboBox
@@ -398,19 +424,19 @@ pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<String> 
         {
             if after.states.expanded == Some(true) {
                 // Alt+Down [obs, 304/s11]: "Open List Box | Germany | 2 of 3".
-                let mut lines = vec!["Open List Box".to_owned()];
-                lines.extend(after.value.iter().map(|v| named(v)));
+                let mut lines = vec![Line::text("Open List Box")];
+                lines.extend(after.value.iter().map(|v| Line::text(named(v))));
                 lines.extend(position(after));
-                Some(lines.join("\n"))
+                Some(joined(lines))
             } else {
                 // Closing it re-announces the combo box as on focus [obs, 304/s13].
-                Some(focus_speech(after, None))
+                Some(focus_speech(after, None).render())
             }
         }
         Role::ComboBox if before.value != after.value => {
-            let mut lines: Vec<String> = after.value.iter().map(|v| named(v)).collect();
+            let mut lines: Vec<Line> = after.value.iter().map(|v| Line::text(named(v))).collect();
             lines.extend(position(after));
-            Some(lines.join("\n"))
+            Some(joined(lines))
         }
         _ => None,
     }
@@ -571,11 +597,11 @@ mod tests {
         let mut name = event(Role::Edit, "Name:");
         name.value = Some("Ada".to_owned());
         assert_eq!(
-            norm(&focus_speech(&name, None)),
+            norm(&focus_speech(&name, None).render()),
             norm("Name:  \u{1d} Edit \u{1e} \nAda\nType in text.")
         );
         assert_eq!(
-            norm(&focus_speech(&event(Role::Edit, "Notes:"), None)),
+            norm(&focus_speech(&event(Role::Edit, "Notes:"), None).render()),
             norm("Notes:  \u{1d} Edit \u{1e} \nType in text.")
         );
     }
@@ -588,12 +614,12 @@ mod tests {
             ..NodeStates::default()
         };
         assert_eq!(
-            norm(&focus_speech(&on, None)),
+            norm(&focus_speech(&on, None).render()),
             norm("Subscribe to updates  \u{1d} check box \u{1e}   \u{1d}checked\u{1e} \nTo clear checkmark press Spacebar.")
         );
         let off = event(Role::CheckBox, "Remember me");
         assert_eq!(
-            norm(&focus_speech(&off, None)),
+            norm(&focus_speech(&off, None).render()),
             norm("Remember me  \u{1d} check box \u{1e}   \u{1d}not checked\u{1e} \nTo check press Spacebar.")
         );
     }
@@ -612,11 +638,13 @@ mod tests {
         );
         pro.states.checked = Some(true);
         assert_eq!(
-            norm(&focus_speech(&pro, None)),
+            norm(&focus_speech(&pro, None).render()),
             norm("Plan \nPro  \u{1d} radio button \u{1e}   \u{1d}checked\u{1e} \n2 of 3\nTo change the selection press Up or Down Arrow.")
         );
         let inside = ContainerKey::of(&pro);
-        assert!(!focus_speech(&pro, inside.as_ref()).starts_with("Plan"));
+        assert!(!focus_speech(&pro, inside.as_ref())
+            .render()
+            .starts_with("Plan"));
     }
 
     /// Arrow keys within a list speak the item without the hint [obs, 303/s1, s10].
@@ -634,7 +662,7 @@ mod tests {
         );
         let list = ContainerKey::of(&cherries);
         assert_eq!(
-            norm(&focus_speech(&cherries, list.as_ref())),
+            norm(&focus_speech(&cherries, list.as_ref()).render()),
             norm("Cherries \n3 of 3")
         );
         let mut notes = at(
@@ -650,7 +678,7 @@ mod tests {
         notes.columns = vec!["2 KB".to_owned()];
         let view = ContainerKey::of(&notes);
         assert_eq!(
-            norm(&focus_speech(&notes, view.as_ref())),
+            norm(&focus_speech(&notes, view.as_ref()).render()),
             norm("notes.txt\n2 KB \n2 of 3")
         );
     }
@@ -668,7 +696,7 @@ mod tests {
             3,
         );
         assert_eq!(
-            norm(&focus_speech(&fruit, None)),
+            norm(&focus_speech(&fruit, None).render()),
             norm("Fruit:  \u{1d} List box \u{1e} \nBananas \n2 of 3\nTo move to an item press the Arrow keys.")
         );
 
@@ -684,7 +712,7 @@ mod tests {
         );
         file.columns = vec!["24 KB".to_owned()];
         assert_eq!(
-            norm(&focus_speech(&file, None)),
+            norm(&focus_speech(&file, None).render()),
             norm(" \u{1d} List view \u{1e} \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.")
         );
 
@@ -700,7 +728,7 @@ mod tests {
         );
         docs.states.expanded = Some(false);
         assert_eq!(
-            norm(&focus_speech(&docs, None)),
+            norm(&focus_speech(&docs, None).render()),
             norm(" \u{1d} Tree view \u{1e} \nDocuments  \u{1d}closed\u{1e} \n1 of 2\nTo move through or expand items use the Arrow keys.")
         );
     }
@@ -710,17 +738,17 @@ mod tests {
         let mut country = at(event(Role::ComboBox, "Country:"), 2, 3);
         country.value = Some("Germany".to_owned());
         assert_eq!(
-            norm(&focus_speech(&country, None)),
+            norm(&focus_speech(&country, None).render()),
             norm("Country:  \u{1d} Combo box \u{1e} \nGermany\n2 of 3\nTo change the selection use the Arrow keys.")
         );
         let mut general = event(Role::Tab, "General");
         general.states.selected = Some(true);
         assert_eq!(
-            norm(&focus_speech(&general, None)),
+            norm(&focus_speech(&general, None).render()),
             norm("General  \u{1d} Tab \u{1e}   \u{1d}selected\u{1e} \nTo switch pages, press Control+PageDown.")
         );
         assert_eq!(
-            norm(&focus_speech(&event(Role::Button, "OK"), None)),
+            norm(&focus_speech(&event(Role::Button, "OK"), None).render()),
             norm("OK  \u{1d} Button \u{1e} \nTo activate press spacebar.")
         );
     }
@@ -735,7 +763,7 @@ mod tests {
         field.item_count = Some(6);
         field.access_key = Some("Alt+o".to_owned());
         assert_eq!(
-            norm(&focus_speech(&field, None)),
+            norm(&focus_speech(&field, None).render()),
             norm(
                 "Open:  \u{1d} edit combo \u{1e} \nC:\n1 of 6\n\
                  To set the value use the Arrow keys or type the value.\nAlt+o"
@@ -770,7 +798,7 @@ mod tests {
             word: None,
         });
         assert_eq!(
-            norm(&focus_speech(&notepad, None)),
+            norm(&focus_speech(&notepad, None).render()),
             norm("Text editor  \u{1d} edit \u{1e} \nContains text")
         );
         assert_eq!(
