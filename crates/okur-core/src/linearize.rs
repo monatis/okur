@@ -1157,4 +1157,30 @@ mod tests {
             )
         );
     }
+
+    /// Tab into a text area with text (JAWS on the dev box, 2026-10-16: "Notes edit |
+    /// Contains text | Type in text."): its text is not read, a one-line field's is.
+    #[test]
+    fn a_focused_text_area_says_it_contains_text() {
+        let mut notes = AomNode::new(1, Role::Edit)
+            .with_name("Notes")
+            .with_value("1. The quick brown fox\n2. jumps over the lazy dog");
+        notes
+            .attributes
+            .insert("multiline".to_owned(), "true".to_owned());
+        let name = AomNode::new(2, Role::Edit)
+            .with_name("Name")
+            .with_value("Ada");
+        let root = AomNode::new(0, Role::Document).with_children(vec![notes, name]);
+        let mut cursor =
+            crate::cursor::VirtualCursor::new(crate::buffer::VirtualBuffer::from_aom(&root));
+        assert_eq!(
+            cursor.focus_node(1).as_deref(),
+            Some("Notes \u{1d} edit \u{1e} \nContains text")
+        );
+        assert_eq!(
+            cursor.focus_node(2).as_deref(),
+            Some("Name \u{1d} Edit \u{1e} \nAda")
+        );
+    }
 }

@@ -313,8 +313,13 @@ impl SpeechFormatter {
                 if required {
                     s.push_str("\n \u{1d}Required\u{1e} ");
                 }
+                // A multi-line field with text says so, not its text (a text area, a web code
+                // editor): "Notes edit | Contains text" (JAWS on the dev box).
                 if !password {
                     match node.value.as_deref().filter(|v| !v.is_empty()) {
+                        Some(_) if attr("multiline") == Some("true") => {
+                            s.push_str("\nContains text")
+                        }
                         Some(v) => s.push_str(&format!("\n{v}")),
                         None => s.push_str("\nblank"),
                     }
