@@ -22,6 +22,18 @@ To record one:
 | 321 | Virtualize Window in a console: opening line, Insert+T ("Virtual Viewer"), first and last lines, Escape | `desktop-console.ps1` (here) |
 | 322 | Virtualize Window on a WinForms form from a one-line field, and Virtualize Current Control on its list view | `desktop-forms.ps1` |
 | 323 | A file's Properties (a property sheet): its page, Say Window, Virtualize Window, switching pages | `desktop-property-sheet.ps1` (here) |
+| 210 | Read down: aria-current links (`page`, `step`, a link to `#`), role descriptions, popup buttons | `web-app-patterns.html` (here) |
+| 211 | An autocomplete: Tab, Enter, type A, Down and Up through its options (aria-activedescendant), Enter | `web-app-patterns.html` (here) |
+| 212 | Tab and Shift+Tab move on from the virtual cursor, not from the focus | `web-app-patterns.html` (here) |
+| 213 | Ctrl+Right and Ctrl+Left in a textarea through "dog," and "std::io" | `web-app-patterns.html` (here) |
+| 214 | Tab from a heading into a link in a list in a navigation region | `web-app-patterns.html` (here) |
+| 215 | A role="application" region: its name on the way in, H, Down and Escape go to the page | `web-app-patterns.html` (here) |
+
+210–215 were written on 2026-10-16 from dev-box JAWS observations (research); the handoff
+`docs/handoff/2026-10-16-responsiveness-and-web-apps.md` quotes what JAWS said there. The dev
+box's JAWS settings differ from old-pc's (it says no "banner"), so compare the recordings with
+those notes before trusting either. The H counts assume JAWS's first H after Ctrl+Home lands
+on the page's h1, as it did on the dev box.
 
 322 and 323 need `run-scenario.ps1` from 2026-10-15 or later: a property sheet is an owned
 window, which its launch finds among the desktop's windows rather than as a process's main

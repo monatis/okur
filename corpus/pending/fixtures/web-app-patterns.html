@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Web App Patterns</title>
+  <style>[role=option][aria-selected=true] { background: #cde; }</style>
+</head>
+<body>
+  <h1>Web App Patterns</h1>
+
+  <h2>Current links</h2>
+  <ul>
+    <li><a href="#overview" aria-current="page">Overview</a></li>
+    <li><a href="#">Settings</a></li>
+    <li><a href="#step2" aria-current="step">Step two</a></li>
+  </ul>
+
+  <h2>Described controls</h2>
+  <p><button aria-roledescription="slide control">Next slide</button></p>
+  <p><a href="#rust" aria-roledescription="chip">Rust</a></p>
+  <p><input type="checkbox" id="wrap" aria-roledescription="toggle"><label for="wrap">Wrap</label></p>
+
+  <h2>Popup buttons</h2>
+  <p><button aria-haspopup="true" aria-label="Outline">=</button></p>
+  <p><button aria-haspopup="menu" aria-expanded="false">Actions</button></p>
+  <p><button aria-haspopup="listbox">Pick one</button></p>
+
+  <h2>Fruit search</h2>
+  <label for="q">Fruit</label>
+  <input id="q" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false"
+         aria-controls="fruits" autocomplete="off">
+  <ul id="fruits" role="listbox" aria-label="Fruits" hidden>
+    <li role="option" id="apple">Apple</li>
+    <li role="option" id="apricot">Apricot</li>
+    <li role="option" id="avocado">Avocado</li>
+  </ul>
+
+  <h2>Tab from here</h2>
+  <p><button>Start</button></p>
+  <p><a href="#skipped">Skipped link</a></p>
+  <div role="group" aria-label="Featured"><p>Group text</p></div>
+  <p><label for="notes">Notes</label>
+     <textarea id="notes" rows="3" cols="40">the lazy dog, then reads std::io again</textarea></p>
+
+  <h2>Repository files</h2>
+  <nav aria-label="Files">
+    <ul><li><a href="#readme" aria-current="page">README</a></li></ul>
+  </nav>
+
+  <h2>Workbench region</h2>
+  <div role="application" aria-label="Workbench">
+    <button>First tool</button>
+    <button>Second tool</button>
+    <p id="keys">Keys:</p>
+  </div>
+  <p>End of page</p>
+
+  <script>
+    // The autocomplete: typing opens the list, Down and Up move the option the field points
+    // at (aria-activedescendant), Enter takes it, Escape closes the list.
+    const field = document.getElementById('q');
+    const list = document.getElementById('fruits');
+    const options = [...list.querySelectorAll('[role=option]')];
+    let current = -1;
+    function open(isOpen) {
+      list.hidden = !isOpen;
+      field.setAttribute('aria-expanded', isOpen);
+      if (!isOpen) {
+        current = -1;
+        field.removeAttribute('aria-activedescendant');
+        options.forEach(o => o.setAttribute('aria-selected', 'false'));
+      }
+    }
+    function select(index) {
+      current = (index + options.length) % options.length;
+      options.forEach((o, i) => o.setAttribute('aria-selected', i === current));
+      field.setAttribute('aria-activedescendant', options[current].id);
+    }
+    field.addEventListener('input', () => open(field.value.length > 0));
+    field.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown') { if (list.hidden) open(true); select(current + 1); e.preventDefault(); }
+      else if (e.key === 'ArrowUp' && !list.hidden) { select(current - 1); e.preventDefault(); }
+      else if (e.key === 'Enter' && current >= 0) { field.value = options[current].textContent; open(false); e.preventDefault(); }
+      else if (e.key === 'Escape') { open(false); }
+    });
+    // The application region shows the keys it got.
+    const keys = document.getElementById('keys');
+    document.querySelector('[role=application]').addEventListener('keydown', e => {
+      keys.textContent += ' ' + e.key;
+    });
+  </script>
+</body>
+</html>

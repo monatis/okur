@@ -1,0 +1,24 @@
+{
+  "id": "214-web-focus-containers",
+  "name": "Tab from a heading into a link in a list in a navigation region names them",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Escape",
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "H" },
+    { "id": "s2", "type": "key", "command": "H" },
+    { "id": "s3", "type": "key", "command": "H" },
+    { "id": "s4", "type": "key", "command": "H" },
+    { "id": "s5", "type": "key", "command": "H" },
+    { "id": "s6", "type": "key", "command": "H" },
+    { "id": "s7", "type": "key", "command": "H" },
+    { "id": "s8", "type": "key", "command": "Tab" }
+  ]
+}
