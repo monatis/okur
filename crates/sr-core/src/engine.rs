@@ -2065,6 +2065,17 @@ impl ScreenReaderEngine {
     /// echo (characters).
     fn edit_key_feedback(&mut self, event: &KeyEvent) {
         if let Some(key) = crate::editing::EditKey::of(event) {
+            // A multi-line native document (Windows 11 Notepad) reads some keys otherwise.
+            let document = !self.forms_mode
+                && self
+                    .last_native_focus
+                    .as_ref()
+                    .is_some_and(|f| f.role == Role::Document);
+            let key = if document {
+                key.in_document(event.key, event.modifiers.ctrl)
+            } else {
+                key
+            };
             self.expect_text_change(key);
         } else if let Some(c) = event.text {
             let echo = if c == ' ' {

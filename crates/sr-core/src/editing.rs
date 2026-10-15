@@ -35,6 +35,26 @@ pub enum EditKey {
     SelectAll,
     /// Ctrl+C: "Copied selection to clipboard" when text is selected (313/s8).
     Copy,
+    /// Ctrl+Home in a multi-line document: "top of file", then the line (JAWS 2025, Windows
+    /// 11 Notepad, dev box: "top of file | First line of the viewer test").
+    TopOfFile,
+    /// Ctrl+End in a multi-line document: "Bottom of file", then the line when it has text
+    /// (dev box, onto an empty last line: "Bottom of file"; the line after it is assumed).
+    BottomOfFile,
+}
+
+impl EditKey {
+    /// The key as a multi-line document reads it, where that differs from a single-line
+    /// field (JAWS, Windows 11 Notepad, dev box): Home reads the character it lands on ("S";
+    /// a single-line field is silent, 305/s1), and Ctrl+Home/Ctrl+End name the file's ends.
+    pub fn in_document(self, key: Key, ctrl: bool) -> Self {
+        match (self, key, ctrl) {
+            (Self::Silent, Key::Home, false) => Self::Character,
+            (Self::Line, Key::Home, true) => Self::TopOfFile,
+            (Self::Line, Key::End, true) => Self::BottomOfFile,
+            (other, _, _) => other,
+        }
+    }
 }
 
 impl EditKey {
@@ -238,7 +258,33 @@ pub fn speech(
             if added.is_empty() {
                 return None;
             }
-            format!("selected\n{added}")
+            // Text over several lines is read line by line (Ctrl+Shift+Home in Windows 11
+            // Notepad, JAWS on the dev box: "selected | First line … | Second line …").
+            let lines: Vec<String> = text_lines(&added)
+                .into_iter()
+                .filter(|l| !l.trim().is_empty())
+                .collect();
+            if lines.is_empty() {
+                format!("selected\n{added}")
+            } else {
+                format!("selected\n{}", lines.join("\n"))
+            }
+        }
+        EditKey::TopOfFile => {
+            let line = line_at(after);
+            if line.trim().is_empty() {
+                "top of file".to_owned()
+            } else {
+                format!("top of file\n{}", line.trim())
+            }
+        }
+        EditKey::BottomOfFile => {
+            let line = line_at(after);
+            if line.trim().is_empty() {
+                "Bottom of file".to_owned()
+            } else {
+                format!("Bottom of file\n{}", line.trim())
+            }
         }
         EditKey::DeleteBackward => {
             let deleted = deleted_before_caret(before, after);
@@ -286,6 +332,31 @@ mod tests {
             font: None,
             word: None,
         }
+    }
+
+    /// Windows 11 Notepad (JAWS on the dev box): Home reads its character, Ctrl+Home and
+    /// Ctrl+End name the file's ends.
+    #[test]
+    fn a_document_names_its_ends_and_reads_home() {
+        let text = "First line\rSecond\r";
+        assert_eq!(
+            EditKey::Silent.in_document(Key::Home, false),
+            EditKey::Character
+        );
+        assert_eq!(
+            EditKey::Silent.in_document(Key::End, false),
+            EditKey::Silent
+        );
+        let top = EditKey::Line.in_document(Key::Home, true);
+        assert_eq!(
+            speech(top, None, &ctx(text, 0, None), "").as_deref(),
+            Some("top of file\nFirst line")
+        );
+        let bottom = EditKey::Line.in_document(Key::End, true);
+        assert_eq!(
+            speech(bottom, None, &ctx(text, 18, None), "").as_deref(),
+            Some("Bottom of file")
+        );
     }
 
     /// Windows 11 Notepad's words (UIA): Ctrl+Right stops at "line", then at "," alone
@@ -411,7 +482,7 @@ mod tests {
         let to_end = ctx(text, 18, Some((6, 18)));
         assert_eq!(
             speech(EditKey::SelectMore, Some(&before), &to_end, "").as_deref(),
-            Some("selected\nsecond\rthird")
+            Some("selected\nsecond\nthird")
         );
     }
 }
