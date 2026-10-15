@@ -11,12 +11,12 @@ impl ScreenReaderEngine {
     /// before and after); typed characters are echoed, as JAWS does with its default typing
     /// echo (characters).
     pub(super) fn edit_key_feedback(&mut self, event: &KeyEvent) {
-        // Windows search's box: Up and Down select results, read as they are selected.
-        if self
-            .last_native_focus
-            .as_ref()
-            .is_some_and(|f| crate::apps::windows_search::arrows_select(f, event))
-        {
+        // An application that reads the key itself (Windows search: Up and Down select
+        // results, read as they are selected).
+        if self.last_native_focus.as_ref().is_some_and(|field| {
+            self.app_for(field)
+                .is_some_and(|app| app.reads_key(field, event))
+        }) {
             return;
         }
         if let Some(key) = crate::editing::EditKey::of(event) {

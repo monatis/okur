@@ -8,6 +8,7 @@
 //! - Ctrl+End reads the last line with text (the prompt), not the empty rows below it.
 
 use crate::aom::Role;
+use crate::apps::AppModule;
 use crate::event::FocusEvent;
 
 /// Windows Terminal's text area (its UIA class name).
@@ -43,6 +44,27 @@ pub fn viewer_lines(text: &str, caret: usize) -> (Vec<String>, usize) {
 pub fn cursor_line(text: &str, caret: usize) -> String {
     let (lines, line) = viewer_lines(text, caret);
     lines.into_iter().nth(line).unwrap_or_default()
+}
+
+/// Consoles.
+pub struct Terminal;
+
+impl AppModule for Terminal {
+    fn owns(&self, focus: &FocusEvent) -> bool {
+        owns(focus)
+    }
+
+    fn virtualizes_text(&self) -> bool {
+        true
+    }
+
+    fn viewer_lines(&self, text: &str, caret: usize) -> Option<(Vec<String>, usize)> {
+        Some(viewer_lines(text, caret))
+    }
+
+    fn line_after_viewer(&self, text: &str, caret: usize) -> Option<String> {
+        Some(cursor_line(text, caret))
+    }
 }
 
 #[cfg(test)]

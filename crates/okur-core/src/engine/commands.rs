@@ -623,7 +623,8 @@ impl ScreenReaderEngine {
         let console = self
             .last_native_focus
             .as_ref()
-            .is_some_and(crate::apps::terminal::owns);
+            .and_then(|focus| self.app_for(focus))
+            .is_some_and(|app| app.virtualizes_text());
         if console && self.actions.as_ref().is_some_and(|a| a.read_text()) {
             self.pending_viewer = Some(PendingViewer::Console { window });
             return None;
@@ -696,7 +697,12 @@ impl ScreenReaderEngine {
         };
         self.pending_viewer = None;
         self.last_text = Some(context.clone());
-        let (lines, line) = crate::apps::terminal::viewer_lines(&context.text, context.caret);
+        // The application that virtualizes its text lays the lines out (a console).
+        let (lines, line) = self
+            .apps
+            .iter()
+            .find_map(|app| app.viewer_lines(&context.text, context.caret))
+            .unwrap_or_default();
         if lines.is_empty() {
             // Nothing read: the viewer shows the control, as for any other.
             let lines = self.virtualized_lines(window);
@@ -756,16 +762,17 @@ impl ScreenReaderEngine {
     /// What JAWS reads when the Virtual Viewer closes: the text field's line, or the focused
     /// control's name and type [obs, 311/s12, s23; 312/s11].
     pub(super) fn speak_focus_again(&mut self) {
-        let console = self
+        let text_app = self
             .last_native_focus
             .as_ref()
-            .is_some_and(crate::apps::terminal::owns);
-        let speech = if console {
+            .and_then(|focus| self.app_for(focus))
+            .filter(|app| app.virtualizes_text());
+        let speech = if let Some(app) = text_app {
             // A console: its cursor's line, as last read (JAWS on the dev box, closing the
             // viewer: "C:\Users\Gigabyte>").
             self.last_text
                 .as_ref()
-                .map(|text| crate::apps::terminal::cursor_line(&text.text, text.caret))
+                .and_then(|text| app.line_after_viewer(&text.text, text.caret))
         } else if self.editing_text() {
             let line = self.last_text.as_ref().map(crate::editing::line_at);
             // A combo box's field adds its list position (JAWS on the Run dialog, dev box:

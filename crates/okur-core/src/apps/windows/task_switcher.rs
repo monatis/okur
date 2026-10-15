@@ -9,6 +9,7 @@
 //!   Arrow keys."
 
 use crate::aom::Role;
+use crate::apps::{AppContext, AppModule, FocusResponse};
 use crate::event::FocusEvent;
 
 /// The switcher's windows, by class: Windows 11's XAML host, Windows 10's frame.
@@ -26,7 +27,7 @@ pub struct TaskSwitcher {
 impl TaskSwitcher {
     /// What a focus in the switcher says (empty for the switcher itself), or `None` when the
     /// focus is not the switcher's.
-    pub fn focus(&mut self, focus: &FocusEvent) -> Option<String> {
+    pub fn speech_for(&mut self, focus: &FocusEvent) -> Option<String> {
         let window = focus
             .platform
             .top_window_class
@@ -51,6 +52,22 @@ impl TaskSwitcher {
     }
 }
 
+impl AppModule for TaskSwitcher {
+    fn focus(&mut self, focus: &FocusEvent, cx: &mut AppContext<'_>) -> FocusResponse {
+        let Some(speech) = self.speech_for(focus) else {
+            return FocusResponse::Pass;
+        };
+        // Its window is remembered, so going back to an application announces that
+        // application's window.
+        cx.note_window(focus);
+        if speech.is_empty() {
+            FocusResponse::Silent
+        } else {
+            FocusResponse::Speak(speech)
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -66,24 +83,26 @@ mod tests {
         let mut switcher = TaskSwitcher::default();
         assert_eq!(
             switcher
-                .focus(&in_switcher(Role::Window, "Task Switching"))
+                .speech_for(&in_switcher(Role::Window, "Task Switching"))
                 .as_deref(),
             Some("")
         );
         assert_eq!(
             switcher
-                .focus(&in_switcher(Role::ListItem, "Claude"))
+                .speech_for(&in_switcher(Role::ListItem, "Claude"))
                 .as_deref(),
             Some("Claude\nTo move to an item press the Arrow keys.")
         );
         // The switcher's own input pane takes focus between items.
         assert_eq!(
-            switcher.focus(&in_switcher(Role::Generic, "")).as_deref(),
+            switcher
+                .speech_for(&in_switcher(Role::Generic, ""))
+                .as_deref(),
             Some("")
         );
         assert_eq!(
             switcher
-                .focus(&in_switcher(Role::ListItem, "JAWS Professional"))
+                .speech_for(&in_switcher(Role::ListItem, "JAWS Professional"))
                 .as_deref(),
             Some("JAWS Professional")
         );
@@ -91,9 +110,9 @@ mod tests {
         let notepad = FocusEvent::new(Role::Document)
             .with_name("Text editor")
             .with_window_class("RichEditD2DPT");
-        assert_eq!(switcher.focus(&notepad), None);
+        assert_eq!(switcher.speech_for(&notepad), None);
         assert!(switcher
-            .focus(&in_switcher(Role::ListItem, "Claude"))
+            .speech_for(&in_switcher(Role::ListItem, "Claude"))
             .is_some_and(|s| s.ends_with("Arrow keys.")));
     }
 
@@ -103,12 +122,12 @@ mod tests {
         let mut item = FocusEvent::new(Role::ListItem).with_name("SR Second Window");
         item.platform.top_window_class = Some(STAGING_WINDOW.to_owned());
         assert_eq!(
-            switcher.focus(&item).as_deref(),
+            switcher.speech_for(&item).as_deref(),
             Some("SR Second Window\nTo move to an item press the Arrow keys.")
         );
         // The staging window's other focus events are an application's, not the switcher's.
         let mut edit = FocusEvent::new(Role::Edit).with_name("Notes");
         edit.platform.top_window_class = Some(STAGING_WINDOW.to_owned());
-        assert_eq!(switcher.focus(&edit), None);
+        assert_eq!(switcher.speech_for(&edit), None);
     }
 }

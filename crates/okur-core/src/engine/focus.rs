@@ -1,20 +1,12 @@
 //! Focus and menu events: what the engine says when the focus or a menu changes.
 
-use super::{AppMode, DesktopItem, NativeDesktopState, NativeExplorerState, ScreenReaderEngine};
+use super::{AppMode, ScreenReaderEngine};
 use crate::aom::Role;
+use crate::apps::{AppContext, FocusResponse};
 use crate::event::FocusEvent;
 use crate::speech::SpeechFormatter;
 
 impl ScreenReaderEngine {
-    /// Records the focused control's top-level window as the active one, for Insert+T and
-    /// for announcing the next window change.
-    fn note_window(title: &mut Option<String>, kind: &mut Option<String>, focus: &FocusEvent) {
-        if let Some(window) = &focus.window_title {
-            *title = Some(window.clone());
-            *kind = focus.platform.top_window_class.clone();
-        }
-    }
-
     /// Handles an OS-level focus changed event.
     /// Synchronizes cursor position, activates/deactivates forms mode,
     /// and emits canonical JAWS speech announcements.
@@ -30,224 +22,21 @@ impl ScreenReaderEngine {
             self.speech.speak(&speech, true);
             return Some(speech);
         }
-        // Ignore spontaneous background tile updates from Windows 11 Widgets applet
-        if focus
-            .name
-            .as_deref()
-            .is_some_and(|n| n.starts_with("Widgets"))
-        {
-            return None;
-        }
-        // Alt+Tab: the task switcher's items. Its window is remembered, so going back to an
-        // application announces that application's window.
-        if let Some(speech) = self.task_switcher.focus(focus) {
-            Self::note_window(
-                &mut self.last_window_title,
-                &mut self.last_window_kind,
-                focus,
-            );
-            if speech.is_empty() {
-                return None;
-            }
-            self.speech.speak(&speech, true);
-            return Some(speech);
-        }
-
-        let is_explorer_event = focus.platform.window_class.as_deref() == Some("CabinetWClass")
-            || focus.platform.window_class.as_deref() == Some("ShellTabWindowClass")
-            || focus.platform.window_class.as_deref() == Some("UIItemsView")
-            || focus.container_name.as_deref() == Some("Items View")
-            || focus.container_name.as_deref() == Some("Items view")
-            || focus.container_name.as_deref() == Some("Shell Folder View")
-            || focus
-                .window_title
-                .as_deref()
-                .is_some_and(|t| t.contains("File Explorer"));
-
-        // 0. Check if focus landed on native desktop
-        let is_desktop_event = !is_explorer_event
-            && (focus.container_name.as_deref() == Some("FolderView")
-                || focus.platform.window_class.as_deref() == Some("Progman")
-                || focus.platform.window_class.as_deref() == Some("WorkerW")
-                || (focus.platform.window_class.as_deref() == Some("SysListView32")
-                    && focus.container_name.as_deref() != Some("Items View")
-                    && focus.container_name.as_deref() != Some("Items view"))
-                // An item in the desktop's window, whatever window the event came from (on
-                // Windows 11 the first of the desktop's focus events has none, seen live).
-                || (focus.role == Role::ListItem
-                    && focus
-                        .platform
-                        .top_window_class
-                        .as_deref()
-                        .is_some_and(|k| matches!(k, "Progman" | "WorkerW")))
-                // An item still on the desktop; not one in another window (the task
-                // switcher's, after Win+M then Alt+Tab).
-                || (focus.role == Role::ListItem
-                    && self.app_mode == AppMode::NativeDesktop
-                    && focus
-                        .platform
-                        .top_window_class
-                        .as_deref()
-                        .is_none_or(|k| matches!(k, "Progman" | "WorkerW"))));
-
-        if is_desktop_event {
-            let prev_mode = self.app_mode;
-            let ds = self
-                .desktop_state
-                .get_or_insert_with(|| NativeDesktopState {
-                    container_name: "FolderView".to_string(),
-                    items: Vec::new(),
-                    current_index: 0,
-                    entered: false,
-                });
-
-            let is_first_entry = prev_mode != AppMode::NativeDesktop || !ds.entered;
-            ds.entered = true;
-            self.app_mode = AppMode::NativeDesktop;
-            // Insert+T on the desktop speaks the virtual desktop's name, not the window
-            // focused before it (user report).
-            Self::note_window(
-                &mut self.last_window_title,
-                &mut self.last_window_kind,
-                focus,
-            );
-
-            if let Some(ref mut es) = self.explorer_state {
-                es.entered = false;
-            }
-
-            let name = focus.name.as_deref().unwrap_or("Desktop");
-            let index = focus
-                .item_index
-                .unwrap_or_else(|| ds.current_item().map(|it| it.index).unwrap_or(1));
-            let total = focus
-                .item_count
-                .unwrap_or_else(|| ds.current_item().map(|it| it.total).unwrap_or(1));
-
-            // Sync ds.items and check for deduplication
-            if ds.items.is_empty() {
-                ds.items.push(DesktopItem {
-                    node_id: index,
-                    name: name.to_string(),
-                    index,
-                    total,
-                });
-                ds.current_index = 0;
-            } else if let Some(pos) = ds
-                .items
-                .iter()
-                .position(|it| it.name.eq_ignore_ascii_case(name) || it.index == index)
-            {
-                if !is_first_entry && ds.current_index == pos {
-                    return None;
+        // Applications first, as JAWS runs an application's script before the default one.
+        let mut cx = AppContext {
+            app_mode: &mut self.app_mode,
+            window_title: &mut self.last_window_title,
+            window_kind: &mut self.last_window_kind,
+        };
+        for app in &mut self.apps {
+            match app.focus(focus, &mut cx) {
+                FocusResponse::Pass => {}
+                FocusResponse::Silent => return None,
+                FocusResponse::Speak(speech) => {
+                    self.speech.speak(&speech, true);
+                    return Some(speech);
                 }
-                ds.current_index = pos;
-            } else {
-                ds.items.push(DesktopItem {
-                    node_id: index,
-                    name: name.to_string(),
-                    index,
-                    total,
-                });
-                ds.current_index = ds.items.len().saturating_sub(1);
             }
-
-            let speech = if is_first_entry {
-                SpeechFormatter::format_desktop_entry("FolderView", name, index, total)
-            } else {
-                SpeechFormatter::format_desktop_item(name, index, total)
-            };
-            self.speech.speak(&speech, true);
-            return Some(speech);
-        } else if is_explorer_event && (focus.role == Role::ListItem || focus.role == Role::List) {
-            let prev_mode = self.app_mode;
-            let es = self
-                .explorer_state
-                .get_or_insert_with(NativeExplorerState::default);
-
-            let is_first_entry = prev_mode != AppMode::NativeExplorer || !es.entered;
-            es.entered = true;
-            self.app_mode = AppMode::NativeExplorer;
-            Self::note_window(
-                &mut self.last_window_title,
-                &mut self.last_window_kind,
-                focus,
-            );
-
-            if let Some(ref mut ds) = self.desktop_state {
-                ds.entered = false;
-            }
-
-            if let Some(ref title) = focus.window_title {
-                es.window_title = Some(title.clone());
-            }
-            if let Some(ref folder) = focus.folder_name {
-                es.folder_name = Some(folder.clone());
-            }
-
-            let name = focus.name.as_deref().unwrap_or("Item");
-            let index = focus.item_index.unwrap_or(1);
-            let total = focus.item_count.unwrap_or(1);
-            let selected = focus.states.selected;
-
-            if !is_first_entry
-                && es.last_index == Some(index)
-                && es.last_name.as_deref() == Some(name)
-            {
-                return None;
-            }
-            es.last_index = Some(index);
-            es.last_name = Some(name.to_string());
-
-            let speech = if is_first_entry {
-                let window_title = focus
-                    .window_title
-                    .as_deref()
-                    .or(es.window_title.as_deref())
-                    .or(Some("File Explorer"));
-                let folder_name = focus.folder_name.as_deref().or(es.folder_name.as_deref());
-                SpeechFormatter::format_explorer_entry(
-                    window_title,
-                    folder_name,
-                    selected,
-                    name,
-                    index,
-                    total,
-                )
-            } else {
-                SpeechFormatter::format_explorer_item(name, index, total)
-            };
-            self.speech.speak(&speech, true);
-            return Some(speech);
-        } else if focus.platform.window_class.as_deref() == Some("Shell_TrayWnd")
-            || focus.container_name.as_deref() == Some("Taskbar")
-        {
-            if let Some(ref mut es) = self.explorer_state {
-                es.entered = false;
-            }
-            let prev_mode = self.app_mode;
-            self.app_mode = AppMode::NativeShell;
-            let name = focus.name.as_deref().unwrap_or("Start Button");
-            let container = if prev_mode != AppMode::NativeShell {
-                focus.container_name.as_deref().or(Some("Taskbar"))
-            } else {
-                None
-            };
-            let speech = SpeechFormatter::format_shell_element(
-                container,
-                name,
-                "Button",
-                focus.help_text.as_deref(),
-            );
-            self.speech.speak(&speech, true);
-            return Some(speech);
-        }
-
-        if let Some(ref mut ds) = self.desktop_state {
-            ds.entered = false;
-        }
-        if let Some(ref mut es) = self.explorer_state {
-            es.entered = false;
         }
 
         let is_in_document = focus.in_document
@@ -405,16 +194,16 @@ impl ScreenReaderEngine {
         let control_speech = self.native_focus.focus(focus)?;
         self.last_native_focus = Some(focus.clone());
 
-        let speech = if window_changed && crate::apps::windows_search::names_window(focus) {
-            // A new active window: its title, then the control. A dialog box adds its role
-            // and its text [obs, 306/s1, s3, s10].
-            // The desktop is announced as "desktop"; its title (Insert+T) is the virtual
-            // desktop's name (JAWS on Windows 11: "desktop | FolderView List view").
-            let win = if focus.platform.top_window_class.as_deref() == Some("Progman") {
-                "desktop"
-            } else {
-                focus.window_title.as_deref().unwrap_or("")
-            };
+        let app = self.app_for(focus);
+        let names_window = app.is_none_or(|app| app.names_window(focus));
+        let speech = if window_changed && names_window {
+            // A new active window: its title, or what its application calls it, then the
+            // control. A dialog box adds its role and its text [obs, 306/s1, s3, s10].
+            let window_name = app.and_then(|app| app.window_name(focus));
+            let win = window_name
+                .as_deref()
+                .or(focus.window_title.as_deref())
+                .unwrap_or("");
             let mut heading = match focus.dialog_text.as_deref() {
                 Some(text) if !text.is_empty() => format!("{win}  \u{1d} dialog \u{1e} \n{text}"),
                 Some(_) => format!("{win}  \u{1d} dialog \u{1e} "),

@@ -25,7 +25,7 @@ mod state;
 mod tests;
 mod text_feedback;
 
-pub use state::{ActiveElementList, AppMode, DesktopItem, NativeDesktopState, NativeExplorerState};
+pub use state::{ActiveElementList, AppMode};
 
 /// A key press counted for "pressed twice quickly": a command, or CapsLock alone (which the
 /// laptop layout's JAWS key also is).
@@ -53,8 +53,6 @@ pub struct ScreenReaderEngine {
     pub forms_mode: bool,
     pub active_element_list: Option<ActiveElementList>,
     pub app_mode: AppMode,
-    pub desktop_state: Option<NativeDesktopState>,
-    pub explorer_state: Option<NativeExplorerState>,
     pub last_window_title: Option<String>,
     /// The active window's class, with `last_window_title` identifying the window.
     last_window_kind: Option<String>,
@@ -87,8 +85,8 @@ pub struct ScreenReaderEngine {
     viewer: Option<crate::viewer::VirtualViewer>,
     /// A Virtual Viewer waiting for what it will show, read off the keyboard hook.
     pending_viewer: Option<PendingViewer>,
-    /// Alt+Tab's task switcher, read as JAWS reads it.
-    task_switcher: crate::apps::task_switcher::TaskSwitcher,
+    /// Behavior for particular applications, offered every focus first ([`crate::apps`]).
+    apps: Vec<Box<dyn crate::apps::AppModule>>,
     /// Each live region's lines when it last changed, by DOM id.
     last_live_text: std::collections::HashMap<String, Vec<String>>,
     /// Live regions being read as they grow, by DOM id (`LiveRegionAppend::Appended`).
@@ -103,8 +101,6 @@ impl ScreenReaderEngine {
             forms_mode: false,
             active_element_list: None,
             app_mode: AppMode::VirtualBuffer,
-            desktop_state: None,
-            explorer_state: None,
             last_window_title: None,
             last_window_kind: None,
             native_focus: crate::native_focus::NativeFocus::default(),
@@ -122,7 +118,7 @@ impl ScreenReaderEngine {
             caps_lock_on: false,
             viewer: None,
             pending_viewer: None,
-            task_switcher: Default::default(),
+            apps: crate::apps::builtin(),
             last_live_text: std::collections::HashMap::new(),
             live_streams: std::collections::HashMap::new(),
         }
@@ -135,6 +131,14 @@ impl ScreenReaderEngine {
         self.forms_mode = false;
         self.active_element_list = None;
         self.app_mode = AppMode::VirtualBuffer;
+    }
+
+    /// The application module that owns `focus`, whose hooks apply to it.
+    fn app_for(&self, focus: &FocusEvent) -> Option<&dyn crate::apps::AppModule> {
+        self.apps
+            .iter()
+            .find(|app| app.owns(focus))
+            .map(|app| app.as_ref())
     }
 
     /// Handles a live keyboard event from the low-level hook.

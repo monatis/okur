@@ -187,37 +187,3 @@ pub enum AppMode {
     NativeExplorer,
     NativeControl,
 }
-
-/// State tracking for File Explorer list view navigation.
-#[derive(Debug, Clone, PartialEq, Eq, Default)]
-pub struct NativeExplorerState {
-    pub window_title: Option<String>,
-    pub folder_name: Option<String>,
-    pub entered: bool,
-    pub last_index: Option<usize>,
-    pub last_name: Option<String>,
-}
-
-/// Represents an item on the native Windows desktop.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct DesktopItem {
-    pub node_id: usize,
-    pub name: String,
-    pub index: usize,
-    pub total: usize,
-}
-
-/// State tracking for native Windows desktop folder view navigation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct NativeDesktopState {
-    pub container_name: String,
-    pub items: Vec<DesktopItem>,
-    pub current_index: usize,
-    pub entered: bool,
-}
-
-impl NativeDesktopState {
-    pub fn current_item(&self) -> Option<&DesktopItem> {
-        self.items.get(self.current_index)
-    }
-}

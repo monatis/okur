@@ -4,6 +4,7 @@
 //! search box's line (JAWS 2025 on the dev box: Down gave "notepad, See more search results,
 //! Press right to switch preview | 2 of 5").
 
+use crate::apps::AppModule;
 use crate::event::FocusEvent;
 use crate::input::{Key, KeyEvent};
 
@@ -23,10 +24,23 @@ pub fn arrows_select(field: &FocusEvent, key: &KeyEvent) -> bool {
     owns(field) && matches!(key.key, Key::UpArrow | Key::DownArrow) && key.modifiers.is_empty()
 }
 
-/// Whether arriving in the search names its window first: JAWS starts at the search box
-/// ("Search box Edit | Type in text.", dev box), without the window's title ("Search").
-pub fn names_window(focus: &FocusEvent) -> bool {
-    !owns(focus)
+/// Windows search.
+pub struct Search;
+
+impl AppModule for Search {
+    fn owns(&self, focus: &FocusEvent) -> bool {
+        owns(focus)
+    }
+
+    /// Arriving in the search does not name its window: JAWS starts at the search box
+    /// ("Search box Edit | Type in text.", dev box), without the window's title ("Search").
+    fn names_window(&self, _focus: &FocusEvent) -> bool {
+        false
+    }
+
+    fn reads_key(&self, field: &FocusEvent, key: &KeyEvent) -> bool {
+        arrows_select(field, key)
+    }
 }
 
 #[cfg(test)]
