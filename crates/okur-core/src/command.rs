@@ -525,6 +525,9 @@ static BINDINGS: &[Binding] = &{
         bind(Alpha('A'), ALONE, MoveToNext(RadioButton)),
         bind(Alpha('O'), SHIFT, MoveToPrior(Article)),
         bind(Alpha('O'), ALONE, MoveToNext(Article)),
+        // Q and Shift+Q both move to the main region.
+        bind(Alpha('Q'), SHIFT, MoveToMainRegion),
+        bind(Alpha('Q'), ALONE, MoveToMainRegion),
         bind(Digit(1), SHIFT, MoveToPrior(HeadingLevel(1))),
         bind(Digit(1), ALONE, MoveToNext(HeadingLevel(1))),
         bind(Digit(2), SHIFT, MoveToPrior(HeadingLevel(2))),
@@ -651,7 +654,8 @@ mod tests {
             (key(Key::RightArrow, shift), Some(SelectNextCharacter)),
             (key(Key::DownArrow, jaws_shift), Some(SaySelectedText)),
             (key(Key::Alpha('f'), jaws), Some(SayFont)),
-            (key(Key::Alpha('q'), none), None),
+            (key(Key::Alpha('q'), none), Some(MoveToMainRegion)),
+            (key(Key::Alpha('q'), shift), Some(MoveToMainRegion)),
             (key(Key::F(3), jaws), None),
         ];
         for (event, command) in cases {

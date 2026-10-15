@@ -21,6 +21,35 @@ fn create_test_buffer() -> VirtualBuffer {
     VirtualBuffer::from_aom(&aom)
 }
 
+/// Q moves to the main region (JAWS's Quick Navigation Keys,
+/// docs/references/jaws-quick-navigation-keys.md); it was handled by name only, so the key
+/// reached the page.
+#[test]
+fn q_moves_to_the_main_region() {
+    let aom = AomNode::new(0, Role::Document).with_children(vec![
+        AomNode::new(1, Role::Heading { level: 1 }).with_text("Site name"),
+        AomNode::new(
+            2,
+            Role::Landmark {
+                landmark_type: "main".to_owned(),
+            },
+        )
+        .with_children(vec![
+            AomNode::new(3, Role::Paragraph).with_text("The article starts here.")
+        ]),
+    ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&aom));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let q = KeyEvent::new(Key::Alpha('q'), Modifiers::none(), true);
+    assert_eq!(engine.handle_key_event(&q), KeyAction::Consume);
+    let spoken = speech.take();
+    assert!(
+        spoken.iter().any(|s| s.contains("main region")),
+        "{spoken:?}"
+    );
+}
+
 #[test]
 fn test_engine_navigation_and_speech() {
     let buffer = create_test_buffer();
