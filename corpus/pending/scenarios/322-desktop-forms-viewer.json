@@ -1,0 +1,30 @@
+{
+  "id": "322-desktop-forms-viewer",
+  "name": "Virtualize Window on a WinForms form with focus in a one-line field (labels, check boxes, group box, list view, tabs, buttons), and Virtualize Current Control on its list view",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-forms.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Desktop Fixture" },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+Alt+W" },
+    { "id": "s2", "type": "key", "command": "Down" },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Ctrl+A" },
+    { "id": "s5", "type": "key", "command": "Ctrl+C", "capture_clipboard": true },
+    { "id": "s6", "type": "key", "command": "Escape" },
+    { "id": "s7", "type": "key", "command": "Tab" },
+    { "id": "s8", "type": "key", "command": "Tab" },
+    { "id": "s9", "type": "key", "command": "Tab" },
+    { "id": "s10", "type": "key", "command": "Tab" },
+    { "id": "s11", "type": "key", "command": "Tab" },
+    { "id": "s12", "type": "key", "command": "Tab" },
+    { "id": "s13", "type": "key", "command": "Tab" },
+    { "id": "s14", "type": "key", "command": "Tab" },
+    { "id": "s15", "type": "key", "command": "Insert+Shift+V" },
+    { "id": "s16", "type": "key", "command": "Ctrl+A" },
+    { "id": "s17", "type": "key", "command": "Ctrl+C", "capture_clipboard": true },
+    { "id": "s18", "type": "key", "command": "Escape" }
+  ]
+}

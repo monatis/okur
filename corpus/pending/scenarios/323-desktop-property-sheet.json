@@ -1,0 +1,23 @@
+{
+  "id": "323-desktop-property-sheet",
+  "name": "A file's Properties (a Win32 property sheet): the focus on its General page, Say Window, Virtualize Window by screen rows, and switching pages",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-property-sheet.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Property Fixture.txt Properties" },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+Tab" },
+    { "id": "s2", "type": "key", "command": "Insert+B" },
+    { "id": "s3", "type": "key", "command": "Insert+Alt+W" },
+    { "id": "s4", "type": "key", "command": "Down" },
+    { "id": "s5", "type": "key", "command": "Down" },
+    { "id": "s6", "type": "key", "command": "Down" },
+    { "id": "s7", "type": "key", "command": "Ctrl+A" },
+    { "id": "s8", "type": "key", "command": "Ctrl+C", "capture_clipboard": true },
+    { "id": "s9", "type": "key", "command": "Escape" },
+    { "id": "s10", "type": "key", "command": "Ctrl+Tab" },
+    { "id": "s11", "type": "key", "command": "Ctrl+Shift+Tab" }
+  ]
+}

@@ -287,9 +287,22 @@ $launch = $scenario.launch
 if ($launch) { $expectedTitle = $launch.window_title }
 
 function Find-WindowByTitle([string]$title) {
-    Get-Process -ErrorAction SilentlyContinue |
+    $p = Get-Process -ErrorAction SilentlyContinue |
         Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero -and $_.MainWindowTitle -eq $title } |
         Select-Object -First 1
+    if ($p) { return $p }
+    # An owned window is no process's main window (a property sheet the shell opens for the
+    # fixture): look among the desktop's top-level windows, for its process and handle.
+    Add-Type -AssemblyName UIAutomationClient, UIAutomationTypes
+    $named = New-Object System.Windows.Automation.PropertyCondition(
+        [System.Windows.Automation.AutomationElement]::NameProperty, $title)
+    $window = [System.Windows.Automation.AutomationElement]::RootElement.FindFirst(
+        [System.Windows.Automation.TreeScope]::Children, $named)
+    if (-not $window) { return $null }
+    [pscustomobject]@{
+        Id               = $window.Current.ProcessId
+        MainWindowHandle = [IntPtr]$window.Current.NativeWindowHandle
+    }
 }
 
 function Start-DesktopFixture {

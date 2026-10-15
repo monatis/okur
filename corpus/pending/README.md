@@ -20,6 +20,12 @@ To record one:
 | 319 | The Run dialog: its announcement and Virtualize Window | `desktop-editor.ps1` |
 | 320 | Notepad, laptop layout: CapsLock+I, K, O, L, J, M, U, Insert+Up, Ctrl+Right | `desktop-notepad.ps1` |
 | 321 | Virtualize Window in a console: opening line, Insert+T ("Virtual Viewer"), first and last lines, Escape | `desktop-console.ps1` (here) |
+| 322 | Virtualize Window on a WinForms form from a one-line field, and Virtualize Current Control on its list view | `desktop-forms.ps1` |
+| 323 | A file's Properties (a property sheet): its page, Say Window, Virtualize Window, switching pages | `desktop-property-sheet.ps1` (here) |
+
+322 and 323 need `run-scenario.ps1` from 2026-10-15 or later: a property sheet is an owned
+window, which its launch finds among the desktop's windows rather than as a process's main
+window.
 
 The plan `docs/plans/2026-10-15-jaws-feature-loop-round-2.md` (work item 1) lists what to
 check in each recording.

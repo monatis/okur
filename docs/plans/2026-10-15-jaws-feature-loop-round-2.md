@@ -1,6 +1,7 @@
 # Plan: JAWS Feature Loop, Round 2 (2026-10-15)
 
-**Branch**: start a new branch from `master` (round 1's `jaws-feature-loop` was merged into it).
+**Branch**: start a new branch from `main` (renamed from `master` on 2026-10-15, when the
+repository went to GitHub; round 1's `jaws-feature-loop` was merged into it).
 **Preceded by**: handoff `docs/handoff/2026-10-15-jaws-feature-loop-round-1.md`.
 
 ## Goal
@@ -126,6 +127,36 @@ Left:
    reach the file view (JAWS said nothing either). Measure it after a click, or find out how
    focus enters the view.
 
+## Done on branch `virtual-viewer` (2026-10-15), and what is left
+
+The user's report: JAWS's viewer shows Local Disk (C:) Properties row by row, while Okur's
+showed one line. Research, design and differences from JAWS are in
+[`docs/references/virtual-viewer.md`](../references/virtual-viewer.md); the handoff is
+`docs/handoff/2026-10-15-virtual-viewer.md`.
+
+Done:
+- Virtualize Window and Virtualize Current Control read the screen through UIA, laid out as
+  JAWS 2025 shows them. This covers classic windows by rows and modern apps by element.
+- Property sheets open as JAWS reads them ("General page"), not with every label on the
+  page.
+
+Left:
+1. **Record 322 and 323 on old-pc** (work item 1 below). Then compare the viewer's lines with
+   Okur's `okur window-text` on old-pc. Replay cannot check them: traces hold no window text.
+2. **Window text in traces.** Have `okur trace` record `window_lines` when Insert+Alt+W or
+   Insert+Shift+V is pressed, so that replay checks the screen viewer as it checks the
+   console's. Today replay keeps the focus-based viewer.
+3. **A file's Properties:** JAWS repeats the selected file name between the opening lines
+   (dev box). 323 will show whether it does so on old-pc.
+4. **Switching property pages** (Ctrl+Tab): what JAWS says (323/s10–s11), and whether
+   Okur's announcement names the new page.
+5. **Faster reads of big windows:** Explorer takes about 190 ms. A single subtree cache
+   request would make one cross-process call instead of one per element. Measure it against
+   pages, where a subtree fetch would include the whole document.
+6. **File Explorer's navigation pane** names items "Start of Quick Access - Desktop (pinned)";
+   JAWS shows "Desktop". It is UIA's name. If it should change, that belongs in an Explorer
+   app module.
+
 ## Work items for old-pc, in order
 
 1. **Record what round 1 left unrecorded** (old-pc was offline). The scenarios wait in `corpus/pending/` (see its README); move each into `corpus/scenarios/` (and its fixture into `corpus/fixtures/`) before pushing it.
@@ -139,6 +170,11 @@ Left:
      - **321**, Virtualize Window in a console (Windows 10's classic console on old-pc): the opening line (the cursor's), Insert+T ("Virtual Viewer"), the first and last lines, and Escape. JAWS 2025 in Windows Terminal on the dev box gave "Virtualizing current window | C:\Users\Gigabyte>", "Virtual Viewer", the first output line, and the prompt line on Ctrl+End and on Escape.
      - **315**, a RichEdit field: lines and Say Font with paragraph formatting.
      - **208**, a web textarea, character by character (the fixed tracer).
+     - **322**, Virtualize Window on the WinForms form from its Name field, and Virtualize
+       Current Control on its list view. It shows whether old-pc's JAWS shows only the
+       focused control for every WinForms window [obs, 311/s1].
+     - **323**, a file's Properties: the page, Say Window, Virtualize Window, and switching
+       pages. Push `run-scenario.ps1` first: it now finds the property sheet, an owned window.
    - Re-record **306**, **314** and **209** with trace format 7, which closes the steps whose traces predate it.
    - Commit the evidence, then regenerate the manifest and baselines. Evidence and code never share a commit.
    - Where Windows 10 JAWS differs from what the dev box showed, the old-pc evidence decides, unless the behavior is specific to Windows 11 (`apps::task_switcher`, Notepad's RichEdit).
@@ -152,6 +188,8 @@ Left:
 
    Mapping MenuItem also changes web pages' buffers, so check it against parity, and against 302's Win32 menu evidence on old-pc.
 4. **Virtualize Window in Notepad:** JAWS includes the menu bar and status bar (314/s10, s11).
+   The screen viewer would show them too. Okur keeps the text path for text editors, at the
+   user's request, so decide with the user whether classic Notepad shows its menus.
 5. **Discovery,** from the JAWS keystroke list. Candidates:
    - Insert+Tab in pages;
    - Insert+B in windows other than dialog boxes;
