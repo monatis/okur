@@ -78,6 +78,12 @@ impl ScreenReaderEngine {
             }
 
             let target_id = self.page_node_for(focus);
+            // Where the virtual cursor was, for the containers the focus enters.
+            let cursor_node = self
+                .cursor
+                .buffer
+                .line_at_offset(self.cursor.offset)
+                .map(|l| l.node_id);
             tracing::debug!(
                 ?target_id,
                 target = ?target_id.and_then(|id| self.cursor.buffer.node(id)).map(|n| (&n.role, &n.name)),
@@ -222,6 +228,17 @@ impl ScreenReaderEngine {
                 let name = focus.web_application.clone().unwrap_or_default();
                 if !name.is_empty() {
                     speech = speech.map(|s| format!("{name}\n{s}"));
+                }
+            }
+            // Lists and landmarks the focus entered from where the virtual cursor was, as
+            // JAWS says them (dev box, GitHub's README tab from its section's heading:
+            // "Repository files NavigationRegion | list | with 1 items | README ...").
+            if !entering_page {
+                if let (Some(from), Some(to)) = (cursor_node, target_id) {
+                    let entered = self.entered_containers(from, to);
+                    if !entered.is_empty() {
+                        speech = speech.map(|s| format!("{entered}{s}"));
+                    }
                 }
             }
             if entering_page {

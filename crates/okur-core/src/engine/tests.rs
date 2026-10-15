@@ -1445,3 +1445,54 @@ fn an_application_region_takes_every_key() {
     assert!(actions.requests().is_empty());
     assert!(engine.forms_mode);
 }
+
+/// Focus entering a list in a navigation region from where the virtual cursor was names
+/// them, as JAWS does (dev box, GitHub's README tab: "Repository files NavigationRegion |
+/// list | with 1 items | README ...").
+#[test]
+fn focus_names_the_lists_and_regions_it_enters() {
+    let link = AomNode::new(
+        4,
+        Role::Link {
+            href: Some("#readme".to_owned()),
+        },
+    )
+    .with_name("README");
+    let nav = AomNode::new(
+        2,
+        Role::Landmark {
+            landmark_type: "navigation".to_owned(),
+        },
+    )
+    .with_name("Repository files")
+    .with_children(vec![AomNode::new(3, Role::List)
+        .with_children(vec![AomNode::new(5, Role::ListItem).with_children(vec![link])])]);
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Repo")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 2 }).with_text("Files"),
+            nav,
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let mut heading = FocusEvent::new(Role::Heading { level: 2 })
+        .with_node_id(1)
+        .with_name("Files");
+    heading.in_document = true;
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(heading));
+    let mut focus = FocusEvent::new(Role::Link {
+        href: Some("#readme".to_owned()),
+    })
+    .with_node_id(4)
+    .with_name("README");
+    focus.in_document = true;
+    let said = engine
+        .handle_accessibility_event(&AccessibilityEvent::Focus(focus))
+        .unwrap_or_default();
+    assert!(
+        said.starts_with(
+            "Repository files \u{1d} NavigationRegion \u{1e} \n \u{1d} list \u{1e} \nwith 1 items\nREADME"
+        ),
+        "{said}"
+    );
+}

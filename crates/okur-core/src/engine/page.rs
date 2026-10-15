@@ -148,18 +148,59 @@ impl ScreenReaderEngine {
 
     /// The region markers for the landmarks around a page node, outermost first: `main`
     /// and forms (named or not) [obs, 19/s2; 204/s1].
+    /// The lists and landmarks around `to` that are not around `from`, outermost first, each
+    /// on its line: "Repository files ‹ NavigationRegion ›", "‹ list › | with 1 items",
+    /// " ‹ MainRegion › ", " ‹ FormRegion › " (JAWS's names; other landmarks are left out
+    /// until JAWS is heard saying them).
+    pub(super) fn entered_containers(&self, from: usize, to: usize) -> String {
+        let ancestors = |id: usize| -> Vec<&AomNode> {
+            let mut path = Vec::new();
+            if let Some(root) = self
+                .cursor
+                .buffer
+                .root_id
+                .and_then(|r| self.cursor.buffer.node(r))
+            {
+                ancestors_of(root, id, &mut path);
+            }
+            path
+        };
+        let around_from: std::collections::HashSet<usize> =
+            ancestors(from).iter().map(|n| n.id).collect();
+        ancestors(to)
+            .into_iter()
+            .filter(|n| !around_from.contains(&n.id) && n.id != from)
+            .filter_map(|n| {
+                let name = n.name.as_deref().map(str::trim).unwrap_or_default();
+                let named = |marker: &str| {
+                    if name.is_empty() {
+                        format!(" \u{1d} {marker} \u{1e} \n")
+                    } else {
+                        format!("{name} \u{1d} {marker} \u{1e} \n")
+                    }
+                };
+                match &n.role {
+                    Role::Landmark { landmark_type } => match landmark_type.as_str() {
+                        "main" => Some(named("MainRegion")),
+                        "form" => Some(named("FormRegion")),
+                        "navigation" => Some(named("NavigationRegion")),
+                        _ => None,
+                    },
+                    Role::List => {
+                        let items = n
+                            .children
+                            .iter()
+                            .filter(|c| c.role == Role::ListItem)
+                            .count();
+                        Some(format!("{}with {items} items\n", named("list")))
+                    }
+                    _ => None,
+                }
+            })
+            .collect()
+    }
+
     pub(super) fn region_markers(&self, node_id: usize) -> String {
-        fn path<'a>(node: &'a AomNode, id: usize, out: &mut Vec<&'a AomNode>) -> bool {
-            if node.id == id {
-                return true;
-            }
-            out.push(node);
-            if node.children.iter().any(|c| path(c, id, out)) {
-                return true;
-            }
-            out.pop();
-            false
-        }
         let Some(root) = self
             .cursor
             .buffer
@@ -169,7 +210,7 @@ impl ScreenReaderEngine {
             return String::new();
         };
         let mut ancestors = Vec::new();
-        path(root, node_id, &mut ancestors);
+        ancestors_of(root, node_id, &mut ancestors);
         ancestors
             .iter()
             .filter_map(|n| {
@@ -538,4 +579,18 @@ fn same_line(buffer: &VirtualBuffer, text: &str, near: usize) -> Option<usize> {
         .filter(|line| line.text == text)
         .map(|line| line.start_offset)
         .min_by_key(|start| start.abs_diff(near))
+}
+
+/// The nodes from `node` down to node `id`, without it, into `out`: its ancestors, outermost
+/// first. False when `id` is not below `node`.
+fn ancestors_of<'a>(node: &'a AomNode, id: usize, out: &mut Vec<&'a AomNode>) -> bool {
+    if node.id == id {
+        return true;
+    }
+    out.push(node);
+    if node.children.iter().any(|c| ancestors_of(c, id, out)) {
+        return true;
+    }
+    out.pop();
+    false
 }

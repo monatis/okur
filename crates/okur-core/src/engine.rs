@@ -361,8 +361,16 @@ impl ScreenReaderEngine {
                 self.forms_mode = true;
                 self.cursor.forms_mode_active = true;
             }
+            let from = self
+                .cursor
+                .buffer
+                .line_at_offset(self.cursor.offset)
+                .map(|l| l.node_id);
+            let entered = from
+                .map(|from| self.entered_containers(from, id))
+                .unwrap_or_default();
             if let Some(speech) = self.cursor.focus_node(id) {
-                self.speech.speak(&speech, true);
+                self.speech.speak(&format!("{entered}{speech}"), true);
             }
         }
         true
