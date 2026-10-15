@@ -98,7 +98,7 @@ Each item started from a user report or from the loop's discovery.
 ### New evidence
 Scenarios 207, 209, 307, 308, 309, 311, 312, 313 and 314 (see their `corpus:` commits).
 
-## Dev-box session (02:20–04:40, after old-pc went offline)
+## Dev-box session (02:20–04:45, after old-pc went offline)
 
 The user allowed using the dev box (Windows 11 26200, JAWS 2025 running) while they slept.
 
@@ -131,6 +131,7 @@ The user allowed using the dev box (Windows 11 26200, JAWS 2025 running) while t
 | 6e863aa | Words in a text field follow the field's UIA word unit (Notepad: "line", ",", "with") | Identical to JAWS |
 | da67328 | Editing in a multi-line document: Home reads its character; Ctrl+Home and Ctrl+End say "top of file" and "Bottom of file"; a selection over several lines is read line by line | Identical to JAWS in Notepad |
 | 52121b5 | Ctrl+Backspace reads the word it deleted | Identical to JAWS in Notepad |
+| cfab9b9 | File Explorer's entry: "Items View MultiSelect ListBox \| Not Selected <item>". The old wording was unbacked. | Identical to JAWS apart from Explorer's passing "Working on it..."; arrows already matched |
 | d8235b8 | Window switches. A Chromium top-level document is a page. Only an editable document is a native text field. The tracer asks UIA for the focus once per event: the second GetFocusedElement blocked 7 s after a switch into Notepad, and every later event was then read against the wrong focus. | Three rounds of Chrome ↔ Notepad: one immediate announcement per switch, no slow reads |
 
 **Still differing on the dev box:**
