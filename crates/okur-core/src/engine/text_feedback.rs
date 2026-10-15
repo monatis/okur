@@ -19,6 +19,13 @@ impl ScreenReaderEngine {
         }) {
             return;
         }
+        // Up and Down in a field pointing at a list's option (an autocomplete) move to the
+        // next option, which its focus event says; the field's text is not read.
+        if self.option_list.is_some()
+            && matches!(event.key, crate::Key::UpArrow | crate::Key::DownArrow)
+        {
+            return;
+        }
         if let Some(key) = crate::editing::EditKey::of(event) {
             // A multi-line native document (Windows 11 Notepad) reads some keys otherwise.
             let document = !self.forms_mode

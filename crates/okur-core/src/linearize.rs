@@ -635,7 +635,13 @@ impl<'a> Builder<'a> {
                 if !labelled {
                     s.push_str(&name);
                 }
-                s.push_str(&role_marker("Combo box"));
+                // One typed in is an "edit combo" (JAWS on the dev box).
+                let kind = if attr(node, "editable") == Some("true") {
+                    "edit combo"
+                } else {
+                    "Combo box"
+                };
+                s.push_str(&role_marker(kind));
                 s.push_str(&state_marker(state));
                 s.push_str(node.value.as_deref().unwrap_or_default());
                 s

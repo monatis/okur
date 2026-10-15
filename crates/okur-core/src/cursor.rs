@@ -662,6 +662,20 @@ impl VirtualCursor {
         let name = node.name.as_deref().unwrap_or_default().trim();
         let mut speech = match &node.role {
             // Unlike the C quick key, Tab omits the collapsed state.
+            // One typed in keeps its state: "Fruit edit combo collapsed | blank" (JAWS on
+            // the dev box).
+            Role::ComboBox if attr("editable") == Some("true") => {
+                let state = if node.states.expanded == Some(true) {
+                    "expanded"
+                } else {
+                    "collapsed"
+                };
+                let value = node.value.as_deref().filter(|v| !v.is_empty());
+                format!(
+                    "{name}  \u{1d} edit combo \u{1e}   \u{1d}{state}\u{1e} \n{}",
+                    value.unwrap_or("blank")
+                )
+            }
             Role::ComboBox => format!(
                 "{name}  \u{1d} Combo box \u{1e}  \n{}",
                 node.value.as_deref().unwrap_or_default()

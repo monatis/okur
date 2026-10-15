@@ -91,6 +91,25 @@ impl ScreenReaderEngine {
                 };
                 crate::linearize::state_marker(state)
             }
+            // An autocomplete's list opened or closed as it is typed in: " expanded " (JAWS on
+            // the dev box). Its value is the typing, already echoed.
+            Role::ComboBox
+                if before
+                    .attributes
+                    .get("editable")
+                    .is_some_and(|e| e == "true") =>
+            {
+                if control.states.expanded.is_none()
+                    || before.states.expanded == control.states.expanded
+                {
+                    return None;
+                }
+                crate::linearize::state_marker(if control.states.expanded == Some(true) {
+                    "expanded"
+                } else {
+                    "collapsed"
+                })
+            }
             Role::ComboBox if before.value != control.value => control.value.clone()?,
             // Space on a tab selects it [obs, 29/s4].
             Role::Tab

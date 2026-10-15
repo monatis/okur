@@ -345,6 +345,11 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     if has(STATE_SYSTEM_PROTECTED) {
         set_attr("password", "true".to_owned());
     }
+    // A combo box one types in (an autocomplete), JAWS's "edit combo". Chrome's UIA reports
+    // a select's value as writable too, so only IA2's editable state tells them apart.
+    if role == Role::ComboBox && node.ia2_states & ia2_state::EDITABLE != 0 {
+        set_attr("editable", "true".to_owned());
+    }
     if node.ia2_states & ia2_state::MULTI_LINE != 0 {
         set_attr("multiline", "true".to_owned());
     }

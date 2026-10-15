@@ -1350,3 +1350,66 @@ fn tab_moves_on_from_the_virtual_cursor() {
         vec![("focus".to_owned(), 4), ("focus".to_owned(), 2)]
     );
 }
+
+/// An autocomplete (a combo box one types in, its options pointed at with
+/// aria-activedescendant), JAWS on the dev box (2026-10-16): the list on the way in, each
+/// option with its position, forms mode kept, and the field again once an option is chosen.
+#[test]
+fn an_autocompletes_options_are_read_and_forms_mode_stays() {
+    let mut combo = AomNode::new(1, Role::ComboBox).with_name("Fruit");
+    combo
+        .attributes
+        .insert("editable".to_owned(), "true".to_owned());
+    combo.states.expanded = Some(false);
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Search")
+        .with_children(vec![combo]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let field = |value: &str| {
+        let mut focus = FocusEvent::new(Role::ComboBox)
+            .with_node_id(1)
+            .with_name("Fruit");
+        focus.in_document = true;
+        focus.value = Some(value.to_owned());
+        focus.states.expanded = Some(false);
+        AccessibilityEvent::Focus(focus)
+    };
+    let option = |name: &str, index: usize| {
+        let mut focus = FocusEvent::new(Role::ListItem).with_name(name);
+        focus.in_document = true;
+        focus.container_name = Some("Fruits".to_owned());
+        focus.item_index = Some(index);
+        focus.item_count = Some(3);
+        AccessibilityEvent::Focus(focus)
+    };
+    engine.handle_accessibility_event(&field(""));
+    engine.forms_mode = true;
+    let hint = "To move to an item press the Arrow keys.";
+    assert_eq!(
+        engine.handle_accessibility_event(&option("Apple", 1)),
+        Some(format!(
+            "Fruits  \u{1d} list \u{1e} \nwith 3 items\nApple\n1 of 3\n{hint}"
+        ))
+    );
+    // Down moves to the next option, which its focus says: the field is not read.
+    let down = KeyEvent::new(Key::DownArrow, Modifiers::none(), true);
+    assert_eq!(engine.handle_key_event(&down), KeyAction::PassThrough);
+    assert!(actions.requests().is_empty());
+    assert_eq!(
+        engine.handle_accessibility_event(&option("Apricot", 2)),
+        Some(format!("Apricot\n2 of 3\n{hint}"))
+    );
+    assert!(engine.forms_mode);
+    // Enter chose it: the field again, with its new value.
+    assert_eq!(
+        engine.handle_accessibility_event(&field("Apricot")),
+        Some(
+            "Fruit  \u{1d} edit combo \u{1e}   \u{1d}collapsed\u{1e} \nApricot\n\
+             To set the value use the Arrow keys or type the value."
+                .to_owned()
+        )
+    );
+}

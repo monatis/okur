@@ -8,6 +8,28 @@ use crate::event::FocusEvent;
 use crate::speech::SpeechFormatter;
 
 impl ScreenReaderEngine {
+    /// An option the focused field points at, said as JAWS says it (dev box, 2026-10-16): its
+    /// list on the way in ("Fruits list | with 3 items"), then "Apple | 1 of 3 | To move to an
+    /// item press the Arrow keys."
+    fn speak_active_option(&mut self, focus: &FocusEvent) -> Option<String> {
+        let list = focus.container_name.clone().unwrap_or_default();
+        let mut lines = Vec::new();
+        if self.option_list.as_deref() != Some(list.as_str()) {
+            if let Some(count) = focus.item_count {
+                lines.push(format!("{list}  \u{1d} list \u{1e} \nwith {count} items"));
+            }
+        }
+        self.option_list = Some(list);
+        lines.push(focus.name.clone().unwrap_or_default());
+        if let (Some(index), Some(count)) = (focus.item_index, focus.item_count) {
+            lines.push(format!("{index} of {count}"));
+        }
+        lines.push("To move to an item press the Arrow keys.".to_owned());
+        let speech = lines.join("\n");
+        self.speech.speak(&speech, true);
+        Some(speech)
+    }
+
     /// Handles an OS-level focus changed event.
     /// Synchronizes cursor position, activates/deactivates forms mode,
     /// and emits canonical JAWS speech announcements.
@@ -95,6 +117,12 @@ impl ScreenReaderEngine {
             let target_role = target_id
                 .and_then(|id| self.cursor.buffer.node(id))
                 .map(|n| n.role.clone());
+            // An option the focused field points at (aria-activedescendant: an autocomplete's
+            // list, an editor's completions) is the field's: forms mode stays on.
+            if self.forms_mode && focus.role == Role::ListItem {
+                return self.speak_active_option(focus);
+            }
+            let from_options = self.option_list.take().is_some();
             if target_role == Some(Role::Document) {
                 // The page itself has focus: the next control focus enters the page.
                 self.last_page_focus = None;
@@ -109,7 +137,7 @@ impl ScreenReaderEngine {
             self.cursor.forms_mode_active = in_forms_mode;
             // Chrome can report focus on the same element again (while typing in it); JAWS
             // does not repeat the field.
-            if target_id.is_some() && target_id == self.last_page_focus {
+            if target_id.is_some() && target_id == self.last_page_focus && !from_options {
                 return None;
             }
             // The first control focused after the page itself is preceded by the page title
@@ -125,15 +153,29 @@ impl ScreenReaderEngine {
             // The focus event carries the live state; the buffer's copy may be older (Space
             // just toggled the control) [obs, 205/s2, s6].
             if let Some(id) = target_id {
+                // A combo box's list and value change as it is typed in (an autocomplete).
+                let combo_changed = |n: &crate::aom::AomNode| {
+                    n.role == Role::ComboBox
+                        && ((focus.states.expanded.is_some()
+                            && n.states.expanded != focus.states.expanded)
+                            || (focus.value.is_some() && n.value != focus.value))
+                };
                 let stale = self.cursor.buffer.node(id).is_some_and(|n| {
-                    focus.states.checked.is_some() && n.states.checked != focus.states.checked
+                    (focus.states.checked.is_some() && n.states.checked != focus.states.checked)
+                        || combo_changed(n)
                 });
                 if stale {
-                    if let Some(rebuilt) = self
-                        .cursor
-                        .buffer
-                        .with_node_changed(id, |n| n.states.checked = focus.states.checked)
-                    {
+                    if let Some(rebuilt) = self.cursor.buffer.with_node_changed(id, |n| {
+                        if focus.states.checked.is_some() {
+                            n.states.checked = focus.states.checked;
+                        }
+                        if n.role == Role::ComboBox {
+                            n.states.expanded = focus.states.expanded.or(n.states.expanded);
+                            if focus.value.is_some() {
+                                n.value = focus.value.clone();
+                            }
+                        }
+                    }) {
                         self.cursor.buffer = rebuilt;
                     }
                 }
@@ -144,7 +186,10 @@ impl ScreenReaderEngine {
             let mut speech = target_id
                 .and_then(|id| self.cursor.focus_node(id))
                 .or_else(|| focus.name.clone());
-            if target_role == Some(Role::ComboBox) && in_forms_mode {
+            let editable_combo = target_id
+                .and_then(|id| self.cursor.buffer.node(id))
+                .is_some_and(|n| n.attributes.get("editable").is_some_and(|e| e == "true"));
+            if target_role == Some(Role::ComboBox) && in_forms_mode && !editable_combo {
                 // In forms mode a combo box gets its usage hint [obs, 205/s8].
                 speech =
                     speech.map(|s| format!("{s}\nTo change the selection use the Arrow keys."));
@@ -154,6 +199,13 @@ impl ScreenReaderEngine {
             let by_enter = std::mem::take(&mut self.forms_mode_by_enter) && is_edit;
             if by_enter {
                 speech = speech.map(|s| format!("{s}\nType in text."));
+            }
+            // Back in an autocomplete from its list: "Fruit edit combo collapsed | Apricot |
+            // To set the value use the Arrow keys or type the value." (JAWS on the dev box).
+            if from_options && target_role == Some(Role::ComboBox) {
+                speech = speech.map(|s| {
+                    format!("{s}\nTo set the value use the Arrow keys or type the value.")
+                });
             }
             if entering_page {
                 let regions = if by_enter {

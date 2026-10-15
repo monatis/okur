@@ -62,6 +62,8 @@ pub struct ScreenReaderEngine {
     last_page_focus: Option<usize>,
     /// The page node the browser starts Tab from: the focus, or where Tab was last sent from.
     tab_start: Option<usize>,
+    /// The list whose option the focused field points at (aria-activedescendant), by name.
+    option_list: Option<String>,
     /// The last native focus outside menus, re-announced when menus close.
     last_native_focus: Option<FocusEvent>,
     menus: crate::native_focus::Menus,
@@ -108,6 +110,7 @@ impl ScreenReaderEngine {
             native_focus: crate::native_focus::NativeFocus::default(),
             last_page_focus: None,
             tab_start: None,
+            option_list: None,
             last_native_focus: None,
             menus: crate::native_focus::Menus::default(),
             pending_edit: None,
