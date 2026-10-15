@@ -1282,29 +1282,35 @@ impl ScreenReaderEngine {
             AccessibilityEvent::Selected(item) => self.handle_selected(item),
             AccessibilityEvent::LiveRegion(live) => self.handle_live_region_event(live),
             AccessibilityEvent::DocumentLoaded { title, root } => {
-                let buffer = VirtualBuffer::from_aom(root);
-                // The page already in the buffer, captured again (the first focus in it
-                // after start-up): refresh it without announcing it or leaving forms mode.
-                let same_page = self.app_mode == AppMode::VirtualBuffer
-                    && self.cursor.buffer.document_title() == Some(title.as_str());
-                if same_page {
-                    // Applied once the events of this change are handled: several live regions
-                    // can change at once, and each is compared with the page before the change
-                    // [obs, 206/s2].
-                    self.pending_page = Some(buffer);
-                    return None;
-                }
-                self.pending_page = None;
-                self.last_page_focus = None;
-                self.last_live_text.clear();
-                self.load_buffer(buffer);
-                self.app_mode = AppMode::VirtualBuffer;
-                self.last_window_title = Some(title.clone());
-                let welcome = format!("{}  \u{001d} Virtual PC Cursor \u{001e}", title);
-                self.speech.speak(&welcome, true);
-                Some(welcome)
+                self.handle_document_loaded(title, VirtualBuffer::from_aom(root))
             }
         }
+    }
+
+    /// Handles a page load ([`AccessibilityEvent::DocumentLoaded`]) whose buffer is already
+    /// built. Building a big page's buffer takes long, so the live screen reader builds it
+    /// before taking the engine, which the keyboard hook waits on.
+    pub fn handle_document_loaded(&mut self, title: &str, buffer: VirtualBuffer) -> Option<String> {
+        // The page already in the buffer, captured again (the first focus in it after
+        // start-up): refresh it without announcing it or leaving forms mode.
+        let same_page = self.app_mode == AppMode::VirtualBuffer
+            && self.cursor.buffer.document_title() == Some(title);
+        if same_page {
+            // Applied once the events of this change are handled: several live regions can
+            // change at once, and each is compared with the page before the change
+            // [obs, 206/s2].
+            self.pending_page = Some(buffer);
+            return None;
+        }
+        self.pending_page = None;
+        self.last_page_focus = None;
+        self.last_live_text.clear();
+        self.load_buffer(buffer);
+        self.app_mode = AppMode::VirtualBuffer;
+        self.last_window_title = Some(title.to_owned());
+        let welcome = format!("{}  \u{001d} Virtual PC Cursor \u{001e}", title);
+        self.speech.speak(&welcome, true);
+        Some(welcome)
     }
 
     /// Records the focused control's top-level window as the active one, for Insert+T and

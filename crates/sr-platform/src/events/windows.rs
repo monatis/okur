@@ -111,9 +111,12 @@ fn start_page_worker(
             let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
             while rx.recv().is_ok() {
                 while rx.try_recv().is_ok() {}
+                let started = std::time::Instant::now();
                 match crate::actions::capture_foreground_page() {
                     Ok(root) => {
                         let title = root.name.clone().unwrap_or_default();
+                        let ms = started.elapsed().as_millis();
+                        tracing::debug!(%title, ms, "page refreshed");
                         let _ = sender.send(AccessibilityEvent::DocumentLoaded { title, root });
                     }
                     Err(e) => tracing::warn!("page refresh failed: {e}"),
@@ -168,10 +171,13 @@ fn load_page_if_new(
         return;
     }
     *page = key;
+    // Events wait while the page is captured, which on a big page takes long.
+    let started = std::time::Instant::now();
     match crate::actions::capture_foreground_page() {
         Ok(root) => {
             let title = document.and_then(|d| d.name.clone()).unwrap_or_default();
-            tracing::debug!(%title, "page loaded");
+            let ms = started.elapsed().as_millis();
+            tracing::debug!(%title, ms, "page loaded");
             let _ = sender.send(AccessibilityEvent::DocumentLoaded { title, root });
         }
         Err(e) => tracing::warn!("page capture failed: {e}"),

@@ -1,5 +1,7 @@
 use clap::{Parser, Subcommand};
-use sr_core::{AomNode, Role, ScreenReaderEngine, VirtualBuffer, VirtualCursor};
+use sr_core::{
+    AccessibilityEvent, AomNode, Role, ScreenReaderEngine, VirtualBuffer, VirtualCursor,
+};
 use sr_platform::{
     create_event_listener, create_keyboard_hook, KeyAction, PlatformBridge, SpeechLog,
     TtsEngineType, TtsManager,
@@ -496,6 +498,79 @@ fn keyboard_settings(
 
 /// Logs to stderr at the RUST_LOG level, or, for `run --debug-log <file>`, everything from
 /// the screen reader's crates at debug level to that file.
+/// Engine work longer than this, on a key or an event, is logged as slow: the keyboard hook
+/// waits on the engine, and a key that waits 150 ms passes to the application unread.
+const SLOW_ENGINE: std::time::Duration = std::time::Duration::from_millis(20);
+
+/// A short name for an event, for logs (a page's tree is too big to print).
+fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
+    match event {
+        None => "idle",
+        Some(AccessibilityEvent::Focus(_)) => "focus",
+        Some(AccessibilityEvent::Menu(_)) => "menu",
+        Some(AccessibilityEvent::Change { .. }) => "change",
+        Some(AccessibilityEvent::TextContext(_)) => "text context",
+        Some(AccessibilityEvent::Selected(_)) => "selected",
+        Some(AccessibilityEvent::LiveRegion(_)) => "live region",
+        Some(AccessibilityEvent::DocumentLoaded { .. }) => "document loaded",
+    }
+}
+
+/// Prints utterances from a thread of its own: a console paused in QuickEdit selection
+/// blocks writes, and the event loop must not wait on it.
+fn spawn_console() -> std::sync::mpsc::Sender<String> {
+    let (tx, rx) = std::sync::mpsc::channel::<String>();
+    let spawned = std::thread::Builder::new()
+        .name("sr-console".to_owned())
+        .spawn(move || {
+            for line in rx {
+                println!("{line}");
+            }
+        });
+    if let Err(e) = spawned {
+        tracing::warn!("no console thread, utterances are not printed: {e}");
+    }
+    tx
+}
+
+/// Debug-log output, handed to the writer thread ([`spawn_log_writer`]).
+struct LogLines(std::sync::mpsc::Sender<Vec<u8>>);
+
+impl std::io::Write for LogLines {
+    fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
+        let _ = self.0.send(buf.to_vec());
+        Ok(buf.len())
+    }
+
+    fn flush(&mut self) -> std::io::Result<()> {
+        Ok(())
+    }
+}
+
+/// Writes the debug log from a thread of its own: the keyboard hook and the event loop log
+/// on every key and event, and must not wait on the disk.
+fn spawn_log_writer(file: std::fs::File) -> std::sync::mpsc::Sender<Vec<u8>> {
+    let (tx, rx) = std::sync::mpsc::channel::<Vec<u8>>();
+    let spawned = std::thread::Builder::new()
+        .name("sr-debug-log".to_owned())
+        .spawn(move || {
+            use std::io::Write;
+            let mut out = std::io::BufWriter::new(file);
+            while let Ok(first) = rx.recv() {
+                let _ = out.write_all(&first);
+                for more in rx.try_iter() {
+                    let _ = out.write_all(&more);
+                }
+                // Flushed whenever the queue empties, so the log is current on disk.
+                let _ = out.flush();
+            }
+        });
+    if let Err(e) = spawned {
+        eprintln!("No debug-log thread, the debug log stays empty: {e}");
+    }
+    tx
+}
+
 fn init_logging(cli: &Cli) {
     if let Some(Commands::Run {
         debug_log: Some(path),
@@ -504,8 +579,9 @@ fn init_logging(cli: &Cli) {
     {
         match std::fs::File::create(path) {
             Ok(file) => {
+                let lines = spawn_log_writer(file);
                 tracing_subscriber::fmt()
-                    .with_writer(std::sync::Mutex::new(file))
+                    .with_writer(move || LogLines(lines.clone()))
                     .with_ansi(false)
                     .with_env_filter(tracing_subscriber::EnvFilter::new(
                         "sr_core=debug,sr_platform=debug,sr_cli=debug",
@@ -647,7 +723,8 @@ async fn main() {
                 // Windows silently removes a low-level keyboard hook that once exceeds
                 // LowLevelHooksTimeout, so the hook never waits long for the engine: a key
                 // that finds it busy for 150 ms passes to the application.
-                let deadline = std::time::Instant::now() + std::time::Duration::from_millis(150);
+                let arrived = std::time::Instant::now();
+                let deadline = arrived + std::time::Duration::from_millis(150);
                 let mut guard = engine_cb.try_lock();
                 while matches!(guard, Err(std::sync::TryLockError::WouldBlock))
                     && std::time::Instant::now() < deadline
@@ -659,7 +736,18 @@ async fn main() {
                     tracing::warn!(key = ?event.key, "engine busy: key passed through");
                 }
                 if let Ok(mut eng) = guard {
+                    let waited = arrived.elapsed();
+                    let started = std::time::Instant::now();
                     let action = eng.handle_key_event(&event);
+                    let held = started.elapsed();
+                    if waited > SLOW_ENGINE || held > SLOW_ENGINE {
+                        tracing::warn!(
+                            key = ?event.key,
+                            waited_ms = waited.as_millis(),
+                            held_ms = held.as_millis(),
+                            "slow key handling"
+                        );
+                    }
                     if event.is_down {
                         tracing::debug!(
                             key = ?event.key,
@@ -689,6 +777,7 @@ async fn main() {
                 tracing::warn!("Could not start OS accessibility event listener: {}", e);
             } else {
                 let engine_events = Arc::clone(&engine);
+                let console = spawn_console();
                 tokio::spawn(async move {
                     let idle = std::time::Duration::from_millis(150);
                     loop {
@@ -698,16 +787,42 @@ async fn main() {
                             // Quiet for a moment: speech JAWS defers until no event supersedes it.
                             Err(_) => None,
                         };
-                        // The engine lock is released before printing: a console in QuickEdit
-                        // selection blocks writes, which must not hold the keyboard hook up.
+                        // A page's buffer is built before the engine is taken: on a big page
+                        // that takes long, and the keyboard hook waits on the engine.
+                        let page = match &event {
+                            Some(AccessibilityEvent::DocumentLoaded { title, root }) => {
+                                let started = std::time::Instant::now();
+                                let buffer = VirtualBuffer::from_aom(root);
+                                tracing::debug!(
+                                    lines = buffer.lines.len(),
+                                    ms = started.elapsed().as_millis(),
+                                    "page buffer built"
+                                );
+                                Some((title.as_str(), buffer))
+                            }
+                            _ => None,
+                        };
                         let spoken = {
                             let Ok(mut eng) = engine_events.lock() else {
                                 continue;
                             };
-                            match &event {
-                                Some(event) => eng.handle_accessibility_event(event),
-                                None => eng.on_idle(),
+                            let started = std::time::Instant::now();
+                            let spoken = match (&event, page) {
+                                (_, Some((title, buffer))) => {
+                                    eng.handle_document_loaded(title, buffer)
+                                }
+                                (Some(event), None) => eng.handle_accessibility_event(event),
+                                (None, None) => eng.on_idle(),
+                            };
+                            let held = started.elapsed();
+                            if held > SLOW_ENGINE {
+                                tracing::warn!(
+                                    event = event_kind(event.as_ref()),
+                                    ms = held.as_millis(),
+                                    "slow event handling"
+                                );
                             }
+                            spoken
                         };
                         if let Some(msg) = spoken {
                             // One line per utterance, so the debug log stays line-oriented.
@@ -715,7 +830,7 @@ async fn main() {
                                 .replace(['\u{001d}', '\u{001e}'], "")
                                 .replace('\n', " | ");
                             tracing::debug!(%msg, "spoken for event");
-                            println!("[Event Spoken] {msg}");
+                            let _ = console.send(format!("[Event Spoken] {msg}"));
                         }
                     }
                 });
