@@ -1844,9 +1844,9 @@ impl ScreenReaderEngine {
 
     /// Say Font (`Insert+F`): the font at the cursor. Pressed twice quickly, JAWS shows it in
     /// the Virtual Viewer and reads the message [obs, 209/s7, 314/s2]; with no font it just
-    /// says "No font" again (313/s2). Native controls report no font yet: JAWS reads
-    /// Notepad's from the screen ("Consolas 22 point" for a 24-point LOGFONT, 314/s1), a
-    /// conversion not yet known.
+    /// says "No font" again (313/s2). A native field reports its font at the caret (UIA text
+    /// attributes) or its window's font; JAWS's size for classic Notepad (314/s1, "22
+    /// point") awaits a trace that recorded the font.
     fn say_font(&mut self, in_viewer: bool) -> Option<String> {
         let formatting = if self.app_mode == AppMode::VirtualBuffer && !self.forms_mode {
             self.cursor.buffer.formatting_at_offset(self.cursor.offset)
@@ -1860,12 +1860,25 @@ impl ScreenReaderEngine {
         let description = formatting
             .as_ref()
             .and_then(SpeechFormatter::font_description);
+        // A native text field that reports its alignment adds its paragraph formatting, after
+        // a comma (JAWS 2025 in Windows 11 Notepad, dev box: "Font is Consolas 11 point, |
+        // Paragraph formatting left justified"); pages (209/s3) and fields known only by
+        // their window font (314/s1) do not.
+        let paragraph = formatting
+            .as_ref()
+            .and_then(|f| f.alignment.as_deref())
+            .filter(|_| self.app_mode != AppMode::VirtualBuffer)
+            .map(SpeechFormatter::paragraph_formatting);
+        let description = match (description, &paragraph) {
+            (Some(font), Some(_)) => Some(format!("{font},")),
+            (font, _) => font,
+        };
         let speech = match (in_viewer, description) {
             (true, Some(font)) if self.viewer.is_none() => {
                 let viewer = crate::viewer::VirtualViewer::message(vec![
                     "Font information:".to_owned(),
                     font,
-                    String::new(),
+                    paragraph.unwrap_or_default(),
                     String::new(),
                     "\u{1d} Link \u{1e} List JAWS Hot Keys".to_owned(),
                     "Press ESCAPE to close this message.".to_owned(),
@@ -1874,7 +1887,11 @@ impl ScreenReaderEngine {
                 self.viewer = Some(viewer);
                 speech
             }
-            _ => SpeechFormatter::format_font(formatting.as_ref()),
+            (_, Some(font)) => match paragraph {
+                Some(paragraph) => format!("Font is {font}\n{paragraph}"),
+                None => format!("Font is {font}"),
+            },
+            (_, None) => SpeechFormatter::format_font(None),
         };
         self.speech.speak(&speech, true);
         Some(speech)
@@ -2440,6 +2457,39 @@ mod tests {
             );
         }
         assert!(engine.viewer.is_none());
+    }
+
+    /// Windows 11 Notepad (JAWS 2025 on the dev box): the font, then its paragraph formatting.
+    #[test]
+    fn a_native_field_says_its_paragraph_formatting() {
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+        let mut focus = FocusEvent::new(Role::Document)
+            .with_name("Text editor")
+            .with_window_title("viewer-test.txt - Notepad");
+        focus.text = Some(crate::event::TextContext {
+            text: "First line".to_owned(),
+            caret: 0,
+            selection: None,
+            font: Some(crate::event::FontInfo {
+                family: "Consolas".to_owned(),
+                size_tenths: 110,
+                alignment: Some("left".to_owned()),
+                ..Default::default()
+            }),
+        });
+        engine.handle_focus_event(&focus);
+        assert_eq!(
+            engine.execute_command("Insert+F").as_deref(),
+            Some("Font is Consolas 11 point,\nParagraph formatting left justified")
+        );
+        assert_eq!(
+            engine.execute_command("SayFontInViewer").as_deref(),
+            Some(
+                "Font information:\nConsolas 11 point,\nParagraph formatting left justified\n\
+                 \u{1d} Link \u{1e} List JAWS Hot Keys\nPress ESCAPE to close this message."
+            )
+        );
     }
 
     #[test]

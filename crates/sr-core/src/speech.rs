@@ -636,6 +636,17 @@ impl SpeechFormatter {
             .map_or_else(|| "No font".to_owned(), |f| format!("Font is {f}"))
     }
 
+    /// A text field's alignment as Say Font words it: "Paragraph formatting left justified"
+    /// (observed; the other alignments' words are assumed to follow it).
+    pub fn paragraph_formatting(alignment: &str) -> String {
+        let words = match alignment {
+            "left" => "left justified",
+            "right" => "right justified",
+            other => other,
+        };
+        format!("Paragraph formatting {words}")
+    }
+
     /// Formats selection action announcement matching JAWS conventions.
     pub fn format_selection(selected: bool, text: &str) -> String {
         if selected {
