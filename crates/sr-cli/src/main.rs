@@ -260,6 +260,12 @@ enum Commands {
         /// Path of the speech log file
         path: String,
     },
+    /// Summarize a live run's responsiveness from its debug log (`run --debug-log`): keys,
+    /// event reads and handling, page captures and text reads, as percentiles in ms
+    Latency {
+        /// Path of the debug log
+        path: String,
+    },
     /// Query hardware soundcard / default playback audio meter
     Meter {
         /// Monitor duration in milliseconds (default 500ms)
@@ -764,6 +770,8 @@ async fn main() {
                             ?action,
                             mode = ?eng.app_mode,
                             forms = eng.forms_mode,
+                            waited_us = waited.as_micros(),
+                            held_us = held.as_micros(),
                             "key"
                         );
                     }
@@ -825,6 +833,14 @@ async fn main() {
                                     event = event_kind(event.as_ref()),
                                     ms = held.as_millis(),
                                     "slow event handling"
+                                );
+                            }
+                            // Idle ticks come every 150 ms of quiet; only events are timed.
+                            if event.is_some() {
+                                tracing::debug!(
+                                    event = event_kind(event.as_ref()),
+                                    us = held.as_micros(),
+                                    "event handled"
                                 );
                             }
                             spoken
@@ -990,6 +1006,20 @@ async fn main() {
                 );
             }
         }
+        Some(Commands::Latency { path }) => match fs::read_to_string(&path) {
+            Ok(log) => {
+                let categories = sr_corpus::latency::summarize(&log);
+                if categories.is_empty() {
+                    println!("No timings in {path:?} (was it written by `run --debug-log`?)");
+                } else {
+                    print!("{}", sr_corpus::latency::render(&categories));
+                }
+            }
+            Err(e) => {
+                eprintln!("Failed to read debug log {path:?}: {e}");
+                std::process::exit(1);
+            }
+        },
         Some(Commands::History { path }) => match SpeechLog::read(&path) {
             Ok(entries) => {
                 for e in entries {

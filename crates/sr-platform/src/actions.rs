@@ -117,8 +117,18 @@ mod windows_actions {
                                     );
                                     continue;
                                 };
+                                let started = Instant::now();
                                 let context = read_after_key(uia);
-                                tracing::debug!(?context, "text context read");
+                                // Offsets, not the text: a document's whole text on every key
+                                // made the debug log huge.
+                                tracing::debug!(
+                                    chars = context.as_ref().map(|c| c.text.chars().count()),
+                                    caret = context.as_ref().map(|c| c.caret),
+                                    selection = ?context.as_ref().and_then(|c| c.selection),
+                                    word = ?context.as_ref().and_then(|c| c.word),
+                                    ms = started.elapsed().as_millis(),
+                                    "text context read"
+                                );
                                 if let Some(context) = context {
                                     let _ = events.send(AccessibilityEvent::TextContext(context));
                                 }
