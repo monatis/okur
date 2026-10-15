@@ -1,0 +1,17 @@
+{
+  "id": "318-web-virtualize-in-browse-mode",
+  "name": "Browse mode: Virtualize Window (Insert+Alt+W) and Virtualize Current Control (Insert+Shift+V) where the page is already a virtual view",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+Alt+W" },
+    { "id": "s2", "type": "key", "command": "Down" },
+    { "id": "s3", "type": "key", "command": "Insert+Shift+V" },
+    { "id": "s4", "type": "key", "command": "H" },
+    { "id": "s5", "type": "key", "command": "Insert+Alt+W" },
+    { "id": "s6", "type": "key", "command": "Down" }
+  ]
+}

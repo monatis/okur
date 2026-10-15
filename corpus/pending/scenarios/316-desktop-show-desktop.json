@@ -1,0 +1,15 @@
+{
+  "id": "316-desktop-show-desktop",
+  "name": "Show Desktop (Win+M): what JAWS says on reaching the desktop, its window title, and returning with Alt+Tab",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-editor.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Editor Fixture" },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Win+M", "settle_max_ms": 15000 },
+    { "id": "s2", "type": "key", "command": "Insert+T" },
+    { "id": "s3", "type": "key", "command": "Alt+Tab", "settle_max_ms": 15000 }
+  ]
+}

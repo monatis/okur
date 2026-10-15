@@ -1,6 +1,6 @@
 # Handoff: JAWS Feature Loop, Round 1 (2026-10-14 to 2026-10-15)
 
-**Branch**: `jaws-feature-loop`.
+**Branch**: `jaws-feature-loop`, fast-forwarded into `master` at the end of the round.
 **Plan**: `docs/plans/2026-10-14-full-ui-accessibility.md` (its "Next" section: the discovery
 loop). Next plan: `docs/plans/2026-10-15-jaws-feature-loop-round-2.md`.
 **Preceded by**: `2026-10-14-full-ui-accessibility-round-1.md`.
@@ -20,8 +20,8 @@ Corpus manifest is current.
 $ cargo test --workspace  (summed test-result lines)
 tests: 856 passed, 0 failed, 198 ignored
 ```
-(After the dev-box session below; the parity lines did not change in it. Run with the
-untracked scenarios parked: each one without evidence counts as "could not run".)
+(After the dev-box session below; the parity lines did not change in it. The unrecorded
+scenarios were outside `corpus/scenarios/`: each one without evidence counts as "could not run".)
 
 At the start of the round: 561/569, and no spoken layer.
 
@@ -141,16 +141,16 @@ The user allowed using the dev box (Windows 11 26200, JAWS 2025 running) while t
 
 ## Not finished
 
-- **old-pc has been offline since about 01:30** (`rendezvous error: target_offline`). These are written but not recorded, and sit untracked in the working tree:
-  - `corpus/scenarios/208-web-textarea-character-review.json` (re-record with the fixed tracer);
-  - `315-desktop-richedit-lines-and-font.json`, with fixture `corpus/fixtures/desktop-richedit.ps1`;
+- **old-pc has been offline since about 01:30** (`rendezvous error: target_offline`). These are written but not recorded, and wait in `corpus/pending/` (see its README), which the manifest and parity ignore:
+  - `208-web-textarea-character-review.json` (re-record with the fixed tracer);
+  - `315-desktop-richedit-lines-and-font.json`, with fixture `desktop-richedit.ps1`;
   - `316-desktop-show-desktop.json`;
   - `317-desktop-alt-tab-hold.json`;
   - `318-web-virtualize-in-browse-mode.json`;
   - `319-desktop-run-dialog-viewer.json`;
   - `320-desktop-notepad-laptop-reading-keys.json`.
 
-  A scenario without evidence counts as "could not run", so they are committed only with their evidence.
+  A scenario in `corpus/scenarios/` without evidence counts as "could not run", so each moves there (and its fixture into `corpus/fixtures/`) only when it is recorded. How to record them: `docs/references/verification-loop.md`.
 - **The dev box's research needs old-pc evidence.** Alt+Tab, Win+M, Insert+T on the desktop, Say Font in Notepad, the Run dialog, and Insert+Tab now match JAWS live on Windows 11, but old-pc (Windows 10) has to record them before they count as parity.
 - **Classic Notepad's font size** (314/s1, JAWS: "22 point").
 - **Alignments other than "left justified"** in Say Font.

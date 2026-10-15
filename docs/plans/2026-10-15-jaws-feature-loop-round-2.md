@@ -1,6 +1,6 @@
 # Plan: JAWS Feature Loop, Round 2 (2026-10-15)
 
-**Branch**: `jaws-feature-loop`.
+**Branch**: start a new branch from `master` (round 1's `jaws-feature-loop` was merged into it).
 **Preceded by**: handoff `docs/handoff/2026-10-15-jaws-feature-loop-round-1.md`.
 
 ## Goal
@@ -13,9 +13,69 @@ Keep the loop running:
 
 Live usability gaps the user reports come first.
 
-## Work items, in order
+How the loop runs (machines, OpenDesk, recording, importing evidence, dev-box rules) is in
+[`docs/references/verification-loop.md`](../references/verification-loop.md). old-pc stays
+offline until the user relaunches `opendesk serve` there. Until then, work on the
+**priorities without old-pc** below, and check old-pc first at the start of each session:
 
-1. **Record what round 1 left unrecorded** (old-pc was offline). The scenarios are untracked in the working tree.
+```bash
+opendesk exec --peer old-pc --timeout 20 "Get-Date -Format HH:mm:ss"
+```
+
+## Priorities without old-pc (the user's list, 2026-10-15)
+
+The screen reader is close to usable for the user's daily work. These come next, in this order
+when old-pc is offline, and interleaved with recording when it is back:
+
+1. **Missing features that bite the user.** Take them from:
+   - the user's own reports, which come first and must be proven live;
+   - the JAWS manual, tutorial and keystroke lists (work item 5 below);
+   - discovery on the dev box, **only when the user allows it** (verification-loop §7).
+
+   A feature found on the dev box gets an old-pc scenario in `corpus/pending/` so it becomes
+   evidence later.
+2. **No panics in xa11y.** `crates/xa11y/gate-baseline.json` allows 1151 `unwrap`/`expect` and
+   120 panicking macros. The pre-commit gate counts non-comment lines, so tests count too.
+   - First separate test code from production code in the count, so the baseline measures what
+     can crash the screen reader.
+   - Then harden the code the screen reader runs, worst first: `xa11y-windows/src/uia.rs`,
+     `xa11y-core/src/{element,locator,app,selector}.rs`, then `xa11y-macos`.
+   - Return `Result` and use `get()` instead of indexing; lower the baseline in the same commit.
+   - The CLI and MCP front ends (`xa11y/src/cli.rs`, `xa11y/src/mcp/`, the `cli` feature) are not used by
+     `sr-cli run`, so they come last or are dropped from the vendored tree.
+   - Finally remove the crate-level `indexing_slicing` allowance (`VENDORED.md`, "Hardening
+     ratchet").
+3. **Review the async machinery so nothing blocks the event loop or the keyboard hook.** What is
+   there today (`crates/sr-cli/src/main.rs`, `run`):
+   - The hook thread waits up to 150 ms for the engine's `std::sync::Mutex`, polling every 1 ms,
+     then passes the key through ("engine busy: key passed through" in the debug log).
+   - The accessibility-event task is a `tokio::spawn` task that takes the same blocking mutex
+     and runs the engine on a runtime worker thread.
+   - The engine calls speech (`SpeechOutput`) and application actions while it holds the lock.
+
+   To do:
+   - Measure first: log the time the engine holds its lock per key and per event, and find
+     every OS call made under it (speech start, clipboard, `actions`).
+   - Move blocking work off the lock and off runtime threads: a dedicated engine thread fed by
+     channels, or `spawn_blocking` for OS reads.
+   - Check that speech `speak`/`stop` never wait on the synthesizer. OneCore and audio
+     (`tts/onecore.rs`, `audio.rs`) poll with `thread::sleep`.
+   - Bound the event channel (it is unbounded) and coalesce floods of events.
+   - The tracer's reads (`event_trace.rs`) already log "slow event read" past 250 ms; give the
+     live listener (`events/windows.rs`) the same instrumentation.
+4. **Code quality, refactoring, performance.**
+   - `sr-core/src/engine.rs` keeps growing. Split by concern: keys, events, window
+     announcements, and layout commands into modules beside `editing.rs` and `native_focus.rs`,
+     without changing behavior. Parity and the tests must stay identical, and the commit says
+     so with the tool output.
+   - Look for duplicated UIA code between `sr-platform::uia_snapshot`, `event_trace` and xa11y
+     (VENDORED.md, "Planned extensions"), and move it into xa11y.
+   - Profile `sr-cli parity` and the live focus path (debug-log stage timings) before
+     optimizing anything.
+
+## Work items for old-pc, in order
+
+1. **Record what round 1 left unrecorded** (old-pc was offline). The scenarios wait in `corpus/pending/` (see its README); move each into `corpus/scenarios/` (and its fixture into `corpus/fixtures/`) before pushing it.
    - Deploy a release `sr-cli` built with trace format 7 and the UIA focus handler: `lab-push.ps1 -SrCli`, then `lab-pull.ps1` on old-pc.
    - Record:
      - **317**, Alt held while Tab is pressed three times. Check `sr-cli evidence 317 --trace` for `uia_focus` events. On Windows 10 the switcher (`MultitaskingViewFrame`) sits behind `ForegroundStaging`.

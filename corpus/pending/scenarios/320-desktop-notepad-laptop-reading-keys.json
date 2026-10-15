@@ -1,0 +1,25 @@
+{
+  "id": "320-desktop-notepad-laptop-reading-keys",
+  "name": "Notepad, laptop layout: Say Line, Say Word (CapsLock+I, K), the next and prior line, word and character (CapsLock+O, L, J, M, U), and Ctrl+Right over punctuation",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "sr-notepad-fixture.txt - Notepad" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "CapsLock+I" },
+    { "id": "s2", "type": "key", "command": "CapsLock+K" },
+    { "id": "s3", "type": "key", "command": "CapsLock+O" },
+    { "id": "s4", "type": "key", "command": "CapsLock+I" },
+    { "id": "s5", "type": "key", "command": "CapsLock+L" },
+    { "id": "s6", "type": "key", "command": "CapsLock+K" },
+    { "id": "s7", "type": "key", "command": "CapsLock+J" },
+    { "id": "s8", "type": "key", "command": "CapsLock+M" },
+    { "id": "s9", "type": "key", "command": "CapsLock+U" },
+    { "id": "s10", "type": "key", "command": "Insert+Up" },
+    { "id": "s11", "type": "key", "command": "Ctrl+Right" },
+    { "id": "s12", "type": "key", "command": "Ctrl+Right" },
+    { "id": "s13", "type": "key", "command": "Ctrl+Right" }
+  ]
+}

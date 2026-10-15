@@ -49,6 +49,7 @@ To ensure seamless context passing across autonomous sessions, all engineering w
 ### Active Plan for Current / Next Session
 - **Active Plan**: [`docs/plans/2026-10-15-jaws-feature-loop-round-2.md`](docs/plans/2026-10-15-jaws-feature-loop-round-2.md)
 - **Latest Handoff**: [`docs/handoff/2026-10-15-jaws-feature-loop-round-1.md`](docs/handoff/2026-10-15-jaws-feature-loop-round-1.md); read the audit [`docs/handoff/2026-10-14-full-audit-of-prior-development.md`](docs/handoff/2026-10-14-full-audit-of-prior-development.md) before trusting any earlier handoff
+- **Loop lifecycle**: [`docs/references/verification-loop.md`](docs/references/verification-loop.md): the machines, OpenDesk and `old-pc`, recording JAWS evidence, importing it, dev-box live checks, and pitfalls. Read it before touching `old-pc` or the corpus.
 
 
 ### Standard Session Execution Protocol
@@ -145,7 +146,7 @@ These exist because an audit (2026-10-14) found parity claims that no tool had e
 - `crates/sr-corpus/`: Test harness, normalizer, differential comparison engine.
 - `crates/sr-cli/`: CLI daemon and regression test binary.
 - `crates/xa11y/`: our accessibility-API layer, vendored from xa11y 0.15.2 (MIT) and extended in-tree. See `crates/xa11y/VENDORED.md` for import changes, the hardening ratchet, and planned extensions.
-- `corpus/`: Reference speech corpus (manifest, fixtures, scenarios, evidence, quality report).
+- `corpus/`: Reference speech corpus (manifest, fixtures, scenarios, evidence, quality report). `corpus/pending/` holds scenarios written but not yet recorded; the manifest and parity ignore it.
 - `skills/jaws-reference/`: Reusable automation skill for JAWS COM and speech extraction.
 - `.agents/`: Antigravity agent configuration (`mcp_config.json`, `hooks.json`) and the shared quality-gate scripts (`scripts/`) used by every harness.
 - `.claude/`, `.mcp.json`, `CLAUDE.md`: Claude Code adapters for the same hooks, MCP servers, and the `jaws-reference` skill.

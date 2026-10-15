@@ -1,0 +1,30 @@
+{
+  "id": "315-desktop-richedit-lines-and-font",
+  "name": "RichEdit (bare carriage-return lines): Up and Down by line, a blank line, the line break as a character, Say Line, Say Font and its message",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-richedit.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR RichEdit Fixture" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Down" },
+    { "id": "s2", "type": "key", "command": "Down" },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Down" },
+    { "id": "s5", "type": "key", "command": "Down" },
+    { "id": "s6", "type": "key", "command": "Up" },
+    { "id": "s7", "type": "key", "command": "Up" },
+    { "id": "s8", "type": "key", "command": "Insert+Up" },
+    { "id": "s9", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s10", "type": "key", "command": "End" },
+    { "id": "s11", "type": "key", "command": "Right" },
+    { "id": "s12", "type": "key", "command": "Right" },
+    { "id": "s13", "type": "key", "command": "Left" },
+    { "id": "s14", "type": "key", "command": "Insert+F" },
+    { "id": "s15", "type": "key", "command": "Insert+F", "repeat": 2 },
+    { "id": "s16", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s17", "type": "key", "command": "Down" },
+    { "id": "s18", "type": "key", "command": "Escape" }
+  ]
+}
