@@ -227,8 +227,21 @@ impl ScreenReaderEngine {
     pub(super) fn apply_pending_page(&mut self) {
         if let Some(buffer) = self.pending_page.take() {
             let offset = self.cursor.offset;
+            let place = self.cursor.buffer.line_at_offset(offset).map(|line| {
+                (
+                    line.text.clone(),
+                    line.start_offset,
+                    offset.saturating_sub(line.start_offset),
+                )
+            });
             self.cursor.buffer = buffer;
-            self.cursor.offset = offset.min(self.cursor.buffer.len());
+            self.cursor.offset = match place {
+                Some((text, start, column)) => same_line(&self.cursor.buffer, &text, start)
+                    .map(|line_start| line_start + column)
+                    .unwrap_or(offset),
+                None => offset,
+            }
+            .min(self.cursor.buffer.len());
             self.last_page_focus = None;
         }
     }
@@ -467,4 +480,16 @@ pub(super) struct LiveStream {
     spoken: usize,
     /// Quiet ticks since it last changed.
     quiet: u8,
+}
+
+/// Where a line with `text` starts in `buffer`, the one nearest to `near`: the cursor's line in
+/// a page captured again, whose lines can shift (a live region grew above it, or the page was
+/// first read quickly and then in full). `None` when no line has that text.
+fn same_line(buffer: &VirtualBuffer, text: &str, near: usize) -> Option<usize> {
+    buffer
+        .lines
+        .iter()
+        .filter(|line| line.text == text)
+        .map(|line| line.start_offset)
+        .min_by_key(|start| start.abs_diff(near))
 }

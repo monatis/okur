@@ -14,6 +14,8 @@ mod dpi;
 mod input;
 #[cfg(target_os = "windows")]
 mod uia;
+#[cfg(target_os = "windows")]
+pub mod uia_element;
 
 mod screenshot;
 

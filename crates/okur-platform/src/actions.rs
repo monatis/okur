@@ -9,6 +9,19 @@
 /// AOM attribute holding a node's IA2 `uniqueID`.
 pub const UNIQUE_ID_ATTR: &str = "ia2_unique_id";
 
+/// AOM attribute holding a node's UIA RuntimeId (comma-separated), for a page read through
+/// UIA, whose nodes have no IA2 `uniqueID`.
+pub const UIA_RUNTIME_ID_ATTR: &str = "uia_runtime_id";
+
+/// The UIA RuntimeId recorded on a node, if any.
+pub fn runtime_id(node: &okur_core::AomNode) -> Option<Vec<i32>> {
+    node.attributes
+        .get(UIA_RUNTIME_ID_ATTR)?
+        .split(',')
+        .map(|part| part.parse().ok())
+        .collect()
+}
+
 /// The IA2 `uniqueID` recorded on a node, if any.
 pub fn unique_id(node: &okur_core::AomNode) -> Option<i32> {
     node.attributes.get(UNIQUE_ID_ATTR)?.parse().ok()
@@ -19,7 +32,7 @@ pub use windows_actions::WindowsActions;
 
 #[cfg(windows)]
 mod windows_actions {
-    use super::unique_id;
+    use super::{runtime_id, unique_id};
     use crate::text_context::read_focused;
     use okur_core::{AccessibilityEvent, TextContext};
     use std::sync::mpsc::{channel, Sender};
@@ -42,6 +55,8 @@ mod windows_actions {
 
     enum Request {
         Object(i32, Ia2Action),
+        /// The same, for a page object read through UIA, found by its RuntimeId.
+        UiaObject(Vec<i32>, Ia2Action),
         /// The field's text once the application has acted on a key, compared with the
         /// field as the engine last knew it.
         Text(Option<TextContext>),
@@ -114,6 +129,14 @@ mod windows_actions {
                                 let window = unsafe { GetForegroundWindow() };
                                 if let Err(e) = perform_chromium_action(window, id, action) {
                                     tracing::warn!("{action:?} on IA2 object {id} failed: {e}");
+                                }
+                            }
+                            Request::UiaObject(id, action) => {
+                                let Some(uia) = uia.as_ref() else {
+                                    continue;
+                                };
+                                if let Err(e) = perform_uia_action(uia, &id, action) {
+                                    tracing::warn!("{action:?} on UIA object {id:?} failed: {e}");
                                 }
                             }
                             Request::Text(before) => {
@@ -201,6 +224,33 @@ mod windows_actions {
                 .lock()
                 .is_ok_and(|tx| tx.send(request).is_ok())
         }
+
+        /// Acts on a page node's live object: by its IA2 uniqueID, or, for a page read through
+        /// UIA (while its IA2 capture is still running), by its UIA RuntimeId.
+        fn act(&self, node: &okur_core::AomNode, action: Ia2Action) -> bool {
+            if let Some(id) = unique_id(node) {
+                return self.send(Request::Object(id, action));
+            }
+            runtime_id(node).is_some_and(|id| self.send(Request::UiaObject(id, action)))
+        }
+    }
+
+    /// Focuses or activates the UIA element with RuntimeId `id` in the window in front.
+    fn perform_uia_action(
+        uia: &IUIAutomation,
+        id: &[i32],
+        action: Ia2Action,
+    ) -> Result<(), String> {
+        use xa11y_windows::uia_element::{do_default_action, find_by_runtime_id};
+        // SAFETY: plain Win32 and UIA calls on valid objects.
+        let root =
+            unsafe { uia.ElementFromHandle(GetForegroundWindow()) }.map_err(|e| e.to_string())?;
+        let element = find_by_runtime_id(uia, &root, id).ok_or("not found")?;
+        match action {
+            // SAFETY: a UIA call on a valid element.
+            Ia2Action::Focus => unsafe { element.SetFocus() }.map_err(|e| e.to_string()),
+            Ia2Action::DefaultAction => do_default_action(&element).map_err(|e| e.to_string()),
+        }
     }
 
     /// The field's state once the application has acted on the key.
@@ -245,12 +295,11 @@ mod windows_actions {
 
     impl okur_core::actions::ApplicationActions for WindowsActions {
         fn focus(&self, node: &okur_core::AomNode) -> bool {
-            unique_id(node).is_some_and(|id| self.send(Request::Object(id, Ia2Action::Focus)))
+            self.act(node, Ia2Action::Focus)
         }
 
         fn activate(&self, node: &okur_core::AomNode) -> bool {
-            unique_id(node)
-                .is_some_and(|id| self.send(Request::Object(id, Ia2Action::DefaultAction)))
+            self.act(node, Ia2Action::DefaultAction)
         }
 
         fn read_at_caret(&self, before: Option<&TextContext>) -> bool {
@@ -372,4 +421,15 @@ pub fn set_clipboard_text(text: &str) -> Result<(), String> {
         let _ = CloseClipboard();
         result
     }
+}
+
+/// Captures the foreground page through UIA alone, with one cached round trip: a page ready
+/// to read in a fraction of the time the IA2 capture takes (GitHub's repository page, 1,182
+/// objects: 160 ms against 3 s), without IA2's rendered line breaks and formatting runs.
+/// The live screen reader reads this first and replaces it with
+/// [`capture_foreground_page`]'s when that is done.
+#[cfg(windows)]
+pub fn capture_foreground_page_quick() -> Result<okur_core::AomNode, crate::PlatformError> {
+    let snapshot = crate::uia_snapshot::capture_foreground_document(None, None)?;
+    Ok(crate::uia_snapshot::to_aom(&snapshot.root))
 }

@@ -725,34 +725,7 @@ impl WindowsProvider {
     /// element falls through dedup, which is harmless because untracked
     /// duplicates would only over-report, never under-report.
     fn runtime_id_key(element: &IUIAutomationElement) -> Option<Vec<i32>> {
-        use windows::Win32::System::Com::SAFEARRAY;
-        use windows::Win32::System::Ole::{SafeArrayAccessData, SafeArrayUnaccessData};
-
-        let sa: *mut SAFEARRAY = match unsafe { element.GetRuntimeId() } {
-            Ok(p) if !p.is_null() => p,
-            _ => return None,
-        };
-
-        // Safety: GetRuntimeId hands us ownership of a SAFEARRAY*. We must
-        // free it via SafeArrayDestroy when done, otherwise we leak. Lock
-        // the data via SafeArrayAccessData, copy out the i32s, unlock,
-        // destroy.
-        let result = unsafe {
-            let mut data_ptr: *mut core::ffi::c_void = core::ptr::null_mut();
-            if SafeArrayAccessData(sa, &mut data_ptr as *mut _).is_err() {
-                let _ = windows::Win32::System::Ole::SafeArrayDestroy(sa);
-                return None;
-            }
-            // SAFEARRAY of i32 — rgsabound[0].cElements is the count.
-            let bounds = (*sa).rgsabound.as_ptr();
-            let count = (*bounds).cElements as usize;
-            let slice = std::slice::from_raw_parts(data_ptr as *const i32, count);
-            let v = slice.to_vec();
-            let _ = SafeArrayUnaccessData(sa);
-            let _ = windows::Win32::System::Ole::SafeArrayDestroy(sa);
-            v
-        };
-        Some(result)
+        crate::uia_element::runtime_id(element)
     }
 }
 

@@ -16,6 +16,28 @@ use tokio::sync::mpsc::UnboundedSender;
 /// UIA `Document` control type.
 const UIA_DOCUMENT: i32 = 50030;
 
+/// What the page worker is asked to capture.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum PageRequest {
+    /// The page after live region changes, once they settle.
+    Refresh(ForegroundWindow),
+    /// The page just read quickly through UIA, now in full through IA2, at once.
+    Refine(ForegroundWindow),
+}
+
+/// The top-level window a page request is for, as a plain handle value: the page is captured
+/// only while that window is still in front, never some other application's document.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+struct ForegroundWindow(isize);
+
+impl ForegroundWindow {
+    fn now() -> Self {
+        use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+        // SAFETY: plain Win32 call with no preconditions.
+        Self(unsafe { GetForegroundWindow() }.0 as isize)
+    }
+}
+
 pub struct WindowsAccessibilityEventListener {
     stop: Arc<AtomicBool>,
     thread: Option<std::thread::JoinHandle<()>>,
@@ -43,14 +65,14 @@ impl AccessibilityEventListener for WindowsAccessibilityEventListener {
         }
         self.stop.store(false, Ordering::Relaxed);
         let stop = Arc::clone(&self.stop);
-        let refresh = start_page_worker(sender.clone())?;
+        let pages = start_page_worker(sender.clone())?;
         let thread = std::thread::Builder::new()
             .name("okur-winevents".to_owned())
             .spawn(move || {
                 let mut page: Option<String> = None;
                 let mut converter = EventConverter::default();
                 let sink = move |event: TraceEvent| {
-                    deliver(&event, &mut converter, &mut page, &sender, &refresh)
+                    deliver(&event, &mut converter, &mut page, &sender, &pages)
                 };
                 let count = run_live(Box::new(sink), &stop);
                 tracing::debug!(count, "WinEvent listener stopped");
@@ -81,7 +103,7 @@ fn deliver(
     converter: &mut EventConverter,
     page: &mut Option<String>,
     sender: &UnboundedSender<AccessibilityEvent>,
-    refresh: &std::sync::mpsc::Sender<()>,
+    pages: &std::sync::mpsc::Sender<PageRequest>,
 ) {
     let events = converter.convert(event);
     if events.is_empty() && crate::event_trace::is_focus(event) {
@@ -90,9 +112,9 @@ fn deliver(
     for converted in events {
         // The page after a live region change is captured off this thread.
         if matches!(converted, AccessibilityEvent::LiveRegion(_)) {
-            let _ = refresh.send(());
+            let _ = pages.send(PageRequest::Refresh(ForegroundWindow::now()));
         }
-        deliver_one(event, converted, page, sender);
+        deliver_one(event, converted, page, sender, pages);
     }
 }
 
@@ -108,8 +130,8 @@ const REFRESH_MAX_DELAY: std::time::Duration = std::time::Duration::from_secs(3)
 /// a streamed chat reply changes its live region many times a second, and each change used
 /// to start a capture of the whole page. Announcements do not wait for it; they compare
 /// with the region's last text. Returns false when the requests' sender is gone.
-fn settle(
-    requests: &std::sync::mpsc::Receiver<()>,
+fn settle<T>(
+    requests: &std::sync::mpsc::Receiver<T>,
     quiet: std::time::Duration,
     max: std::time::Duration,
 ) -> bool {
@@ -121,7 +143,7 @@ fn settle(
             return true;
         }
         match requests.recv_timeout(quiet.min(left)) {
-            Ok(()) => {}
+            Ok(_) => {}
             Err(RecvTimeoutError::Timeout) => return true,
             Err(RecvTimeoutError::Disconnected) => return false,
         }
@@ -130,24 +152,36 @@ fn settle(
 
 fn start_page_worker(
     sender: UnboundedSender<AccessibilityEvent>,
-) -> Result<std::sync::mpsc::Sender<()>, PlatformError> {
-    let (tx, rx) = std::sync::mpsc::channel::<()>();
+) -> Result<std::sync::mpsc::Sender<PageRequest>, PlatformError> {
+    let (tx, rx) = std::sync::mpsc::channel::<PageRequest>();
     std::thread::Builder::new()
         .name("okur-page-refresh".to_owned())
         .spawn(move || {
             use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
             // SAFETY: COM initialization for this worker thread.
             let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
-            while rx.recv().is_ok() {
-                if !settle(&rx, REFRESH_QUIET, REFRESH_MAX_DELAY) {
+            while let Ok(request) = rx.recv() {
+                let (PageRequest::Refresh(window) | PageRequest::Refine(window)) = request;
+                if matches!(request, PageRequest::Refresh(_))
+                    && !settle(&rx, REFRESH_QUIET, REFRESH_MAX_DELAY)
+                {
                     break;
+                }
+                if ForegroundWindow::now() != window {
+                    tracing::debug!(?request, "page request skipped: its window left the front");
+                    continue;
                 }
                 let started = std::time::Instant::now();
                 match crate::actions::capture_foreground_page() {
                     Ok(root) => {
                         let title = root.name.clone().unwrap_or_default();
                         let ms = started.elapsed().as_millis();
-                        tracing::debug!(%title, ms, "page refreshed");
+                        match request {
+                            PageRequest::Refresh(_) => {
+                                tracing::debug!(%title, ms, "page refreshed")
+                            }
+                            PageRequest::Refine(_) => tracing::debug!(%title, ms, "page refined"),
+                        }
                         let _ = sender.send(AccessibilityEvent::DocumentLoaded { title, root });
                     }
                     Err(e) => tracing::warn!("page refresh failed: {e}"),
@@ -163,6 +197,7 @@ fn deliver_one(
     converted: AccessibilityEvent,
     page: &mut Option<String>,
     sender: &UnboundedSender<AccessibilityEvent>,
+    pages: &std::sync::mpsc::Sender<PageRequest>,
 ) {
     match &converted {
         AccessibilityEvent::Focus(focus) => {
@@ -174,7 +209,7 @@ fn deliver_one(
                 "focus event"
             );
             if focus.in_document {
-                load_page_if_new(event, page, sender);
+                load_page_if_new(event, page, sender, pages);
             }
         }
         other => tracing::debug!(event = ?other, "event"),
@@ -182,10 +217,15 @@ fn deliver_one(
     let _ = sender.send(converted);
 }
 
+/// Loads a page new to the buffer. Events wait while it is captured, so it is read quickly
+/// through UIA first, and the page worker captures it in full through IA2 right after
+/// (GitHub's repository page: 3 s through IA2, 160 ms through UIA). The engine takes the full
+/// capture as the same page again, keeping the virtual cursor's place.
 fn load_page_if_new(
     event: &TraceEvent,
     page: &mut Option<String>,
     sender: &UnboundedSender<AccessibilityEvent>,
+    pages: &std::sync::mpsc::Sender<PageRequest>,
 ) {
     let document = event
         .focus_chain
@@ -202,16 +242,26 @@ fn load_page_if_new(
         return;
     }
     *page = key;
-    // Events wait while the page is captured, which on a big page takes long.
+    let title = document.and_then(|d| d.name.clone()).unwrap_or_default();
     let started = std::time::Instant::now();
-    match crate::actions::capture_foreground_page() {
+    match crate::actions::capture_foreground_page_quick() {
         Ok(root) => {
-            let title = document.and_then(|d| d.name.clone()).unwrap_or_default();
             let ms = started.elapsed().as_millis();
             tracing::debug!(%title, ms, "page loaded");
             let _ = sender.send(AccessibilityEvent::DocumentLoaded { title, root });
+            let _ = pages.send(PageRequest::Refine(ForegroundWindow::now()));
         }
-        Err(e) => tracing::warn!("page capture failed: {e}"),
+        Err(e) => {
+            tracing::debug!("quick page capture failed ({e}); capturing through IA2");
+            match crate::actions::capture_foreground_page() {
+                Ok(root) => {
+                    let ms = started.elapsed().as_millis();
+                    tracing::debug!(%title, ms, "page loaded");
+                    let _ = sender.send(AccessibilityEvent::DocumentLoaded { title, root });
+                }
+                Err(e) => tracing::warn!("page capture failed: {e}"),
+            }
+        }
     }
 }
 

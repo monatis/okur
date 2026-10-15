@@ -21,6 +21,51 @@ fn create_test_buffer() -> VirtualBuffer {
     VirtualBuffer::from_aom(&aom)
 }
 
+/// A page captured again (read quickly first, then in full; or after a live region grew
+/// above the cursor) keeps the virtual cursor on its line, found by its text.
+#[test]
+fn a_recaptured_page_keeps_the_cursor_on_its_line() {
+    let page = |lines: &[&str]| {
+        AomNode::new(0, Role::Document)
+            .with_name("News")
+            .with_children(
+                lines
+                    .iter()
+                    .enumerate()
+                    .map(|(i, text)| AomNode::new(i + 1, Role::Paragraph).with_text(*text))
+                    .collect(),
+            )
+    };
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.handle_document_loaded(
+        "News",
+        VirtualBuffer::from_aom(&page(&["First story.", "Second story.", "Third story."])),
+    );
+    engine.execute_command("{DOWN}");
+    engine.execute_command("{DOWN}");
+    assert_eq!(
+        engine.execute_command("SayLine").as_deref(),
+        Some("Second story.")
+    );
+    // The same page again, with a new line above the cursor's.
+    engine.handle_document_loaded(
+        "News",
+        VirtualBuffer::from_aom(&page(&[
+            "Breaking: a new story.",
+            "First story.",
+            "Second story.",
+            "Third story.",
+        ])),
+    );
+    // Applied once events go quiet.
+    engine.on_idle();
+    assert_eq!(
+        engine.execute_command("SayLine").as_deref(),
+        Some("Second story.")
+    );
+}
+
 /// Q moves to the main region (JAWS's Quick Navigation Keys,
 /// docs/references/jaws-quick-navigation-keys.md); it was handled by name only, so the key
 /// reached the page.

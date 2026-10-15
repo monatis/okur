@@ -38,6 +38,10 @@ pub struct UiaNode {
     pub class_name: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub automation_id: Option<String>,
+    /// The element's RuntimeId, by which an action finds it again (a page read through UIA has
+    /// no IA2 uniqueIDs).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub runtime_id: Option<Vec<i32>>,
     /// Raw `HeadingLevel` value (`HeadingLevel1` = 80051 .. `HeadingLevel9` = 80059).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub heading_level: Option<i32>,
@@ -267,6 +271,13 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> okur_core::AomNode {
 
     let mut aom = AomNode::new(id, role.clone());
     aom.name = node.name.clone();
+    if let Some(runtime_id) = &node.runtime_id {
+        let joined: Vec<String> = runtime_id.iter().map(i32::to_string).collect();
+        aom.attributes.insert(
+            crate::actions::UIA_RUNTIME_ID_ATTR.to_owned(),
+            joined.join(","),
+        );
+    }
     match role {
         Role::Text => aom.text = node.name.clone(),
         Role::Edit | Role::ComboBox => aom.value = node.value.clone(),
@@ -476,6 +487,7 @@ pub(crate) mod capture {
             aria_properties: string(el, UIA_AriaPropertiesPropertyId),
             class_name: string(el, UIA_ClassNamePropertyId),
             automation_id: string(el, UIA_AutomationIdPropertyId),
+            runtime_id: xa11y_windows::uia_element::runtime_id(el),
             heading_level: int(el, UIA_HeadingLevelPropertyId),
             landmark_type: int(el, UIA_LandmarkTypePropertyId).filter(|&v| v != 0),
             localized_landmark_type: string(el, UIA_LocalizedLandmarkTypePropertyId),
