@@ -31,7 +31,7 @@ Live usability gaps the user reports come first.
 3. **Virtualize Window in Notepad:** JAWS includes the menu bar and status bar (314/s10, s11).
 4. **Discovery,** from the JAWS keystroke list. Candidates:
    - Insert+Tab in pages;
-   - Insert+B (read window);
+   - Insert+B in windows other than dialog boxes;
    - Insert+Num5, Say Character, pressed twice (phonetic), three times (character value);
    - Insert+Up pressed twice (spell the line);
    - Say All by line;
@@ -41,5 +41,4 @@ Live usability gaps the user reports come first.
    - 207/s87's location after the title;
    - 303/s6;
    - 305/s13;
-   - the first task switcher opening after start missing item 1;
    - the Claude app announcing twice on arrival.

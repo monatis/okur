@@ -18,7 +18,7 @@ Buffer invariants: 0 violation(s)
 $ sr-cli corpus-manifest
 Corpus manifest is current.
 $ cargo test --workspace  (summed test-result lines)
-tests: 847 passed, 0 failed, 198 ignored
+tests: 849 passed, 0 failed, 198 ignored
 ```
 (After the dev-box session below; the parity lines did not change in it. Run with the
 untracked scenarios parked: each one without evidence counts as "could not run".)
@@ -98,7 +98,7 @@ Each item started from a user report or from the loop's discovery.
 ### New evidence
 Scenarios 207, 209, 307, 308, 309, 311, 312, 313 and 314 (see their `corpus:` commits).
 
-## Dev-box session (02:20–03:30, after old-pc went offline)
+## Dev-box session (02:20–03:50, after old-pc went offline)
 
 The user allowed using the dev box (Windows 11 26200, JAWS 2025 running) while they slept.
 
@@ -117,12 +117,15 @@ The user allowed using the dev box (Windows 11 26200, JAWS 2025 running) while t
 | af27edc | A modifier pressed after the JAWS key was consumed, so the system saw Alt up and Insert+Alt+W became Insert+W. The hook now keeps consumed modifiers held. | Insert+Alt+W, CapsLock+Alt+W, Insert+Shift+V work |
 | f01d064 | `sr-cli run` started on a guessed page (Notepad was read as a web page). The tracer now records the current focus at start. | Starting with Notepad in front announces it |
 | ad27ba6 | Virtualize in a page | "The current location is already in a virtual view", as JAWS says |
-| b21cd19 | Alt+Tab held. UIA's focus event names the switcher's item while `GetFocusedElement` returns its input pane, so the item is read from the event's sender. New `sr_core::apps::task_switcher`. | "Claude \| To move to an item press the Arrow keys.", "JAWS Professional", "Command Prompt": identical to JAWS. The first switch after starting can miss item 1. |
+| b21cd19 | Alt+Tab held. UIA's focus event names the switcher's item while `GetFocusedElement` returns its input pane, so the item is read from the event's sender. New `sr_core::apps::task_switcher`. | "Claude \| To move to an item press the Arrow keys.", "JAWS Professional", "Command Prompt": identical to JAWS. (Item 1 on the first opening: 2320f9e.) |
 | 971afe1, 5a58fd0 | The desktop heading is lowercase "desktop", announced once | Identical to JAWS |
 | d03af8b | Virtualize Window on a dialog box: screen rows from the Win32 controls, with static text wrapped by GDI measurement at real DPI | Run dialog: 5 lines identical to JAWS |
 | 79cac42 | A dialog's own text, and "edit combo" (value, list position from the combo box, hint, access key) | Run dialog announcement identical to JAWS |
 | 5dde68c | Insert+Tab (Say Current Focus); Notepad's document as "edit \| Contains text" | Identical to JAWS for Notepad, the Run combo box, and OK |
 | 2f1fc62 | Native Say Font adds "Paragraph formatting left justified" | Identical to JAWS (the user's report) |
+| 5e822a2 | Say Window (Insert+B) for dialog boxes: the dialog's UIA tree, read as name, type word, state and value | Run dialog: identical to JAWS |
+| b2a0ecf | `sr-cli keys` (foreground-checked chords) and `sr-cli jaws-history` (FSAPI, clipboard put back) replace the scratchpad C# | Used for the checks after it |
+| 2320f9e | The switcher's first item on its first opening: queued UIA focus elements, and a UIA focus read by its chain alone (its context took 2.8 s) | Two runs right after start: all items spoken |
 
 **Still differing on the dev box:**
 - In the font viewer, JAWS moved through its lines; old-pc's evidence stays on the last line, as ours does.
