@@ -65,6 +65,15 @@ pub struct Ia2TextState {
     pub selection: Option<(i32, i32)>,
 }
 
+/// Where a text object's caret and first selection are, and its length, in UTF-16 code
+/// units: what changes when a key moves the caret or edits the text.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Ia2TextPosition {
+    pub caret: i32,
+    pub selection: Option<(i32, i32)>,
+    pub length: i32,
+}
+
 /// One accessible object as exposed through MSAA + IA2.
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Ia2Node {
@@ -179,7 +188,7 @@ pub fn parse_attributes(raw: &str) -> BTreeMap<String, String> {
 #[cfg(target_os = "windows")]
 pub use com::capture::{
     capture_chromium_document, capture_chromium_object, chromium_caret_text, chromium_text_state,
-    perform_chromium_action, Ia2Action, Ia2CaptureError,
+    perform_chromium_action, ChromiumTextField, Ia2Action, Ia2CaptureError,
 };
 
 #[cfg(target_os = "windows")]
@@ -297,7 +306,7 @@ mod com {
 
     pub mod capture {
         use super::super::{
-            parse_attributes, Ia2Node, Ia2TextRun, Ia2TextState, FONT_ATTRIBUTES,
+            parse_attributes, Ia2Node, Ia2TextRun, Ia2TextPosition, Ia2TextState, FONT_ATTRIBUTES,
             IA2_TEXT_BOUNDARY_LINE, IA2_TEXT_OFFSET_LENGTH,
         };
         use super::{IAccessible2, IAccessibleText};
@@ -604,40 +613,84 @@ mod com {
         pub fn chromium_text_state(
             top_level: HWND,
         ) -> Result<Option<Ia2TextState>, Ia2CaptureError> {
-            let document = chromium_document(top_level)?;
-            // SAFETY: MSAA focus query on a valid IAccessible.
-            let focus = unsafe { document.accFocus() }.map_err(|e| err("accFocus", e))?;
-            let focused = dispatch_child(&focus).unwrap_or(document);
-            let Some(text) = ia2_of(&focused).and_then(|ia2| ia2.cast::<IAccessibleText>().ok())
-            else {
-                return Ok(None);
-            };
-            let mut all = BSTR::default();
-            let mut caret = 0i32;
-            let mut selections = 0i32;
-            // SAFETY: out-pointers to locals on a valid interface; BSTR ownership transfers.
-            unsafe {
-                text.get_text(0, IA2_TEXT_OFFSET_LENGTH, &mut all)
-                    .ok()
-                    .map_err(|e| err("text", e))?;
-                text.get_caretOffset(&mut caret)
-                    .ok()
-                    .map_err(|e| err("caretOffset", e))?;
-                let _ = text.get_nSelections(&mut selections);
+            ChromiumTextField::focused(top_level)?
+                .map(|field| field.state())
+                .transpose()
+        }
+
+        /// The focused text object of a Chromium window's page, kept to be read again: while
+        /// a key takes effect its caret is polled through it, without finding the focus anew
+        /// (a window's accessible object and its focus cost milliseconds; a caret, a call).
+        pub struct ChromiumTextField(IAccessibleText);
+
+        impl ChromiumTextField {
+            /// The focused object, when it has text. `Err` when the window is not Chromium.
+            pub fn focused(top_level: HWND) -> Result<Option<Self>, Ia2CaptureError> {
+                let document = chromium_document(top_level)?;
+                // SAFETY: MSAA focus query on a valid IAccessible.
+                let focus = unsafe { document.accFocus() }.map_err(|e| err("accFocus", e))?;
+                let focused = dispatch_child(&focus).unwrap_or(document);
+                Ok(ia2_of(&focused)
+                    .and_then(|ia2| ia2.cast::<IAccessibleText>().ok())
+                    .map(Self))
             }
-            let mut selection = None;
-            if selections > 0 {
+
+            /// Its caret, first selection and length, in UTF-16 code units: enough to see
+            /// that a key moved the caret or changed the text.
+            pub fn position(&self) -> Result<Ia2TextPosition, Ia2CaptureError> {
+                let (mut caret, mut length) = (0i32, 0i32);
+                // SAFETY: out-pointers to locals on a valid interface.
+                unsafe {
+                    self.0
+                        .get_caretOffset(&mut caret)
+                        .ok()
+                        .map_err(|e| err("caretOffset", e))?;
+                    self.0
+                        .get_nCharacters(&mut length)
+                        .ok()
+                        .map_err(|e| err("nCharacters", e))?;
+                }
+                Ok(Ia2TextPosition {
+                    caret: caret.max(0),
+                    selection: self.selection(),
+                    length,
+                })
+            }
+
+            /// Its whole text, with its caret and first selection.
+            pub fn state(&self) -> Result<Ia2TextState, Ia2CaptureError> {
+                let mut all = BSTR::default();
+                let mut caret = 0i32;
+                // SAFETY: out-pointers to locals on a valid interface; BSTR ownership transfers.
+                unsafe {
+                    self.0
+                        .get_text(0, IA2_TEXT_OFFSET_LENGTH, &mut all)
+                        .ok()
+                        .map_err(|e| err("text", e))?;
+                    self.0
+                        .get_caretOffset(&mut caret)
+                        .ok()
+                        .map_err(|e| err("caretOffset", e))?;
+                }
+                Ok(Ia2TextState {
+                    text: all.to_string(),
+                    caret: caret.max(0),
+                    selection: self.selection(),
+                })
+            }
+
+            fn selection(&self) -> Option<(i32, i32)> {
+                let mut selections = 0i32;
                 let (mut start, mut end) = (0i32, 0i32);
-                // SAFETY: as above.
-                if unsafe { text.get_selection(0, &mut start, &mut end) }.is_ok() && start < end {
-                    selection = Some((start, end));
+                // SAFETY: out-pointers to locals on a valid interface.
+                unsafe {
+                    let _ = self.0.get_nSelections(&mut selections);
+                    (selections > 0
+                        && self.0.get_selection(0, &mut start, &mut end).is_ok()
+                        && start < end)
+                        .then_some((start, end))
                 }
             }
-            Ok(Some(Ia2TextState {
-                text: all.to_string(),
-                caret: caret.max(0),
-                selection,
-            }))
         }
 
         /// The MSAA client object of a Chromium window's web content.

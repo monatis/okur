@@ -22,7 +22,7 @@ pub fn utf16_to_chars(text: &str, offset: i32) -> usize {
 }
 
 #[cfg(windows)]
-pub use reader::read_focused;
+pub use reader::{from_ia2, ia2_position, read_focused};
 
 #[cfg(windows)]
 mod reader {
@@ -39,22 +39,41 @@ mod reader {
         // SAFETY: plain Win32 call with no preconditions.
         let window = unsafe { GetForegroundWindow() };
         match xa11y_windows::ia2::chromium_text_state(window) {
-            Ok(Some(state)) => Some(TextContext {
-                caret: utf16_to_chars(&state.text, state.caret),
-                selection: state.selection.map(|(s, e)| {
-                    (
-                        utf16_to_chars(&state.text, s),
-                        utf16_to_chars(&state.text, e),
-                    )
-                }),
-                text: state.text,
-                font: None,
-                word: None,
-            }),
+            Ok(Some(state)) => Some(from_ia2(state)),
             // A Chromium page whose focused object has no text.
             Ok(None) => None,
             // Not a Chromium window.
             Err(_) => read_uia(uia).or_else(read_win32_edit),
+        }
+    }
+
+    /// A Chromium text object's state, its UTF-16 offsets made character offsets.
+    pub fn from_ia2(state: xa11y_windows::ia2::Ia2TextState) -> TextContext {
+        TextContext {
+            caret: utf16_to_chars(&state.text, state.caret),
+            selection: state.selection.map(|(s, e)| {
+                (
+                    utf16_to_chars(&state.text, s),
+                    utf16_to_chars(&state.text, e),
+                )
+            }),
+            text: state.text,
+            font: None,
+            word: None,
+        }
+    }
+
+    /// Where a context's caret and selection are, and its length, in UTF-16 code units: what
+    /// a Chromium field is polled for while a key takes effect.
+    pub fn ia2_position(context: &TextContext) -> xa11y_windows::ia2::Ia2TextPosition {
+        let units = |chars: usize| -> i32 {
+            let n: usize = context.text.chars().take(chars).map(char::len_utf16).sum();
+            i32::try_from(n).unwrap_or(i32::MAX)
+        };
+        xa11y_windows::ia2::Ia2TextPosition {
+            caret: units(context.caret),
+            selection: context.selection.map(|(s, e)| (units(s), units(e))),
+            length: units(usize::MAX),
         }
     }
 
@@ -297,5 +316,26 @@ mod tests {
         // "𝄞" is two UTF-16 units and one character.
         assert_eq!(utf16_to_chars("𝄞ab", 2), 1);
         assert_eq!(utf16_to_chars("ab", 10), 2);
+    }
+
+    /// A context's position is polled against a page field's IA2 offsets (UTF-16 units).
+    #[cfg(windows)]
+    #[test]
+    fn a_contexts_position_is_in_utf16_units() {
+        let context = okur_core::TextContext {
+            text: "𝄞ab cd".to_owned(),
+            caret: 3,
+            selection: Some((1, 3)),
+            font: None,
+            word: None,
+        };
+        assert_eq!(
+            ia2_position(&context),
+            xa11y_windows::ia2::Ia2TextPosition {
+                caret: 4,
+                selection: Some((2, 4)),
+                length: 7,
+            }
+        );
     }
 }

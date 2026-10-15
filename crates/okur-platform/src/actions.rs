@@ -49,6 +49,8 @@ mod windows_actions {
     /// How long to wait for the application to act on a key.
     const SETTLE: Duration = Duration::from_millis(250);
     const POLL: Duration = Duration::from_millis(15);
+    /// How often a page's field is polled while a key takes effect: a poll is a few calls.
+    const FIELD_POLL: Duration = Duration::from_millis(2);
     /// The application's head start on the first read: an idle application has acted on a
     /// key within a millisecond or two of the hook passing it on.
     const HEAD_START: Duration = Duration::from_millis(3);
@@ -269,6 +271,58 @@ mod windows_actions {
     /// (a key at a boundary changes nothing). Without a known state, a first read is the
     /// "before", as it was.
     fn read_after_key(uia: &IUIAutomation, known: Option<TextContext>) -> Option<TextContext> {
+        // SAFETY: plain Win32 call with no preconditions.
+        let window = unsafe { GetForegroundWindow() };
+        match xa11y_windows::ia2::ChromiumTextField::focused(window) {
+            Ok(Some(field)) => read_chromium_after_key(&field, known),
+            Ok(None) => None,
+            // Not a Chromium window.
+            Err(_) => read_other_after_key(uia, known),
+        }
+    }
+
+    /// A page's field (a web editor, a text area) after a key. The field is found once,
+    /// and its caret, selection and length are polled every couple of milliseconds until
+    /// they differ from what the engine knew; then its text is read once. Reading the whole
+    /// field each time (a window's object, its focus, all its text: about 7 ms) every 15 ms
+    /// kept a web editor's arrow keys at 33–43 ms (vscode.dev, `okur latency`).
+    fn read_chromium_after_key(
+        field: &xa11y_windows::ia2::ChromiumTextField,
+        known: Option<TextContext>,
+    ) -> Option<TextContext> {
+        use crate::text_context::{from_ia2, ia2_position};
+        let started = Instant::now();
+        let before = match &known {
+            Some(known) => {
+                std::thread::sleep(HEAD_START);
+                Some(ia2_position(known))
+            }
+            None => field.position().ok(),
+        };
+        let mut now = field.position().ok();
+        while now == before && started.elapsed() < SETTLE {
+            std::thread::sleep(FIELD_POLL);
+            now = field.position().ok();
+        }
+        // A selection still being extended is read once two reads agree.
+        if now != before && now.is_some_and(|p| p.selection.is_some()) {
+            loop {
+                std::thread::sleep(POLL);
+                let again = field.position().ok();
+                if again == now || started.elapsed() >= SETTLE * 2 {
+                    break;
+                }
+                now = again;
+            }
+        }
+        field.state().ok().map(from_ia2)
+    }
+
+    /// Any other field after a key, read whole each time.
+    fn read_other_after_key(
+        uia: &IUIAutomation,
+        known: Option<TextContext>,
+    ) -> Option<TextContext> {
         let started = Instant::now();
         let (before, mut now) = match known {
             Some(known) => {
