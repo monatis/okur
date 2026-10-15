@@ -20,8 +20,8 @@ Set-Location $workspaceRoot
 # Auto-format with cargo fmt
 & cargo fmt 2>&1 | Out-Null
 
-# Run clippy with warnings denied and indexing_slicing denied
-$clippyOutput = & cargo clippy --all-targets --all-features -- -D warnings -D clippy::indexing_slicing 2>&1
+# Run clippy with warnings, unchecked indexing and string slicing denied
+$clippyOutput = & cargo clippy --all-targets --all-features -- -D warnings -D clippy::indexing_slicing -D clippy::string_slice 2>&1
 $clippyExitCode = $LASTEXITCODE
 
 if ($clippyExitCode -ne 0) {

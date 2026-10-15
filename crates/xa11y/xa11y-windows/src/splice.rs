@@ -19,9 +19,13 @@ pub fn splice_at_char_offset(current: &str, insert: &str, caret_char_offset: usi
         .map(|(i, _)| i)
         .unwrap_or(current.len());
     let mut out = String::with_capacity(current.len() + insert.len());
-    out.push_str(&current[..byte_offset]);
+    // `byte_offset` comes from `char_indices`, so it is always a boundary.
+    let (before, after) = current
+        .split_at_checked(byte_offset)
+        .unwrap_or((current, ""));
+    out.push_str(before);
     out.push_str(insert);
-    out.push_str(&current[byte_offset..]);
+    out.push_str(after);
     out
 }
 

@@ -1,7 +1,7 @@
 # Claude Code Stop adapter for the shared code-quality gate.
 #
 # Gate logic lives in .agents/scripts/stop-hook.ps1 (single source of truth, shared
-# with the Antigravity harness: cargo fmt + clippy -D warnings -D clippy::indexing_slicing).
+# with the Antigravity harness: cargo fmt + clippy -D warnings -D clippy::indexing_slicing -D clippy::string_slice).
 # This adapter translates Antigravity {decision: continue} into Claude {decision: block},
 # skips the gate when no Rust/Cargo files are dirty, and caps consecutive blocks so an
 # unfixable failure cannot trap the session in an infinite Stop loop.

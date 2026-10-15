@@ -119,15 +119,15 @@ if (Test-Path $cratesDir) {
 }
 
 # -----------------------------------------------------------------------------
-# Check 3: Index Bounds Safety (clippy::indexing_slicing)
+# Check 3: Index Bounds Safety (clippy::indexing_slicing, clippy::string_slice)
 # -----------------------------------------------------------------------------
 Push-Location $workspaceRoot
 try {
-    $clippyOutput = & cargo clippy --all-targets --all-features -- -D warnings -D clippy::indexing_slicing 2>&1
+    $clippyOutput = & cargo clippy --all-targets --all-features -- -D warnings -D clippy::indexing_slicing -D clippy::string_slice 2>&1
     $clippyExit = $LASTEXITCODE
     if ($clippyExit -ne 0) {
         $errorMsg = ($clippyOutput -join "`n").Trim()
-        $failureReasons += "[Bounds Safety Gate] cargo clippy detected direct slice/index operations (clippy::indexing_slicing). Use .get(), .first(), or .last() instead of direct brackets:`n$errorMsg"
+        $failureReasons += "[Bounds Safety Gate] cargo clippy detected direct slice/index operations (clippy::indexing_slicing, clippy::string_slice). Use .get(), .first(), .last() or str::get() instead of direct brackets:`n$errorMsg"
     }
 } finally {
     Pop-Location

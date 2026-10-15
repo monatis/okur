@@ -141,7 +141,11 @@ impl VirtualCursor {
                 &current_char.to_string(),
             ))
         } else {
-            let unsel_slice = &self.buffer.text[prior_active..next_offset];
+            let unsel_slice = self
+                .buffer
+                .text
+                .get(prior_active..next_offset)
+                .unwrap_or_default();
             Some(SpeechFormatter::format_selection(false, unsel_slice))
         }
     }
@@ -175,7 +179,7 @@ impl VirtualCursor {
         if sel.active < sel.anchor {
             Some(SpeechFormatter::format_selection(true, &ch.to_string()))
         } else {
-            let unsel_slice = &self.buffer.text[prev..prior_active];
+            let unsel_slice = self.buffer.text.get(prev..prior_active).unwrap_or_default();
             Some(SpeechFormatter::format_selection(false, unsel_slice))
         }
     }
@@ -208,7 +212,10 @@ impl VirtualCursor {
             Some(SpeechFormatter::format_selection(true, line_text))
         } else {
             let unsel = if prior_active < new_offset {
-                &self.buffer.text[prior_active..new_offset]
+                self.buffer
+                    .text
+                    .get(prior_active..new_offset)
+                    .unwrap_or_default()
             } else {
                 line_text
             };
@@ -244,7 +251,10 @@ impl VirtualCursor {
             Some(SpeechFormatter::format_selection(true, line_text))
         } else {
             let unsel = if prior_active > new_offset {
-                &self.buffer.text[new_offset..prior_active]
+                self.buffer
+                    .text
+                    .get(new_offset..prior_active)
+                    .unwrap_or_default()
             } else {
                 line_text
             };
@@ -260,7 +270,12 @@ impl VirtualCursor {
                 let end = sel.end();
                 if start < self.buffer.len() {
                     let end_bounded = end.min(self.buffer.len());
-                    let text = self.buffer.text[start..end_bounded].trim();
+                    let text = self
+                        .buffer
+                        .text
+                        .get(start..end_bounded)
+                        .unwrap_or_default()
+                        .trim();
                     if !text.is_empty() {
                         return text.to_string();
                     }

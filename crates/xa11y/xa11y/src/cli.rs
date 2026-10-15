@@ -659,8 +659,13 @@ pub(crate) fn parse_key_name(name: &str) -> CliResult<Key> {
         "End" => Key::End,
         "PageUp" => Key::PageUp,
         "PageDown" => Key::PageDown,
-        s if s.starts_with('F') && s.len() >= 2 && s[1..].chars().all(|c| c.is_ascii_digit()) => {
-            let n: u8 = s[1..]
+        s if s
+            .strip_prefix('F')
+            .is_some_and(|n| !n.is_empty() && n.chars().all(|c| c.is_ascii_digit())) =>
+        {
+            let n: u8 = s
+                .strip_prefix('F')
+                .unwrap_or_default()
                 .parse()
                 .map_err(|_| CliError::Usage(format!("invalid function key: {s}")))?;
             Key::F(n)

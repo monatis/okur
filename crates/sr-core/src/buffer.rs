@@ -241,7 +241,7 @@ impl VirtualBuffer {
 
     /// Returns the character at the specified byte/char offset.
     pub fn char_at(&self, offset: usize) -> Option<char> {
-        self.text[offset..].chars().next()
+        self.text.get(offset..)?.chars().next()
     }
 
     /// Total length in bytes of the buffer text.
@@ -753,7 +753,7 @@ impl VirtualBuffer {
         self.spans
             .iter()
             .find(|s| offset >= s.start_offset && offset < s.end_offset)
-            .map(|s| &self.text[s.start_offset..s.end_offset])
+            .and_then(|s| self.text.get(s.start_offset..s.end_offset))
     }
 
     /// Finds the AOM node associated with the given buffer offset.

@@ -13,7 +13,7 @@ maps the harness pieces to their Claude Code equivalents.
     Run generators (`corpus-manifest --write`, `parity --write-baseline`) and `git add` in a
     separate command before `git commit`.
   - `Stop`: when Rust/Cargo files are dirty, runs `stop-hook.ps1` (`cargo fmt` + clippy
-    `-D warnings -D clippy::indexing_slicing`) and blocks finishing until clean (max 3 attempts).
+    `-D warnings -D clippy::indexing_slicing -D clippy::string_slice`) and blocks finishing until clean (max 3 attempts).
 - **MCP** (`.mcp.json`): `opendesk` (`opendesk-mcp` from `~/.cargo/bin`) for local and remote
   computer use. The `opendesk` CLI (`opendesk exec --peer old-pc "..."`) works from Bash too.
 - **Skill**: `.claude/skills/jaws-reference/` adapts `skills/jaws-reference/` and documents how
