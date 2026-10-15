@@ -1,8 +1,8 @@
 //! Windows accessibility events for the live screen reader.
 //!
 //! Events come from the WinEvent capture that `sr-cli trace` records
-//! ([`crate::event_trace::run_live`]). They are converted by the functions parity replay uses
-//! ([`focus_event_from_trace`], [`menu_event_from_trace`]), so the live screen reader consumes
+//! ([`crate::event_trace::run_live`]). They are converted by the converter parity replay uses
+//! ([`EventConverter`]), so the live screen reader consumes
 //! the event stream the harness records, replays and verifies against JAWS.
 
 use super::AccessibilityEventListener;

@@ -42,7 +42,7 @@ impl SpeechFormatter {
         }
     }
 
-    /// Formats an inline frame entry announcement matching JAWS conventions: "<Name> frame".
+    /// Formats an inline frame entry announcement matching JAWS conventions: `"<Name> frame"`.
     pub fn format_frame(name: &str) -> String {
         let trimmed = name.trim();
         if trimmed.is_empty() {
@@ -52,7 +52,7 @@ impl SpeechFormatter {
         }
     }
 
-    /// Formats an inline frame exit announcement matching JAWS conventions: "<Name> frame end".
+    /// Formats an inline frame exit announcement matching JAWS conventions: `"<Name> frame end"`.
     pub fn format_frame_end(name: &str) -> String {
         let trimmed = name.trim();
         if trimmed.is_empty() {
@@ -76,7 +76,7 @@ impl SpeechFormatter {
     }
 
     /// Formats an ARIA combobox announcement matching JAWS conventions.
-    /// Canonical JAWS pattern: "<Label>  \u{001d} combo box \u{001e} <Value> \u{001d} <collapsed|expanded> \u{001e}"
+    /// Canonical JAWS pattern: `"<Label>  \u{001d} combo box \u{001e} <Value> \u{001d} <collapsed|expanded> \u{001e}"`
     pub fn format_combobox(name: &str, value: Option<&str>, expanded: bool) -> String {
         let state_str = if expanded { "expanded" } else { "collapsed" };
         let val_str = value.unwrap_or("").trim();
@@ -94,7 +94,7 @@ impl SpeechFormatter {
     }
 
     /// Formats an ARIA treeitem announcement matching JAWS conventions.
-    /// Canonical JAWS pattern: "<Name>  \u{001d} level <N> \u{001e} <collapsed|expanded>"
+    /// Canonical JAWS pattern: `"<Name>  \u{001d} level <N> \u{001e} <collapsed|expanded>"`
     pub fn format_tree_item(name: &str, level: u32, expanded: Option<bool>) -> String {
         match expanded {
             Some(true) => format!("{}  \u{001d} level {} \u{001e} expanded", name, level),
@@ -104,7 +104,7 @@ impl SpeechFormatter {
     }
 
     /// Formats an ARIA slider announcement matching JAWS conventions.
-    /// Canonical JAWS pattern: "<Name>  \u{001d} slider \u{001e} <value>"
+    /// Canonical JAWS pattern: `"<Name>  \u{001d} slider \u{001e} <value>"`
     pub fn format_slider(name: &str, value: f64) -> String {
         format!(
             "{}  \u{001d} slider \u{001e} {}",
@@ -114,7 +114,7 @@ impl SpeechFormatter {
     }
 
     /// Formats an ARIA progress bar announcement matching JAWS conventions.
-    /// Canonical JAWS pattern: "<Name>  \u{001d} progress bar \u{001e} <value>%"
+    /// Canonical JAWS pattern: `"<Name>  \u{001d} progress bar \u{001e} <value>%"`
     pub fn format_progressbar(name: &str, value: f64) -> String {
         format!(
             "{}  \u{001d} progress bar \u{001e} {}%",

@@ -340,7 +340,7 @@ pub const MAX_ANNOTATIONS: usize = 100;
 /// - Whatever resolving a locator surfaces (the application is gone, the
 ///   platform refused a tree read).
 /// - [`Error::PermissionDenied`] / [`Error::Unsupported`] from the capture
-///   itself, on the same terms as [`screenshot`] and [`screenshot_region`].
+///   itself, on the same terms as [`screenshot()`] and [`screenshot_region`].
 ///
 /// # Timing
 ///

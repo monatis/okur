@@ -18,7 +18,7 @@ pub trait ApplicationActions: Send {
 
     /// Asks for the text at the focused edit's caret once the application has handled the
     /// navigation key being passed to it. The text arrives later as
-    /// [`crate::event::AccessibilityEvent::CaretText`]. Returns false when unsupported.
+    /// [`crate::event::AccessibilityEvent::TextContext`]. Returns false when unsupported.
     fn read_at_caret(&self, unit: crate::event::CaretUnit) -> bool {
         let _ = unit;
         false

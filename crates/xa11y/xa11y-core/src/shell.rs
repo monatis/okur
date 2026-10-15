@@ -5,7 +5,7 @@
 //! what is missing is a way to *find* it, because the per-platform root
 //! filters behind [`Provider::list_apps`] drop it. This module adds exactly
 //! that: a discovery primitive
-//! ([`Provider::list_shell_surfaces`](crate::provider::Provider::list_shell_surfaces))
+//! ([`Provider::list_shell_surfaces`])
 //! and a handle type ([`ShellSurface`]) shaped like [`App`](crate::App).
 //! Selectors, locators, auto-wait, actions, `tree` / `dump`, [`Element`] and
 //! [`Diagnosis`] are reused unchanged — every surface wraps a **real**

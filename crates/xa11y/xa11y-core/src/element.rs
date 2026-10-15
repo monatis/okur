@@ -983,7 +983,7 @@ pub type RawPlatformData = HashMap<String, serde_json::Value>;
 
 /// A node in a recursive snapshot of the accessibility subtree.
 ///
-/// Returned by [`Element::tree`] and [`Locator::tree`]. Each node carries the
+/// Returned by [`Element::tree`] and [`Locator::tree`](crate::locator::Locator::tree). Each node carries the
 /// role, display name, and value of one element, plus its children recursively.
 /// `children` is empty when `max_depth` was reached or the element is a leaf.
 ///

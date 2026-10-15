@@ -185,7 +185,7 @@ impl Screenshot {
     ///
     /// The badge is placed **outside** the box — by preference immediately
     /// above its top-left corner, bottom edge touching the box's top edge —
-    /// so it never covers the content the box points at. See [`badge_spot`]
+    /// so it never covers the content the box points at. See `badge_spot`
     /// for the fallback order; a badge only lands inside the box when no
     /// outside position is visible, and is clamped into the box's on-image
     /// part when no position at all is — which is what happens to a box that

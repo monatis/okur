@@ -17,7 +17,7 @@ use crate::shell::ShellSurfaceKind;
 /// as an escape hatch — it takes a `snake_case` action name string.
 ///
 /// Providers should check platform permissions in their constructor (`new()`)
-/// and return [`Error::PermissionDenied`](crate::Error::PermissionDenied) if
+/// and return [`Error::PermissionDenied`] if
 /// required permissions are not granted.
 pub trait Provider: Send + Sync {
     // ── Tree navigation ─────────────────────────────────────────────
@@ -71,7 +71,7 @@ pub trait Provider: Send + Sync {
     ///
     /// Only the AT-SPI backend can (a per-process entry plus per-event-loop
     /// pieces such as a tray or a tooltip context); macOS and Windows
-    /// guarantee one entry per pid. When `false`, [`App::windows_with`]
+    /// guarantee one entry per pid. When `false`, [`App::windows_with`](crate::app::App::windows_with)
     /// skips the same-pid merge — and the full `list_apps` re-enumeration it
     /// requires — because the calling entry's descendants already cover the
     /// process, so no cross-entry merge can add anything.

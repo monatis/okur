@@ -220,7 +220,7 @@ impl Event {
 ///
 /// Basic variants (`Attached`, `Detached`, `Visible`, `Hidden`, `Enabled`,
 /// `Disabled`, `Focused`, `Unfocused`) cover common cases. For arbitrary
-/// conditions, use [`Locator::wait_until`] with a closure.
+/// conditions, use [`Locator::wait_until`](crate::locator::Locator::wait_until) with a closure.
 ///
 /// `#[non_exhaustive]`: the set of named wait conditions is open — `Checked`,
 /// `Selected`, and `Expanded` are all states [`crate::StateSet`] already
