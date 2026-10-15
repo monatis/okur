@@ -99,6 +99,35 @@ fn deliver(
 /// Captures the foreground page off the event thread, for refreshes after live region
 /// changes: on a big page a capture takes long, and focus and caret events must keep
 /// flowing meanwhile. Requests that arrive during a capture become one more capture.
+/// How long live regions must be quiet before the page is captured again.
+const REFRESH_QUIET: std::time::Duration = std::time::Duration::from_millis(700);
+/// The longest a refresh waits for quiet: a reply streamed for a minute still refreshes.
+const REFRESH_MAX_DELAY: std::time::Duration = std::time::Duration::from_secs(3);
+
+/// Waits until no refresh request has come for `quiet`, or `max` has passed since the first:
+/// a streamed chat reply changes its live region many times a second, and each change used
+/// to start a capture of the whole page. Announcements do not wait for it; they compare
+/// with the region's last text. Returns false when the requests' sender is gone.
+fn settle(
+    requests: &std::sync::mpsc::Receiver<()>,
+    quiet: std::time::Duration,
+    max: std::time::Duration,
+) -> bool {
+    use std::sync::mpsc::RecvTimeoutError;
+    let first = std::time::Instant::now();
+    loop {
+        let left = max.saturating_sub(first.elapsed());
+        if left.is_zero() {
+            return true;
+        }
+        match requests.recv_timeout(quiet.min(left)) {
+            Ok(()) => {}
+            Err(RecvTimeoutError::Timeout) => return true,
+            Err(RecvTimeoutError::Disconnected) => return false,
+        }
+    }
+}
+
 fn start_page_worker(
     sender: UnboundedSender<AccessibilityEvent>,
 ) -> Result<std::sync::mpsc::Sender<()>, PlatformError> {
@@ -110,7 +139,9 @@ fn start_page_worker(
             // SAFETY: COM initialization for this worker thread.
             let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
             while rx.recv().is_ok() {
-                while rx.try_recv().is_ok() {}
+                if !settle(&rx, REFRESH_QUIET, REFRESH_MAX_DELAY) {
+                    break;
+                }
                 let started = std::time::Instant::now();
                 match crate::actions::capture_foreground_page() {
                     Ok(root) => {
@@ -181,5 +212,39 @@ fn load_page_if_new(
             let _ = sender.send(AccessibilityEvent::DocumentLoaded { title, root });
         }
         Err(e) => tracing::warn!("page capture failed: {e}"),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::settle;
+    use std::time::{Duration, Instant};
+
+    #[test]
+    fn a_burst_of_refresh_requests_settles_into_one() {
+        let (tx, rx) = std::sync::mpsc::channel::<()>();
+        for _ in 0..5 {
+            let _ = tx.send(());
+        }
+        let started = Instant::now();
+        assert!(settle(
+            &rx,
+            Duration::from_millis(20),
+            Duration::from_secs(2)
+        ));
+        // The burst was taken, and the wait ended on quiet, long before the limit.
+        assert!(rx.try_recv().is_err());
+        assert!(started.elapsed() < Duration::from_secs(1));
+    }
+
+    #[test]
+    fn a_closed_request_channel_ends_the_wait() {
+        let (tx, rx) = std::sync::mpsc::channel::<()>();
+        drop(tx);
+        assert!(!settle(
+            &rx,
+            Duration::from_millis(20),
+            Duration::from_secs(2)
+        ));
     }
 }
