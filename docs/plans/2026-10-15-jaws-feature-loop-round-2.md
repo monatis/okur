@@ -42,4 +42,5 @@ Live usability gaps the user reports come first.
    - 207/s87's location after the title;
    - 303/s6;
    - 305/s13;
-   - the Claude app announcing twice on arrival.
+   - the Claude app announcing twice on arrival (fixed for Chrome by d8235b8; recheck in the Claude app);
+   - Windows search on Windows 10 (old-pc): whether its results raise the same ElementSelected events (scenario still to write).
