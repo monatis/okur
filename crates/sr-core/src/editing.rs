@@ -25,6 +25,8 @@ pub enum EditKey {
     SelectMore,
     /// Backspace: the character it deleted (305/s6).
     DeleteBackward,
+    /// Ctrl+Backspace: the word it deleted (JAWS 2025, Windows 11 Notepad, dev box: "test").
+    DeleteWordBackward,
     /// Delete: the character now at the caret (305/s8).
     DeleteForward,
     /// Insert+Up (Say Line): the field's name and role, then the line (305/s9, s15).
@@ -82,6 +84,7 @@ impl EditKey {
             (false, true) if ends => Self::Line,
             (false, false) if ends => Self::Silent,
             (false, false) if event.key == Key::Backspace => Self::DeleteBackward,
+            (false, true) if event.key == Key::Backspace => Self::DeleteWordBackward,
             (false, false) if event.key == Key::Delete => Self::DeleteForward,
             (false, true) if event.key == Key::Alpha('A') => Self::SelectAll,
             (false, true) if event.key == Key::Alpha('C') => Self::Copy,
@@ -293,6 +296,13 @@ pub fn speech(
             }
             deleted
         }
+        EditKey::DeleteWordBackward => {
+            let deleted = deleted_before_caret(before, after);
+            if deleted.trim().is_empty() {
+                return None;
+            }
+            deleted.trim().to_owned()
+        }
         EditKey::SelectAll => {
             let lines: Vec<String> = text_lines(&selected_text(after))
                 .into_iter()
@@ -332,6 +342,17 @@ mod tests {
             font: None,
             word: None,
         }
+    }
+
+    /// Ctrl+Backspace reads the word it deleted, without its space (JAWS on the dev box).
+    #[test]
+    fn ctrl_backspace_reads_the_deleted_word() {
+        let before = ctx("of the viewer test ", 19, None);
+        let after = ctx("of the viewer ", 14, None);
+        assert_eq!(
+            speech(EditKey::DeleteWordBackward, Some(&before), &after, "").as_deref(),
+            Some("test")
+        );
     }
 
     /// Windows 11 Notepad (JAWS on the dev box): Home reads its character, Ctrl+Home and
