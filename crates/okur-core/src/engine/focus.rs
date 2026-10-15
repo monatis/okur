@@ -1,6 +1,7 @@
 //! Focus and menu events: what the engine says when the focus or a menu changes.
 
 use super::{AppMode, ScreenReaderEngine};
+use crate::announcement::{Announcement, Line, Part};
 use crate::aom::Role;
 use crate::apps::{AppContext, FocusResponse};
 use crate::event::FocusEvent;
@@ -32,7 +33,8 @@ impl ScreenReaderEngine {
             match app.focus(focus, &mut cx) {
                 FocusResponse::Pass => {}
                 FocusResponse::Silent => return None,
-                FocusResponse::Speak(speech) => {
+                FocusResponse::Speak(announcement) => {
+                    let speech = announcement.render();
                     self.speech.speak(&speech, true);
                     return Some(speech);
                 }
@@ -191,37 +193,17 @@ impl ScreenReaderEngine {
         if window_changed {
             self.native_focus.reset();
         }
-        let control_speech = self.native_focus.focus(focus)?.render();
+        let control = self.native_focus.focus(focus)?;
         self.last_native_focus = Some(focus.clone());
 
         let app = self.app_for(focus);
         let names_window = app.is_none_or(|app| app.names_window(focus));
-        let speech = if window_changed && names_window {
-            // A new active window: its title, or what its application calls it, then the
-            // control. A dialog box adds its role and its text [obs, 306/s1, s3, s10].
-            let window_name = app.and_then(|app| app.window_name(focus));
-            let win = window_name
-                .as_deref()
-                .or(focus.window_title.as_deref())
-                .unwrap_or("");
-            let mut heading = match focus.dialog_text.as_deref() {
-                Some(text) if !text.is_empty() => format!("{win}  \u{1d} dialog \u{1e} \n{text}"),
-                Some(_) => format!("{win}  \u{1d} dialog \u{1e} "),
-                None => win.to_owned(),
-            };
-            // A property sheet names the page it opens on (JAWS 2025 on the dev box:
-            // "Local Disk (C:) Properties dialog | General page").
-            if let Some(page) = &focus.dialog_page {
-                heading.push_str(&format!("\n{page}  \u{1d} page \u{1e} "));
-            }
-            if control_speech.is_empty() || control_speech == win {
-                heading
-            } else {
-                format!("{heading}\n{control_speech}")
-            }
+        let announcement = if window_changed && names_window {
+            self.window_heading(focus, app, control)
         } else {
-            control_speech
+            control
         };
+        let speech = announcement.render();
 
         if !speech.is_empty() {
             self.speech.speak(&speech, true);
@@ -229,6 +211,49 @@ impl ScreenReaderEngine {
         } else {
             None
         }
+    }
+
+    /// A new active window: its title, or what its application calls it, then the control.
+    /// A dialog box adds its role and its text [obs, 306/s1, s3, s10]; a property sheet the
+    /// page it opens on (JAWS 2025 on the dev box: "Local Disk (C:) Properties dialog |
+    /// General page").
+    fn window_heading(
+        &self,
+        focus: &FocusEvent,
+        app: Option<&dyn crate::apps::AppModule>,
+        control: Announcement,
+    ) -> Announcement {
+        let window_name = app.and_then(|app| app.window_name(focus));
+        let win = window_name
+            .as_deref()
+            .or(focus.window_title.as_deref())
+            .unwrap_or("");
+        let mut lines = vec![match &focus.dialog_text {
+            Some(_) => Line::new(vec![
+                Part::Text(win.to_owned()),
+                Part::Role("dialog".to_owned()),
+            ]),
+            None => Line::text(win),
+        }];
+        lines.extend(
+            focus
+                .dialog_text
+                .as_deref()
+                .filter(|text| !text.is_empty())
+                .map(Line::text),
+        );
+        lines.extend(focus.dialog_page.as_deref().map(|page| {
+            Line::new(vec![
+                Part::Text(page.to_owned()),
+                Part::Role("page".to_owned()),
+            ])
+        }));
+        // The control, unless it only repeats the window's name.
+        let control_speech = control.render();
+        if !control_speech.is_empty() && control_speech != win {
+            lines.extend(control.lines);
+        }
+        Announcement::new(lines)
     }
 
     /// Handles menu mode transitions [obs, 302]. Leaving menus re-announces the control

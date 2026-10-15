@@ -73,6 +73,11 @@ impl Announcement {
         Self { lines }
     }
 
+    /// Text as lines of words, one per line of `text`.
+    pub fn from_text(text: &str) -> Self {
+        Self::new(text.split('\n').map(Line::text).collect())
+    }
+
     /// The speech text: the lines that say something, one per line.
     pub fn render(&self) -> String {
         self.lines

@@ -24,7 +24,7 @@ pub enum FocusResponse {
     /// The module's, and nothing is said.
     Silent,
     /// The module's: this is said.
-    Speak(String),
+    Speak(crate::announcement::Announcement),
 }
 
 /// The engine's state a module reads and changes while it handles a focus event.

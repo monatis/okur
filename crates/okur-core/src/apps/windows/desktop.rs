@@ -1,6 +1,7 @@
 //! The Windows desktop's icons (the "FolderView" list). Entering it reads "desktop", the list
 //! and the item with its position and hints; moving reads the item and its position.
 
+use crate::announcement::Announcement;
 use crate::aom::Role;
 use crate::apps::{AppContext, AppModule, FocusResponse};
 use crate::engine::AppMode;
@@ -103,7 +104,7 @@ impl AppModule for Desktop {
             self.current = self.items.len().saturating_sub(1);
         }
 
-        FocusResponse::Speak(if first_entry {
+        FocusResponse::Speak(Announcement::from_text(&if first_entry {
             // JAWS heads it with "desktop", not the list's role. JAWS 2025 on Windows 11,
             // observed on the dev box (2026-10-15; research, scenario 316 records it on
             // old-pc): "desktop | FolderView List view | Dropbox | 7 of 11 | To move to items
@@ -113,7 +114,7 @@ impl AppModule for Desktop {
             )
         } else {
             format!("{name}\n{index} of {total}")
-        })
+        }))
     }
 
     /// A window that comes to the front on the desktop is announced as "desktop"; its title

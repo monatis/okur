@@ -8,6 +8,7 @@
 //! - Windows 10 [obs, 306/s7 variant]: "SR Second Window | To move to an item press the
 //!   Arrow keys."
 
+use crate::announcement::Announcement;
 use crate::aom::Role;
 use crate::apps::{AppContext, AppModule, FocusResponse};
 use crate::event::FocusEvent;
@@ -63,7 +64,7 @@ impl AppModule for TaskSwitcher {
         if speech.is_empty() {
             FocusResponse::Silent
         } else {
-            FocusResponse::Speak(speech)
+            FocusResponse::Speak(Announcement::from_text(&speech))
         }
     }
 }

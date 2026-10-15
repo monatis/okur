@@ -1,6 +1,7 @@
 //! File Explorer's file list. Entering it reads the window, the folder, the list ("Items
 //! View MultiSelect ListBox") and the item; moving reads the item and its position.
 
+use crate::announcement::{Announcement, Line, Part};
 use crate::aom::Role;
 use crate::apps::{AppContext, AppModule, FocusResponse};
 use crate::engine::AppMode;
@@ -72,7 +73,7 @@ impl AppModule for Explorer {
                 total,
             )
         } else {
-            format!("{name}\n{index} of {total}")
+            Announcement::from_text(&format!("{name}\n{index} of {total}"))
         })
     }
 }
@@ -85,25 +86,28 @@ fn entry(
     item_name: &str,
     index: usize,
     total: usize,
-) -> String {
+) -> Announcement {
     let mut lines = Vec::new();
     if let Some(title) = window_title {
-        lines.push(title.to_string());
+        lines.push(Line::text(title));
     }
     if let Some(folder) = folder_name {
-        lines.push(folder.to_string());
+        lines.push(Line::text(folder));
     }
     // JAWS 2025, Windows 11, observed on the dev box (research): "live - File Explorer |
     // Items View MultiSelect ListBox | Not Selected combo.cs | 1 of 8".
-    lines.push("Items View  \u{1d} MultiSelect ListBox \u{1e} ".to_string());
+    lines.push(Line::new(vec![
+        Part::Text("Items View".to_owned()),
+        Part::Role("MultiSelect ListBox".to_owned()),
+    ]));
     match selected {
-        Some(false) => lines.push(format!("Not Selected {item_name}")),
+        Some(false) => lines.push(Line::text(format!("Not Selected {item_name}"))),
         Some(true) => {
-            lines.push("selected".to_string());
-            lines.push(item_name.to_string());
+            lines.push(Line::text("selected"));
+            lines.push(Line::text(item_name));
         }
-        None => lines.push(item_name.to_string()),
+        None => lines.push(Line::text(item_name)),
     }
-    lines.push(format!("{} of {}", index, total));
-    lines.join("\n")
+    lines.push(Line::text(format!("{index} of {total}")));
+    Announcement::new(lines)
 }

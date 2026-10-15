@@ -519,7 +519,7 @@ fn test_engine_file_explorer_entry_and_item_navigation() {
     // ListBox | Not Selected combo.cs | 1 of 8"); the folder line is this test's own.
     assert_eq!(
         s1,
-        "Dropbox - File Explorer\nDropbox\nItems View  \u{1d} MultiSelect ListBox \u{1e} \nNot Selected .cache\n1 of 143"
+        "Dropbox - File Explorer\nDropbox\nItems View \u{1d} MultiSelect ListBox \u{1e} \nNot Selected .cache\n1 of 143"
     );
 
     // Press 'a' inside File Explorer -> ailabs

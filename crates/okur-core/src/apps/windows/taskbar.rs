@@ -1,5 +1,6 @@
 //! The Windows taskbar: its buttons, with the taskbar named on entering it.
 
+use crate::announcement::Announcement;
 use crate::apps::{AppContext, AppModule, FocusResponse};
 use crate::engine::AppMode;
 use crate::event::FocusEvent;
@@ -18,7 +19,11 @@ impl AppModule for Taskbar {
         *cx.app_mode = AppMode::NativeShell;
         let name = focus.name.as_deref().unwrap_or("Start Button");
         let container = entering.then(|| focus.container_name.as_deref().unwrap_or("Taskbar"));
-        FocusResponse::Speak(button(container, name, focus.help_text.as_deref()))
+        FocusResponse::Speak(Announcement::from_text(&button(
+            container,
+            name,
+            focus.help_text.as_deref(),
+        )))
     }
 }
 
