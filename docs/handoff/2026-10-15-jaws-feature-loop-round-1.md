@@ -98,7 +98,7 @@ Each item started from a user report or from the loop's discovery.
 ### New evidence
 Scenarios 207, 209, 307, 308, 309, 311, 312, 313 and 314 (see their `corpus:` commits).
 
-## Dev-box session (02:20–04:05, after old-pc went offline)
+## Dev-box session (02:20–04:25, after old-pc went offline)
 
 The user allowed using the dev box (Windows 11 26200, JAWS 2025 running) while they slept.
 
@@ -129,10 +129,11 @@ The user allowed using the dev box (Windows 11 26200, JAWS 2025 running) while t
 | d4ed970 | Laptop layout: CapsLock+I (Say Line) and CapsLock+K (Say Word). Say Line in a multi-line document reads the line alone. | Identical to JAWS in Notepad |
 | df40cb7 | Laptop layout: CapsLock+O/U/L/J/M move, then read. In pages they are virtual cursor commands. In native controls the application's arrow key is sent, marked as ours. JAWS's unmarked copy of it also counts as ours, so it is not read as a JAWS chord while CapsLock is held. | Identical to JAWS in Notepad. CapsLock+Comma and CapsLock+Period were typed into the document by JAWS here, so they are left alone. |
 | 6e863aa | Words in a text field follow the field's UIA word unit (Notepad: "line", ",", "with") | Identical to JAWS |
+| d8235b8 | Window switches. A Chromium top-level document is a page. Only an editable document is a native text field. The tracer asks UIA for the focus once per event: the second GetFocusedElement blocked 7 s after a switch into Notepad, and every later event was then read against the wrong focus. | Three rounds of Chrome ↔ Notepad: one immediate announcement per switch, no slow reads |
 
 **Still differing on the dev box:**
 - In the font viewer, JAWS moved through its lines; old-pc's evidence stays on the last line, as ours does.
-- The Claude app announces twice on arrival (focus, then page load).
+- The Claude app announced twice on arrival (focus, then page load). The same thing in Chrome was fixed by d8235b8; the Claude app itself was not rechecked, to avoid reading the user's conversation.
 
 ## Not finished
 
