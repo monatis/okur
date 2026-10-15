@@ -373,6 +373,14 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     {
         set_attr("haspopup", popup);
     }
+    // A name given by aria-label (or title), which a link says in place of its text.
+    if attr("name-from").as_deref() == Some("attribute") {
+        set_attr("labelled", "true".to_owned());
+    }
+    // aria-keyshortcuts, said after a link's or graphic's name ("Alt+ArrowUp").
+    if let Some(keys) = attr("keyshortcuts").filter(|k| !k.trim().is_empty()) {
+        set_attr("keyshortcuts", keys);
+    }
     // aria-roledescription, said in place of some roles.
     if let Some(description) = attr("roledescription") {
         set_attr("roledescription", description);

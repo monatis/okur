@@ -752,12 +752,15 @@ impl VirtualCursor {
             .find(|h| h.0 == offset)
             .map(|h| h.1)
             .unwrap_or(1);
-        let text = self
-            .buffer
-            .line_at_offset(offset)
-            .map(|l| l.text.clone())
+        let line = self.buffer.line_at_offset(offset);
+        let text = line.map(|l| l.text.clone()).unwrap_or_default();
+        // A heading that is a button says the button after the heading.
+        let button = line
+            .and_then(|l| self.buffer.node(l.node_id))
+            .filter(|n| matches!(n.role, Role::Button | Role::MenuButton))
+            .map(crate::linearize::button_suffix)
             .unwrap_or_default();
-        SpeechFormatter::format_heading(level, &text)
+        format!("{}{button}", SpeechFormatter::format_heading(level, &text))
     }
 
     /// Moves cursor to next heading across all levels (`H` / `MoveToNextHeading`).

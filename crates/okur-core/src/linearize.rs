@@ -28,6 +28,41 @@ pub(crate) fn state_marker(name: &str) -> String {
     format!(" {RS}{name}{RE} ")
 }
 
+/// A heading's only control, when it is a button named as the heading is: GitHub's "Collapse
+/// file tree" heading is one button.
+fn sole_button<'a>(heading: &'a AomNode, text: &str) -> Option<&'a AomNode> {
+    fn controls<'a>(node: &'a AomNode, out: &mut Vec<&'a AomNode>) {
+        for child in &node.children {
+            if matches!(child.role, Role::Button | Role::MenuButton) {
+                out.push(child);
+            } else {
+                controls(child, out);
+            }
+        }
+    }
+    let mut found = Vec::new();
+    controls(heading, &mut found);
+    match found.as_slice() {
+        [only] if only.name.as_deref().map(squash).as_deref() == Some(text) => Some(*only),
+        _ => None,
+    }
+}
+
+/// What a heading that is a button says after its name: "Collapse file tree heading level 2
+/// ‹ Button › ‹expanded›" (JAWS on the dev box, GitHub's code view).
+pub(crate) fn button_suffix(button: &AomNode) -> String {
+    let role = button.role_description().unwrap_or(match button.role {
+        Role::MenuButton => "button menu",
+        _ => "Button",
+    });
+    let state = match button.states.expanded {
+        Some(true) => state_marker("expanded"),
+        Some(false) => state_marker("collapsed"),
+        None => String::new(),
+    };
+    format!("{}{state}", role_marker(role))
+}
+
 /// The longest a line of paragraph text may be before it wraps (§5). JAWS's default
 /// `[HTML] MaxLineLength=150` in `Default.JCF`.
 pub const MAX_LINE_LENGTH: usize = 150;
@@ -470,8 +505,29 @@ impl<'a> Builder<'a> {
                     t if t.is_empty() => node.name.as_deref().map(squash).unwrap_or_default(),
                     t => t,
                 };
-                let speech = format!("{}{text}", role_marker(&format!("heading level {level}")));
-                let off = self.emit(node.id, node.role.clone(), &text, speech);
+                // A heading that is a single button (GitHub's "Collapse file tree") says the
+                // button, and its line is the button's: Tab, B and Enter reach it.
+                let button = sole_button(node, &text);
+                let suffix = button.map(button_suffix).unwrap_or_default();
+                let speech = format!(
+                    "{}{text}{suffix}",
+                    role_marker(&format!("heading level {level}"))
+                );
+                let line_node = button.map_or(node.id, |b| b.id);
+                let off = self.emit(line_node, node.role.clone(), &text, speech);
+                if let Some(button) = button {
+                    let end = self.offset();
+                    self.buffer.spans.push(BufferSpan {
+                        start_offset: off,
+                        end_offset: end,
+                        node_id: button.id,
+                        role: button.role.clone(),
+                    });
+                    self.buffer.mark_readable(button.id);
+                    self.buffer.buttons.push(off);
+                    self.buffer.form_controls.push(off);
+                    self.buffer.tab_stops.push(off);
+                }
                 self.end_paragraph_since(first_line);
                 self.buffer.headings.push((off, level));
             }
@@ -479,7 +535,13 @@ impl<'a> Builder<'a> {
             Class::Graphic => {
                 self.flush();
                 let alt = node.name.as_deref().map(squash).unwrap_or_default();
-                let speech = format!("{alt}\n{}", role_marker("Graphic"));
+                // Its key shortcuts follow its name: "monatis Alt+ArrowUp | Graphic" (JAWS on
+                // the dev box, GitHub's avatars).
+                let named = match attr(node, "keyshortcuts") {
+                    Some(keys) => format!("{alt} {keys}"),
+                    None => alt.clone(),
+                };
+                let speech = format!("{named}\n{}", role_marker("Graphic"));
                 let off = self.emit(node.id, node.role.clone(), &alt, speech);
                 self.buffer.graphics.push(off);
             }
@@ -543,10 +605,23 @@ impl<'a> Builder<'a> {
             self.flush();
             String::new()
         };
-        let text = match text_content(node) {
-            t if t.is_empty() => node.name.as_deref().map(squash).unwrap_or_default(),
-            t => t,
+        // A link named by aria-label says that name, not its text, and then its key
+        // shortcuts: "Link commits by monatis Alt+ArrowUp" (JAWS on the dev box, GitHub).
+        let label = node
+            .name
+            .as_deref()
+            .map(squash)
+            .filter(|n| !n.is_empty() && attr(node, "labelled") == Some("true"));
+        let mut text = match label {
+            Some(label) => label,
+            None => match text_content(node) {
+                t if t.is_empty() => node.name.as_deref().map(squash).unwrap_or_default(),
+                t => t,
+            },
         };
+        if let Some(keys) = attr(node, "keyshortcuts") {
+            text = format!("{text} {keys}");
+        }
         let href = match &node.role {
             Role::Link { href } => href.as_deref(),
             _ => None,
@@ -1294,5 +1369,48 @@ mod tests {
             cursor.focus_node(1).as_deref(),
             Some("Actions  \u{1d} button menu \u{1e} ")
         );
+    }
+
+    /// GitHub's code view, JAWS on the dev box (2026-10-16): a link named by aria-label says
+    /// that name and its key shortcuts; an avatar says its shortcuts; a heading that is a
+    /// button says the button, and its line is the button's.
+    #[test]
+    fn labels_shortcuts_and_a_heading_that_is_a_button() {
+        let mut commits = link(1, "https://github.com/x", "commits by monatis", None);
+        commits.text = Some("monatis".to_owned());
+        commits
+            .attributes
+            .insert("labelled".to_owned(), "true".to_owned());
+        commits
+            .attributes
+            .insert("keyshortcuts".to_owned(), "Alt+ArrowUp".to_owned());
+        let mut avatar = AomNode::new(2, Role::Image).with_name("monatis");
+        avatar
+            .attributes
+            .insert("keyshortcuts".to_owned(), "Alt+ArrowUp".to_owned());
+        let mut button = AomNode::new(4, Role::Button).with_name("Collapse file tree");
+        button.states.expanded = Some(true);
+        let heading = AomNode::new(3, Role::Heading { level: 2 })
+            .with_name("Collapse file tree")
+            .with_children(vec![button]);
+        let root = AomNode::new(0, Role::Document).with_children(vec![commits, avatar, heading]);
+        let buffer = crate::buffer::VirtualBuffer::from_aom(&root);
+        let speech: Vec<&str> = buffer.lines.iter().map(|l| l.speech.as_str()).collect();
+        assert_eq!(
+            speech,
+            vec![
+                format!("{}commits by monatis Alt+ArrowUp", role_marker("Link")),
+                format!("monatis Alt+ArrowUp\n{}", role_marker("Graphic")),
+                format!(
+                    "{}Collapse file tree{}{}",
+                    role_marker("heading level 2"),
+                    role_marker("Button"),
+                    state_marker("expanded")
+                ),
+            ]
+        );
+        let heading_line = buffer.lines.get(2).map(|l| (l.node_id, l.start_offset));
+        assert_eq!(heading_line.map(|(node, _)| node), Some(4));
+        assert!(heading_line.is_some_and(|(_, off)| buffer.tab_stops.contains(&off)));
     }
 }
