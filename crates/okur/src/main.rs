@@ -882,7 +882,7 @@ async fn main() {
             println!("  - Ctrl+Home / Ctrl+End: Document start / end");
             println!("  - H / Shift+H: Next / prior heading");
             println!("  - 1..6: Next heading by level");
-            println!("  - K / U: Next link");
+            println!("  - U / Shift+U: Next / prior link");
             println!("  - T / Shift+T: Next / prior table");
             println!("  - Tab / Shift+Tab: Interactive controls");
             println!("  - Enter: Forms mode on edits");
