@@ -50,6 +50,9 @@ pub struct UiaNode {
     pub full_description: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub help_text: Option<String>,
+    /// `AccessKey`: the keys that reach the control ("Alt+o"), from its label's accelerator.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub access_key: Option<String>,
     /// `ToggleState`: 0 off, 1 on, 2 indeterminate.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub toggle_state: Option<i32>,
@@ -405,6 +408,7 @@ pub(crate) mod capture {
         UIA_LocalizedLandmarkTypePropertyId,
         UIA_FullDescriptionPropertyId,
         UIA_HelpTextPropertyId,
+        UIA_AccessKeyPropertyId,
         UIA_ToggleToggleStatePropertyId,
         UIA_ExpandCollapseExpandCollapseStatePropertyId,
         UIA_SelectionItemIsSelectedPropertyId,
@@ -477,6 +481,7 @@ pub(crate) mod capture {
             localized_landmark_type: string(el, UIA_LocalizedLandmarkTypePropertyId),
             full_description: string(el, UIA_FullDescriptionPropertyId),
             help_text: string(el, UIA_HelpTextPropertyId),
+            access_key: string(el, UIA_AccessKeyPropertyId),
             toggle_state: int(el, UIA_ToggleToggleStatePropertyId),
             expand_collapse_state: int(el, UIA_ExpandCollapseExpandCollapseStatePropertyId),
             is_selected: boolean(el, UIA_SelectionItemIsSelectedPropertyId),

@@ -131,6 +131,8 @@ pub struct FocusEvent {
     pub window_title: Option<String>,
     pub folder_name: Option<String>,
     pub help_text: Option<String>,
+    /// The keys that reach the control from anywhere in its window ("Alt+o").
+    pub access_key: Option<String>,
 }
 
 impl FocusEvent {
@@ -160,6 +162,7 @@ impl FocusEvent {
             window_title: None,
             folder_name: None,
             help_text: None,
+            access_key: None,
         }
     }
 

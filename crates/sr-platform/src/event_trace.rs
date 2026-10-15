@@ -20,6 +20,8 @@ const WEB_CONTENT_WINDOW_CLASSES: [&str; 2] = ["Chrome_RenderWidgetHostHWND", "M
 const UIA_TREEITEM: i32 = 50024;
 const UIA_TEXT: i32 = 50020;
 const UIA_BUTTON: i32 = 50000;
+const UIA_EDIT: i32 = 50004;
+const UIA_COMBOBOX: i32 = 50003;
 /// The window class of Win32 dialog boxes (message boxes, common dialogs).
 const WIN32_DIALOG_CLASS: &str = "#32770";
 /// The window kind of focus on the desktop ([`sr_core::FocusEvent::window_kind`]).
@@ -125,6 +127,9 @@ pub struct TraceEvent {
     /// ([`crate::screen_lines`]), for the Virtual Viewer.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub dialog_lines: Vec<String>,
+    /// For focus in that dialog box: its static text that labels no field, top to bottom.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub dialog_text: Vec<String>,
 }
 
 /// The first line of a trace file.
@@ -230,6 +235,24 @@ pub fn focus_event_from_chain(
         event.dom_id = focused.automation_id.clone().filter(|id| !id.is_empty());
     }
 
+    event.access_key = focused.access_key.clone().filter(|k| !k.is_empty());
+    // An edit inside a combo box is the combo box's text field (an "edit combo").
+    let parent = chain.iter().rev().nth(1);
+    if focused.control_type == UIA_EDIT && parent.is_some_and(|p| p.control_type == UIA_COMBOBOX) {
+        event.container_role = Some(Role::ComboBox);
+        event.container_name = parent.and_then(|p| p.name.clone());
+        event.container_class = parent.and_then(|p| p.class_name.clone());
+        // The access key belongs to the combo box; the position is its list's selection
+        // (from the Win32 combo box), not the edit's own "1 of 1".
+        event.access_key = event.access_key.or_else(|| {
+            parent
+                .and_then(|p| p.access_key.clone())
+                .filter(|k| !k.is_empty())
+        });
+        event.item_index = None;
+        event.item_count = None;
+        return Some(event);
+    }
     // The nearest structural container (list, group, tab list, tree, table, dialog, landmark).
     for ancestor in chain.iter().rev().skip(1) {
         let mut a = ancestor.clone();
@@ -320,7 +343,14 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent>
             .filter_map(|s| s.name.as_deref())
             .filter(|n| !n.trim().is_empty())
             .collect();
-        focus.dialog_text = Some(text.join("\n"));
+        // Focus inside a field (the Run dialog's combo box) has no text beside it: the
+        // dialog's own static text is read from its window [JAWS on Windows 11, dev box:
+        // "Run dialog | Type the name of a program, …"].
+        focus.dialog_text = Some(if text.is_empty() {
+            event.dialog_text.join("\n")
+        } else {
+            text.join("\n")
+        });
         focus.dialog_buttons = event
             .focus_siblings
             .iter()
@@ -372,7 +402,11 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<sr_core::FocusEvent>
         focus.item_index = usize::try_from(index).ok().map(|i| i + 1);
         focus.item_count = usize::try_from(count).ok();
     }
-    if focus.item_index.is_none() && focus.role != sr_core::Role::ComboBox {
+    // Siblings count positions among peers; a combo box's field has its list's position.
+    if focus.item_index.is_none()
+        && focus.role != sr_core::Role::ComboBox
+        && focus.container_role != Some(sr_core::Role::ComboBox)
+    {
         let peers: Vec<&UiaNode> = event
             .focus_siblings
             .iter()
@@ -668,7 +702,20 @@ mod capture {
     /// collapsed WinForms combo box exposes no items through UIA, yet JAWS says "2 of 3".
     fn win32_list_position(hwnd: HWND, class: &str) -> Option<[i32; 2]> {
         use windows::Win32::Foundation::{LPARAM, WPARAM};
-        use windows::Win32::UI::WindowsAndMessaging::{SendMessageTimeoutW, SMTO_ABORTIFHUNG};
+        use windows::Win32::UI::WindowsAndMessaging::{
+            GetParent, SendMessageTimeoutW, SMTO_ABORTIFHUNG,
+        };
+        // An edit inside a combo box: the combo box's selection.
+        if class.eq_ignore_ascii_case("Edit") {
+            // SAFETY: plain Win32 query on a window handle.
+            let parent = unsafe { GetParent(hwnd) }.ok()?;
+            let (_, parent_class) = window_text(parent);
+            return parent_class
+                .to_ascii_uppercase()
+                .contains("COMBOBOX")
+                .then(|| win32_list_position(parent, &parent_class))
+                .flatten();
+        }
         let upper = class.to_ascii_uppercase();
         let (get_sel, get_count) = if upper.contains("COMBOBOX") {
             (0x0147, 0x0146)
@@ -677,15 +724,16 @@ mod capture {
         } else {
             return None;
         };
-        let ask = |msg: u32| {
+        let ask_with = |msg: u32, wparam: WPARAM, lparam: LPARAM| {
             let mut result = 0usize;
-            // SAFETY: a read-only query message with a timeout, to a window that may be gone.
+            // SAFETY: a read-only query message with a timeout, to a window that may be gone;
+            // a string parameter outlives the call (the system copies it across processes).
             let sent = unsafe {
                 SendMessageTimeoutW(
                     hwnd,
                     msg,
-                    WPARAM(0),
-                    LPARAM(0),
+                    wparam,
+                    lparam,
                     SMTO_ABORTIFHUNG,
                     200,
                     Some(&mut result),
@@ -694,8 +742,24 @@ mod capture {
             // CB_ERR/LB_ERR is -1, as the low 32 bits of the result.
             (sent.0 != 0).then_some(result as i32)
         };
-        let index = ask(get_sel).filter(|&i| i >= 0)?;
+        let ask = |msg: u32| ask_with(msg, WPARAM(0), LPARAM(0));
         let count = ask(get_count).filter(|&n| n > 0)?;
+        let index = ask(get_sel).filter(|&i| i >= 0).or_else(|| {
+            // An editable combo box's typed text selects nothing: its position is that of
+            // the list item with the same text (JAWS on the Run dialog: "C: | 1 of 6").
+            const CB_FINDSTRINGEXACT: u32 = 0x0158;
+            if !upper.contains("COMBOBOX") {
+                return None;
+            }
+            let text = crate::screen_lines::control_text(hwnd);
+            let wide: Vec<u16> = text.encode_utf16().chain(std::iter::once(0)).collect();
+            ask_with(
+                CB_FINDSTRINGEXACT,
+                WPARAM(usize::MAX),
+                LPARAM(wide.as_ptr() as isize),
+            )
+            .filter(|&i| i >= 0)
+        })?;
         Some([index, count])
     }
 
@@ -879,13 +943,23 @@ mod capture {
     /// Records the focus as it is now, as a focus event on the foreground thread's focused
     /// window (the foreground window when it has none).
     fn record_current_focus() {
+        const OBJID_CLIENT: i32 = -4;
+        const EVENT_OBJECT_FOCUS: u32 = 0x8005;
+        let focused = keyboard_focus_window();
+        if !focused.is_invalid() {
+            record("focus", EVENT_OBJECT_FOCUS, focused, OBJID_CLIENT, 0, None);
+        }
+    }
+
+    /// The window with the keyboard focus in the foreground thread (the foreground window
+    /// when none has it). A focus event can arrive on another window: the dialog box whose
+    /// field has the focus.
+    fn keyboard_focus_window() -> HWND {
         use windows::Win32::UI::WindowsAndMessaging::{
             GetForegroundWindow, GetGUIThreadInfo, GetWindowThreadProcessId, GUITHREADINFO,
         };
-        const OBJID_CLIENT: i32 = -4;
-        const EVENT_OBJECT_FOCUS: u32 = 0x8005;
         // SAFETY: plain Win32 queries; the info struct is sized as the call requires.
-        let focused = unsafe {
+        unsafe {
             let foreground = GetForegroundWindow();
             let thread = GetWindowThreadProcessId(foreground, None);
             let mut info = GUITHREADINFO {
@@ -896,9 +970,6 @@ mod capture {
                 Ok(()) if !info.hwndFocus.is_invalid() => info.hwndFocus,
                 _ => foreground,
             }
-        };
-        if !focused.is_invalid() {
-            record("focus", EVENT_OBJECT_FOCUS, focused, OBJID_CLIENT, 0, None);
         }
     }
 
@@ -969,7 +1040,12 @@ mod capture {
             };
             stages.push(("context", clock.elapsed().as_millis()));
             let list_position = if focused || changes_focus_context {
-                win32_list_position(hwnd, &class)
+                win32_list_position(hwnd, &class).or_else(|| {
+                    let focus_window = keyboard_focus_window();
+                    (focus_window != hwnd)
+                        .then(|| win32_list_position(focus_window, &window_text(focus_window).1))
+                        .flatten()
+                })
             } else {
                 None
             };
@@ -984,12 +1060,12 @@ mod capture {
                 } else {
                     (None, None, None)
                 };
-            let dialog_lines = if focused && top_window_class.as_deref() == Some("#32770") {
+            let dialog = if focused && top_window_class.as_deref() == Some("#32770") {
                 use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
                 // SAFETY: plain Win32 call with no preconditions.
-                crate::screen_lines::dialog_lines(unsafe { GetForegroundWindow() })
+                crate::screen_lines::dialog_layout(unsafe { GetForegroundWindow() })
             } else {
-                Vec::new()
+                crate::screen_lines::DialogLayout::default()
             };
             stages.push(("window", clock.elapsed().as_millis()));
             let (region, page) = if name == "live_region_change" {
@@ -1054,7 +1130,8 @@ mod capture {
                 top_window_title,
                 top_window_class,
                 virtual_desktop,
-                dialog_lines,
+                dialog_lines: dialog.rows,
+                dialog_text: dialog.text,
             };
             (state.sink)(event);
             state.count += 1;
@@ -1221,6 +1298,7 @@ mod tests {
             top_window_class: None,
             virtual_desktop: None,
             dialog_lines: Vec::new(),
+            dialog_text: Vec::new(),
         }
     }
 
@@ -1244,6 +1322,37 @@ mod tests {
     fn no_siblings_means_no_position() {
         let focus = focus_event_from_trace(&focus_event(Vec::new()));
         assert_eq!(focus.map(|f| f.item_index), Some(None));
+    }
+
+    /// The Run dialog's Open field: an edit inside a combo box, whose access key and position
+    /// are the combo box's.
+    #[test]
+    fn an_edit_in_a_combo_box_is_its_field() {
+        let combo = UiaNode {
+            access_key: Some("Alt+o".to_owned()),
+            ..node(UIA_COMBOBOX, "Open:", false)
+        };
+        let event = TraceEvent {
+            focus_chain: vec![combo, node(UIA_EDIT, "Open:", true)],
+            focus_siblings: vec![node(UIA_EDIT, "Open:", true)],
+            list_position: Some([0, 6]),
+            ..focus_event(Vec::new())
+        };
+        let focus = focus_event_from_trace(&event);
+        assert_eq!(
+            focus.as_ref().map(|f| (
+                f.container_role.clone(),
+                f.access_key.as_deref(),
+                f.item_index,
+                f.item_count
+            )),
+            Some((
+                Some(sr_core::Role::ComboBox),
+                Some("Alt+o"),
+                Some(1),
+                Some(6)
+            ))
+        );
     }
 
     /// Chrome's caption names the profile; its UIA window name does not.

@@ -1933,7 +1933,18 @@ impl ScreenReaderEngine {
     /// control's name and type [obs, 311/s12, s23; 312/s11].
     fn speak_focus_again(&mut self) {
         let speech = if self.editing_text() {
-            self.last_text.as_ref().map(crate::editing::line_at)
+            let line = self.last_text.as_ref().map(crate::editing::line_at);
+            // A combo box's field adds its list position (JAWS on the Run dialog, dev box:
+            // "C: | 1 of 6").
+            let position = self
+                .last_native_focus
+                .as_ref()
+                .filter(|f| f.container_role == Some(Role::ComboBox))
+                .and_then(|f| Some(format!("{} of {}", f.item_index?, f.item_count?)));
+            match (line, position) {
+                (Some(line), Some(position)) => Some(format!("{line}\n{position}")),
+                (line, _) => line,
+            }
         } else if self.app_mode == AppMode::VirtualBuffer {
             // In a page, the virtual cursor's line [obs, 209/s11].
             Some(self.cursor.current_line())

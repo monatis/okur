@@ -88,12 +88,39 @@ pub fn without_accelerators(text: &str) -> String {
     out
 }
 
+/// A dialog box as read from its controls.
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct DialogLayout {
+    /// Its text by screen rows (the Virtual Viewer's lines).
+    pub rows: Vec<String>,
+    /// Its static text that labels no field, top to bottom: what JAWS reads after the
+    /// dialog's title ("Run dialog | Type the name of a program, …").
+    pub text: Vec<String>,
+}
+
+/// Static texts (`top`, `bottom`, text) that label no field: a static sharing a row with a
+/// field (`top`, `bottom`) is that field's label ("Open:"), read with the field.
+pub fn standalone(mut statics: Vec<(i32, i32, String)>, fields: &[(i32, i32)]) -> Vec<String> {
+    statics.sort_by_key(|(top, _, _)| *top);
+    statics
+        .into_iter()
+        .filter(|(top, bottom, _)| {
+            !fields
+                .iter()
+                .any(|(field_top, field_bottom)| field_top < bottom && top < field_bottom)
+        })
+        .map(|(_, _, text)| text)
+        .collect()
+}
+
 #[cfg(windows)]
-pub use windows_lines::dialog_lines;
+pub use windows_lines::dialog_layout;
+#[cfg(windows)]
+pub(crate) use windows_lines::text_of as control_text;
 
 #[cfg(windows)]
 mod windows_lines {
-    use super::{rows, without_accelerators, wrap, Run};
+    use super::{rows, standalone, without_accelerators, wrap, DialogLayout, Run};
     use windows::core::BOOL;
     use windows::Win32::Foundation::{HWND, LPARAM, RECT, WPARAM};
     use windows::Win32::Graphics::Gdi::{
@@ -118,7 +145,7 @@ mod windows_lines {
     }
 
     /// A control's text through WM_GETTEXT, which reaches edits in other processes.
-    fn text_of(hwnd: HWND) -> String {
+    pub(crate) fn text_of(hwnd: HWND) -> String {
         let mut buf = vec![0u16; 2048];
         let mut copied = 0usize;
         // SAFETY: the buffer outlives the call and its length is passed with it.
@@ -205,9 +232,8 @@ mod windows_lines {
         BOOL(1)
     }
 
-    /// The dialog's text by screen rows: static text as drawn, an edit's or combo box's text
-    /// beside its label, buttons by their captions.
-    pub fn dialog_lines(dialog: HWND) -> Vec<String> {
+    /// A dialog's text by screen rows, and its text that labels no field.
+    pub fn dialog_layout(dialog: HWND) -> DialogLayout {
         use windows::Win32::UI::HiDpi::{
             SetThreadDpiAwarenessContext, DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2,
         };
@@ -216,13 +242,13 @@ mod windows_lines {
         // SAFETY: changes this thread's DPI awareness, restored below.
         let previous =
             unsafe { SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2) };
-        let lines = read_lines(dialog);
+        let layout = read_layout(dialog);
         // SAFETY: restores the awareness this thread had.
         unsafe { SetThreadDpiAwarenessContext(previous) };
-        lines
+        layout
     }
 
-    fn read_lines(dialog: HWND) -> Vec<String> {
+    fn read_layout(dialog: HWND) -> DialogLayout {
         let mut children: Vec<HWND> = Vec::new();
         // SAFETY: the callback only pushes into the Vec, which outlives the call.
         let _ = unsafe {
@@ -233,6 +259,8 @@ mod windows_lines {
             )
         };
         let mut runs = Vec::new();
+        let mut statics: Vec<(i32, i32, String)> = Vec::new();
+        let mut fields: Vec<(i32, i32)> = Vec::new();
         for child in children {
             // SAFETY: plain Win32 queries on a window handle.
             if !unsafe { IsWindowVisible(child) }.as_bool() {
@@ -245,14 +273,18 @@ mod windows_lines {
             if class == "Edit" && parent.is_some_and(|p| class_of(p) == "ComboBox") {
                 continue;
             }
+            let rect = rect_of(child);
+            if !matches!(class.as_str(), "Static" | "Button") {
+                fields.push((rect.top, rect.bottom));
+            }
             let text = text_of(child);
             if text.trim().is_empty() {
                 continue;
             }
-            let rect = rect_of(child);
             match class.as_str() {
                 "Static" => {
                     let text = without_accelerators(&text);
+                    statics.push((rect.top, rect.bottom, text.clone()));
                     let lines = static_lines(child, &text);
                     let height =
                         (rect.bottom - rect.top) / i32::try_from(lines.len().max(1)).unwrap_or(1);
@@ -280,7 +312,10 @@ mod windows_lines {
                 }),
             }
         }
-        rows(runs)
+        DialogLayout {
+            rows: rows(runs),
+            text: standalone(statics, &fields),
+        }
     }
 }
 
@@ -340,6 +375,18 @@ mod tests {
         );
         assert_eq!(wrap("first\nsecond", 1000, measure), ["first", "second"]);
         assert_eq!(wrap("unbreakable", 30, measure), ["unbreakable"]);
+    }
+
+    #[test]
+    fn a_field_label_is_not_dialog_text() {
+        let text = standalone(
+            vec![
+                (83, 97, "Open:".to_owned()),
+                (20, 52, "Type the name of a program.".to_owned()),
+            ],
+            &[(80, 100)],
+        );
+        assert_eq!(text, ["Type the name of a program."]);
     }
 
     #[test]

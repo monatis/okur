@@ -78,6 +78,16 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<String> {
     let value = focus.value.as_deref().map(named).filter(|v| !v.is_empty());
     let mut lines = Vec::new();
     match focus.role {
+        // A combo box's text field. JAWS 2025 on the Run dialog's Open field, observed on the
+        // dev box (2026-10-15; research): "Open: edit combo | C: | 1 of 6 | To set the
+        // value use the Arrow keys or type the value. | Alt+o".
+        Role::Edit if focus.container_role == Some(Role::ComboBox) => {
+            lines.push(format!("{name}{}", role_marker("edit combo")));
+            lines.extend(value);
+            lines.extend(position(focus));
+            lines.push("To set the value use the Arrow keys or type the value.".to_owned());
+            lines.extend(focus.access_key.clone());
+        }
         Role::Edit => {
             // [hyp] An unlabelled edit takes the window title as its name (306/s5).
             let name = if name.is_empty() {
@@ -637,6 +647,24 @@ mod tests {
         assert_eq!(
             norm(&focus_speech(&event(Role::Button, "OK"), None)),
             norm("OK  \u{1d} Button \u{1e} \nTo activate press spacebar.")
+        );
+    }
+
+    /// The Run dialog's Open field (JAWS 2025 on Windows 11, observed on the dev box).
+    #[test]
+    fn a_combo_box_field_is_an_edit_combo() {
+        let mut field = event(Role::Edit, "Open:");
+        field.value = Some("C:".to_owned());
+        field.container_role = Some(Role::ComboBox);
+        field.item_index = Some(1);
+        field.item_count = Some(6);
+        field.access_key = Some("Alt+o".to_owned());
+        assert_eq!(
+            norm(&focus_speech(&field, None)),
+            norm(
+                "Open:  \u{1d} edit combo \u{1e} \nC:\n1 of 6\n\
+                 To set the value use the Arrow keys or type the value.\nAlt+o"
+            )
         );
     }
 }
