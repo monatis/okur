@@ -927,6 +927,40 @@ fn a_window_with_no_screen_text_shows_its_focus() {
     );
 }
 
+/// A form's one-line field is one row of its window: Virtualize Window reads the window
+/// (JAWS 2025 on the dev box shows the whole WinForms form), Virtualize Current Control the
+/// field's text.
+#[test]
+fn a_forms_field_is_virtualized_with_its_window() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let actions = crate::actions::RecordingActions::reading_windows();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut name = FocusEvent::new(Role::Edit)
+        .with_name("Name:")
+        .with_window_title("SR Desktop Fixture");
+    name.text = Some(crate::event::TextContext {
+        text: "Ada".to_owned(),
+        caret: 3,
+        selection: None,
+        font: None,
+        word: None,
+    });
+    engine.handle_focus_event(&name);
+    assert_eq!(engine.execute_command("VirtualizeWindow"), None);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(request, _)| request == "read window true"));
+    engine.handle_accessibility_event(&AccessibilityEvent::ViewerText(Vec::new()));
+    let escape = KeyEvent::new(Key::Escape, Modifiers::none(), true);
+    engine.handle_key_event(&escape);
+    assert_eq!(
+        engine.execute_command("VirtualizeControl").as_deref(),
+        Some("Virtualizing current control\nAda")
+    );
+}
+
 /// A text editor's window shows the text's lines (Notepad, where JAWS shows "paragraph"):
 /// the screen is not read.
 #[test]

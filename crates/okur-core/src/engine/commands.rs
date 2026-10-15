@@ -839,14 +839,11 @@ impl ScreenReaderEngine {
             self.pending_viewer = Some(PendingViewer::Console { window });
             return None;
         }
-        // A text field's text is its lines (Notepad, where JAWS shows only "paragraph"),
-        // unless it is one field of a dialog being virtualized whole. Anything else is read
-        // as it is on screen, and the viewer opens when it arrives (`open_screen_viewer`).
-        let dialog = self
-            .last_native_focus
-            .as_ref()
-            .is_some_and(|f| f.window_kind.as_deref() == Some("#32770"));
-        let text_field = self.editing_text() && !(window && dialog);
+        // A text field's text is its lines: the control's, and the window's when the text is
+        // what the window is for (Notepad, where JAWS shows only "paragraph"). A field among
+        // others (a form's Name field) is one row of its window. Anything else is read as it
+        // is on screen, and the viewer opens when it arrives (`open_screen_viewer`).
+        let text_field = self.editing_text() && (!window || self.text_is_the_window());
         let native = self.app_mode != AppMode::VirtualBuffer;
         if native && !text_field && self.actions.as_ref().is_some_and(|a| a.read_window(window)) {
             self.pending_viewer = Some(PendingViewer::Screen { window });
@@ -854,6 +851,20 @@ impl ScreenReaderEngine {
         }
         let lines = self.virtualized_lines(window)?;
         self.open_viewer(crate::viewer::VirtualViewer::new(lines), window)
+    }
+
+    /// Whether the focused text is what its window shows: a document, or a field of several
+    /// lines outside a dialog box (an editor's page, not a form's field).
+    fn text_is_the_window(&self) -> bool {
+        let Some(focus) = self.last_native_focus.as_ref() else {
+            return false;
+        };
+        let dialog = focus.window_kind.as_deref() == Some("#32770");
+        let lines = self
+            .last_text
+            .as_ref()
+            .is_some_and(|t| t.text.contains(['\r', '\n']));
+        focus.role == Role::Document || (lines && !dialog)
     }
 
     /// Opens the Virtual Viewer that waits for the screen's text (`pending_viewer`). With
