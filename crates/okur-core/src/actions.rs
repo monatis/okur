@@ -32,6 +32,16 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Asks for the Virtual Viewer's lines for the window in front (`window`) or for the
+    /// focused control, as they are on screen now. They arrive later as
+    /// [`crate::event::AccessibilityEvent::ViewerText`], always: empty when nothing could be
+    /// read. Returns false when unsupported (recorded traces hold no window text, so replay
+    /// keeps the viewer built from the focus).
+    fn read_window(&self, window: bool) -> bool {
+        let _ = window;
+        false
+    }
+
     /// Puts `text` on the system clipboard (the Virtual Viewer's Ctrl+C). Returns false when
     /// unsupported.
     fn copy_text(&self, text: &str) -> bool {
@@ -53,9 +63,20 @@ pub trait ApplicationActions: Send {
 #[derive(Debug, Default, Clone)]
 pub struct RecordingActions {
     log: std::sync::Arc<std::sync::Mutex<Vec<(String, usize)>>>,
+    /// Takes `read_window`, as a live platform does. Replay leaves it off: recorded traces
+    /// hold no window text to answer with.
+    windows: bool,
 }
 
 impl RecordingActions {
+    /// Records actions and takes `read_window` requests; the test delivers the text.
+    pub fn reading_windows() -> Self {
+        Self {
+            windows: true,
+            ..Self::default()
+        }
+    }
+
     /// The requested actions so far, as `(action, node id)`.
     pub fn requests(&self) -> Vec<(String, usize)> {
         self.log.lock().map(|l| l.clone()).unwrap_or_default()
@@ -90,6 +111,15 @@ impl ApplicationActions for RecordingActions {
             log.push(("read text".to_owned(), 0));
         }
         true
+    }
+
+    fn read_window(&self, window: bool) -> bool {
+        if self.windows {
+            if let Ok(mut log) = self.log.lock() {
+                log.push((format!("read window {window}"), 0));
+            }
+        }
+        self.windows
     }
 
     fn copy_text(&self, text: &str) -> bool {

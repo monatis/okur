@@ -31,6 +31,16 @@ pub use state::{
     ShellNavState,
 };
 
+/// A Virtual Viewer that opens once its text is read; `window` is Virtualize Window, not
+/// Virtualize Current Control.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum PendingViewer {
+    /// A console's buffer, arriving as a text context.
+    Console { window: bool },
+    /// What the window or control shows, arriving as viewer text.
+    Screen { window: bool },
+}
+
 /// Primary runtime engine for screen reader execution, coordinating virtual cursor navigation,
 /// speech output, and interactive input event handling.
 pub struct ScreenReaderEngine {
@@ -72,9 +82,8 @@ pub struct ScreenReaderEngine {
     caps_lock_on: bool,
     /// The Virtual Viewer, while it is open (it takes the keys).
     viewer: Option<crate::viewer::VirtualViewer>,
-    /// A Virtual Viewer waiting for the focused text to be read (a console): `Some(window)`
-    /// for Virtualize Window, `Some(false)` for Virtualize Current Control.
-    pending_viewer: Option<bool>,
+    /// A Virtual Viewer waiting for what it will show, read off the keyboard hook.
+    pending_viewer: Option<PendingViewer>,
     /// Alt+Tab's task switcher, read as JAWS reads it.
     task_switcher: crate::apps::task_switcher::TaskSwitcher,
     /// Each live region's lines when it last changed, by DOM id.
@@ -385,6 +394,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::TextContext(context) => self.handle_text_context(context),
             AccessibilityEvent::Selected(item) => self.handle_selected(item),
             AccessibilityEvent::LiveRegion(live) => self.handle_live_region_event(live),
+            AccessibilityEvent::ViewerText(lines) => self.open_screen_viewer(lines),
             AccessibilityEvent::DocumentLoaded { title, root } => {
                 self.handle_document_loaded(title, VirtualBuffer::from_aom(root))
             }

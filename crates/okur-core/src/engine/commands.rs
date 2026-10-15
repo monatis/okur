@@ -1,7 +1,7 @@
 //! Reading commands: the JAWS script names `execute_command` runs, the JAWS-key chords, and
 //! the commands that need more than the buffer (Say Font, Virtualize Window, the clock).
 
-use super::{ActiveElementList, AppMode, ScreenReaderEngine, DOUBLE_PRESS_MS};
+use super::{ActiveElementList, AppMode, PendingViewer, ScreenReaderEngine, DOUBLE_PRESS_MS};
 use crate::aom::Role;
 use crate::input::{Key, KeyAction, KeyEvent};
 use crate::speech::SpeechFormatter;
@@ -836,10 +836,38 @@ impl ScreenReaderEngine {
             .as_ref()
             .is_some_and(crate::apps::terminal::owns);
         if console && self.actions.as_ref().is_some_and(|a| a.read_text()) {
-            self.pending_viewer = Some(window);
+            self.pending_viewer = Some(PendingViewer::Console { window });
+            return None;
+        }
+        // A text field's text is its lines (Notepad, where JAWS shows only "paragraph"),
+        // unless it is one field of a dialog being virtualized whole. Anything else is read
+        // as it is on screen, and the viewer opens when it arrives (`open_screen_viewer`).
+        let dialog = self
+            .last_native_focus
+            .as_ref()
+            .is_some_and(|f| f.window_kind.as_deref() == Some("#32770"));
+        let text_field = self.editing_text() && !(window && dialog);
+        let native = self.app_mode != AppMode::VirtualBuffer;
+        if native && !text_field && self.actions.as_ref().is_some_and(|a| a.read_window(window)) {
+            self.pending_viewer = Some(PendingViewer::Screen { window });
             return None;
         }
         let lines = self.virtualized_lines(window)?;
+        self.open_viewer(crate::viewer::VirtualViewer::new(lines), window)
+    }
+
+    /// Opens the Virtual Viewer that waits for the screen's text (`pending_viewer`). With
+    /// nothing read, it shows what the focus says, as without a screen read.
+    pub(super) fn open_screen_viewer(&mut self, lines: &[String]) -> Option<String> {
+        let Some(PendingViewer::Screen { window }) = self.pending_viewer else {
+            return None;
+        };
+        self.pending_viewer = None;
+        let lines = if lines.is_empty() {
+            self.virtualized_lines(window)?
+        } else {
+            lines.to_vec()
+        };
         self.open_viewer(crate::viewer::VirtualViewer::new(lines), window)
     }
 
@@ -863,7 +891,10 @@ impl ScreenReaderEngine {
         &mut self,
         context: &crate::event::TextContext,
     ) -> Option<Option<String>> {
-        let window = self.pending_viewer.take()?;
+        let Some(PendingViewer::Console { window }) = self.pending_viewer else {
+            return None;
+        };
+        self.pending_viewer = None;
         self.last_text = Some(context.clone());
         let (lines, line) = crate::apps::terminal::viewer_lines(&context.text, context.caret);
         if lines.is_empty() {

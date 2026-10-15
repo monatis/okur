@@ -855,6 +855,108 @@ fn test_engine_window_change_announcement_in_native_control() {
     assert!(s3.contains("Command Prompt"));
 }
 
+/// Local Disk (C:) Properties (JAWS 2025 on the dev box, 2026-10-15): Virtualize Window shows
+/// the dialog as it is on screen, read off the keyboard hook; the viewer opens when it
+/// arrives, on its first line.
+#[test]
+fn a_dialog_is_virtualized_from_its_screen() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let actions = crate::actions::RecordingActions::reading_windows();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut focus = FocusEvent::new(Role::Tab)
+        .with_name("General")
+        .with_window_title("Local Disk (C:) Properties");
+    focus.window_kind = Some("#32770".to_owned());
+    engine.handle_focus_event(&focus);
+
+    assert_eq!(engine.execute_command("VirtualizeWindow"), None);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(request, _)| request == "read window true"));
+    let lines: Vec<String> = [
+        "Local Disk (C:) Properties",
+        "General Tools Hardware Sharing",
+        "Type: Local Disk",
+        "OK Cancel Apply",
+    ]
+    .map(str::to_owned)
+    .to_vec();
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&AccessibilityEvent::ViewerText(lines))
+            .as_deref(),
+        Some("Virtualizing current window\nLocal Disk (C:) Properties")
+    );
+    speech.take();
+    let down = KeyEvent::new(Key::DownArrow, Modifiers::none(), true);
+    engine.handle_key_event(&down);
+    engine.handle_key_event(&down);
+    let spoken = speech.take();
+    assert!(spoken.iter().any(|s| s == "Type: Local Disk"), "{spoken:?}");
+
+    // Viewer text nobody waits for opens nothing.
+    let escape = KeyEvent::new(Key::Escape, Modifiers::none(), true);
+    engine.handle_key_event(&escape);
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&AccessibilityEvent::ViewerText(vec!["stray".to_owned()])),
+        None
+    );
+}
+
+/// When the screen gives nothing, the viewer shows what the focus says, as on old-pc
+/// [obs, 311/s1]: the control's name and type, then a blank line.
+#[test]
+fn a_window_with_no_screen_text_shows_its_focus() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.set_actions(Box::new(crate::actions::RecordingActions::reading_windows()));
+    let focus = FocusEvent::new(Role::Button)
+        .with_name("Save...")
+        .with_window_title("SR Dialog Fixture");
+    engine.handle_focus_event(&focus);
+    assert_eq!(engine.execute_command("VirtualizeWindow"), None);
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&AccessibilityEvent::ViewerText(Vec::new()))
+            .as_deref(),
+        Some("Virtualizing current window\nSave... Button")
+    );
+}
+
+/// A text editor's window shows the text's lines (Notepad, where JAWS shows "paragraph"):
+/// the screen is not read.
+#[test]
+fn a_text_editor_is_virtualized_from_its_text() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let actions = crate::actions::RecordingActions::reading_windows();
+    engine.set_actions(Box::new(actions.clone()));
+    let edit = FocusEvent::new(Role::Edit)
+        .with_name("Text editor")
+        .with_window_title("Untitled - Notepad");
+    engine.handle_focus_event(&edit);
+    let context = crate::event::TextContext {
+        text: "First line\rSecond line".to_owned(),
+        caret: 0,
+        selection: None,
+        font: None,
+        word: None,
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::TextContext(context));
+    assert_eq!(
+        engine.execute_command("VirtualizeWindow").as_deref(),
+        Some("Virtualizing current window\nUntitled - Notepad")
+    );
+    assert!(!actions
+        .requests()
+        .iter()
+        .any(|(request, _)| request.starts_with("read window")));
+}
+
 /// Windows Terminal (JAWS 2025 on the dev box, 2026-10-15): the Virtual Viewer shows the
 /// console's text, opens at the prompt, and is titled "Virtual Viewer".
 #[test]

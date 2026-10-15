@@ -263,6 +263,13 @@ enum Commands {
         #[arg(short, long, default_value = "auto")]
         engine: String,
     },
+    /// Print the Virtual Viewer's lines for the window in front, as Virtualize Window builds
+    /// them (Windows): for comparing with JAWS's viewer
+    WindowText {
+        /// The focused control only, as Virtualize Current Control reads it
+        #[arg(long)]
+        control: bool,
+    },
     /// Print a speech log recorded with `run --speech-log`
     History {
         /// Path of the speech log file
@@ -531,6 +538,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::TextContext(_)) => "text context",
         Some(AccessibilityEvent::Selected(_)) => "selected",
         Some(AccessibilityEvent::LiveRegion(_)) => "live region",
+        Some(AccessibilityEvent::ViewerText(_)) => "viewer text",
         Some(AccessibilityEvent::DocumentLoaded { .. }) => "document loaded",
     }
 }
@@ -1014,6 +1022,26 @@ async fn main() {
                     voice.name,
                     voice.language
                 );
+            }
+        }
+        Some(Commands::WindowText { control }) => {
+            #[cfg(windows)]
+            match okur_platform::window_text::foreground_lines(control) {
+                Ok(lines) => {
+                    for line in lines {
+                        println!("{line}");
+                    }
+                }
+                Err(e) => {
+                    eprintln!("{e}");
+                    std::process::exit(1);
+                }
+            }
+            #[cfg(not(windows))]
+            {
+                let _ = control;
+                eprintln!("window-text is only available on Windows");
+                std::process::exit(1);
             }
         }
         Some(Commands::Latency { path }) => match fs::read_to_string(&path) {

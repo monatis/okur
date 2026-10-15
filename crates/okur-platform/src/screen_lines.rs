@@ -114,9 +114,11 @@ pub fn standalone(mut statics: Vec<(i32, i32, String)>, fields: &[(i32, i32)]) -
 }
 
 #[cfg(windows)]
-pub use windows_lines::dialog_layout;
-#[cfg(windows)]
 pub(crate) use windows_lines::text_of as control_text;
+#[cfg(windows)]
+pub(crate) use windows_lines::{class_of, owner_drawn, static_lines, symbol_font};
+#[cfg(windows)]
+pub use windows_lines::{dialog_layout, page_of};
 
 #[cfg(windows)]
 mod windows_lines {
@@ -137,7 +139,7 @@ mod windows_lines {
     /// How long a control may take to answer a message.
     const TIMEOUT_MS: u32 = 200;
 
-    fn class_of(hwnd: HWND) -> String {
+    pub(crate) fn class_of(hwnd: HWND) -> String {
         let mut buf = [0u16; 64];
         // SAFETY: valid buffer for the class name.
         let n = unsafe { GetClassNameW(hwnd, &mut buf) };
@@ -173,14 +175,27 @@ mod windows_lines {
         rect
     }
 
-    /// A static control's lines as it draws them: its text wrapped at its width in its font.
-    fn static_lines(hwnd: HWND, text: &str) -> Vec<String> {
+    /// A static control's lines as it draws them: its text wrapped at its width, less
+    /// `inset` pixels (a check box's box), in its font.
+    pub(crate) fn static_lines(hwnd: HWND, text: &str, inset: i32) -> Vec<String> {
+        use windows::Win32::UI::HiDpi::{
+            GetWindowDpiAwarenessContext, SetThreadDpiAwarenessContext,
+        };
         let mut client = RECT::default();
         let mut font_handle = 0usize;
+        // The control's width in its own units, those of its font: a window not aware of
+        // the monitor's scaling is stretched, and its width scaled for a caller that is.
+        // SAFETY: changes this thread's DPI awareness for one call, restored after it.
+        let sized = unsafe {
+            let previous = SetThreadDpiAwarenessContext(GetWindowDpiAwarenessContext(hwnd));
+            let sized = GetClientRect(hwnd, &mut client).is_ok();
+            SetThreadDpiAwarenessContext(previous);
+            sized
+        };
         // SAFETY: valid out-pointers; the message only reads the control's font handle.
-        let ok = unsafe {
-            GetClientRect(hwnd, &mut client).is_ok()
-                && SendMessageTimeoutW(
+        let ok = sized
+            && unsafe {
+                SendMessageTimeoutW(
                     hwnd,
                     WM_GETFONT,
                     WPARAM(0),
@@ -190,7 +205,7 @@ mod windows_lines {
                     Some(&mut font_handle),
                 )
                 .0 != 0
-        };
+            };
         let mut logfont = LOGFONTW::default();
         let size = i32::try_from(std::mem::size_of::<LOGFONTW>()).unwrap_or(0);
         // SAFETY: the font handle is only read, into a LOGFONT of the size given.
@@ -217,7 +232,7 @@ mod windows_lines {
                 let _ = GetTextExtentPoint32W(dc, &wide, &mut extent);
                 extent.cx
             };
-            let lines = wrap(text, client.right, measure);
+            let lines = wrap(text, client.right - inset, measure);
             SelectObject(dc, old);
             let _ = DeleteObject(font.into());
             let _ = DeleteDC(dc);
@@ -225,11 +240,84 @@ mod windows_lines {
         }
     }
 
+    /// Whether a Win32 label or button draws itself (`SS_OWNERDRAW`, `BS_OWNERDRAW`): its
+    /// window text is then not what it shows (a drive's colour squares and pie chart).
+    /// WinForms paints its own labels and buttons through the same style, from their window
+    /// text, so they are not counted.
+    pub(crate) fn owner_drawn(hwnd: HWND) -> bool {
+        use windows::Win32::UI::WindowsAndMessaging::{GetWindowLongW, GWL_STYLE};
+        const SS_TYPEMASK: i32 = 0x1F;
+        const SS_OWNERDRAW: i32 = 0x0D;
+        const BS_TYPEMASK: i32 = 0x0F;
+        const BS_OWNERDRAW: i32 = 0x0B;
+        // SAFETY: plain Win32 query on a window handle.
+        let style = unsafe { GetWindowLongW(hwnd, GWL_STYLE) };
+        match class_of(hwnd).as_str() {
+            "Static" => style & SS_TYPEMASK == SS_OWNERDRAW,
+            "Button" => style & BS_TYPEMASK == BS_OWNERDRAW,
+            _ => false,
+        }
+    }
+
+    /// Whether a control draws its text in a symbol font (Wingdings and the like): its text
+    /// is pictures, such as the colour squares beside a drive's used and free space, which
+    /// read as letters ("z").
+    pub(crate) fn symbol_font(hwnd: HWND) -> bool {
+        const SYMBOL_CHARSET: u8 = 2;
+        let mut font_handle = 0usize;
+        // SAFETY: the message only returns the control's font handle.
+        let sent = unsafe {
+            SendMessageTimeoutW(
+                hwnd,
+                WM_GETFONT,
+                WPARAM(0),
+                LPARAM(0),
+                SMTO_ABORTIFHUNG,
+                TIMEOUT_MS,
+                Some(&mut font_handle),
+            )
+        };
+        if sent.0 == 0 || font_handle == 0 {
+            return false;
+        }
+        let mut logfont = LOGFONTW::default();
+        let size = i32::try_from(std::mem::size_of::<LOGFONTW>()).unwrap_or(0);
+        // SAFETY: the font handle is only read, into a LOGFONT of the size given.
+        let read = unsafe {
+            GetObjectW(
+                HFONT(font_handle as *mut core::ffi::c_void).into(),
+                size,
+                Some((&mut logfont as *mut LOGFONTW).cast()),
+            )
+        };
+        read != 0 && logfont.lfCharSet.0 == SYMBOL_CHARSET
+    }
+
     unsafe extern "system" fn collect(hwnd: HWND, children: LPARAM) -> BOOL {
         // SAFETY: LPARAM is the Vec passed to EnumChildWindows below, alive for the call.
         let children = unsafe { &mut *(children.0 as *mut Vec<HWND>) };
         children.push(hwnd);
         BOOL(1)
+    }
+
+    /// The property sheet page `focus` is on in `dialog`, by name ("General"): a dialog box
+    /// inside the dialog box.
+    pub fn page_of(focus: HWND, dialog: HWND) -> Option<String> {
+        const LEVELS: usize = 16;
+        let mut current = focus;
+        for _ in 0..LEVELS {
+            // SAFETY: plain Win32 query on a window handle.
+            let parent = unsafe { GetParent(current) }.ok()?;
+            if parent == dialog || parent.is_invalid() {
+                return None;
+            }
+            if class_of(parent) == "#32770" {
+                let name = text_of(parent);
+                return (!name.trim().is_empty()).then(|| without_accelerators(&name));
+            }
+            current = parent;
+        }
+        None
     }
 
     /// A dialog's text by screen rows, and its text that labels no field.
@@ -267,12 +355,20 @@ mod windows_lines {
                 continue;
             }
             let class = class_of(child);
+            // A property sheet's page holds controls that are enumerated themselves; as one
+            // run it would join every row it covers.
+            if class == "#32770" {
+                continue;
+            }
             // A combo box's edit is read through its combo box.
             // SAFETY: plain Win32 query.
             let parent = unsafe { GetParent(child) }.ok();
             if class == "Edit" && parent.is_some_and(|p| class_of(p) == "ComboBox") {
                 continue;
             }
+            // A page's text is not the dialog's: JAWS 2025 opens Local Disk (C:) Properties
+            // with "General page", not the page's labels (dev box, 2026-10-15).
+            let in_page = parent.is_some_and(|p| p != dialog && class_of(p) == "#32770");
             let rect = rect_of(child);
             if !matches!(class.as_str(), "Static" | "Button") {
                 fields.push((rect.top, rect.bottom));
@@ -284,8 +380,10 @@ mod windows_lines {
             match class.as_str() {
                 "Static" => {
                     let text = without_accelerators(&text);
-                    statics.push((rect.top, rect.bottom, text.clone()));
-                    let lines = static_lines(child, &text);
+                    if !in_page {
+                        statics.push((rect.top, rect.bottom, text.clone()));
+                    }
+                    let lines = static_lines(child, &text, 0);
                     let height =
                         (rect.bottom - rect.top) / i32::try_from(lines.len().max(1)).unwrap_or(1);
                     for (i, line) in lines.into_iter().enumerate() {

@@ -137,6 +137,10 @@ pub struct TraceEvent {
     /// For focus in that dialog box: its static text that labels no field, top to bottom.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub dialog_text: Vec<String>,
+    /// For focus on a property sheet's page in that dialog box: the page's name ("General").
+    /// UIA leaves the page out of the focus chain.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub dialog_page: Option<String>,
     /// For focus in that dialog box: its control tree, without the title bar (Say Window).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dialog_tree: Option<UiaNode>,
@@ -396,9 +400,14 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     // which sits beside its buttons [obs, 306/s1]. Other windows are announced by title only
     // (306/s10).
     if active_window.and_then(|w| w.class_name.as_deref()) == Some(WIN32_DIALOG_CLASS) {
+        // On a property sheet's page, the text beside the focus is the page's labels ("Type:",
+        // "Local Disk"): JAWS 2025 opens Local Disk (C:) Properties naming the page instead,
+        // "General page" (dev box, 2026-10-15).
+        focus.dialog_page = event.dialog_page.clone();
         let text: Vec<&str> = event
             .focus_siblings
             .iter()
+            .filter(|_| event.dialog_page.is_none())
             .filter(|s| s.control_type == UIA_TEXT)
             .filter_map(|s| s.name.as_deref())
             .filter(|n| !n.trim().is_empty())
@@ -1351,21 +1360,22 @@ mod capture {
                 } else {
                     (None, None, None)
                 };
-            let (dialog, dialog_tree) = if focused && top_window_class.as_deref() == Some("#32770")
-            {
-                use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
-                // SAFETY: plain Win32 call with no preconditions.
-                let window = unsafe { GetForegroundWindow() };
-                (
-                    crate::screen_lines::dialog_layout(window),
-                    state
-                        .uia
-                        .as_ref()
-                        .and_then(|uia| window_subtree(uia, window)),
-                )
-            } else {
-                (crate::screen_lines::DialogLayout::default(), None)
-            };
+            let (dialog, dialog_tree, dialog_page) =
+                if focused && top_window_class.as_deref() == Some("#32770") {
+                    use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+                    // SAFETY: plain Win32 call with no preconditions.
+                    let window = unsafe { GetForegroundWindow() };
+                    (
+                        crate::screen_lines::dialog_layout(window),
+                        state
+                            .uia
+                            .as_ref()
+                            .and_then(|uia| window_subtree(uia, window)),
+                        crate::screen_lines::page_of(keyboard_focus_window(), window),
+                    )
+                } else {
+                    (crate::screen_lines::DialogLayout::default(), None, None)
+                };
             stages.push(("window", clock.elapsed().as_millis()));
             let (region, page) = if name == "live_region_change" {
                 // Live, the page after the change is captured by the listener's page worker.
@@ -1439,6 +1449,7 @@ mod capture {
                 virtual_desktop,
                 dialog_lines: dialog.rows,
                 dialog_text: dialog.text,
+                dialog_page,
                 dialog_tree,
             };
             (state.sink)(event);
@@ -1668,6 +1679,7 @@ mod tests {
             virtual_desktop: None,
             dialog_lines: Vec::new(),
             dialog_text: Vec::new(),
+            dialog_page: None,
             dialog_tree: None,
         }
     }
@@ -1692,6 +1704,93 @@ mod tests {
     fn no_siblings_means_no_position() {
         let focus = focus_event_from_trace(&focus_event(Vec::new()));
         assert_eq!(focus.map(|f| f.item_index), Some(None));
+    }
+
+    fn dialog_node(control_type: i32, name: &str) -> UiaNode {
+        UiaNode {
+            class_name: Some("#32770".to_owned()),
+            ..node(control_type, name, false)
+        }
+    }
+
+    /// Local Disk (C:) Properties opening, focus on the General page's Label field, as traced
+    /// on the dev box: the page is not in the focus chain, and the siblings are the page's.
+    fn property_page_event() -> TraceEvent {
+        TraceEvent {
+            focus_chain: vec![
+                dialog_node(UIA_WINDOW, "Local Disk (C:) Properties"),
+                node(UIA_EDIT, "Label:", true),
+            ],
+            focus_siblings: vec![
+                node(UIA_EDIT, "Label:", true),
+                node(TEXT, "Type:", false),
+                node(TEXT, "Local Disk", false),
+            ],
+            top_window_title: Some("Local Disk (C:) Properties".to_owned()),
+            top_window_class: Some("#32770".to_owned()),
+            dialog_page: Some("General".to_owned()),
+            ..focus_event(Vec::new())
+        }
+    }
+
+    /// A message box's text is beside its buttons; a property page's labels are the page's,
+    /// not the dialog's (JAWS 2025 on the dev box: "Local Disk (C:) Properties dialog",
+    /// "General page", "Label: Edit").
+    #[test]
+    fn a_property_pages_labels_are_not_the_dialogs_text() {
+        let message_box = TraceEvent {
+            focus_chain: vec![
+                dialog_node(UIA_WINDOW, "SR Dialog Fixture"),
+                node(UIA_BUTTON, "Yes", true),
+            ],
+            focus_siblings: vec![
+                node(TEXT, "Save changes to the document?", false),
+                node(UIA_BUTTON, "Yes", true),
+            ],
+            ..focus_event(Vec::new())
+        };
+        assert_eq!(
+            focus_event_from_trace(&message_box).and_then(|f| f.dialog_text),
+            Some("Save changes to the document?".to_owned())
+        );
+        assert_eq!(
+            focus_event_from_trace(&property_page_event()).and_then(|f| f.dialog_text),
+            Some(String::new())
+        );
+    }
+
+    /// JAWS 2025 names the page a property sheet opens on (dev box, 2026-10-15).
+    #[test]
+    fn a_property_sheet_opens_on_its_page() {
+        use okur_core::{AomNode, MockSpeechOutput, Role, ScreenReaderEngine, VirtualBuffer};
+        let cursor = okur_core::VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(
+            0,
+            Role::Document,
+        )));
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+        let spoken = focus_event_from_trace(&property_page_event())
+            .and_then(|focus| engine.handle_focus_event(&focus))
+            .unwrap_or_default();
+        // Lines as heard: role marks and spacing aside.
+        let lines: Vec<String> = spoken
+            .lines()
+            .map(|l| {
+                l.replace(['\u{1d}', '\u{1e}'], " ")
+                    .split_whitespace()
+                    .collect::<Vec<_>>()
+                    .join(" ")
+            })
+            .collect();
+        assert_eq!(
+            lines,
+            vec![
+                "Local Disk (C:) Properties dialog",
+                "General page",
+                "Label: Edit",
+                "Type in text."
+            ],
+            "{spoken:?}"
+        );
     }
 
     /// The Run dialog's Open field: an edit inside a combo box, whose access key and position

@@ -412,11 +412,16 @@ impl ScreenReaderEngine {
             } else {
                 focus.window_title.as_deref().unwrap_or("")
             };
-            let heading = match focus.dialog_text.as_deref() {
+            let mut heading = match focus.dialog_text.as_deref() {
                 Some(text) if !text.is_empty() => format!("{win}  \u{1d} dialog \u{1e} \n{text}"),
                 Some(_) => format!("{win}  \u{1d} dialog \u{1e} "),
                 None => win.to_owned(),
             };
+            // A property sheet names the page it opens on (JAWS 2025 on the dev box:
+            // "Local Disk (C:) Properties dialog | General page").
+            if let Some(page) = &focus.dialog_page {
+                heading.push_str(&format!("\n{page}  \u{1d} page \u{1e} "));
+            }
             if control_speech.is_empty() || control_speech == win {
                 heading
             } else {

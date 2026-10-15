@@ -441,19 +441,19 @@ pub(crate) mod capture {
     }
 
     /// Reads a cached property, returning `None` when the provider does not support it.
-    fn cached(el: &IUIAutomationElement, id: UIA_PROPERTY_ID) -> Option<VARIANT> {
+    pub(crate) fn cached(el: &IUIAutomationElement, id: UIA_PROPERTY_ID) -> Option<VARIANT> {
         // SAFETY: `el` is a valid cached element; the property id is in the cache request.
         unsafe { el.GetCachedPropertyValueEx(id, true) }.ok()
     }
 
-    fn string(el: &IUIAutomationElement, id: UIA_PROPERTY_ID) -> Option<String> {
+    pub(crate) fn string(el: &IUIAutomationElement, id: UIA_PROPERTY_ID) -> Option<String> {
         cached(el, id)
             .and_then(|v| BSTR::try_from(&v).ok())
             .map(|b| b.to_string())
             .filter(|s| !s.is_empty())
     }
 
-    fn int(el: &IUIAutomationElement, id: UIA_PROPERTY_ID) -> Option<i32> {
+    pub(crate) fn int(el: &IUIAutomationElement, id: UIA_PROPERTY_ID) -> Option<i32> {
         cached(el, id).and_then(|v| i32::try_from(&v).ok())
     }
 
@@ -461,7 +461,7 @@ pub(crate) mod capture {
         cached(el, id).and_then(|v| f64::try_from(&v).ok())
     }
 
-    fn boolean(el: &IUIAutomationElement, id: UIA_PROPERTY_ID) -> Option<bool> {
+    pub(crate) fn boolean(el: &IUIAutomationElement, id: UIA_PROPERTY_ID) -> Option<bool> {
         cached(el, id).and_then(|v| bool::try_from(&v).ok())
     }
 

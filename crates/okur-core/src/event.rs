@@ -134,6 +134,9 @@ pub struct FocusEvent {
     pub text: Option<TextContext>,
     /// When the active window is a dialog box (Win32 `#32770`): its static text.
     pub dialog_text: Option<String>,
+    /// When the focus is on a property sheet's page in that dialog box: the page's name,
+    /// announced as the dialog opens ("General page").
+    pub dialog_page: Option<String>,
     /// When the active window is a dialog box: its buttons, in order (the Virtual Viewer's
     /// last line, "Yes No Cancel") [obs, 311/s14].
     pub dialog_buttons: Vec<String>,
@@ -182,6 +185,7 @@ impl FocusEvent {
             child_count: None,
             text: None,
             dialog_text: None,
+            dialog_page: None,
             dialog_buttons: Vec::new(),
             dialog_lines: Vec::new(),
             window_items: Vec::new(),
@@ -306,6 +310,9 @@ pub enum AccessibilityEvent {
     /// as the search box's text changes, or as Down moves through them.
     Selected(FocusEvent),
     LiveRegion(LiveRegionEvent),
+    /// The Virtual Viewer's lines for the window or control in front, read for Virtualize
+    /// Window or Virtualize Current Control; empty when nothing could be read.
+    ViewerText(Vec<String>),
     DocumentLoaded {
         title: String,
         root: crate::aom::AomNode,

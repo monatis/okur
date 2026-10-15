@@ -45,6 +45,9 @@ mod windows_actions {
         TextNow,
         /// A chord of virtual keys, sent marked as the screen reader's own.
         Keys(Vec<u16>),
+        /// The Virtual Viewer's lines for the window in front (`true`) or the focused
+        /// control, answered even when nothing could be read.
+        Window(bool),
     }
 
     /// The virtual key of a key the screen reader sends for a reading command.
@@ -155,6 +158,31 @@ mod windows_actions {
                                 });
                                 let _ = events.send(AccessibilityEvent::TextContext(context));
                             }
+                            Request::Window(window) => {
+                                let Some(events) = events.as_ref() else {
+                                    tracing::warn!("window read impossible: no event channel");
+                                    continue;
+                                };
+                                let started = Instant::now();
+                                let lines = uia.as_ref().and_then(|uia| {
+                                    if window {
+                                        // SAFETY: plain Win32 call with no preconditions.
+                                        let hwnd = unsafe { GetForegroundWindow() };
+                                        crate::window_text::window_lines(uia, hwnd)
+                                    } else {
+                                        crate::window_text::control_lines(uia)
+                                    }
+                                });
+                                tracing::debug!(
+                                    window,
+                                    lines = lines.as_ref().map(Vec::len),
+                                    ms = started.elapsed().as_millis(),
+                                    "viewer text read"
+                                );
+                                // Answered even when empty: the engine waits for it.
+                                let lines = lines.unwrap_or_default();
+                                let _ = events.send(AccessibilityEvent::ViewerText(lines));
+                            }
                         }
                     }
                 }
@@ -214,6 +242,10 @@ mod windows_actions {
 
         fn read_text(&self) -> bool {
             self.send(Request::TextNow)
+        }
+
+        fn read_window(&self, window: bool) -> bool {
+            self.send(Request::Window(window))
         }
 
         fn press(&self, chord: &[okur_core::Key]) -> bool {

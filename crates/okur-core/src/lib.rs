@@ -15,6 +15,7 @@ pub mod pronounce;
 pub mod settings;
 pub mod speech;
 pub mod viewer;
+pub mod viewer_text;
 
 pub use aom::{AomNode, NodeStates, Role};
 pub use buffer::{
