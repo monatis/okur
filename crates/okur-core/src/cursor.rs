@@ -285,11 +285,6 @@ impl VirtualCursor {
         "No selection".to_string()
     }
 
-    /// Speaks font formatting attributes at cursor (`Insert+F` / `WhatFont`).
-    pub fn say_font_formatting(&self) -> String {
-        SpeechFormatter::format_font(self.buffer.formatting_at_offset(self.offset).as_ref())
-    }
-
     /// Resets the cursor to the top of document (`^{HOME}`).
     pub fn move_to_start(&mut self) -> String {
         self.selection = None;

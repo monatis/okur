@@ -27,6 +27,14 @@ mod text_feedback;
 
 pub use state::{ActiveElementList, AppMode, DesktopItem, NativeDesktopState, NativeExplorerState};
 
+/// A key press counted for "pressed twice quickly": a command, or CapsLock alone (which the
+/// laptop layout's JAWS key also is).
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum Press {
+    Command(crate::command::Command),
+    CapsLock,
+}
+
 /// A Virtual Viewer that opens once its text is read; `window` is Virtualize Window, not
 /// Virtualize Current Control.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -70,7 +78,7 @@ pub struct ScreenReaderEngine {
     /// The local time and locale formats for Say System Time; None when headless.
     clock: Option<Box<dyn crate::clock::Clock>>,
     /// The last JAWS-key command and when it was pressed, to tell a double press.
-    last_press: Option<(String, u64)>,
+    last_press: Option<(Press, u64)>,
     /// User settings (JAWS defaults unless configured).
     pub settings: crate::settings::Settings,
     /// Caps Lock's state as toggled through the JAWS key, when the platform does not report it.
@@ -247,8 +255,8 @@ impl ScreenReaderEngine {
         }
 
         // 7. In Virtual PC Cursor mode, check if keystroke translates to a command
-        if let Some(cmd) = event.to_command_string() {
-            let res = self.execute_command(&cmd);
+        if let Some(command) = crate::command::command_for(event) {
+            let res = self.execute(command);
             if res.is_some() {
                 return KeyAction::Consume;
             }

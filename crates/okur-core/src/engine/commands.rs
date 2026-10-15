@@ -1,95 +1,108 @@
 //! Reading commands: the JAWS script names `execute_command` runs, the JAWS-key chords, and
 //! the commands that need more than the buffer (Say Font, Virtualize Window, the clock).
 
-use super::{ActiveElementList, AppMode, PendingViewer, ScreenReaderEngine, DOUBLE_PRESS_MS};
+use super::{
+    ActiveElementList, AppMode, PendingViewer, Press, ScreenReaderEngine, DOUBLE_PRESS_MS,
+};
 use crate::aom::Role;
+use crate::command::{Command, Element};
 use crate::input::{Key, KeyAction, KeyEvent};
 use crate::speech::SpeechFormatter;
 
 impl ScreenReaderEngine {
-    /// Executes a screen reader navigation command string (matching JAWS script names and keystrokes).
-    /// Speaks the resulting announcement and returns the emitted speech text.
-    pub fn execute_command(&mut self, command: &str) -> Option<String> {
-        if command == "SayWindow" {
-            // Dialog boxes; other windows are not read this way yet.
-            let focus = self
-                .last_native_focus
-                .as_ref()
-                .filter(|f| !f.window_items.is_empty())?;
-            let speech = crate::native_focus::say_window(
-                focus.window_title.as_deref().unwrap_or_default(),
-                &focus.window_items,
-            );
-            self.speech.speak(&speech, true);
-            return Some(speech);
-        }
-        if command == "SayCurrentFocus" {
-            // Native controls; a page's focus is not read this way yet.
-            let speech = self
-                .last_native_focus
-                .as_ref()
-                .filter(|_| self.app_mode == AppMode::NativeControl)
-                .map(crate::native_focus::say_focus)
-                .filter(|s| !s.is_empty())?;
-            self.speech.speak(&speech, true);
-            return Some(speech);
-        }
-        if command == "SayWindowTitle" {
-            // The Virtual Viewer is a window of its own: JAWS names it, whatever it shows
-            // ("Virtual Viewer", without "Title is"; dev box, Windows Terminal and Notepad,
-            // 2026-10-15).
-            if self.viewer.is_some() {
-                let speech = "Virtual Viewer".to_owned();
+    /// Runs the command a name calls ([`Command::from_name`]): a JAWS script name or the key
+    /// notation of JAWS's key maps. Speaks the result and returns it.
+    pub fn execute_command(&mut self, name: &str) -> Option<String> {
+        self.execute(Command::from_name(name)?)
+    }
+
+    /// Runs `command`, speaks what it reads, and returns it.
+    pub fn execute(&mut self, command: Command) -> Option<String> {
+        match command {
+            Command::SayWindow => {
+                // Dialog boxes; other windows are not read this way yet.
+                let focus = self
+                    .last_native_focus
+                    .as_ref()
+                    .filter(|f| !f.window_items.is_empty())?;
+                let speech = crate::native_focus::say_window(
+                    focus.window_title.as_deref().unwrap_or_default(),
+                    &focus.window_items,
+                );
                 self.speech.speak(&speech, true);
                 return Some(speech);
             }
-            // [obs, 306/s12]: "Title is | SR Dialog Fixture". In a browser it is the browser
-            // window's title, not the page's [obs, 209/s1: "... - Google Chrome - <profile>"].
-            let title = self.last_window_title.clone().or_else(|| {
-                (self.app_mode == AppMode::VirtualBuffer)
-                    .then(|| self.cursor.buffer.document_title().map(str::to_owned))
-                    .flatten()
-            })?;
-            let speech = format!("Title is\n{title}");
-            self.speech.speak(&speech, true);
-            return Some(speech);
-        }
-        if let Some(speech) = self.clock_command(command) {
-            self.speech.speak(&speech, true);
-            return Some(speech);
-        }
-        if command == "VirtualizeWindow" || command == "VirtualizeControl" {
-            return self.virtualize(command == "VirtualizeWindow");
-        }
-        if command == "Insert+F" || command == "SayFontInViewer" {
-            return self.say_font(command == "SayFontInViewer");
+            Command::SayCurrentFocus => {
+                // Native controls; a page's focus is not read this way yet.
+                let speech = self
+                    .last_native_focus
+                    .as_ref()
+                    .filter(|_| self.app_mode == AppMode::NativeControl)
+                    .map(crate::native_focus::say_focus)
+                    .filter(|s| !s.is_empty())?;
+                self.speech.speak(&speech, true);
+                return Some(speech);
+            }
+            Command::SayWindowTitle => {
+                // The Virtual Viewer is a window of its own: JAWS names it, whatever it shows
+                // ("Virtual Viewer", without "Title is"; dev box, Windows Terminal and Notepad,
+                // 2026-10-15).
+                if self.viewer.is_some() {
+                    let speech = "Virtual Viewer".to_owned();
+                    self.speech.speak(&speech, true);
+                    return Some(speech);
+                }
+                // [obs, 306/s12]: "Title is | SR Dialog Fixture". In a browser it is the browser
+                // window's title, not the page's [obs, 209/s1: "... - Google Chrome - <profile>"].
+                let title = self.last_window_title.clone().or_else(|| {
+                    (self.app_mode == AppMode::VirtualBuffer)
+                        .then(|| self.cursor.buffer.document_title().map(str::to_owned))
+                        .flatten()
+                })?;
+                let speech = format!("Title is\n{title}");
+                self.speech.speak(&speech, true);
+                return Some(speech);
+            }
+            Command::SaySystemTime
+            | Command::SaySystemTimeWithSeconds
+            | Command::SaySystemDate
+            | Command::SayWeekNumber => {
+                let speech = self.clock_command(&command)?;
+                self.speech.speak(&speech, true);
+                return Some(speech);
+            }
+            Command::VirtualizeWindow => return self.virtualize(true),
+            Command::VirtualizeControl => return self.virtualize(false),
+            Command::SayFont => return self.say_font(false),
+            Command::SayFontInViewer => return self.say_font(true),
+            _ => {}
         }
         // On the desktop and the taskbar, Windows moves and the focus is read: the page
         // commands below have nothing to act on.
         if matches!(self.app_mode, AppMode::NativeDesktop | AppMode::NativeShell) {
             return None;
         }
-        // 0. Active element list navigation takes precedence for {DOWN}, {UP}, {ENTER}, {ESC}
+        // An element list (Insert+F6, F7, F5) takes the arrows, Enter and Escape.
         if let Some(ref mut list) = self.active_element_list {
             match command {
-                "{DOWN}" => {
+                Command::SayNextLine => {
                     let speech = list.move_next();
                     self.speech.speak(&speech, true);
                     return Some(speech);
                 }
-                "{UP}" => {
+                Command::SayPriorLine => {
                     let speech = list.move_prior();
                     self.speech.speak(&speech, true);
                     return Some(speech);
                 }
-                "{ENTER}" => {
+                Command::Enter => {
                     let target_offset = list.selected_offset();
                     self.active_element_list = None;
                     let speech = self.cursor.jump_to_element_offset(target_offset);
                     self.speech.speak(&speech, true);
                     return Some(speech);
                 }
-                "{ESC}" => {
+                Command::Escape => {
                     self.active_element_list = None;
                     let speech = "virtual PC Cursor".to_string();
                     self.speech.speak(&speech, true);
@@ -99,85 +112,62 @@ impl ScreenReaderEngine {
             }
         }
 
-        // Parameterized search commands
-        if let Some(query) = command
-            .strip_prefix("Find:")
-            .or_else(|| command.strip_prefix("find:"))
-            .or_else(|| command.strip_prefix("VirtualFind:"))
-            .or_else(|| command.strip_prefix("JAWSFind:"))
-            .or_else(|| command.strip_prefix("^f:"))
-        {
-            let speech = self.cursor.find_text(query, false);
-            if let Some(ref text) = speech {
-                self.speech.speak(text, true);
+        match &command {
+            Command::Find(query) => {
+                let speech = self.cursor.find_text(query, false);
+                if let Some(ref text) = speech {
+                    self.speech.speak(text, true);
+                }
+                return speech;
             }
-            return speech;
-        }
-
-        // Parameterized element list selection
-        if let Some(target) = command
-            .strip_prefix("SelectHeading:")
-            .or_else(|| command.strip_prefix("JumpToHeading:"))
-        {
-            let list = self.cursor.buffer.get_headings_list();
-            if let Some(item) = list
-                .iter()
-                .find(|h| h.text.eq_ignore_ascii_case(target) || h.text.contains(target))
-            {
+            Command::JumpToHeading(target) => {
+                let list = self.cursor.buffer.get_headings_list();
+                let item = list
+                    .iter()
+                    .find(|h| h.text.eq_ignore_ascii_case(target) || h.text.contains(target))?;
                 let speech = self.cursor.jump_to_element_offset(item.offset);
                 self.speech.speak(&speech, true);
                 return Some(speech);
             }
-        }
-
-        if let Some(target) = command
-            .strip_prefix("SelectLink:")
-            .or_else(|| command.strip_prefix("JumpToLink:"))
-        {
-            let list = self.cursor.buffer.get_links_list();
-            if let Some(item) = list
-                .iter()
-                .find(|l| l.text.eq_ignore_ascii_case(target) || l.text.contains(target))
-            {
+            Command::JumpToLink(target) => {
+                let list = self.cursor.buffer.get_links_list();
+                let item = list
+                    .iter()
+                    .find(|l| l.text.eq_ignore_ascii_case(target) || l.text.contains(target))?;
                 let speech = self.cursor.jump_to_element_offset(item.offset);
                 self.speech.speak(&speech, true);
                 return Some(speech);
             }
-        }
-
-        if let Some(target) = command
-            .strip_prefix("SelectFormField:")
-            .or_else(|| command.strip_prefix("JumpToFormField:"))
-        {
-            let list = self.cursor.buffer.get_form_fields_list();
-            if let Some(item) = list
-                .iter()
-                .find(|f| f.name.eq_ignore_ascii_case(target) || f.name.contains(target))
-            {
+            Command::JumpToFormField(target) => {
+                let list = self.cursor.buffer.get_form_fields_list();
+                let item = list
+                    .iter()
+                    .find(|f| f.name.eq_ignore_ascii_case(target) || f.name.contains(target))?;
                 let speech = self.cursor.jump_to_element_offset(item.offset);
                 self.speech.speak(&speech, true);
                 return Some(speech);
             }
+            _ => {}
         }
 
-        let speech = match command {
-            "{DOWN}" => {
+        let speech = match &command {
+            Command::SayNextLine => {
                 if self.cursor.is_combobox_expanded() {
                     self.cursor.combobox_next_option()
                 } else {
                     self.cursor.move_next_line()
                 }
             }
-            "{UP}" => {
+            Command::SayPriorLine => {
                 if self.cursor.is_combobox_expanded() {
                     self.cursor.combobox_prior_option()
                 } else {
                     self.cursor.move_prior_line()
                 }
             }
-            "^{RIGHT}" => self.cursor.move_next_word(),
-            "^{LEFT}" => self.cursor.move_prior_word(),
-            "{RIGHT}" => {
+            Command::SayNextWord => self.cursor.move_next_word(),
+            Command::SayPriorWord => self.cursor.move_prior_word(),
+            Command::SayNextCharacter => {
                 let role = self.cursor.current_node().map(|n| n.role.clone());
                 match role {
                     Some(Role::TreeItem) => self.cursor.tree_item_expand_or_next(),
@@ -185,7 +175,7 @@ impl ScreenReaderEngine {
                     _ => self.cursor.move_next_char(),
                 }
             }
-            "{LEFT}" => {
+            Command::SayPriorCharacter => {
                 let role = self.cursor.current_node().map(|n| n.role.clone());
                 match role {
                     Some(Role::TreeItem) => self.cursor.tree_item_collapse_or_parent(),
@@ -193,123 +183,40 @@ impl ScreenReaderEngine {
                     _ => self.cursor.move_prior_char(),
                 }
             }
-            "^{DOWN}" => self.cursor.move_next_paragraph(),
-            "^{UP}" => self.cursor.move_prior_paragraph(),
-            "^{HOME}" => Some(self.cursor.move_to_start()),
-            "^{END}" => Some(self.cursor.move_to_end()),
+            Command::SayNextParagraph => self.cursor.move_next_paragraph(),
+            Command::SayPriorParagraph => self.cursor.move_prior_paragraph(),
+            Command::TopOfFile => Some(self.cursor.move_to_start()),
+            Command::BottomOfFile => Some(self.cursor.move_to_end()),
 
-            // Headings
-            "H" | "h" | "MoveToNextHeading" => self.cursor.move_next_heading(),
-            "+H" | "+h" | "MoveToPriorHeading" => self.cursor.move_prior_heading(),
-            "1" | "MoveToNextHeadingLevelOne" => self.cursor.move_next_heading_level(1),
-            "2" | "MoveToNextHeadingLevelTwo" => self.cursor.move_next_heading_level(2),
-            "3" | "MoveToNextHeadingLevelThree" => self.cursor.move_next_heading_level(3),
-            "4" | "MoveToNextHeadingLevelFour" => self.cursor.move_next_heading_level(4),
-            "5" | "MoveToNextHeadingLevelFive" => self.cursor.move_next_heading_level(5),
-            "6" | "MoveToNextHeadingLevelSix" => self.cursor.move_next_heading_level(6),
-            "+1" | "MoveToPriorHeadingLevelOne" => self.cursor.move_prior_heading_level(1),
-            "+2" | "MoveToPriorHeadingLevelTwo" => self.cursor.move_prior_heading_level(2),
-            "+3" | "MoveToPriorHeadingLevelThree" => self.cursor.move_prior_heading_level(3),
-            "+4" | "MoveToPriorHeadingLevelFour" => self.cursor.move_prior_heading_level(4),
-            "+5" | "MoveToPriorHeadingLevelFive" => self.cursor.move_prior_heading_level(5),
-            "+6" | "MoveToPriorHeadingLevelSix" => self.cursor.move_prior_heading_level(6),
-
-            // Links
-            "U" | "u" | "MoveToNextLink" | "MoveToNextUnvisitedLink" => {
-                self.cursor.move_next_link()
-            }
-            "+U" | "+u" | "MoveToPriorLink" | "MoveToPriorUnvisitedLink" => {
-                self.cursor.move_prior_link()
-            }
+            // Quick navigation, JAWS's Quick Navigation Keys
+            // (docs/references/jaws-quick-navigation-keys.md).
+            Command::MoveToNext(element) => self.move_to_element(*element, true),
+            Command::MoveToPrior(element) => self.move_to_element(*element, false),
+            Command::MoveToMainRegion => self.cursor.move_to_main_region(),
 
             // Tables
-            "T" | "t" | "MoveToNextTable" => self.cursor.move_next_table(),
-            "+T" | "+t" | "MoveToPriorTable" => self.cursor.move_prior_table(),
-            "^%{RIGHT}" | "NextCell" | "TableCellRight" => self.cursor.move_table_cell_right(),
-            "^%{LEFT}" | "PriorCell" | "TableCellLeft" => self.cursor.move_table_cell_left(),
-            "^%{DOWN}" | "NextRow" | "TableCellDown" => self.cursor.move_table_cell_down(),
-            "^%{UP}" | "PriorRow" | "TableCellUp" => self.cursor.move_table_cell_up(),
-            "^%{HOME}" | "FirstCell" | "TableFirstCell" => self.cursor.move_table_first_cell(),
-            "^%{END}" | "LastCell" | "TableLastCell" => self.cursor.move_table_last_cell(),
-            "^%+LEFT" | "^%+{LEFT}" | "MoveToStartOfRow" | "RowStart" => {
-                self.cursor.move_table_row_start()
-            }
-            "^%+RIGHT" | "^%+{RIGHT}" | "MoveToEndOfRow" | "RowEnd" => {
-                self.cursor.move_table_row_end()
-            }
-            "^%+UP" | "^%+{UP}" | "MoveToTopOfColumn" | "ColumnTop" => {
-                self.cursor.move_table_col_top()
-            }
-            "^%+DOWN" | "^%+{DOWN}" | "MoveToBottomOfColumn" | "ColumnBottom" => {
-                self.cursor.move_table_col_bottom()
-            }
-            "^%{NUMPAD5}" | "^%5" | "SayCurrentCell" | "CurrentCell" => {
-                self.cursor.read_current_cell()
-            }
-            "^%+H" | "^%+h" | "SayColumnHeader" => self.cursor.read_current_col_header(),
-            "^%+R" | "^%+r" | "SayRowHeader" => self.cursor.read_current_row_header(),
+            Command::TableCellRight => self.cursor.move_table_cell_right(),
+            Command::TableCellLeft => self.cursor.move_table_cell_left(),
+            Command::TableCellDown => self.cursor.move_table_cell_down(),
+            Command::TableCellUp => self.cursor.move_table_cell_up(),
+            Command::TableFirstCell => self.cursor.move_table_first_cell(),
+            Command::TableLastCell => self.cursor.move_table_last_cell(),
+            Command::MoveToStartOfRow => self.cursor.move_table_row_start(),
+            Command::MoveToEndOfRow => self.cursor.move_table_row_end(),
+            Command::MoveToTopOfColumn => self.cursor.move_table_col_top(),
+            Command::MoveToBottomOfColumn => self.cursor.move_table_col_bottom(),
+            Command::SayCurrentCell => self.cursor.read_current_cell(),
+            Command::SayColumnHeader => self.cursor.read_current_col_header(),
+            Command::SayRowHeader => self.cursor.read_current_row_header(),
 
-            // Bindings from JAWS's Quick Navigation Keys table
-            // (docs/references/jaws-quick-navigation-keys.md).
-            "O" | "o" | "MoveToNextArticle" => self.cursor.move_next_article(),
-            "+O" | "+o" | "MoveToPriorArticle" => self.cursor.move_prior_article(),
-            "Q" | "q" | "+Q" | "+q" | "MoveToMainRegion" => self.cursor.move_to_main_region(),
-            ";" | "MoveToNextOnMouseOverElement" => self.cursor.move_next_on_mouse_over(),
-            "+;" | "MoveToPriorOnMouseOverElement" => self.cursor.move_prior_on_mouse_over(),
-            "'" | "MoveToNextTab" => self.cursor.move_next_tab(),
-            "+'" | "MoveToPriorTab" => self.cursor.move_prior_tab(),
-            // Place markers are not implemented; K must not fall through to another command.
-            "K" | "k" | "+K" | "+k" | "MoveToNextPlaceMarker" | "MoveToPriorPlaceMarker" => None,
-
-            // Graphics and radio buttons (spec §16, §17)
-            "G" | "g" | "MoveToNextGraphic" => self.cursor.move_next_graphic(),
-            "+G" | "+g" | "MoveToPriorGraphic" => self.cursor.move_prior_graphic(),
-            "A" | "a" | "MoveToNextRadioButton" => self.cursor.move_next_radio_button(),
-            "+A" | "+a" | "MoveToPriorRadioButton" => self.cursor.move_prior_radio_button(),
-
-            // MathML
-            "MoveToNextMath" => self.cursor.move_next_math(),
-            "MoveToPriorMath" => self.cursor.move_prior_math(),
-            "EnterMathViewer" | "ShowMathEditor" => self.cursor.enter_math_viewer(),
-
-            // Form controls
-            "F" | "f" | "FocusToNextField" => self.cursor.move_next_form_control(),
-            "+F" | "+f" | "FocusToPriorField" => self.cursor.move_prior_form_control(),
-            "B" | "b" | "MoveToNextButton" => self.cursor.move_next_button(),
-            "+B" | "+b" | "MoveToPriorButton" => self.cursor.move_prior_button(),
-            "E" | "e" | "MoveToNextEdit" => self.cursor.move_next_edit(),
-            "+E" | "+e" | "MoveToPriorEdit" => self.cursor.move_prior_edit(),
-            "X" | "x" | "MoveToNextCheckbox" => self.cursor.move_next_checkbox(),
-            "+X" | "+x" | "MoveToPriorCheckbox" => self.cursor.move_prior_checkbox(),
-            "C" | "c" | "MoveToNextCombo" | "MoveToNextComboBox" => {
-                self.cursor.move_next_combobox()
-            }
-            "+C" | "+c" | "MoveToPriorCombo" | "MoveToPriorComboBox" => {
-                self.cursor.move_prior_combobox()
-            }
-            "!{DOWN}" | "ExpandComboBox" => self.cursor.expand_combobox(),
-            "!{UP}" | "CollapseComboBox" => self.cursor.collapse_combobox(),
-
-            // Lists & Landmarks
-            "L" | "l" | "MoveToNextList" => self.cursor.move_next_list(),
-            "+L" | "+l" | "MoveToPriorList" => self.cursor.move_prior_list(),
-            "I" | "i" | "MoveToNextListItem" => self.cursor.move_next_list_item(),
-            "+I" | "+i" | "MoveToPriorListItem" => self.cursor.move_prior_list_item(),
-            "R" | "r" | "MoveToNextLandmark" | "MoveToNextRegion" => {
-                self.cursor.move_next_landmark()
-            }
-            "+R" | "+r" | "MoveToPriorLandmark" | "MoveToPriorRegion" => {
-                self.cursor.move_prior_landmark()
-            }
-
-            // Frames
-            "M" | "m" | "MoveToNextFrame" => self.cursor.move_next_frame(),
-            "+M" | "+m" | "MoveToPriorFrame" => self.cursor.move_prior_frame(),
+            Command::EnterMathViewer => self.cursor.enter_math_viewer(),
+            Command::ExpandComboBox => self.cursor.expand_combobox(),
+            Command::CollapseComboBox => self.cursor.collapse_combobox(),
 
             // Interactive navigation & actions
-            "{TAB}" => self.cursor.move_next_tab_stop(),
-            "+{TAB}" | "+TAB" => self.cursor.move_prior_tab_stop(),
-            "{SPACE}" => {
+            Command::NextTabStop => self.cursor.move_next_tab_stop(),
+            Command::PriorTabStop => self.cursor.move_prior_tab_stop(),
+            Command::Activate => {
                 if let (Some(actions), Some(node)) = (&self.actions, self.node_under_cursor()) {
                     let is_link = matches!(node.role, Role::Link { .. });
                     if node.role.is_interactive_control() && !is_link && actions.activate(&node) {
@@ -319,7 +226,7 @@ impl ScreenReaderEngine {
                 }
                 None
             }
-            "{ENTER}" | "EnterFormsMode" | "ActivateLink" => {
+            Command::Enter => {
                 let node = self.node_under_cursor();
                 let same_page_link = node
                     .as_ref()
@@ -361,11 +268,10 @@ impl ScreenReaderEngine {
                     res
                 }
             }
-            "{ESC}" | "ExitFormsMode" => {
+            Command::Escape => {
                 if self.cursor.is_combobox_expanded() {
                     self.cursor.collapse_combobox()
                 } else if self.forms_mode {
-
                     let res = self.cursor.exit_forms_mode();
                     self.forms_mode = false;
                     res
@@ -377,17 +283,14 @@ impl ScreenReaderEngine {
             }
 
             // Text selection commands
-            "+{RIGHT}" | "SelectNextCharacter" => self.cursor.select_next_char(),
-            "+{LEFT}" | "SelectPriorCharacter" => self.cursor.select_prior_char(),
-            "+{DOWN}" | "SelectNextLine" => self.cursor.select_next_line(),
-            "+{UP}" | "SelectPriorLine" => self.cursor.select_prior_line(),
-            "+!{DOWN}" | "SaySelection" | "SaySelectedText" => Some(self.cursor.say_selection()),
-
-            // Font formatting query
-            "Insert+F" | "WhatFont" | "SayFont" => Some(self.cursor.say_font_formatting()),
+            Command::SelectNextCharacter => self.cursor.select_next_char(),
+            Command::SelectPriorCharacter => self.cursor.select_prior_char(),
+            Command::SelectNextLine => self.cursor.select_next_line(),
+            Command::SelectPriorLine => self.cursor.select_prior_line(),
+            Command::SaySelectedText => Some(self.cursor.say_selection()),
 
             // Modal dialog commands
-            "EnterModal" => {
+            Command::EnterModal => {
                 let target_dlg = if let Some(node_id) = self.cursor.current_node_id {
                     self.cursor.buffer.dialog_for_node(node_id)
                 } else {
@@ -401,23 +304,23 @@ impl ScreenReaderEngine {
                     None
                 }
             }
-            "ExitModal" => self.cursor.exit_modal(),
+            Command::ExitModal => self.cursor.exit_modal(),
 
             // JAWS Say Scripts
-            "SayAll" => Some(self.cursor.say_all()),
-            "SayLine" => Some(self.cursor.current_line()),
-            "SayWord" => Some(self.cursor.current_word()),
-            "SayCharacter" => Some(self.cursor.current_char()),
+            Command::SayAll => Some(self.cursor.say_all()),
+            Command::SayLine => Some(self.cursor.current_line()),
+            Command::SayWord => Some(self.cursor.current_word()),
+            Command::SayCharacter => Some(self.cursor.current_char()),
 
             // In-buffer find commands
-            "^f" | "Ctrl+F" | "VirtualFind" | "JAWSFind" => {
+            Command::VirtualFind => {
                 Some("JAWS Find  \u{001d} dialog \u{001e} \nFind what:  \u{001d} edit combo \u{001e} \nTo set the value use the Arrow keys or type the value.".to_string())
             }
-            "{F3}" | "F3" | "JAWSFindNext" | "FindNext" => self.cursor.find_next(),
-            "+{F3}" | "+F3" | "Shift+F3" | "JAWSFindPrior" | "FindPrior" => self.cursor.find_prior(),
+            Command::FindNext => self.cursor.find_next(),
+            Command::FindPrior => self.cursor.find_prior(),
 
             // Element list dialogs
-            "SelectAHeading" | "HeadingList" | "HeadingsList" | "Insert+F6" | "JAWSKey+F6" => {
+            Command::SelectAHeading => {
                 let items = self.cursor.buffer.get_headings_list();
                 if items.is_empty() {
                     Some("There are no headings on this page.".to_string())
@@ -430,7 +333,7 @@ impl ScreenReaderEngine {
                     Some(speech)
                 }
             }
-            "SelectALink" | "LinkList" | "LinksList" | "Insert+F7" | "JAWSKey+F7" => {
+            Command::SelectALink => {
                 let items = self.cursor.buffer.get_links_list();
                 if items.is_empty() {
                     Some("There are no links on this page.".to_string())
@@ -443,13 +346,7 @@ impl ScreenReaderEngine {
                     Some(speech)
                 }
             }
-            "SelectAFormField"
-            | "FormFieldList"
-            | "FormFieldsList"
-            | "Insert+F5"
-            | "JAWSKey+F5"
-            | "Insert+Ctrl+F"
-            | "JAWSKey+Ctrl+F" => {
+            Command::SelectAFormField => {
                 let items = self.cursor.buffer.get_form_fields_list();
                 if items.is_empty() {
                     Some("There are no form fields on this page.".to_string())
@@ -468,7 +365,10 @@ impl ScreenReaderEngine {
 
         if let Some(ref text) = speech {
             // Left/Right read a character, which the synthesizer names ("space").
-            let character = matches!(command, "{RIGHT}" | "{LEFT}") && text.chars().count() == 1;
+            let character = matches!(
+                command,
+                Command::SayNextCharacter | Command::SayPriorCharacter
+            ) && text.chars().count() == 1;
             if character {
                 self.speech.speak_character(text, true);
             } else if !text.is_empty() {
@@ -496,9 +396,9 @@ impl ScreenReaderEngine {
     /// A JAWS key command (Insert+…). In a text field the reading commands read the field;
     /// elsewhere they run as virtual cursor or application commands.
     pub(super) fn jaws_key_command(&mut self, event: &KeyEvent) {
-        let layout_command = self.settings.keyboard.layout_command(event);
-        let say_line =
-            layout_command == Some("SayLine") || crate::editing::EditKey::of(event).is_some();
+        let layout_command = crate::command::layout_command_for(&self.settings.keyboard, event);
+        let say_line = layout_command == Some(Command::SayLine)
+            || crate::editing::EditKey::of(event).is_some();
         if self.editing_text() && say_line {
             // Say Line does not change the field, so no report follows: speak the field's
             // last known text now, or read it when none is known [obs, 305/s9, s15]. A
@@ -527,25 +427,23 @@ impl ScreenReaderEngine {
         // A reading command that moves first is the matching arrow key: the application's
         // own in a native control (sent, then read as any arrow key is), the virtual
         // cursor's in a page.
-        let moving = layout_command.and_then(|command| {
-            Some(match command {
-                "SayNextLine" => (vec![Key::DownArrow], "{DOWN}"),
-                "SayPriorLine" => (vec![Key::UpArrow], "{UP}"),
-                "SayNextWord" => (vec![Key::Control, Key::RightArrow], "^{RIGHT}"),
-                "SayPriorWord" => (vec![Key::Control, Key::LeftArrow], "^{LEFT}"),
-                "SayPriorCharacter" => (vec![Key::LeftArrow], "{LEFT}"),
-                _ => return None,
-            })
-        });
-        if let Some((chord, page_command)) = moving {
+        let moving = match layout_command {
+            Some(Command::SayNextLine) => Some(vec![Key::DownArrow]),
+            Some(Command::SayPriorLine) => Some(vec![Key::UpArrow]),
+            Some(Command::SayNextWord) => Some(vec![Key::Control, Key::RightArrow]),
+            Some(Command::SayPriorWord) => Some(vec![Key::Control, Key::LeftArrow]),
+            Some(Command::SayPriorCharacter) => Some(vec![Key::LeftArrow]),
+            _ => None,
+        };
+        if let (Some(chord), Some(command)) = (moving, &layout_command) {
             if self.app_mode == AppMode::VirtualBuffer && !self.forms_mode {
-                let _ = self.execute_command(page_command);
+                let _ = self.execute(command.clone());
             } else if let Some(actions) = &self.actions {
                 actions.press(&chord);
             }
             return;
         }
-        if self.editing_text() && layout_command == Some("SayWord") {
+        if self.editing_text() && layout_command == Some(Command::SayWord) {
             let word = self
                 .last_text
                 .as_ref()
@@ -556,38 +454,30 @@ impl ScreenReaderEngine {
             }
             return;
         }
-        if let Some(cmd) = layout_command
-            .map(str::to_owned)
-            .or_else(|| event.to_command_string())
-        {
-            let cmd = self.repeated_command(cmd, event.time_ms);
-            let _ = self.execute_command(&cmd);
+        if let Some(command) = layout_command.or_else(|| crate::command::command_for(event)) {
+            let command = if self.pressed_twice(Press::Command(command.clone()), event.time_ms) {
+                command.pressed_twice().unwrap_or(command)
+            } else {
+                command
+            };
+            let _ = self.execute(command);
         }
     }
 
-    /// The command a JAWS-key command becomes when pressed twice quickly, e.g. Say System
-    /// Time's second press speaks the date [obs, 308/s2, s4].
-    fn repeated_command(&mut self, cmd: String, time_ms: u64) -> String {
+    /// Whether `press` repeats the last press quickly enough to be a double press
+    /// ([`Command::pressed_twice`]). A double press is not the first press of another.
+    fn pressed_twice(&mut self, press: Press, time_ms: u64) -> bool {
         let twice = matches!(&self.last_press, Some((last, at))
-            if *last == cmd && time_ms != 0 && time_ms.saturating_sub(*at) <= DOUBLE_PRESS_MS);
-        self.last_press = (!twice).then(|| (cmd.clone(), time_ms));
-        if !twice {
-            return cmd;
-        }
-        match cmd.as_str() {
-            "SaySystemTime" => "SaySystemDate".to_owned(),
-            "SaySystemTimeWithSeconds" => "SayWeekNumber".to_owned(),
-            "CapsLock" => "ToggleCapsLock".to_owned(),
-            "Insert+F" => "SayFontInViewer".to_owned(),
-            _ => cmd,
-        }
+            if *last == press && time_ms != 0 && time_ms.saturating_sub(*at) <= DOUBLE_PRESS_MS);
+        self.last_press = (!twice).then_some((press, time_ms));
+        twice
     }
 
     /// CapsLock as the JAWS key: a single press is the JAWS key; pressed twice quickly it
     /// toggles Caps Lock (the second press reaches the system), which JAWS announces
     /// [obs, 310: "Caps lock on", then "Caps lock off"].
     pub(super) fn caps_lock_press(&mut self, event: &KeyEvent) -> KeyAction {
-        if self.repeated_command("CapsLock".to_owned(), event.time_ms) != "ToggleCapsLock" {
+        if !self.pressed_twice(Press::CapsLock, event.time_ms) {
             return KeyAction::Consume;
         }
         let was_on = event.caps_lock_on.unwrap_or(self.caps_lock_on);
@@ -602,14 +492,61 @@ impl ScreenReaderEngine {
     }
 
     /// Say System Time and its variants, from the clock in the user's locale formats.
-    fn clock_command(&self, command: &str) -> Option<String> {
+    fn clock_command(&self, command: &Command) -> Option<String> {
         let clock = self.clock.as_deref();
         match command {
-            "SaySystemTime" => Some(crate::clock::say_time(clock?, false)),
-            "SaySystemTimeWithSeconds" => Some(crate::clock::say_time(clock?, true)),
-            "SaySystemDate" => Some(crate::clock::say_date(clock?, false)),
-            "SayWeekNumber" => Some(crate::clock::say_date(clock?, true)),
+            Command::SaySystemTime => Some(crate::clock::say_time(clock?, false)),
+            Command::SaySystemTimeWithSeconds => Some(crate::clock::say_time(clock?, true)),
+            Command::SaySystemDate => Some(crate::clock::say_date(clock?, false)),
+            Command::SayWeekNumber => Some(crate::clock::say_date(clock?, true)),
             _ => None,
+        }
+    }
+
+    /// Quick navigation to the next or prior `element`.
+    fn move_to_element(&mut self, element: Element, next: bool) -> Option<String> {
+        let c = &mut self.cursor;
+        match (element, next) {
+            (Element::Heading, true) => c.move_next_heading(),
+            (Element::Heading, false) => c.move_prior_heading(),
+            (Element::HeadingLevel(level), true) => c.move_next_heading_level(u32::from(level)),
+            (Element::HeadingLevel(level), false) => c.move_prior_heading_level(u32::from(level)),
+            (Element::Link, true) => c.move_next_link(),
+            (Element::Link, false) => c.move_prior_link(),
+            (Element::Table, true) => c.move_next_table(),
+            (Element::Table, false) => c.move_prior_table(),
+            (Element::Article, true) => c.move_next_article(),
+            (Element::Article, false) => c.move_prior_article(),
+            (Element::OnMouseOver, true) => c.move_next_on_mouse_over(),
+            (Element::OnMouseOver, false) => c.move_prior_on_mouse_over(),
+            (Element::Tab, true) => c.move_next_tab(),
+            (Element::Tab, false) => c.move_prior_tab(),
+            // Place markers are not implemented: K moves nowhere.
+            (Element::PlaceMarker, _) => None,
+            (Element::Graphic, true) => c.move_next_graphic(),
+            (Element::Graphic, false) => c.move_prior_graphic(),
+            (Element::RadioButton, true) => c.move_next_radio_button(),
+            (Element::RadioButton, false) => c.move_prior_radio_button(),
+            (Element::Math, true) => c.move_next_math(),
+            (Element::Math, false) => c.move_prior_math(),
+            (Element::FormField, true) => c.move_next_form_control(),
+            (Element::FormField, false) => c.move_prior_form_control(),
+            (Element::Button, true) => c.move_next_button(),
+            (Element::Button, false) => c.move_prior_button(),
+            (Element::Edit, true) => c.move_next_edit(),
+            (Element::Edit, false) => c.move_prior_edit(),
+            (Element::CheckBox, true) => c.move_next_checkbox(),
+            (Element::CheckBox, false) => c.move_prior_checkbox(),
+            (Element::ComboBox, true) => c.move_next_combobox(),
+            (Element::ComboBox, false) => c.move_prior_combobox(),
+            (Element::List, true) => c.move_next_list(),
+            (Element::List, false) => c.move_prior_list(),
+            (Element::ListItem, true) => c.move_next_list_item(),
+            (Element::ListItem, false) => c.move_prior_list_item(),
+            (Element::Landmark, true) => c.move_next_landmark(),
+            (Element::Landmark, false) => c.move_prior_landmark(),
+            (Element::Frame, true) => c.move_next_frame(),
+            (Element::Frame, false) => c.move_prior_frame(),
         }
     }
 

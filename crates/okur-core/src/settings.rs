@@ -63,34 +63,6 @@ impl KeyboardSettings {
         }
     }
 
-    /// The reading command a JAWS-key chord is in this layout, where the layout has its own:
-    /// the laptop layout reads the current line with CapsLock+I and the current word with
-    /// CapsLock+K (JAWS 2025, laptop layout, observed on the dev box: "First line of the
-    /// viewer test", "First"). `event` is resolved (`modifiers.insert` is the JAWS key).
-    pub fn layout_command(&self, event: &KeyEvent) -> Option<&'static str> {
-        let m = &event.modifiers;
-        if self.layout != KeyboardLayout::Laptop || !m.insert || m.ctrl || m.alt || m.shift {
-            return None;
-        }
-        // The commands that move first (next or prior line, word, character) move the caret
-        // as the arrow keys do, then read [JAWS on the dev box: CapsLock+O "Second line, with
-        // punctuation: a.b", CapsLock+L "line", CapsLock+J "Second", CapsLock+U "First line
-        // of the viewer test"].
-        let Key::Alpha(c) = event.key else {
-            return None;
-        };
-        Some(match c.to_ascii_uppercase() {
-            'I' => "SayLine",
-            'K' => "SayWord",
-            'O' => "SayNextLine",
-            'U' => "SayPriorLine",
-            'L' => "SayNextWord",
-            'J' => "SayPriorWord",
-            'M' => "SayPriorCharacter",
-            _ => return None,
-        })
-    }
-
     /// `event` with the JAWS modifier (`modifiers.insert`) set when any JAWS key is held,
     /// and cleared when only a key that is not a JAWS key is held.
     pub fn resolve(&self, event: &KeyEvent) -> KeyEvent {
