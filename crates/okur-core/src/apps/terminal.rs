@@ -17,8 +17,9 @@ const CONSOLE_WINDOW: &str = "ConsoleWindowClass";
 
 /// Whether the focus is a console's text area.
 pub fn owns(focus: &FocusEvent) -> bool {
-    focus.element_class.as_deref() == Some(TERMINAL_TEXT_AREA)
-        || (focus.window_kind.as_deref() == Some(CONSOLE_WINDOW) && focus.role == Role::Document)
+    focus.platform.element_class.as_deref() == Some(TERMINAL_TEXT_AREA)
+        || (focus.platform.top_window_class.as_deref() == Some(CONSOLE_WINDOW)
+            && focus.role == Role::Document)
 }
 
 /// The Virtual Viewer's lines for a console's text, and the line holding `caret` (a
@@ -51,15 +52,15 @@ mod tests {
     #[test]
     fn a_terminal_text_area_and_a_classic_console_are_consoles() {
         let mut terminal = FocusEvent::new(Role::Text);
-        terminal.element_class = Some("TermControl".to_owned());
+        terminal.platform.element_class = Some("TermControl".to_owned());
         assert!(owns(&terminal));
 
         let mut classic = FocusEvent::new(Role::Document).with_name("Text Area");
-        classic.window_kind = Some("ConsoleWindowClass".to_owned());
+        classic.platform.top_window_class = Some("ConsoleWindowClass".to_owned());
         assert!(owns(&classic));
 
         let mut notepad = FocusEvent::new(Role::Document);
-        notepad.window_kind = Some("Notepad".to_owned());
+        notepad.platform.top_window_class = Some("Notepad".to_owned());
         assert!(!owns(&notepad));
     }
 

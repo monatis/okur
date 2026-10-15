@@ -28,9 +28,10 @@ impl TaskSwitcher {
     /// focus is not the switcher's.
     pub fn focus(&mut self, focus: &FocusEvent) -> Option<String> {
         let window = focus
-            .window_kind
+            .platform
+            .top_window_class
             .as_deref()
-            .or(focus.window_class.as_deref());
+            .or(focus.platform.window_class.as_deref());
         let item = focus.role == Role::ListItem;
         let ours = window.is_some_and(|w| SWITCHER_WINDOWS.contains(&w))
             || (item && window == Some(STAGING_WINDOW));
@@ -56,7 +57,7 @@ mod tests {
 
     fn in_switcher(role: Role, name: &str) -> FocusEvent {
         let mut focus = FocusEvent::new(role).with_name(name);
-        focus.window_kind = Some("XamlExplorerHostIslandWindow".to_owned());
+        focus.platform.top_window_class = Some("XamlExplorerHostIslandWindow".to_owned());
         focus
     }
 
@@ -100,14 +101,14 @@ mod tests {
     fn windows_10_items_sit_behind_the_staging_window() {
         let mut switcher = TaskSwitcher::default();
         let mut item = FocusEvent::new(Role::ListItem).with_name("SR Second Window");
-        item.window_kind = Some(STAGING_WINDOW.to_owned());
+        item.platform.top_window_class = Some(STAGING_WINDOW.to_owned());
         assert_eq!(
             switcher.focus(&item).as_deref(),
             Some("SR Second Window\nTo move to an item press the Arrow keys.")
         );
         // The staging window's other focus events are an application's, not the switcher's.
         let mut edit = FocusEvent::new(Role::Edit).with_name("Notes");
-        edit.window_kind = Some(STAGING_WINDOW.to_owned());
+        edit.platform.top_window_class = Some(STAGING_WINDOW.to_owned());
         assert_eq!(switcher.focus(&edit), None);
     }
 }

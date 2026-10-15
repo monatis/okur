@@ -409,8 +409,8 @@ fn the_desktop_is_announced_once() {
             .with_name("Microsoft Edge")
             .with_item_index(9)
             .with_item_count(11);
-        focus.window_class = class.map(str::to_owned);
-        focus.window_kind = Some("Progman".to_owned());
+        focus.platform.window_class = class.map(str::to_owned);
+        focus.platform.top_window_class = Some("Progman".to_owned());
         focus
     };
     let first = engine
@@ -447,7 +447,7 @@ fn task_switcher_items_after_the_desktop_are_not_desktop_items() {
         .with_window_class("ForegroundStaging")
         .with_window_title("Task Switching")
         .with_name("Untitled - Notepad");
-    item.window_kind = Some("MultitaskingViewFrame".to_owned());
+    item.platform.top_window_class = Some("MultitaskingViewFrame".to_owned());
     // The switcher's item, not a desktop item ("Untitled - Notepad | 1 of 3").
     assert_eq!(
         engine.handle_focus_event(&item).as_deref(),
@@ -868,7 +868,8 @@ fn a_dialog_is_virtualized_from_its_screen() {
     let mut focus = FocusEvent::new(Role::Tab)
         .with_name("General")
         .with_window_title("Local Disk (C:) Properties");
-    focus.window_kind = Some("#32770".to_owned());
+    focus.platform.top_window_class = Some("#32770".to_owned());
+    focus.in_dialog_box = true;
     engine.handle_focus_event(&focus);
 
     assert_eq!(engine.execute_command("VirtualizeWindow"), None);
@@ -1003,7 +1004,7 @@ fn a_console_is_virtualized_from_its_text_at_the_prompt() {
     let mut focus = FocusEvent::new(Role::Text)
         .with_name("Command Prompt")
         .with_window_title("Command Prompt");
-    focus.element_class = Some("TermControl".to_owned());
+    focus.platform.element_class = Some("TermControl".to_owned());
     engine.handle_focus_event(&focus);
 
     // Nothing is spoken until the console's text is read.

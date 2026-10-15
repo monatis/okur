@@ -13,7 +13,7 @@ const PROCESS: &str = "SearchHost.exe";
 /// Whether the focus is in Windows search.
 pub fn owns(focus: &FocusEvent) -> bool {
     focus
-        .process
+        .app
         .as_deref()
         .is_some_and(|p| p.eq_ignore_ascii_case(PROCESS))
 }
@@ -38,7 +38,7 @@ mod tests {
     #[test]
     fn up_and_down_in_the_search_box_select_results() {
         let mut search_box = FocusEvent::new(Role::Edit).with_name("Search box");
-        search_box.process = Some("SearchHost.exe".to_owned());
+        search_box.app = Some("SearchHost.exe".to_owned());
         let down = KeyEvent::new(Key::DownArrow, Modifiers::none(), true);
         let left = KeyEvent::new(Key::LeftArrow, Modifiers::none(), true);
         assert!(arrows_select(&search_box, &down));

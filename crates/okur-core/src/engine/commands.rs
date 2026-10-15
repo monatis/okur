@@ -648,7 +648,7 @@ impl ScreenReaderEngine {
         let Some(focus) = self.last_native_focus.as_ref() else {
             return false;
         };
-        let dialog = focus.window_kind.as_deref() == Some("#32770");
+        let dialog = focus.in_dialog_box;
         let lines = self
             .last_text
             .as_ref()
@@ -715,7 +715,7 @@ impl ScreenReaderEngine {
     fn virtualized_lines(&self, window: bool) -> Option<Vec<String>> {
         let focus = self.last_native_focus.as_ref()?;
         let title = focus.window_title.clone().unwrap_or_default();
-        if window && focus.window_kind.as_deref() == Some("#32770") {
+        if window && focus.in_dialog_box {
             let mut lines = vec![title];
             // As laid out on screen: wrapped text by its rows, a label beside its field
             // (JAWS on the Run dialog: "Open: C:", "OK Cancel Browse...").

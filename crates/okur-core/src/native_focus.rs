@@ -1,4 +1,4 @@
-//! Focus speech for native application controls (outside a browser document).
+//! Fous speech for native application controls (outside a browser document).
 //!
 //! Implements `docs/references/jaws-native-focus-spec.md`. JAWS speaks, in order:
 //! 1. The container being entered, once, when focus moves into it from outside: a named
@@ -30,14 +30,6 @@ impl ContainerKey {
     }
 }
 
-/// Win32 list-view controls (`SysListView32`, also as WinForms `WindowsForms10.SysListView32…`).
-fn is_list_view(focus: &FocusEvent) -> bool {
-    focus
-        .container_class
-        .as_deref()
-        .is_some_and(|c| c.contains("SysListView32"))
-}
-
 fn named(name: &str) -> String {
     name.trim().to_owned()
 }
@@ -48,7 +40,9 @@ fn container_entry(focus: &FocusEvent) -> Option<String> {
     let name = named(focus.container_name.as_deref().unwrap_or_default());
     match focus.container_role.as_ref()? {
         Role::Group if !name.is_empty() => Some(name),
-        Role::List if is_list_view(focus) => Some(format!("{name}{}", role_marker("List view"))),
+        Role::List if focus.container_is_list_view => {
+            Some(format!("{name}{}", role_marker("List view")))
+        }
         Role::List => Some(format!("{name}{}", role_marker("List box"))),
         Role::Tree => Some(format!("{name}{}", role_marker("Tree view"))),
         _ => None,
@@ -144,7 +138,7 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<String> {
             lines.extend(focus.columns.iter().map(|c| named(c)));
             lines.extend(position(focus));
             if entering {
-                lines.push(if is_list_view(focus) {
+                lines.push(if focus.container_is_list_view {
                     "To move to items use the Arrow keys.".to_owned()
                 } else {
                     "To move to an item press the Arrow keys.".to_owned()
@@ -558,7 +552,9 @@ mod tests {
     fn in_container(mut e: FocusEvent, role: Role, name: &str, class: &str) -> FocusEvent {
         e.container_role = Some(role);
         e.container_name = Some(name.to_owned());
-        e.container_class = Some(class.to_owned());
+        // As the platform reports a Win32 list view (also WinForms').
+        e.container_is_list_view = class.contains("SysListView32");
+        e.platform.container_class = Some(class.to_owned());
         e
     }
 

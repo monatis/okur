@@ -170,7 +170,7 @@ fn deliver_one(
                 role = ?focus.role,
                 name = ?focus.name,
                 in_document = focus.in_document,
-                class = ?focus.window_class,
+                class = ?focus.platform.window_class,
                 "focus event"
             );
             if focus.in_document {

@@ -11,7 +11,7 @@ impl ScreenReaderEngine {
     fn note_window(title: &mut Option<String>, kind: &mut Option<String>, focus: &FocusEvent) {
         if let Some(window) = &focus.window_title {
             *title = Some(window.clone());
-            *kind = focus.window_kind.clone();
+            *kind = focus.platform.top_window_class.clone();
         }
     }
 
@@ -53,9 +53,9 @@ impl ScreenReaderEngine {
             return Some(speech);
         }
 
-        let is_explorer_event = focus.window_class.as_deref() == Some("CabinetWClass")
-            || focus.window_class.as_deref() == Some("ShellTabWindowClass")
-            || focus.window_class.as_deref() == Some("UIItemsView")
+        let is_explorer_event = focus.platform.window_class.as_deref() == Some("CabinetWClass")
+            || focus.platform.window_class.as_deref() == Some("ShellTabWindowClass")
+            || focus.platform.window_class.as_deref() == Some("UIItemsView")
             || focus.container_name.as_deref() == Some("Items View")
             || focus.container_name.as_deref() == Some("Items view")
             || focus.container_name.as_deref() == Some("Shell Folder View")
@@ -67,16 +67,17 @@ impl ScreenReaderEngine {
         // 0. Check if focus landed on native desktop
         let is_desktop_event = !is_explorer_event
             && (focus.container_name.as_deref() == Some("FolderView")
-                || focus.window_class.as_deref() == Some("Progman")
-                || focus.window_class.as_deref() == Some("WorkerW")
-                || (focus.window_class.as_deref() == Some("SysListView32")
+                || focus.platform.window_class.as_deref() == Some("Progman")
+                || focus.platform.window_class.as_deref() == Some("WorkerW")
+                || (focus.platform.window_class.as_deref() == Some("SysListView32")
                     && focus.container_name.as_deref() != Some("Items View")
                     && focus.container_name.as_deref() != Some("Items view"))
                 // An item in the desktop's window, whatever window the event came from (on
                 // Windows 11 the first of the desktop's focus events has none, seen live).
                 || (focus.role == Role::ListItem
                     && focus
-                        .window_kind
+                        .platform
+                        .top_window_class
                         .as_deref()
                         .is_some_and(|k| matches!(k, "Progman" | "WorkerW")))
                 // An item still on the desktop; not one in another window (the task
@@ -84,7 +85,8 @@ impl ScreenReaderEngine {
                 || (focus.role == Role::ListItem
                     && self.app_mode == AppMode::NativeDesktop
                     && focus
-                        .window_kind
+                        .platform
+                        .top_window_class
                         .as_deref()
                         .is_none_or(|k| matches!(k, "Progman" | "WorkerW"))));
 
@@ -217,7 +219,7 @@ impl ScreenReaderEngine {
             };
             self.speech.speak(&speech, true);
             return Some(speech);
-        } else if focus.window_class.as_deref() == Some("Shell_TrayWnd")
+        } else if focus.platform.window_class.as_deref() == Some("Shell_TrayWnd")
             || focus.container_name.as_deref() == Some("Taskbar")
         {
             if let Some(ref mut es) = self.explorer_state {
@@ -259,7 +261,7 @@ impl ScreenReaderEngine {
             // browser (toolbar, address bar), so that focus does not announce a new window.
             if let Some(title) = &focus.window_title {
                 self.last_window_title = Some(title.clone());
-                self.last_window_kind = focus.window_kind.clone();
+                self.last_window_kind = focus.platform.top_window_class.clone();
             }
 
             let target_id = self.page_node_for(focus);
@@ -386,10 +388,11 @@ impl ScreenReaderEngine {
 
         let window_changed = if let Some(ref wt) = focus.window_title {
             let changed = self.last_window_title.as_ref() != Some(wt)
-                || (focus.window_kind.is_some() && self.last_window_kind != focus.window_kind);
+                || (focus.platform.top_window_class.is_some()
+                    && self.last_window_kind != focus.platform.top_window_class);
             if changed {
                 self.last_window_title = Some(wt.clone());
-                self.last_window_kind = focus.window_kind.clone();
+                self.last_window_kind = focus.platform.top_window_class.clone();
             }
             changed
         } else {
@@ -407,7 +410,7 @@ impl ScreenReaderEngine {
             // and its text [obs, 306/s1, s3, s10].
             // The desktop is announced as "desktop"; its title (Insert+T) is the virtual
             // desktop's name (JAWS on Windows 11: "desktop | FolderView List view").
-            let win = if focus.window_kind.as_deref() == Some("Progman") {
+            let win = if focus.platform.top_window_class.as_deref() == Some("Progman") {
                 "desktop"
             } else {
                 focus.window_title.as_deref().unwrap_or("")

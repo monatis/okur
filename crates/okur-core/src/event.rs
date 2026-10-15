@@ -118,8 +118,9 @@ pub struct FocusEvent {
     pub item_count: Option<usize>,
     pub container_role: Option<Role>,
     pub container_name: Option<String>,
-    /// Window class of the container (`SysListView32` makes a list a list view).
-    pub container_class: Option<String>,
+    /// The container is a list view, a list of items with columns (JAWS's "List view"),
+    /// not a list box.
+    pub container_is_list_view: bool,
     /// Further columns of a list-view item, after its name.
     pub columns: Vec<String>,
     /// The focused element is inside a browser document (its focus chain has a document).
@@ -146,10 +147,8 @@ pub struct FocusEvent {
     /// When a dialog box is in front: its controls in reading order, below the dialog itself
     /// (Say Window, Insert+B).
     pub window_items: Vec<WindowItem>,
-    /// The active window's class, which tells windows with the same title apart (a message
-    /// box titled like its main window).
-    pub window_kind: Option<String>,
-    pub window_class: Option<String>,
+    /// The window in front is a dialog box.
+    pub in_dialog_box: bool,
     pub window_title: Option<String>,
     pub folder_name: Option<String>,
     pub help_text: Option<String>,
@@ -158,11 +157,28 @@ pub struct FocusEvent {
     /// Whether the control's value is read-only (UIA), where it reports one: an editable
     /// document is a text field.
     pub read_only: Option<bool>,
-    /// The executable of the focus's window ("SearchHost.exe"), for application behavior.
-    pub process: Option<String>,
+    /// The application, as the platform names it: its executable on Windows
+    /// ("SearchHost.exe"), its bundle identifier on macOS. For application modules (`apps/`).
+    pub app: Option<String>,
+    /// What the platform calls the focus's windows and elements, for application modules.
+    pub platform: PlatformIds,
+}
+
+/// What the platform calls things: window and element classes. Application modules (`apps/`)
+/// match them, as JAWS's application scripts know their windows' classes. General code
+/// never matches their values; it may compare them, to tell two windows apart.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PlatformIds {
+    /// The class of the window the event came from (a Win32 window class).
+    pub window_class: Option<String>,
+    /// The class of the top-level window in front, which tells windows with the same title
+    /// apart (a message box titled like its main window).
+    pub top_window_class: Option<String>,
     /// The focused element's own class (UIA ClassName: Windows Terminal's text area is a
-    /// "TermControl"), for application behavior.
+    /// "TermControl").
     pub element_class: Option<String>,
+    /// The class of the focus's container.
+    pub container_class: Option<String>,
 }
 
 impl FocusEvent {
@@ -177,7 +193,7 @@ impl FocusEvent {
             item_count: None,
             container_role: None,
             container_name: None,
-            container_class: None,
+            container_is_list_view: false,
             columns: Vec::new(),
             in_document: false,
             dom_id: None,
@@ -189,15 +205,14 @@ impl FocusEvent {
             dialog_buttons: Vec::new(),
             dialog_lines: Vec::new(),
             window_items: Vec::new(),
-            window_kind: None,
-            window_class: None,
+            in_dialog_box: false,
             window_title: None,
             folder_name: None,
             help_text: None,
             access_key: None,
             read_only: None,
-            process: None,
-            element_class: None,
+            app: None,
+            platform: PlatformIds::default(),
         }
     }
 
@@ -242,7 +257,7 @@ impl FocusEvent {
     }
 
     pub fn with_window_class(mut self, class: impl Into<String>) -> Self {
-        self.window_class = Some(class.into());
+        self.platform.window_class = Some(class.into());
         self
     }
 

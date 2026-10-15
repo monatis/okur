@@ -248,6 +248,12 @@ pub fn reports_position(chain: &[UiaNode]) -> bool {
         .is_some_and(|f| f.position_in_set.is_some() && f.size_of_set.is_some())
 }
 
+/// Win32 list-view controls (`SysListView32`, also as WinForms `WindowsForms10.SysListView32...`):
+/// JAWS calls their lists "List view".
+fn is_list_view(class: Option<&str>) -> bool {
+    class.is_some_and(|c| c.contains("SysListView32"))
+}
+
 pub fn focus_event_from_chain(
     chain: &[UiaNode],
     window_class: Option<&str>,
@@ -282,7 +288,7 @@ pub fn focus_event_from_chain(
         .full_description
         .clone()
         .or_else(|| focused.help_text.clone());
-    event.window_class = window_class.map(str::to_owned);
+    event.platform.window_class = window_class.map(str::to_owned);
     event.window_title = window_title.map(str::to_owned);
     // Inside a browser document, Chrome reports the DOM id as AutomationId.
     // A page: a document in a browser's web content window. Documents elsewhere (Windows 11
@@ -294,7 +300,7 @@ pub fn focus_event_from_chain(
         .is_some_and(|c| c == CHROMIUM_TOP_WINDOW || WEB_CONTENT_WINDOW_CLASSES.contains(&c));
     event.in_document = in_browser && chain.iter().any(|a| a.control_type == UIA_DOCUMENT);
     event.read_only = focused.value_is_read_only;
-    event.element_class = focused.class_name.clone().filter(|c| !c.is_empty());
+    event.platform.element_class = focused.class_name.clone().filter(|c| !c.is_empty());
     if event.in_document {
         event.dom_id = focused.automation_id.clone().filter(|id| !id.is_empty());
     }
@@ -305,7 +311,7 @@ pub fn focus_event_from_chain(
     if focused.control_type == UIA_EDIT && parent.is_some_and(|p| p.control_type == UIA_COMBOBOX) {
         event.container_role = Some(Role::ComboBox);
         event.container_name = parent.and_then(|p| p.name.clone());
-        event.container_class = parent.and_then(|p| p.class_name.clone());
+        event.platform.container_class = parent.and_then(|p| p.class_name.clone());
         // The access key belongs to the combo box; the position is its list's selection
         // (from the Win32 combo box), not the edit's own "1 of 1".
         event.access_key = event.access_key.or_else(|| {
@@ -335,7 +341,8 @@ pub fn focus_event_from_chain(
             && a.name.as_deref().is_some_and(|n| !n.trim().is_empty()));
         if is_container {
             event.container_name = a.name.clone();
-            event.container_class = a.class_name.clone();
+            event.platform.container_class = a.class_name.clone();
+            event.container_is_list_view = is_list_view(a.class_name.as_deref());
             event.container_role = Some(role);
             break;
         }
@@ -388,7 +395,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     let focused = event.focus_chain.last()?;
     // The window's kind is its class: the desktop's, the window in front, or (older traces)
     // the UIA window around the focus.
-    focus.window_kind = if event.virtual_desktop.is_some() {
+    focus.platform.top_window_class = if event.virtual_desktop.is_some() {
         Some(DESKTOP_KIND.to_owned())
     } else {
         event
@@ -396,6 +403,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             .clone()
             .or_else(|| active_window.and_then(|w| w.class_name.clone()))
     };
+    focus.in_dialog_box = focus.platform.top_window_class.as_deref() == Some(WIN32_DIALOG_CLASS);
     // A dialog box (Win32 #32770, as a message box is) is announced with its static text,
     // which sits beside its buttons [obs, 306/s1]. Other windows are announced by title only
     // (306/s10).
@@ -428,7 +436,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             .collect();
     }
     focus.dialog_lines = event.dialog_lines.clone();
-    focus.process = event.process.clone();
+    focus.app = event.process.clone();
     focus.window_items = event
         .dialog_tree
         .as_ref()
