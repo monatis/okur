@@ -758,15 +758,17 @@ impl SpeechFormatter {
         if let Some(folder) = folder_name {
             lines.push(folder.to_string());
         }
-        lines.push("Items view multi select box".to_string());
-        if let Some(sel) = selected {
-            if !sel {
-                lines.push("Not selected".to_string());
-            } else {
+        // JAWS 2025, Windows 11, observed on the dev box (research): "live - File Explorer |
+        // Items View MultiSelect ListBox | Not Selected combo.cs | 1 of 8".
+        lines.push("Items View  \u{1d} MultiSelect ListBox \u{1e} ".to_string());
+        match selected {
+            Some(false) => lines.push(format!("Not Selected {item_name}")),
+            Some(true) => {
                 lines.push("selected".to_string());
+                lines.push(item_name.to_string());
             }
+            None => lines.push(item_name.to_string()),
         }
-        lines.push(item_name.to_string());
         lines.push(format!("{} of {}", index, total));
         lines.join("\n")
     }
