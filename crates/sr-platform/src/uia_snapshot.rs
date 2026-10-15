@@ -557,23 +557,30 @@ pub(crate) mod capture {
         Ok(uia)
     }
 
-    /// Reads one element (no children) with the full snapshot property set.
-    pub(crate) fn read_element(
+    /// A cache request for the snapshot property set of each element it is used with.
+    /// `AutomationElementMode_Full` keeps the elements usable for walking further.
+    fn properties_request(
         uia: &IUIAutomation,
-        element: &IUIAutomationElement,
-    ) -> Option<UiaNode> {
-        // SAFETY: a cache request for a single element of a valid UIA client.
+        mode: AutomationElementMode,
+    ) -> Option<IUIAutomationCacheRequest> {
+        request_for(uia, mode, PROPERTIES)
+    }
+
+    /// A cache request for `properties` of each element it is used with.
+    fn request_for(
+        uia: &IUIAutomation,
+        mode: AutomationElementMode,
+        properties: &[UIA_PROPERTY_ID],
+    ) -> Option<IUIAutomationCacheRequest> {
+        // SAFETY: building a cache request on a valid UIA client.
         unsafe {
             let request = uia.CreateCacheRequest().ok()?;
-            for &prop in PROPERTIES {
+            for &prop in properties {
                 request.AddProperty(prop).ok()?;
             }
             request.SetTreeScope(TreeScope_Element).ok()?;
-            request
-                .SetAutomationElementMode(AutomationElementMode_None)
-                .ok()?;
-            let cached = element.BuildUpdatedCache(&request).ok()?;
-            Some(read_node(&cached, usize::MAX))
+            request.SetAutomationElementMode(mode).ok()?;
+            Some(request)
         }
     }
 
@@ -588,8 +595,23 @@ pub(crate) mod capture {
     pub(crate) fn focus_chain(uia: &IUIAutomation) -> Vec<UiaNode> {
         // SAFETY: UIA client query on a valid automation object.
         unsafe { uia.GetFocusedElement() }
+            .ok()
+            .and_then(|focused| with_properties(uia, &focused))
             .map(|focused| focus_chain_from(uia, &focused))
             .unwrap_or_default()
+    }
+
+    /// `element` with the snapshot properties cached, usable for walking further: fetched
+    /// once per event and shared by [`focus_chain_from`] and [`focus_context_of`]. A Win32
+    /// control behind UIA's MSAA proxy answers each property across processes, 40 ms for
+    /// one list-view item (dev box, 2026-10-15).
+    pub(crate) fn with_properties(
+        uia: &IUIAutomation,
+        element: &IUIAutomationElement,
+    ) -> Option<IUIAutomationElement> {
+        let request = properties_request(uia, AutomationElementMode_Full)?;
+        // SAFETY: a cache request for a valid element.
+        unsafe { element.BuildUpdatedCache(&request) }.ok()
     }
 
     /// `element` and its control-view ancestors, outermost first, as [`focus_chain`] reads
@@ -608,6 +630,11 @@ pub(crate) mod capture {
             let Ok(root) = uia.GetRootElement() else {
                 return chain;
             };
+            let Some(request) = properties_request(uia, AutomationElementMode_Full) else {
+                return chain;
+            };
+            // `element` comes with its properties ([`with_properties`]); each step up fetches
+            // the parent with its properties in one call.
             let mut current = Some(element.clone());
             // Bound the walk: real focus chains are a few dozen levels deep at most.
             for _ in 0..64 {
@@ -619,10 +646,8 @@ pub(crate) mod capture {
                 {
                     break;
                 }
-                if let Some(node) = read_element(uia, &el) {
-                    chain.push(node);
-                }
-                current = walker.GetParentElement(&el).ok();
+                chain.push(read_node(&el, usize::MAX));
+                current = walker.GetParentElementBuildCache(&el, &request).ok();
             }
         }
         chain.reverse();
@@ -644,22 +669,27 @@ pub(crate) mod capture {
     /// Nodes recorded below a focused element, at most.
     const MAX_FOCUS_SUBTREE: usize = 200;
 
-    /// What a screen reader reads around the focused element besides its ancestors: the
-    /// control-view siblings (without children), from which positions such as "2 of 3" are
-    /// counted when the provider reports no PositionInSet, and the element's own control-view
-    /// subtree to depth 2 (list-view columns, a combo box's items).
+    /// What a screen reader reads around the focused element (from [`with_properties`])
+    /// besides its ancestors: with `siblings`, the control-view siblings (without children),
+    /// from which positions such as "2 of 3" are counted when nothing else gives them, and a
+    /// dialog box's text and buttons; and the element's own control-view subtree as deep as
+    /// announcements use ([`subtree_depth`]: list-view columns, a combo box's items). Every
+    /// element is fetched with its properties in one call.
     pub(crate) fn focus_context_of(
         uia: &IUIAutomation,
         focused: &IUIAutomationElement,
+        siblings: bool,
     ) -> (Vec<UiaNode>, Option<UiaNode>) {
-        const UIA_EDIT: i32 = 50004;
         const UIA_DOCUMENT: i32 = 50030;
         // SAFETY: UIA client queries on a valid automation object.
         unsafe {
-            let Ok(walker) = uia.ControlViewWalker() else {
+            let (Ok(walker), Some(request)) = (
+                uia.ControlViewWalker(),
+                properties_request(uia, AutomationElementMode_Full),
+            ) else {
                 return (Vec::new(), None);
             };
-            let control_type = focused.CurrentControlType().map(|t| t.0);
+            let control_type = focused.CachedControlType().map(|t| t.0);
             // A document needs nothing around it: no position, no dialog text. Its siblings
             // in Windows 11 Notepad (tabs, bars) took 7 s to read right after the window came
             // to the front, holding up every event behind it (dev box).
@@ -667,47 +697,114 @@ pub(crate) mod capture {
                 let mut budget = MAX_FOCUS_SUBTREE;
                 return (
                     Vec::new(),
-                    read_subtree(uia, &walker, focused, 0, &mut budget),
+                    read_subtree(&walker, &request, focused, 0, &mut budget),
                 );
             }
-            let mut siblings = Vec::new();
+            let mut found = Vec::new();
             // A top-level window's siblings are every window on the desktop, each read across
             // processes, and no announcement counts them: Windows Terminal reports its window
             // focused before its text area, and reading them held every event for 6.6 s
             // (dev box, 2026-10-15).
-            let parent = walker
-                .GetParentElement(focused)
-                .ok()
+            let parent = siblings
+                .then(|| walker.GetParentElement(focused).ok())
+                .flatten()
                 .filter(|parent| !is_root(uia, parent));
             if let Some(parent) = parent {
-                let mut current = walker.GetFirstChildElement(&parent).ok();
+                let mut current = walker
+                    .GetFirstChildElementBuildCache(&parent, &request)
+                    .ok();
                 while let Some(el) = current {
-                    if siblings.len() >= MAX_FOCUS_SIBLINGS {
+                    if found.len() >= MAX_FOCUS_SIBLINGS {
                         break;
                     }
-                    if let Some(node) = read_element(uia, &el) {
-                        siblings.push(node);
-                    }
-                    current = walker.GetNextSiblingElement(&el).ok();
+                    found.push(read_node(&el, usize::MAX));
+                    current = walker.GetNextSiblingElementBuildCache(&el, &request).ok();
                 }
             }
-            // A text field's subtree is its content, which no announcement reads.
-            let mut budget = MAX_FOCUS_SUBTREE;
-            let depth = if control_type == Ok(UIA_EDIT) { 0 } else { 2 };
-            let subtree = read_subtree(uia, &walker, focused, depth, &mut budget);
-            (siblings, subtree)
+            let depth = subtree_depth(control_type.unwrap_or_default());
+            let subtree = read_levels(uia, focused, depth);
+            (found, subtree)
         }
     }
 
-    /// The focused element with its control-view subtree to depth 2.
+    /// How deep a focused element's subtree is read: only what an announcement uses (a list
+    /// item's columns and a tree item's children one level down, a combo box's list items
+    /// two). For anything else the element alone: a window's subtree reached the items of
+    /// its list, 1.6 s per window switch (dev box, 2026-10-15), and a text field's is its
+    /// content.
+    fn subtree_depth(control_type: i32) -> usize {
+        match control_type {
+            super::CT_LISTITEM | super::CT_DATAITEM | super::CT_TREEITEM => 1,
+            super::CT_COMBOBOX => 2,
+            _ => 0,
+        }
+    }
+
+    /// The focused element with its control-view subtree, as deep as announcements use.
     pub(crate) fn focus_subtree_of(uia: &IUIAutomation) -> Option<UiaNode> {
         // SAFETY: UIA client queries on a valid automation object.
         unsafe {
-            let walker = uia.ControlViewWalker().ok()?;
-            let focused = uia.GetFocusedElement().ok()?;
-            let mut budget = MAX_FOCUS_SUBTREE;
-            read_subtree(uia, &walker, &focused, 2, &mut budget)
+            let request = properties_request(uia, AutomationElementMode_Full)?;
+            let focused = uia.GetFocusedElementBuildCache(&request).ok()?;
+            let depth = subtree_depth(focused.CachedControlType().map(|t| t.0).unwrap_or_default());
+            read_levels(uia, &focused, depth)
         }
+    }
+
+    /// What announcements read of a focused element's children (list-view columns, tree
+    /// items, a combo box's list and items): fewer properties, because a Win32 control behind
+    /// UIA's MSAA proxy answers each across processes.
+    const CHILD_PROPERTIES: &[UIA_PROPERTY_ID] = &[
+        UIA_ControlTypePropertyId,
+        UIA_NamePropertyId,
+        UIA_SelectionItemIsSelectedPropertyId,
+    ];
+
+    /// `element` (already fetched) and its control-view children to `depth`, each level's
+    /// children fetched in one call with [`CHILD_PROPERTIES`], at most `MAX_FOCUS_SUBTREE`
+    /// nodes. Children are the control elements directly below: right for the items and
+    /// columns a focus subtree reads, where no layout element sits between.
+    fn read_levels(
+        uia: &IUIAutomation,
+        element: &IUIAutomationElement,
+        depth: usize,
+    ) -> Option<UiaNode> {
+        let request = request_for(uia, AutomationElementMode_Full, CHILD_PROPERTIES)?;
+        // SAFETY: UIA client queries on valid automation objects.
+        let condition = unsafe { uia.ControlViewCondition() }.ok()?;
+        let mut budget = MAX_FOCUS_SUBTREE;
+        read_level(&condition, &request, element, depth, &mut budget)
+    }
+
+    fn read_level(
+        condition: &IUIAutomationCondition,
+        request: &IUIAutomationCacheRequest,
+        element: &IUIAutomationElement,
+        depth: usize,
+        budget: &mut usize,
+    ) -> Option<UiaNode> {
+        *budget = budget.checked_sub(1)?;
+        let mut node = read_node(element, usize::MAX);
+        if depth == 0 {
+            return Some(node);
+        }
+        // SAFETY: UIA client queries on valid automation objects.
+        let children = unsafe { element.FindAllBuildCache(TreeScope_Children, condition, request) };
+        let Ok(children) = children else {
+            return Some(node);
+        };
+        let count = unsafe { children.Length() }.unwrap_or(0);
+        for index in 0..count {
+            // SAFETY: an index below the array's length.
+            let Ok(child) = (unsafe { children.GetElement(index) }) else {
+                continue;
+            };
+            match read_level(condition, request, &child, depth - 1, budget) {
+                Some(child) => node.children.push(child),
+                None => break,
+            }
+        }
+        Some(node)
     }
 
     /// Nodes recorded for a window's control tree, at most.
@@ -720,40 +817,43 @@ pub(crate) mod capture {
         hwnd: windows::Win32::Foundation::HWND,
     ) -> Option<UiaNode> {
         const UIA_TITLEBAR: i32 = 50037;
+        let request = properties_request(uia, AutomationElementMode_Full)?;
         // SAFETY: UIA client queries on a valid automation object.
         let (walker, window) = unsafe {
             (
                 uia.ControlViewWalker().ok()?,
-                uia.ElementFromHandle(hwnd).ok()?,
+                uia.ElementFromHandleBuildCache(hwnd, &request).ok()?,
             )
         };
         let mut budget = MAX_WINDOW_TREE;
-        let mut tree = read_subtree(uia, &walker, &window, 6, &mut budget)?;
+        let mut tree = read_subtree(&walker, &request, &window, 6, &mut budget)?;
         tree.children.retain(|c| c.control_type != UIA_TITLEBAR);
         Some(tree)
     }
 
+    /// `element` (fetched with `request`) and its control-view subtree to `depth`, each child
+    /// fetched with its properties as the walk reaches it.
     fn read_subtree(
-        uia: &IUIAutomation,
         walker: &IUIAutomationTreeWalker,
+        request: &IUIAutomationCacheRequest,
         element: &IUIAutomationElement,
         depth: usize,
         budget: &mut usize,
     ) -> Option<UiaNode> {
         *budget = budget.checked_sub(1)?;
-        let mut node = read_element(uia, element)?;
+        let mut node = read_node(element, usize::MAX);
         if depth == 0 {
             return Some(node);
         }
         // SAFETY: UIA tree walking on valid elements.
-        let mut current = unsafe { walker.GetFirstChildElement(element) }.ok();
+        let mut current = unsafe { walker.GetFirstChildElementBuildCache(element, request) }.ok();
         while let Some(el) = current {
-            match read_subtree(uia, walker, &el, depth - 1, budget) {
+            match read_subtree(walker, request, &el, depth - 1, budget) {
                 Some(child) => node.children.push(child),
                 None => break,
             }
             // SAFETY: as above.
-            current = unsafe { walker.GetNextSiblingElement(&el) }.ok();
+            current = unsafe { walker.GetNextSiblingElementBuildCache(&el, request) }.ok();
         }
         Some(node)
     }

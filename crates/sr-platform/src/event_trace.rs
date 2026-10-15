@@ -226,6 +226,24 @@ pub fn event_name(win_event: u32, id_object: i32) -> Option<&'static str> {
 /// Builds the engine's focus event from a focus chain (outermost first), using the same
 /// UIA-to-AOM mapping as document snapshots. Used by trace replay, and by the live listener,
 /// so both exercise one conversion.
+/// Whether the focus is in a dialog box (the innermost window of its chain is a Win32
+/// `#32770`), whose static text and buttons are read from the focus's siblings.
+pub fn in_dialog_box(chain: &[UiaNode]) -> bool {
+    chain
+        .iter()
+        .rev()
+        .find(|w| w.control_type == UIA_WINDOW)
+        .is_some_and(|w| w.class_name.as_deref() == Some(WIN32_DIALOG_CLASS))
+}
+
+/// Whether the focused element reports its own position ("2 of 5"), so that its siblings
+/// need not be counted.
+pub fn reports_position(chain: &[UiaNode]) -> bool {
+    chain
+        .last()
+        .is_some_and(|f| f.position_in_set.is_some() && f.size_of_set.is_some())
+}
+
 pub fn focus_event_from_chain(
     chain: &[UiaNode],
     window_class: Option<&str>,
@@ -664,12 +682,12 @@ fn apply_msaa_states(control: &mut sr_core::FocusEvent, states: u32) {
 #[cfg(windows)]
 mod capture {
     use super::{
-        event_name, TraceEvent, TraceHeader, TraceObject, TRACE_FORMAT_VERSION, UIA_FOCUS_WINDOWS,
-        UIA_SELECTION_PROCESSES,
+        event_name, in_dialog_box, reports_position, TraceEvent, TraceHeader, TraceObject,
+        TRACE_FORMAT_VERSION, UIA_FOCUS_WINDOWS, UIA_SELECTION_PROCESSES,
     };
     use crate::uia_snapshot::capture::{
         automation, focus_chain_from, focus_context_of, focus_subtree_of, focused_element,
-        window_subtree, window_text,
+        window_subtree, window_text, with_properties,
     };
     use crate::PlatformError;
     use std::cell::RefCell;
@@ -700,6 +718,36 @@ mod capture {
     const WINEVENT_OUTOFCONTEXT: u32 = 0x0000;
     const WINEVENT_SKIPOWNPROCESS: u32 = 0x0002;
 
+    /// How soon a focus event naming the focused element again is a repeat of the last one.
+    const REPEATED_FOCUS: std::time::Duration = std::time::Duration::from_millis(1000);
+    /// How soon after a focus a selection or value change of the same element is its echo.
+    const FOCUS_ECHO: std::time::Duration = std::time::Duration::from_millis(300);
+    /// A WinEvent about an object itself rather than one of its children.
+    const CHILDID_SELF: i32 = 0;
+
+    /// A focus event that was read: the element it named, when, and its event's window.
+    #[derive(Clone)]
+    struct SeenFocus {
+        element: IUIAutomationElement,
+        at: std::time::Instant,
+        window: isize,
+    }
+
+    impl SeenFocus {
+        /// Whether `element` is this focus's element, named again within `within`.
+        fn names(
+            &self,
+            uia: &IUIAutomation,
+            element: &IUIAutomationElement,
+            within: std::time::Duration,
+        ) -> bool {
+            self.at.elapsed() < within
+                // SAFETY: comparing two valid automation elements.
+                && unsafe { uia.CompareElements(element, &self.element) }
+                    .is_ok_and(|same| same.as_bool())
+        }
+    }
+
     struct TraceState {
         /// Receives every event: the trace file, or the live screen reader.
         sink: Box<dyn FnMut(TraceEvent)>,
@@ -708,6 +756,12 @@ mod capture {
         /// Feeding the live screen reader: events it does not use are dropped before any
         /// cross-process read, and live-region pages are captured elsewhere.
         live: bool,
+        /// The last focus event about a whole object (not a child item): the same element
+        /// named again right after is not read twice.
+        last_object_focus: Option<SeenFocus>,
+        /// The last focus event read, of any kind: a selection or value change for its
+        /// element right after is its echo.
+        last_focus_read: Option<SeenFocus>,
     }
 
     thread_local! {
@@ -771,6 +825,34 @@ mod capture {
                 .flatten();
         }
         let upper = class.to_ascii_uppercase();
+        // A list view: its focused item and item count (LVM_GETNEXTITEM with LVNI_FOCUSED,
+        // searching from the start; LVM_GETITEMCOUNT). Counting its items through UIA took
+        // 2 s per item in a 300-item list (dev box, 2026-10-15).
+        if upper.contains("SYSLISTVIEW32") {
+            const LVM_GETITEMCOUNT: u32 = 0x1004;
+            const LVM_GETNEXTITEM: u32 = 0x100C;
+            const LVNI_FOCUSED: isize = 0x0001;
+            let ask = |msg: u32, wparam: usize, lparam: isize| {
+                let mut result = 0usize;
+                // SAFETY: read-only integer queries with a timeout, to a window that may be
+                // gone.
+                let sent = unsafe {
+                    SendMessageTimeoutW(
+                        hwnd,
+                        msg,
+                        WPARAM(wparam),
+                        LPARAM(lparam),
+                        SMTO_ABORTIFHUNG,
+                        200,
+                        Some(&mut result),
+                    )
+                };
+                (sent.0 != 0).then_some(result as i32)
+            };
+            let count = ask(LVM_GETITEMCOUNT, 0, 0).filter(|&n| n > 0)?;
+            let index = ask(LVM_GETNEXTITEM, usize::MAX, LVNI_FOCUSED).filter(|&i| i >= 0)?;
+            return Some([index, count]);
+        }
         let (get_sel, get_count) = if upper.contains("COMBOBOX") {
             (0x0147, 0x0146)
         } else if upper.contains("LISTBOX") {
@@ -1175,24 +1257,60 @@ mod capture {
                 _ => None,
             };
             let element = element.or(asked.as_ref());
+            // The same element named by focus events right after one another is read once:
+            // Windows Terminal reports one focus five times, once from each of its windows
+            // (dev box, 2026-10-15). Any other focus between them makes the next one new. An
+            // event about a child object (a WinForms menu item, while UIA still names the
+            // control behind the menu [obs, 302]) is always read.
+            let window = hwnd.0 as isize;
+            if focused && !uia_named {
+                if let (Some(uia), Some(element)) = (state.uia.as_ref(), element) {
+                    let repeated = id_child == CHILDID_SELF
+                        && state
+                            .last_object_focus
+                            .as_ref()
+                            .is_some_and(|last| last.names(uia, element, REPEATED_FOCUS));
+                    let seen = SeenFocus {
+                        element: element.clone(),
+                        at: std::time::Instant::now(),
+                        window,
+                    };
+                    state.last_object_focus = (id_child == CHILDID_SELF).then(|| seen.clone());
+                    state.last_focus_read = Some(seen);
+                    if repeated {
+                        tracing::debug!(event = name, "repeated focus not read");
+                        return;
+                    }
+                }
+            }
+            // A list's selection and value change for the item just focused (a list view
+            // reports both after each arrow key) say nothing the focus did not: 70 ms each,
+            // per key (dev box, 2026-10-15). A state change (a check box toggled) is always
+            // read.
+            if matches!(name, "selection" | "value_change") {
+                if let (Some(uia), Some(element)) = (state.uia.as_ref(), element) {
+                    let echo = state.last_focus_read.as_ref().is_some_and(|last| {
+                        last.window == window && last.names(uia, element, FOCUS_ECHO)
+                    });
+                    if echo {
+                        tracing::debug!(event = name, "focus echo not read");
+                        return;
+                    }
+                }
+            }
+            stages.push(("element", clock.elapsed().as_millis()));
+            // The focused element's properties are fetched once, for the chain and the context.
+            let element = match (state.uia.as_ref(), element) {
+                (Some(uia), Some(element)) if reads_focus => with_properties(uia, element),
+                _ => None,
+            };
+            stages.push(("properties", clock.elapsed().as_millis()));
+            let element = element.as_ref();
             let focus = match (state.uia.as_ref(), element) {
                 (Some(uia), Some(element)) if reads_focus => focus_chain_from(uia, element),
                 _ => Vec::new(),
             };
             stages.push(("chain", clock.elapsed().as_millis()));
-            let (focus_siblings, focus_subtree) = match (name, state.uia.as_ref()) {
-                // A focus UIA names (the task switcher's items) is read by name alone: on the
-                // switcher's first opening its tree answers slowly, and reading around the item
-                // held the thread for seconds while the next items went by (dev box).
-                (_, Some(_)) if uia_named => (Vec::new(), None),
-                (_, Some(uia)) if focused => match element {
-                    Some(element) => focus_context_of(uia, element),
-                    None => (Vec::new(), None),
-                },
-                (_, Some(uia)) if changes_focus_context => (Vec::new(), focus_subtree_of(uia)),
-                _ => (Vec::new(), None),
-            };
-            stages.push(("context", clock.elapsed().as_millis()));
             let list_position = if focused || changes_focus_context {
                 win32_list_position(hwnd, &class).or_else(|| {
                     let focus_window = keyboard_focus_window();
@@ -1203,6 +1321,25 @@ mod capture {
             } else {
                 None
             };
+            stages.push(("position", clock.elapsed().as_millis()));
+            // Siblings give a position when nothing else does, and a dialog box's text and
+            // buttons. Reading them in a long list took 2 s per item (dev box, 2026-10-15),
+            // where the list already gives the position.
+            let needs_siblings =
+                in_dialog_box(&focus) || (list_position.is_none() && !reports_position(&focus));
+            let (focus_siblings, focus_subtree) = match (name, state.uia.as_ref()) {
+                // A focus UIA names (the task switcher's items) is read by name alone: on the
+                // switcher's first opening its tree answers slowly, and reading around the item
+                // held the thread for seconds while the next items went by (dev box).
+                (_, Some(_)) if uia_named => (Vec::new(), None),
+                (_, Some(uia)) if focused => match element {
+                    Some(element) => focus_context_of(uia, element, needs_siblings),
+                    None => (Vec::new(), None),
+                },
+                (_, Some(uia)) if changes_focus_context => (Vec::new(), focus_subtree_of(uia)),
+                _ => (Vec::new(), None),
+            };
+            stages.push(("context", clock.elapsed().as_millis()));
             // The window is the one in front now, when the focus chain was read: an event's
             // own window can have lost the foreground meanwhile (the task switcher's last
             // events arrive after the switch back, seen live on the dev box).
@@ -1272,6 +1409,13 @@ mod capture {
             if clock.elapsed() > SLOW_EVENT {
                 tracing::debug!(event = name, %class, ?stages, "slow event read");
             }
+            // Every read's time, for `sr-cli latency`.
+            tracing::debug!(
+                event = name,
+                us = clock.elapsed().as_micros(),
+                ?stages,
+                "event read"
+            );
             let event = TraceEvent {
                 t_ms,
                 event: name.to_owned(),
@@ -1361,6 +1505,8 @@ mod capture {
                 uia: automation().ok(),
                 count: 0,
                 live,
+                last_object_focus: None,
+                last_focus_read: None,
             })
         });
 
@@ -1475,6 +1621,27 @@ mod tests {
             is_enabled: true,
             ..UiaNode::default()
         }
+    }
+
+    #[test]
+    fn siblings_are_needed_in_a_dialog_box_or_without_a_reported_position() {
+        let window = |class: &str| UiaNode {
+            class_name: Some(class.to_owned()),
+            ..node(UIA_WINDOW, "Window", false)
+        };
+        let item = node(RADIO, "Option", true);
+        let dialog = [window("#32770"), item.clone()];
+        let main = [window("WindowsForms10.Window.8.app"), item.clone()];
+        assert!(in_dialog_box(&dialog));
+        assert!(!in_dialog_box(&main));
+
+        assert!(!reports_position(&main));
+        let placed = UiaNode {
+            position_in_set: Some(2),
+            size_of_set: Some(5),
+            ..item
+        };
+        assert!(reports_position(&[window("Main"), placed]));
     }
 
     fn focus_event(siblings: Vec<UiaNode>) -> TraceEvent {
