@@ -1085,4 +1085,46 @@ mod tests {
         let buffer = VirtualBuffer::from_aom(&page);
         assert_eq!(text(Some(&buffer), 1), Some("Later"));
     }
+
+    /// A page of `leaves` paragraphs under a chain of `depth` wrapping groups, as web apps nest
+    /// their content.
+    fn wrapped_page(depth: usize, leaves: usize) -> AomNode {
+        let paragraphs = (0..leaves)
+            .map(|i| AomNode::new(10_000 + i, Role::Paragraph).with_text("A line of the page."))
+            .collect();
+        let mut root = AomNode::new(1, Role::Group).with_children(paragraphs);
+        for id in 2..depth + 2 {
+            root = AomNode::new(id, Role::Group).with_children(vec![root]);
+        }
+        AomNode::new(0, Role::Document).with_children(vec![root])
+    }
+
+    /// The fastest of three builds of `page`.
+    fn build_time(page: &AomNode) -> std::time::Duration {
+        (0..3)
+            .map(|_| {
+                let started = std::time::Instant::now();
+                let buffer = VirtualBuffer::from_aom(page);
+                let elapsed = started.elapsed();
+                assert!(!buffer.lines.is_empty());
+                elapsed
+            })
+            .min()
+            .unwrap_or_default()
+    }
+
+    /// Building a buffer stays linear in the page: wrapping the same content four times
+    /// deeper adds a few nodes, not a copy of the content per level (the node map once held a
+    /// deep copy of every node, 2026-10-15). A ratio, so the machine's speed does not matter:
+    /// linear building gives about 1, copying per level about 4.
+    #[test]
+    fn building_a_buffer_does_not_grow_with_wrapping_depth() {
+        let shallow = build_time(&wrapped_page(50, 2000));
+        let deep = build_time(&wrapped_page(200, 2000));
+        let ratio = deep.as_secs_f64() / shallow.as_secs_f64().max(f64::EPSILON);
+        assert!(
+            ratio < 2.0,
+            "4x deeper wrapping took {ratio:.2}x as long ({shallow:?} -> {deep:?})"
+        );
+    }
 }
