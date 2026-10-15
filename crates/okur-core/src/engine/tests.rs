@@ -1413,3 +1413,35 @@ fn an_autocompletes_options_are_read_and_forms_mode_stays() {
         )
     );
 }
+
+/// A page's application region (ARIA role "application", VS Code's workbench), JAWS on the
+/// dev box (2026-10-16): its name on the way in, and every key is the page's, Escape too.
+#[test]
+fn an_application_region_takes_every_key() {
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Tools")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 2 }).with_text("Before"),
+            AomNode::new(2, Role::Button).with_name("First tool"),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut focus = FocusEvent::new(Role::Button)
+        .with_node_id(2)
+        .with_name("First tool");
+    focus.in_document = true;
+    focus.web_application = Some("Workbench".to_owned());
+    let said = engine
+        .handle_accessibility_event(&AccessibilityEvent::Focus(focus))
+        .unwrap_or_default();
+    assert!(said.contains("Workbench\nFirst tool"), "{said}");
+    for key in [Key::Alpha('h'), Key::DownArrow, Key::Escape] {
+        let event = KeyEvent::new(key, Modifiers::none(), true);
+        assert_eq!(engine.handle_key_event(&event), KeyAction::PassThrough);
+    }
+    // A button's keys are the page's to answer: no field is read for them.
+    assert!(actions.requests().is_empty());
+    assert!(engine.forms_mode);
+}

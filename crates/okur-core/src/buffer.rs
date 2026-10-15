@@ -301,13 +301,14 @@ impl VirtualBuffer {
         Some(path)
     }
 
-    /// The page node that had keyboard focus when the page was captured (the innermost).
+    /// The page node that had keyboard focus when the page was captured (the innermost). The
+    /// document itself focused is no element focused.
     pub fn focused_node(&self) -> Option<usize> {
         fn find(node: &AomNode) -> Option<usize> {
             node.children
                 .iter()
                 .find_map(find)
-                .or(node.states.focused.then_some(node.id))
+                .or((node.states.focused && node.role != Role::Document).then_some(node.id))
         }
         self.page.as_ref().and_then(find)
     }

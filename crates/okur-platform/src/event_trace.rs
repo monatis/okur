@@ -303,6 +303,12 @@ pub fn focus_event_from_chain(
     event.platform.element_class = focused.class_name.clone().filter(|c| !c.is_empty());
     if event.in_document {
         event.dom_id = focused.automation_id.clone().filter(|id| !id.is_empty());
+        event.web_application = chain
+            .iter()
+            .rev()
+            .skip(1)
+            .find(|a| a.aria_role.as_deref() == Some("application"))
+            .map(|a| a.name.clone().unwrap_or_default());
     }
 
     event.access_key = focused.access_key.clone().filter(|k| !k.is_empty());

@@ -64,6 +64,11 @@ pub struct ScreenReaderEngine {
     tab_start: Option<usize>,
     /// The list whose option the focused field points at (aria-activedescendant), by name.
     option_list: Option<String>,
+    /// The page's application region (ARIA role "application") the focus is in, by name:
+    /// every key goes to the page there, Escape too.
+    web_application: Option<String>,
+    /// The page's focus is a text field or a combo box (one is typed in, its caret read).
+    page_focus_is_field: bool,
     /// The last native focus outside menus, re-announced when menus close.
     last_native_focus: Option<FocusEvent>,
     menus: crate::native_focus::Menus,
@@ -111,6 +116,8 @@ impl ScreenReaderEngine {
             last_page_focus: None,
             tab_start: None,
             option_list: None,
+            web_application: None,
+            page_focus_is_field: false,
             last_native_focus: None,
             menus: crate::native_focus::Menus::default(),
             pending_edit: None,
@@ -214,6 +221,16 @@ impl ScreenReaderEngine {
 
         // 3. Handle Forms Mode
         if self.forms_mode {
+            // In a page's application region every key is the page's (JAWS on the dev box:
+            // Escape closes VS Code's command palette).
+            if self.web_application.is_some() {
+                // Typing and caret keys are read in its text fields only: on its buttons and
+                // lists the page answers keys itself, and JAWS says nothing for them.
+                if self.page_focus_is_field {
+                    self.edit_key_feedback(event);
+                }
+                return KeyAction::PassThrough;
+            }
             if event.key == Key::Escape {
                 self.forms_mode = false;
                 let _ = self.cursor.exit_forms_mode();

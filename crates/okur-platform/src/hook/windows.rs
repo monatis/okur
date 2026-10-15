@@ -1,7 +1,7 @@
 use super::{HookCallback, Key, KeyAction, KeyEvent, KeyboardHook, Modifiers};
 use crate::PlatformError;
 use std::collections::HashSet;
-use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicU32, AtomicUsize, Ordering};
 use std::sync::Mutex;
 use std::thread::{self, JoinHandle};
 
@@ -41,6 +41,11 @@ pub const INJECTED_MARK: usize = 0x4F4B_5552;
 static RECENT_KEYS: Mutex<[(u32, u32); 4]> = Mutex::new([(0, 0); 4]);
 /// How long after a key JAWS's copy of it can come (about 5 ms on the dev box).
 const COPY_WINDOW_MS: u32 = 50;
+/// How long after a key a copy with JAWS's known mark can come: JAWS runs a script for some
+/// keys first (Ctrl+Home's copy came 230 ms later, dev box).
+const MARKED_COPY_WINDOW_MS: u32 = 1000;
+/// JAWS's `dwExtraInfo`, learned from its first copy that came within [`COPY_WINDOW_MS`].
+static JAWS_MARK: AtomicUsize = AtomicUsize::new(0);
 /// `KBDLLHOOKSTRUCT::flags`: the event was injected.
 const LLKHF_INJECTED: u32 = 0x10;
 const SHIFT_BIT: u32 = 1;
@@ -48,13 +53,13 @@ const CTRL_BIT: u32 = 2;
 const ALT_BIT: u32 = 4;
 const WIN_BIT: u32 = 8;
 
-/// Whether `vk` was pressed within [`COPY_WINDOW_MS`] before `time`: the press is then
-/// forgotten, as each original has one copy.
-fn take_recent(vk: u32, time: u32) -> bool {
+/// Whether `vk` was pressed within `window` ms before `time`: the press is then forgotten,
+/// as each original has one copy.
+fn take_recent(vk: u32, time: u32, window: u32) -> bool {
     RECENT_KEYS.lock().is_ok_and(|mut recent| {
         recent
             .iter_mut()
-            .find(|(key, at)| *key == vk && time.wrapping_sub(*at) <= COPY_WINDOW_MS)
+            .find(|(key, at)| *key == vk && time.wrapping_sub(*at) <= window)
             .map(|entry| *entry = (0, 0))
             .is_some()
     })
@@ -283,8 +288,19 @@ unsafe extern "system" fn low_level_keyboard_proc(
     // letter they type twice is never taken for a copy.
     let marked = kbd.dwExtraInfo == INJECTED_MARK;
     let foreign_mark = kbd.dwExtraInfo != 0 && !marked;
-    if foreign_mark && kbd.flags.0 & LLKHF_INJECTED != 0 && take_recent(vk_code, kbd.time) {
-        return CallNextHookEx(None, ncode, wparam, lparam);
+    if foreign_mark && kbd.flags.0 & LLKHF_INJECTED != 0 {
+        let jaws_mark = JAWS_MARK.load(Ordering::Relaxed);
+        let window = if jaws_mark != 0 && kbd.dwExtraInfo == jaws_mark {
+            MARKED_COPY_WINDOW_MS
+        } else {
+            COPY_WINDOW_MS
+        };
+        if take_recent(vk_code, kbd.time, window) {
+            if jaws_mark == 0 {
+                JAWS_MARK.store(kbd.dwExtraInfo, Ordering::Relaxed);
+            }
+            return CallNextHookEx(None, ncode, wparam, lparam);
+        }
     }
     if let Ok(mut recent) = RECENT_KEYS.lock() {
         recent.rotate_right(1);

@@ -119,6 +119,10 @@ pub struct FocusEvent {
     pub in_document: bool,
     /// The element's DOM id, when it is in a document and has one.
     pub dom_id: Option<String>,
+    /// The page region with ARIA role "application" the focus is in (VS Code's workbench), by
+    /// its name: the page takes every key there, as JAWS gives them.
+    #[serde(default)]
+    pub web_application: Option<String>,
     /// For tree items: the nesting level, 0 for top-level items.
     pub tree_level: Option<usize>,
     /// Number of child items (an expanded tree item's children).
@@ -189,6 +193,7 @@ impl FocusEvent {
             columns: Vec::new(),
             in_document: false,
             dom_id: None,
+            web_application: None,
             tree_level: None,
             child_count: None,
             text: None,

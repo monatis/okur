@@ -123,6 +123,12 @@ impl ScreenReaderEngine {
                 return self.speak_active_option(focus);
             }
             let from_options = self.option_list.take().is_some();
+            // Into a page's application region (ARIA role "application"): its name, and every
+            // key goes to the page, as JAWS does (dev box, 2026-10-16: "Workbench | First tool
+            // Button").
+            let entering_application = focus.web_application.is_some()
+                && focus.web_application != self.web_application;
+            self.web_application = focus.web_application.clone();
             if target_role == Some(Role::Document) {
                 // The page itself has focus: the next control focus enters the page.
                 self.last_page_focus = None;
@@ -132,7 +138,12 @@ impl ScreenReaderEngine {
             // Forms mode follows focus into edits; a combo box keeps the forms mode Enter
             // turned on [obs, 205/s8].
             let is_edit = target_role == Some(Role::Edit) || focus.role == Role::Edit;
-            let in_forms_mode = is_edit || (target_role == Some(Role::ComboBox) && self.forms_mode);
+            self.page_focus_is_field = is_edit
+                || focus.role == Role::ComboBox
+                || target_role == Some(Role::ComboBox);
+            let in_forms_mode = is_edit
+                || (target_role == Some(Role::ComboBox) && self.forms_mode)
+                || self.web_application.is_some();
             self.forms_mode = in_forms_mode;
             self.cursor.forms_mode_active = in_forms_mode;
             // Chrome can report focus on the same element again (while typing in it); JAWS
@@ -207,6 +218,12 @@ impl ScreenReaderEngine {
                     format!("{s}\nTo set the value use the Arrow keys or type the value.")
                 });
             }
+            if entering_application {
+                let name = focus.web_application.clone().unwrap_or_default();
+                if !name.is_empty() {
+                    speech = speech.map(|s| format!("{name}\n{s}"));
+                }
+            }
             if entering_page {
                 let regions = if by_enter {
                     target_id
@@ -229,6 +246,7 @@ impl ScreenReaderEngine {
         }
 
         // Native control / application window handling
+        self.web_application = None;
         self.last_page_focus = None;
         self.tab_start = None;
         self.app_mode = AppMode::NativeControl;
