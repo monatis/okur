@@ -77,11 +77,21 @@ still stand; this plan adds tonight's.
 - **Tab from the virtual cursor skips focusable custom widgets** (an ARIA menu bar item with
   `tabindex=0`; found with `web-menus.html`). Okur focuses the next tab stop it knows (links,
   buttons, fields), and accessibility APIs do not give the Tab order (`tabindex=-1` elements
-  are focusable too). Do it JAWS's way: put the browser's sequential-navigation starting point
-  at the virtual cursor (a caret or selection there, through IA2), then let Chrome do Tab.
-  Recheck 212 and 216 after.
-- A page's Say Focus (Insert+Tab): not implemented for page focuses
-  (`engine/commands.rs`).
+  are focusable too). **A caret does not do it** (tried 2026-10-17, dev box): Chrome's Tab
+  starts from the focused element, or from a starting point that only focus, a click or a
+  fragment link sets (Blink `focus_controller.cc`, `Document::SequentialFocusNavigationStartingPoint`);
+  a selection in non-editable text moves neither (`FrameSelection::SetFocusedNodeIfNeeded`
+  acts only in editable content). IA2 `setCaretOffset` there also never reports a caret back
+  (S_FALSE). Chromium has an action that sets the starting point without focusing
+  (`kSetSequentialFocusNavigationStartingPoint`), but no Windows API sends it, and the only other
+  path (the default action, a click) has side effects. The open choices are NVDA's
+  (`_tabOverride`: when the virtual cursor is outside the focused element, focus the next
+  *focusable* node, `tabindex=-1` included; otherwise pass Tab on), or focusing the nearest
+  focusable before the cursor and letting Chrome's Tab go on from it. Record 212 and 218 on
+  old-pc first: whether JAWS's Tab reaches the menu bar, and where it starts. Also note that
+  the buffer has no line for the menu bar at all (Down from the heading goes to "Notes"). The
+  experiment's code is not kept.
+- ~~A page's Say Focus (Insert+Tab)~~: done in `0efd27c`.
 - Structure step 4 (`SpeechFormatter`, the buffer's lines): design a structured page line
   (parts with roles and states) before converting.
 
