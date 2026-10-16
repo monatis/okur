@@ -43,6 +43,7 @@ scenario for old-pc (see "Next").
 | `205c01b` | aria-label links say their label; aria-keyshortcuts; a heading that is a button |
 | `380a13d` | A read-only text area (GitHub's code view) is read by lines |
 | `07aa36f` | E stops on an edit combo and says "edit combo" |
+| `68eb04f` | The cursor stays on the focus when the page is captured again (Enter clicked the wrong button after the full capture) |
 
 ## Verification
 
@@ -57,7 +58,7 @@ same: parity-all-uia.txt (1817 lines)
 same: parity-spoken.txt (85 lines)
 ```
 
-The summary lines of that output, at `07aa36f`:
+The summary lines of that output, at `07aa36f` (and unchanged at `68eb04f`):
 
 ```
 JAWS parity (Ia2): 818/844 steps match exactly (0 scenarios could not run)
@@ -69,7 +70,7 @@ One change made parity differ before it was committed: an editable combo box det
 UIA turned the `<select>` of 204/205 into an "edit combo" (UIA reports a select's value as
 writable). It now comes from IA2's editable state only, and the output is identical again.
 
-**Tests.** `cargo test --workspace` at `07aa36f`: 909 passed, 0 failed, 198 ignored (summed
+**Tests.** `cargo test --workspace` at `68eb04f`: 910 passed, 0 failed, 198 ignored (summed
 from its "test result" lines). Each feature above has a hermetic test.
 
 ### Latency
@@ -147,6 +148,9 @@ GitHub logged out. Okur's live speech (`okur run --speech-log`) matched each aft
   installed (only its sandbox service runs).
 - **Structure step 4** (`SpeechFormatter` and the buffer's lines as `Announcement`s) waits for a
   structured page-line model; the plan's Status says so.
+- **Found, not fixed:** with focus in Chrome's address bar, a text read returns the page's
+  focused object ("￼") instead of the URL. Two fixes were tried and reverted; the plan has the
+  details and the next idea.
 - The isolated Chrome profile's windows closed during a connection loss (about 02:50 to
   05:00); vscode.dev restored its scratch file when reopened.
 
