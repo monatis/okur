@@ -22,7 +22,7 @@ pub fn utf16_to_chars(text: &str, offset: i32) -> usize {
 }
 
 #[cfg(windows)]
-pub use reader::{from_ia2, ia2_position, read_focused, read_focused_outside_page};
+pub use reader::{focus_is_in_page, from_ia2, ia2_position, read_focused, read_focused_outside_page};
 
 #[cfg(windows)]
 mod reader {
@@ -44,6 +44,29 @@ mod reader {
             Ok(None) => None,
             // Not a Chromium window.
             Err(_) => read_uia(uia).or_else(read_win32_edit),
+        }
+    }
+
+    /// Whether a document is above the focused element: a page's field (a browser's or an
+    /// Electron app's), not the browser's own controls (its address bar).
+    pub fn focus_is_in_page(uia: &IUIAutomation) -> bool {
+        use windows::Win32::UI::Accessibility::UIA_DocumentControlTypeId;
+        // SAFETY: UIA tree calls on valid objects.
+        unsafe {
+            let (Ok(walker), Ok(mut element)) = (uia.RawViewWalker(), uia.GetFocusedElement())
+            else {
+                return false;
+            };
+            for _ in 0..40 {
+                if element.CurrentControlType() == Ok(UIA_DocumentControlTypeId) {
+                    return true;
+                }
+                match walker.GetParentElement(&element) {
+                    Ok(parent) => element = parent,
+                    Err(_) => return false,
+                }
+            }
+            false
         }
     }
 

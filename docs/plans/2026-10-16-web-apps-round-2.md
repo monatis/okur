@@ -33,7 +33,7 @@ still stand; this plan adds tonight's.
 
 - ~~Bug: Chrome's address bar is read as the page.~~ Fixed in `0440801`: the engine says with
   each read whether the focus is in a page, and the tracer decides from the focus chain.
-  `okur caret` still reads a page first, so in the address bar it still shows "￼".
+  `okur caret` decides the same way (a document above the UIA focus).
 - Monaco's completions (Ctrl+Space in vscode.dev): the textarea points at the suggest widget's
   rows with aria-activedescendant, which `01c65c3` handles; check what JAWS says.
 - Other landmarks entered on focus (banner, complementary, contentinfo, search, named regions):

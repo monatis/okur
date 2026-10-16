@@ -411,7 +411,12 @@ pub fn read_text_now() -> Option<okur_core::TextContext> {
         CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER)
     }
     .ok()?;
-    crate::text_context::read_focused(&uia)
+    // As the tracer decides: a page's field only with a document above the focus.
+    if crate::text_context::focus_is_in_page(&uia) {
+        crate::text_context::read_focused(&uia)
+    } else {
+        crate::text_context::read_focused_outside_page(&uia)
+    }
 }
 /// Performs an action on a node's live object right away, on the calling thread, reporting
 /// why it failed. For harness checks; the engine goes through `WindowsActions`.

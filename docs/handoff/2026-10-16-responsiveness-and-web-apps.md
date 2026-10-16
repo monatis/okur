@@ -45,6 +45,8 @@ scenario for old-pc (see "Next").
 | `07aa36f` | E stops on an edit combo and says "edit combo" |
 | `68eb04f` | The cursor stays on the focus when the page is captured again (Enter clicked the wrong button after the full capture) |
 | `0440801` | Chrome's address bar is read as itself, not as the page |
+| `054afe4` | Leaving an autocomplete for another app reads its fields again |
+| (next) | `okur caret` reads Chrome's address bar as itself too |
 
 ## Verification
 
