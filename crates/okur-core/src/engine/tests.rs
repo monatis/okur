@@ -2173,3 +2173,46 @@ fn a_sheets_cell_editor_is_said_with_its_cell() {
         Some("\u{1d} group \u{1e}")
     );
 }
+
+/// Say Focus (Insert+Tab) on a page: the focus as it was announced, without moving the
+/// virtual cursor, and in a menu its item (JAWS in Google Docs, dev box 2026-10-16:
+/// "Document content edit | Contains text"; "menu | Accessibility | 10 of 10").
+#[test]
+fn say_focus_reads_a_pages_focus_and_a_menus_item() {
+    let mut field = AomNode::new(2, Role::Edit)
+        .with_name("Document content")
+        .with_value("Some text");
+    field
+        .attributes
+        .insert("multiline".to_owned(), "true".to_owned());
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Untitled document - Google Docs")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Untitled document"),
+            field,
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let mut focus = FocusEvent::new(Role::Edit)
+        .with_node_id(2)
+        .with_name("Document content");
+    focus.in_document = true;
+    let on_focus = engine
+        .handle_accessibility_event(&AccessibilityEvent::Focus(focus))
+        .unwrap_or_default();
+    let offset = engine.cursor.offset;
+    let said = engine
+        .execute_command("SayCurrentFocus")
+        .unwrap_or_default();
+    assert!(on_focus.ends_with(&said), "{on_focus:?} / {said:?}");
+    assert!(said.starts_with("Document content"), "{said:?}");
+    assert_eq!(engine.cursor.offset, offset);
+
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(
+        FocusEvent::new(Role::MenuItem).with_name("Accessibility"),
+    ));
+    assert_eq!(
+        engine.execute_command("SayCurrentFocus").as_deref(),
+        Some("Accessibility")
+    );
+}

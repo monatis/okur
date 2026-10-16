@@ -465,6 +465,11 @@ impl Menus {
         self.active
     }
 
+    /// The menu item that has the focus, while menus are active.
+    pub fn current(&self) -> Option<&str> {
+        self.current.as_deref().filter(|_| self.active)
+    }
+
     /// Focus landed on a menu item.
     pub fn focus(&mut self, name: &str) -> Option<String> {
         let name = name.trim();

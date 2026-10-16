@@ -32,8 +32,28 @@ impl ScreenReaderEngine {
                 self.speech.speak(&speech, true);
                 return Some(speech);
             }
+            // A page's focus is said as it was when it got the focus, without moving the
+            // virtual cursor: "Document content edit | Contains text" (JAWS in Google Docs,
+            // dev box 2026-10-16).
+            // In a menu, its item (JAWS in Google Docs' menu: "menu | Accessibility | 10 of 10";
+            // the position is not known here).
+            Command::SayCurrentFocus if self.menus.current().is_some() => {
+                let speech = self.menus.current()?.to_owned();
+                self.speech.speak(&speech, true);
+                return Some(speech);
+            }
+            Command::SayCurrentFocus if self.app_mode == AppMode::VirtualBuffer => {
+                let id = self.last_page_focus?;
+                let (offset, node) = (self.cursor.offset, self.cursor.current_node_id);
+                let speech = self.cursor.focus_node(id);
+                self.cursor.offset = offset;
+                self.cursor.current_node_id = node;
+                let speech = speech.filter(|s| !s.trim().is_empty())?;
+                self.speech.speak(&speech, true);
+                return Some(speech);
+            }
             Command::SayCurrentFocus => {
-                // Native controls; a page's focus is not read this way yet.
+                // Native controls.
                 let speech = self
                     .last_native_focus
                     .as_ref()
@@ -412,10 +432,13 @@ impl ScreenReaderEngine {
     /// Whether keys go to a text field: forms mode in a page, or a focused native edit or
     /// text document (Windows 11 Notepad, Word).
     pub(super) fn editing_text(&self) -> bool {
+        // A combo box one types in is a text field too (Google Sheets' cell editor).
         (self.forms_mode
-            && self
-                .node_under_cursor()
-                .is_some_and(|n| n.role == Role::Edit))
+            && self.node_under_cursor().is_some_and(|n| {
+                n.role == Role::Edit
+                    || (n.role == Role::ComboBox
+                        && n.attributes.get("editable").is_some_and(|e| e == "true"))
+            }))
             || (self.app_mode != AppMode::VirtualBuffer
                 && self
                     .last_native_focus
@@ -442,8 +465,12 @@ impl ScreenReaderEngine {
             match self.last_text.clone() {
                 Some(context) => {
                     let speech = if document {
-                        Some(crate::editing::line_at(&context).trim().to_owned())
-                            .filter(|l| !l.is_empty())
+                        Some(
+                            crate::editing::line_at(&context)
+                                .trim_matches(|c: char| c.is_whitespace() || c == '﻿')
+                                .to_owned(),
+                        )
+                        .filter(|l| !l.is_empty())
                     } else {
                         crate::editing::speech(key, None, &context, &self.text_field_line())
                     };

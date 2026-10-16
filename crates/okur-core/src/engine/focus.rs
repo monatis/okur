@@ -178,8 +178,21 @@ impl ScreenReaderEngine {
             self.forms_mode = in_forms_mode;
             self.cursor.forms_mode_active = in_forms_mode;
             // Chrome can report focus on the same element again (while typing in it); JAWS
-            // does not repeat the field.
-            if target_id.is_some() && target_id == self.last_page_focus && !from_options {
+            // does not repeat the field, except after leaving menus: "Leaving menus | Document
+            // content edit | Contains text" (Google Docs with braille support, dev box
+            // 2026-10-16). An element with nothing to say is not repeated then either (Docs'
+            // empty element for typing: "Leaving menus" alone).
+            let nothing_to_say = target_id
+                .and_then(|id| self.cursor.buffer.node(id))
+                .is_some_and(|n| {
+                    n.name.as_deref().unwrap_or_default().trim().is_empty()
+                        && !self.cursor.buffer.shows(n.id)
+                });
+            if target_id.is_some()
+                && target_id == self.last_page_focus
+                && !from_options
+                && (!leaving_menus || nothing_to_say)
+            {
                 return leaving_menus.then(|| self.say_leaving_menus());
             }
             // The first control focused after the page itself is preceded by the page title
