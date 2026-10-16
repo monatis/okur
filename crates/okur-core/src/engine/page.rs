@@ -301,7 +301,12 @@ impl ScreenReaderEngine {
     pub(super) fn apply_pending_page(&mut self) {
         if let Some(buffer) = self.pending_page.take() {
             let offset = self.cursor.offset;
-            let place = self.cursor.buffer.line_at_offset(offset).map(|line| {
+            let line = self.cursor.buffer.line_at_offset(offset);
+            // A cursor on the focus stays on it: the focus is found again by its state, where
+            // its line's text can change (the full capture knows more of a control than the
+            // quick one: "edit combo" for "Combo box").
+            let on_focus = line.is_some_and(|l| Some(l.node_id) == self.last_page_focus);
+            let place = line.map(|line| {
                 (
                     line.text.clone(),
                     line.start_offset,
@@ -309,16 +314,30 @@ impl ScreenReaderEngine {
                 )
             });
             self.cursor.buffer = buffer;
-            self.cursor.offset = match place {
-                Some((text, start, column)) => same_line(&self.cursor.buffer, &text, start)
-                    .map(|line_start| line_start + column)
-                    .unwrap_or(offset),
-                None => offset,
-            }
-            .min(self.cursor.buffer.len());
             // Node ids are the capture's own: the focus is found again by its state.
             self.last_page_focus = self.cursor.buffer.focused_node();
             self.tab_start = self.last_page_focus;
+            let focus_line = self
+                .last_page_focus
+                .filter(|_| on_focus)
+                .and_then(|id| self.cursor.buffer.lines.iter().find(|l| l.node_id == id))
+                .map(|l| l.start_offset);
+            self.cursor.offset = match (focus_line, place) {
+                (Some(start), _) => start,
+                (None, Some((text, start, column))) => {
+                    same_line(&self.cursor.buffer, &text, start)
+                        .map(|line_start| line_start + column)
+                        .unwrap_or(offset)
+                }
+                (None, None) => offset,
+            }
+            .min(self.cursor.buffer.len());
+            // The cursor's node, as the new capture numbers it.
+            self.cursor.current_node_id = self
+                .cursor
+                .buffer
+                .line_at_offset(self.cursor.offset)
+                .map(|l| l.node_id);
         }
     }
 

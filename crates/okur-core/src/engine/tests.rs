@@ -1497,3 +1497,50 @@ fn focus_names_the_lists_and_regions_it_enters() {
         "{said}"
     );
 }
+
+/// A page read quickly and then in full: the full capture knows more of the focused control
+/// (an autocomplete is an "edit combo" only through IA2), so its line's text changes. A cursor
+/// on the focus stays on it, found by the focus's state, and Enter acts on it, not on whatever
+/// line now sits at the old offset (it clicked the next button, live on the dev box).
+#[test]
+fn a_cursor_on_the_focus_stays_on_it_when_the_page_is_captured_again() {
+    let page = |editable: bool| {
+        let mut combo = AomNode::new(3, Role::ComboBox).with_name("Fruit");
+        combo.states.focused = true;
+        if editable {
+            combo
+                .attributes
+                .insert("editable".to_owned(), "true".to_owned());
+        }
+        // The full capture also has a line above (a status that appeared meanwhile).
+        let mut children = Vec::new();
+        if editable {
+            children.push(AomNode::new(7, Role::Paragraph).with_text("Three results."));
+        }
+        children.extend([
+            AomNode::new(1, Role::Heading { level: 2 }).with_text("Fruit search"),
+            combo,
+            AomNode::new(5, Role::Button).with_name("Pick one"),
+        ]);
+        AomNode::new(0, Role::Document)
+            .with_name("Search")
+            .with_children(children)
+    };
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.handle_document_loaded("Search", VirtualBuffer::from_aom(&page(false)));
+    let mut focus = FocusEvent::new(Role::ComboBox)
+        .with_node_id(3)
+        .with_name("Fruit");
+    focus.in_document = true;
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(focus));
+    engine.handle_document_loaded("Search", VirtualBuffer::from_aom(&page(true)));
+    engine.on_idle();
+    let line = engine
+        .cursor
+        .buffer
+        .line_at_offset(engine.cursor.offset)
+        .map(|l| (l.node_id, l.text.clone()));
+    assert_eq!(line, Some((3, "Fruit edit combo collapsed".to_owned())));
+    assert_eq!(engine.cursor.current_node_id, Some(3));
+}
