@@ -1,0 +1,7 @@
+# The Rust that this machine, the commit gate and CI all use. Each Rust release can add
+# clippy lints, and clippy runs with warnings denied, so move to a new version deliberately:
+# change it here (and in the README's Rust badge), run the gate's clippy and the tests with it,
+# and fix what it reports.
+[toolchain]
+channel = "1.99.0"
+components = ["rustfmt", "clippy"]

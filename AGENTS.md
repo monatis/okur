@@ -183,5 +183,6 @@ CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs the same checks
 `main` and every pull request: formatting, `.agents/scripts/check-sources.ps1` (the gate's panic scan),
 clippy and the tests on Windows, `.agents/scripts/check-reference-separation.sh` over the pushed
 commits, and the platform-neutral crates' tests on macOS and Linux (informational until those ports
-are built there). The project is licensed under Apache-2.0 (`LICENSE`, `NOTICE`); the vendored xa11y
+are built there). `rust-toolchain.toml` pins the Rust version for this machine, the gate and CI alike;
+move to a new one deliberately, fixing the lints its clippy adds. The project is licensed under Apache-2.0 (`LICENSE`, `NOTICE`); the vendored xa11y
 crates keep their MIT license.

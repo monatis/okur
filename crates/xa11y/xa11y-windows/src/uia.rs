@@ -5093,7 +5093,7 @@ impl WindowsProvider {
                 e
             };
             for window in initial_windows.get() {
-                let hwnd = window_handle(window).map_err(&cleanup_error)?;
+                let hwnd = window_handle(window).map_err(cleanup_error)?;
                 let reg = register_window_handlers(
                     autom,
                     window,
@@ -5105,7 +5105,7 @@ impl WindowsProvider {
                     initial_structure.get(),
                     &initial_state.visual_states,
                 )
-                .map_err(&cleanup_error)?;
+                .map_err(cleanup_error)?;
                 let mut registrations = initial_state
                     .registered
                     .lock()

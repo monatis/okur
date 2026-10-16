@@ -2,7 +2,7 @@
 
 [![CI status](https://github.com/monatis/okur/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/monatis/okur/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Written in Rust](https://img.shields.io/badge/rust-stable-orange.svg?logo=rust)](https://www.rust-lang.org)
+[![Rust 1.99.0](https://img.shields.io/badge/rust-1.99.0-orange.svg?logo=rust)](rust-toolchain.toml)
 [![Platforms: Windows; macOS in progress](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%28in%20progress%29-lightgrey.svg)](#platforms)
 [![JAWS parity: 818 of 844 recorded steps](https://img.shields.io/badge/JAWS%20parity-818%2F844%20steps-brightgreen.svg)](#where-it-stands)
 
@@ -147,7 +147,8 @@ attach the file. It records keys and what is on screen, so check it before you s
 
 ### Build and test
 
-Requires stable Rust. The screen reader runs on Windows 10 and 11; the engine
+Requires Rust; [`rust-toolchain.toml`](rust-toolchain.toml) pins the version, and rustup
+installs it on the first build. The screen reader runs on Windows 10 and 11; the engine
 (`okur-core`) builds and tests on any platform.
 
 ```
