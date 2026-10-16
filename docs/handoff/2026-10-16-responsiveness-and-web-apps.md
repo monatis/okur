@@ -51,6 +51,7 @@ scenario for old-pc (see "Next").
 | `19cb465` | Tab in a table says the column header and the position that changed |
 | `1cabd7f` | Table positions judged from the virtual cursor; a focused link says its description |
 | `fb7d127` | `corpus/pending`: scenarios 216–217, the fixture's table and landmarks |
+| `8361069` | A page's first focus on an autocomplete says "edit combo" (UIA: a writable value, a popup other than a menu) |
 
 ## Verification
 
@@ -77,7 +78,7 @@ One change made parity differ before it was committed: an editable combo box det
 UIA turned the `<select>` of 204/205 into an "edit combo" (UIA reports a select's value as
 writable). It now comes from IA2's editable state only, and the output is identical again.
 
-**Tests.** `cargo test --workspace` at `1cabd7f`: 913 passed, 0 failed, 198 ignored (summed
+**Tests.** `cargo test --workspace` at `8361069`: 913 passed, 0 failed, 198 ignored (summed
 from its "test result" lines). Each feature above has a hermetic test.
 
 ### Latency
