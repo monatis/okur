@@ -364,23 +364,14 @@ fn focus_speech_within(
 ) -> Announcement {
     let mut lines = Vec::new();
     // A group or list container the platform gave the groups of is named through them.
-    if !focus.groups.is_empty()
-        && matches!(focus.container_role, Some(Role::Group) | Some(Role::List))
-    {
+    // (Any container but a tree: Settings' InfoBar link has the page's landmark around it.)
+    if !focus.groups.is_empty() && focus.container_role != Some(Role::Tree) {
         let last = entered.len().saturating_sub(1);
         for (i, entry) in entered.iter().enumerate() {
-            // An unnamed list entered with the group it is in takes the group's name:
-            // Bluetooth & devices' "Input | Input List box", Sound's "Troubleshoot common
-            // sound problems List box"; without it, none (Sound's output devices: "List box").
-            let group_above = i
-                .checked_sub(1)
-                .and_then(|above| entered.get(above))
-                .filter(|above| !above.list);
-            let name = match group_above {
-                Some(group) if entry.list && entry.name.trim().is_empty() => named(&group.name),
-                _ => named(&entry.name),
-            };
-            lines.push(if entry.list {
+            let name = named(&entry.name);
+            lines.push(if entry.dialog {
+                Line::new(vec![text(name), role("dialog")])
+            } else if entry.list {
                 let kind = if i == last && focus.container_is_list_view {
                     "List view"
                 } else {
@@ -869,14 +860,36 @@ mod tests {
             say(Role::Button, "Add device", Role::Group, add),
             norm("Pair a new output device\nAdd device \u{1d} Button \u{1e} \nTo activate press spacebar.")
         );
-        // Bluetooth & devices: an unnamed list entered with its section takes its name.
+        // Bluetooth & devices: a list named by the text before it (the platform's label).
         let input = vec![
             GroupEntry::group("Input"),
-            GroupEntry::list(""),
+            GroupEntry::list("Input"),
             GroupEntry::group("USB Receiver"),
         ];
         assert!(say(Role::Button, "Show more settings", Role::Group, input)
             .starts_with(&norm("Input\nInput \u{1d} List box \u{1e} \nUSB Receiver")));
+    }
+
+    /// Windows Settings' Power page: a link in an InfoBar, an unnamed dialog with no
+    /// container around the link, is said after the bar (JAWS: "Power mode is set
+    /// automatically ... dialog | More about power mode Link").
+    #[test]
+    fn a_link_in_an_info_bar_says_the_bar() {
+        let mut native = NativeFocus::default();
+        let _ = native.focus(&FocusEvent::new(Role::Button).with_name("Energy recommendations"));
+        let mut link =
+            FocusEvent::new(Role::Link { href: None }).with_name("More about power mode");
+        link.groups = vec![crate::event::GroupEntry::dialog(
+            "Power mode is set automatically.",
+        )];
+        assert_eq!(
+            native.focus(&link).map(|a| norm(&a.render())),
+            Some(norm(
+                "Power mode is set automatically.  dialog  
+More about power mode  Link  
+To activate press Enter."
+            ))
+        );
     }
 
     /// Windows Settings' navigation items have no container (an unnamed group): moving from

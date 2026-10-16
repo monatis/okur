@@ -176,6 +176,10 @@ pub struct GroupEntry {
     /// A list (said with its role, "List box"), not a group.
     #[serde(default)]
     pub list: bool,
+    /// A dialog (said with its role): Windows Settings' InfoBar, "Power mode is set
+    /// automatically ... dialog".
+    #[serde(default)]
+    pub dialog: bool,
 }
 
 impl GroupEntry {
@@ -183,6 +187,7 @@ impl GroupEntry {
         Self {
             name: name.into(),
             list: false,
+            dialog: false,
         }
     }
 
@@ -190,6 +195,15 @@ impl GroupEntry {
         Self {
             name: name.into(),
             list: true,
+            dialog: false,
+        }
+    }
+
+    pub fn dialog(name: impl Into<String>) -> Self {
+        Self {
+            name: name.into(),
+            list: false,
+            dialog: true,
         }
     }
 }

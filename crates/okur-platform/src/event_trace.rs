@@ -435,10 +435,21 @@ fn nested_groups(chain: &[UiaNode]) -> (Vec<okur_core::GroupEntry>, bool) {
             UIA_GROUP | UIA_TEXT => {
                 entries.extend(named(ancestor).map(okur_core::GroupEntry::group))
             }
+            // An unnamed list is named by the text just before it (`UiaNode::label`).
             UIA_LIST => entries.push(okur_core::GroupEntry::list(
-                named(ancestor).unwrap_or_default(),
+                named(ancestor)
+                    .or_else(|| ancestor.label.clone())
+                    .unwrap_or_default(),
             )),
             UIA_PANE => {}
+            // A dialog inside a window that the control is in (Settings' InfoBar): its name, or
+            // its first text. A dialog window is named as its window opens.
+            _ if ancestor.is_dialog == Some(true) && ancestor.control_type != UIA_WINDOW => entries
+                .push(okur_core::GroupEntry::dialog(
+                    named(ancestor)
+                        .or_else(|| ancestor.label.clone())
+                        .unwrap_or_default(),
+                )),
             // Inside a control: a button, a check box, a combo box, an edit, a link, a list or
             // tree item, a menu item, a radio button, a slider, a tab, a data item, a split
             // button.
@@ -2230,6 +2241,32 @@ mod tests {
         assert_eq!(
             focus.map(|f| (f.role, f.name)),
             Some((okur_core::Role::MenuItem, Some("Graphics g".to_owned())))
+        );
+    }
+
+    /// Windows Settings' Power page: its first link is in an InfoBar, an unnamed dialog named
+    /// by its first text (JAWS: "Power mode is set automatically ... dialog | More about power
+    /// mode Link").
+    #[test]
+    fn a_link_in_an_info_bar_has_the_bar_among_its_groups() {
+        let mut event = focus_event(Vec::new());
+        let bar = UiaNode {
+            is_dialog: Some(true),
+            label: Some("Power mode is set automatically.".to_owned()),
+            ..node(50017, "", false)
+        };
+        event.focus_chain = vec![
+            node(UIA_WINDOW, "Settings", false),
+            node(50033, "", false),
+            bar,
+            node(50005, "More about power mode", true),
+        ];
+        let focus = focus_event_from_trace(&event);
+        assert_eq!(
+            focus.map(|f| f.groups),
+            Some(vec![okur_core::GroupEntry::dialog(
+                "Power mode is set automatically."
+            )])
         );
     }
 

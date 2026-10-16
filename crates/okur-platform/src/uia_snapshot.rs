@@ -94,6 +94,11 @@ pub struct UiaNode {
     pub live_setting: Option<i32>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_dialog: Option<bool>,
+    /// For an unnamed list in a focus chain: the text just before it, which names it as JAWS
+    /// names it (Windows Settings' "98 apps found List box", "Recent and commonly used
+    /// settings List box"; dev box, 2026-10-17).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub label: Option<String>,
     pub is_enabled: bool,
     pub is_offscreen: bool,
     pub is_password: bool,
@@ -528,6 +533,7 @@ pub(crate) mod capture {
             grid_column_count: int(el, UIA_GridColumnCountPropertyId),
             live_setting: int(el, UIA_LiveSettingPropertyId).filter(|&v| v != 0),
             is_dialog: boolean(el, UIA_IsDialogPropertyId).filter(|&v| v),
+            label: None,
             is_enabled: boolean(el, UIA_IsEnabledPropertyId).unwrap_or(true),
             is_offscreen: boolean(el, UIA_IsOffscreenPropertyId).unwrap_or(false),
             is_password: boolean(el, UIA_IsPasswordPropertyId).unwrap_or(false),
@@ -675,12 +681,62 @@ pub(crate) mod capture {
                 {
                     break;
                 }
-                chain.push(read_node(&el, usize::MAX));
+                let mut node = read_node(&el, usize::MAX);
+                if node.control_type == super::CT_LIST && node.name.is_none() {
+                    node.label = text_before(&walker, &request, &el);
+                }
+                // An unnamed dialog (Settings' InfoBar) by its first text.
+                if node.is_dialog == Some(true) && node.name.is_none() {
+                    node.label = first_text(&walker, &request, &el);
+                }
+                chain.push(node);
                 current = walker.GetParentElementBuildCache(&el, &request).ok();
             }
         }
         chain.reverse();
         chain
+    }
+
+    /// The name of the text just before `element` among its siblings, if it is a text.
+    fn text_before(
+        walker: &IUIAutomationTreeWalker,
+        request: &IUIAutomationCacheRequest,
+        element: &IUIAutomationElement,
+    ) -> Option<String> {
+        const UIA_TEXT: i32 = 50020;
+        // SAFETY: UIA tree walking on a valid element.
+        let before =
+            unsafe { walker.GetPreviousSiblingElementBuildCache(element, request) }.ok()?;
+        (int(&before, UIA_ControlTypePropertyId) == Some(UIA_TEXT))
+            .then(|| string(&before, UIA_NamePropertyId))
+            .flatten()
+            .map(|name| name.trim().to_owned())
+            .filter(|name| !name.is_empty())
+    }
+
+    /// The name of `element`'s first child text, if any (among its first few children).
+    fn first_text(
+        walker: &IUIAutomationTreeWalker,
+        request: &IUIAutomationCacheRequest,
+        element: &IUIAutomationElement,
+    ) -> Option<String> {
+        const UIA_TEXT: i32 = 50020;
+        // SAFETY: UIA tree walking on valid elements.
+        let mut child = unsafe { walker.GetFirstChildElementBuildCache(element, request) }.ok();
+        for _ in 0..4 {
+            let el = child?;
+            if int(&el, UIA_ControlTypePropertyId) == Some(UIA_TEXT) {
+                if let Some(name) = string(&el, UIA_NamePropertyId)
+                    .map(|n| n.trim().to_owned())
+                    .filter(|n| !n.is_empty())
+                {
+                    return Some(name);
+                }
+            }
+            // SAFETY: as above.
+            child = unsafe { walker.GetNextSiblingElementBuildCache(&el, request) }.ok();
+        }
+        None
     }
 
     /// Whether `element` is the desktop (UIA's root element).
