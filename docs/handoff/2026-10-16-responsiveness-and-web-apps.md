@@ -47,6 +47,7 @@ scenario for old-pc (see "Next").
 | `0440801` | Chrome's address bar is read as itself, not as the page |
 | `054afe4` | Leaving an autocomplete for another app reads its fields again |
 | `d48f567` | `okur caret` reads Chrome's address bar as itself too |
+| (last) | Focus names every landmark it enters (banner, complementary, search, region, contentinfo) |
 
 ## Verification
 

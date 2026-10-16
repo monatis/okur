@@ -152,8 +152,8 @@ impl ScreenReaderEngine {
     /// and forms (named or not) [obs, 19/s2; 204/s1].
     /// The lists and landmarks around `to` that are not around `from`, outermost first, each
     /// on its line: "Repository files ‹ NavigationRegion ›", "‹ list › | with 1 items",
-    /// " ‹ MainRegion › ", " ‹ FormRegion › " (JAWS's names; other landmarks are left out
-    /// until JAWS is heard saying them).
+    /// " ‹ MainRegion › ", " ‹ FormRegion › ", "Related ‹ ComplementaryRegion ›", "Updates
+    /// ‹ Region ›" (JAWS's names, dev box 2026-10-16; a table is said otherwise, and left out).
     pub(super) fn entered_containers(&self, from: usize, to: usize) -> String {
         let ancestors = |id: usize| -> Vec<&AomNode> {
             let mut path = Vec::new();
@@ -186,6 +186,11 @@ impl ScreenReaderEngine {
                         "main" => Some(named("MainRegion")),
                         "form" => Some(named("FormRegion")),
                         "navigation" => Some(named("NavigationRegion")),
+                        "banner" => Some(named("BannerRegion")),
+                        "complementary" => Some(named("ComplementaryRegion")),
+                        "search" => Some(named("SearchRegion")),
+                        "contentinfo" => Some(named("ContentInfoRegion")),
+                        "region" => Some(named("Region")),
                         _ => None,
                     },
                     Role::List => {

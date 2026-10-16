@@ -1569,3 +1569,75 @@ fn leaving_an_autocomplete_for_a_native_field_reads_its_lines_again() {
     assert_eq!(engine.handle_key_event(&down), KeyAction::PassThrough);
     assert_eq!(actions.requests(), vec![("caret".to_owned(), 0)]);
 }
+
+/// The other landmarks' names on the way in, JAWS on the dev box (2026-10-16): "BannerRegion",
+/// "Related ComplementaryRegion", "Site SearchRegion", "Updates Region", "ContentInfoRegion".
+#[test]
+fn focus_names_every_landmark_it_enters() {
+    let landmark = |id: usize, kind: &str, name: Option<&str>| {
+        let link = AomNode::new(
+            id + 1,
+            Role::Link {
+                href: Some("#x".to_owned()),
+            },
+        )
+        .with_name("Go");
+        let mut node = AomNode::new(
+            id,
+            Role::Landmark {
+                landmark_type: kind.to_owned(),
+            },
+        )
+        .with_children(vec![link]);
+        node.name = name.map(str::to_owned);
+        node
+    };
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Landmarks")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 2 }).with_text("Start"),
+            landmark(10, "banner", None),
+            landmark(20, "complementary", Some("Related")),
+            landmark(30, "search", Some("Site")),
+            landmark(40, "region", Some("Updates")),
+            landmark(50, "contentinfo", None),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let focus = |id: usize| {
+        let mut focus = FocusEvent::new(Role::Link {
+            href: Some("#x".to_owned()),
+        })
+        .with_node_id(id)
+        .with_name("Go");
+        focus.in_document = true;
+        AccessibilityEvent::Focus(focus)
+    };
+    let mut heading = FocusEvent::new(Role::Heading { level: 2 })
+        .with_node_id(1)
+        .with_name("Start");
+    heading.in_document = true;
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(heading));
+    let said: Vec<String> = [11, 21, 31, 41, 51]
+        .iter()
+        .map(|&id| {
+            engine
+                .handle_accessibility_event(&focus(id))
+                .unwrap_or_default()
+                .lines()
+                .next()
+                .unwrap_or_default()
+                .to_owned()
+        })
+        .collect();
+    assert_eq!(
+        said,
+        [
+            " \u{1d} BannerRegion \u{1e} ",
+            "Related \u{1d} ComplementaryRegion \u{1e} ",
+            "Site \u{1d} SearchRegion \u{1e} ",
+            "Updates \u{1d} Region \u{1e} ",
+            " \u{1d} ContentInfoRegion \u{1e} ",
+        ]
+    );
+}
