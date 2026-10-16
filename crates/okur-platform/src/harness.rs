@@ -45,6 +45,18 @@ pub fn virtual_key(name: &str) -> Option<u16> {
         "period" | "." => 0xBE,
         "semicolon" | ";" => 0xBA,
         "apostrophe" | "'" => 0xDE,
+        "minus" | "-" => 0xBD,
+        // The numeric keypad's operators, the same on every layout (Calculator).
+        "numpadadd" => 0x6B,
+        "numpadsubtract" => 0x6D,
+        "numpadmultiply" => 0x6A,
+        "numpaddivide" => 0x6F,
+        other if other.len() == 7 && other.starts_with("numpad") => {
+            return other
+                .get(6..)
+                .and_then(|d| d.parse::<u16>().ok())
+                .map(|d| 0x60 + d);
+        }
         other => {
             let mut chars = other.chars();
             return match (chars.next(), chars.next()) {
@@ -63,9 +75,10 @@ pub fn virtual_key(name: &str) -> Option<u16> {
     Some(named)
 }
 
-/// Keys that need the extended-key flag (the navigation block, Insert, the Windows key).
+/// Keys that need the extended-key flag (the navigation block, Insert, the Windows key, the
+/// numeric keypad's divide).
 pub fn is_extended(vk: u16) -> bool {
-    matches!(vk, 0x21..=0x28 | 0x2D | 0x2E | 0x5B | 0x5C)
+    matches!(vk, 0x21..=0x28 | 0x2D | 0x2E | 0x5B | 0x5C | 0x6F)
 }
 
 /// A step from its text: a chord ("Ctrl+Home"), "down:Key", "up:Key" or "wait:Ms".
@@ -448,5 +461,8 @@ mod tests {
         );
         assert!(parse_step("Hyper+Q").is_err());
         assert!(is_extended(0x2D) && is_extended(0x28) && !is_extended(0x12));
+        assert_eq!(parse_step("NumpadAdd"), Ok(KeyStep::Chord(vec![0x6B])));
+        assert_eq!(parse_step("Numpad7"), Ok(KeyStep::Chord(vec![0x67])));
+        assert!(parse_step("NumpadX").is_err());
     }
 }
