@@ -291,11 +291,13 @@ pub fn focus_event_from_chain(
     let mut event = okur_core::FocusEvent::new(role);
     event.name = aom.name.clone();
     event.value = aom.value.clone();
-    // A slider's value is its range value, a percentage when it runs from 0 to 100: Windows
-    // Settings' "Adjust the output volume left right slider | 34%" (JAWS on the dev box,
-    // 2026-10-16).
+    // A slider's value is the one it reports ("Brightness left right slider | 100"), else its
+    // range value, a percentage when it runs from 0 to 100 ("Adjust the output volume left
+    // right slider | 34%"): Windows Settings, JAWS on the dev box (2026-10-16).
     if aom.role == Role::Slider {
-        if let Some(now) = aom.value_now {
+        if let Some(value) = focused.value.clone().filter(|v| !v.trim().is_empty()) {
+            event.value = Some(value);
+        } else if let Some(now) = aom.value_now {
             let number = if now.fract() == 0.0 {
                 format!("{now:.0}")
             } else {
@@ -2229,6 +2231,29 @@ mod tests {
             focus.map(|f| (f.role, f.name)),
             Some((okur_core::Role::MenuItem, Some("Graphics g".to_owned())))
         );
+    }
+
+    /// A slider says the value it reports, else its range value, as a percentage from 0 to
+    /// 100: Windows Settings' brightness "100", volume "34%" (JAWS on the dev box).
+    #[test]
+    fn a_sliders_value_is_its_reported_value_or_its_percentage() {
+        const UIA_SLIDER: i32 = 50015;
+        let slider = |value: Option<&str>, now: f64| {
+            let mut event = focus_event(Vec::new());
+            event.focus_chain = vec![
+                node(UIA_WINDOW, "Settings", false),
+                UiaNode {
+                    value: value.map(str::to_owned),
+                    range_value: Some(now),
+                    range_minimum: Some(0.0),
+                    range_maximum: Some(100.0),
+                    ..node(UIA_SLIDER, "Volume", true)
+                },
+            ];
+            focus_event_from_trace(&event).and_then(|f| f.value)
+        };
+        assert_eq!(slider(Some("100"), 100.0), Some("100".to_owned()));
+        assert_eq!(slider(None, 34.0), Some("34%".to_owned()));
     }
 
     /// A UIA notification is said as an announcement, and the same one again within two
