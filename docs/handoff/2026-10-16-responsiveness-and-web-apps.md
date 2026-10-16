@@ -46,7 +46,7 @@ scenario for old-pc (see "Next").
 | `68eb04f` | The cursor stays on the focus when the page is captured again (Enter clicked the wrong button after the full capture) |
 | `0440801` | Chrome's address bar is read as itself, not as the page |
 | `054afe4` | Leaving an autocomplete for another app reads its fields again |
-| (next) | `okur caret` reads Chrome's address bar as itself too |
+| `d48f567` | `okur caret` reads Chrome's address bar as itself too |
 
 ## Verification
 
@@ -73,7 +73,7 @@ One change made parity differ before it was committed: an editable combo box det
 UIA turned the `<select>` of 204/205 into an "edit combo" (UIA reports a select's value as
 writable). It now comes from IA2's editable state only, and the output is identical again.
 
-**Tests.** `cargo test --workspace` at `68eb04f`: 910 passed, 0 failed, 198 ignored (summed
+**Tests.** `cargo test --workspace` at `d48f567`: 911 passed, 0 failed, 198 ignored (summed
 from its "test result" lines). Each feature above has a hermetic test.
 
 ### Latency
