@@ -202,6 +202,9 @@ impl SpeechFormatter {
             }
             Role::ComboBox => {
                 let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
+                if node.attributes.get("editable").is_some_and(|e| e == "true") {
+                    return Self::format_edit_combo(name, node);
+                }
                 let value = node.value.as_deref();
                 let expanded = node.states.expanded.unwrap_or(false);
                 Self::format_combobox(name, value, expanded)
@@ -350,6 +353,9 @@ impl SpeechFormatter {
                 }
                 s
             }
+            Role::ComboBox if attr("editable") == Some("true") => {
+                Self::format_edit_combo(name, node)
+            }
             Role::ComboBox => {
                 let state = if node.states.expanded == Some(true) {
                     "expanded"
@@ -412,6 +418,21 @@ impl SpeechFormatter {
     /// Formats a heading announcement for quick navigation (`H` / `1`–`6`).
     pub fn format_heading(level: u32, text: &str) -> String {
         format!("{}\n \u{001d} heading level {} \u{001e}", text, level)
+    }
+
+    /// A combo box one types in (an autocomplete): "Fruit edit combo collapsed | blank" (JAWS
+    /// on the dev box), on focus and at E.
+    pub fn format_edit_combo(name: &str, node: &AomNode) -> String {
+        let state = if node.states.expanded == Some(true) {
+            "expanded"
+        } else {
+            "collapsed"
+        };
+        let value = node.value.as_deref().filter(|v| !v.is_empty());
+        format!(
+            "{name}  \u{1d} edit combo \u{1e}   \u{1d}{state}\u{1e} \n{}",
+            value.unwrap_or("blank")
+        )
     }
 
     /// A link taking focus: "Page one ‹ same page link › ‹Current Page›". aria-current comes

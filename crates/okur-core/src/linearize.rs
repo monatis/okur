@@ -836,6 +836,11 @@ impl<'a> Builder<'a> {
             Role::ComboBox => {
                 self.buffer.comboboxes.push(off);
                 self.buffer.form_controls.push(off);
+                // One typed in is an edit too: E stops on it (JAWS on the dev box, GitHub's
+                // "Go to file" edit combo).
+                if attr(node, "editable") == Some("true") {
+                    self.buffer.edits.push(off);
+                }
             }
             Role::Slider => self.buffer.sliders.push(off),
             Role::ProgressBar => self.buffer.progress_bars.push(off),
