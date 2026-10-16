@@ -423,14 +423,22 @@ impl SpeechFormatter {
     /// A combo box one types in (an autocomplete): "Fruit edit combo collapsed | blank" (JAWS
     /// on the dev box), on focus and at E.
     pub fn format_edit_combo(name: &str, node: &AomNode) -> String {
-        let state = if node.states.expanded == Some(true) {
-            "expanded"
-        } else {
-            "collapsed"
+        // One that opens nothing (Google Sheets' cell editor: no expanded state) has no state
+        // to say, and JAWS says none (dev box, 2026-10-16).
+        let state = match node.states.expanded {
+            Some(true) => "   \u{1d}expanded\u{1e} ",
+            Some(false) => "   \u{1d}collapsed\u{1e} ",
+            None => " ",
         };
-        let value = node.value.as_deref().filter(|v| !v.is_empty());
+        // Google Sheets' cell editor holds a zero-width no-break space and a line break
+        // around its text.
+        let value = node
+            .value
+            .as_deref()
+            .map(|v| v.trim_matches(|c: char| c.is_whitespace() || c == '\u{feff}'))
+            .filter(|v| !v.is_empty());
         format!(
-            "{name}  \u{1d} edit combo \u{1e}   \u{1d}{state}\u{1e} \n{}",
+            "{name}  \u{1d} edit combo \u{1e}{state}\n{}",
             value.unwrap_or("blank")
         )
     }

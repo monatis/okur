@@ -313,6 +313,22 @@ impl VirtualBuffer {
         self.page.as_ref().and_then(find)
     }
 
+    /// Whether the buffer has text of the node `id` or of a node inside it.
+    pub fn shows(&self, id: usize) -> bool {
+        fn subtree(node: &AomNode, ids: &mut HashSet<usize>) {
+            ids.insert(node.id);
+            for child in &node.children {
+                subtree(child, ids);
+            }
+        }
+        let Some(node) = self.node(id) else {
+            return false;
+        };
+        let mut ids = HashSet::new();
+        subtree(node, &mut ids);
+        self.spans.iter().any(|s| ids.contains(&s.node_id))
+    }
+
     /// The page node with DOM id `dom_id` (the first, where a page repeats an id).
     pub fn node_with_dom_id(&self, dom_id: &str) -> Option<usize> {
         self.nodes()

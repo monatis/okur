@@ -666,17 +666,17 @@ impl VirtualCursor {
         self.move_to_node_id(node_id);
         let node = self.buffer.node(node_id)?;
         // A focus with nothing of it in the buffer (Google Docs' empty element it types
-        // into) is said by its name alone: the cursor's line is some other element's.
-        let mut ids = std::collections::HashSet::new();
-        fn subtree(node: &AomNode, ids: &mut std::collections::HashSet<usize>) {
-            ids.insert(node.id);
-            for child in &node.children {
-                subtree(child, ids);
-            }
-        }
-        subtree(node, &mut ids);
-        if !self.buffer.spans.iter().any(|s| ids.contains(&s.node_id)) {
-            return Some(node.name.as_deref().unwrap_or_default().trim().to_owned());
+        // into) is said by its name, not by the cursor's line, which is some other element's;
+        // a group adds its role (Google Sheets' grid, back from a cell's editor: JAWS on the
+        // dev box said "group", 2026-10-16).
+        if !self.buffer.shows(node_id) {
+            let name = node.name.as_deref().unwrap_or_default().trim();
+            return Some(match node.role {
+                Role::Group => format!("{name}{}", crate::linearize::role_marker("group"))
+                    .trim()
+                    .to_owned(),
+                _ => name.to_owned(),
+            });
         }
         let attr = |k: &str| node.attributes.get(k).map(String::as_str);
         let name = node.name.as_deref().unwrap_or_default().trim();

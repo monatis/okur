@@ -308,6 +308,18 @@ impl ScreenReaderEngine {
 
             // JAWS Say Scripts
             Command::SayAll => Some(self.cursor.say_all()),
+            // A page's focus with nothing of it in the buffer (the empty element Google Sheets
+            // and Docs type into) has a blank line, as JAWS says (dev box, 2026-10-16), not
+            // the virtual cursor's.
+            Command::SayLine
+                if self.forms_mode
+                    && self.app_mode == AppMode::VirtualBuffer
+                    && self
+                        .last_page_focus
+                        .is_some_and(|id| !self.cursor.buffer.shows(id)) =>
+            {
+                Some("blank".to_owned())
+            }
             Command::SayLine => Some(self.cursor.current_line()),
             Command::SayWord => Some(self.cursor.current_word()),
             Command::SayCharacter => Some(self.cursor.current_char()),

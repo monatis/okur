@@ -1919,8 +1919,9 @@ fn a_page_menu_is_left_when_the_focus_returns_to_the_page() {
 }
 
 /// A focus with nothing of it in the buffer (Google Docs' empty element it types into) is
-/// said by its name alone: entering the page says the title once, not the title again as the
-/// line the virtual cursor was on (dev box, 2026-10-16).
+/// said by its name and, for a group, its role ("group", as JAWS said for Google Sheets'
+/// grid): entering the page says the title once, not the title again as the line the virtual
+/// cursor was on (dev box, 2026-10-16).
 #[test]
 fn an_empty_focus_is_not_read_as_the_cursors_line() {
     let page = AomNode::new(0, Role::Document)
@@ -1936,7 +1937,10 @@ fn an_empty_focus_is_not_read_as_the_cursors_line() {
     let said = engine
         .handle_accessibility_event(&AccessibilityEvent::Focus(focus))
         .unwrap_or_default();
-    assert_eq!(said.trim(), "Untitled document - Google Docs");
+    assert_eq!(
+        said.trim(),
+        "Untitled document - Google Docs\n\u{1d} group \u{1e}"
+    );
 }
 
 /// A page's menu opened from a text field (the web menus fixture's Alt+Shift+F, dev box
@@ -2102,4 +2106,70 @@ fn a_refreshed_page_finds_a_focus_without_an_id() {
     });
     engine.on_idle();
     assert_eq!(engine.last_page_focus, Some(11));
+}
+
+/// Google Sheets (and Docs without braille support) types into an empty element in an
+/// application region: Say Line there is "blank", as JAWS says (dev box, 2026-10-16), not
+/// the line the virtual cursor is on (the page title).
+#[test]
+fn say_line_on_an_empty_page_focus_is_blank() {
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Untitled spreadsheet - Google Sheets")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Untitled spreadsheet"),
+            AomNode::new(2, Role::Group),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let mut focus = FocusEvent::new(Role::Group).with_node_id(2);
+    focus.in_document = true;
+    focus.web_application = Some(String::new());
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(focus));
+    assert_eq!(engine.execute_command("SayLine").as_deref(), Some("blank"));
+}
+
+/// Google Sheets' cell editor (JAWS on the dev box, 2026-10-16): a combo box one types in,
+/// named by its cell, which the page captured without that name. Typing into a cell says
+/// "D1 edit combo | n | To set the value use the Arrow keys or type the value.", without a
+/// state (it opens nothing); Enter back in the grid says "group".
+#[test]
+fn a_sheets_cell_editor_is_said_with_its_cell() {
+    let mut editor = AomNode::new(3, Role::ComboBox);
+    editor
+        .attributes
+        .insert("editable".to_owned(), "true".to_owned());
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Untitled spreadsheet - Google Sheets")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Untitled spreadsheet"),
+            AomNode::new(2, Role::Group),
+            editor,
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let in_grid = |id: usize, role: Role| {
+        let mut focus = FocusEvent::new(role).with_node_id(id);
+        focus.in_document = true;
+        focus.web_application = Some(String::new());
+        focus
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(in_grid(2, Role::Group)));
+    let mut typing = in_grid(3, Role::ComboBox).with_name("D1");
+    typing.value = Some("\u{feff}n\n".to_owned());
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&AccessibilityEvent::Focus(typing))
+            .as_deref(),
+        Some(
+            "D1  \u{1d} edit combo \u{1e} \nn\n\
+             To set the value use the Arrow keys or type the value."
+        )
+    );
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&AccessibilityEvent::Focus(in_grid(2, Role::Group)))
+            .map(|s| s.trim().to_owned())
+            .as_deref(),
+        Some("\u{1d} group \u{1e}")
+    );
 }

@@ -195,12 +195,14 @@ impl ScreenReaderEngine {
             // The focus event carries the live state; the buffer's copy may be older (Space
             // just toggled the control) [obs, 205/s2, s6].
             if let Some(id) = target_id {
-                // A combo box's list and value change as it is typed in (an autocomplete).
+                // A combo box's list and value change as it is typed in (an autocomplete), and
+                // its name can too (Google Sheets' cell editor is named by its cell, "E1").
                 let combo_changed = |n: &crate::aom::AomNode| {
                     n.role == Role::ComboBox
                         && ((focus.states.expanded.is_some()
                             && n.states.expanded != focus.states.expanded)
-                            || (focus.value.is_some() && n.value != focus.value))
+                            || (focus.value.is_some() && n.value != focus.value)
+                            || (focus.name.is_some() && n.name != focus.name))
                 };
                 let stale = self.cursor.buffer.node(id).is_some_and(|n| {
                     (focus.states.checked.is_some() && n.states.checked != focus.states.checked)
@@ -215,6 +217,9 @@ impl ScreenReaderEngine {
                             n.states.expanded = focus.states.expanded.or(n.states.expanded);
                             if focus.value.is_some() {
                                 n.value = focus.value.clone();
+                            }
+                            if focus.name.is_some() {
+                                n.name = focus.name.clone();
                             }
                         }
                     }) {
@@ -243,8 +248,10 @@ impl ScreenReaderEngine {
                 speech = speech.map(|s| format!("{s}\nType in text."));
             }
             // Back in an autocomplete from its list: "Fruit edit combo collapsed | Apricot |
-            // To set the value use the Arrow keys or type the value." (JAWS on the dev box).
-            if from_options && target_role == Some(Role::ComboBox) {
+            // To set the value use the Arrow keys or type the value." (JAWS on the dev box),
+            // and into a combo box one types in: Google Sheets' cell editor, "D1 edit combo |
+            // n | To set the value use the Arrow keys or type the value." (dev box, 2026-10-16).
+            if (from_options || editable_combo) && target_role == Some(Role::ComboBox) {
                 speech = speech.map(|s| {
                     format!("{s}\nTo set the value use the Arrow keys or type the value.")
                 });
