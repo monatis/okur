@@ -31,15 +31,9 @@ still stand; this plan adds tonight's.
 
 ## 3. Without old-pc or the user
 
-- **Bug: Chrome's address bar is read as the page.** With focus in the address bar (Ctrl+L),
-  `okur caret --unit line` gives "￼" (one embedded-object character) instead of the URL: the
-  text reader asks the page's document for its focus (`ChromiumTextField::focused`), and the
-  page still names a focused object then. Tried on 2026-10-16 and reverted, neither fixed it:
-  treating `accFocus` VT_EMPTY as "not the page" (Chrome does not return it then), and
-  requiring STATE_SYSTEM_FOCUSED on the named object (it has it). The Win32 focus window is no
-  sign either: Chrome keeps it on its top-level window for the page too. Next idea: compare
-  with the focus event the engine already has (`in_document`), passing it with the read
-  request, rather than guessing in the platform.
+- ~~Bug: Chrome's address bar is read as the page.~~ Fixed in `0440801`: the engine says with
+  each read whether the focus is in a page, and the tracer decides from the focus chain.
+  `okur caret` still reads a page first, so in the address bar it still shows "￼".
 - Monaco's completions (Ctrl+Space in vscode.dev): the textarea points at the suggest widget's
   rows with aria-activedescendant, which `01c65c3` handles; check what JAWS says.
 - Other landmarks entered on focus (banner, complementary, contentinfo, search, named regions):

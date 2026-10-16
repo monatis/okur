@@ -44,6 +44,7 @@ scenario for old-pc (see "Next").
 | `380a13d` | A read-only text area (GitHub's code view) is read by lines |
 | `07aa36f` | E stops on an edit combo and says "edit combo" |
 | `68eb04f` | The cursor stays on the focus when the page is captured again (Enter clicked the wrong button after the full capture) |
+| `0440801` | Chrome's address bar is read as itself, not as the page |
 
 ## Verification
 
@@ -148,9 +149,9 @@ GitHub logged out. Okur's live speech (`okur run --speech-log`) matched each aft
   installed (only its sandbox service runs).
 - **Structure step 4** (`SpeechFormatter` and the buffer's lines as `Announcement`s) waits for a
   structured page-line model; the plan's Status says so.
-- **Found, not fixed:** with focus in Chrome's address bar, a text read returns the page's
-  focused object ("￼") instead of the URL. Two fixes were tried and reverted; the plan has the
-  details and the next idea.
+- **Found and fixed late (`0440801`):** with focus in Chrome's address bar, a text read
+  returned the page's focused object ("￼") instead of the URL. Two platform-side guesses were
+  reverted first; the engine now says with each read whether the focus is in a page.
 - The isolated Chrome profile's windows closed during a connection loss (about 02:50 to
   05:00); vscode.dev restored its scratch file when reopened.
 
