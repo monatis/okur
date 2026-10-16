@@ -1,6 +1,7 @@
 # Plan: Web Apps, Round 2 (2026-10-16)
 
-Follows [`docs/handoff/2026-10-16-responsiveness-and-web-apps.md`](../handoff/2026-10-16-responsiveness-and-web-apps.md).
+Follows [`docs/handoff/2026-10-16-responsiveness-and-web-apps.md`](../handoff/2026-10-16-responsiveness-and-web-apps.md)
+and, for Google Docs, [`docs/handoff/2026-10-16-google-docs.md`](../handoff/2026-10-16-google-docs.md).
 The old-pc work items of [`2026-10-15-jaws-feature-loop-round-2.md`](2026-10-15-jaws-feature-loop-round-2.md)
 still stand; this plan adds tonight's.
 
@@ -16,16 +17,26 @@ still stand; this plan adds tonight's.
   - 214 "Files NavigationRegion | list | with 1 items";
   - 215 role="application";
   - 216 Tab through a table (header, position);
-  - 217 landmarks named on focus.
+  - 217 landmarks named on focus;
+  - 218 an ARIA menu bar (`web-menus.html`): JAWS's wording for a page's menus, its position
+    ("10 of 10") and tutor direction, and whether Tab reaches the bar.
 - Where old-pc's JAWS differs from the dev box, old-pc decides (the dev box's settings are the
   user's). Check especially: the hint after Tab into an edit combo (the dev box said it in one
   run and not in another), and whether old-pc says "banner" where the dev box does not.
 
 ## 2. With the user (accounts needed)
 
-- **Google Docs and Sheets**, signed in by the user, in a test document. Start with reading
-  (Down, Ctrl+Right), Docs' own announcements (its live regions), Sheets' cell navigation, and
-  latency (`okur latency`).
+- **Google Docs**: started (handoff `2026-10-16-google-docs.md`). Say Font from the toolbar,
+  Backspace saying only the deleted character, repeated announcements, and Docs' menus are
+  done. Next:
+  - ask the user before turning on Docs' braille support (a Docs setting): it puts the text
+    in the tree, which Say Line (Insert+Up, silent now), Say All and selection reading need;
+    then compare JAWS and Okur with it on;
+  - selection (Shift+arrows, Ctrl+A), headings and lists in the document, comments, and
+    `okur latency` for Docs' announcements;
+  - Docs' Ctrl+Alt shortcuts type characters on AltGr layouts (Turkish: Ctrl+Alt+A is "æ").
+    Okur could offer them on its own keys; decide with the user.
+- **Google Sheets**: cell navigation and Sheets' announcements.
 - **Cursor and Antigravity**: the user signs in, or lends a profile. Their editors are Monaco,
   as in vscode.dev, so tonight's work applies; check the workbench, the agent panels and the
   terminal.
@@ -52,6 +63,14 @@ still stand; this plan adds tonight's.
   and PowerShell's Right at a line's end accepts a suggestion. A safe version needs the
   application to say the key did nothing (a caret event that does not come), or a shorter
   settle where the field is known to be whole and static.
+- **Tab from the virtual cursor skips focusable custom widgets** (an ARIA menu bar item with
+  `tabindex=0`; found with `web-menus.html`). Okur focuses the next tab stop it knows (links,
+  buttons, fields), and accessibility APIs do not give the Tab order (`tabindex=-1` elements
+  are focusable too). Do it JAWS's way: put the browser's sequential-navigation starting point
+  at the virtual cursor (a caret or selection there, through IA2), then let Chrome do Tab.
+  Recheck 212 and 216 after.
+- A page's Say Focus (Insert+Tab): not implemented for page focuses
+  (`engine/commands.rs`).
 - Structure step 4 (`SpeechFormatter`, the buffer's lines): design a structured page line
   (parts with roles and states) before converting.
 
