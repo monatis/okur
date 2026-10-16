@@ -427,12 +427,12 @@ fn nested_groups(chain: &[UiaNode]) -> (Vec<okur_core::GroupEntry>, bool) {
             // button.
             50000 | 50002 | 50003 | 50004 | 50005 | 50007 | 50011 | 50013 | 50015 | 50019
             | 50024 | 50029 | 50031 => {
-                entries.clear();
                 inside_control = true;
-                // Inside a list, tree or data item the groups are the item's (Sound's "Output
-                // devices" link, in its list item: JAWS names "Advanced" no more after it);
-                // inside another control, none (Display's brightness slider, in a button:
-                // JAWS names "Brightness & color" again after it).
+                // Inside a list, tree or data item the groups go on through the item (Sound's
+                // "Output devices" link, in its list item: JAWS names "Advanced" no more after
+                // it; Network's Wi-Fi switch, in a "Wi-Fi" group in its list item: JAWS names
+                // "Wi-Fi"); inside another control there are none (Display's brightness
+                // slider, in a button: JAWS names "Brightness & color" again after it).
                 if !matches!(ancestor.control_type, 50007 | 50024 | 50029) {
                     return (Vec::new(), true);
                 }
@@ -1974,6 +1974,17 @@ mod tests {
         let mut expected = groups(&["Advanced"]);
         expected.push(GroupEntry::list(""));
         assert_eq!(nested_groups(&link_in_item), (expected, true));
+        // Network's Wi-Fi switch, in a "Wi-Fi" group in its list item.
+        let switch_in_item = [
+            node(UIA_LIST, "", false),
+            node(UIA_LISTITEM, "Wi-Fi", false),
+            node(UIA_GROUP, "Wi-Fi", false),
+            node(UIA_BUTTON, "Wi-Fi", true),
+        ];
+        assert_eq!(
+            nested_groups(&switch_in_item),
+            (vec![GroupEntry::list(""), GroupEntry::group("Wi-Fi")], true)
+        );
     }
 
     /// A closed WinUI combo box holds only its selected item: that is its value, not a
