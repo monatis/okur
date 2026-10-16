@@ -251,6 +251,7 @@ struct FocusKey {
     role: Role,
     name: Option<String>,
     item_index: Option<usize>,
+    item_count: Option<usize>,
     container: Option<ContainerKey>,
     /// Tells apart controls of one role and name side by side: Windows Settings' "Night
     /// light" toggle switch and the "Night light" button next to it.
@@ -263,6 +264,7 @@ impl FocusKey {
             role: focus.role.clone(),
             name: focus.name.clone(),
             item_index: focus.item_index,
+            item_count: focus.item_count,
             container: ContainerKey::of(focus),
             element_class: focus.platform.element_class.clone(),
         }
@@ -293,7 +295,18 @@ impl NativeFocus {
             return None;
         }
         let previous = self.container.take();
-        let within = key.container.is_some() && key.container == previous;
+        // Within one list also where its items have no container to tell it by: Windows
+        // Settings' navigation items, in an unnamed group, said with their position and no
+        // usage hint after the first (JAWS on the dev box, 2026-10-16).
+        let between_items = key.container.is_none()
+            && previous.is_none()
+            && focus.role == Role::ListItem
+            && self.last.as_ref().is_some_and(|last| {
+                last.role == Role::ListItem
+                    && last.container.is_none()
+                    && last.item_count == focus.item_count
+            });
+        let within = (key.container.is_some() && key.container == previous) || between_items;
         // The groups entered: those after the ones the last focus shared with this one.
         let shared = self
             .groups
@@ -302,7 +315,7 @@ impl NativeFocus {
             .take_while(|(a, b)| a == b)
             .count();
         let entered = focus.groups.get(shared..).unwrap_or_default();
-        let mut speech = focus_speech_entering(focus, previous.as_ref(), entered);
+        let mut speech = focus_speech_within(focus, within, entered);
         self.groups = focus.groups.clone();
         if focus.role == Role::TreeItem {
             if !within {
@@ -338,9 +351,18 @@ fn focus_speech_entering(
     previous: Option<&ContainerKey>,
     entered: &[crate::event::GroupEntry],
 ) -> Announcement {
-    let mut lines = Vec::new();
     let container = ContainerKey::of(focus);
     let within = container.is_some() && container.as_ref() == previous;
+    focus_speech_within(focus, within, entered)
+}
+
+/// [`focus_speech_entering`], with whether the focus moved `within` its container known.
+fn focus_speech_within(
+    focus: &FocusEvent,
+    within: bool,
+    entered: &[crate::event::GroupEntry],
+) -> Announcement {
+    let mut lines = Vec::new();
     // A group or list container the platform gave the groups of is named through them.
     if !focus.groups.is_empty()
         && matches!(focus.container_role, Some(Role::Group) | Some(Role::List))
@@ -855,6 +877,30 @@ mod tests {
         ];
         assert!(say(Role::Button, "Show more settings", Role::Group, input)
             .starts_with(&norm("Input\nInput \u{1d} List box \u{1e} \nUSB Receiver")));
+    }
+
+    /// Windows Settings' navigation items have no container (an unnamed group): moving from
+    /// one to the next is still within the list, said with the position alone.
+    #[test]
+    fn items_without_a_container_move_within_their_list() {
+        let item = |name: &str, index: usize| {
+            let mut focus = FocusEvent::new(Role::ListItem).with_name(name);
+            focus.item_index = Some(index);
+            focus.item_count = Some(12);
+            focus
+        };
+        let mut native = NativeFocus::default();
+        let mut say = |focus: &FocusEvent| {
+            native
+                .focus(focus)
+                .map(|a| norm(&a.render()))
+                .unwrap_or_default()
+        };
+        assert_eq!(
+            say(&item("Home", 1)),
+            norm("Home\n1 of 12\nTo move to an item press the Arrow keys.")
+        );
+        assert_eq!(say(&item("System", 2)), norm("System\n2 of 12"));
     }
 
     /// Windows Settings' home page, JAWS on the dev box (2026-10-16): a link says its role and
