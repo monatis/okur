@@ -1,7 +1,9 @@
 # Plan: Web Apps, Round 2 (2026-10-16)
 
 Follows [`docs/handoff/2026-10-16-responsiveness-and-web-apps.md`](../handoff/2026-10-16-responsiveness-and-web-apps.md)
-and, for Google Docs, [`docs/handoff/2026-10-16-google-docs.md`](../handoff/2026-10-16-google-docs.md).
+and, for Google Docs, [`docs/handoff/2026-10-16-google-docs.md`](../handoff/2026-10-16-google-docs.md); for
+Docs with braille support, Sheets and Windows Settings,
+[`docs/handoff/2026-10-17-docs-sheets-settings.md`](../handoff/2026-10-17-docs-sheets-settings.md).
 The old-pc work items of [`2026-10-15-jaws-feature-loop-round-2.md`](2026-10-15-jaws-feature-loop-round-2.md)
 still stand; this plan adds tonight's.
 
@@ -26,23 +28,32 @@ still stand; this plan adds tonight's.
 
 ## 2. With the user (accounts needed)
 
-- **Google Docs**: started (handoff `2026-10-16-google-docs.md`). Say Font from the toolbar,
-  Backspace saying only the deleted character, repeated announcements, and Docs' menus are
-  done. Next:
-  - ask the user before turning on Docs' braille support (a Docs setting): it puts the text
-    in the tree, which Say Line (Insert+Up, silent now), Say All and selection reading need;
-    then compare JAWS and Okur with it on;
-  - selection (Shift+arrows, Ctrl+A), headings and lists in the document, comments, and
-    `okur latency` for Docs' announcements;
+- **Google Docs**: reading, editing, selection, Say All, Say Font and menus match JAWS, with
+  and without braille support (now on in the user's account). Next:
+  - headings and lists in the document, comments, tables;
+  - latency: Docs' compound field is read through UIA (32–77 ms key to speech); poll the
+    caret through IA2 (the paragraph object's caret) and read UIA once;
   - Docs' Ctrl+Alt shortcuts type characters on AltGr layouts (Turkish: Ctrl+Alt+A is "æ").
     Okur could offer them on its own keys; decide with the user.
-- **Google Sheets**: cell navigation and Sheets' announcements.
+- **Google Sheets**: cells, editor, grid and selections match JAWS. Next: Insert+F from its
+  toolbar (wider window), formulas, sheet tabs, menus.
 - **Cursor and Antigravity**: the user signs in, or lends a profile. Their editors are Monaco,
   as in vscode.dev, so tonight's work applies; check the workbench, the agent panels and the
   terminal.
 - **Claude desktop and Codex**, only on test conversations the user sets up.
 
-## 3. Without old-pc or the user
+## 3. Windows Settings (dev box, read only)
+
+- Eleven pages, the navigation list, a subpage and the search box match JAWS (handoff
+  `2026-10-17-docs-sheets-settings.md`). Left: "Insert f1 Help." on sliders, a list named by
+  the text before it ("98 apps found"), what JAWS says on a page reached with Alt+Left, and
+  "1 of 1" on Sound's "All sound devices".
+- Next pages: Privacy & security, Accounts, Gaming, Storage, Power; dialogs Settings opens
+  (Rename this PC); F6 between its panes.
+- Other WinUI apps with the same rules (groups, toggle switches, UIA notifications): the
+  Microsoft Store, Calculator (its results are notifications), the new Notepad's settings.
+
+## 4. Without old-pc or the user
 
 - ~~Bug: Chrome's address bar is read as the page.~~ Fixed in `0440801`: the engine says with
   each read whether the focus is in a page, and the tracer decides from the focus chain.
