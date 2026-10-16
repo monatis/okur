@@ -341,6 +341,15 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> okur_core::AomNode {
     if aom.role == okur_core::Role::Edit && node.value_is_read_only == Some(true) {
         set_attr("readonly", "true".to_owned());
     }
+    // A combo box one types in (an autocomplete), JAWS's "edit combo": its value is writable,
+    // and its popup is not a menu (Chrome's UIA gives a select a writable value too, with
+    // "haspopup=menu").
+    if aom.role == okur_core::Role::ComboBox
+        && node.value_is_read_only == Some(false)
+        && aria_property(node, "haspopup").is_some_and(|p| p != "menu")
+    {
+        set_attr("editable", "true".to_owned());
+    }
     if aria_property(node, "multiline") == Some("true") {
         set_attr("multiline", "true".to_owned());
     }
