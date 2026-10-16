@@ -4,7 +4,7 @@
 **Plan**: [`docs/plans/2026-10-16-web-apps-round-2.md`](../plans/2026-10-16-web-apps-round-2.md)
 lists what is next. The old-pc work items are still those of
 [`docs/plans/2026-10-15-jaws-feature-loop-round-2.md`](../plans/2026-10-15-jaws-feature-loop-round-2.md),
-plus the pending scenarios 210–215 written tonight.
+plus the pending scenarios 210–217 written tonight.
 
 ## Why
 
@@ -50,6 +50,7 @@ scenario for old-pc (see "Next").
 | `291ab94` | Focus names every landmark it enters (banner, complementary, search, region, contentinfo) |
 | `19cb465` | Tab in a table says the column header and the position that changed |
 | `1cabd7f` | Table positions judged from the virtual cursor; a focused link says its description |
+| `fb7d127` | `corpus/pending`: scenarios 216–217, the fixture's table and landmarks |
 
 ## Verification
 
@@ -176,5 +177,5 @@ GitHub logged out. Okur's live speech (`okur run --speech-log`) matched each aft
 
 ## Next
 
-See the plan. In short: record 208 and 210–215 (and round 2's 315–323) on old-pc; Google
+See the plan. In short: record 208 and 210–217 (and round 2's 315–323) on old-pc; Google
 Docs, Sheets and the IDEs need the user's accounts, in a session with the user.
