@@ -347,7 +347,17 @@ fn focus_speech_entering(
     {
         let last = entered.len().saturating_sub(1);
         for (i, entry) in entered.iter().enumerate() {
-            let name = named(&entry.name);
+            // An unnamed list entered with the group it is in takes the group's name:
+            // Bluetooth & devices' "Input | Input List box", Sound's "Troubleshoot common
+            // sound problems List box"; without it, none (Sound's output devices: "List box").
+            let group_above = i
+                .checked_sub(1)
+                .and_then(|above| entered.get(above))
+                .filter(|above| !above.list);
+            let name = match group_above {
+                Some(group) if entry.list && entry.name.trim().is_empty() => named(&group.name),
+                _ => named(&entry.name),
+            };
             lines.push(if entry.list {
                 let kind = if i == last && focus.container_is_list_view {
                     "List view"
@@ -837,6 +847,14 @@ mod tests {
             say(Role::Button, "Add device", Role::Group, add),
             norm("Pair a new output device\nAdd device \u{1d} Button \u{1e} \nTo activate press spacebar.")
         );
+        // Bluetooth & devices: an unnamed list entered with its section takes its name.
+        let input = vec![
+            GroupEntry::group("Input"),
+            GroupEntry::list(""),
+            GroupEntry::group("USB Receiver"),
+        ];
+        assert!(say(Role::Button, "Show more settings", Role::Group, input)
+            .starts_with(&norm("Input\nInput \u{1d} List box \u{1e} \nUSB Receiver")));
     }
 
     /// Windows Settings' home page, JAWS on the dev box (2026-10-16): a link says its role and
