@@ -45,6 +45,13 @@ still stand; this plan adds tonight's.
   with old-pc's evidence.
 - A list item with aria-current: JAWS said "• Item nine", then "Current Step" on its own.
 - Quick navigation onto options of an open list box, and Insert+F3.
+- **Keys at a field's edge** (Down on the last line, Right at the end) still wait the settle
+  time (250 ms): nothing changes, so nothing is noticed. Speaking at once from the known text
+  was considered and not done: Monaco's text area holds only a window of lines (its last line
+  is not the document's), a console's Down at the prompt recalls history (the text changes),
+  and PowerShell's Right at a line's end accepts a suggestion. A safe version needs the
+  application to say the key did nothing (a caret event that does not come), or a shorter
+  settle where the field is known to be whole and static.
 - Structure step 4 (`SpeechFormatter`, the buffer's lines): design a structured page line
   (parts with roles and states) before converting.
 
