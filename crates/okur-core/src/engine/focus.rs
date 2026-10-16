@@ -263,6 +263,7 @@ impl ScreenReaderEngine {
 
         // Native control / application window handling
         self.web_application = None;
+        self.option_list = None;
         self.last_page_focus = None;
         self.tab_start = None;
         self.app_mode = AppMode::NativeControl;

@@ -1544,3 +1544,28 @@ fn a_cursor_on_the_focus_stays_on_it_when_the_page_is_captured_again() {
     assert_eq!(line, Some((3, "Fruit edit combo collapsed".to_owned())));
     assert_eq!(engine.cursor.current_node_id, Some(3));
 }
+
+/// Leaving a page while its autocomplete's list was open (Alt+Tab to Notepad): the native
+/// field's Up and Down are read again, not left to an option focus that never comes.
+#[test]
+fn leaving_an_autocomplete_for_a_native_field_reads_its_lines_again() {
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Search")
+        .with_children(vec![AomNode::new(1, Role::ComboBox).with_name("Fruit")]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    engine.forms_mode = true;
+    let mut option = FocusEvent::new(Role::ListItem).with_name("Apple");
+    option.in_document = true;
+    option.container_name = Some("Fruits".to_owned());
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(option));
+    let notepad = FocusEvent::new(Role::Edit)
+        .with_name("Text editor")
+        .with_window_title("Untitled - Notepad");
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(notepad));
+    let down = KeyEvent::new(Key::DownArrow, Modifiers::none(), true);
+    assert_eq!(engine.handle_key_event(&down), KeyAction::PassThrough);
+    assert_eq!(actions.requests(), vec![("caret".to_owned(), 0)]);
+}

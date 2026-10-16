@@ -58,6 +58,8 @@ impl ScreenReaderEngine {
         self.pending_page = None;
         self.last_page_focus = None;
         self.tab_start = None;
+        self.option_list = None;
+        self.web_application = None;
         self.last_live_text.clear();
         self.live_streams.clear();
         self.load_buffer(buffer);
