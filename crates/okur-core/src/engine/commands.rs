@@ -462,6 +462,23 @@ impl ScreenReaderEngine {
             }
             return;
         }
+        // Say All in a document reads its lines from the caret's to the last (JAWS in Google
+        // Docs' document with braille support, dev box 2026-10-16), not the page around it.
+        let say_all = layout_command
+            .clone()
+            .or_else(|| crate::command::command_for(event))
+            == Some(Command::SayAll);
+        if self.editing_document() && say_all {
+            let lines = self
+                .last_text
+                .as_ref()
+                .map(crate::editing::lines_from_caret)
+                .unwrap_or_default();
+            for (i, line) in lines.iter().enumerate() {
+                self.speech.speak(line, i == 0);
+            }
+            return;
+        }
         if self.editing_text() && layout_command == Some(Command::SayWord) {
             let word = self
                 .last_text

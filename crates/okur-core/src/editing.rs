@@ -143,6 +143,24 @@ pub fn line_at(context: &TextContext) -> String {
     text.get(start..end).unwrap_or_default().iter().collect()
 }
 
+/// The lines from the caret's line to the end of the text, without empty ones: what Say All
+/// reads in a document (JAWS in Google Docs' document, dev box 2026-10-16: each line from the
+/// caret's, to the last).
+pub fn lines_from_caret(context: &TextContext) -> Vec<String> {
+    let text = chars(&context.text);
+    let caret = context.caret.min(text.len());
+    let start = text
+        .get(..caret)
+        .and_then(|before| before.iter().rposition(|c| is_line_break(*c)))
+        .map_or(0, |i| i + 1);
+    let rest: String = text.get(start..).unwrap_or_default().iter().collect();
+    rest.split(is_line_break)
+        .map(str::trim)
+        .filter(|line| !line.is_empty())
+        .map(str::to_owned)
+        .collect()
+}
+
 /// A page field's word around `caret` (in characters), as Chrome moves by words and JAWS
 /// reads them (dev box, 2026-10-16): letters, digits and `_` make a word, and so does a run
 /// of punctuation ("dog", ","; "std", "::", "collections"); an apostrophe between letters
@@ -393,6 +411,19 @@ mod tests {
             speech(EditKey::DeleteWordBackward, Some(&before), &after, "").as_deref(),
             Some("test")
         );
+    }
+
+    /// Say All in a document: from the caret's line, whatever the caret's column, to the last
+    /// line, without empty lines.
+    #[test]
+    fn say_all_reads_from_the_carets_line() {
+        let text = "First line\nSecond line\n\nLast line\n";
+        assert_eq!(
+            lines_from_caret(&ctx(text, 14, None)),
+            vec!["Second line", "Last line"]
+        );
+        assert_eq!(lines_from_caret(&ctx(text, 0, None)).len(), 3);
+        assert!(lines_from_caret(&ctx("", 0, None)).is_empty());
     }
 
     /// Windows 11 Notepad (JAWS on the dev box): Home reads its character, Ctrl+Home and

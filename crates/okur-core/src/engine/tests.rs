@@ -2047,6 +2047,24 @@ fn a_pages_multi_line_field_reads_keys_as_a_document() {
         speech.take(),
         vec!["S".to_owned(), "top of file\nFirst line".to_owned()]
     );
+
+    // Say All: the lines from the caret's to the last, not the page around the field.
+    let say_all = KeyEvent::new(
+        Key::DownArrow,
+        Modifiers {
+            insert: true,
+            ..Modifiers::none()
+        },
+        true,
+    );
+    engine.handle_key_event(&say_all);
+    assert_eq!(
+        speech.take(),
+        vec![
+            "First line".to_owned(),
+            "Second line with a bold word".to_owned()
+        ]
+    );
 }
 
 /// A page captured again finds its focus by role and name when the focus has no DOM id and
