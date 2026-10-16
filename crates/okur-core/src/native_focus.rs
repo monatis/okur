@@ -219,6 +219,16 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
             }
             lines.extend(position(focus));
             lines.push(Line::text("To activate press spacebar."));
+            // Its access key, as a key sequence: Calculator's "Open history flyout Button |
+            // To activate press spacebar. | Alt followed by I" (UIA AccessKey "Alt, I"; JAWS
+            // on the dev box, 2026-10-17).
+            lines.extend(
+                focus
+                    .access_key
+                    .as_deref()
+                    .filter(|k| k.contains(", "))
+                    .map(|k| Line::text(k.replace(", ", " followed by ")).on_arrival()),
+            );
         }
         // Windows Settings' Brightness (JAWS, dev box 2026-10-16): "Brightness left right
         // slider | To increase or decrease use the Arrow keys."
@@ -868,6 +878,16 @@ mod tests {
         ];
         assert!(say(Role::Button, "Show more settings", Role::Group, input)
             .starts_with(&norm("Input\nInput \u{1d} List box \u{1e} \nUSB Receiver")));
+    }
+
+    /// A modern app's button says its access key as a sequence (Calculator: UIA AccessKey
+    /// "Alt, I" is "Alt followed by I").
+    #[test]
+    fn a_buttons_access_key_sequence_is_said() {
+        let mut history = FocusEvent::new(Role::Button).with_name("Open history flyout");
+        history.access_key = Some("Alt, I".to_owned());
+        assert!(norm(&focus_speech(&history, None).render())
+            .ends_with("To activate press spacebar. Alt followed by I"));
     }
 
     /// Windows Settings' Power page: a link in an InfoBar, an unnamed dialog with no
