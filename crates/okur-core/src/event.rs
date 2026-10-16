@@ -116,11 +116,12 @@ pub struct FocusEvent {
     /// The focused menu item is on a menu bar (a page's ARIA menu bar), not in a menu.
     #[serde(default)]
     pub in_menu_bar: bool,
-    /// The named groups a native control is in, outermost first, as far up as groups nest
-    /// directly above it: Windows Settings' "Brightness & color", "Night light". Empty where
-    /// none, and where the groups are a control's own content.
+    /// The named groups and the lists a native control is in, outermost first, up to its
+    /// window: Windows Settings' "Brightness & color", "Night light"; "Advanced",
+    /// "Troubleshoot common sound problems", then that list. Empty where none, and where the
+    /// groups are a control's own content.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub groups: Vec<String>,
+    pub groups: Vec<GroupEntry>,
     /// Further columns of a list-view item, after its name.
     pub columns: Vec<String>,
     /// The focused element is inside a browser document (its focus chain has a document).
@@ -166,6 +167,31 @@ pub struct FocusEvent {
     pub app: Option<String>,
     /// What the platform calls the focus's windows and elements, for application modules.
     pub platform: PlatformIds,
+}
+
+/// A group or a list a control is in ([`FocusEvent::groups`]).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct GroupEntry {
+    pub name: String,
+    /// A list (said with its role, "List box"), not a group.
+    #[serde(default)]
+    pub list: bool,
+}
+
+impl GroupEntry {
+    pub fn group(name: impl Into<String>) -> Self {
+        Self {
+            name: name.into(),
+            list: false,
+        }
+    }
+
+    pub fn list(name: impl Into<String>) -> Self {
+        Self {
+            name: name.into(),
+            list: true,
+        }
+    }
 }
 
 /// What the platform calls things: window and element classes. Application modules (`apps/`)

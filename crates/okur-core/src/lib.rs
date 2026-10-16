@@ -27,8 +27,8 @@ pub use buffer::{
 pub use cursor::{SearchState, VirtualCursor};
 pub use engine::{ActiveElementList, ScreenReaderEngine};
 pub use event::{
-    AccessibilityEvent, ChangeKind, FocusEvent, FontInfo, LiveRegionEvent, MenuEvent, PlatformIds,
-    Politeness, TextContext, WindowItem,
+    AccessibilityEvent, ChangeKind, FocusEvent, FontInfo, GroupEntry, LiveRegionEvent, MenuEvent,
+    PlatformIds, Politeness, TextContext, WindowItem,
 };
 pub use input::{Key, KeyAction, KeyEvent, Modifiers};
 pub use speech::{MockSpeechOutput, SpeechFormatter, SpeechOutput};

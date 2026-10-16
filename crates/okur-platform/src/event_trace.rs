@@ -277,6 +277,22 @@ pub fn focus_event_from_chain(
     let mut event = okur_core::FocusEvent::new(role);
     event.name = aom.name.clone();
     event.value = aom.value.clone();
+    // A slider's value is its range value, a percentage when it runs from 0 to 100: Windows
+    // Settings' "Adjust the output volume left right slider | 34%" (JAWS on the dev box,
+    // 2026-10-16).
+    if aom.role == Role::Slider {
+        if let Some(now) = aom.value_now {
+            let number = if now.fract() == 0.0 {
+                format!("{now:.0}")
+            } else {
+                format!("{now}")
+            };
+            event.value = Some(match (aom.value_min, aom.value_max) {
+                (Some(min), Some(max)) if min == 0.0 && max == 100.0 => format!("{number}%"),
+                _ => number,
+            });
+        }
+    }
     event.states = aom.states.clone();
     event.item_index = focused
         .position_in_set
@@ -309,9 +325,10 @@ pub fn focus_event_from_chain(
         .is_some_and(|c| c == CHROMIUM_TOP_WINDOW || WEB_CONTENT_WINDOW_CLASSES.contains(&c));
     event.in_document = in_browser && chain.iter().any(|a| a.control_type == UIA_DOCUMENT);
     // Groups that are a control's content name nothing: not even as the nearest container.
-    let control_content = !event.in_document && nested_groups(chain).is_none();
+    let (groups, inside_control) = nested_groups(chain);
+    let control_content = !event.in_document && inside_control;
     if !event.in_document {
-        event.groups = nested_groups(chain).unwrap_or_default();
+        event.groups = groups;
     }
     event.read_only = focused.value_is_read_only;
     event.platform.element_class = focused.class_name.clone().filter(|c| !c.is_empty());
@@ -373,39 +390,59 @@ pub fn focus_event_from_chain(
     Some(event)
 }
 
-/// The named groups above the focused element (`chain`'s last), outermost first, as far up as
-/// groups nest directly: Windows Settings' toggle switch is in its "Night light" card, in the
-/// "Brightness & color" section, and JAWS names both on the way in (dev box, 2026-10-16).
+/// The named groups and the lists above the focused element (`chain`'s last), outermost first,
+/// up to its window. Windows Settings' toggle switch is in its "Night light" card, in the
+/// "Brightness & color" section, and JAWS names both on the way in; a list item of Sound's
+/// "Troubleshoot common sound problems" list is in that list, its card and the "Advanced"
+/// section, all named (dev box, 2026-10-16). A text a control is in counts as a group
+/// (Settings' "More about HDR" link, in a text of that name). Scroll panes are passed through.
 /// Groups that are a control's content (Settings' brightness slider, in a group inside the
-/// "Show more settings" button) are `None`: JAWS names none there.
-fn nested_groups(chain: &[UiaNode]) -> Option<Vec<String>> {
+/// "Show more settings" button) are left out, JAWS names none there: the groups are a list
+/// item's, or none inside another control. The second value says the focus is a control's
+/// content.
+fn nested_groups(chain: &[UiaNode]) -> (Vec<okur_core::GroupEntry>, bool) {
     const UIA_GROUP: i32 = 50026;
     const UIA_PANE: i32 = 50033;
     const UIA_LIST: i32 = 50008;
-    const UIA_CUSTOM: i32 = 50025;
-    let mut names = Vec::new();
+    let named = |node: &UiaNode| {
+        node.name
+            .as_deref()
+            .map(str::trim)
+            .filter(|n| !n.is_empty())
+            .map(str::to_owned)
+    };
+    let mut entries = Vec::new();
+    let mut inside_control = false;
     for ancestor in chain.iter().rev().skip(1) {
-        // A text a control is in counts as one (Settings' "More about HDR" link, in a text of
-        // that name: JAWS says "HDR | More about HDR | More about HDR Link").
-        if matches!(ancestor.control_type, UIA_GROUP | UIA_TEXT) {
-            if let Some(name) = ancestor.name.as_deref().map(str::trim) {
-                if !name.is_empty() {
-                    names.push(name.to_owned());
+        match ancestor.control_type {
+            UIA_GROUP | UIA_TEXT => {
+                entries.extend(named(ancestor).map(okur_core::GroupEntry::group))
+            }
+            UIA_LIST => entries.push(okur_core::GroupEntry::list(
+                named(ancestor).unwrap_or_default(),
+            )),
+            UIA_PANE => {}
+            // Inside a control: a button, a check box, a combo box, an edit, a link, a list or
+            // tree item, a menu item, a radio button, a slider, a tab, a data item, a split
+            // button.
+            50000 | 50002 | 50003 | 50004 | 50005 | 50007 | 50011 | 50013 | 50015 | 50019
+            | 50024 | 50029 | 50031 => {
+                entries.clear();
+                inside_control = true;
+                // Inside a list, tree or data item the groups are the item's (Sound's "Output
+                // devices" link, in its list item: JAWS names "Advanced" no more after it);
+                // inside another control, none (Display's brightness slider, in a button:
+                // JAWS names "Brightness & color" again after it).
+                if !matches!(ancestor.control_type, 50007 | 50024 | 50029) {
+                    return (Vec::new(), true);
                 }
             }
-            continue;
+            // Any other container (the window, a tab control, a toolbar) ends the groups.
+            _ => break,
         }
-        let container = matches!(
-            ancestor.control_type,
-            UIA_PANE | UIA_LIST | UIA_CUSTOM | UIA_WINDOW | UIA_DOCUMENT
-        );
-        if !container {
-            return None;
-        }
-        break;
     }
-    names.reverse();
-    Some(names)
+    entries.reverse();
+    (entries, inside_control)
 }
 
 /// The focus event a recorded `focus` trace event delivers to the engine: the chain mapping
@@ -1871,9 +1908,15 @@ mod tests {
     /// they are inside a control (the slider in the "Show more settings" button).
     #[test]
     fn a_controls_groups_are_the_ones_it_nests_in() {
+        use okur_core::GroupEntry;
         const UIA_GROUP: i32 = 50026;
         const UIA_PANE: i32 = 50033;
         const UIA_SLIDER: i32 = 50015;
+        const UIA_LIST: i32 = 50008;
+        const UIA_CUSTOM: i32 = 50025;
+        let groups = |names: &[&str]| -> Vec<GroupEntry> {
+            names.iter().map(|n| GroupEntry::group(*n)).collect()
+        };
         let toggle = [
             node(UIA_PANE, "", false),
             node(UIA_GROUP, "Brightness & color", false),
@@ -1881,8 +1924,8 @@ mod tests {
             node(UIA_BUTTON, "Night light", true),
         ];
         assert_eq!(
-            nested_groups(&toggle).unwrap_or_default(),
-            ["Brightness & color", "Night light"]
+            nested_groups(&toggle),
+            (groups(&["Brightness & color", "Night light"]), false)
         );
         let link = [
             node(UIA_PANE, "", false),
@@ -1892,16 +1935,45 @@ mod tests {
             node(50005, "More about HDR", true),
         ];
         assert_eq!(
-            nested_groups(&link).unwrap_or_default(),
-            ["Brightness & color", "HDR", "More about HDR"]
+            nested_groups(&link),
+            (
+                groups(&["Brightness & color", "HDR", "More about HDR"]),
+                false
+            )
         );
+        // Sound's output device: through its list and the scroll panes, up to the window's
+        // navigation view.
+        let device = [
+            node(UIA_CUSTOM, "", false),
+            node(UIA_PANE, "", false),
+            node(UIA_GROUP, "Output", false),
+            node(UIA_GROUP, "Choose where to play sound.", false),
+            node(UIA_LIST, "", false),
+            node(UIA_PANE, "", false),
+            node(UIA_GROUP, "Hoparlör", false),
+            node(UIA_BUTTON, "Hoparlör", true),
+        ];
+        let mut expected = groups(&["Output", "Choose where to play sound."]);
+        expected.push(GroupEntry::list(""));
+        expected.extend(groups(&["Hoparlör"]));
+        assert_eq!(nested_groups(&device), (expected, false));
         let slider = [
             node(UIA_GROUP, "Brightness, Brightness", false),
             node(UIA_BUTTON, "Show more settings", false),
             node(UIA_GROUP, "Brightness", false),
             node(UIA_SLIDER, "Brightness", true),
         ];
-        assert_eq!(nested_groups(&slider), None);
+        assert_eq!(nested_groups(&slider), (Vec::new(), true));
+        // Sound's "Output devices" link, in its list item: the item's groups.
+        let link_in_item = [
+            node(UIA_GROUP, "Advanced", false),
+            node(UIA_LIST, "", false),
+            node(UIA_LISTITEM, "Output devices", false),
+            node(50005, "Output devices", true),
+        ];
+        let mut expected = groups(&["Advanced"]);
+        expected.push(GroupEntry::list(""));
+        assert_eq!(nested_groups(&link_in_item), (expected, true));
     }
 
     /// A closed WinUI combo box holds only its selected item: that is its value, not a

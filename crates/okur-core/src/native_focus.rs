@@ -224,6 +224,7 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
         // slider | To increase or decrease use the Arrow keys."
         Role::Slider => {
             lines.push(Line::new(vec![text(name), role("left right slider")]));
+            lines.extend(value);
             lines.push(Line::text("To increase or decrease use the Arrow keys."));
         }
         // Windows Settings' "Rename" (JAWS, dev box 2026-10-16): "Rename Link | To activate
@@ -273,8 +274,8 @@ impl FocusKey {
 pub struct NativeFocus {
     container: Option<ContainerKey>,
     last: Option<FocusKey>,
-    /// The named groups the last focus was in (`FocusEvent::groups`).
-    groups: Vec<String>,
+    /// The groups and lists the last focus was in (`FocusEvent::groups`).
+    groups: Vec<crate::event::GroupEntry>,
     /// The tree level last announced in the current tree.
     tree_level: Option<usize>,
 }
@@ -327,20 +328,37 @@ pub fn focus_speech(focus: &FocusEvent, previous: Option<&ContainerKey>) -> Anno
     focus_speech_entering(focus, previous, &focus.groups)
 }
 
-/// [`focus_speech`], naming the groups the focus `entered` (of `FocusEvent::groups`),
-/// outermost first, in place of its group container: Windows Settings' "Brightness & color |
-/// Night light | Night light Button | Off" (JAWS on the dev box, 2026-10-16).
+/// [`focus_speech`], naming the groups and lists the focus `entered` (of
+/// `FocusEvent::groups`), outermost first, in place of its group or list container: Windows
+/// Settings' "Brightness & color | Night light | Night light Button | Off", "Advanced |
+/// Troubleshoot common sound problems | Troubleshoot common sound problems List box | Output
+/// devices | 1 of 2" (JAWS on the dev box, 2026-10-16).
 fn focus_speech_entering(
     focus: &FocusEvent,
     previous: Option<&ContainerKey>,
-    entered: &[String],
+    entered: &[crate::event::GroupEntry],
 ) -> Announcement {
     let mut lines = Vec::new();
     let container = ContainerKey::of(focus);
     let within = container.is_some() && container.as_ref() == previous;
-    // A group container the platform gave the groups of is named through them.
-    if !focus.groups.is_empty() && focus.container_role == Some(Role::Group) {
-        lines.extend(entered.iter().map(|group| Line::text(group.clone())));
+    // A group or list container the platform gave the groups of is named through them.
+    if !focus.groups.is_empty()
+        && matches!(focus.container_role, Some(Role::Group) | Some(Role::List))
+    {
+        let last = entered.len().saturating_sub(1);
+        for (i, entry) in entered.iter().enumerate() {
+            let name = named(&entry.name);
+            lines.push(if entry.list {
+                let kind = if i == last && focus.container_is_list_view {
+                    "List view"
+                } else {
+                    "List box"
+                };
+                Line::new(vec![text(name), role(kind)])
+            } else {
+                Line::text(name)
+            });
+        }
     } else if !within {
         lines.extend(container_entry(focus));
     }
@@ -725,7 +743,10 @@ mod tests {
             let mut focus = FocusEvent::new(role).with_name(name);
             focus.container_role = Some(Role::Group);
             focus.container_name = groups.last().map(|g| (*g).to_owned());
-            focus.groups = groups.iter().map(|g| (*g).to_owned()).collect();
+            focus.groups = groups
+                .iter()
+                .map(|g| crate::event::GroupEntry::group(*g))
+                .collect();
             focus
         };
         let mut native = NativeFocus::default();
@@ -774,6 +795,47 @@ mod tests {
         assert_eq!(
             say(&more),
             norm("Multiple displays\nShow more settings \u{1d} Button \u{1e} \u{1d}collapsed\u{1e} \nTo activate press spacebar.")
+        );
+    }
+
+    /// Windows Settings' Sound page, JAWS on the dev box (2026-10-16): a list among the groups
+    /// is said with its role, and groups the focus stays in are not said again.
+    #[test]
+    fn settings_sound_page_names_lists_and_sections() {
+        use crate::event::GroupEntry;
+        let mut native = NativeFocus::default();
+        let mut say = |role: Role, name: &str, container: Role, groups: Vec<GroupEntry>| {
+            let mut focus = FocusEvent::new(role).with_name(name);
+            focus.container_role = Some(container);
+            focus.container_name = groups.last().map(|g| g.name.clone());
+            focus.groups = groups;
+            native
+                .focus(&focus)
+                .map(|a| norm(&a.render()))
+                .unwrap_or_default()
+        };
+        let output = vec![
+            GroupEntry::group("Output"),
+            GroupEntry::group("Choose where to play sound."),
+        ];
+        say(
+            Role::Button,
+            "Show more settings",
+            Role::Group,
+            output.clone(),
+        );
+        let mut speaker = output.clone();
+        speaker.push(GroupEntry::list(""));
+        speaker.push(GroupEntry::group("Hoparlör"));
+        assert_eq!(
+            say(Role::Button, "Hoparlör", Role::Group, speaker),
+            norm("\u{1d} List box \u{1e} \nHoparlör\nHoparlör \u{1d} Button \u{1e} \nTo activate press spacebar.")
+        );
+        let mut add = output;
+        add.push(GroupEntry::group("Pair a new output device"));
+        assert_eq!(
+            say(Role::Button, "Add device", Role::Group, add),
+            norm("Pair a new output device\nAdd device \u{1d} Button \u{1e} \nTo activate press spacebar.")
         );
     }
 
