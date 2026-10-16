@@ -1857,3 +1857,83 @@ fn an_atomic_live_region_says_a_repeat_and_its_additions() {
     }
     assert_eq!(speech.take(), vec!["Reply\nDone".to_owned()]);
 }
+
+/// A page's menu (Google Docs' Accessibility menu, dev box 2026-10-16): the browser opens the
+/// popup before an item has the focus, reports each item twice, and ends no menu mode. The
+/// item is said once, the popup without an empty name, and the focus back in the page says
+/// "Leaving menus", as JAWS does; nothing about a sub menu follows.
+#[test]
+fn a_page_menu_is_left_when_the_focus_returns_to_the_page() {
+    let mut target = AomNode::new(2, Role::Group);
+    target.attributes.insert(
+        "id".to_owned(),
+        "docs-texteventtarget-descendant".to_owned(),
+    );
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Untitled document - Google Docs")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Untitled document"),
+            target,
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let mut text_target = FocusEvent::new(Role::Group).with_node_id(2);
+    text_target.in_document = true;
+    text_target.web_application = Some(String::new());
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(text_target.clone()));
+    speech.take();
+
+    let item =
+        |name: &str| AccessibilityEvent::Focus(FocusEvent::new(Role::MenuItem).with_name(name));
+    let popup = AccessibilityEvent::Menu(crate::event::MenuEvent::PopupStart);
+    engine.handle_accessibility_event(&popup);
+    engine.handle_accessibility_event(&item("Accessibility"));
+    engine.handle_accessibility_event(&item("Accessibility"));
+    engine.handle_accessibility_event(&item("Verbalize selection s"));
+    engine.handle_accessibility_event(&popup);
+    let spoken: Vec<String> = speech
+        .take()
+        .iter()
+        .map(|s| s.split_whitespace().collect::<Vec<_>>().join(" "))
+        .collect();
+    assert_eq!(
+        spoken,
+        vec![
+            "\u{1d} Menu bar \u{1e} Accessibility To navigate press Left or Right Arrow.",
+            "\u{1d} menu \u{1e} Verbalize selection s To move through items press up or down arrow.",
+        ]
+    );
+
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&AccessibilityEvent::Focus(text_target))
+            .as_deref(),
+        Some("Leaving menus")
+    );
+    let end = AccessibilityEvent::Menu(crate::event::MenuEvent::PopupEnd);
+    engine.handle_accessibility_event(&end);
+    engine.handle_accessibility_event(&end);
+    assert_eq!(engine.on_idle(), None);
+}
+
+/// A focus with nothing of it in the buffer (Google Docs' empty element it types into) is
+/// said by its name alone: entering the page says the title once, not the title again as the
+/// line the virtual cursor was on (dev box, 2026-10-16).
+#[test]
+fn an_empty_focus_is_not_read_as_the_cursors_line() {
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Untitled document - Google Docs")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Toolbar text"),
+            AomNode::new(2, Role::Group),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let mut focus = FocusEvent::new(Role::Group).with_node_id(2);
+    focus.in_document = true;
+    let said = engine
+        .handle_accessibility_event(&AccessibilityEvent::Focus(focus))
+        .unwrap_or_default();
+    assert_eq!(said.trim(), "Untitled document - Google Docs");
+}

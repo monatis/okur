@@ -30,6 +30,13 @@ impl ScreenReaderEngine {
         Some(speech)
     }
 
+    /// Says that menus were left, when nothing else is said with it.
+    fn say_leaving_menus(&mut self) -> String {
+        let speech = "Leaving menus".to_owned();
+        self.speech.speak(&speech, true);
+        speech
+    }
+
     /// Handles an OS-level focus changed event.
     /// Synchronizes cursor position, activates/deactivates forms mode,
     /// and emits canonical JAWS speech announcements.
@@ -69,6 +76,10 @@ impl ScreenReaderEngine {
                 .is_some_and(|id| self.cursor.buffer.contains_node(id));
 
         if is_in_document {
+            // A page's menu closed with the focus back in the page: a browser ends no menu
+            // mode (no menu-end event), and JAWS says it left menus (Google Docs, dev box,
+            // 2026-10-16).
+            let leaving_menus = self.menus.is_active() && self.menus.end();
             self.app_mode = AppMode::VirtualBuffer;
             // The page is in the same top-level window as anything focused next in the
             // browser (toolbar, address bar), so that focus does not announce a new window.
@@ -140,7 +151,13 @@ impl ScreenReaderEngine {
                 // The page itself has focus: the next control focus enters the page.
                 self.last_page_focus = None;
                 self.tab_start = None;
-                return None;
+                return leaving_menus.then(|| self.say_leaving_menus());
+            }
+            // A document the buffer does not hold: a frame inside the page, which the focus
+            // passes through on its way to an element (Google Docs' frame for typing, after
+            // its menus close). The page keeps its focus.
+            if focus.role == Role::Document && target_id.is_none() {
+                return leaving_menus.then(|| self.say_leaving_menus());
             }
             // Forms mode follows focus into edits; a combo box keeps the forms mode Enter
             // turned on [obs, 205/s8].
@@ -155,7 +172,7 @@ impl ScreenReaderEngine {
             // Chrome can report focus on the same element again (while typing in it); JAWS
             // does not repeat the field.
             if target_id.is_some() && target_id == self.last_page_focus && !from_options {
-                return None;
+                return leaving_menus.then(|| self.say_leaving_menus());
             }
             // The first control focused after the page itself is preceded by the page title
             // [obs, 205/s2; 204/s1 second variant].
@@ -252,6 +269,12 @@ impl ScreenReaderEngine {
                 if let Some(title) = self.cursor.buffer.document_title() {
                     speech = speech.map(|s| format!("{title}\n{regions}{s}"));
                 }
+            }
+            if leaving_menus {
+                speech = Some(match speech {
+                    Some(s) if !s.is_empty() => format!("Leaving menus\n{s}"),
+                    _ => "Leaving menus".to_owned(),
+                });
             }
             if let Some(ref text) = speech {
                 if !text.is_empty() {

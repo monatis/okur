@@ -665,6 +665,19 @@ impl VirtualCursor {
         let previous = self.offset;
         self.move_to_node_id(node_id);
         let node = self.buffer.node(node_id)?;
+        // A focus with nothing of it in the buffer (Google Docs' empty element it types
+        // into) is said by its name alone: the cursor's line is some other element's.
+        let mut ids = std::collections::HashSet::new();
+        fn subtree(node: &AomNode, ids: &mut std::collections::HashSet<usize>) {
+            ids.insert(node.id);
+            for child in &node.children {
+                subtree(child, ids);
+            }
+        }
+        subtree(node, &mut ids);
+        if !self.buffer.spans.iter().any(|s| ids.contains(&s.node_id)) {
+            return Some(node.name.as_deref().unwrap_or_default().trim().to_owned());
+        }
         let attr = |k: &str| node.attributes.get(k).map(String::as_str);
         let name = node.name.as_deref().unwrap_or_default().trim();
         let mut speech = match &node.role {

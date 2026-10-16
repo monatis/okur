@@ -475,18 +475,28 @@ impl Menus {
                 "{}\n{name}\nTo navigate press Left or Right Arrow.",
                 role_marker("Menu bar")
             ))
+        } else if self.current.as_deref() == Some(name) {
+            // The same item reported again (a browser reports a page's menu item twice).
+            None
         } else if self.popup_pending {
             self.popup_pending = false;
             let parent = self.open.last().cloned().unwrap_or_default();
             let first = !self.popup_shown;
             self.popup_shown = true;
+            // A page's menu can open before any item has the focus (Google Docs' Alt+Shift+A
+            // opens its Accessibility menu): there is no item to name it by.
+            let menu = if parent.is_empty() {
+                String::new()
+            } else {
+                format!("{parent} menu\n")
+            };
             Some(if first {
                 format!(
-                    "{}\n\n{parent} menu\n{name}\nTo move through items press up or down arrow.",
+                    "{}\n\n{menu}{name}\nTo move through items press up or down arrow.",
                     role_marker("menu")
                 )
             } else {
-                format!("{parent} menu\n{name}")
+                format!("{menu}{name}")
             })
         } else if switching {
             // The next menu's popup opens right away and introduces the item (302/s5).

@@ -24,6 +24,7 @@ const UIA_TEXT: i32 = 50020;
 const UIA_BUTTON: i32 = 50000;
 const UIA_EDIT: i32 = 50004;
 const UIA_COMBOBOX: i32 = 50003;
+const UIA_MENUITEM: i32 = 50011;
 /// The window class of Win32 dialog boxes (message boxes, common dialogs).
 const WIN32_DIALOG_CLASS: &str = "#32770";
 /// The window kind of focus on the desktop ([`okur_core::FocusEvent::window_kind`]).
@@ -372,6 +373,19 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         return Some(
             okur_core::FocusEvent::new(okur_core::Role::MenuItem)
                 .with_name(object.name.clone().unwrap_or_default()),
+        );
+    }
+    // A page's menu item (an ARIA menu): Chrome reports the focus on its document too, with
+    // the menu item focused through UIA (Google Docs' menus, dev box, 2026-10-16). Both are
+    // the menu item.
+    if let Some(item) = event
+        .focus_chain
+        .last()
+        .filter(|f| f.control_type == UIA_MENUITEM)
+    {
+        return Some(
+            okur_core::FocusEvent::new(okur_core::Role::MenuItem)
+                .with_name(item.name.clone().unwrap_or_default()),
         );
     }
     // The recorded window text belongs to the focused HWND (an edit's text is its content);
@@ -1743,6 +1757,22 @@ mod tests {
         assert_eq!(
             inner.map(|l| (l.politeness, l.atomic)),
             Some((okur_core::Politeness::Polite, false))
+        );
+    }
+
+    /// A page's menu item focused through its document (Chrome, Google Docs' menus): the menu
+    /// item, as its MSAA focus names it.
+    #[test]
+    fn a_page_menu_item_focused_through_its_document_is_a_menu_item() {
+        let mut event = focus_event(Vec::new());
+        event.focus_chain = vec![
+            node(UIA_DOCUMENT, "Untitled document - Google Docs", false),
+            node(UIA_MENUITEM, "Graphics g", true),
+        ];
+        let focus = focus_event_from_trace(&event);
+        assert_eq!(
+            focus.map(|f| (f.role, f.name)),
+            Some((okur_core::Role::MenuItem, Some("Graphics g".to_owned())))
         );
     }
 
