@@ -21,14 +21,15 @@ Restructuring now is cheaper than later.
 | 1. Commands and keys | done | `0a94da5` |
 | 2. Platform-neutral windows | done | `6185a8e` |
 | 3. Application modules | done | `2fc61b5` |
-| 4. Announcements as data | started: the `Announcement` type, native focus speech | `8cf7ffd` |
+| 4. Announcements as data | the `Announcement` type, native focus speech, the window heading, application modules; `SpeechFormatter` and the buffer's lines wait for a structured page-line model | `8cf7ffd`, `a7ddbf8` |
 | 5. Separate fixes | Q bound to the main region; key help no longer calls K a link key; `Insert+F` dead arm and unused formatters gone with the refactors | `88eff63`, `e696275` |
 
-Next for step 4:
-1. The window heading in `engine/focus.rs`: title, "dialog", text and page as lines.
-2. Application modules return announcements instead of strings.
+Next for step 4 (2026-10-16: items 1 and 2 done in `a7ddbf8`):
+1. ~~The window heading in `engine/focus.rs`: title, "dialog", text and page as lines.~~
+2. ~~Application modules return announcements instead of strings.~~
 3. `SpeechFormatter`, module by module.
-4. The virtual buffer's lines.
+4. The virtual buffer's lines. Design a structured page line (parts with roles and states)
+   first: tonight's web features (aria-current, role descriptions, popups) add parts to it.
 
 Spacing around the marks differs between places ("  ‹ dialog › ", " ‹ X › ",
 " ‹X› "). Parity normalizes whitespace, but unit tests pin exact strings. Two ways forward:

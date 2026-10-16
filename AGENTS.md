@@ -53,9 +53,9 @@ This is an **autonomous, agent-driven project with a "verification harness in th
 To ensure seamless context passing across autonomous sessions, all engineering work is orchestrated through the `docs/` tree:
 
 ### Active Plan for Current / Next Session
-- **Active Plan**: [`docs/plans/2026-10-15-structure-for-macos-and-extensions.md`](docs/plans/2026-10-15-structure-for-macos-and-extensions.md) while old-pc is offline. Its old-pc work items are in [`docs/plans/2026-10-15-jaws-feature-loop-round-2.md`](docs/plans/2026-10-15-jaws-feature-loop-round-2.md).
+- **Active Plan**: [`docs/plans/2026-10-16-web-apps-round-2.md`](docs/plans/2026-10-16-web-apps-round-2.md). Its old-pc work items add to those of [`docs/plans/2026-10-15-jaws-feature-loop-round-2.md`](docs/plans/2026-10-15-jaws-feature-loop-round-2.md); the structure work left is in [`docs/plans/2026-10-15-structure-for-macos-and-extensions.md`](docs/plans/2026-10-15-structure-for-macos-and-extensions.md).
 - **Future goal**: an extension SDK, after Okur is stable on Windows and macOS ([`docs/references/extension-sdk-vision.md`](docs/references/extension-sdk-vision.md)).
-- **Latest Handoff**: [`docs/handoff/2026-10-15-structure-round-1.md`](docs/handoff/2026-10-15-structure-round-1.md), after [`docs/handoff/2026-10-15-virtual-viewer.md`](docs/handoff/2026-10-15-virtual-viewer.md) and [`docs/handoff/2026-10-15-jaws-feature-loop-round-1.md`](docs/handoff/2026-10-15-jaws-feature-loop-round-1.md); read the audit [`docs/handoff/2026-10-14-full-audit-of-prior-development.md`](docs/handoff/2026-10-14-full-audit-of-prior-development.md) before trusting any earlier handoff
+- **Latest Handoff**: [`docs/handoff/2026-10-16-responsiveness-and-web-apps.md`](docs/handoff/2026-10-16-responsiveness-and-web-apps.md), after [`docs/handoff/2026-10-15-structure-round-1.md`](docs/handoff/2026-10-15-structure-round-1.md), [`docs/handoff/2026-10-15-virtual-viewer.md`](docs/handoff/2026-10-15-virtual-viewer.md) and [`docs/handoff/2026-10-15-jaws-feature-loop-round-1.md`](docs/handoff/2026-10-15-jaws-feature-loop-round-1.md); read the audit [`docs/handoff/2026-10-14-full-audit-of-prior-development.md`](docs/handoff/2026-10-14-full-audit-of-prior-development.md) before trusting any earlier handoff
 - **Loop lifecycle**: [`docs/references/verification-loop.md`](docs/references/verification-loop.md): the machines, OpenDesk and `old-pc`, recording JAWS evidence, importing it, dev-box live checks, and pitfalls. Read it before touching `old-pc` or the corpus.
 
 
@@ -105,7 +105,9 @@ Building evidence collection and verification tooling is the real engineering in
 - `okur snapshot --api ia2`: IAccessible2 view of a Chromium document (attributes, states, hypertext, rendered line ranges).
 - `okur trace` / `run-scenario.ps1 -TraceDir`: per-trial accessibility event traces, replayed into the engine by `okur parity`.
 - `okur evidence <scenario-id> [--trace]`: readable view of recorded JAWS transcripts and trial variants; `--trace` lists the accessibility events traced during each step.
-- `okur keys --allow <process>` and `okur jaws-history`: quick live checks (skill Workflow H). Chords are sent only while an allowed application is in front, and JAWS's speech history is read through FSAPI with the clipboard put back. Research, never evidence.
+- `okur keys --allow <process>` and `okur jaws-history`: quick live checks (skill Workflow H). Chords are sent only while an allowed application is in front, and JAWS's speech history is read through FSAPI with the clipboard put back. Research, never evidence. `okur front <title>` brings a test window forward first.
+- `okur latency <debug log>`: per-step timings of a live run, including key to speech audio per chord; `skills/jaws-reference/scripts/measure-edit-keys.sh` plays the everyday edit keys for it.
+- `skills/jaws-reference/scripts/parity-snapshot.sh <dir>`: the three parity outputs, to compare before and after a change with `diff -r`.
 
 ### Verification Integrity Rules (non-negotiable)
 

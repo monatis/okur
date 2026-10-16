@@ -245,6 +245,18 @@ the morning. This is how it was done; it needs fresh permission each time.
 - **Research only.** Mark what you learn "observed on the dev box" in the code, and add an
   old-pc scenario so it becomes evidence. Windows 11 behavior (XAML switcher, Notepad's
   RichEdit, Windows search) may have no Windows 10 counterpart; say so.
+- **The dev box's JAWS settings are the user's.** It says no "banner" on `news-article.html`,
+  where old-pc's evidence does. Before calling a difference a gap, read a fixture that has
+  evidence on the dev box and compare.
+- **Okur next to the user's JAWS** (2026-10-16):
+  - JAWS takes arrows and letters in browse mode before the page sees them. Put JAWS in forms
+    mode on the field first (a JAWS-only run: Tab, or E, then Enter), then start Okur.
+  - JAWS sends its own copy of each navigation key it passes on, injected with its own
+    `dwExtraInfo` (0x45789400 on the dev box), usually within 5 ms, but 230 ms for Ctrl+Home.
+    Okur's hook skips these copies; older debug logs show every such key twice.
+  - Test pages and web apps go in a Chrome with its own `--user-data-dir` in the scratchpad,
+    never in the user's Chrome. Bring a test window forward with `okur front <title>`. A
+    mouse click on a Chrome window not in front only activates it.
 
 ## 8. Pitfalls already paid for
 
