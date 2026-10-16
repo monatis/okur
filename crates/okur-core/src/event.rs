@@ -116,6 +116,11 @@ pub struct FocusEvent {
     /// The focused menu item is on a menu bar (a page's ARIA menu bar), not in a menu.
     #[serde(default)]
     pub in_menu_bar: bool,
+    /// The named groups a native control is in, outermost first, as far up as groups nest
+    /// directly above it: Windows Settings' "Brightness & color", "Night light". Empty where
+    /// none, and where the groups are a control's own content.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub groups: Vec<String>,
     /// Further columns of a list-view item, after its name.
     pub columns: Vec<String>,
     /// The focused element is inside a browser document (its focus chain has a document).
@@ -194,6 +199,7 @@ impl FocusEvent {
             container_name: None,
             container_is_list_view: false,
             in_menu_bar: false,
+            groups: Vec::new(),
             columns: Vec::new(),
             in_document: false,
             dom_id: None,

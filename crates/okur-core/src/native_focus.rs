@@ -199,9 +199,32 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
         // "Home Button | 1 of 1 | To activate press spacebar."; JAWS on the dev box,
         // 2026-10-16); the platform counts none for buttons (a dialog's say none, 306).
         Role::Button => {
-            lines.push(Line::new(vec![text(name), role("Button")]));
+            // An expander's button says its state: Windows Settings' "Show more settings Button
+            // collapsed" (JAWS on the dev box, 2026-10-16).
+            let mut parts = vec![text(name), role("Button")];
+            match focus.states.expanded {
+                Some(true) => parts.push(state("expanded")),
+                Some(false) => parts.push(state("collapsed")),
+                None => {}
+            }
+            lines.push(Line::new(parts));
+            // A WinUI toggle switch is a button with a toggle state, said as its switch
+            // reads: Windows Settings' "Night light Button | Off" (JAWS, dev box 2026-10-16).
+            if focus.platform.element_class.as_deref() == Some("ToggleSwitch") {
+                match focus.states.checked {
+                    Some(true) => lines.push(Line::text("On")),
+                    Some(false) => lines.push(Line::text("Off")),
+                    None => {}
+                }
+            }
             lines.extend(position(focus));
             lines.push(Line::text("To activate press spacebar."));
+        }
+        // Windows Settings' Brightness (JAWS, dev box 2026-10-16): "Brightness left right
+        // slider | To increase or decrease use the Arrow keys."
+        Role::Slider => {
+            lines.push(Line::new(vec![text(name), role("left right slider")]));
+            lines.push(Line::text("To increase or decrease use the Arrow keys."));
         }
         // Windows Settings' "Rename" (JAWS, dev box 2026-10-16): "Rename Link | To activate
         // press Enter."
@@ -228,6 +251,9 @@ struct FocusKey {
     name: Option<String>,
     item_index: Option<usize>,
     container: Option<ContainerKey>,
+    /// Tells apart controls of one role and name side by side: Windows Settings' "Night
+    /// light" toggle switch and the "Night light" button next to it.
+    element_class: Option<String>,
 }
 
 impl FocusKey {
@@ -237,6 +263,7 @@ impl FocusKey {
             name: focus.name.clone(),
             item_index: focus.item_index,
             container: ContainerKey::of(focus),
+            element_class: focus.platform.element_class.clone(),
         }
     }
 }
@@ -246,6 +273,8 @@ impl FocusKey {
 pub struct NativeFocus {
     container: Option<ContainerKey>,
     last: Option<FocusKey>,
+    /// The named groups the last focus was in (`FocusEvent::groups`).
+    groups: Vec<String>,
     /// The tree level last announced in the current tree.
     tree_level: Option<usize>,
 }
@@ -264,7 +293,16 @@ impl NativeFocus {
         }
         let previous = self.container.take();
         let within = key.container.is_some() && key.container == previous;
-        let mut speech = focus_speech(focus, previous.as_ref());
+        // The groups entered: those after the ones the last focus shared with this one.
+        let shared = self
+            .groups
+            .iter()
+            .zip(&focus.groups)
+            .take_while(|(a, b)| a == b)
+            .count();
+        let entered = focus.groups.get(shared..).unwrap_or_default();
+        let mut speech = focus_speech_entering(focus, previous.as_ref(), entered);
+        self.groups = focus.groups.clone();
         if focus.role == Role::TreeItem {
             if !within {
                 self.tree_level = None;
@@ -286,10 +324,24 @@ impl NativeFocus {
 /// Speech for focus landing on a native control. `previous` is the container of the
 /// previously focused control; the container is announced only when it differs.
 pub fn focus_speech(focus: &FocusEvent, previous: Option<&ContainerKey>) -> Announcement {
+    focus_speech_entering(focus, previous, &focus.groups)
+}
+
+/// [`focus_speech`], naming the groups the focus `entered` (of `FocusEvent::groups`),
+/// outermost first, in place of its group container: Windows Settings' "Brightness & color |
+/// Night light | Night light Button | Off" (JAWS on the dev box, 2026-10-16).
+fn focus_speech_entering(
+    focus: &FocusEvent,
+    previous: Option<&ContainerKey>,
+    entered: &[String],
+) -> Announcement {
     let mut lines = Vec::new();
     let container = ContainerKey::of(focus);
     let within = container.is_some() && container.as_ref() == previous;
-    if !within {
+    // A group container the platform gave the groups of is named through them.
+    if !focus.groups.is_empty() && focus.container_role == Some(Role::Group) {
+        lines.extend(entered.iter().map(|group| Line::text(group.clone())));
+    } else if !within {
         lines.extend(container_entry(focus));
     }
     lines.extend(control_lines(focus, !within));
@@ -662,6 +714,67 @@ mod tests {
         );
         assert!(m.end());
         assert!(!m.is_active());
+    }
+
+    /// Windows Settings' Display page with Tab, JAWS on the dev box (2026-10-16): the groups
+    /// entered are named, outermost first, and not again while the focus stays in them; a
+    /// toggle switch says its state, a slider its kind, an expander's button its state.
+    #[test]
+    fn settings_display_page_names_the_groups_it_enters() {
+        let control = |role: Role, name: &str, groups: &[&str]| {
+            let mut focus = FocusEvent::new(role).with_name(name);
+            focus.container_role = Some(Role::Group);
+            focus.container_name = groups.last().map(|g| (*g).to_owned());
+            focus.groups = groups.iter().map(|g| (*g).to_owned()).collect();
+            focus
+        };
+        let mut native = NativeFocus::default();
+        let mut say = |focus: &FocusEvent| {
+            native
+                .focus(focus)
+                .map(|a| norm(&a.render()))
+                .unwrap_or_default()
+        };
+        // Its group is the slider's button's content: the platform gives it no name.
+        let slider = control(Role::Slider, "Brightness", &[]);
+        assert_eq!(
+            say(&slider),
+            norm("Brightness \u{1d} left right slider \u{1e} \nTo increase or decrease use the Arrow keys.")
+        );
+        let mut toggle = control(
+            Role::Button,
+            "Night light",
+            &["Brightness & color", "Night light"],
+        );
+        toggle.platform.element_class = Some("ToggleSwitch".to_owned());
+        toggle.states.checked = Some(false);
+        assert_eq!(
+            say(&toggle),
+            norm("Brightness & color\nNight light\nNight light \u{1d} Button \u{1e} \nOff\nTo activate press spacebar.")
+        );
+        let page_button = control(
+            Role::Button,
+            "Night light",
+            &["Brightness & color", "Night light"],
+        );
+        assert_eq!(
+            say(&page_button),
+            norm("Night light \u{1d} Button \u{1e} \nTo activate press spacebar.")
+        );
+        let mut combo = control(Role::ComboBox, "Scale", &["Scale & layout", "Scale"]);
+        combo.value = Some("125% (Recommended)".to_owned());
+        assert_eq!(
+            say(&combo),
+            norm("Scale & layout\nScale\nScale \u{1d} Combo box \u{1e} \n125% (Recommended)\nTo change the selection use the Arrow keys.")
+        );
+        let resolution = control(Role::ComboBox, "Display resolution", &["Scale & layout"]);
+        assert!(!say(&resolution).starts_with("Scale & layout"));
+        let mut more = control(Role::Button, "Show more settings", &["Multiple displays"]);
+        more.states.expanded = Some(false);
+        assert_eq!(
+            say(&more),
+            norm("Multiple displays\nShow more settings \u{1d} Button \u{1e} \u{1d}collapsed\u{1e} \nTo activate press spacebar.")
+        );
     }
 
     /// Windows Settings' home page, JAWS on the dev box (2026-10-16): a link says its role and

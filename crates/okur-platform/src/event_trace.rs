@@ -308,6 +308,11 @@ pub fn focus_event_from_chain(
     let in_browser = window_class
         .is_some_and(|c| c == CHROMIUM_TOP_WINDOW || WEB_CONTENT_WINDOW_CLASSES.contains(&c));
     event.in_document = in_browser && chain.iter().any(|a| a.control_type == UIA_DOCUMENT);
+    // Groups that are a control's content name nothing: not even as the nearest container.
+    let control_content = !event.in_document && nested_groups(chain).is_none();
+    if !event.in_document {
+        event.groups = nested_groups(chain).unwrap_or_default();
+    }
     event.read_only = focused.value_is_read_only;
     event.platform.element_class = focused.class_name.clone().filter(|c| !c.is_empty());
     if event.in_document {
@@ -362,7 +367,45 @@ pub fn focus_event_from_chain(
             break;
         }
     }
+    if control_content && event.container_role == Some(Role::Group) {
+        event.container_name = None;
+    }
     Some(event)
+}
+
+/// The named groups above the focused element (`chain`'s last), outermost first, as far up as
+/// groups nest directly: Windows Settings' toggle switch is in its "Night light" card, in the
+/// "Brightness & color" section, and JAWS names both on the way in (dev box, 2026-10-16).
+/// Groups that are a control's content (Settings' brightness slider, in a group inside the
+/// "Show more settings" button) are `None`: JAWS names none there.
+fn nested_groups(chain: &[UiaNode]) -> Option<Vec<String>> {
+    const UIA_GROUP: i32 = 50026;
+    const UIA_PANE: i32 = 50033;
+    const UIA_LIST: i32 = 50008;
+    const UIA_CUSTOM: i32 = 50025;
+    let mut names = Vec::new();
+    for ancestor in chain.iter().rev().skip(1) {
+        // A text a control is in counts as one (Settings' "More about HDR" link, in a text of
+        // that name: JAWS says "HDR | More about HDR | More about HDR Link").
+        if matches!(ancestor.control_type, UIA_GROUP | UIA_TEXT) {
+            if let Some(name) = ancestor.name.as_deref().map(str::trim) {
+                if !name.is_empty() {
+                    names.push(name.to_owned());
+                }
+            }
+            continue;
+        }
+        let container = matches!(
+            ancestor.control_type,
+            UIA_PANE | UIA_LIST | UIA_CUSTOM | UIA_WINDOW | UIA_DOCUMENT
+        );
+        if !container {
+            return None;
+        }
+        break;
+    }
+    names.reverse();
+    Some(names)
 }
 
 /// The focus event a recorded `focus` trace event delivers to the engine: the chain mapping
@@ -534,7 +577,10 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
                 .filter(|n| !n.trim().is_empty() && Some(n) != focused.name.as_ref())
                 .collect();
         }
-        // A combo box's position is its selected item's, among its list items.
+        // A combo box's position is its selected item's, among its list items. A closed WinUI
+        // combo box holds only its selected item, which is its value, and no position:
+        // Windows Settings' "Scale Combo box | 125% (Recommended)" (JAWS on the dev box,
+        // 2026-10-16).
         if focus.role == okur_core::Role::ComboBox && focus.item_index.is_none() {
             let items: Vec<&UiaNode> = subtree
                 .children
@@ -542,9 +588,18 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
                 .flat_map(|c| std::iter::once(c).chain(c.children.iter()))
                 .filter(|n| n.control_type == UIA_LISTITEM)
                 .collect();
-            if let Some(i) = items.iter().position(|n| n.is_selected == Some(true)) {
-                focus.item_index = Some(i + 1);
-                focus.item_count = Some(items.len());
+            let selected = items.iter().position(|n| n.is_selected == Some(true));
+            match (selected, items.as_slice()) {
+                (Some(_), [only]) => {
+                    if focus.value.is_none() {
+                        focus.value = only.name.clone();
+                    }
+                }
+                (Some(i), _) => {
+                    focus.item_index = Some(i + 1);
+                    focus.item_count = Some(items.len());
+                }
+                (None, _) => {}
             }
         }
     }
@@ -1808,6 +1863,65 @@ mod tests {
         assert_eq!(
             inner.map(|l| (l.politeness, l.atomic)),
             Some((okur_core::Politeness::Polite, false))
+        );
+    }
+
+    /// Windows Settings' Display page (UIA chains read on the dev box, 2026-10-16): the
+    /// groups a control is directly in, outermost first, a text counting as one; none when
+    /// they are inside a control (the slider in the "Show more settings" button).
+    #[test]
+    fn a_controls_groups_are_the_ones_it_nests_in() {
+        const UIA_GROUP: i32 = 50026;
+        const UIA_PANE: i32 = 50033;
+        const UIA_SLIDER: i32 = 50015;
+        let toggle = [
+            node(UIA_PANE, "", false),
+            node(UIA_GROUP, "Brightness & color", false),
+            node(UIA_GROUP, "Night light", false),
+            node(UIA_BUTTON, "Night light", true),
+        ];
+        assert_eq!(
+            nested_groups(&toggle).unwrap_or_default(),
+            ["Brightness & color", "Night light"]
+        );
+        let link = [
+            node(UIA_PANE, "", false),
+            node(UIA_GROUP, "Brightness & color", false),
+            node(UIA_GROUP, "HDR", false),
+            node(UIA_TEXT, "More about HDR ", false),
+            node(50005, "More about HDR", true),
+        ];
+        assert_eq!(
+            nested_groups(&link).unwrap_or_default(),
+            ["Brightness & color", "HDR", "More about HDR"]
+        );
+        let slider = [
+            node(UIA_GROUP, "Brightness, Brightness", false),
+            node(UIA_BUTTON, "Show more settings", false),
+            node(UIA_GROUP, "Brightness", false),
+            node(UIA_SLIDER, "Brightness", true),
+        ];
+        assert_eq!(nested_groups(&slider), None);
+    }
+
+    /// A closed WinUI combo box holds only its selected item: that is its value, not a
+    /// position (Windows Settings' "Scale Combo box | 125% (Recommended)").
+    #[test]
+    fn a_closed_combo_boxs_only_item_is_its_value() {
+        let mut event = focus_event(Vec::new());
+        let scale = node(UIA_COMBOBOX, "Scale", true);
+        event.focus_chain = vec![node(UIA_WINDOW, "Settings", false), scale.clone()];
+        event.focus_subtree = Some(UiaNode {
+            children: vec![UiaNode {
+                is_selected: Some(true),
+                ..node(UIA_LISTITEM, "125% (Recommended)", false)
+            }],
+            ..scale
+        });
+        let focus = focus_event_from_trace(&event);
+        assert_eq!(
+            focus.map(|f| (f.value, f.item_index)),
+            Some((Some("125% (Recommended)".to_owned()), None))
         );
     }
 
