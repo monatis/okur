@@ -14,13 +14,41 @@ reading of web pages and Windows applications. It is built by AI agents in a **c
 they never see JAWS's code, only what JAWS says when keys are pressed on a separate lab
 machine, and nothing they build counts until it matches recorded JAWS speech.
 
+## Why re-implement JAWS?
+
+Blind people use the computer with the keyboard. With daily use, the keystrokes become
+instant: Insert+F7 for the list of links, H for the next heading, Insert+T for the window
+title. Nobody thinks about them, just as sighted people don't think about using the mouse.
+
+Now suppose someone changed your mouse overnight, and it behaved differently from what you
+were used to. That is how changing screen readers feels after years, often decades, of daily
+use. The alternatives are good, but they use other keys, other phrasing and other ideas of
+where the cursor is. So people stay with what they know, and for many that is JAWS: a
+commercial product, three decades old, that runs only on Windows.
+
+Okur keeps the muscle memory and replaces everything underneath:
+- **Open source**, under the Apache License 2.0.
+- **Memory-safe and fast**, written in Rust.
+- **Built to run on Windows and macOS** as first-class platforms, with Linux as a second tier.
+
+The keystrokes, the announcements and the navigation model are the interface people rely on,
+so they follow JAWS, checked step by step against recordings of it. Everything behind them is
+our own.
+
+Where to go from here:
+- **If you use a screen reader** and want to try Okur, go to
+  [For screen reader users](#for-screen-reader-users).
+- **If you are a developer** and want to contribute, go to [For developers](#for-developers).
+- **If you are curious** how AI agents can build a screen reader, read
+  [How AI agents build it](#how-ai-agents-build-it) further down.
+
+## Where it stands
+
 > **Status (October 2026): a preview on Windows.** Web pages in Chrome, File Explorer,
 > Notepad, Windows Terminal, dialog boxes, the desktop, Alt+Tab and Windows search are read as
 > JAWS reads them, and web apps such as GitHub and VS Code for the web are coming along. It
 > is not yet a replacement for your screen reader. macOS has its accessibility layer; its
 > keyboard and speech come next.
-
-## Where it stands
 
 Every figure is tool output, rerun for this README.
 
@@ -203,27 +231,6 @@ handoff. The [verification loop](docs/references/verification-loop.md) describes
 machines, recording JAWS evidence and live checks.
 
 ---
-
-## Why re-implement JAWS?
-
-Blind people use the computer with the keyboard. With daily use, the keystrokes become
-instant: Insert+F7 for the list of links, H for the next heading, Insert+T for the window
-title. Nobody thinks about them, just as sighted people don't think about using the mouse.
-
-Now suppose someone changed your mouse overnight, and it behaved differently from what you
-were used to. That is how changing screen readers feels after years, often decades, of daily
-use. The alternatives are good, but they use other keys, other phrasing and other ideas of
-where the cursor is. So people stay with what they know, and for many that is JAWS: a
-commercial product, three decades old, that runs only on Windows.
-
-Okur keeps the muscle memory and replaces everything underneath:
-- **Open source**, under the Apache License 2.0.
-- **Memory-safe and fast**, written in Rust.
-- **Built to run on Windows and macOS** as first-class platforms, with Linux as a second tier.
-
-The keystrokes, the announcements and the navigation model are the interface people rely on,
-so they follow JAWS, checked step by step against recordings of it. Everything behind them is
-our own.
 
 ## How AI agents build it
 
