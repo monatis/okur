@@ -90,21 +90,47 @@ pub enum LiveRegionAppend {
     WholeText,
 }
 
+/// What typing a character says (Basic Settings: Typing Echo).
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub enum TypingEcho {
+    /// Each character as it is typed: JAWS's default (no `TypingEcho` in `DEFAULT.JCF`).
+    #[default]
+    Characters,
+    /// Nothing: `TypingEcho=0`, the reference machine's and the dev box's. On the dev box no
+    /// sound followed four letters typed in the Run box, while Backspace spoke (`okur
+    /// wait-silence`, 2026-10-17). JAWS's word echo is not modeled.
+    None,
+}
+
+impl TypingEcho {
+    /// The echo a `DEFAULT.JCF` `TypingEcho` value sets: "0" is none; anything else is read
+    /// as characters, the only other mode modeled.
+    pub fn from_jcf(value: &str) -> Self {
+        if value.trim() == "0" {
+            Self::None
+        } else {
+            Self::Characters
+        }
+    }
+}
+
 /// All user settings.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct Settings {
     pub keyboard: KeyboardSettings,
     pub live_region_append: LiveRegionAppend,
+    pub typing_echo: TypingEcho,
 }
 
 impl Settings {
     /// The reference machine's JAWS configuration (`old-pc`'s `DEFAULT.JCF`, unchanged since
-    /// 2025-08-19, before any evidence was recorded): `KeyboardType=Laptop`; and JAWS's own
-    /// reading of growing live regions, so replay compares like with like.
+    /// 2025-08-19, before any evidence was recorded): `KeyboardType=Laptop`, `TypingEcho=0`;
+    /// and JAWS's own reading of growing live regions, so replay compares like with like.
     pub fn reference_machine() -> Self {
         Self {
             keyboard: KeyboardSettings::for_layout(KeyboardLayout::Laptop),
             live_region_append: LiveRegionAppend::WholeText,
+            typing_echo: TypingEcho::None,
         }
     }
 }

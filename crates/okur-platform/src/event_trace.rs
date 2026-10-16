@@ -931,7 +931,11 @@ fn uia_live_region_event(region: &UiaNode) -> Option<okur_core::LiveRegionEvent>
     fn texts(node: &UiaNode, out: &mut Vec<String>) {
         for child in &node.children {
             if child.control_type == UIA_TEXT {
-                if let Some(name) = child.name.as_deref().map(str::trim).filter(|n| !n.is_empty())
+                if let Some(name) = child
+                    .name
+                    .as_deref()
+                    .map(str::trim)
+                    .filter(|n| !n.is_empty())
                 {
                     out.push(name.to_owned());
                 }
@@ -2454,7 +2458,11 @@ mod tests {
         let mut group = node(UIA_GROUP, "Brightness", false);
         group.children = vec![
             node(UIA_TEXT, "Brightness", false),
-            node(UIA_TEXT, "Change brightness for the built-in display", false),
+            node(
+                UIA_TEXT,
+                "Change brightness for the built-in display",
+                false,
+            ),
             node(UIA_SLIDER, "Brightness", false),
         ];
         let mut expander = node(UIA_BUTTON, "Show more settings", false);

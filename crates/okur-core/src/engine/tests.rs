@@ -2225,3 +2225,28 @@ fn say_focus_reads_a_pages_focus_and_a_menus_item() {
         Some("Accessibility")
     );
 }
+
+/// Typing echo follows the setting: the character with JAWS's default, nothing with
+/// `TypingEcho=0` (the dev box's JAWS made no sound for letters typed in the Run box, and spoke
+/// for Backspace; 2026-10-17).
+#[test]
+fn typing_echo_follows_the_setting() {
+    use crate::settings::TypingEcho;
+    for (echo, expected) in [
+        (TypingEcho::Characters, vec!["a".to_owned()]),
+        (TypingEcho::None, Vec::new()),
+    ] {
+        let (mut engine, speech) = engine_with_speech();
+        engine.settings.typing_echo = echo;
+        engine.handle_focus_event(
+            &FocusEvent::new(Role::Edit)
+                .with_name("Open:")
+                .with_window_title("Run"),
+        );
+        speech.take();
+        let mut a = KeyEvent::new(Key::Alpha('A'), Modifiers::none(), true);
+        a.text = Some('a');
+        engine.handle_key_event(&a);
+        assert_eq!(speech.take(), expected, "{echo:?}");
+    }
+}

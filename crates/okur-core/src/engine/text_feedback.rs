@@ -36,13 +36,15 @@ impl ScreenReaderEngine {
             };
             self.expect_text_change(key);
         } else if let Some(c) = event.text {
-            let echo = if c == ' ' {
-                "space".to_owned()
-            } else {
-                SpeechFormatter::format_char(c)
-            };
-            tracing::debug!(%echo, "typing echo");
-            self.speech.speak_echo(&echo);
+            if self.settings.typing_echo == crate::settings::TypingEcho::Characters {
+                let echo = if c == ' ' {
+                    "space".to_owned()
+                } else {
+                    SpeechFormatter::format_char(c)
+                };
+                tracing::debug!(%echo, "typing echo");
+                self.speech.speak_echo(&echo);
+            }
             // Keep the field's known text current (no speech follows), so the next edit key
             // (Backspace) is spoken from the text as typed.
             if let Some(actions) = &self.actions {

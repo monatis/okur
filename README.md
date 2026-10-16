@@ -129,6 +129,7 @@ Other options:
 | `--keyboard-layout desktop` or `laptop` | the JAWS keyboard layout |
 | `--jaws-key insert`, `capslock` or `scrolllock` | the JAWS key |
 | `--live-region-whole-text` | read a growing live region whole each time, as JAWS does |
+| `--typing-echo none` | say nothing as you type (JAWS's Typing Echo set to None); `characters`, the default, says each character |
 | `--debug-log <file>` | record keys, events and timings, for reporting a problem |
 
 ### Reporting a problem

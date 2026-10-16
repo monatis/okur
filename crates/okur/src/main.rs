@@ -69,6 +69,10 @@ enum Commands {
         /// (default: only what was appended, so a streamed chat reply is read once)
         #[arg(long)]
         live_region_whole_text: bool,
+
+        /// Typing echo: characters (default, as JAWS's) or none (JAWS's TypingEcho=0)
+        #[arg(long, default_value = "characters")]
+        typing_echo: String,
     },
     /// Compare engine speech with recorded JAWS speech for every genuine corpus scenario
     Parity {
@@ -646,7 +650,16 @@ async fn main() {
             keyboard_layout,
             jaws_key,
             live_region_whole_text,
+            typing_echo,
         }) => {
+            let typing_echo = match typing_echo.to_ascii_lowercase().as_str() {
+                "characters" => okur_core::settings::TypingEcho::Characters,
+                "none" => okur_core::settings::TypingEcho::None,
+                other => {
+                    eprintln!("Error: --typing-echo must be characters or none, not {other:?}");
+                    std::process::exit(1);
+                }
+            };
             let keyboard =
                 keyboard_settings(&keyboard_layout, jaws_key.as_deref()).unwrap_or_else(|e| {
                     eprintln!("Error: {e}");
@@ -728,6 +741,7 @@ async fn main() {
                 Some(event_tx.clone()),
             )));
             engine.settings.keyboard = keyboard;
+            engine.settings.typing_echo = typing_echo;
             if live_region_whole_text {
                 engine.settings.live_region_append =
                     okur_core::settings::LiveRegionAppend::WholeText;

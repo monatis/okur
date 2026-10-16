@@ -566,7 +566,7 @@ fn replay_clock(evidence: &Value) -> Result<Option<(FixedClock, i32)>, String> {
 /// The settings JAWS ran with: from the evidence's recorded `DEFAULT.JCF` options, else the
 /// reference machine's configuration (unchanged since before any evidence was recorded).
 fn replay_settings(evidence: &Value) -> okur_core::settings::Settings {
-    use okur_core::settings::{KeyboardLayout, KeyboardSettings, Settings};
+    use okur_core::settings::{KeyboardLayout, KeyboardSettings, Settings, TypingEcho};
     let mut settings = Settings::reference_machine();
     let options = evidence.pointer("/provenance/jaws_settings/DEFAULT.JCF/Options");
     if let Some(options) = options {
@@ -578,6 +578,11 @@ fn replay_settings(evidence: &Value) -> okur_core::settings::Settings {
             KeyboardLayout::Desktop
         };
         settings.keyboard = KeyboardSettings::for_layout(layout);
+        settings.typing_echo = options
+            .get("TypingEcho")
+            .and_then(Value::as_str)
+            .map(TypingEcho::from_jcf)
+            .unwrap_or_default();
     }
     settings
 }
