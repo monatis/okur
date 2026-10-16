@@ -442,7 +442,7 @@ impl SpeechFormatter {
             .current_phrase()
             .map(|c| format!(" \u{1d}{c}\u{1e} "))
             .unwrap_or_default();
-        if node
+        let mut speech = if node
             .attributes
             .get("same_page")
             .is_some_and(|v| v == "true")
@@ -450,7 +450,13 @@ impl SpeechFormatter {
             format!("{name}  \u{1d} same page link \u{1e} {current}")
         } else {
             format!("{name}{current}  \u{1d} Link \u{1e} ")
+        };
+        // Its description follows (GitHub's commit links: the whole message, dev box).
+        if let Some(description) = node.attributes.get("description") {
+            speech.push('\n');
+            speech.push_str(description);
         }
+        speech
     }
 
     /// Formats a single word for speech.

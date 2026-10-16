@@ -655,6 +655,13 @@ impl VirtualCursor {
     /// virtual cursor follows, and JAWS speaks the control as the F/E/X quick keys do, plus
     /// the usage hint for check boxes, links and buttons [obs, 204].
     pub fn focus_node(&mut self, node_id: usize) -> Option<String> {
+        self.focus_node_from(node_id, None)
+    }
+
+    /// [`Self::focus_node`], with the table position judged from `from` (where the virtual
+    /// cursor was, when it is not the previous focus): JAWS says a table's header and position
+    /// as entered from its virtual cursor (GitHub's files table from its heading, dev box).
+    pub fn focus_node_from(&mut self, node_id: usize, from: Option<usize>) -> Option<String> {
         let previous = self.offset;
         self.move_to_node_id(node_id);
         let node = self.buffer.node(node_id)?;
@@ -708,7 +715,9 @@ impl VirtualCursor {
         if speech.trim().is_empty() {
             speech = name.to_owned();
         }
-        if let Some((header, position)) = self.table_focus_context(self.offset, previous) {
+        if let Some((header, position)) =
+            self.table_focus_context(self.offset, from.unwrap_or(previous))
+        {
             if let Some(header) = header {
                 speech = format!("{header}\n{speech}");
             }

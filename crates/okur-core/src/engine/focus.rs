@@ -79,10 +79,11 @@ impl ScreenReaderEngine {
 
             let target_id = self.page_node_for(focus);
             // Where the virtual cursor was, for the containers the focus enters.
+            let cursor_offset = self.cursor.offset;
             let cursor_node = self
                 .cursor
                 .buffer
-                .line_at_offset(self.cursor.offset)
+                .line_at_offset(cursor_offset)
                 .map(|l| l.node_id);
             tracing::debug!(
                 ?target_id,
@@ -200,7 +201,7 @@ impl ScreenReaderEngine {
                 self.cursor.offset = offset;
             }
             let mut speech = target_id
-                .and_then(|id| self.cursor.focus_node(id))
+                .and_then(|id| self.cursor.focus_node_from(id, Some(cursor_offset)))
                 .or_else(|| focus.name.clone());
             let editable_combo = target_id
                 .and_then(|id| self.cursor.buffer.node(id))
