@@ -3,6 +3,7 @@
 pub mod desktop;
 pub mod explorer;
 pub mod search;
+pub mod settings;
 pub mod task_switcher;
 pub mod taskbar;
 pub mod terminal;
@@ -23,5 +24,6 @@ pub fn modules() -> Vec<Box<dyn AppModule>> {
         Box::new(taskbar::Taskbar),
         Box::new(terminal::Terminal),
         Box::new(search::Search),
+        Box::new(settings::Settings),
     ]
 }

@@ -209,6 +209,10 @@ pub struct PlatformIds {
     pub element_class: Option<String>,
     /// The class of the focus's container.
     pub container_class: Option<String>,
+    /// The focused element's automation id (UIA AutomationId: Windows Settings' search box
+    /// is "CommandSearchTextBox").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub automation_id: Option<String>,
 }
 
 impl FocusEvent {

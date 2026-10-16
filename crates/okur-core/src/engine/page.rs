@@ -289,6 +289,16 @@ impl ScreenReaderEngine {
     /// | 2 of 5"): its name and position. The field's edit key that led to it is not read: its
     /// effect was the selection.
     pub(super) fn handle_selected(&mut self, item: &FocusEvent) -> Option<String> {
+        // A selection is read while the focus stays in a text field (a search box's results
+        // or suggestions); where the focus moves with the selection (a list), the focus says
+        // the item.
+        if !self
+            .last_native_focus
+            .as_ref()
+            .is_some_and(|f| f.role == Role::Edit)
+        {
+            return None;
+        }
         let name = item
             .name
             .as_deref()

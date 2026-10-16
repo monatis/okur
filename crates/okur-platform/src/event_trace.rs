@@ -53,7 +53,9 @@ pub const UIA_FOCUS_WINDOWS: [&str; 3] = [
 /// Processes in front whose list selections are read while focus stays in a field: Windows
 /// 11 search selects a result as the search box's text changes, and moves the selection on
 /// Down, with UIA ElementSelected events only (probed on the dev box).
-pub const UIA_SELECTION_PROCESSES: [&str; 1] = ["SearchHost.exe"];
+/// Windows Settings' search box does the same with its suggestions; Settings is in front as
+/// its frame's process (JAWS: "Display settings | 1 of 25", dev box 2026-10-16).
+pub const UIA_SELECTION_PROCESSES: [&str; 2] = ["SearchHost.exe", "ApplicationFrameHost.exe"];
 
 /// Whether a recorded event is a focus change, from a WinEvent or from UIA.
 pub fn is_focus(event: &TraceEvent) -> bool {
@@ -145,6 +147,18 @@ pub struct TraceEvent {
     /// For focus in that dialog box: its control tree, without the title bar (Say Window).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dialog_tree: Option<UiaNode>,
+    /// For a UIA notification from the application in front: what it says.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub notification: Option<TraceNotification>,
+}
+
+/// A UIA notification (`UiaRaiseNotificationEvent`): Windows Settings' search box says
+/// "Suggestions available" as it is typed in (JAWS reads it; dev box, 2026-10-16).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct TraceNotification {
+    pub text: String,
+    /// `NotificationProcessing`: 0 and 1 are important (they interrupt), 2 to 4 are not.
+    pub processing: i32,
 }
 
 /// A dialog's controls in reading order (depth first), below the dialog itself: what Say
@@ -332,6 +346,7 @@ pub fn focus_event_from_chain(
     }
     event.read_only = focused.value_is_read_only;
     event.platform.element_class = focused.class_name.clone().filter(|c| !c.is_empty());
+    event.platform.automation_id = focused.automation_id.clone().filter(|i| !i.is_empty());
     if event.in_document {
         event.dom_id = focused.automation_id.clone().filter(|id| !id.is_empty());
         event.web_application = chain
@@ -699,13 +714,31 @@ pub struct EventConverter {
     last_focus: Option<okur_core::FocusEvent>,
     /// The focused control's own name, from the last focus event's focus chain.
     focused_control: Option<String>,
+    /// The last UIA notification and when it came: the same text again within
+    /// [`NOTIFICATION_REPEAT_MS`] is said once (Settings' search box says "Suggestions
+    /// available" for every letter typed; JAWS said it once).
+    last_notification: Option<(String, u128)>,
 }
+
+/// How long the same UIA notification again is not said, in milliseconds.
+const NOTIFICATION_REPEAT_MS: u128 = 2000;
 
 impl EventConverter {
     /// The engine events for one captured event, in order (usually one, or none).
     pub fn convert(&mut self, event: &TraceEvent) -> Vec<okur_core::AccessibilityEvent> {
         if event.event == "live_region_change" {
             return live_region_events(event);
+        }
+        if let Some(notification) = &event.notification {
+            let repeat = self.last_notification.as_ref().is_some_and(|(text, at)| {
+                *text == notification.text
+                    && event.t_ms.saturating_sub(*at) < NOTIFICATION_REPEAT_MS
+            });
+            if repeat {
+                return Vec::new();
+            }
+            self.last_notification = Some((notification.text.clone(), event.t_ms));
+            return vec![notification_event(notification)];
         }
         self.convert_one(event).into_iter().collect()
     }
@@ -828,6 +861,22 @@ fn text_lines(node: &crate::ia2_snapshot::Ia2Node, out: &mut Vec<String>) {
     }
 }
 
+/// A UIA notification, said as a live region's announcement: whole each time (the same text
+/// again too), interrupting speech when the application marks it important.
+fn notification_event(notification: &TraceNotification) -> okur_core::AccessibilityEvent {
+    use okur_core::{LiveRegionEvent, Politeness};
+    // NotificationProcessing_ImportantAll and _ImportantMostRecent.
+    let politeness = if matches!(notification.processing, 0 | 1) {
+        Politeness::Assertive
+    } else {
+        Politeness::Polite
+    };
+    let mut live = LiveRegionEvent::new(notification.text.trim(), politeness);
+    live.region_id = Some("uia-notification".to_owned());
+    live.atomic = true;
+    okur_core::AccessibilityEvent::LiveRegion(live)
+}
+
 /// A live region changed: its announcement, then the page as it is now, which refreshes the
 /// buffer [obs, 206/s2-s10].
 fn live_region_events(event: &TraceEvent) -> Vec<okur_core::AccessibilityEvent> {
@@ -913,7 +962,9 @@ mod capture {
     use windows::Win32::UI::Accessibility::{
         IUIAutomationElement, IUIAutomationEventHandler, IUIAutomationEventHandler_Impl,
         IUIAutomationFocusChangedEventHandler, IUIAutomationFocusChangedEventHandler_Impl,
-        TreeScope_Subtree, UIA_SelectionItem_ElementSelectedEventId,
+        IUIAutomationNotificationEventHandler, IUIAutomationNotificationEventHandler_Impl,
+        NotificationKind, NotificationProcessing, TreeScope_Subtree,
+        UIA_SelectionItem_ElementSelectedEventId,
     };
     use windows::Win32::UI::WindowsAndMessaging::{
         DispatchMessageW, GetWindowThreadProcessId, MsgWaitForMultipleObjects, PeekMessageW,
@@ -1413,6 +1464,131 @@ mod capture {
         }
     }
 
+    const WM_UIA_NOTIFICATION: u32 = windows::Win32::UI::WindowsAndMessaging::WM_APP + 3;
+    /// UIA notifications not yet recorded, oldest first.
+    static UIA_NOTIFICATIONS: std::sync::Mutex<
+        std::collections::VecDeque<super::TraceNotification>,
+    > = std::sync::Mutex::new(std::collections::VecDeque::new());
+
+    /// The processes of the window in front: its own, and for a UWP app in a frame
+    /// (ApplicationFrameHost: Windows Settings) the app's, which owns its core window.
+    fn foreground_processes() -> [u32; 2] {
+        use windows::core::w;
+        use windows::Win32::UI::WindowsAndMessaging::{FindWindowExW, GetForegroundWindow};
+        let mut frame = 0u32;
+        let mut app = 0u32;
+        // SAFETY: plain Win32 queries with valid out-pointers and a static class name.
+        unsafe {
+            let foreground = GetForegroundWindow();
+            GetWindowThreadProcessId(foreground, Some(&mut frame));
+            if let Ok(core) = FindWindowExW(
+                Some(foreground),
+                None,
+                w!("Windows.UI.Core.CoreWindow"),
+                None,
+            ) {
+                GetWindowThreadProcessId(core, Some(&mut app));
+            }
+        }
+        [frame, app]
+    }
+
+    /// Wakes the tracer thread on UIA notifications from the application in front: what an
+    /// application says without a focus or a live region (Settings' search box: "Suggestions
+    /// available", which JAWS reads; dev box, 2026-10-16).
+    #[implement(IUIAutomationNotificationEventHandler)]
+    struct UiaNotificationHandler {
+        thread: u32,
+    }
+
+    impl IUIAutomationNotificationEventHandler_Impl for UiaNotificationHandler_Impl {
+        fn HandleNotificationEvent(
+            &self,
+            sender: windows::core::Ref<IUIAutomationElement>,
+            _kind: NotificationKind,
+            processing: NotificationProcessing,
+            display: &windows::core::BSTR,
+            _activity: &windows::core::BSTR,
+        ) -> windows::core::Result<()> {
+            use windows::Win32::Foundation::{LPARAM, WPARAM};
+            use windows::Win32::UI::WindowsAndMessaging::PostThreadMessageW;
+            let text = display.to_string();
+            if text.trim().is_empty() {
+                return Ok(());
+            }
+            // SAFETY: a property read on the element UIA passed in.
+            let pid = sender
+                .as_ref()
+                .and_then(|e| unsafe { e.CurrentProcessId() }.ok())
+                .and_then(|p| u32::try_from(p).ok())
+                .unwrap_or(0);
+            if pid == 0 || !foreground_processes().contains(&pid) {
+                return Ok(());
+            }
+            if let Ok(mut queue) = UIA_NOTIFICATIONS.lock() {
+                if queue.len() >= MAX_UIA_FOCUSED {
+                    queue.pop_front();
+                }
+                queue.push_back(super::TraceNotification {
+                    text,
+                    processing: processing.0,
+                });
+            }
+            // SAFETY: the post targets a thread that pumps messages until the handler is
+            // removed.
+            let _ = unsafe {
+                PostThreadMessageW(self.thread, WM_UIA_NOTIFICATION, WPARAM(0), LPARAM(0))
+            };
+            Ok(())
+        }
+    }
+
+    /// Records the notifications UIA reported, on the tracer thread.
+    fn record_uia_notifications() {
+        let notifications: Vec<super::TraceNotification> = UIA_NOTIFICATIONS
+            .lock()
+            .map(|mut queue| queue.drain(..).collect())
+            .unwrap_or_default();
+        for notification in notifications {
+            STATE.with(|state| {
+                let mut state = state.borrow_mut();
+                let Some(state) = state.as_mut() else { return };
+                let event = TraceEvent {
+                    t_ms: now_ms(),
+                    event: "uia_notification".to_owned(),
+                    win_event: UIA_NOTIFICATION_EVENT,
+                    hwnd: 0,
+                    id_object: 0,
+                    id_child: 0,
+                    window_class: None,
+                    window_title: None,
+                    process: None,
+                    object: None,
+                    focus_chain: Vec::new(),
+                    focus_siblings: Vec::new(),
+                    focus_subtree: None,
+                    list_position: None,
+                    text_context: None,
+                    region: None,
+                    page: None,
+                    top_window_title: None,
+                    top_window_class: None,
+                    virtual_desktop: None,
+                    dialog_lines: Vec::new(),
+                    dialog_text: Vec::new(),
+                    dialog_page: None,
+                    dialog_tree: None,
+                    notification: Some(notification),
+                };
+                (state.sink)(event);
+                state.count += 1;
+            });
+        }
+    }
+
+    /// UIA's notification event id.
+    const UIA_NOTIFICATION_EVENT: u32 = 20035;
+
     /// Records one event through the sink, with what the engine needs read now. `element`
     /// is the focused element when the event names it (UIA); otherwise UIA's focus is read.
     fn record(
@@ -1653,6 +1829,7 @@ mod capture {
                 dialog_text: dialog.text,
                 dialog_page,
                 dialog_tree,
+                notification: None,
             };
             (state.sink)(event);
             state.count += 1;
@@ -1762,6 +1939,22 @@ mod capture {
             .is_ok(),
             _ => false,
         };
+        let uia_notification: IUIAutomationNotificationEventHandler =
+            UiaNotificationHandler { thread }.into();
+        let uia5 = uia.as_ref().and_then(|uia| {
+            use windows::core::Interface;
+            uia.cast::<windows::Win32::UI::Accessibility::IUIAutomation5>()
+                .ok()
+        });
+        let uia_notification_added = match (uia5.as_ref(), root.as_ref()) {
+            // SAFETY: a desktop-wide UIA handler, removed before this thread stops pumping.
+            (Some(uia5), Some(root)) => unsafe {
+                uia5.AddNotificationEventHandler(root, TreeScope_Subtree, None, &uia_notification)
+            }
+            .inspect_err(|e| tracing::warn!("UIA notification handler not added: {e}"))
+            .is_ok(),
+            _ => false,
+        };
         // Where focus is already, as JAWS reads it when it starts: no event will report it.
         record_current_focus();
 
@@ -1772,6 +1965,7 @@ mod capture {
                 let _ = MsgWaitForMultipleObjects(None, false, 50, QS_ALLINPUT);
                 let mut uia_focused = false;
                 let mut uia_selected_queued = false;
+                let mut uia_notified = false;
                 while PeekMessageW(&mut msg, None, 0, 0, PM_REMOVE).as_bool() {
                     if msg.hwnd.is_invalid() && msg.message == WM_UIA_FOCUS {
                         // Several focus changes queued meanwhile: the focus now is read once.
@@ -1780,6 +1974,10 @@ mod capture {
                     }
                     if msg.hwnd.is_invalid() && msg.message == WM_UIA_SELECTED {
                         uia_selected_queued = true;
+                        continue;
+                    }
+                    if msg.hwnd.is_invalid() && msg.message == WM_UIA_NOTIFICATION {
+                        uia_notified = true;
                         continue;
                     }
                     let _ = TranslateMessage(&msg);
@@ -1791,7 +1989,16 @@ mod capture {
                 if uia_selected_queued {
                     record_uia_selected();
                 }
+                if uia_notified {
+                    record_uia_notifications();
+                }
             }
+        }
+        if let (Some(uia5), Some(root), true) =
+            (uia5.as_ref(), root.as_ref(), uia_notification_added)
+        {
+            // SAFETY: removes the handler added above.
+            let _ = unsafe { uia5.RemoveNotificationEventHandler(root, &uia_notification) };
         }
         if let (Some(uia), Some(root), true) = (uia.as_ref(), root.as_ref(), uia_selected_added) {
             // SAFETY: removes the handler added above.
@@ -2024,6 +2231,36 @@ mod tests {
         );
     }
 
+    /// A UIA notification is said as an announcement, and the same one again within two
+    /// seconds once (Settings' "Suggestions available" for each letter typed).
+    #[test]
+    fn a_notification_is_said_once_while_it_repeats() {
+        let notify = |t_ms: u128| {
+            let mut event = focus_event(Vec::new());
+            event.event = "uia_notification".to_owned();
+            event.t_ms = t_ms;
+            event.notification = Some(TraceNotification {
+                text: "Suggestions available".to_owned(),
+                processing: 3,
+            });
+            event
+        };
+        let mut converter = EventConverter::default();
+        let said = |events: Vec<okur_core::AccessibilityEvent>| match events.first() {
+            Some(okur_core::AccessibilityEvent::LiveRegion(live)) => Some(live.text.clone()),
+            _ => None,
+        };
+        assert_eq!(
+            said(converter.convert(&notify(1_000))),
+            Some("Suggestions available".to_owned())
+        );
+        assert_eq!(said(converter.convert(&notify(1_500))), None);
+        assert_eq!(
+            said(converter.convert(&notify(4_000))),
+            Some("Suggestions available".to_owned())
+        );
+    }
+
     /// Windows Settings' breadcrumb is a Button with a heading level: a button to focus, with
     /// the position it reports. A button reporting none gets no position counted among its
     /// siblings (a dialog's buttons, where JAWS says none).
@@ -2120,6 +2357,7 @@ mod tests {
             dialog_text: Vec::new(),
             dialog_page: None,
             dialog_tree: None,
+            notification: None,
         }
     }
 
