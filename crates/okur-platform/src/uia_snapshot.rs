@@ -986,6 +986,59 @@ pub(crate) mod capture {
         })
     }
 
+    /// The elements of the foreground window's page with these DOM ids (Chrome's
+    /// AutomationId), each with its raw-view subtree, found in one cached search: what a page
+    /// shows in its own controls, read as it is now (Google Docs' toolbar, 5 elements: the
+    /// whole page through UIA took 127 ms on the dev box).
+    pub(crate) fn page_elements(uia: &IUIAutomation, ids: &[String]) -> Vec<UiaNode> {
+        let found = || -> Option<Vec<UiaNode>> {
+            // SAFETY: UIA client queries on a valid automation object; the conditions and the
+            // cache request outlive the search.
+            unsafe {
+                let hwnd = GetForegroundWindow();
+                if hwnd.is_invalid() {
+                    return None;
+                }
+                let window = uia.ElementFromHandle(hwnd).ok()?;
+                let is_document = uia
+                    .CreatePropertyCondition(
+                        UIA_ControlTypePropertyId,
+                        &VARIANT::from(UIA_DocumentControlTypeId.0),
+                    )
+                    .ok()?;
+                let document = window.FindFirst(TreeScope_Descendants, &is_document).ok()?;
+                let mut condition: Option<IUIAutomationCondition> = None;
+                for id in ids {
+                    let this = uia
+                        .CreatePropertyCondition(
+                            UIA_AutomationIdPropertyId,
+                            &VARIANT::from(BSTR::from(id.as_str())),
+                        )
+                        .ok()?;
+                    condition = Some(match condition {
+                        Some(before) => uia.CreateOrCondition(&before, &this).ok()?,
+                        None => this,
+                    });
+                }
+                let condition = condition?;
+                let request = request_for(uia, AutomationElementMode_None, PROPERTIES)?;
+                request.SetTreeScope(TreeScope_Subtree).ok()?;
+                request.SetTreeFilter(&uia.RawViewCondition().ok()?).ok()?;
+                let elements = document
+                    .FindAllBuildCache(TreeScope_Descendants, &condition, &request)
+                    .ok()?;
+                let count = elements.Length().unwrap_or(0);
+                Some(
+                    (0..count)
+                        .filter_map(|i| elements.GetElement(i).ok())
+                        .map(|el| read_node(&el, 0))
+                        .collect(),
+                )
+            }
+        };
+        found().unwrap_or_default()
+    }
+
     pub(crate) fn os_version() -> String {
         // `ver` output, e.g. "Microsoft Windows [Version 10.0.19045.5737]".
         std::process::Command::new("cmd")

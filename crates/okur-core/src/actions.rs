@@ -47,6 +47,16 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Asks for the elements of the page in front with these DOM ids, each with its subtree,
+    /// as they are now: what a page shows in its own controls (Google Docs' toolbar shows
+    /// the formatting at the caret). They arrive later as
+    /// [`crate::event::AccessibilityEvent::PageElements`], always: empty when none was found.
+    /// Returns false when unsupported (recorded traces hold no such reads).
+    fn read_page_elements(&self, ids: &[&str]) -> bool {
+        let _ = ids;
+        false
+    }
+
     /// Puts `text` on the system clipboard (the Virtual Viewer's Ctrl+C). Returns false when
     /// unsupported.
     fn copy_text(&self, text: &str) -> bool {
@@ -71,6 +81,8 @@ pub struct RecordingActions {
     /// Takes `read_window`, as a live platform does. Replay leaves it off: recorded traces
     /// hold no window text to answer with.
     windows: bool,
+    /// Takes `read_page_elements`, as a live platform does; replay leaves it off too.
+    page_elements: bool,
 }
 
 impl RecordingActions {
@@ -78,6 +90,15 @@ impl RecordingActions {
     pub fn reading_windows() -> Self {
         Self {
             windows: true,
+            ..Self::default()
+        }
+    }
+
+    /// Records actions and takes `read_page_elements` requests; the test delivers the
+    /// elements.
+    pub fn reading_page_elements() -> Self {
+        Self {
+            page_elements: true,
             ..Self::default()
         }
     }
@@ -125,6 +146,15 @@ impl ApplicationActions for RecordingActions {
             }
         }
         self.windows
+    }
+
+    fn read_page_elements(&self, ids: &[&str]) -> bool {
+        if self.page_elements {
+            if let Ok(mut log) = self.log.lock() {
+                log.push((format!("read page elements {}", ids.join(" ")), 0));
+            }
+        }
+        self.page_elements
     }
 
     fn copy_text(&self, text: &str) -> bool {

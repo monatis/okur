@@ -5,13 +5,17 @@
 //! Each module implements [`AppModule`]. The engine keeps them in a registry ([`builtin`]):
 //! - every focus event is offered to the modules in order, before the engine's own handling,
 //!   as JAWS runs an application's script before the default one;
-//! - the other hooks go to the module that owns the focus ([`AppModule::owns`]).
+//! - the other hooks go to the module that owns the focus ([`AppModule::owns`]);
+//! - a web application's hooks go to the module that owns the page in front, by its address
+//!   ([`AppModule::owns_page`]).
 //!
-//! A module may match what the platform calls its windows (`FocusEvent::platform`, `app`);
-//! general code does not.
+//! A module may match what the platform calls its windows (`FocusEvent::platform`, `app`)
+//! or a web application's address and DOM ids; general code does not.
 
+pub mod web;
 pub mod windows;
 
+use crate::aom::{AomNode, TextFormatting};
 use crate::engine::AppMode;
 use crate::event::FocusEvent;
 use crate::input::KeyEvent;
@@ -91,9 +95,30 @@ pub trait AppModule: Send {
     fn line_after_viewer(&self, _text: &str, _caret: usize) -> Option<String> {
         None
     }
+
+    /// Whether the page at `url` is this module's web application: the page hooks below are
+    /// asked of the module that owns the page in front.
+    fn owns_page(&self, _url: &str) -> bool {
+        false
+    }
+
+    /// For Say Font in the page, focused on the element with DOM id `focus_id`: the page
+    /// elements, by DOM id, that show the formatting at the caret. For a page that draws its
+    /// text itself (Google Docs' canvas), whose focus has no text to take a font from; empty
+    /// where the focus's own text has the font.
+    fn font_elements(&self, _focus_id: &str) -> &'static [&'static str] {
+        &[]
+    }
+
+    /// The formatting at the caret, from those elements as they are now.
+    fn font_from_elements(&self, _elements: &[AomNode]) -> Option<TextFormatting> {
+        None
+    }
 }
 
 /// The application modules Okur has, in the order focus events are offered to them.
 pub fn builtin() -> Vec<Box<dyn AppModule>> {
-    windows::modules()
+    let mut modules = windows::modules();
+    modules.extend(web::modules());
+    modules
 }

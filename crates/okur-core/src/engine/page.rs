@@ -320,9 +320,19 @@ impl ScreenReaderEngine {
                     offset.saturating_sub(line.start_offset),
                 )
             });
+            let focus_dom_id = self
+                .last_page_focus
+                .and_then(|id| self.cursor.buffer.node(id))
+                .and_then(|n| n.attributes.get("id"))
+                .cloned();
             self.cursor.buffer = buffer;
-            // Node ids are the capture's own: the focus is found again by its state.
-            self.last_page_focus = self.cursor.buffer.focused_node();
+            // Node ids are the capture's own: the focus is found again by its DOM id, else by
+            // its state. A page can leave the state on more than its focus: Google Docs' menu
+            // bar is still "focused" through IA2 after a menu closes, while the document has
+            // the keyboard (dev box, 2026-10-16).
+            self.last_page_focus = focus_dom_id
+                .and_then(|id| self.cursor.buffer.node_with_dom_id(&id))
+                .or_else(|| self.cursor.buffer.focused_node());
             self.tab_start = self.last_page_focus;
             let focus_line = self
                 .last_page_focus
@@ -376,9 +386,23 @@ impl ScreenReaderEngine {
             self.live_region_additions(live);
             return None;
         }
-        let (added, continues) = match self.settings.live_region_append {
-            LiveRegionAppend::Appended => self.live_stream_piece(live),
-            LiveRegionAppend::WholeText => (self.live_region_additions(live), false),
+        // An atomic region filled again with the text it had says it again: Google Docs says
+        // each character the caret passes over in one, and Left back over the one Right
+        // passed is "o" again. What a change adds is read alone, as in any region: Docs adds a
+        // deleted character to what it said last ("e", then "e r"), which JAWS reads whole,
+        // the character at the caret with the one deleted (dev box, 2026-10-16).
+        let (added, continues) = if live.atomic {
+            let added = self.live_region_additions(live);
+            if added.trim().is_empty() {
+                (live.text.clone(), false)
+            } else {
+                (added, false)
+            }
+        } else {
+            match self.settings.live_region_append {
+                LiveRegionAppend::Appended => self.live_stream_piece(live),
+                LiveRegionAppend::WholeText => (self.live_region_additions(live), false),
+            }
         };
         if added.trim().is_empty() {
             return None;

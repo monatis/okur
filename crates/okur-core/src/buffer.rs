@@ -313,6 +313,13 @@ impl VirtualBuffer {
         self.page.as_ref().and_then(find)
     }
 
+    /// The page node with DOM id `dom_id` (the first, where a page repeats an id).
+    pub fn node_with_dom_id(&self, dom_id: &str) -> Option<usize> {
+        self.nodes()
+            .find(|n| n.attributes.get("id").is_some_and(|id| id == dom_id))
+            .map(|n| n.id)
+    }
+
     /// The page node `id`, with its subtree, if the buffer reads it.
     pub fn node(&self, id: usize) -> Option<&AomNode> {
         if !self.readable.contains(&id) {
@@ -663,6 +670,15 @@ impl VirtualBuffer {
     /// Resolves tab info for an AOM node.
     pub fn tab_info_for_node(&self, node_id: usize) -> Option<&TabInfo> {
         self.tabs.iter().find(|t| t.node_id == node_id)
+    }
+
+    /// The page's address, when it has one.
+    pub fn document_url(&self) -> Option<&str> {
+        self.page
+            .as_ref()?
+            .attributes
+            .get("url")
+            .map(String::as_str)
     }
 
     /// Document title if available.

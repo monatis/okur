@@ -69,6 +69,8 @@ mod windows_actions {
         /// The Virtual Viewer's lines for the window in front (`true`) or the focused
         /// control, answered even when nothing could be read.
         Window(bool),
+        /// The page's elements with these DOM ids, answered even when none was found.
+        PageElements(Vec<String>),
     }
 
     /// The virtual key of a key the screen reader sends for a reading command.
@@ -211,6 +213,30 @@ mod windows_actions {
                                 // Answered even when empty: the engine waits for it.
                                 let lines = lines.unwrap_or_default();
                                 let _ = events.send(AccessibilityEvent::ViewerText(lines));
+                            }
+                            Request::PageElements(ids) => {
+                                let Some(events) = events.as_ref() else {
+                                    tracing::warn!("page read impossible: no event channel");
+                                    continue;
+                                };
+                                let started = Instant::now();
+                                let elements: Vec<okur_core::AomNode> = uia
+                                    .as_ref()
+                                    .map(|uia| {
+                                        crate::uia_snapshot::capture::page_elements(uia, &ids)
+                                    })
+                                    .unwrap_or_default()
+                                    .iter()
+                                    .map(crate::uia_snapshot::to_aom)
+                                    .collect();
+                                tracing::debug!(
+                                    asked = ids.len(),
+                                    found = elements.len(),
+                                    ms = started.elapsed().as_millis(),
+                                    "page elements read"
+                                );
+                                // Answered even when none was found: the engine waits for it.
+                                let _ = events.send(AccessibilityEvent::PageElements(elements));
                             }
                         }
                     }
@@ -379,6 +405,12 @@ mod windows_actions {
 
         fn read_window(&self, window: bool) -> bool {
             self.send(Request::Window(window))
+        }
+
+        fn read_page_elements(&self, ids: &[&str]) -> bool {
+            self.send(Request::PageElements(
+                ids.iter().map(|id| (*id).to_owned()).collect(),
+            ))
         }
 
         fn press(&self, chord: &[okur_core::Key]) -> bool {

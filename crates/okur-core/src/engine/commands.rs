@@ -556,6 +556,27 @@ impl ScreenReaderEngine {
     /// attributes) or its window's font; JAWS's size for classic Notepad (314/s1, "22
     /// point") awaits a trace that recorded the font.
     fn say_font(&mut self, in_viewer: bool) -> Option<String> {
+        // A page that draws its text itself shows the font in its own controls (Google Docs'
+        // toolbar): they are read as they are now, and the font is said when they arrive
+        // (`say_page_font`).
+        if self.app_mode == AppMode::VirtualBuffer && self.forms_mode {
+            let elements = self
+                .last_page_focus
+                .and_then(|id| self.cursor.buffer.node(id))
+                .and_then(|focus| focus.attributes.get("id"))
+                .zip(self.page_app())
+                .map(|(id, app)| app.font_elements(id))
+                .unwrap_or_default();
+            if !elements.is_empty()
+                && self
+                    .actions
+                    .as_ref()
+                    .is_some_and(|a| a.read_page_elements(elements))
+            {
+                self.pending_font = Some(in_viewer);
+                return None;
+            }
+        }
         let formatting = if self.app_mode == AppMode::VirtualBuffer && !self.forms_mode {
             self.cursor.buffer.formatting_at_offset(self.cursor.offset)
         } else {
@@ -565,6 +586,25 @@ impl ScreenReaderEngine {
                 .and_then(|t| t.font.as_ref())
                 .map(crate::event::FontInfo::formatting)
         };
+        self.speak_font(formatting, in_viewer)
+    }
+
+    /// Says the font that the page's own controls show, read for Say Font (`pending_font`).
+    /// Elements nobody waits for say nothing.
+    pub(super) fn say_page_font(&mut self, elements: &[crate::aom::AomNode]) -> Option<String> {
+        let in_viewer = self.pending_font.take()?;
+        let formatting = self
+            .page_app()
+            .and_then(|app| app.font_from_elements(elements));
+        self.speak_font(formatting, in_viewer)
+    }
+
+    /// Says `formatting` as Say Font does, or shows it in the Virtual Viewer (`in_viewer`).
+    fn speak_font(
+        &mut self,
+        formatting: Option<crate::aom::TextFormatting>,
+        in_viewer: bool,
+    ) -> Option<String> {
         let description = formatting
             .as_ref()
             .and_then(SpeechFormatter::font_description);

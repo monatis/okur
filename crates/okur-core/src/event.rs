@@ -284,6 +284,9 @@ pub struct LiveRegionEvent {
     /// The region's DOM id, to find its previous text in the page.
     #[serde(default)]
     pub region_id: Option<String>,
+    /// The region is read as a whole when it changes (`aria-atomic`), not by what was added.
+    #[serde(default)]
+    pub atomic: bool,
 }
 
 impl LiveRegionEvent {
@@ -293,6 +296,7 @@ impl LiveRegionEvent {
             politeness,
             container_name: None,
             region_id: None,
+            atomic: false,
         }
     }
 
@@ -325,6 +329,9 @@ pub enum AccessibilityEvent {
     /// The Virtual Viewer's lines for the window or control in front, read for Virtualize
     /// Window or Virtualize Current Control; empty when nothing could be read.
     ViewerText(Vec<String>),
+    /// Page elements asked for by DOM id, each with its subtree, as they are now; empty when
+    /// none was found ([`crate::actions::ApplicationActions::read_page_elements`]).
+    PageElements(Vec<crate::aom::AomNode>),
     DocumentLoaded {
         title: String,
         root: crate::aom::AomNode,

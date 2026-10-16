@@ -1709,3 +1709,151 @@ fn tab_in_a_table_says_the_header_and_position_that_changed() {
     assert_eq!(said(21, "first commit"), ["Message", "Column 2"]);
     assert_eq!(said(41, "second commit"), ["Row 3"]);
 }
+
+/// Google Docs draws its document itself, and keys go to an empty element in an application
+/// region, where JAWS's Say Font says "No font" (dev box, 2026-10-16). Okur reads the font
+/// at the caret from the toolbar, as it is when Insert+F is pressed, and says it as JAWS says
+/// a font in Notepad.
+#[test]
+fn say_font_in_google_docs_reads_the_toolbar() {
+    let mut page_root =
+        AomNode::new(0, Role::Document).with_name("Untitled document - Google Docs");
+    page_root.attributes.insert(
+        "url".to_owned(),
+        "https://docs.google.com/document/d/1XYG/edit?tab=t.0".to_owned(),
+    );
+    let mut target = AomNode::new(2, Role::Group);
+    target.attributes.insert(
+        "id".to_owned(),
+        "docs-texteventtarget-descendant".to_owned(),
+    );
+    let page = page_root.with_children(vec![
+        AomNode::new(1, Role::Heading { level: 1 }).with_text("Untitled document"),
+        target,
+    ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let actions = crate::actions::RecordingActions::reading_page_elements();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut focus = FocusEvent::new(Role::Group).with_node_id(2);
+    focus.in_document = true;
+    focus.web_application = Some(String::new());
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(focus));
+    speech.take();
+
+    // The page captured again after Docs' announcements, numbered anew: the menu bar is
+    // still "focused" through IA2 after a menu closed, before the document's text target.
+    let focused = crate::aom::NodeStates {
+        focused: true,
+        ..Default::default()
+    };
+    let mut menu_bar = AomNode::new(11, Role::Group).with_states(focused.clone());
+    menu_bar
+        .attributes
+        .insert("id".to_owned(), "docs-menubar".to_owned());
+    let mut target = AomNode::new(12, Role::Group).with_states(focused);
+    target.attributes.insert(
+        "id".to_owned(),
+        "docs-texteventtarget-descendant".to_owned(),
+    );
+    let mut again = page.clone();
+    again.children = vec![
+        AomNode::new(10, Role::Heading { level: 1 }).with_text("Untitled document"),
+        menu_bar,
+        target,
+    ];
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentLoaded {
+        title: "Untitled document - Google Docs".to_owned(),
+        root: again,
+    });
+
+    let insert_f = KeyEvent::new(
+        Key::Alpha('f'),
+        Modifiers {
+            insert: true,
+            ..Modifiers::none()
+        },
+        true,
+    );
+    engine.handle_key_event(&insert_f);
+    assert!(speech.take().is_empty());
+    assert!(
+        actions.requests().iter().any(|(request, _)| request
+            == "read page elements docs-font-family fontSizeSelect boldButton italicButton underlineButton"),
+        "{:?}",
+        actions.requests()
+    );
+    let with_id = |node: AomNode, id: &str| {
+        let mut node = node;
+        node.attributes.insert("id".to_owned(), id.to_owned());
+        node
+    };
+    let selected = crate::aom::NodeStates {
+        selected: Some(true),
+        ..Default::default()
+    };
+    let pressed = crate::aom::NodeStates {
+        checked: Some(true),
+        ..Default::default()
+    };
+    let elements = vec![
+        with_id(
+            AomNode::new(10, Role::List).with_name("Font"),
+            "docs-font-family",
+        )
+        .with_children(vec![AomNode::new(11, Role::ListItem)
+            .with_name("Font list. Arial selected.")
+            .with_states(selected)]),
+        with_id(
+            AomNode::new(12, Role::ComboBox).with_name("Font size"),
+            "fontSizeSelect",
+        )
+        .with_children(vec![AomNode::new(13, Role::Group)
+            .with_name("Font size list. 11 selected.")
+            .with_children(vec![AomNode::new(14, Role::Edit)
+                .with_name("Font size")
+                .with_value("11")])]),
+        with_id(
+            AomNode::new(15, Role::Button).with_name("Bold (Ctrl+B)"),
+            "boldButton",
+        )
+        .with_states(pressed),
+    ];
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&AccessibilityEvent::PageElements(elements.clone()))
+            .as_deref(),
+        Some("Font is bold  Arial 11 point")
+    );
+    // Elements nobody waits for say nothing.
+    assert_eq!(
+        engine.handle_accessibility_event(&AccessibilityEvent::PageElements(elements)),
+        None
+    );
+}
+
+/// An atomic region (aria-atomic) filled again with the same text says it again: Google Docs
+/// says the character the caret passes over in one, so Right then Left over the same letter
+/// says it twice. What it adds is read alone: Backspace adds the deleted character to what
+/// Docs said last, and only the deleted one is said, as Notepad's is (dev box, 2026-10-16:
+/// JAWS reads the region whole, "e r"). A region that is not atomic does not repeat itself.
+#[test]
+fn an_atomic_live_region_says_a_repeat_and_its_additions() {
+    let (mut engine, speech) = engine_with_speech();
+    let docs = |text: &str| {
+        let mut live = LiveRegionEvent::new(text, Politeness::Assertive);
+        live.region_id = Some("docs-aria-speakable".to_owned());
+        live.atomic = true;
+        AccessibilityEvent::LiveRegion(live)
+    };
+    for text in ["o", "o", "e", "e\nr", "e\nr\ne"] {
+        engine.handle_accessibility_event(&docs(text));
+    }
+    assert_eq!(speech.take(), ["o", "o", "e", "r", "e"].map(str::to_owned));
+
+    for _ in 0..2 {
+        engine.handle_accessibility_event(&AccessibilityEvent::LiveRegion(reply_region("Done")));
+    }
+    assert_eq!(speech.take(), vec!["Reply\nDone".to_owned()]);
+}

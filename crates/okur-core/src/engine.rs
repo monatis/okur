@@ -94,6 +94,9 @@ pub struct ScreenReaderEngine {
     viewer: Option<crate::viewer::VirtualViewer>,
     /// A Virtual Viewer waiting for what it will show, read off the keyboard hook.
     pending_viewer: Option<PendingViewer>,
+    /// Say Font waiting for the page elements that show the font (`true`: pressed twice,
+    /// shown in the Virtual Viewer).
+    pending_font: Option<bool>,
     /// Behavior for particular applications, offered every focus first ([`crate::apps`]).
     apps: Vec<Box<dyn crate::apps::AppModule>>,
     /// Each live region's lines when it last changed, by DOM id.
@@ -131,6 +134,7 @@ impl ScreenReaderEngine {
             caps_lock_on: false,
             viewer: None,
             pending_viewer: None,
+            pending_font: None,
             apps: crate::apps::builtin(),
             last_live_text: std::collections::HashMap::new(),
             live_streams: std::collections::HashMap::new(),
@@ -151,6 +155,15 @@ impl ScreenReaderEngine {
         self.apps
             .iter()
             .find(|app| app.owns(focus))
+            .map(|app| app.as_ref())
+    }
+
+    /// The application module that owns the page in front, by the page's address.
+    fn page_app(&self) -> Option<&dyn crate::apps::AppModule> {
+        let url = self.cursor.buffer.document_url()?;
+        self.apps
+            .iter()
+            .find(|app| app.owns_page(url))
             .map(|app| app.as_ref())
     }
 
@@ -392,6 +405,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::Selected(item) => self.handle_selected(item),
             AccessibilityEvent::LiveRegion(live) => self.handle_live_region_event(live),
             AccessibilityEvent::ViewerText(lines) => self.open_screen_viewer(lines),
+            AccessibilityEvent::PageElements(elements) => self.say_page_font(elements),
             AccessibilityEvent::DocumentLoaded { title, root } => {
                 self.handle_document_loaded(title, VirtualBuffer::from_aom(root))
             }

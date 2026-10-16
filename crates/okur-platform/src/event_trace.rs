@@ -679,9 +679,25 @@ fn live_region_events(event: &TraceEvent) -> Vec<okur_core::AccessibilityEvent> 
     if let Some(region) = &event.region {
         let mut lines = Vec::new();
         text_lines(region, &mut lines);
-        let mut live = LiveRegionEvent::new(lines.join("\n"), Politeness::Polite);
+        // The region's ARIA properties, as Chromium gives them (its own, or inherited from the
+        // live region it is in): an assertive region interrupts what is being said (Google
+        // Docs' announcements as the caret moves), an atomic one is read whole.
+        let attribute = |name: &str, inherited: &str| {
+            region
+                .attributes
+                .get(name)
+                .or_else(|| region.attributes.get(inherited))
+                .map(String::as_str)
+        };
+        let politeness = match attribute("live", "container-live") {
+            Some("assertive") => Politeness::Assertive,
+            Some("off") => Politeness::Off,
+            _ => Politeness::Polite,
+        };
+        let mut live = LiveRegionEvent::new(lines.join("\n"), politeness);
         live.container_name = region.name.clone().filter(|n| !n.trim().is_empty());
         live.region_id = region.attributes.get("id").cloned();
+        live.atomic = attribute("atomic", "container-atomic") == Some("true");
         events.push(AccessibilityEvent::LiveRegion(live));
     }
     if let Some(page) = &event.page {
@@ -1682,6 +1698,52 @@ mod tests {
             ..item
         };
         assert!(reports_position(&[window("Main"), placed]));
+    }
+
+    /// A live region's politeness and atomicity come from its ARIA properties, as Chromium
+    /// gives them: Google Docs' announcements are assertive and atomic (dev box, 2026-10-16).
+    #[test]
+    fn a_live_region_keeps_its_aria_properties() {
+        let region = |attributes: &[(&str, &str)]| crate::ia2_snapshot::Ia2Node {
+            attributes: attributes
+                .iter()
+                .map(|(k, v)| ((*k).to_owned(), (*v).to_owned()))
+                .collect(),
+            children: vec![crate::ia2_snapshot::Ia2Node {
+                msaa_role: Some(0x29),
+                name: Some("o".to_owned()),
+                ..Default::default()
+            }],
+            ..Default::default()
+        };
+        let live = |region| {
+            let mut event = focus_event(Vec::new());
+            event.event = "live_region_change".to_owned();
+            event.region = Some(region);
+            match live_region_events(&event).first() {
+                Some(okur_core::AccessibilityEvent::LiveRegion(live)) => Some(live.clone()),
+                _ => None,
+            }
+        };
+        let docs = live(region(&[
+            ("id", "docs-aria-speakable"),
+            ("live", "assertive"),
+            ("atomic", "true"),
+        ]));
+        assert_eq!(
+            docs.as_ref()
+                .map(|l| (l.politeness, l.atomic, l.text.as_str())),
+            Some((okur_core::Politeness::Assertive, true, "o"))
+        );
+        // A region inside a live region takes the container's properties.
+        let inner = live(region(&[
+            ("container-live", "polite"),
+            ("container-atomic", "false"),
+        ]));
+        assert_eq!(
+            inner.map(|l| (l.politeness, l.atomic)),
+            Some((okur_core::Politeness::Polite, false))
+        );
     }
 
     fn focus_event(siblings: Vec<UiaNode>) -> TraceEvent {

@@ -545,6 +545,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::Selected(_)) => "selected",
         Some(AccessibilityEvent::LiveRegion(_)) => "live region",
         Some(AccessibilityEvent::ViewerText(_)) => "viewer text",
+        Some(AccessibilityEvent::PageElements(_)) => "page elements",
         Some(AccessibilityEvent::DocumentLoaded { .. }) => "document loaded",
     }
 }
