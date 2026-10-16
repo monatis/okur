@@ -265,8 +265,16 @@ pub fn focus_event_from_chain(
     let mut leaf = focused.clone();
     leaf.children.clear();
     let aom = crate::uia_snapshot::to_aom(&leaf);
+    // A native button that is also a heading (Windows Settings' breadcrumb, a Button with
+    // HeadingLevel1) takes the focus as a button: JAWS says "Home Button | 1 of 1" (dev box,
+    // 2026-10-16).
+    let native = !chain.iter().any(|a| a.control_type == UIA_DOCUMENT);
+    let role = match aom.role {
+        Role::Heading { .. } if native && focused.control_type == UIA_BUTTON => Role::Button,
+        ref role => role.clone(),
+    };
 
-    let mut event = okur_core::FocusEvent::new(aom.role.clone());
+    let mut event = okur_core::FocusEvent::new(role);
     event.name = aom.name.clone();
     event.value = aom.value.clone();
     event.states = aom.states.clone();
@@ -544,9 +552,13 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         focus.item_index = usize::try_from(index).ok().map(|i| i + 1);
         focus.item_count = usize::try_from(count).ok();
     }
-    // Siblings count positions among peers; a combo box's field has its list's position.
+    // Siblings count positions among peers; a combo box's field has its list's position. A
+    // button has only the position its application reports: JAWS says none for a dialog's
+    // buttons (306), and "1 of 1" for Windows Settings' breadcrumb, which reports it (dev box,
+    // 2026-10-16).
     if focus.item_index.is_none()
         && focus.role != okur_core::Role::ComboBox
+        && focus.role != okur_core::Role::Button
         && focus.container_role != Some(okur_core::Role::ComboBox)
     {
         let peers: Vec<&UiaNode> = event
@@ -1812,6 +1824,35 @@ mod tests {
         assert_eq!(
             focus.map(|f| (f.role, f.name)),
             Some((okur_core::Role::MenuItem, Some("Graphics g".to_owned())))
+        );
+    }
+
+    /// Windows Settings' breadcrumb is a Button with a heading level: a button to focus, with
+    /// the position it reports. A button reporting none gets no position counted among its
+    /// siblings (a dialog's buttons, where JAWS says none).
+    #[test]
+    fn a_native_heading_button_is_a_button() {
+        let mut event = focus_event(Vec::new());
+        let home = UiaNode {
+            heading_level: Some(80051),
+            position_in_set: Some(1),
+            size_of_set: Some(1),
+            ..node(UIA_BUTTON, "Home", true)
+        };
+        event.focus_chain = vec![node(UIA_WINDOW, "Settings", false), home];
+        let focus = focus_event_from_trace(&event);
+        assert_eq!(
+            focus.map(|f| (f.role, f.item_index, f.item_count)),
+            Some((okur_core::Role::Button, Some(1), Some(1)))
+        );
+
+        let ok = node(UIA_BUTTON, "OK", true);
+        let cancel = node(UIA_BUTTON, "Cancel", false);
+        let mut event = focus_event(vec![ok.clone(), cancel]);
+        event.focus_chain = vec![node(UIA_WINDOW, "Dialog", false), ok];
+        assert_eq!(
+            focus_event_from_trace(&event).and_then(|f| f.item_index),
+            None
         );
     }
 

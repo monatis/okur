@@ -195,9 +195,19 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
                 "Press space to activate the menu, then navigate with arrow keys",
             ));
         }
+        // A button says the position its application reports (Windows Settings' breadcrumb:
+        // "Home Button | 1 of 1 | To activate press spacebar."; JAWS on the dev box,
+        // 2026-10-16); the platform counts none for buttons (a dialog's say none, 306).
         Role::Button => {
             lines.push(Line::new(vec![text(name), role("Button")]));
+            lines.extend(position(focus));
             lines.push(Line::text("To activate press spacebar."));
+        }
+        // Windows Settings' "Rename" (JAWS, dev box 2026-10-16): "Rename Link | To activate
+        // press Enter."
+        Role::Link { .. } => {
+            lines.push(Line::new(vec![text(name), role("Link")]));
+            lines.push(Line::text("To activate press Enter."));
         }
         // A window taking focus is announced by its title alone (the window change).
         Role::Window => {}
@@ -652,6 +662,29 @@ mod tests {
         );
         assert!(m.end());
         assert!(!m.is_active());
+    }
+
+    /// Windows Settings' home page, JAWS on the dev box (2026-10-16): a link says its role and
+    /// hint, and a button the position its application reports.
+    #[test]
+    fn settings_links_and_breadcrumb_buttons() {
+        let link = FocusEvent::new(Role::Link { href: None }).with_name("Rename");
+        assert_eq!(
+            norm(&focus_speech(&link, None).render()),
+            norm("Rename \u{1d} Link \u{1e} \nTo activate press Enter.")
+        );
+        let mut home = FocusEvent::new(Role::Button).with_name("Home");
+        home.item_index = Some(1);
+        home.item_count = Some(1);
+        assert_eq!(
+            norm(&focus_speech(&home, None).render()),
+            norm("Home \u{1d} Button \u{1e} \n1 of 1\nTo activate press spacebar.")
+        );
+        let account = FocusEvent::new(Role::Button).with_name("Gigabyte Local Account");
+        assert_eq!(
+            norm(&focus_speech(&account, None).render()),
+            norm("Gigabyte Local Account \u{1d} Button \u{1e} \nTo activate press spacebar.")
+        );
     }
 
     /// Google Docs' menus, JAWS on the dev box (2026-10-16): Alt+Shift+A, Left, Down, Right,
