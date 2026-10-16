@@ -1860,8 +1860,9 @@ fn an_atomic_live_region_says_a_repeat_and_its_additions() {
 
 /// A page's menu (Google Docs' Accessibility menu, dev box 2026-10-16): the browser opens the
 /// popup before an item has the focus, reports each item twice, and ends no menu mode. The
-/// item is said once, the popup without an empty name, and the focus back in the page says
-/// "Leaving menus", as JAWS does; nothing about a sub menu follows.
+/// first item is introduced as the popup's ("menu", as JAWS begins), each item is said once,
+/// and the focus back in the page says "Leaving menus", as JAWS does; nothing about a sub
+/// menu follows.
 #[test]
 fn a_page_menu_is_left_when_the_focus_returns_to_the_page() {
     let mut target = AomNode::new(2, Role::Group);
@@ -1900,8 +1901,8 @@ fn a_page_menu_is_left_when_the_focus_returns_to_the_page() {
     assert_eq!(
         spoken,
         vec![
-            "\u{1d} Menu bar \u{1e} Accessibility To navigate press Left or Right Arrow.",
-            "\u{1d} menu \u{1e} Verbalize selection s To move through items press up or down arrow.",
+            "\u{1d} menu \u{1e} Accessibility To move through items press up or down arrow.",
+            "Verbalize selection s",
         ]
     );
 
@@ -1936,4 +1937,40 @@ fn an_empty_focus_is_not_read_as_the_cursors_line() {
         .handle_accessibility_event(&AccessibilityEvent::Focus(focus))
         .unwrap_or_default();
     assert_eq!(said.trim(), "Untitled document - Google Docs");
+}
+
+/// A page's menu opened from a text field (the web menus fixture's Alt+Shift+F, dev box
+/// 2026-10-16): its keys are the menu's. Down is not read as the field's next line (Okur
+/// said the item it left), and Escape closes the menu instead of leaving forms mode.
+#[test]
+fn a_page_menu_opened_from_a_field_takes_its_keys() {
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Web Menus"),
+            AomNode::new(2, Role::Edit).with_name("Notes"),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut notes = FocusEvent::new(Role::Edit)
+        .with_node_id(2)
+        .with_name("Notes");
+    notes.in_document = true;
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(notes));
+    assert!(engine.forms_mode);
+
+    engine.handle_accessibility_event(&AccessibilityEvent::Menu(
+        crate::event::MenuEvent::PopupStart,
+    ));
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(
+        FocusEvent::new(Role::MenuItem).with_name("New"),
+    ));
+    for key in [Key::DownArrow, Key::Escape] {
+        let event = KeyEvent::new(key, Modifiers::none(), true);
+        assert_eq!(engine.handle_key_event(&event), KeyAction::PassThrough);
+    }
+    assert!(actions.requests().is_empty(), "{:?}", actions.requests());
+    assert!(engine.forms_mode);
 }

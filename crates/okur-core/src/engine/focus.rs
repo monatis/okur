@@ -46,6 +46,14 @@ impl ScreenReaderEngine {
             self.pending_edit = None;
         }
         if focus.role == Role::MenuItem {
+            // A page's menu (an ARIA menu): its keys are the page's, as in forms mode, and
+            // none of them reads the field focused before it.
+            if self.app_mode == AppMode::VirtualBuffer {
+                self.forms_mode = true;
+                self.cursor.forms_mode_active = true;
+                self.page_focus_is_field = false;
+                self.pending_edit = None;
+            }
             let speech = self
                 .menus
                 .focus(focus.name.as_deref().unwrap_or_default())?;

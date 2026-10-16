@@ -234,6 +234,12 @@ impl ScreenReaderEngine {
 
         // 3. Handle Forms Mode
         if self.forms_mode {
+            // A page's menu takes every key, Escape too, which closes it (JAWS in Google Docs'
+            // menus, dev box, 2026-10-16); the menu's items are focus changes, not a field's
+            // text.
+            if self.menus.is_active() && self.app_mode == AppMode::VirtualBuffer {
+                return KeyAction::PassThrough;
+            }
             // In a page's application region every key is the page's (JAWS on the dev box:
             // Escape closes VS Code's command palette).
             if self.web_application.is_some() {

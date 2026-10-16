@@ -469,7 +469,17 @@ impl Menus {
     pub fn focus(&mut self, name: &str) -> Option<String> {
         let name = name.trim();
         let switching = self.closed.take().is_some() && self.open.is_empty();
-        let speech = if !self.active {
+        let speech = if !self.active && self.popup_pending {
+            // A page's menu opened before any item had the focus (Google Docs' Alt+Shift+A):
+            // the item is its popup's first.
+            self.active = true;
+            self.popup_pending = false;
+            self.popup_shown = true;
+            Some(format!(
+                "{}\n\n{name}\nTo move through items press up or down arrow.",
+                role_marker("menu")
+            ))
+        } else if !self.active {
             self.active = true;
             Some(format!(
                 "{}\n{name}\nTo navigate press Left or Right Arrow.",
@@ -499,7 +509,10 @@ impl Menus {
                 format!("{menu}{name}")
             })
         } else if switching {
-            // The next menu's popup opens right away and introduces the item (302/s5).
+            // The next menu's popup opens right away and introduces the item (302/s5). When
+            // none opens (a page's menu closed with Escape, the focus back on its bar item),
+            // the item is said once the events go quiet, as a native bar item is (302/s7).
+            self.closed = Some(name.to_owned());
             None
         } else {
             Some(name.to_owned())
@@ -528,7 +541,7 @@ impl Menus {
 
     /// Speech that waits for the event stream to go quiet.
     pub fn idle(&mut self) -> Option<String> {
-        let item = self.closed.take()?;
+        let item = self.closed.take().filter(|item| !item.is_empty())?;
         let sub_menu = state_marker("sub menu");
         Some(format!("{item}\n{sub_menu}\n{item} {sub_menu}"))
     }
@@ -574,6 +587,35 @@ mod tests {
         );
         assert!(m.end());
         assert!(!m.is_active());
+    }
+
+    /// A page's menu opened from its editor (the web menus fixture's Alt+Shift+F; Google
+    /// Docs' Alt+Shift+letter): the popup opens before any item has the focus, and Escape
+    /// moves the focus back to the bar item, which is said once the events go quiet.
+    #[test]
+    fn a_page_menu_opened_from_its_editor() {
+        let mut m = Menus::default();
+        m.popup_start();
+        assert_eq!(
+            m.focus("New").as_deref().map(norm),
+            Some(norm(
+                " \u{1d} menu \u{1e} \n\nNew\nTo move through items press up or down arrow."
+            ))
+        );
+        assert_eq!(m.focus("Open").as_deref(), Some("Open"));
+        m.popup_end();
+        assert_eq!(m.focus("File"), None);
+        assert_eq!(
+            m.idle().as_deref().map(norm),
+            Some(norm(
+                "File\n \u{1d}sub menu\u{1e} \nFile  \u{1d}sub menu\u{1e}"
+            ))
+        );
+        // A popup that closes with no item to name says nothing once quiet.
+        let mut m = Menus::default();
+        m.popup_start();
+        m.popup_end();
+        assert_eq!(m.idle(), None);
     }
 
     /// Collapses whitespace, as the parity normalizer does.
