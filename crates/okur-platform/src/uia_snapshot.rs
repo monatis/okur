@@ -841,6 +841,20 @@ pub(crate) mod capture {
         }
     }
 
+    /// An element with its control-view subtree to `depth`: a live region and what it holds.
+    pub(crate) fn element_subtree(
+        uia: &IUIAutomation,
+        element: &IUIAutomationElement,
+        depth: usize,
+    ) -> Option<UiaNode> {
+        // SAFETY: UIA client queries on valid automation objects.
+        unsafe {
+            let request = properties_request(uia, AutomationElementMode_Full)?;
+            let element = element.BuildUpdatedCache(&request).ok()?;
+            read_levels(uia, &element, depth)
+        }
+    }
+
     /// The focused element with its control-view subtree, as deep as announcements use.
     pub(crate) fn focus_subtree_of(uia: &IUIAutomation) -> Option<UiaNode> {
         // SAFETY: UIA client queries on a valid automation object.

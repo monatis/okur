@@ -746,6 +746,9 @@ pub struct EventConverter {
     /// [`NOTIFICATION_REPEAT_MS`] is said once (Settings' search box says "Suggestions
     /// available" for every letter typed; JAWS said it once).
     last_notification: Option<(String, u128)>,
+    /// The last native live region text and when it came, said once within
+    /// [`NOTIFICATION_REPEAT_MS`] as notifications are.
+    last_live_region: Option<(String, u128)>,
 }
 
 /// How long the same UIA notification again is not said, in milliseconds.
@@ -756,6 +759,19 @@ impl EventConverter {
     pub fn convert(&mut self, event: &TraceEvent) -> Vec<okur_core::AccessibilityEvent> {
         if event.event == "live_region_change" {
             return live_region_events(event);
+        }
+        if event.event == "uia_live_region" {
+            let Some(live) = event.focus_subtree.as_ref().and_then(uia_live_region_event) else {
+                return Vec::new();
+            };
+            let repeat = self.last_live_region.as_ref().is_some_and(|(text, at)| {
+                *text == live.text && event.t_ms.saturating_sub(*at) < NOTIFICATION_REPEAT_MS
+            });
+            if repeat {
+                return Vec::new();
+            }
+            self.last_live_region = Some((live.text.clone(), event.t_ms));
+            return vec![okur_core::AccessibilityEvent::LiveRegion(live)];
         }
         if let Some(notification) = &event.notification {
             let repeat = self.last_notification.as_ref().is_some_and(|(text, at)| {
@@ -905,6 +921,50 @@ fn notification_event(notification: &TraceNotification) -> okur_core::Accessibil
     okur_core::AccessibilityEvent::LiveRegion(live)
 }
 
+/// A native application's live region changed (UIA): the texts it holds, then its own name
+/// where that is not one of them, as JAWS reads Windows Settings' expander button as Alt+Left
+/// shows its page again: " Brightness Change brightness for the built-in display | Show more
+/// settings" (the slider inside is left out; dev box, 2026-10-17). A text region says its
+/// name. A region whose live setting is off says nothing.
+fn uia_live_region_event(region: &UiaNode) -> Option<okur_core::LiveRegionEvent> {
+    use okur_core::{LiveRegionEvent, Politeness};
+    fn texts(node: &UiaNode, out: &mut Vec<String>) {
+        for child in &node.children {
+            if child.control_type == UIA_TEXT {
+                if let Some(name) = child.name.as_deref().map(str::trim).filter(|n| !n.is_empty())
+                {
+                    out.push(name.to_owned());
+                }
+            }
+            texts(child, out);
+        }
+    }
+    let politeness = match region.live_setting {
+        Some(0) => return None,
+        Some(2) => Politeness::Assertive,
+        _ => Politeness::Polite,
+    };
+    let mut held = Vec::new();
+    texts(region, &mut held);
+    let name = region
+        .name
+        .as_deref()
+        .map(str::trim)
+        .filter(|n| !n.is_empty() && !held.iter().any(|t| t == n));
+    let mut parts = Vec::new();
+    if !held.is_empty() {
+        parts.push(held.join(" "));
+    }
+    parts.extend(name.map(str::to_owned));
+    if parts.is_empty() {
+        return None;
+    }
+    let mut live = LiveRegionEvent::new(parts.join("\n"), politeness);
+    live.region_id = Some("uia-live-region".to_owned());
+    live.atomic = true;
+    Some(live)
+}
+
 /// A live region changed: its announcement, then the page as it is now, which refreshes the
 /// buffer [obs, 206/s2-s10].
 fn live_region_events(event: &TraceEvent) -> Vec<okur_core::AccessibilityEvent> {
@@ -991,7 +1051,7 @@ mod capture {
         IUIAutomationElement, IUIAutomationEventHandler, IUIAutomationEventHandler_Impl,
         IUIAutomationFocusChangedEventHandler, IUIAutomationFocusChangedEventHandler_Impl,
         IUIAutomationNotificationEventHandler, IUIAutomationNotificationEventHandler_Impl,
-        NotificationKind, NotificationProcessing, TreeScope_Subtree,
+        NotificationKind, NotificationProcessing, TreeScope_Subtree, UIA_LiveRegionChangedEventId,
         UIA_SelectionItem_ElementSelectedEventId,
     };
     use windows::Win32::UI::WindowsAndMessaging::{
@@ -1617,6 +1677,110 @@ mod capture {
     /// UIA's notification event id.
     const UIA_NOTIFICATION_EVENT: u32 = 20035;
 
+    const WM_UIA_LIVE_REGION: u32 = windows::Win32::UI::WindowsAndMessaging::WM_APP + 4;
+    /// Live regions changed and not yet recorded, oldest first.
+    static UIA_LIVE_REGIONS: std::sync::Mutex<std::collections::VecDeque<MtaElement>> =
+        std::sync::Mutex::new(std::collections::VecDeque::new());
+    /// UIA's live region changed event id.
+    const UIA_LIVE_REGION_EVENT: u32 = 20024;
+
+    /// Wakes the tracer thread when a live region changes in the application in front: a
+    /// native application's (Windows Settings' cards as a page is shown again). A browser's
+    /// page regions are read through IA2 from their WinEvent instead.
+    #[implement(IUIAutomationEventHandler)]
+    struct UiaLiveRegionHandler {
+        thread: u32,
+    }
+
+    impl IUIAutomationEventHandler_Impl for UiaLiveRegionHandler_Impl {
+        fn HandleAutomationEvent(
+            &self,
+            sender: windows::core::Ref<IUIAutomationElement>,
+            _event: windows::Win32::UI::Accessibility::UIA_EVENT_ID,
+        ) -> windows::core::Result<()> {
+            use windows::Win32::Foundation::{LPARAM, WPARAM};
+            use windows::Win32::UI::WindowsAndMessaging::PostThreadMessageW;
+            let Some(element) = sender.as_ref() else {
+                return Ok(());
+            };
+            // SAFETY: property reads on the element UIA passed in.
+            let pid = unsafe { element.CurrentProcessId() }
+                .ok()
+                .and_then(|p| u32::try_from(p).ok())
+                .unwrap_or(0);
+            if pid == 0 || !foreground_processes().contains(&pid) {
+                return Ok(());
+            }
+            // SAFETY: as above.
+            let framework = unsafe { element.CurrentFrameworkId() }
+                .map(|f| f.to_string())
+                .unwrap_or_default();
+            if matches!(framework.as_str(), "Chrome" | "Gecko") {
+                return Ok(());
+            }
+            if let Ok(mut queue) = UIA_LIVE_REGIONS.lock() {
+                if queue.len() >= MAX_UIA_FOCUSED {
+                    queue.pop_front();
+                }
+                queue.push_back(MtaElement(element.clone()));
+            }
+            // SAFETY: the post targets a thread that pumps messages until the handler is
+            // removed.
+            let _ = unsafe {
+                PostThreadMessageW(self.thread, WM_UIA_LIVE_REGION, WPARAM(0), LPARAM(0))
+            };
+            Ok(())
+        }
+    }
+
+    /// Records the live regions UIA reported, each with what it holds, on the tracer thread.
+    fn record_uia_live_regions() {
+        let elements: Vec<MtaElement> = UIA_LIVE_REGIONS
+            .lock()
+            .map(|mut queue| queue.drain(..).collect())
+            .unwrap_or_default();
+        for element in elements {
+            STATE.with(|state| {
+                let mut state = state.borrow_mut();
+                let Some(state) = state.as_mut() else { return };
+                let Some(region) = state.uia.as_ref().and_then(|uia| {
+                    crate::uia_snapshot::capture::element_subtree(uia, &element.0, 2)
+                }) else {
+                    return;
+                };
+                let event = TraceEvent {
+                    t_ms: now_ms(),
+                    event: "uia_live_region".to_owned(),
+                    win_event: UIA_LIVE_REGION_EVENT,
+                    hwnd: 0,
+                    id_object: 0,
+                    id_child: 0,
+                    window_class: None,
+                    window_title: None,
+                    process: None,
+                    object: None,
+                    focus_chain: Vec::new(),
+                    focus_siblings: Vec::new(),
+                    focus_subtree: Some(region),
+                    list_position: None,
+                    text_context: None,
+                    region: None,
+                    page: None,
+                    top_window_title: None,
+                    top_window_class: None,
+                    virtual_desktop: None,
+                    dialog_lines: Vec::new(),
+                    dialog_text: Vec::new(),
+                    dialog_page: None,
+                    dialog_tree: None,
+                    notification: None,
+                };
+                (state.sink)(event);
+                state.count += 1;
+            });
+        }
+    }
+
     /// Records one event through the sink, with what the engine needs read now. `element`
     /// is the focused element when the event names it (UIA); otherwise UIA's focus is read.
     fn record(
@@ -1648,6 +1812,12 @@ mod capture {
                 && (!LIVE_EVENTS.contains(&name)
                     || (changes_focus_context && !in_foreground_process(hwnd)))
             {
+                return;
+            }
+            // A live region outside a Chromium page is read from UIA's own event
+            // ([`UiaLiveRegionHandler`]); this one has nothing to read, and its MSAA object took
+            // 970 ms to answer as Windows Settings opened (dev box, 2026-10-17).
+            if name == "live_region_change" && class != "Chrome_RenderWidgetHostHWND" {
                 return;
             }
             // Each read's end, in milliseconds since the event arrived, for the debug log when
@@ -1967,6 +2137,22 @@ mod capture {
             .is_ok(),
             _ => false,
         };
+        let uia_live_region: IUIAutomationEventHandler = UiaLiveRegionHandler { thread }.into();
+        let uia_live_region_added = match (uia.as_ref(), root.as_ref()) {
+            // SAFETY: a desktop-wide UIA handler, removed before this thread stops pumping.
+            (Some(uia), Some(root)) => unsafe {
+                uia.AddAutomationEventHandler(
+                    UIA_LiveRegionChangedEventId,
+                    root,
+                    TreeScope_Subtree,
+                    None,
+                    &uia_live_region,
+                )
+            }
+            .inspect_err(|e| tracing::warn!("UIA live region handler not added: {e}"))
+            .is_ok(),
+            _ => false,
+        };
         let uia_notification: IUIAutomationNotificationEventHandler =
             UiaNotificationHandler { thread }.into();
         let uia5 = uia.as_ref().and_then(|uia| {
@@ -1994,6 +2180,7 @@ mod capture {
                 let mut uia_focused = false;
                 let mut uia_selected_queued = false;
                 let mut uia_notified = false;
+                let mut uia_live_region_queued = false;
                 while PeekMessageW(&mut msg, None, 0, 0, PM_REMOVE).as_bool() {
                     if msg.hwnd.is_invalid() && msg.message == WM_UIA_FOCUS {
                         // Several focus changes queued meanwhile: the focus now is read once.
@@ -2008,6 +2195,10 @@ mod capture {
                         uia_notified = true;
                         continue;
                     }
+                    if msg.hwnd.is_invalid() && msg.message == WM_UIA_LIVE_REGION {
+                        uia_live_region_queued = true;
+                        continue;
+                    }
                     let _ = TranslateMessage(&msg);
                     DispatchMessageW(&msg);
                 }
@@ -2020,7 +2211,21 @@ mod capture {
                 if uia_notified {
                     record_uia_notifications();
                 }
+                if uia_live_region_queued {
+                    record_uia_live_regions();
+                }
             }
+        }
+        if let (Some(uia), Some(root), true) = (uia.as_ref(), root.as_ref(), uia_live_region_added)
+        {
+            // SAFETY: removes the handler added above.
+            let _ = unsafe {
+                uia.RemoveAutomationEventHandler(
+                    UIA_LiveRegionChangedEventId,
+                    root,
+                    &uia_live_region,
+                )
+            };
         }
         if let (Some(uia5), Some(root), true) =
             (uia5.as_ref(), root.as_ref(), uia_notification_added)
@@ -2223,7 +2428,11 @@ mod tests {
         // Notifications' app switch, in the app's button, its group and the list: the list's
         // entry, as an item.
         let switch_in_entry = [
-            node(UIA_GROUP, "Notifications from apps and other senders", false),
+            node(
+                UIA_GROUP,
+                "Notifications from apps and other senders",
+                false,
+            ),
             node(UIA_LIST, "", false),
             node(UIA_PANE, "", false),
             node(UIA_GROUP, "Claude", false),
@@ -2234,6 +2443,43 @@ mod tests {
         expected.push(GroupEntry::list(""));
         expected.extend(groups(&["Claude"]));
         assert_eq!(nested_groups(&switch_in_entry), (expected, true));
+    }
+
+    /// A native live region says the texts it holds, then its name; a text region its name.
+    #[test]
+    fn a_native_live_region_says_its_texts_then_its_name() {
+        // Windows Settings' brightness expander, traced on the dev box (2026-10-17).
+        const UIA_GROUP: i32 = 50026;
+        const UIA_SLIDER: i32 = 50015;
+        let mut group = node(UIA_GROUP, "Brightness", false);
+        group.children = vec![
+            node(UIA_TEXT, "Brightness", false),
+            node(UIA_TEXT, "Change brightness for the built-in display", false),
+            node(UIA_SLIDER, "Brightness", false),
+        ];
+        let mut expander = node(UIA_BUTTON, "Show more settings", false);
+        expander.live_setting = Some(1);
+        expander.children = vec![group];
+        let live = uia_live_region_event(&expander).map(|l| (l.text, l.politeness));
+        assert_eq!(
+            live,
+            Some((
+                "Brightness Change brightness for the built-in display\nShow more settings"
+                    .to_owned(),
+                okur_core::Politeness::Polite
+            ))
+        );
+        let mut status = node(UIA_TEXT, "Discoverable as \u{201c}PC\u{201d}", false);
+        status.live_setting = Some(2);
+        assert_eq!(
+            uia_live_region_event(&status).map(|l| (l.text, l.politeness)),
+            Some((
+                "Discoverable as \u{201c}PC\u{201d}".to_owned(),
+                okur_core::Politeness::Assertive
+            ))
+        );
+        status.live_setting = Some(0);
+        assert!(uia_live_region_event(&status).is_none());
     }
 
     /// A closed WinUI combo box holds only its selected item: that is its value, not a
