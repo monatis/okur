@@ -29,7 +29,14 @@ To record one:
 | 214 | Tab from a heading into a link in a list in a navigation region | `web-app-patterns.html` (here) |
 | 215 | A role="application" region: its name on the way in, H, Down and Escape go to the page | `web-app-patterns.html` (here) |
 
-210–215 were written on 2026-10-16 from dev-box JAWS observations (research); the handoff
+| 216 | Tab through links in a table: column header and position | `web-app-patterns.html` (here) |
+| 217 | Tab into links in complementary, search, region and contentinfo landmarks | `web-app-patterns.html` (here) |
+
+216: on the dev box, JAWS's first Tab into a table said "Name | alpha.rs … | column 1 row 2"
+on two pages, but "alpha.rs … | Row 2" (no header) on this fixture once. Okur says the header
+and the full position when the focus enters the table from outside it; the recording decides.
+
+210–217 were written on 2026-10-16 from dev-box JAWS observations (research); the handoff
 `docs/handoff/2026-10-16-responsiveness-and-web-apps.md` quotes what JAWS said there. The dev
 box's JAWS settings differ from old-pc's (it says no "banner"), so compare the recordings with
 those notes before trusting either. The H counts assume JAWS's first H after Ctrl+Home lands

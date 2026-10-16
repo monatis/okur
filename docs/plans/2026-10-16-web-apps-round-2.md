@@ -7,14 +7,16 @@ still stand; this plan adds tonight's.
 ## 1. When old-pc is back: record
 
 - Round 2's pending scenarios first (its work item 1: 315–323, 208).
-- Then 210–215 (`corpus/pending/README.md` lists them; fixture `web-app-patterns.html`). Each
+- Then 210–217 (`corpus/pending/README.md` lists them; fixture `web-app-patterns.html`). Each
   checks a behavior built from dev-box observations:
   - 210 aria-current, role descriptions, popup buttons, in reading;
   - 211 the autocomplete (forms mode kept on options, "edit combo");
   - 212 Tab and Shift+Tab from the virtual cursor;
   - 213 word stops at punctuation in a text area;
   - 214 "Files NavigationRegion | list | with 1 items";
-  - 215 role="application".
+  - 215 role="application";
+  - 216 Tab through a table (header, position);
+  - 217 landmarks named on focus.
 - Where old-pc's JAWS differs from the dev box, old-pc decides (the dev box's settings are the
   user's). Check especially: the hint after Tab into an edit combo (the dev box said it in one
   run and not in another), and whether old-pc says "banner" where the dev box does not.
