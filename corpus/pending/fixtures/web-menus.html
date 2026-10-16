@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Web Menus</title>
+  <style>
+    [role=menubar] { display: flex; gap: 1em; list-style: none; padding: 0; }
+    [role=menu] { list-style: none; padding: 0.2em; border: 1px solid #888; }
+    [role=menuitem]:focus { background: #cde; }
+  </style>
+</head>
+<body>
+  <h1>Web Menus</h1>
+  <!-- An ARIA menu bar as web editors build them (Google Docs, the APG menu bar pattern):
+       one tab stop, Left and Right along the bar, Down opens a menu, Right opens a sub menu,
+       Escape closes one level; Escape on the bar returns to the editor. Alt+Shift+F opens the
+       File menu from the editor, as Google Docs' Alt+Shift+letter shortcuts do. -->
+  <ul role="menubar" aria-label="Main menu">
+    <li role="none">
+      <span role="menuitem" tabindex="0" aria-haspopup="true" aria-expanded="false">File</span>
+      <ul role="menu" aria-label="File" hidden>
+        <li role="none"><span role="menuitem" tabindex="-1">New</span></li>
+        <li role="none"><span role="menuitem" tabindex="-1">Open</span></li>
+        <li role="none">
+          <span role="menuitem" tabindex="-1" aria-haspopup="true" aria-expanded="false">Recent</span>
+          <ul role="menu" aria-label="Recent" hidden>
+            <li role="none"><span role="menuitem" tabindex="-1">notes.txt</span></li>
+            <li role="none"><span role="menuitem" tabindex="-1">todo.txt</span></li>
+          </ul>
+        </li>
+        <li role="none"><span role="menuitem" tabindex="-1">Close</span></li>
+      </ul>
+    </li>
+    <li role="none">
+      <span role="menuitem" tabindex="-1" aria-haspopup="true" aria-expanded="false">Edit</span>
+      <ul role="menu" aria-label="Edit" hidden>
+        <li role="none"><span role="menuitem" tabindex="-1">Undo</span></li>
+        <li role="none"><span role="menuitem" tabindex="-1">Redo</span></li>
+      </ul>
+    </li>
+    <li role="none">
+      <span role="menuitem" tabindex="-1">Help</span>
+    </li>
+  </ul>
+
+  <p><label for="editor">Notes</label></p>
+  <textarea id="editor" rows="4" cols="40">First line of notes.</textarea>
+  <p id="chosen">Chosen: none</p>
+
+  <script>
+    const bar = document.querySelector('[role=menubar]');
+    const editor = document.getElementById('editor');
+    const barItems = [...bar.querySelectorAll(':scope > li > [role=menuitem]')];
+
+    const menuOf = item => item.nextElementSibling && item.nextElementSibling.matches('[role=menu]')
+      ? item.nextElementSibling : null;
+    const itemsOf = menu => [...menu.querySelectorAll(':scope > li > [role=menuitem]')];
+
+    function open(item) {
+      const menu = menuOf(item);
+      if (!menu) return null;
+      menu.hidden = false;
+      item.setAttribute('aria-expanded', 'true');
+      return menu;
+    }
+    function close(item) {
+      const menu = menuOf(item);
+      if (!menu) return;
+      for (const inner of itemsOf(menu)) close(inner);
+      menu.hidden = true;
+      item.setAttribute('aria-expanded', 'false');
+    }
+    function focusBar(item) {
+      for (const other of barItems) other.tabIndex = other === item ? 0 : -1;
+      item.focus();
+    }
+    function openFirst(item) {
+      const menu = open(item);
+      if (menu) itemsOf(menu)[0].focus();
+    }
+
+    bar.addEventListener('keydown', e => {
+      const item = e.target;
+      const inBar = barItems.includes(item);
+      const menu = item.closest('[role=menu]');
+      const owner = menu ? menu.previousElementSibling : null;
+      const topItem = inBar ? item : barItems.find(b => b.parentElement.contains(item));
+      const step = (list, by) => list[(list.indexOf(item) + by + list.length) % list.length];
+      let handled = true;
+      if (inBar && e.key === 'ArrowRight') focusBar(step(barItems, 1));
+      else if (inBar && e.key === 'ArrowLeft') focusBar(step(barItems, -1));
+      else if (inBar && (e.key === 'ArrowDown' || e.key === 'Enter')) openFirst(item);
+      else if (inBar && e.key === 'Escape') editor.focus();
+      else if (!inBar && e.key === 'ArrowDown') step(itemsOf(menu), 1).focus();
+      else if (!inBar && e.key === 'ArrowUp') step(itemsOf(menu), -1).focus();
+      else if (!inBar && e.key === 'ArrowRight' && menuOf(item)) openFirst(item);
+      else if (!inBar && e.key === 'Escape') { close(owner); owner.focus(); }
+      else if (!inBar && e.key === 'Enter' && !menuOf(item)) {
+        document.getElementById('chosen').textContent = 'Chosen: ' + item.textContent;
+        close(topItem);
+        editor.focus();
+      } else handled = false;
+      if (handled) e.preventDefault();
+    });
+
+    // Alt+Shift+F from the editor opens the File menu at its first item.
+    editor.addEventListener('keydown', e => {
+      if (e.altKey && e.shiftKey && e.code === 'KeyF') {
+        e.preventDefault();
+        focusBar(barItems[0]);
+        openFirst(barItems[0]);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -28,13 +28,18 @@ To record one:
 | 213 | Ctrl+Right and Ctrl+Left in a textarea through "dog," and "std::io" | `web-app-patterns.html` (here) |
 | 214 | Tab from a heading into a link in a list in a navigation region | `web-app-patterns.html` (here) |
 | 215 | A role="application" region: its name on the way in, H, Down and Escape go to the page | `web-app-patterns.html` (here) |
-
 | 216 | Tab through links in a table: column header and position | `web-app-patterns.html` (here) |
 | 217 | Tab into links in complementary, search, region and contentinfo landmarks | `web-app-patterns.html` (here) |
+| 218 | An ARIA menu bar: Tab in, Down, a sub menu, Escape out, and Alt+Shift+F from the editor | `web-menus.html` (here) |
 
 216: on the dev box, JAWS's first Tab into a table said "Name | alpha.rs … | column 1 row 2"
 on two pages, but "alpha.rs … | Row 2" (no header) on this fixture once. Okur says the header
 and the full position when the focus enters the table from outside it; the recording decides.
+
+218 (2026-10-16) settles how JAWS words a page's menus. On the dev box, in Google Docs, JAWS
+said "menu | Accessibility | 10 of 10 | To move through items press left or right arrow." for
+Alt+Shift+A, only the item for the next one, and "Leaving menus" when the menu closed; Okur
+words them as native menus until this is recorded.
 
 210–217 were written on 2026-10-16 from dev-box JAWS observations (research); the handoff
 `docs/handoff/2026-10-16-responsiveness-and-web-apps.md` quotes what JAWS said there. The dev
