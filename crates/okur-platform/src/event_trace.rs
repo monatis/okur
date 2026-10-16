@@ -428,9 +428,19 @@ fn nested_groups(chain: &[UiaNode]) -> (Vec<okur_core::GroupEntry>, bool) {
             .filter(|n| !n.is_empty())
             .map(str::to_owned)
     };
+    // Whether a list is above, through groups, texts and panes: a control there is the list's
+    // entry, as an item is.
+    let in_list = |above: &[UiaNode]| {
+        above
+            .iter()
+            .rev()
+            .take_while(|a| matches!(a.control_type, UIA_GROUP | UIA_TEXT | UIA_PANE | UIA_LIST))
+            .any(|a| a.control_type == UIA_LIST)
+    };
     let mut entries = Vec::new();
     let mut inside_control = false;
-    for ancestor in chain.iter().rev().skip(1) {
+    let ancestors = chain.len().saturating_sub(1);
+    for (i, ancestor) in chain.iter().enumerate().take(ancestors).rev() {
         match ancestor.control_type {
             UIA_GROUP | UIA_TEXT => {
                 entries.extend(named(ancestor).map(okur_core::GroupEntry::group))
@@ -460,8 +470,13 @@ fn nested_groups(chain: &[UiaNode]) -> (Vec<okur_core::GroupEntry>, bool) {
                 // "Output devices" link, in its list item: JAWS names "Advanced" no more after
                 // it; Network's Wi-Fi switch, in a "Wi-Fi" group in its list item: JAWS names
                 // "Wi-Fi"); inside another control there are none (Display's brightness
-                // slider, in a button: JAWS names "Brightness & color" again after it).
-                if !matches!(ancestor.control_type, 50007 | 50024 | 50029) {
+                // slider, in a button: JAWS names "Brightness & color" again after it). A
+                // control that is a list's entry is its item (Notifications' app switch, in
+                // the app's button in the list: JAWS names "Notifications from apps and other
+                // senders" no more after it).
+                let item = matches!(ancestor.control_type, 50007 | 50024 | 50029)
+                    || chain.get(..i).is_some_and(in_list);
+                if !item {
                     return (Vec::new(), true);
                 }
             }
@@ -2205,6 +2220,20 @@ mod tests {
             nested_groups(&switch_in_item),
             (vec![GroupEntry::list(""), GroupEntry::group("Wi-Fi")], true)
         );
+        // Notifications' app switch, in the app's button, its group and the list: the list's
+        // entry, as an item.
+        let switch_in_entry = [
+            node(UIA_GROUP, "Notifications from apps and other senders", false),
+            node(UIA_LIST, "", false),
+            node(UIA_PANE, "", false),
+            node(UIA_GROUP, "Claude", false),
+            node(UIA_BUTTON, "Claude", false),
+            node(UIA_BUTTON, "Claude", true),
+        ];
+        let mut expected = groups(&["Notifications from apps and other senders"]);
+        expected.push(GroupEntry::list(""));
+        expected.extend(groups(&["Claude"]));
+        assert_eq!(nested_groups(&switch_in_entry), (expected, true));
     }
 
     /// A closed WinUI combo box holds only its selected item: that is its value, not a
