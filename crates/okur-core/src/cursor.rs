@@ -708,11 +708,53 @@ impl VirtualCursor {
         if speech.trim().is_empty() {
             speech = name.to_owned();
         }
+        if let Some((header, position)) = self.table_focus_context(self.offset, previous) {
+            if let Some(header) = header {
+                speech = format!("{header}\n{speech}");
+            }
+            speech.push('\n');
+            speech.push_str(&position);
+        }
         if let Some(hint) = SpeechFormatter::web_focus_hint(node) {
             speech.push('\n');
             speech.push_str(hint);
         }
         Some(speech)
+    }
+
+    /// A focus in a table cell, as JAWS says it on Tab (dev box, 2026-10-16): the column
+    /// header when the column changed, and the position that changed after the control:
+    /// "Name | alpha.rs same page link | column 1 row 2", then "Message | first commit ... |
+    /// Column 2", or "gamma.rs ... | Row 4" further down the same column.
+    fn table_focus_context(
+        &self,
+        offset: usize,
+        previous: usize,
+    ) -> Option<(Option<String>, String)> {
+        let cell_at = |at: usize| {
+            let table = self.buffer.table_at_offset(at)?;
+            let cell = table
+                .cells
+                .iter()
+                .flatten()
+                .filter(|c| c.offset <= at)
+                .max_by_key(|c| c.offset)?;
+            Some((table.table_id, cell.row, cell.col, cell.col_header.clone()))
+        };
+        let (table, row, col, header) = cell_at(offset)?;
+        let before = cell_at(previous)
+            .filter(|(t, ..)| *t == table)
+            .map(|(_, r, c, _)| (r, c));
+        let header = match before {
+            Some((_, c)) if c == col => None,
+            _ => header.filter(|h| !h.trim().is_empty()),
+        };
+        let position = match before {
+            Some((r, _)) if r == row => format!("Column {col}"),
+            Some((_, c)) if c == col => format!("Row {row}"),
+            _ => format!("column {col} row {row}"),
+        };
+        Some((header, position))
     }
 
     fn control_focus_speech(&self, offset: usize, previous: usize) -> String {

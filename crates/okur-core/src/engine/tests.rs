@@ -1641,3 +1641,71 @@ fn focus_names_every_landmark_it_enters() {
         ]
     );
 }
+
+/// Tab through links in a table, JAWS on the dev box (2026-10-16): the column header when the
+/// column changes, then the position that changed after the link.
+#[test]
+fn tab_in_a_table_says_the_header_and_position_that_changed() {
+    let header = |id: usize, text: &str| {
+        let mut cell = AomNode::new(id, Role::TableCell).with_text(text);
+        cell.attributes.insert("tag".to_owned(), "th".to_owned());
+        cell.attributes.insert("scope".to_owned(), "col".to_owned());
+        cell
+    };
+    let link_cell = |id: usize, text: &str| {
+        AomNode::new(id, Role::TableCell).with_children(vec![AomNode::new(
+            id + 1,
+            Role::Link {
+                href: Some("#x".to_owned()),
+            },
+        )
+        .with_name(text)])
+    };
+    let table = AomNode::new(1, Role::Table).with_children(vec![
+        AomNode::new(2, Role::TableRow)
+            .with_children(vec![header(3, "Name"), header(4, "Message")]),
+        AomNode::new(5, Role::TableRow).with_children(vec![
+            link_cell(10, "alpha.rs"),
+            link_cell(20, "first commit"),
+        ]),
+        AomNode::new(6, Role::TableRow).with_children(vec![
+            link_cell(30, "beta.rs"),
+            link_cell(40, "second commit"),
+        ]),
+    ]);
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Files")
+        .with_children(vec![
+            AomNode::new(90, Role::Heading { level: 2 }).with_text("Files"),
+            table,
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let focus = |id: usize, name: &str| {
+        let mut focus = FocusEvent::new(Role::Link {
+            href: Some("#x".to_owned()),
+        })
+        .with_node_id(id)
+        .with_name(name);
+        focus.in_document = true;
+        AccessibilityEvent::Focus(focus)
+    };
+    let mut heading = FocusEvent::new(Role::Heading { level: 2 })
+        .with_node_id(90)
+        .with_name("Files");
+    heading.in_document = true;
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(heading));
+    let mut said = |id: usize, name: &str| {
+        let speech = engine
+            .handle_accessibility_event(&focus(id, name))
+            .unwrap_or_default();
+        speech
+            .lines()
+            .filter(|l| !l.contains("link") && !l.starts_with("To activate"))
+            .map(str::to_owned)
+            .collect::<Vec<_>>()
+    };
+    assert_eq!(said(11, "alpha.rs"), ["Name", "column 1 row 2"]);
+    assert_eq!(said(21, "first commit"), ["Message", "Column 2"]);
+    assert_eq!(said(41, "second commit"), ["Row 3"]);
+}

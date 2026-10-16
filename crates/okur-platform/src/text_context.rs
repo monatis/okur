@@ -22,7 +22,9 @@ pub fn utf16_to_chars(text: &str, offset: i32) -> usize {
 }
 
 #[cfg(windows)]
-pub use reader::{focus_is_in_page, from_ia2, ia2_position, read_focused, read_focused_outside_page};
+pub use reader::{
+    focus_is_in_page, from_ia2, ia2_position, read_focused, read_focused_outside_page,
+};
 
 #[cfg(windows)]
 mod reader {

@@ -37,9 +37,8 @@ still stand; this plan adds tonight's.
 - Monaco's completions (Ctrl+Space in vscode.dev): the textarea points at the suggest widget's
   rows with aria-activedescendant, which `01c65c3` handles; check what JAWS says.
 - ~~Other landmarks entered on focus~~: done (BannerRegion, ComplementaryRegion, SearchRegion,
-  Region, ContentInfoRegion, heard on the dev box). A table cell entered by Tab is said
-  otherwise (JAWS: "Link" (its column header) | "Table link same page link" | "column 2 row
-  2"); not done.
+  Region, ContentInfoRegion, heard on the dev box). A control in a table cell on Tab:
+  done too (the header when the column changes, then "column 1 row 2", "Column 2" or "Row 4").
 - JAWS's E on a read-only text area says the whole text; Okur says "Contains text". Decide
   with old-pc's evidence.
 - A list item with aria-current: JAWS said "• Item nine", then "Current Step" on its own.
