@@ -1414,11 +1414,17 @@ mod capture {
                 && !uia_named
                 && !(state.live && caret_moved)
             {
+                // A browser's own controls (its address bar) are read as an application's: the
+                // page names a focus of its own, which is not the one typed in.
+                let in_page = focus.iter().any(|n| n.control_type == super::UIA_DOCUMENT);
                 let read = || {
-                    state
-                        .uia
-                        .as_ref()
-                        .and_then(crate::text_context::read_focused)
+                    state.uia.as_ref().and_then(|uia| {
+                        if in_page {
+                            crate::text_context::read_focused(uia)
+                        } else {
+                            crate::text_context::read_focused_outside_page(uia)
+                        }
+                    })
                 };
                 let first = read();
                 // Chromium fires the caret event before its IA2 caret offset moves: a trace

@@ -22,7 +22,7 @@ pub fn utf16_to_chars(text: &str, offset: i32) -> usize {
 }
 
 #[cfg(windows)]
-pub use reader::{from_ia2, ia2_position, read_focused};
+pub use reader::{from_ia2, ia2_position, read_focused, read_focused_outside_page};
 
 #[cfg(windows)]
 mod reader {
@@ -45,6 +45,12 @@ mod reader {
             // Not a Chromium window.
             Err(_) => read_uia(uia).or_else(read_win32_edit),
         }
+    }
+
+    /// The focused field of an application other than a page: a browser's own controls (its
+    /// address bar), whose page still names a focus of its own, which is not the one typed in.
+    pub fn read_focused_outside_page(uia: &IUIAutomation) -> Option<TextContext> {
+        read_uia(uia).or_else(read_win32_edit)
     }
 
     /// A Chromium text object's state, its UTF-16 offsets made character offsets. Its word

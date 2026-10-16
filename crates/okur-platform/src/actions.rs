@@ -33,7 +33,7 @@ pub use windows_actions::WindowsActions;
 #[cfg(windows)]
 mod windows_actions {
     use super::{runtime_id, unique_id};
-    use crate::text_context::read_focused;
+    use crate::text_context::{read_focused, read_focused_outside_page};
     use okur_core::{AccessibilityEvent, TextContext};
     use std::sync::mpsc::{channel, Sender};
     use std::sync::Mutex;
@@ -61,7 +61,7 @@ mod windows_actions {
         UiaObject(Vec<i32>, Ia2Action),
         /// The field's text once the application has acted on a key, compared with the
         /// field as the engine last knew it.
-        Text(Option<TextContext>),
+        Text(Option<TextContext>, bool),
         /// The focused text as it is now, answered even when there is none.
         TextNow,
         /// A chord of virtual keys, sent marked as the screen reader's own.
@@ -111,9 +111,9 @@ mod windows_actions {
                     // the latest key. Page actions still run, in order.
                     let mut batch = vec![first];
                     batch.extend(rx.try_iter());
-                    let last_text = batch.iter().rposition(|r| matches!(r, Request::Text(_)));
+                    let last_text = batch.iter().rposition(|r| matches!(r, Request::Text(..)));
                     let batch = batch.into_iter().enumerate().filter_map(|(i, r)| {
-                        (!matches!(r, Request::Text(_)) || Some(i) == last_text).then_some(r)
+                        (!matches!(r, Request::Text(..)) || Some(i) == last_text).then_some(r)
                     });
                     for request in batch {
                         match request {
@@ -141,7 +141,7 @@ mod windows_actions {
                                     tracing::warn!("{action:?} on UIA object {id:?} failed: {e}");
                                 }
                             }
-                            Request::Text(before) => {
+                            Request::Text(before, in_page) => {
                                 let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref())
                                 else {
                                     tracing::warn!(
@@ -150,7 +150,7 @@ mod windows_actions {
                                     continue;
                                 };
                                 let started = Instant::now();
-                                let context = read_after_key(uia, before);
+                                let context = read_after_key(uia, before, in_page);
                                 // Offsets, not the text: a document's whole text on every key
                                 // made the debug log huge.
                                 tracing::debug!(
@@ -270,7 +270,14 @@ mod windows_actions {
     /// the field is read; unchanged, it is polled until it changes or the settle time passes
     /// (a key at a boundary changes nothing). Without a known state, a first read is the
     /// "before", as it was.
-    fn read_after_key(uia: &IUIAutomation, known: Option<TextContext>) -> Option<TextContext> {
+    fn read_after_key(
+        uia: &IUIAutomation,
+        known: Option<TextContext>,
+        in_page: bool,
+    ) -> Option<TextContext> {
+        if !in_page {
+            return read_other_after_key(uia, known);
+        }
         // SAFETY: plain Win32 call with no preconditions.
         let window = unsafe { GetForegroundWindow() };
         match xa11y_windows::ia2::ChromiumTextField::focused(window) {
@@ -327,23 +334,23 @@ mod windows_actions {
         let (before, mut now) = match known {
             Some(known) => {
                 std::thread::sleep(HEAD_START);
-                (Some(known), read_focused(uia))
+                (Some(known), read_focused_outside_page(uia))
             }
             None => {
-                let before = read_focused(uia);
+                let before = read_focused_outside_page(uia);
                 (before.clone(), before)
             }
         };
         while now == before && started.elapsed() < SETTLE {
             std::thread::sleep(POLL);
-            now = read_focused(uia);
+            now = read_focused_outside_page(uia);
         }
         // A selection still being extended (Ctrl+Shift+End over many lines) is read once two
         // reads agree; a caret move is read at once.
         if now != before && now.as_ref().is_some_and(|c| c.selection.is_some()) {
             loop {
                 std::thread::sleep(POLL);
-                let again = read_focused(uia);
+                let again = read_focused_outside_page(uia);
                 if again == now || started.elapsed() >= SETTLE * 2 {
                     break;
                 }
@@ -362,8 +369,8 @@ mod windows_actions {
             self.act(node, Ia2Action::DefaultAction)
         }
 
-        fn read_at_caret(&self, before: Option<&TextContext>) -> bool {
-            self.send(Request::Text(before.cloned()))
+        fn read_at_caret(&self, before: Option<&TextContext>, in_page: bool) -> bool {
+            self.send(Request::Text(before.cloned(), in_page))
         }
 
         fn read_text(&self) -> bool {

@@ -20,9 +20,12 @@ pub trait ApplicationActions: Send {
     /// handled the key being passed to it. `before` is the field as the engine last knew it:
     /// the application may act on the key before the platform's first read, so the read
     /// compares with it to see the key's effect. The text arrives later as
-    /// [`crate::event::AccessibilityEvent::TextContext`]. Returns false when unsupported.
-    fn read_at_caret(&self, before: Option<&crate::event::TextContext>) -> bool {
-        let _ = before;
+    /// [`crate::event::AccessibilityEvent::TextContext`]. `in_page` says the focus is in a
+    /// page (a browser's or an Electron app's document), whose fields the platform reads
+    /// through the page; a browser's own controls (its address bar) are read like any other
+    /// application's. Returns false when unsupported.
+    fn read_at_caret(&self, before: Option<&crate::event::TextContext>, in_page: bool) -> bool {
+        let _ = (before, in_page);
         false
     }
 
@@ -101,7 +104,7 @@ impl ApplicationActions for RecordingActions {
         self.record("activate", node)
     }
 
-    fn read_at_caret(&self, _before: Option<&crate::event::TextContext>) -> bool {
+    fn read_at_caret(&self, _before: Option<&crate::event::TextContext>, _in_page: bool) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push(("caret".to_owned(), 0));
         }

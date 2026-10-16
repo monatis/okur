@@ -324,11 +324,9 @@ impl ScreenReaderEngine {
                 .map(|l| l.start_offset);
             self.cursor.offset = match (focus_line, place) {
                 (Some(start), _) => start,
-                (None, Some((text, start, column))) => {
-                    same_line(&self.cursor.buffer, &text, start)
-                        .map(|line_start| line_start + column)
-                        .unwrap_or(offset)
-                }
+                (None, Some((text, start, column))) => same_line(&self.cursor.buffer, &text, start)
+                    .map(|line_start| line_start + column)
+                    .unwrap_or(offset),
                 (None, None) => offset,
             }
             .min(self.cursor.buffer.len());
