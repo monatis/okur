@@ -1,0 +1,89 @@
+# The checks every agent commit passes locally (.agents/scripts/check-pre-commit.ps1), run on
+# every push to main and every pull request: formatting, no panicking calls, clippy with the
+# bounds-safety lints, the hermetic test suite (parity replay, the corpus manifest and the
+# baselines included), and reference data kept apart from engine code.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+  RUST_BACKTRACE: 1
+
+jobs:
+  integrity:
+    name: Format and reference data
+    runs-on: ubuntu-latest
+    steps:
+      # Recorded evidence and snapshots are hashed byte for byte: no line-ending conversion.
+      - run: git config --global core.autocrlf false
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - name: Formatting
+        run: cargo fmt --all --check
+      - name: Reference data and engine code in separate commits
+        shell: bash
+        run: |
+          before='${{ github.event.before }}'
+          if [ '${{ github.event_name }}' = 'pull_request' ]; then
+            range='origin/${{ github.base_ref }}..HEAD'
+          elif [ -n "$before" ] && [ "$before" != '0000000000000000000000000000000000000000' ]; then
+            range="$before..${{ github.sha }}"
+          else
+            echo 'No pushed range to check.'
+            exit 0
+          fi
+          bash .agents/scripts/check-reference-separation.sh "$range"
+
+  windows:
+    name: Windows (gate, clippy, tests)
+    runs-on: windows-latest
+    steps:
+      - run: git config --global core.autocrlf false
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: No unwrap, expect or panicking macros
+        shell: pwsh
+        run: ./.agents/scripts/check-sources.ps1
+      - name: Clippy (warnings, indexing and string slicing denied)
+        run: cargo clippy --workspace --all-targets --all-features -- -D warnings -D clippy::indexing_slicing -D clippy::string_slice
+      - name: Tests (hermetic; parity replay, corpus manifest and baselines included)
+        run: cargo test --workspace
+
+  portable:
+    name: ${{ matrix.os }} (platform-neutral crates)
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    # The engine and the accessibility types must build and pass everywhere. The macOS and
+    # Linux ports themselves are not built here yet; until they are, this job reports
+    # without failing the workflow.
+    continue-on-error: true
+    steps:
+      - run: git config --global core.autocrlf false
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Tests of the engine and the accessibility types
+        run: cargo test -p okur-core -p xa11y-core

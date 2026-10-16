@@ -157,7 +157,8 @@ These exist because an audit (2026-10-14) found parity claims that no tool had e
 - `crates/xa11y/`: our accessibility-API layer, vendored from xa11y 0.15.2 (MIT) and extended in-tree. See `crates/xa11y/VENDORED.md` for import changes, the hardening ratchet, and planned extensions.
 - `corpus/`: Reference speech corpus (manifest, fixtures, scenarios, evidence, quality report). `corpus/pending/` holds scenarios written but not yet recorded; the manifest and parity ignore it.
 - `skills/jaws-reference/`: Reusable automation skill for JAWS COM and speech extraction.
-- `.agents/`: Antigravity agent configuration (`mcp_config.json`, `hooks.json`) and the shared quality-gate scripts (`scripts/`) used by every harness.
+- `.agents/`: Antigravity agent configuration (`mcp_config.json`, `hooks.json`) and the shared quality-gate scripts (`scripts/`) used by every harness and by CI.
+- `.github/workflows/`: CI.
 - `.claude/`, `.mcp.json`, `CLAUDE.md`: Claude Code adapters for the same hooks, MCP servers, and the `jaws-reference` skill.
 
 ---
@@ -168,8 +169,8 @@ These exist because an audit (2026-10-14) found parity claims that no tool had e
 # Code formatting
 cargo fmt --check
 
-# Strict lint check (must have 0 errors, 0 warnings)
-cargo clippy --all-targets --all-features -- -D warnings
+# Strict lint check (must have 0 errors, 0 warnings; the gate also denies unchecked indexing)
+cargo clippy --workspace --all-targets --all-features -- -D warnings -D clippy::indexing_slicing -D clippy::string_slice
 
 # Test execution
 cargo test
@@ -177,3 +178,10 @@ cargo test
 # Run CLI
 cargo run --bin okur -- --help
 ```
+
+CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs the same checks on every push to
+`main` and every pull request: formatting, `.agents/scripts/check-sources.ps1` (the gate's panic scan),
+clippy and the tests on Windows, `.agents/scripts/check-reference-separation.sh` over the pushed
+commits, and the platform-neutral crates' tests on macOS and Linux (informational until those ports
+are built there). The project is licensed under Apache-2.0 (`LICENSE`, `NOTICE`); the vendored xa11y
+crates keep their MIT license.
