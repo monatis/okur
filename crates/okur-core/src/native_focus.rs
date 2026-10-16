@@ -458,6 +458,9 @@ pub struct Menus {
     /// The item whose popup just closed. If focus does not move on (switching menus with
     /// Left/Right), JAWS announces the item once speech goes idle (302/s7).
     closed: Option<String>,
+    /// A page's menus (ARIA), whose items say where they are themselves ([`Self::page_focus`]):
+    /// popups opening and closing say nothing.
+    page: bool,
 }
 
 impl Menus {
@@ -527,14 +530,71 @@ impl Menus {
     }
 
     pub fn popup_start(&mut self) {
+        if self.page {
+            return;
+        }
         self.open.push(self.current.clone().unwrap_or_default());
         self.popup_pending = true;
         self.closed = None;
     }
 
     pub fn popup_end(&mut self) {
+        if self.page {
+            return;
+        }
         self.closed = self.open.pop();
         self.popup_pending = false;
+    }
+
+    /// Focus landed on a page's menu item (an ARIA menu), said as JAWS says one (Google Docs'
+    /// menus, dev box 2026-10-16): on the menu bar its name and position ("Help | 9 of 10"),
+    /// in a menu its name, and "sub menu" for one that opens a menu ("Verbalize to screen
+    /// reader s ► sub menu"). The first item of the session begins with "menu" and ends with
+    /// the hint ("menu | Accessibility | 10 of 10 | To move through items press left or
+    /// right arrow."). The same item reported again says nothing.
+    pub fn page_focus(
+        &mut self,
+        name: &str,
+        on_bar: bool,
+        position: Option<(usize, usize)>,
+        opens_menu: bool,
+    ) -> Option<String> {
+        let name = name.trim();
+        if self.active && self.current.as_deref() == Some(name) {
+            return None;
+        }
+        let first = !self.active;
+        self.active = true;
+        self.page = true;
+        self.current = Some(name.to_owned());
+        self.popup_pending = false;
+        self.closed = None;
+        let mut lines = Vec::new();
+        if first {
+            lines.push(role_marker("menu"));
+            lines.push(String::new());
+        }
+        if on_bar {
+            lines.push(name.to_owned());
+            if let Some((index, count)) = position {
+                lines.push(format!("{index} of {count}"));
+            }
+        } else if opens_menu {
+            lines.push(format!("{name} {}", state_marker("sub menu")));
+        } else {
+            lines.push(name.to_owned());
+        }
+        if first {
+            lines.push(
+                if on_bar {
+                    "To move through items press left or right arrow."
+                } else {
+                    "To move through items press up or down arrow."
+                }
+                .to_owned(),
+            );
+        }
+        Some(lines.join("\n"))
     }
 
     /// Ends menu mode; true when menus were active ("Leaving menus").
@@ -592,6 +652,45 @@ mod tests {
         );
         assert!(m.end());
         assert!(!m.is_active());
+    }
+
+    /// Google Docs' menus, JAWS on the dev box (2026-10-16): Alt+Shift+A, Left, Down, Right,
+    /// Down. Bar items say their position; menu items their name, and "sub menu" for one that
+    /// opens a menu; popups opening and closing say nothing, also once quiet.
+    #[test]
+    fn a_pages_menus_say_where_their_items_are() {
+        let mut m = Menus::default();
+        m.popup_start();
+        assert_eq!(
+            m.page_focus("Accessibility", true, Some((10, 10)), true)
+                .as_deref()
+                .map(norm),
+            Some(norm(
+                " \u{1d} menu \u{1e} \n\nAccessibility\n10 of 10\n\
+                 To move through items press left or right arrow."
+            ))
+        );
+        m.popup_end();
+        assert_eq!(
+            m.page_focus("Help", true, Some((9, 10)), true).as_deref(),
+            Some("Help\n9 of 10")
+        );
+        m.popup_start();
+        assert_eq!(
+            m.page_focus("Search the menus", false, Some((1, 3)), false)
+                .as_deref(),
+            Some("Search the menus")
+        );
+        assert_eq!(m.page_focus("Search the menus", false, None, false), None);
+        assert_eq!(
+            m.page_focus("Verbalize to screen reader", false, None, true)
+                .as_deref()
+                .map(norm),
+            Some(norm("Verbalize to screen reader \u{1d}sub menu\u{1e}"))
+        );
+        m.popup_end();
+        assert_eq!(m.idle(), None);
+        assert!(m.end());
     }
 
     /// A page's menu opened from its editor (the web menus fixture's Alt+Shift+F; Google

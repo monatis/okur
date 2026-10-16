@@ -113,6 +113,9 @@ pub struct FocusEvent {
     /// The container is a list view, a list of items with columns (JAWS's "List view"),
     /// not a list box.
     pub container_is_list_view: bool,
+    /// The focused menu item is on a menu bar (a page's ARIA menu bar), not in a menu.
+    #[serde(default)]
+    pub in_menu_bar: bool,
     /// Further columns of a list-view item, after its name.
     pub columns: Vec<String>,
     /// The focused element is inside a browser document (its focus chain has a document).
@@ -190,6 +193,7 @@ impl FocusEvent {
             container_role: None,
             container_name: None,
             container_is_list_view: false,
+            in_menu_bar: false,
             columns: Vec::new(),
             in_document: false,
             dom_id: None,

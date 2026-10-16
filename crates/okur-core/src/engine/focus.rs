@@ -54,9 +54,18 @@ impl ScreenReaderEngine {
                 self.page_focus_is_field = false;
                 self.pending_edit = None;
             }
-            let speech = self
-                .menus
-                .focus(focus.name.as_deref().unwrap_or_default())?;
+            let name = focus.name.as_deref().unwrap_or_default();
+            let speech = if focus.in_document {
+                let position = focus.item_index.zip(focus.item_count);
+                self.menus.page_focus(
+                    name,
+                    focus.in_menu_bar,
+                    position,
+                    focus.states.expanded.is_some(),
+                )
+            } else {
+                self.menus.focus(name)
+            }?;
             self.speech.speak(&speech, true);
             return Some(speech);
         }

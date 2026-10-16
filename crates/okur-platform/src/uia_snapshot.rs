@@ -182,7 +182,7 @@ fn heading_level(node: &UiaNode) -> Option<u32> {
         .and_then(|l| u32::try_from(l - 80050).ok())
 }
 
-fn aria_property<'a>(node: &'a UiaNode, key: &str) -> Option<&'a str> {
+pub(crate) fn aria_property<'a>(node: &'a UiaNode, key: &str) -> Option<&'a str> {
     node.aria_properties.as_deref().and_then(|props| {
         props.split(';').find_map(|pair| {
             let (k, v) = pair.split_once('=')?;

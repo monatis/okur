@@ -1860,9 +1860,9 @@ fn an_atomic_live_region_says_a_repeat_and_its_additions() {
 
 /// A page's menu (Google Docs' Accessibility menu, dev box 2026-10-16): the browser opens the
 /// popup before an item has the focus, reports each item twice, and ends no menu mode. The
-/// first item is introduced as the popup's ("menu", as JAWS begins), each item is said once,
-/// and the focus back in the page says "Leaving menus", as JAWS does; nothing about a sub
-/// menu follows.
+/// first item is said as JAWS says it ("menu | Accessibility | 10 of 10 | To move through
+/// items press left or right arrow."), each item once, and the focus back in the page says
+/// "Leaving menus", as JAWS does; nothing about a sub menu follows.
 #[test]
 fn a_page_menu_is_left_when_the_focus_returns_to_the_page() {
     let mut target = AomNode::new(2, Role::Group);
@@ -1885,13 +1885,21 @@ fn a_page_menu_is_left_when_the_focus_returns_to_the_page() {
     engine.handle_accessibility_event(&AccessibilityEvent::Focus(text_target.clone()));
     speech.take();
 
-    let item =
-        |name: &str| AccessibilityEvent::Focus(FocusEvent::new(Role::MenuItem).with_name(name));
+    let item = |name: &str, on_bar: bool| {
+        let mut focus = FocusEvent::new(Role::MenuItem).with_name(name);
+        focus.in_document = true;
+        focus.in_menu_bar = on_bar;
+        if on_bar {
+            focus.item_index = Some(10);
+            focus.item_count = Some(10);
+        }
+        AccessibilityEvent::Focus(focus)
+    };
     let popup = AccessibilityEvent::Menu(crate::event::MenuEvent::PopupStart);
     engine.handle_accessibility_event(&popup);
-    engine.handle_accessibility_event(&item("Accessibility"));
-    engine.handle_accessibility_event(&item("Accessibility"));
-    engine.handle_accessibility_event(&item("Verbalize selection s"));
+    engine.handle_accessibility_event(&item("Accessibility", true));
+    engine.handle_accessibility_event(&item("Accessibility", true));
+    engine.handle_accessibility_event(&item("Verbalize selection s", false));
     engine.handle_accessibility_event(&popup);
     let spoken: Vec<String> = speech
         .take()
@@ -1901,7 +1909,8 @@ fn a_page_menu_is_left_when_the_focus_returns_to_the_page() {
     assert_eq!(
         spoken,
         vec![
-            "\u{1d} menu \u{1e} Accessibility To move through items press up or down arrow.",
+            "\u{1d} menu \u{1e} Accessibility 10 of 10 \
+             To move through items press left or right arrow.",
             "Verbalize selection s",
         ]
     );

@@ -363,6 +363,58 @@ pub fn focus_event_from_chain(
 /// Without a provider PositionInSet (WinForms and most Win32 controls report none), the
 /// position is counted among the focused element's siblings of the same control type.
 pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
+    // A page's menu item (an ARIA menu): Chrome reports the focus on the menu item and on its
+    // document, both with the item focused through UIA, which gives its place: on the menu
+    // bar or in a menu, its position, and whether it opens a menu (Google Docs' menus; JAWS
+    // says "Help | 9 of 10" for a bar item, "Verbalize to screen reader s ► sub menu" for an
+    // item that opens one; dev box, 2026-10-16).
+    if let Some(item) = event
+        .focus_chain
+        .last()
+        .filter(|f| f.control_type == UIA_MENUITEM)
+        .filter(|_| {
+            event
+                .focus_chain
+                .iter()
+                .any(|n| n.control_type == UIA_DOCUMENT)
+        })
+    {
+        const UIA_MENUBAR: i32 = 50010;
+        let mut focus = okur_core::FocusEvent::new(okur_core::Role::MenuItem)
+            .with_name(item.name.clone().unwrap_or_default());
+        focus.in_document = true;
+        focus.item_index = item.position_in_set.and_then(|p| usize::try_from(p).ok());
+        focus.item_count = item.size_of_set.and_then(|s| usize::try_from(s).ok());
+        // An item that opens a menu reports no expand state through Chromium's UIA when its
+        // menu is closed, only its popup (`haspopup=menu`).
+        let opens_menu =
+            crate::uia_snapshot::aria_property(item, "haspopup").is_some_and(|p| p != "false");
+        focus.states.expanded = match item.expand_collapse_state {
+            Some(0) => Some(false),
+            Some(1) | Some(2) => Some(true),
+            _ => opens_menu.then_some(false),
+        };
+        focus.in_menu_bar = event
+            .focus_chain
+            .iter()
+            .rev()
+            .nth(1)
+            .is_some_and(|parent| parent.control_type == UIA_MENUBAR);
+        return Some(focus);
+    }
+    // A page's menu item focused through MSAA when UIA has the focus elsewhere: the page
+    // moved on (Google Docs puts the focus on a bar item for a moment as Escape closes its
+    // menu, then back in the document); not a menu to enter.
+    let page_window = event.window_class.as_deref() == Some("Chrome_RenderWidgetHostHWND");
+    if page_window
+        && event.object.as_ref().and_then(|o| o.role) == Some(MSAA_MENUITEM)
+        && event
+            .focus_chain
+            .last()
+            .is_some_and(|f| f.control_type != UIA_MENUITEM)
+    {
+        return None;
+    }
     // Menus: UIA keeps reporting the control focused before the menu (WinForms MenuStrip),
     // while the MSAA focus event names the menu item, as JAWS reads it [obs, 302].
     if let Some(object) = event
@@ -373,19 +425,6 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         return Some(
             okur_core::FocusEvent::new(okur_core::Role::MenuItem)
                 .with_name(object.name.clone().unwrap_or_default()),
-        );
-    }
-    // A page's menu item (an ARIA menu): Chrome reports the focus on its document too, with
-    // the menu item focused through UIA (Google Docs' menus, dev box, 2026-10-16). Both are
-    // the menu item.
-    if let Some(item) = event
-        .focus_chain
-        .last()
-        .filter(|f| f.control_type == UIA_MENUITEM)
-    {
-        return Some(
-            okur_core::FocusEvent::new(okur_core::Role::MenuItem)
-                .with_name(item.name.clone().unwrap_or_default()),
         );
     }
     // The recorded window text belongs to the focused HWND (an edit's text is its content);
@@ -1774,6 +1813,47 @@ mod tests {
             focus.map(|f| (f.role, f.name)),
             Some((okur_core::Role::MenuItem, Some("Graphics g".to_owned())))
         );
+    }
+
+    /// A page's menu item keeps its place: on the menu bar, its position, whether it opens a
+    /// menu (Google Docs' "Help", 9 of 10). A menu item reported through MSAA while UIA has
+    /// the focus elsewhere in the page is the page moving on, not a menu.
+    #[test]
+    fn a_page_menu_item_keeps_its_place() {
+        const UIA_MENUBAR: i32 = 50010;
+        let mut event = focus_event(Vec::new());
+        let help = UiaNode {
+            position_in_set: Some(9),
+            size_of_set: Some(10),
+            aria_properties: Some("haspopup=menu".to_owned()),
+            ..node(UIA_MENUITEM, "Help", true)
+        };
+        event.focus_chain = vec![
+            node(UIA_DOCUMENT, "Untitled document - Google Docs", false),
+            node(UIA_MENUBAR, "", false),
+            help,
+        ];
+        let focus = focus_event_from_trace(&event);
+        assert_eq!(
+            focus
+                .as_ref()
+                .map(|f| (f.in_document, f.in_menu_bar, f.item_index, f.item_count)),
+            Some((true, true, Some(9), Some(10)))
+        );
+        assert_eq!(focus.and_then(|f| f.states.expanded), Some(false));
+
+        event.window_class = Some("Chrome_RenderWidgetHostHWND".to_owned());
+        event.object = Some(TraceObject {
+            role: Some(MSAA_MENUITEM),
+            name: Some("Help".to_owned()),
+            value: None,
+            states: 0,
+        });
+        event.focus_chain = vec![
+            node(UIA_DOCUMENT, "Untitled document - Google Docs", false),
+            node(UIA_EDIT, "Document content", true),
+        ];
+        assert_eq!(focus_event_from_trace(&event), None);
     }
 
     fn focus_event(siblings: Vec<UiaNode>) -> TraceEvent {
