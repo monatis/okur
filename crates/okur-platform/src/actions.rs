@@ -27,6 +27,17 @@ pub fn unique_id(node: &okur_core::AomNode) -> Option<i32> {
     node.attributes.get(UNIQUE_ID_ATTR)?.parse().ok()
 }
 
+/// Whether two reads of a field have the same text, caret and selection: what a key
+/// changes. The font is left out: the read the engine knows can carry what a poll does not
+/// look up (a page paragraph's alignment, `text_context::with_paragraph_alignment`).
+fn same_place(a: &Option<okur_core::TextContext>, b: &Option<okur_core::TextContext>) -> bool {
+    match (a, b) {
+        (Some(a), Some(b)) => a.text == b.text && a.caret == b.caret && a.selection == b.selection,
+        (None, None) => true,
+        _ => false,
+    }
+}
+
 #[cfg(windows)]
 pub use windows_actions::WindowsActions;
 
@@ -307,6 +318,12 @@ mod windows_actions {
         // SAFETY: plain Win32 call with no preconditions.
         let window = unsafe { GetForegroundWindow() };
         match xa11y_windows::ia2::ChromiumTextField::focused(window) {
+            // A field whose paragraphs are objects of their own (Google Docs with braille
+            // support): its IA2 text is those objects, and UIA reads it as one text, with
+            // the caret where it is in it and the font there.
+            Ok(Some(field)) if field.is_compound() => {
+                read_other_after_key(uia, known).map(crate::text_context::with_paragraph_alignment)
+            }
             Ok(Some(field)) => read_chromium_after_key(&field, known),
             Ok(None) => None,
             // Not a Chromium window.
@@ -367,17 +384,18 @@ mod windows_actions {
                 (before.clone(), before)
             }
         };
-        while now == before && started.elapsed() < SETTLE {
+        while super::same_place(&now, &before) && started.elapsed() < SETTLE {
             std::thread::sleep(POLL);
             now = read_focused_outside_page(uia);
         }
         // A selection still being extended (Ctrl+Shift+End over many lines) is read once two
         // reads agree; a caret move is read at once.
-        if now != before && now.as_ref().is_some_and(|c| c.selection.is_some()) {
+        if !super::same_place(&now, &before) && now.as_ref().is_some_and(|c| c.selection.is_some())
+        {
             loop {
                 std::thread::sleep(POLL);
                 let again = read_focused_outside_page(uia);
-                if again == now || started.elapsed() >= SETTLE * 2 {
+                if super::same_place(&again, &now) || started.elapsed() >= SETTLE * 2 {
                     break;
                 }
                 now = again;
@@ -536,4 +554,32 @@ pub fn set_clipboard_text(text: &str) -> Result<(), String> {
 pub fn capture_foreground_page_quick() -> Result<okur_core::AomNode, crate::PlatformError> {
     let snapshot = crate::uia_snapshot::capture_foreground_document(None, None)?;
     Ok(crate::uia_snapshot::to_aom(&snapshot.root))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::same_place;
+
+    fn read(caret: usize, alignment: Option<&str>) -> Option<okur_core::TextContext> {
+        Some(okur_core::TextContext {
+            text: "Second line".to_owned(),
+            caret,
+            selection: None,
+            font: Some(okur_core::FontInfo {
+                family: "Arial".to_owned(),
+                alignment: alignment.map(str::to_owned),
+                ..Default::default()
+            }),
+            word: None,
+        })
+    }
+
+    /// A poll without the paragraph's alignment is the same place as the read with it: a
+    /// key has not acted until the text, caret or selection change.
+    #[test]
+    fn a_reads_place_leaves_the_font_out() {
+        assert!(same_place(&read(3, Some("left")), &read(3, None)));
+        assert!(!same_place(&read(3, Some("left")), &read(4, Some("left"))));
+        assert!(!same_place(&read(3, None), &None));
+    }
 }

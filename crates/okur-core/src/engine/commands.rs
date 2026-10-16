@@ -379,6 +379,24 @@ impl ScreenReaderEngine {
         speech
     }
 
+    /// Whether the text field typed in is a document, which reads some keys as a document
+    /// does: a native one (Windows 11 Notepad), or a page's multi-line field (Google Docs'
+    /// document with braille support; JAWS on the dev box, 2026-10-16).
+    pub(super) fn editing_document(&self) -> bool {
+        let native = self.app_mode != AppMode::VirtualBuffer
+            && self
+                .last_native_focus
+                .as_ref()
+                .is_some_and(|f| f.role == Role::Document);
+        let page = self.forms_mode
+            && self.app_mode == AppMode::VirtualBuffer
+            && self
+                .last_page_focus
+                .and_then(|id| self.cursor.buffer.node(id))
+                .is_some_and(|n| n.attributes.get("multiline").is_some_and(|m| m == "true"));
+        native || page
+    }
+
     /// Whether keys go to a text field: forms mode in a page, or a focused native edit or
     /// text document (Windows 11 Notepad, Word).
     pub(super) fn editing_text(&self) -> bool {
@@ -402,14 +420,15 @@ impl ScreenReaderEngine {
         if self.editing_text() && say_line {
             // Say Line does not change the field, so no report follows: speak the field's
             // last known text now, or read it when none is known [obs, 305/s9, s15]. A
-            // multi-line document (Notepad) gives the line alone (JAWS, dev box).
-            let key = crate::editing::EditKey::SayLine;
+            // document (Notepad, Google Docs) gives the line alone (JAWS, dev box).
+            let document = self.editing_document();
+            let key = if document {
+                crate::editing::EditKey::Line
+            } else {
+                crate::editing::EditKey::SayLine
+            };
             match self.last_text.clone() {
                 Some(context) => {
-                    let document = self
-                        .last_native_focus
-                        .as_ref()
-                        .is_some_and(|f| f.role == Role::Document);
                     let speech = if document {
                         Some(crate::editing::line_at(&context).trim().to_owned())
                             .filter(|l| !l.is_empty())
@@ -610,12 +629,14 @@ impl ScreenReaderEngine {
             .and_then(SpeechFormatter::font_description);
         // A native text field that reports its alignment adds its paragraph formatting, after
         // a comma (JAWS 2025 in Windows 11 Notepad, dev box: "Font is Consolas 11 point, |
-        // Paragraph formatting left justified"); pages (209/s3) and fields known only by
-        // their window font (314/s1) do not.
+        // Paragraph formatting left justified"), and so does a page's field (Google Docs'
+        // document with braille support, dev box 2026-10-16); the virtual cursor (209/s3) and
+        // fields known only by their window font (314/s1) do not.
+        let in_browse_mode = self.app_mode == AppMode::VirtualBuffer && !self.forms_mode;
         let paragraph = formatting
             .as_ref()
             .and_then(|f| f.alignment.as_deref())
-            .filter(|_| self.app_mode != AppMode::VirtualBuffer)
+            .filter(|_| !in_browse_mode)
             .map(SpeechFormatter::paragraph_formatting);
         let description = match (description, &paragraph) {
             (Some(font), Some(_)) => Some(format!("{font},")),

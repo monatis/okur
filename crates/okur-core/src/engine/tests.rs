@@ -1974,3 +1974,114 @@ fn a_page_menu_opened_from_a_field_takes_its_keys() {
     assert!(actions.requests().is_empty(), "{:?}", actions.requests());
     assert!(engine.forms_mode);
 }
+
+/// A page's multi-line field reads keys as a document does: Google Docs' document with
+/// braille support, JAWS on the dev box (2026-10-16). Home says the character it lands on,
+/// Ctrl+Home "top of file" and the line, Say Line the line alone, and Say Font the font and
+/// then the paragraph's alignment.
+#[test]
+fn a_pages_multi_line_field_reads_keys_as_a_document() {
+    let mut field = AomNode::new(2, Role::Edit).with_name("Document content");
+    field
+        .attributes
+        .insert("multiline".to_owned(), "true".to_owned());
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Untitled document - Google Docs")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Untitled document"),
+            field,
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.set_actions(Box::new(crate::actions::RecordingActions::default()));
+    let context = |caret: usize| crate::event::TextContext {
+        text: "First line\nSecond line with a bold word".to_owned(),
+        caret,
+        selection: None,
+        font: Some(crate::event::FontInfo {
+            family: "Arial".to_owned(),
+            size_tenths: 110,
+            bold: true,
+            alignment: Some("left".to_owned()),
+            ..Default::default()
+        }),
+        word: None,
+    };
+    let mut focus = FocusEvent::new(Role::Edit)
+        .with_node_id(2)
+        .with_name("Document content");
+    focus.in_document = true;
+    focus.text = Some(context(15));
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(focus));
+    assert!(engine.forms_mode);
+    speech.take();
+
+    assert_eq!(
+        engine.execute_command("Insert+F").as_deref(),
+        Some("Font is bold  Arial 11 point,\nParagraph formatting left justified")
+    );
+    let jaws = |key: Key, ctrl: bool| {
+        KeyEvent::new(
+            key,
+            Modifiers {
+                ctrl,
+                insert: key == Key::UpArrow,
+                ..Modifiers::none()
+            },
+            true,
+        )
+    };
+    speech.take();
+    engine.handle_key_event(&jaws(Key::UpArrow, false));
+    assert_eq!(
+        speech.take(),
+        vec!["Second line with a bold word".to_owned()]
+    );
+
+    engine.handle_key_event(&jaws(Key::Home, false));
+    engine.handle_accessibility_event(&AccessibilityEvent::TextContext(context(11)));
+    engine.handle_key_event(&jaws(Key::Home, true));
+    engine.handle_accessibility_event(&AccessibilityEvent::TextContext(context(0)));
+    assert_eq!(
+        speech.take(),
+        vec!["S".to_owned(), "top of file\nFirst line".to_owned()]
+    );
+}
+
+/// A page captured again finds its focus by role and name when the focus has no DOM id and
+/// another node keeps a focused state (Google Docs' menu bar, before its document's field).
+#[test]
+fn a_refreshed_page_finds_a_focus_without_an_id() {
+    let focused = crate::aom::NodeStates {
+        focused: true,
+        ..Default::default()
+    };
+    let page = |first: usize| {
+        let mut menu_bar = AomNode::new(first, Role::Group).with_states(focused.clone());
+        menu_bar
+            .attributes
+            .insert("id".to_owned(), "docs-menubar".to_owned());
+        AomNode::new(0, Role::Document)
+            .with_name("Untitled document - Google Docs")
+            .with_children(vec![
+                menu_bar,
+                AomNode::new(first + 1, Role::Edit)
+                    .with_name("Document content")
+                    .with_states(focused.clone()),
+            ])
+    };
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page(1)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let mut focus = FocusEvent::new(Role::Edit)
+        .with_node_id(2)
+        .with_name("Document content");
+    focus.in_document = true;
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(focus));
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentLoaded {
+        title: "Untitled document - Google Docs".to_owned(),
+        root: page(10),
+    });
+    engine.on_idle();
+    assert_eq!(engine.last_page_focus, Some(11));
+}

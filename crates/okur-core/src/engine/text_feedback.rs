@@ -1,7 +1,6 @@
 //! What edit keys say: the text, caret and selection the application reports after a key.
 
 use super::ScreenReaderEngine;
-use crate::aom::Role;
 use crate::input::KeyEvent;
 use crate::speech::SpeechFormatter;
 
@@ -27,13 +26,10 @@ impl ScreenReaderEngine {
             return;
         }
         if let Some(key) = crate::editing::EditKey::of(event) {
-            // A multi-line native document (Windows 11 Notepad) reads some keys otherwise.
-            let document = !self.forms_mode
-                && self
-                    .last_native_focus
-                    .as_ref()
-                    .is_some_and(|f| f.role == Role::Document);
-            let key = if document {
+            // A document (Windows 11 Notepad; a page's multi-line field, Google Docs' with
+            // braille support, where JAWS said "top of file" for Ctrl+Home and the character
+            // for Home on the dev box, 2026-10-16) reads some keys otherwise.
+            let key = if self.editing_document() {
                 key.in_document(event.key, event.modifiers.ctrl)
             } else {
                 key

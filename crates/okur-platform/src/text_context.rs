@@ -21,9 +21,21 @@ pub fn utf16_to_chars(text: &str, offset: i32) -> usize {
     text.chars().count()
 }
 
+/// A CSS `text-align` as Say Font's alignments name it.
+pub fn css_alignment(align: &str) -> Option<&'static str> {
+    Some(match align {
+        "left" | "start" => "left",
+        "right" | "end" => "right",
+        "center" => "centered",
+        "justify" => "justified",
+        _ => return None,
+    })
+}
+
 #[cfg(windows)]
 pub use reader::{
     focus_is_in_page, from_ia2, ia2_position, read_focused, read_focused_outside_page,
+    with_paragraph_alignment,
 };
 
 #[cfg(windows)]
@@ -41,6 +53,17 @@ mod reader {
         // SAFETY: plain Win32 call with no preconditions.
         let window = unsafe { GetForegroundWindow() };
         match xa11y_windows::ia2::chromium_text_state(window) {
+            // A field whose paragraphs are objects of their own (Google Docs with braille
+            // support) is read as one text through UIA.
+            Ok(Some(state))
+                if state
+                    .text
+                    .contains(xa11y_windows::ia2::EMBEDDED_OBJECT_CHAR) =>
+            {
+                read_uia(uia)
+                    .map(with_paragraph_alignment)
+                    .or_else(|| Some(from_ia2(state)))
+            }
             Ok(Some(state)) => Some(from_ia2(state)),
             // A Chromium page whose focused object has no text.
             Ok(None) => None,
@@ -280,6 +303,29 @@ mod reader {
         }
     }
 
+    /// `context` with the alignment of the paragraph at its caret, when its font has none:
+    /// Chromium's UIA reports no text alignment, and the paragraph's IA2 object attributes
+    /// have it (`text-align`), as JAWS says it for Google Docs' document ("Paragraph
+    /// formatting left justified", dev box 2026-10-16).
+    pub fn with_paragraph_alignment(mut context: TextContext) -> TextContext {
+        if context.font.as_ref().is_none_or(|f| f.alignment.is_some()) {
+            return context;
+        }
+        // SAFETY: plain Win32 call with no preconditions.
+        let window = unsafe { GetForegroundWindow() };
+        let alignment = xa11y_windows::ia2::ChromiumTextField::focused(window)
+            .ok()
+            .flatten()
+            .and_then(|field| field.caret_paragraph_attributes())
+            .and_then(|attributes| attributes.get("text-align").cloned())
+            .and_then(|align| super::css_alignment(&align))
+            .map(str::to_owned);
+        if let Some(font) = context.font.as_mut() {
+            font.alignment = alignment;
+        }
+        context
+    }
+
     /// The font a Win32 edit draws with (`WM_GETFONT`; GDI font handles are valid across the
     /// session), in points at the screen's DPI.
     fn win32_font(hwnd: windows::Win32::Foundation::HWND) -> Option<okur_core::FontInfo> {
@@ -342,6 +388,15 @@ mod reader {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn css_alignments_are_named_as_say_font_names_them() {
+        assert_eq!(css_alignment("start"), Some("left"));
+        assert_eq!(css_alignment("center"), Some("centered"));
+        assert_eq!(css_alignment("justify"), Some("justified"));
+        assert_eq!(css_alignment("end"), Some("right"));
+        assert_eq!(css_alignment("-webkit-auto"), None);
+    }
 
     #[test]
     fn utf16_offsets_become_character_offsets() {

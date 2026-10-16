@@ -320,19 +320,35 @@ impl ScreenReaderEngine {
                     offset.saturating_sub(line.start_offset),
                 )
             });
-            let focus_dom_id = self
+            let old_focus = self
                 .last_page_focus
                 .and_then(|id| self.cursor.buffer.node(id))
-                .and_then(|n| n.attributes.get("id"))
-                .cloned();
+                .map(|n| {
+                    (
+                        n.attributes.get("id").cloned(),
+                        n.role.clone(),
+                        n.name.clone(),
+                    )
+                });
             self.cursor.buffer = buffer;
-            // Node ids are the capture's own: the focus is found again by its DOM id, else by
-            // its state. A page can leave the state on more than its focus: Google Docs' menu
-            // bar is still "focused" through IA2 after a menu closes, while the document has
-            // the keyboard (dev box, 2026-10-16).
-            self.last_page_focus = focus_dom_id
-                .and_then(|id| self.cursor.buffer.node_with_dom_id(&id))
-                .or_else(|| self.cursor.buffer.focused_node());
+            // Node ids are the capture's own: the focus is found again by its DOM id, else as
+            // the focused node with its role and name, else by its state alone. A page can
+            // leave the state on more than its focus: Google Docs' menu bar is still "focused"
+            // through IA2 after a menu closes, while the document has the keyboard (dev box,
+            // 2026-10-16), and its document's field has no DOM id.
+            let buffer = &self.cursor.buffer;
+            self.last_page_focus = old_focus
+                .as_ref()
+                .and_then(|(dom_id, _, _)| dom_id.as_deref())
+                .and_then(|id| buffer.node_with_dom_id(id))
+                .or_else(|| {
+                    let (_, role, name) = old_focus.as_ref()?;
+                    buffer
+                        .nodes()
+                        .find(|n| n.states.focused && &n.role == role && &n.name == name)
+                        .map(|n| n.id)
+                })
+                .or_else(|| buffer.focused_node());
             self.tab_start = self.last_page_focus;
             let focus_line = self
                 .last_page_focus

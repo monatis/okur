@@ -306,8 +306,8 @@ mod com {
 
     pub mod capture {
         use super::super::{
-            parse_attributes, Ia2Node, Ia2TextPosition, Ia2TextRun, Ia2TextState, FONT_ATTRIBUTES,
-            IA2_TEXT_BOUNDARY_LINE, IA2_TEXT_OFFSET_LENGTH,
+            parse_attributes, Ia2Node, Ia2TextPosition, Ia2TextRun, Ia2TextState,
+            EMBEDDED_OBJECT_CHAR, FONT_ATTRIBUTES, IA2_TEXT_BOUNDARY_LINE, IA2_TEXT_OFFSET_LENGTH,
         };
         use super::{IAccessible2, IAccessibleText};
         use windows::core::{Interface, BSTR, PCWSTR};
@@ -358,6 +358,18 @@ mod com {
             let sp: IServiceProvider = acc.cast().ok()?;
             // SAFETY: QueryService with the IAccessible service id and IAccessible2 IID.
             unsafe { sp.QueryService::<IAccessible2>(&IAccessible::IID) }.ok()
+        }
+
+        /// An MSAA object's IA2 object attributes (`text-align`, `display`, …), when it has
+        /// IA2.
+        fn object_attributes(
+            acc: &IAccessible,
+        ) -> Option<std::collections::BTreeMap<String, String>> {
+            let ia2 = ia2_of(acc)?;
+            let mut attrs = BSTR::default();
+            // SAFETY: out-pointer to a local on a valid interface; BSTR ownership transfers.
+            unsafe { ia2.get_attributes(&mut attrs) }.ok().ok()?;
+            Some(parse_attributes(&attrs.to_string()))
         }
 
         fn read_text(text: &IAccessibleText, node: &mut Ia2Node) {
@@ -655,6 +667,88 @@ mod com {
                     selection: self.selection(),
                     length,
                 })
+            }
+
+            /// Whether its text holds other objects (an [`EMBEDDED_OBJECT_CHAR`] for each): an
+            /// editing host whose paragraphs are elements of their own (Google Docs' document
+            /// with braille support), whose own text is those characters, not what it shows.
+            /// Its start and the character at its caret are checked, so a long plain field is
+            /// not read whole for it.
+            pub fn is_compound(&self) -> bool {
+                let text = |start: i32, end: i32| -> Option<String> {
+                    let mut part = BSTR::default();
+                    // SAFETY: out-pointer to a local on a valid interface; BSTR ownership
+                    // transfers to `part`.
+                    unsafe { self.0.get_text(start, end, &mut part) }
+                        .ok()
+                        .ok()?;
+                    Some(part.to_string())
+                };
+                let (mut caret, mut length) = (0i32, 0i32);
+                // SAFETY: out-pointers to locals on a valid interface.
+                let read = unsafe {
+                    self.0.get_caretOffset(&mut caret).is_ok()
+                        && self.0.get_nCharacters(&mut length).is_ok()
+                };
+                if !read || length <= 0 {
+                    return false;
+                }
+                let embedded =
+                    |part: Option<String>| part.is_some_and(|p| p.contains(EMBEDDED_OBJECT_CHAR));
+                embedded(text(0, length.min(256)))
+                    || (caret >= 0 && caret < length && embedded(text(caret, caret + 1)))
+            }
+
+            /// The IA2 object attributes of the paragraph its caret is in (`text-align`), for a
+            /// field whose paragraphs are objects of their own ([`Self::is_compound`]): the
+            /// caret is on the paragraph's embedded object character, and the paragraph is the
+            /// field's child object of that rank (its static text children have no such
+            /// character). Otherwise the field's own attributes.
+            pub fn caret_paragraph_attributes(
+                &self,
+            ) -> Option<std::collections::BTreeMap<String, String>> {
+                const ROLE_SYSTEM_STATICTEXT: i32 = 0x29;
+                let field: IAccessible = self.0.cast().ok()?;
+                let text = |start: i32, end: i32| -> Option<String> {
+                    let mut part = BSTR::default();
+                    // SAFETY: out-pointer to a local on a valid interface; BSTR ownership
+                    // transfers to `part`.
+                    unsafe { self.0.get_text(start, end, &mut part) }
+                        .ok()
+                        .ok()?;
+                    Some(part.to_string())
+                };
+                let mut caret = 0i32;
+                // SAFETY: out-pointer to a local on a valid interface.
+                unsafe { self.0.get_caretOffset(&mut caret) }.ok().ok()?;
+                let on_object =
+                    text(caret, caret + 1).is_some_and(|c| c.starts_with(EMBEDDED_OBJECT_CHAR));
+                if !on_object {
+                    return object_attributes(&field);
+                }
+                let rank = text(0, caret)?
+                    .chars()
+                    .filter(|&c| c == EMBEDDED_OBJECT_CHAR)
+                    .count();
+                // SAFETY: valid IAccessible.
+                let count = unsafe { field.accChildCount() }.unwrap_or(0).max(0);
+                let mut children = vec![VARIANT::default(); usize::try_from(count).ok()?];
+                let mut obtained = 0i32;
+                // SAFETY: the slice length is the requested child count.
+                unsafe { AccessibleChildren(&field, 0, &mut children, &mut obtained) }.ok()?;
+                let paragraph = children
+                    .iter()
+                    .take(usize::try_from(obtained).unwrap_or(0))
+                    .filter_map(dispatch_child)
+                    .filter(|child| {
+                        // SAFETY: MSAA role query on a valid child for itself.
+                        let role = unsafe { child.get_accRole(&self_child()) }
+                            .ok()
+                            .and_then(|v| i32::try_from(&v).ok());
+                        role != Some(ROLE_SYSTEM_STATICTEXT)
+                    })
+                    .nth(rank)?;
+                object_attributes(&paragraph)
             }
 
             /// Its whole text, with its caret and first selection.
