@@ -143,6 +143,10 @@ pub struct FocusEvent {
     /// When the focus is on a property sheet's page in that dialog box: the page's name,
     /// announced as the dialog opens ("General page").
     pub dialog_page: Option<String>,
+    /// When the focused control is inside a dialog box's group box: the group box's text,
+    /// which JAWS says before the control's name ("Speech Rate: left right slider").
+    #[serde(default)]
+    pub group_box: Option<String>,
     /// When the active window is a dialog box: its buttons, in order (the Virtual Viewer's
     /// last line, "Yes No Cancel") [obs, 311/s14].
     pub dialog_buttons: Vec<String>,
@@ -260,6 +264,7 @@ impl FocusEvent {
             text: None,
             dialog_text: None,
             dialog_page: None,
+            group_box: None,
             dialog_buttons: Vec::new(),
             dialog_lines: Vec::new(),
             window_items: Vec::new(),

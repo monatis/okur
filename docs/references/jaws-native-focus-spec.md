@@ -94,6 +94,20 @@ WinForms reports a combo box's expanded state only through MSAA, so the converte
 - **Insert+T:** `Title is | SR Dialog Fixture`.
 - **Alt+Tab:** sometimes preceded by the task switcher (`Task Switching | To move to an item press the Arrow keys.`); this varies between trials (306/s7).
 - [hyp] An unlabelled edit takes the window title as its name (306/s5).
+- **A dialog box's labels** (a static text that names a control beside it) are not its
+  static text: they are said with their controls. Observed on the dev box, 2026-10-17, with
+  Okur's own settings dialog: `Okur Settings ‹ dialog › | Speech Synthesizer: ‹ Combo box ›
+  | No speech | 4 of 4 | To change the selection use the Arrow keys. | Alt+y`.
+- **Group boxes** name every control inside them, before its own name, on every focus:
+  `Speech Rate: ‹ left right slider ›`, `Reading Show Virtual Viewer on Screen ‹ check
+  box ›`. A group box frames its controls on screen but is their sibling, so the tracer finds
+  it by geometry (`screen_lines::group_box_of`). Buttons outside every group box get none.
+- **Access keys** come last, on arrival: as UI Automation gives them for a control named by
+  a label (`Alt+v`, `Alt+r`), and as `alt+` and the letter written in the text for a
+  control with its own (`alt+S` for "&Show Virtual Viewer on Screen", `alt+A` for "&Apply").
+  A button without one (OK) says none.
+- **A trackbar's value** is a percentage, said in words: `50 percent`.
+- Research, dev box: these need old-pc scenarios before tests rely on JAWS evidence.
 
 ## 7. Editing text [obs, 305]
 

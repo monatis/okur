@@ -76,11 +76,53 @@ fn checked(focus: &FocusEvent) -> Part {
     }
 }
 
+/// A control's access key, said last on arrival, as JAWS says it in a Win32 dialog (dev box,
+/// 2026-10-17): a control named by a label gives the key as UI Automation does ("Alt+v"),
+/// one with its own text "alt+" and the letter as written there ("alt+S" for "&Show
+/// Virtual Viewer on Screen"). A key sequence is said with "followed by": Calculator's
+/// "Alt followed by I" (UIA AccessKey "Alt, I").
+fn access_key(focus: &FocusEvent, own_text: bool) -> Option<Line> {
+    let key = focus
+        .access_key
+        .as_deref()
+        .map(str::trim)
+        .filter(|k| !k.is_empty())?;
+    if key.contains(", ") {
+        return Some(Line::text(key.replace(", ", " followed by ")).on_arrival());
+    }
+    let letter = key
+        .strip_prefix("Alt+")
+        .filter(|l| l.chars().count() == 1 && own_text);
+    let said = match letter {
+        Some(letter) => {
+            let written = focus
+                .name
+                .as_deref()
+                .unwrap_or_default()
+                .chars()
+                .find(|c| {
+                    c.to_lowercase()
+                        .eq(letter.chars().flat_map(char::to_lowercase))
+                })
+                .map_or_else(|| letter.to_uppercase(), String::from);
+            format!("alt+{written}")
+        }
+        None => key.to_owned(),
+    };
+    Some(Line::text(said).on_arrival())
+}
+
 /// The control's own lines (2–4 above).
 /// `entering` is false when focus moved within the same container (arrow keys in a list),
 /// where JAWS speaks the item without the container's usage hint [obs, 303/s1, s10–s11].
 fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
     let name = named(focus.name.as_deref().unwrap_or_default());
+    // A control in a dialog's group box is named after the box, every time: "Speech Rate:
+    // left right slider" (JAWS on the dev box, 2026-10-17).
+    let name = match focus.group_box.as_deref().map(named) {
+        Some(group) if !group.is_empty() && !name.is_empty() => format!("{group} {name}"),
+        _ => name,
+    };
     let value = focus
         .value
         .as_deref()
@@ -145,6 +187,7 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
             } else {
                 "To check press Spacebar."
             }));
+            lines.extend(access_key(focus, true));
         }
         Role::RadioButton => {
             lines.push(Line::new(vec![
@@ -156,12 +199,14 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
             lines.push(Line::text(
                 "To change the selection press Up or Down Arrow.",
             ));
+            lines.extend(access_key(focus, true));
         }
         Role::ComboBox => {
             lines.push(Line::new(vec![text(name), role("Combo box")]));
             lines.extend(value);
             lines.extend(position(focus));
             lines.push(Line::text("To change the selection use the Arrow keys."));
+            lines.extend(access_key(focus, false));
         }
         Role::ListItem => {
             lines.push(Line::text(name));
@@ -240,23 +285,27 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
             }
             lines.extend(position(focus));
             lines.push(Line::text("To activate press spacebar."));
-            // Its access key, as a key sequence: Calculator's "Open history flyout Button |
-            // To activate press spacebar. | Alt followed by I" (UIA AccessKey "Alt, I"; JAWS
-            // on the dev box, 2026-10-17).
-            lines.extend(
-                focus
-                    .access_key
-                    .as_deref()
-                    .filter(|k| k.contains(", "))
-                    .map(|k| Line::text(k.replace(", ", " followed by ")).on_arrival()),
-            );
+            lines.extend(access_key(focus, true));
         }
         // Windows Settings' Brightness (JAWS, dev box 2026-10-16): "Brightness left right
         // slider | To increase or decrease use the Arrow keys."
         Role::Slider => {
             lines.push(Line::new(vec![text(name), role("left right slider")]));
-            lines.extend(value);
+            // A percentage is said in words: a trackbar's "50 percent" (JAWS, dev box,
+            // 2026-10-17).
+            lines.extend(
+                focus
+                    .value
+                    .as_deref()
+                    .map(named)
+                    .filter(|v| !v.is_empty())
+                    .map(|v| match v.strip_suffix('%') {
+                        Some(number) => Line::text(format!("{} percent", number.trim_end())),
+                        None => Line::text(v),
+                    }),
+            );
             lines.push(Line::text("To increase or decrease use the Arrow keys."));
+            lines.extend(access_key(focus, false));
         }
         // Windows Settings' "Rename" (JAWS, dev box 2026-10-16): "Rename Link | To activate
         // press Enter."
@@ -1338,6 +1387,56 @@ To activate press Enter."
                 "Open:  \u{1d} edit combo \u{1e} \nC:\n1 of 6\n\
                  To set the value use the Arrow keys or type the value.\nAlt+o"
             )
+        );
+    }
+
+    /// Controls in a Win32 dialog's group boxes, as JAWS read Okur's settings dialog (dev
+    /// box, 2026-10-17): the group box first, a percentage in words, and the access key last,
+    /// as UI Automation gives it for a control named by a label, and as written in the text
+    /// for one with its own.
+    #[test]
+    fn a_dialogs_controls_say_their_group_box_and_access_key() {
+        let mut rate = event(Role::Slider, "Rate:");
+        rate.group_box = Some("Speech".to_owned());
+        rate.value = Some("50%".to_owned());
+        rate.access_key = Some("Alt+r".to_owned());
+        assert_eq!(
+            norm(&focus_speech(&rate, None).render()),
+            norm(
+                "Speech Rate:  \u{1d} left right slider \u{1e} \n50 percent\n\
+                 To increase or decrease use the Arrow keys.\nAlt+r"
+            )
+        );
+        let mut voice = event(Role::ComboBox, "Voice:");
+        voice.group_box = Some("Speech".to_owned());
+        voice.value = Some("Default".to_owned());
+        voice.item_index = Some(1);
+        voice.item_count = Some(2);
+        voice.access_key = Some("Alt+v".to_owned());
+        assert_eq!(
+            norm(&focus_speech(&voice, None).render()),
+            norm(
+                "Speech Voice:  \u{1d} Combo box \u{1e} \nDefault\n1 of 2\n\
+                 To change the selection use the Arrow keys.\nAlt+v"
+            )
+        );
+        let mut viewer = event(Role::CheckBox, "Show Virtual Viewer on Screen");
+        viewer.group_box = Some("Reading".to_owned());
+        viewer.states.checked = Some(true);
+        viewer.access_key = Some("Alt+s".to_owned());
+        assert_eq!(
+            norm(&focus_speech(&viewer, None).render()),
+            norm(
+                "Reading Show Virtual Viewer on Screen  \u{1d} check box \u{1e}   \
+                 \u{1d}checked\u{1e} \nTo clear checkmark press Spacebar.\nalt+S"
+            )
+        );
+        // Outside any group box, a button with an access key.
+        let mut apply = event(Role::Button, "Apply");
+        apply.access_key = Some("Alt+a".to_owned());
+        assert_eq!(
+            norm(&focus_speech(&apply, None).render()),
+            norm("Apply  \u{1d} Button \u{1e} \nTo activate press spacebar.\nalt+A")
         );
     }
 

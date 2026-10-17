@@ -118,7 +118,7 @@ pub(crate) use windows_lines::text_of as control_text;
 #[cfg(windows)]
 pub(crate) use windows_lines::{class_of, owner_drawn, static_lines, symbol_font};
 #[cfg(windows)]
-pub use windows_lines::{dialog_layout, page_of};
+pub use windows_lines::{dialog_layout, group_box_of, page_of};
 
 #[cfg(windows)]
 mod windows_lines {
@@ -130,8 +130,8 @@ mod windows_lines {
         GetTextExtentPoint32W, SelectObject, HFONT, LOGFONTW,
     };
     use windows::Win32::UI::WindowsAndMessaging::{
-        EnumChildWindows, GetClassNameW, GetClientRect, GetParent, GetWindowRect, IsWindowVisible,
-        SendMessageTimeoutW, SMTO_ABORTIFHUNG,
+        EnumChildWindows, GetClassNameW, GetClientRect, GetParent, GetWindowLongW, GetWindowRect,
+        IsWindowVisible, SendMessageTimeoutW, GWL_STYLE, SMTO_ABORTIFHUNG,
     };
 
     const WM_GETTEXT: u32 = 0x000D;
@@ -318,6 +318,44 @@ mod windows_lines {
             current = parent;
         }
         None
+    }
+
+    /// The group box around the focused window in a dialog: the smallest visible one whose
+    /// rectangle holds the focus's, by its text without access-key marks. JAWS names it
+    /// before every control in it: "Speech Rate: left right slider", "Sort Links In Tab
+    /// Order radio button" (dev box, 2026-10-17). A group box is a sibling of the controls
+    /// it frames, not their parent, in Win32 as in UI Automation, so only geometry tells.
+    pub fn group_box_of(focus: HWND, dialog: HWND) -> Option<String> {
+        const BS_TYPEMASK: i32 = 0xF;
+        const BS_GROUPBOX: i32 = 7;
+        let target = rect_of(focus);
+        let mut children: Vec<HWND> = Vec::new();
+        // SAFETY: the callback only pushes into the Vec, which outlives the call.
+        let _ = unsafe {
+            EnumChildWindows(
+                Some(dialog),
+                Some(collect),
+                LPARAM(&mut children as *mut Vec<HWND> as isize),
+            )
+        };
+        children
+            .into_iter()
+            .filter(|&child| child != focus && class_of(child) == "Button")
+            // SAFETY: plain Win32 queries on a window handle.
+            .filter(|&child| unsafe {
+                IsWindowVisible(child).as_bool()
+                    && GetWindowLongW(child, GWL_STYLE) & BS_TYPEMASK == BS_GROUPBOX
+            })
+            .map(|child| (child, rect_of(child)))
+            .filter(|(_, r)| {
+                r.left <= target.left
+                    && r.top <= target.top
+                    && r.right >= target.right
+                    && r.bottom >= target.bottom
+            })
+            .min_by_key(|(_, r)| i64::from(r.right - r.left) * i64::from(r.bottom - r.top))
+            .map(|(child, _)| without_accelerators(&text_of(child)))
+            .filter(|name| !name.trim().is_empty())
     }
 
     /// A dialog's text by screen rows, and its text that labels no field.

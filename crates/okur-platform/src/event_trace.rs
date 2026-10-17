@@ -144,6 +144,9 @@ pub struct TraceEvent {
     /// UIA leaves the page out of the focus chain.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dialog_page: Option<String>,
+    /// For focus in that dialog box: the group box around the focused control, by its text.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub group_box: Option<String>,
     /// For focus in that dialog box: its control tree, without the title bar (Say Window).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dialog_tree: Option<UiaNode>,
@@ -626,13 +629,24 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         // "Local Disk"): JAWS 2025 opens Local Disk (C:) Properties naming the page instead,
         // "General page" (dev box, 2026-10-15).
         focus.dialog_page = event.dialog_page.clone();
+        focus.group_box = event.group_box.clone();
+        // A text that names a control beside it is that control's label, said with the
+        // control, not as the dialog's text: JAWS opened Okur's settings with "Okur Settings
+        // dialog | Speech Synthesizer: Combo box", without "Voice:", "Rate:" (dev box,
+        // 2026-10-17).
+        let labels: Vec<&str> = event
+            .focus_siblings
+            .iter()
+            .filter(|s| s.control_type != UIA_TEXT)
+            .filter_map(|s| s.name.as_deref())
+            .collect();
         let text: Vec<&str> = event
             .focus_siblings
             .iter()
             .filter(|_| event.dialog_page.is_none())
             .filter(|s| s.control_type == UIA_TEXT)
             .filter_map(|s| s.name.as_deref())
-            .filter(|n| !n.trim().is_empty())
+            .filter(|n| !n.trim().is_empty() && !labels.contains(n))
             .collect();
         // Focus inside a field (the Run dialog's combo box) has no text beside it: the
         // dialog's own static text is read from its window [JAWS on Windows 11, dev box:
@@ -1736,6 +1750,7 @@ mod capture {
                     dialog_lines: Vec::new(),
                     dialog_text: Vec::new(),
                     dialog_page: None,
+                    group_box: None,
                     dialog_tree: None,
                     notification: Some(notification),
                 };
@@ -1843,6 +1858,7 @@ mod capture {
                     dialog_lines: Vec::new(),
                     dialog_text: Vec::new(),
                     dialog_page: None,
+                    group_box: None,
                     dialog_tree: None,
                     notification: None,
                 };
@@ -2001,7 +2017,7 @@ mod capture {
                 } else {
                     (None, None, None)
                 };
-            let (dialog, dialog_tree, dialog_page) =
+            let (dialog, dialog_tree, dialog_page, group_box) =
                 if focused && top_window_class.as_deref() == Some("#32770") {
                     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
                     // SAFETY: plain Win32 call with no preconditions.
@@ -2013,9 +2029,15 @@ mod capture {
                             .as_ref()
                             .and_then(|uia| window_subtree(uia, window)),
                         crate::screen_lines::page_of(keyboard_focus_window(), window),
+                        crate::screen_lines::group_box_of(keyboard_focus_window(), window),
                     )
                 } else {
-                    (crate::screen_lines::DialogLayout::default(), None, None)
+                    (
+                        crate::screen_lines::DialogLayout::default(),
+                        None,
+                        None,
+                        None,
+                    )
                 };
             stages.push(("window", clock.elapsed().as_millis()));
             let (region, page) = if name == "live_region_change" {
@@ -2097,6 +2119,7 @@ mod capture {
                 dialog_lines: dialog.rows,
                 dialog_text: dialog.text,
                 dialog_page,
+                group_box,
                 dialog_tree,
                 notification: None,
             };
@@ -2768,6 +2791,7 @@ mod tests {
             dialog_lines: Vec::new(),
             dialog_text: Vec::new(),
             dialog_page: None,
+            group_box: None,
             dialog_tree: None,
             notification: None,
         }
@@ -2820,6 +2844,34 @@ mod tests {
             dialog_page: Some("General".to_owned()),
             ..focus_event(Vec::new())
         }
+    }
+
+    /// A text that names a control beside it is that control's label, not the dialog's text;
+    /// the group box comes from the trace (JAWS on Okur's settings dialog, dev box,
+    /// 2026-10-17: "Okur Settings dialog | Speech Synthesizer: Combo box").
+    #[test]
+    fn a_dialogs_labels_are_not_its_text() {
+        let settings = TraceEvent {
+            focus_chain: vec![
+                dialog_node(UIA_WINDOW, "Okur Settings"),
+                node(UIA_COMBOBOX, "Synthesizer:", true),
+            ],
+            focus_siblings: vec![
+                node(TEXT, "Synthesizer:", false),
+                node(UIA_COMBOBOX, "Synthesizer:", true),
+                node(TEXT, "Voice:", false),
+                node(UIA_COMBOBOX, "Voice:", false),
+                node(TEXT, "Changes apply when you press OK.", false),
+            ],
+            group_box: Some("Speech".to_owned()),
+            ..focus_event(Vec::new())
+        };
+        let focus = focus_event_from_trace(&settings);
+        assert_eq!(
+            focus.as_ref().and_then(|f| f.dialog_text.clone()),
+            Some("Changes apply when you press OK.".to_owned())
+        );
+        assert_eq!(focus.and_then(|f| f.group_box), Some("Speech".to_owned()));
     }
 
     /// A message box's text is beside its buttons; a property page's labels are the page's,
