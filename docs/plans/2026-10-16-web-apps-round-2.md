@@ -44,14 +44,16 @@ still stand; this plan adds tonight's.
 
 ## 3. Windows Settings (dev box, read only)
 
-- Eleven pages, the navigation list, a subpage and the search box match JAWS (handoff
-  `2026-10-17-docs-sheets-settings.md`). Left: "Insert f1 Help." on sliders, a list named by
-  the text before it ("98 apps found"), what JAWS says on a page reached with Alt+Left, and
-  "1 of 1" on Sound's "All sound devices".
-- Next pages: Privacy & security, Accounts, Gaming, Storage, Power; dialogs Settings opens
-  (Rename this PC); F6 between its panes.
-- Other WinUI apps with the same rules (groups, toggle switches, UIA notifications): the
-  Microsoft Store, Calculator (its results are notifications), the new Notepad's settings.
+- 31 pages, the navigation list, a subpage, Alt+Left and the search box match JAWS (handoff
+  `2026-10-17-docs-sheets-settings.md`). Left: "1 of 1" on Sound's "All sound devices", the
+  order of a live region and the focus after Alt+Left, and "No results for …" said twice.
+- **Dialogs Settings opens in `SystemSettingsAdminFlows`** (Rename this PC): Okur, without
+  UIAccess, sees no content in them. Find out whether UIAccess is what JAWS has that Okur
+  lacks (a build with `uiAccess=true`, signed, run from Program Files), and what it takes to
+  ship one. This blocks every such dialog.
+- Other WinUI apps with the same rules: the Microsoft Store, the new Notepad's settings,
+  Calculator (JAWS's wording is in the handoff: a Calculator module could say it, from the
+  notification, the display's child pane and the expression element, not from English text).
 
 ## 4. Without old-pc or the user
 

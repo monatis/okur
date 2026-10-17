@@ -34,6 +34,23 @@ arrows, Enter on page links and Escape, and change no setting.
 - `9787cb5`, `50d1c44`, `2e0f015`, `e4ca425`, `37c10d8`, `bba359c`, `886a631`: Windows
   Settings (below).
 - `2fa765d` feat(windows): UIA notifications, and Windows Settings' search suggestions.
+- `66c4fa1` feat(windows): an unnamed list is named by the text just before it ("98 apps
+  found List box", Home's "Recent and commonly used settings List box"), replacing
+  `e4ca425`'s guess; Power's InfoBar is said as a dialog among the groups.
+- `9ae8582` feat(windows): a modern app's button says its access key sequence (Calculator:
+  "Alt followed by I"); Win32-style keys stay unsaid on buttons.
+- `da0db72` docs: why a caret cannot start Chrome's Tab from the virtual cursor (below).
+- `37b32ac` fix(windows): the Widgets module silenced every focus named "Widgets…"
+  (Settings' Taskbar page skipped its "Widgets" switch); it now keys on the Widgets
+  board's processes and the taskbar. A control that is a list's entry (Notifications' app
+  switch, inside the app's button) keeps the groups above it.
+- `30fec74` feat(harness): numpad and minus keys for `okur keys`.
+- `77b23cc` feat(windows): native UIA live regions are read (their texts, then their name):
+  Alt+Left back to Display now says "Brightness Change brightness for the built-in display
+  | Show more settings". The WinEvent read for a native live region, which took 970 ms as
+  Settings opened, is gone.
+- `2f27ecf` feat: a typing echo setting (`okur run --typing-echo none`); both old-pc and the
+  dev box have JAWS's `TypingEcho=0`, and replay reads it from the evidence.
 
 ## Docs and Sheets: where they stand (dev box)
 
@@ -61,6 +78,12 @@ arrows, Enter on page links and Escape, and change no setting.
     About;
   - plus the navigation list's arrows, the Accessibility list's arrows, a subpage (Night
     light) and back, and the search box's suggestions.
+  - Later the same night, 12 Tabs each, the same as collapsed text (`web/same.js`): Game Bar,
+    Notifications, Multitasking, Colors, Taskbar, Default apps, Storage, Themes, Background,
+    Typing, Mouse, Language & region, Location, Text size, Privacy & security. Windows Update
+    loaded an "Available updates" section for JAWS's run and not yet for Okur's; the rest of
+    it is the same. Opening Display (Okur running first) is the same as JAWS. Win+I too.
+  - F6 does nothing in Settings, for either.
 - What made them the same:
   - **The groups and lists a control is in** are said on the way in, outermost first, and
     not again while the focus stays in them: "Brightness & color | Night light", "Scale &
@@ -104,18 +127,35 @@ arrows, Enter on page links and Escape, and change no setting.
 ## Differences left (known)
 
 - **Settings:**
-  - JAWS's "Insert f1 Help." on the brightness slider (its source is unknown).
+  - JAWS's "Insert f1 Help." on the brightness slider: JAWS's own timing as the page loads
+    (one JAWS run said it in place of the value, another said "100" for the same keys).
   - "1 of 1" on Sound's "All sound devices" (no reported position).
-  - The installed apps list's name "98 apps found" (a text before the list).
-  - On a page reached with Alt+Left, JAWS says "Brightness Change brightness for the
-    built-in display | Show more settings" before the focus.
-  - Okur also reads the suggestion selected as each letter is typed.
+  - On a page reached with Alt+Left, JAWS says the expander's live region before the focus;
+    Okur says it after (its event comes 140 ms after the focus).
+  - **"Rename this PC"** (About) opens a dialog in `SystemSettingsAdminFlows`
+    (`Shell_Dialog`, a XAML island). JAWS reads "Rename your PC | Current PC name:
+    DESKTOP-… Edit"; a UIA client without UIAccess (PowerShell's, Okur's) sees only two
+    empty panes, and keys sent with `okur keys` did not reach it (it was closed with
+    `WM_CLOSE`, nothing renamed). Okur is silent there: likely needs UIAccess (a signed build
+    in a secure folder), as NVDA's installed copy has.
+  - The search box: JAWS said each "No results for …" twice (a second source not found).
+  - Okur echoes typed letters by default (JAWS's default); the user's JAWS has it off:
+    run with `--typing-echo none` to match.
 - **Docs and Sheets:**
   - JAWS's "Type in text." after "Leaving menus".
   - Sheets' Insert+F says "No font", as JAWS does. The Docs module covers documents only,
     and Sheets' formatting buttons were hidden in its toolbar's overflow at this window
     width, so a Sheets module could not be checked.
-- **Tab from the virtual cursor** still skips focusable custom widgets (the plan's item).
+- **Tab from the virtual cursor** still skips focusable custom widgets. Tried: a caret at
+  the virtual cursor (IA2 `setCaretOffset`), then the browser's Tab. Chrome's Tab never starts
+  from a selection (Blink's `FocusController`, `Document::SequentialFocusNavigationStartingPoint`),
+  so it went from wherever focus had last been; the code was not kept (plan, §4).
+- **Calculator:** Okur says each notification ("Display is 52"). JAWS (dev box) says the
+  digit typed ("2"), the expression for an operator ("5 plus"), "Square", "Reciprocal",
+  "Percent" for Q, R and %, the bare result after Enter, Backspace and F9 ("8", "-9"), and
+  "Clear expression" or "Clear display" for Escape and Delete, then the value if it
+  changed. The display's bare value is the name of its child pane ("3"); the expression is
+  `CalculatorExpression` ("Expression is 5 + "). Not built.
 
 ## Left in the user's account
 
@@ -123,3 +163,5 @@ arrows, Enter on page links and Escape, and change no setting.
   user allowed it; it can be turned off there.
 - The test document "Untitled document" and the test spreadsheet "Untitled spreadsheet" (a
   five-row table) in the user's Google Drive.
+- The clipboard: one Enter meant for "Rename this PC" may have pressed About's "Copy"
+  (device info) instead; the clipboard was not read to check.
