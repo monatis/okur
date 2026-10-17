@@ -626,6 +626,16 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             .filter_map(|s| s.name.clone())
             .collect();
     }
+    // A File Explorer window is titled "<folder> - <File Explorer, localized>": JAWS names the
+    // folder after the title on entering it ("backlog - File Explorer | backlog"; dev box,
+    // 2026-10-17).
+    if focus.platform.top_window_class.as_deref() == Some(EXPLORER_WINDOW_CLASS) {
+        focus.folder_name = focus
+            .window_title
+            .as_deref()
+            .and_then(|t| t.rsplit_once(" - "))
+            .map(|(folder, _)| folder.to_owned());
+    }
     focus.dialog_lines = event.dialog_lines.clone();
     focus.app = event.process.clone();
     focus.window_items = event
@@ -651,14 +661,18 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         }
         // A shell item's kind is its type cell's value where UIA gives no ItemType: File
         // Explorer's "File folder" (the Windows property `System.ItemTypeText`).
-        if focus.item_type.is_none() {
-            focus.item_type = subtree
+        let cell = |id: &str| {
+            subtree
                 .children
                 .iter()
-                .find(|c| c.automation_id.as_deref() == Some(SHELL_ITEM_TYPE))
+                .find(|c| c.automation_id.as_deref() == Some(id))
                 .and_then(|c| c.value.clone())
-                .filter(|t| !t.trim().is_empty());
+                .filter(|t| !t.trim().is_empty())
+        };
+        if focus.item_type.is_none() {
+            focus.item_type = cell(SHELL_ITEM_TYPE);
         }
+        focus.item_size = cell(SHELL_ITEM_SIZE);
         // A list-view item's further columns are its text children after the name.
         if focus.role == okur_core::Role::ListItem {
             focus.columns = subtree
@@ -765,8 +779,12 @@ pub struct EventConverter {
     last_live_region: Option<(String, u128)>,
 }
 
+/// File Explorer's top-level window class.
+const EXPLORER_WINDOW_CLASS: &str = "CabinetWClass";
 /// The Windows Shell property of an item's kind, the AutomationId of its cell in a shell view.
 const SHELL_ITEM_TYPE: &str = "System.ItemTypeText";
+/// The Windows Shell property of an item's size ("1 KB"), likewise.
+const SHELL_ITEM_SIZE: &str = "System.Size";
 
 /// How long the same UIA notification again is not said, in milliseconds.
 const NOTIFICATION_REPEAT_MS: u128 = 2000;

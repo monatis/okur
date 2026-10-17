@@ -46,12 +46,15 @@ impl AppModule for Explorer {
         if !(is_explorer_window(focus) && matches!(focus.role, Role::ListItem | Role::List)) {
             return FocusResponse::Pass;
         }
-        let first_entry = *cx.app_mode != AppMode::NativeExplorer;
-        *cx.app_mode = AppMode::NativeExplorer;
-        // Entering from another window names it; entering from within (Tab from the
-        // navigation pane) does not.
+        // Entering from another window (another folder too: Enter on one, Alt+Up) names it;
+        // entering from within (Tab from the navigation pane) does not. From another
+        // application the list's hint is left out.
         let window_changed = focus.window_title.is_some()
             && cx.window_title.as_deref() != focus.window_title.as_deref();
+        let first_entry = *cx.app_mode != AppMode::NativeExplorer || window_changed;
+        *cx.app_mode = AppMode::NativeExplorer;
+        let from_other_app = cx.window_kind.is_none()
+            || cx.window_kind.as_deref() != focus.platform.top_window_class.as_deref();
         cx.note_window(focus);
         if let Some(title) = &focus.window_title {
             self.window_title = Some(title.clone());
@@ -80,51 +83,66 @@ impl AppModule for Explorer {
                 let folder = focus.folder_name.as_deref().or(self.folder_name.as_deref());
                 (title, folder)
             });
-            entry(
+            let kind = [focus.item_type.as_deref(), focus.item_size.as_deref()]
+                .into_iter()
+                .flatten()
+                .collect::<Vec<_>>()
+                .join(" ");
+            entry(&Entry {
                 window,
-                focus.states.selected,
+                selected: focus.states.selected,
                 name,
-                focus.item_type.as_deref(),
+                kind: Some(kind.as_str()).filter(|k| !k.is_empty()),
                 index,
                 total,
-            )
+                hint: !(window_changed && from_other_app),
+            })
         } else {
             Announcement::from_text(&format!("{name}\n{index} of {total}"))
         })
     }
 }
 
-/// Entering the file list: the window and folder when it is another window's, the list, the
-/// item and its kind, its position, and, from within the window, the list's hint.
-fn entry(
-    window: Option<(&str, Option<&str>)>,
+/// What entering the file list says.
+struct Entry<'a> {
+    /// The window's title and folder, when the focus was in another window.
+    window: Option<(&'a str, Option<&'a str>)>,
     selected: Option<bool>,
-    item_name: &str,
-    item_type: Option<&str>,
+    name: &'a str,
+    /// The item's type and size ("Markdown Kaynak Dosyası 1 KB", "File folder").
+    kind: Option<&'a str>,
     index: usize,
     total: usize,
-) -> Announcement {
+    hint: bool,
+}
+
+/// Entering the file list: the window and folder when the focus was in another window, the
+/// list, the item, its type and size, its position, and the list's hint. JAWS 2025, Windows
+/// 11, on the dev box (research): from another application, "live - File Explorer | Items
+/// View MultiSelect ListBox | Not Selected combo.cs | 1 of 8"; Enter on a folder, "backlog -
+/// File Explorer | backlog | Items View MultiSelect ListBox | Not Selected
+/// complex-web-apps-….md | Markdown Kaynak Dosyası 1 KB | 1 of 2 | To move to an item press
+/// the Arrow keys."; Tab from the navigation pane onto a selected folder, "Items View
+/// MultiSelect ListBox | backlog | File folder | 1 of 4 | To move to an item press the Arrow
+/// keys." (2026-10-17).
+fn entry(e: &Entry<'_>) -> Announcement {
     let mut lines = Vec::new();
-    if let Some((title, folder)) = window {
+    if let Some((title, folder)) = e.window {
         lines.push(Line::text(title));
         lines.extend(folder.map(Line::text));
     }
-    // JAWS 2025, Windows 11, on the dev box (research): from another window, "live - File
-    // Explorer | Items View MultiSelect ListBox | Not Selected combo.cs | 1 of 8"; Tab from the
-    // navigation pane onto a selected folder, "Items View MultiSelect ListBox | backlog | File
-    // folder | 1 of 4 | To move to an item press the Arrow keys." (2026-10-17).
     lines.push(Line::new(vec![
         Part::Text("Items View".to_owned()),
         Part::Role("MultiSelect ListBox".to_owned()),
     ]));
-    lines.push(Line::text(if selected == Some(false) {
-        format!("Not Selected {item_name}")
+    lines.push(Line::text(if e.selected == Some(false) {
+        format!("Not Selected {}", e.name)
     } else {
-        item_name.to_owned()
+        e.name.to_owned()
     }));
-    lines.extend(item_type.map(Line::text));
-    lines.push(Line::text(format!("{index} of {total}")));
-    if window.is_none() {
+    lines.extend(e.kind.map(Line::text));
+    lines.push(Line::text(format!("{} of {}", e.index, e.total)));
+    if e.hint {
         lines.push(Line::text("To move to an item press the Arrow keys."));
     }
     Announcement::new(lines)
@@ -134,11 +152,15 @@ fn entry(
 mod tests {
     use super::*;
 
-    fn entering(focus: &FocusEvent, title_before: Option<&str>) -> String {
+    const EXPLORER_WINDOW: &str = "CabinetWClass";
+
+    /// What entering the list says, after a focus in the window `before` (title, top window
+    /// class).
+    fn entering(focus: &FocusEvent, before: (&str, &str)) -> String {
         let mut explorer = Explorer::default();
         let mut mode = AppMode::NativeControl;
-        let mut title = title_before.map(str::to_owned);
-        let mut kind = None;
+        let mut title = Some(before.0.to_owned());
+        let mut kind = Some(before.1.to_owned());
         let mut cx = AppContext {
             app_mode: &mut mode,
             window_title: &mut title,
@@ -150,24 +172,39 @@ mod tests {
         }
     }
 
-    /// Tab from the navigation pane onto the list's selected folder (JAWS on the dev box,
-    /// 2026-10-17): no window, no "selected", the item's kind and the hint.
-    #[test]
-    fn tab_into_the_list_says_the_item_and_its_kind() {
-        let mut backlog = FocusEvent::new(Role::ListItem)
-            .with_window_title("docs - File Explorer")
+    fn item(window: &str, folder: &str, name: &str, selected: bool) -> FocusEvent {
+        let mut item = FocusEvent::new(Role::ListItem)
+            .with_window_title(window)
+            .with_folder_name(folder)
             .with_container_name("Items View")
-            .with_name("backlog")
-            .with_item_index(1)
-            .with_item_count(4);
-        backlog.states.selected = Some(true);
+            .with_name(name)
+            .with_item_index(1);
+        item.platform.top_window_class = Some(EXPLORER_WINDOW.to_owned());
+        item.states.selected = Some(selected);
+        item
+    }
+
+    /// JAWS on the dev box, 2026-10-17.
+    #[test]
+    fn entering_the_list_says_the_item_its_kind_and_the_hint() {
+        // Tab from the navigation pane onto the selected folder: no window, no "selected".
+        let mut backlog = item("docs - File Explorer", "docs", "backlog", true).with_item_count(4);
         backlog.item_type = Some("File folder".to_owned());
         assert_eq!(
-            entering(&backlog, Some("docs - File Explorer")),
+            entering(&backlog, ("docs - File Explorer", EXPLORER_WINDOW)),
             "Items View \u{1d} MultiSelect ListBox \u{1e} \nbacklog\nFile folder\n1 of 4\nTo move to an item press the Arrow keys."
         );
-        // From another window: the window first, and no hint.
-        assert!(entering(&backlog, Some("Settings")).starts_with("docs - File Explorer\n"));
+        // Enter on that folder: the new window and folder, the type and size.
+        let mut file =
+            item("backlog - File Explorer", "backlog", "notes.md", false).with_item_count(2);
+        file.item_type = Some("Markdown Kaynak Dosyası".to_owned());
+        file.item_size = Some("1 KB".to_owned());
+        assert_eq!(
+            entering(&file, ("docs - File Explorer", EXPLORER_WINDOW)),
+            "backlog - File Explorer\nbacklog\nItems View \u{1d} MultiSelect ListBox \u{1e} \nNot Selected notes.md\nMarkdown Kaynak Dosyası 1 KB\n1 of 2\nTo move to an item press the Arrow keys."
+        );
+        // From another application: no hint.
+        assert!(!entering(&file, ("Settings", "ApplicationFrameWindow")).contains("To move"));
     }
 
     #[test]
