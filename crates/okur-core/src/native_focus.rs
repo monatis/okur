@@ -122,6 +122,17 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
             lines.push(Line::new(vec![text(name), role("Edit")]));
             lines.extend(value);
             lines.push(Line::text("Type in text."));
+            // Its shortcut (UIA AcceleratorKey): Chrome's address bar, "… Type in text. |
+            // Ctrl+L" (JAWS on the dev box, 2026-10-17). Buttons' shortcuts are not said (File
+            // Explorer's Back, Alt+Left).
+            lines.extend(
+                focus
+                    .accelerator_key
+                    .as_deref()
+                    .map(str::trim)
+                    .filter(|k| !k.is_empty())
+                    .map(|k| Line::text(k).on_arrival()),
+            );
         }
         Role::CheckBox => {
             lines.push(Line::new(vec![

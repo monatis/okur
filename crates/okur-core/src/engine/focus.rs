@@ -126,6 +126,11 @@ impl ScreenReaderEngine {
             // mode (no menu-end event), and JAWS says it left menus (Google Docs, dev box,
             // 2026-10-16).
             let leaving_menus = self.menus.is_active() && self.menus.end();
+            // Back in the page from the browser's own controls in the same window (Escape in
+            // the address bar).
+            let from_browser_ui = self.app_mode == AppMode::NativeControl
+                && focus.window_title.is_some()
+                && self.last_window_title.as_deref() == focus.window_title.as_deref();
             self.app_mode = AppMode::VirtualBuffer;
             // The page is in the same top-level window as anything focused next in the
             // browser (toolbar, address bar), so that focus does not announce a new window.
@@ -197,6 +202,16 @@ impl ScreenReaderEngine {
                 // The page itself has focus: the next control focus enters the page.
                 self.last_page_focus = None;
                 self.tab_start = None;
+                // JAWS names the page coming back to it: "Web Menus document" (Escape in
+                // Chrome's address bar; dev box, 2026-10-17).
+                if from_browser_ui && !leaving_menus {
+                    if let Some(title) = self.cursor.buffer.document_title().map(str::to_owned) {
+                        let speech =
+                            format!("{title}{}", crate::linearize::role_marker("document"));
+                        self.speech.speak(&speech, true);
+                        return Some(speech);
+                    }
+                }
                 return leaving_menus.then(|| self.say_leaving_menus());
             }
             // A document the buffer does not hold: a frame inside the page, which the focus

@@ -2310,3 +2310,31 @@ fn a_notification_echoing_the_typed_character_says_nothing() {
         Some("hı")
     );
 }
+
+/// Chrome's address bar and Escape back to the page (JAWS on the dev box, 2026-10-17): the
+/// field says its shortcut after its hint; the page, focused again, its title and "document".
+#[test]
+fn the_address_bar_says_its_shortcut_and_the_page_its_name_on_return() {
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![AomNode::new(1, Role::Paragraph).with_text("Notes")]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let mut document = FocusEvent::new(Role::Document)
+        .with_name("Web Menus")
+        .with_window_title("Web Menus - Google Chrome");
+    document.in_document = true;
+    document.node_id = Some(0);
+    engine.handle_focus_event(&document);
+    let mut address = FocusEvent::new(Role::Edit)
+        .with_name("Address and search bar")
+        .with_window_title("Web Menus - Google Chrome");
+    address.accelerator_key = Some("Ctrl+L".to_owned());
+    let said = engine.handle_focus_event(&address).unwrap_or_default();
+    assert!(said.ends_with("Type in text.\nCtrl+L"), "{said}");
+    assert_eq!(
+        engine.handle_focus_event(&document).as_deref(),
+        Some("Web Menus \u{1d} document \u{1e} ")
+    );
+}
