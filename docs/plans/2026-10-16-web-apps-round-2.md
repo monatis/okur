@@ -56,6 +56,17 @@ still stand; this plan adds tonight's.
   Calculator (JAWS's wording is in the handoff: a Calculator module could say it, from the
   notification, the display's child pane and the expression element, not from English text).
 
+## 3b. Desktop applications (dev box)
+
+- File Explorer, Windows search and Windows Terminal match JAWS on their common keys
+  (handoff). Left there: Ctrl+A in Explorer's list (JAWS reads every selected item with its
+  columns); when JAWS reads a native control's help text (Explorer's view buttons yes,
+  Settings' toggles no) and counts a radio button's position; Home, End and Ctrl+Left in a
+  console; JAWS's "Popup" as a WinUI menu opens.
+- Calculator: JAWS's own wording (handoff), as a Calculator module.
+- Next applications: the classic console (conhost, if Windows Terminal is not the default),
+  Notepad's settings page, the Microsoft Store.
+
 ## 4. Without old-pc or the user
 
 - ~~Bug: Chrome's address bar is read as the page.~~ Fixed in `0440801`: the engine says with

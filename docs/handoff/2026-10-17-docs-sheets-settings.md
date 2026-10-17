@@ -1,4 +1,4 @@
-# Handoff: Google Docs with braille support, Google Sheets, Windows Settings (2026-10-17, night)
+# Handoff: Google Docs with braille support, Google Sheets, Windows Settings, File Explorer, Windows Terminal (2026-10-17, night)
 
 Follows [`2026-10-16-google-docs.md`](2026-10-16-google-docs.md). The user restarted JAWS,
 allowed changing Google Docs' settings, chose the copyright holder ("M. Yusuf Sarıgöz"), and
@@ -52,6 +52,12 @@ arrows, Enter on page links and Escape, and change no setting.
 - `384de93` feat(windows): `okur run` says when it is not elevated (below, Rename this PC).
 - `2f27ecf` feat: a typing echo setting (`okur run --typing-echo none`); both old-pc and the
   dev box have JAWS's `TypingEcho=0`, and replay reads it from the evidence.
+- `ea1eea8`, `40e12ea`, `374f119`: File Explorer (below).
+- `7a0d488` feat(windows): WinUI menus (Explorer's context menu) and leaving them.
+- `4a7d6bf` fix(windows): arrows in a tree say a position only with a new level; 303/s6
+  now matches (parity numbers below).
+- `9103505` fix(windows): a search result selected again says its name alone.
+- `247dac7`, `80100b9`: Windows Terminal (below).
 
 ## Docs and Sheets: where they stand (dev box)
 
@@ -112,14 +118,48 @@ arrows, Enter on page links and Escape, and change no setting.
     - UIA notifications from the application in front are said ("Suggestions available");
     - the same notification again within 2 s is said once.
 
+## File Explorer, Windows search, Windows Terminal (dev box)
+
+Explorer was opened on the repository's `docs` folder (no personal files); Windows search
+looked for "settings"; Windows Terminal ran in a new window titled `OkurTestTerminal`, with
+PowerShell in the session scratchpad. Only moving keys, selection, and typing at a prompt;
+no file or setting changed. Compared as collapsed text with JAWS's speech history.
+- **Explorer, Tab through the window** (toolbar, breadcrumb, search, command bar,
+  navigation pane, file list, column header, view buttons, tab): the same but for the
+  "Details" view button, where JAWS reads its help text ("Displays information about each
+  item in the window. (Ctrl+Shift+6)") and says no position; Okur says "1 of 2". Settings'
+  toggles carry help text JAWS does not read, so no rule was guessed.
+  - UIA split buttons ("This PC split button | 1 of 6", "Name split button"), a reported tab
+    position ("docs Tab | selected | 1 of 1"), MSAA states only from the focused control's
+    own object (the view button was "not checked").
+- **Explorer's list:** entering it, a folder opened with Enter, Alt+Up, first letters, Alt+D
+  and Escape, Shift+Down: the same ("backlog - File Explorer | backlog | Items View
+  MultiSelect ListBox | Not Selected … | Markdown Kaynak Dosyası 1 KB | 1 of 2 | To move to an
+  item press the Arrow keys.", "selected | handoff"). The item's type and size are its
+  `System.ItemTypeText` and `System.Size` cells. Left: Ctrl+A (JAWS reads every selected item
+  with its columns), and Alt+Up, where JAWS's "Working on it..." split its reading.
+- **Explorer's context menu** (Shift+F10): the same item for item ("Cut<tab>Ctrl+X | 1 of 4 |
+  To move through items press up or down arrow. | Alt followed by T"), and "Leaving menus"
+  on Escape. JAWS also said "Popup" and the first item again.
+- **The navigation pane:** arrows say no position within a level (and 303/s6 now matches,
+  the same rule). Left: JAWS's "not checked | not checked" on pinned Quick Access items (no
+  checked state in UIA or MSAA) and "Closed" with a capital.
+- **Windows search** (Start, typing): the same, but for the results' counts (timing) and the
+  typing echo (the dev box's JAWS has it off). A result selected again says its name alone.
+- **Windows Terminal:** output after Enter and the recalled line come as the terminal's UIA
+  notifications. Escape reads the cleared line (the prompt); Left, Right and Backspace read
+  as in a field ("c", "b", the deleted "b"). With `--typing-echo none`, the same as JAWS but
+  for Home, End and Ctrl+Left (JAWS: " ", "ac"; Okur reads none of them).
+
 ## Verification
 
 - `cargo test --workspace` (gate, each commit): passes; clippy with the gate's flags clean.
-- `skills/jaws-reference/scripts/parity-snapshot.sh` then `diff -r` against the `5cc13e1`
-  reference, after every change: identical.
+- `skills/jaws-reference/scripts/parity-snapshot.sh` then `diff -r` against the previous
+  reference, after every change: identical to `5cc13e1` until `4a7d6bf`, which made 303/s6 a
+  match (and 303/s5 "Pictures", still a match); identical to `4a7d6bf` after it.
   ```
-  JAWS parity (Ia2): 818/844 steps match exactly (0 scenarios could not run)
-  JAWS parity (Uia): 719/844 steps match exactly (0 scenarios could not run)
+  JAWS parity (Ia2): 819/844 steps match exactly (0 scenarios could not run)
+  JAWS parity (Uia): 720/844 steps match exactly (0 scenarios could not run)
   JAWS spoken parity: 171/172 steps match exactly (evidence recorded through the speech recorder voice)
   ```
 - New tests cover each rule (Settings pages as focus sequences, the platform's group
