@@ -653,6 +653,40 @@ impl Menus {
         speech
     }
 
+    /// Focus landed on an item of a modern (WinUI) menu, which reports its position: File
+    /// Explorer's context menu, JAWS 2025 on the dev box (2026-10-17): "Cut\tCtrl+X | 1 of 4
+    /// | To move through items press up or down arrow. | Alt followed by T", then
+    /// "Copy\tCtrl+C | 2 of 4 | Alt followed by C" (`\t` a tab). Its name and shortcut, its
+    /// position, the hint on the
+    /// first item, and its access key as a key sequence. The same item again says nothing.
+    pub fn modern_focus(&mut self, item: &FocusEvent) -> Option<String> {
+        let name = item.name.as_deref().unwrap_or_default().trim();
+        if self.active && self.current.as_deref() == Some(name) {
+            return None;
+        }
+        let first = !self.active;
+        self.active = true;
+        self.current = Some(name.to_owned());
+        self.popup_pending = false;
+        self.popup_shown = true;
+        self.closed = None;
+        let mut lines = vec![match item.accelerator_key.as_deref() {
+            Some(shortcut) => format!("{name}\t{shortcut}"),
+            None => name.to_owned(),
+        }];
+        lines.extend(position(item).map(|p| p.render()));
+        if first {
+            lines.push("To move through items press up or down arrow.".to_owned());
+        }
+        lines.extend(
+            item.access_key
+                .as_deref()
+                .filter(|k| k.contains(", "))
+                .map(|k| k.replace(", ", " followed by ")),
+        );
+        Some(lines.join("\n"))
+    }
+
     pub fn popup_start(&mut self) {
         if self.page {
             return;
@@ -1306,5 +1340,35 @@ To activate press Enter."
             "Run\ndialog\nType the name of a program.\nOpen:\nOpen:\ncombo box\ncollapsed\nC:\n\
              Open:\nedit\nC:\nOpen\nbutton\nOK\nbutton"
         );
+    }
+
+    /// File Explorer's context menu (JAWS on the dev box, 2026-10-17): each item with its
+    /// shortcut, position and access key; the hint on the first.
+    #[test]
+    fn a_modern_menu_says_its_items_shortcuts_and_keys() {
+        let item = |name: &str, shortcut: &str, index: usize, key: &str| {
+            let mut item = FocusEvent::new(Role::MenuItem).with_name(name);
+            item.accelerator_key = Some(shortcut.to_owned());
+            item.item_index = Some(index);
+            item.item_count = Some(4);
+            item.access_key = Some(key.to_owned());
+            item
+        };
+        let mut menus = Menus::default();
+        assert_eq!(
+            menus.modern_focus(&item("Cut", "Ctrl+X", 1, "Alt, T")).as_deref(),
+            Some("Cut\tCtrl+X\n1 of 4\nTo move through items press up or down arrow.\nAlt followed by T")
+        );
+        assert_eq!(
+            menus
+                .modern_focus(&item("Copy", "Ctrl+C", 2, "Alt, C"))
+                .as_deref(),
+            Some("Copy\tCtrl+C\n2 of 4\nAlt followed by C")
+        );
+        assert_eq!(
+            menus.modern_focus(&item("Copy", "Ctrl+C", 2, "Alt, C")),
+            None
+        );
+        assert!(menus.end());
     }
 }

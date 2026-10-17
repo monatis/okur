@@ -63,12 +63,27 @@ impl ScreenReaderEngine {
                     position,
                     focus.states.expanded.is_some(),
                 )
+            } else if focus.item_index.is_some() && focus.item_count.is_some() && !focus.in_menu_bar
+            {
+                // A modern menu reports its items' positions; a Win32 one does not (302).
+                self.menus.modern_focus(focus)
             } else {
                 self.menus.focus(name)
             }?;
             self.speech.speak(&speech, true);
             return Some(speech);
         }
+        // A native focus outside the menus while they are active: a modern menu closed with
+        // no menu-end event (File Explorer's context menu, Escape: "Leaving menus | Items View
+        // MultiSelect ListBox | backlog | …"; JAWS on the dev box, 2026-10-17).
+        let leaving_menus = !focus.in_document && self.menus.is_active() && self.menus.end();
+        let with_leaving = |speech: String| {
+            if leaving_menus {
+                format!("Leaving menus\n{speech}")
+            } else {
+                speech
+            }
+        };
         // Applications first, as JAWS runs an application's script before the default one.
         let mut cx = AppContext {
             app_mode: &mut self.app_mode,
@@ -78,9 +93,14 @@ impl ScreenReaderEngine {
         for app in &mut self.apps {
             match app.focus(focus, &mut cx) {
                 FocusResponse::Pass => {}
+                FocusResponse::Silent if leaving_menus => {
+                    let speech = "Leaving menus".to_owned();
+                    self.speech.speak(&speech, true);
+                    return Some(speech);
+                }
                 FocusResponse::Silent => return None,
                 FocusResponse::Speak(announcement) => {
-                    let speech = announcement.render();
+                    let speech = with_leaving(announcement.render());
                     self.speech.speak(&speech, true);
                     // The focus is still the last one native focus knows, for the container
                     // the next one is in: File Explorer's column header after its list's item
@@ -356,7 +376,9 @@ impl ScreenReaderEngine {
         if window_changed {
             self.native_focus.reset();
         }
-        let control = self.native_focus.focus(focus)?;
+        let Some(control) = self.native_focus.focus(focus) else {
+            return leaving_menus.then(|| self.say_leaving_menus());
+        };
         self.last_native_focus = Some(focus.clone());
 
         let app = self.app_for(focus);
@@ -366,7 +388,7 @@ impl ScreenReaderEngine {
         } else {
             control
         };
-        let speech = announcement.render();
+        let speech = with_leaving(announcement.render());
 
         if !speech.is_empty() {
             self.speech.speak(&speech, true);

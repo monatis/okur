@@ -285,10 +285,22 @@ pub fn focus_event_from_chain(
     let native = !chain.iter().any(|a| a.control_type == UIA_DOCUMENT);
     let role = match aom.role {
         Role::Heading { .. } if native && focused.control_type == UIA_BUTTON => Role::Button,
+        // A WinUI menu's item (File Explorer's context menu): UIA reports it, where a Win32
+        // menu's comes through MSAA (`focus_event_from_trace`). Pages' menu items stay out
+        // of the snapshot's roles, which the UIA parity reads.
+        _ if native && focused.control_type == UIA_MENUITEM => Role::MenuItem,
         ref role => role.clone(),
     };
 
     let mut event = okur_core::FocusEvent::new(role);
+    if event.role == Role::MenuItem {
+        const UIA_MENUBAR: i32 = 50010;
+        event.in_menu_bar = chain
+            .iter()
+            .rev()
+            .nth(1)
+            .is_some_and(|parent| parent.control_type == UIA_MENUBAR);
+    }
     event.name = aom.name.clone();
     event.value = aom.value.clone();
     // A slider's value is the one it reports ("Brightness left right slider | 100"), else its
@@ -361,6 +373,10 @@ pub fn focus_event_from_chain(
     }
 
     event.access_key = focused.access_key.clone().filter(|k| !k.is_empty());
+    event.accelerator_key = focused
+        .accelerator_key
+        .clone()
+        .filter(|k| !k.trim().is_empty());
     // An edit inside a combo box is the combo box's text field (an "edit combo").
     let parent = chain.iter().rev().nth(1);
     if focused.control_type == UIA_EDIT && parent.is_some_and(|p| p.control_type == UIA_COMBOBOX) {
@@ -716,12 +732,14 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     // button has only the position its application reports: JAWS says none for a dialog's
     // buttons (306), and "1 of 1" for Windows Settings' breadcrumb, which reports it (dev box,
     // 2026-10-16). A tab likewise: none for a WinForms tab (303/s12), "1 of 1" for File
-    // Explorer's, which reports it (dev box, 2026-10-17).
+    // Explorer's, which reports it (dev box, 2026-10-17). A menu item too: a reported position
+    // is what tells a modern menu from a Win32 one (302 says none).
     if focus.item_index.is_none()
         && focus.role != okur_core::Role::ComboBox
         && focus.role != okur_core::Role::Button
         && focus.role != okur_core::Role::Tab
         && focus.role != okur_core::Role::SplitButton
+        && focus.role != okur_core::Role::MenuItem
         && focus.container_role != Some(okur_core::Role::ComboBox)
     {
         let peers: Vec<&UiaNode> = event

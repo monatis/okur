@@ -57,6 +57,9 @@ pub struct UiaNode {
     /// `ItemType`: what kind of item it is (File Explorer's "File folder", "Text Document").
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub item_type: Option<String>,
+    /// `AcceleratorKey`: the shortcut that runs the command (a menu item's "Ctrl+X").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub accelerator_key: Option<String>,
     /// `AccessKey`: the keys that reach the control ("Alt+o"), from its label's accelerator.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub access_key: Option<String>,
@@ -447,6 +450,7 @@ pub(crate) mod capture {
         UIA_FullDescriptionPropertyId,
         UIA_HelpTextPropertyId,
         UIA_ItemTypePropertyId,
+        UIA_AcceleratorKeyPropertyId,
         UIA_AccessKeyPropertyId,
         UIA_ToggleToggleStatePropertyId,
         UIA_ExpandCollapseExpandCollapseStatePropertyId,
@@ -522,6 +526,7 @@ pub(crate) mod capture {
             full_description: string(el, UIA_FullDescriptionPropertyId),
             help_text: string(el, UIA_HelpTextPropertyId),
             item_type: string(el, UIA_ItemTypePropertyId),
+            accelerator_key: string(el, UIA_AcceleratorKeyPropertyId),
             access_key: string(el, UIA_AccessKeyPropertyId),
             toggle_state: int(el, UIA_ToggleToggleStatePropertyId),
             expand_collapse_state: int(el, UIA_ExpandCollapseExpandCollapseStatePropertyId),
