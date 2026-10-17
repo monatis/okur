@@ -274,6 +274,18 @@ the morning. This is how it was done; it needs fresh permission each time.
   Windows 11's is `XamlExplorerHostIslandWindow` and speaks only through UIA focus events.
 - **On old-pc, Chrome needs time to start cold**, and the JAWS window can grab the foreground.
   `run-scenario.ps1` waits for it and checks the foreground.
+- **A chord that opens one of JAWS's dialogs can leave a modifier down** (dev box,
+  2026-10-17). JAWS runs elevated: while its dialog is in front, Windows drops our key-ups
+  and hides the key state from us. Shift stayed down for every application after
+  Ctrl+Shift+Insert+Down opened Skim Reading: the next Escape opened Chrome's Task Manager,
+  Insert+F5 reloaded the page, and Ctrl+Right selected words. `okur keys` now sends a chord in
+  one batch, releases keys left down before its first step, and says when a higher window
+  hides the key state. If keys act strangely after a JAWS dialog, suspect this first.
+- **JAWS's dialogs are closed to normal-integrity tools.** They refuse our keys and
+  `WM_CLOSE`, and UI Automation sees only their titles. Drive them through FSAPI: `RunScript`
+  opens one by its script name (`SelectAPlaceMarker`, `QuickSettings`, `RunJAWSManager`,
+  `DoFlexibleWebDialog`, the way a layered key would not), `RunScript("ReadBoxInTabOrder")`
+  reads it, `RunFunction('TypeKey("Escape")')` closes it.
 
 ## 9. Open questions to settle on old-pc
 

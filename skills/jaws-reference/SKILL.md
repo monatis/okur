@@ -115,7 +115,9 @@ For a quick look at what JAWS says, and what ours says, on a machine where that 
 (old-pc always; the user's dev box only when the user says so):
 - `okur keys --allow notepad,explorer "Insert+Alt+W" "down:Alt" Tab "up:Alt" "wait:500"`
   sends scan-coded chords. Each chord or key-down is sent only while one of the `--allow`
-  processes is in front; otherwise the command refuses and releases any held key.
+  processes is in front; otherwise the command refuses and releases any held key. A chord
+  goes in one batch, and keys left down (a key-up lost to an elevated JAWS dialog) are
+  released before the first step; see the pitfalls in `docs/references/verification-loop.md`.
 - `okur jaws-history --clear` prints JAWS's speech history (FSAPI
   `CopySpeechHistoryToClipboard`), empties it, and puts the clipboard's text back.
 - `okur run --engine no-speech --speech-log <file> --debug-log <file>` gives ours. Stop it

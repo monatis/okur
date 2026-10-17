@@ -75,11 +75,29 @@ pub fn virtual_key(name: &str) -> Option<u16> {
     Some(named)
 }
 
-/// Keys that need the extended-key flag (the navigation block, Insert, the Windows key, the
-/// numeric keypad's divide).
+/// Keys that need the extended-key flag (the navigation block, Insert, the Windows keys, the
+/// numeric keypad's divide, the right Ctrl and Alt).
 pub fn is_extended(vk: u16) -> bool {
-    matches!(vk, 0x21..=0x28 | 0x2D | 0x2E | 0x5B | 0x5C | 0x6F)
+    matches!(
+        vk,
+        0x21..=0x28 | 0x2D | 0x2E | 0x5B | 0x5C | 0x6F | 0xA3 | 0xA5
+    )
 }
+
+/// The modifier keys, left and right apart, and Insert (the JAWS key): the keys a chord holds
+/// while the others are pressed, so a lost key-up leaves one of them down for every
+/// application.
+pub const HELD_KEYS: [(u16, &str); 9] = [
+    (0xA0, "left Shift"),
+    (0xA1, "right Shift"),
+    (0xA2, "left Ctrl"),
+    (0xA3, "right Ctrl"),
+    (0xA4, "left Alt"),
+    (0xA5, "right Alt"),
+    (0x5B, "left Windows"),
+    (0x5C, "right Windows"),
+    (0x2D, "Insert"),
+];
 
 /// A step from its text: a chord ("Ctrl+Home"), "down:Key", "up:Key" or "wait:Ms".
 pub fn parse_step(text: &str) -> Result<KeyStep, String> {
@@ -109,7 +127,7 @@ pub use windows_harness::{
 
 #[cfg(windows)]
 mod windows_harness {
-    use super::{is_extended, KeyStep};
+    use super::{is_extended, KeyStep, HELD_KEYS};
     use std::time::{Duration, Instant};
     use windows::Win32::UI::Input::KeyboardAndMouse::{
         MapVirtualKeyW, SendInput, INPUT, INPUT_0, INPUT_KEYBOARD, KEYBDINPUT, KEYBD_EVENT_FLAGS,
@@ -163,8 +181,25 @@ mod windows_harness {
         std::thread::sleep(KEY_GAP);
     }
 
+    /// Presses `keys` in order and releases them in reverse, all in one `SendInput` call.
+    /// Windows queues a call's events together, so every key-up is in the queue before the
+    /// chord's command can open a window that would refuse it.
+    fn chord(keys: &[u16]) {
+        let inputs: Vec<INPUT> = keys
+            .iter()
+            .map(|&k| key_input(k, false, 0))
+            .chain(keys.iter().rev().map(|&k| key_input(k, true, 0)))
+            .collect();
+        send_inputs(&inputs);
+        std::thread::sleep(KEY_GAP);
+    }
+
     /// Sends one key event, scan-coded, with `extra` as its `dwExtraInfo`.
     pub fn send_key(vk: u16, up: bool, extra: usize) {
+        send_inputs(&[key_input(vk, up, extra)]);
+    }
+
+    fn key_input(vk: u16, up: bool, extra: usize) -> INPUT {
         // SAFETY: a scan-code lookup with no preconditions.
         let scan = unsafe { MapVirtualKeyW(u32::from(vk), MAPVK_VK_TO_VSC) };
         let mut flags = KEYBD_EVENT_FLAGS(0);
@@ -174,7 +209,7 @@ mod windows_harness {
         if up {
             flags |= KEYEVENTF_KEYUP;
         }
-        let input = INPUT {
+        INPUT {
             r#type: INPUT_KEYBOARD,
             Anonymous: INPUT_0 {
                 ki: KEYBDINPUT {
@@ -185,10 +220,69 @@ mod windows_harness {
                     dwExtraInfo: extra,
                 },
             },
-        };
+        }
+    }
+
+    fn send_inputs(inputs: &[INPUT]) {
         let size = i32::try_from(std::mem::size_of::<INPUT>()).unwrap_or(0);
-        // SAFETY: one well-formed keyboard input.
-        unsafe { SendInput(&[input], size) };
+        // SAFETY: well-formed keyboard inputs.
+        unsafe { SendInput(inputs, size) };
+    }
+
+    /// Whether the foreground window's process runs at a higher integrity level than ours
+    /// (JAWS's dialogs, an elevated application). Windows refuses our input to it and hides
+    /// the key state from us while it is in front. A process whose token we may not read is
+    /// taken as higher.
+    fn foreground_is_higher() -> bool {
+        use windows::Win32::Foundation::{CloseHandle, HANDLE};
+        use windows::Win32::Security::{
+            GetSidSubAuthority, GetSidSubAuthorityCount, GetTokenInformation, TokenIntegrityLevel,
+            TOKEN_MANDATORY_LABEL, TOKEN_QUERY,
+        };
+        use windows::Win32::System::Threading::{
+            GetCurrentProcess, OpenProcess, OpenProcessToken, PROCESS_QUERY_LIMITED_INFORMATION,
+        };
+        use windows::Win32::UI::WindowsAndMessaging::{
+            GetForegroundWindow, GetWindowThreadProcessId,
+        };
+        fn integrity(process: HANDLE) -> Option<u32> {
+            let mut token = HANDLE::default();
+            // u64s, so the label read from the buffer is aligned for its pointer.
+            let mut buf = [0u64; 16];
+            let mut len = 0u32;
+            // SAFETY: the token is closed below; the label is read from our own buffer,
+            // which GetTokenInformation filled and whose size it checked.
+            unsafe {
+                OpenProcessToken(process, TOKEN_QUERY, &mut token).ok()?;
+                let read = GetTokenInformation(
+                    token,
+                    TokenIntegrityLevel,
+                    Some(buf.as_mut_ptr().cast()),
+                    u32::try_from(std::mem::size_of_val(&buf)).unwrap_or(0),
+                    &mut len,
+                );
+                let _ = CloseHandle(token);
+                read.ok()?;
+                let label = &*buf.as_ptr().cast::<TOKEN_MANDATORY_LABEL>();
+                let sid = label.Label.Sid;
+                let count = *GetSidSubAuthorityCount(sid);
+                Some(*GetSidSubAuthority(sid, u32::from(count.checked_sub(1)?)))
+            }
+        }
+        let mut pid = 0u32;
+        // SAFETY: plain Win32 queries; the process handle is closed below.
+        unsafe {
+            GetWindowThreadProcessId(GetForegroundWindow(), Some(&mut pid));
+            let Ok(process) = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, pid) else {
+                return true;
+            };
+            let theirs = integrity(process);
+            let _ = CloseHandle(process);
+            match (theirs, integrity(GetCurrentProcess())) {
+                (Some(theirs), Some(ours)) => theirs > ours,
+                _ => true,
+            }
+        }
     }
 
     /// Brings the visible top-level window whose title contains `title` (case-insensitive)
@@ -270,10 +364,40 @@ mod windows_harness {
         String::from_utf16_lossy(buf.get(..len).unwrap_or_default())
     }
 
+    /// The held keys (`HELD_KEYS`) Windows has down now, by name.
+    fn keys_down() -> Vec<(u16, &'static str)> {
+        use windows::Win32::UI::Input::KeyboardAndMouse::GetAsyncKeyState;
+        HELD_KEYS
+            .into_iter()
+            // SAFETY: a key-state query with no preconditions.
+            .filter(|&(vk, _)| unsafe { GetAsyncKeyState(i32::from(vk)) } < 0)
+            .collect()
+    }
+
+    /// Releases the held keys still down, and names those that stay down.
+    fn release_keys_down() -> Vec<&'static str> {
+        let down = keys_down();
+        down.iter().for_each(|&(vk, _)| key(vk, true));
+        if down.is_empty() {
+            return Vec::new();
+        }
+        keys_down().into_iter().map(|(_, name)| name).collect()
+    }
+
     /// Sends `steps`, each only while the foreground application is one of `allowed`
     /// (process names, case-insensitive) and, with `title`, while the foreground window's
     /// title contains it: one process can own both the user's windows and the test's
     /// (Windows Terminal). A held key is released before a refusal returns.
+    ///
+    /// Windows drops keys sent while a window that runs elevated is in front (JAWS's own
+    /// dialogs, under UIPI) without saying so, and hides the key state from us meanwhile.
+    /// When a chord opened such a window between its key events, the key-ups after it were
+    /// lost, and a modifier stayed down for every application, the user's typing included
+    /// (observed on the dev box, 2026-10-17: Shift stuck after Ctrl+Shift+Insert+Down opened
+    /// JAWS's Skim Reading dialog, and the next Escape opened Chrome's Task Manager). So a
+    /// chord is sent in one batch; the keys still down are released before the first step,
+    /// once an allowed window is in front; and they are checked after the last, unless a
+    /// higher window in front hides them: one still down is an error.
     pub fn send_steps(
         steps: &[KeyStep],
         allowed: &[String],
@@ -293,11 +417,25 @@ mod windows_harness {
             }
             Ok(())
         };
-        let result = steps.iter().try_for_each(|step| match step {
+        if check().is_ok() {
+            let released: Vec<_> = keys_down().into_iter().map(|(_, name)| name).collect();
+            if !released.is_empty() {
+                let still = release_keys_down();
+                eprintln!(
+                    "released {}, down before the first key (a lost key-up?){}",
+                    released.join(", "),
+                    if still.is_empty() {
+                        String::new()
+                    } else {
+                        format!("; still down: {}", still.join(", "))
+                    }
+                );
+            }
+        }
+        let result: Result<(), String> = steps.iter().try_for_each(|step| match step {
             KeyStep::Chord(keys) => {
                 check()?;
-                keys.iter().for_each(|&k| key(k, false));
-                keys.iter().rev().for_each(|&k| key(k, true));
+                chord(keys);
                 Ok(())
             }
             KeyStep::Down(k) => {
@@ -319,7 +457,25 @@ mod windows_harness {
         for k in held.into_iter().rev() {
             key(k, true);
         }
-        result
+        result?;
+        if foreground_is_higher() {
+            eprintln!(
+                "note: {:?} runs at a higher integrity level, so Windows hides the key state; \
+                 the next `okur keys` with a normal window in front releases any key left down",
+                foreground_title()
+            );
+            return Ok(());
+        }
+        let still = release_keys_down();
+        if still.is_empty() {
+            Ok(())
+        } else {
+            Err(format!(
+                "{} still down after the keys, with {:?} in front",
+                still.join(", "),
+                foreground_title()
+            ))
+        }
     }
 
     /// JAWS's speech history, read by asking JAWS to copy it to the clipboard (its FSAPI
@@ -461,6 +617,8 @@ mod tests {
         );
         assert!(parse_step("Hyper+Q").is_err());
         assert!(is_extended(0x2D) && is_extended(0x28) && !is_extended(0x12));
+        // The right Ctrl and Alt are extended keys; releasing a stuck one needs the flag.
+        assert!(is_extended(0xA3) && is_extended(0xA5) && !is_extended(0xA2));
         assert_eq!(parse_step("NumpadAdd"), Ok(KeyStep::Chord(vec![0x6B])));
         assert_eq!(parse_step("Numpad7"), Ok(KeyStep::Chord(vec![0x67])));
         assert!(parse_step("NumpadX").is_err());
