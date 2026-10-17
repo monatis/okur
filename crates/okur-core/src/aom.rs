@@ -47,6 +47,8 @@ pub enum Role {
     MenuItem,
     /// A button that opens a menu (MSAA `ROLE_SYSTEM_BUTTONMENU`).
     MenuButton,
+    /// A button with a drop-down part (UIA SplitButton): File Explorer's column headers.
+    SplitButton,
     Generic,
 }
 
@@ -57,6 +59,7 @@ impl Role {
             self,
             Role::Button
                 | Role::MenuButton
+                | Role::SplitButton
                 | Role::CheckBox
                 | Role::RadioButton
                 | Role::Tab

@@ -157,6 +157,9 @@ pub struct FocusEvent {
     pub window_title: Option<String>,
     pub folder_name: Option<String>,
     pub help_text: Option<String>,
+    /// What kind of item it is, where the application says (UIA `ItemType`: File Explorer's
+    /// "File folder").
+    pub item_type: Option<String>,
     /// The keys that reach the control from anywhere in its window ("Alt+o").
     pub access_key: Option<String>,
     /// Whether the control's value is read-only (UIA), where it reports one: an editable
@@ -260,6 +263,7 @@ impl FocusEvent {
             window_title: None,
             folder_name: None,
             help_text: None,
+            item_type: None,
             access_key: None,
             read_only: None,
             app: None,

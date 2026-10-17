@@ -206,6 +206,8 @@ fn deliver_one(
                 name = ?focus.name,
                 in_document = focus.in_document,
                 class = ?focus.platform.window_class,
+                container = ?focus.container_role.as_ref().zip(focus.container_name.as_ref()),
+                groups = ?focus.groups.iter().map(|g| g.name.as_str()).collect::<Vec<_>>(),
                 "focus event"
             );
             if focus.in_document {

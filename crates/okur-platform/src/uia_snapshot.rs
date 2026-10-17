@@ -54,6 +54,9 @@ pub struct UiaNode {
     pub full_description: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub help_text: Option<String>,
+    /// `ItemType`: what kind of item it is (File Explorer's "File folder", "Text Document").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub item_type: Option<String>,
     /// `AccessKey`: the keys that reach the control ("Alt+o"), from its label's accelerator.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub access_key: Option<String>,
@@ -158,6 +161,7 @@ impl UiaSnapshot {
 // UIA control type ids (UIAutomationClient.h). Kept as plain numbers so mapping compiles on
 // every platform.
 const CT_BUTTON: i32 = 50000;
+const CT_SPLITBUTTON: i32 = 50031;
 const CT_CHECKBOX: i32 = 50002;
 const CT_COMBOBOX: i32 = 50003;
 const CT_EDIT: i32 = 50004;
@@ -225,6 +229,7 @@ fn map_role(node: &UiaNode) -> okur_core::Role {
     match node.control_type {
         CT_DOCUMENT => Role::Document,
         CT_BUTTON => Role::Button,
+        CT_SPLITBUTTON => Role::SplitButton,
         CT_CHECKBOX => Role::CheckBox,
         CT_RADIOBUTTON => Role::RadioButton,
         CT_COMBOBOX => Role::ComboBox,
@@ -441,6 +446,7 @@ pub(crate) mod capture {
         UIA_LocalizedLandmarkTypePropertyId,
         UIA_FullDescriptionPropertyId,
         UIA_HelpTextPropertyId,
+        UIA_ItemTypePropertyId,
         UIA_AccessKeyPropertyId,
         UIA_ToggleToggleStatePropertyId,
         UIA_ExpandCollapseExpandCollapseStatePropertyId,
@@ -515,6 +521,7 @@ pub(crate) mod capture {
             localized_landmark_type: string(el, UIA_LocalizedLandmarkTypePropertyId),
             full_description: string(el, UIA_FullDescriptionPropertyId),
             help_text: string(el, UIA_HelpTextPropertyId),
+            item_type: string(el, UIA_ItemTypePropertyId),
             access_key: string(el, UIA_AccessKeyPropertyId),
             toggle_state: int(el, UIA_ToggleToggleStatePropertyId),
             expand_collapse_state: int(el, UIA_ExpandCollapseExpandCollapseStatePropertyId),
@@ -878,10 +885,14 @@ pub(crate) mod capture {
     /// What announcements read of a focused element's children (list-view columns, tree
     /// items, a combo box's list and items): fewer properties, because a Win32 control behind
     /// UIA's MSAA proxy answers each across processes.
+    /// A shell view's cells are told by their AutomationId and read by their value (File
+    /// Explorer's "System.ItemTypeText" cell, "File folder").
     const CHILD_PROPERTIES: &[UIA_PROPERTY_ID] = &[
         UIA_ControlTypePropertyId,
         UIA_NamePropertyId,
         UIA_SelectionItemIsSelectedPropertyId,
+        UIA_AutomationIdPropertyId,
+        UIA_ValueValuePropertyId,
     ];
 
     /// `element` (already fetched) and its control-view children to `depth`, each level's

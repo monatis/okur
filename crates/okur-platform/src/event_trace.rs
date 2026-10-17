@@ -329,6 +329,7 @@ pub fn focus_event_from_chain(
         .full_description
         .clone()
         .or_else(|| focused.help_text.clone());
+    event.item_type = focused.item_type.clone().filter(|t| !t.trim().is_empty());
     event.platform.window_class = window_class.map(str::to_owned);
     event.window_title = window_title.map(str::to_owned);
     // Inside a browser document, Chrome reports the DOM id as AutomationId.
@@ -648,6 +649,16 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
                 .count();
             focus.child_count = (children > 0).then_some(children);
         }
+        // A shell item's kind is its type cell's value where UIA gives no ItemType: File
+        // Explorer's "File folder" (the Windows property `System.ItemTypeText`).
+        if focus.item_type.is_none() {
+            focus.item_type = subtree
+                .children
+                .iter()
+                .find(|c| c.automation_id.as_deref() == Some(SHELL_ITEM_TYPE))
+                .and_then(|c| c.value.clone())
+                .filter(|t| !t.trim().is_empty());
+        }
         // A list-view item's further columns are its text children after the name.
         if focus.role == okur_core::Role::ListItem {
             focus.columns = subtree
@@ -690,10 +701,13 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     // Siblings count positions among peers; a combo box's field has its list's position. A
     // button has only the position its application reports: JAWS says none for a dialog's
     // buttons (306), and "1 of 1" for Windows Settings' breadcrumb, which reports it (dev box,
-    // 2026-10-16).
+    // 2026-10-16). A tab likewise: none for a WinForms tab (303/s12), "1 of 1" for File
+    // Explorer's, which reports it (dev box, 2026-10-17).
     if focus.item_index.is_none()
         && focus.role != okur_core::Role::ComboBox
         && focus.role != okur_core::Role::Button
+        && focus.role != okur_core::Role::Tab
+        && focus.role != okur_core::Role::SplitButton
         && focus.container_role != Some(okur_core::Role::ComboBox)
     {
         let peers: Vec<&UiaNode> = event
@@ -750,6 +764,9 @@ pub struct EventConverter {
     /// [`NOTIFICATION_REPEAT_MS`] as notifications are.
     last_live_region: Option<(String, u128)>,
 }
+
+/// The Windows Shell property of an item's kind, the AutomationId of its cell in a shell view.
+const SHELL_ITEM_TYPE: &str = "System.ItemTypeText";
 
 /// How long the same UIA notification again is not said, in milliseconds.
 const NOTIFICATION_REPEAT_MS: u128 = 2000;
@@ -818,8 +835,15 @@ impl EventConverter {
                 if event.event == "uia_focus" && self.last_focus.as_ref() == Some(&focus) {
                     return None;
                 }
-                if let Some(states) = event.object.as_ref().map(|o| o.states) {
-                    apply_msaa_states(&mut focus, states);
+                // The event's MSAA object can be a window around the focused control: File
+                // Explorer's "Explorer Pane" for its view buttons, whose states are not the
+                // checked "Details" button's (dev box, 2026-10-17). Only the control's count.
+                if let Some(object) = event
+                    .object
+                    .as_ref()
+                    .filter(|o| o.name.is_some() && o.name == focus.name)
+                {
+                    apply_msaa_states(&mut focus, object.states);
                 }
                 focus.text = event.text_context.clone();
                 let name = event.object.as_ref().and_then(|o| o.name.clone());

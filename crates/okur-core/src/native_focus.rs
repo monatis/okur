@@ -187,7 +187,17 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
                 parts.push(state("selected"));
             }
             lines.push(Line::new(parts));
+            // The position the application reports: File Explorer's tab, "docs Tab | selected |
+            // 1 of 1" (dev box, 2026-10-17); a WinForms tab reports none (303/s12).
+            lines.extend(position(focus));
             lines.push(Line::text("To switch pages, press Control+PageDown."));
+        }
+        // File Explorer (JAWS on the dev box, 2026-10-17): a column header, "Name split button";
+        // the address bar's breadcrumb, "This PC split button | 1 of 6", the position it
+        // reports. No hint.
+        Role::SplitButton => {
+            lines.push(Line::new(vec![text(name), role("split button")]));
+            lines.extend(position(focus));
         }
         Role::MenuButton => {
             lines.push(Line::new(vec![text(name), role("button menu")]));
@@ -480,6 +490,7 @@ pub fn role_word(role: &Role) -> Option<&'static str> {
     Some(match role {
         Role::Button => "Button",
         Role::MenuButton => "button menu",
+        Role::SplitButton => "split button",
         Role::Edit => "Edit",
         Role::CheckBox => "check box",
         Role::RadioButton => "radio button",

@@ -82,6 +82,13 @@ impl ScreenReaderEngine {
                 FocusResponse::Speak(announcement) => {
                     let speech = announcement.render();
                     self.speech.speak(&speech, true);
+                    // The focus is still the last one native focus knows, for the container
+                    // the next one is in: File Explorer's column header after its list's item
+                    // is within that list (JAWS on the dev box, 2026-10-17: "Name split
+                    // button").
+                    if !focus.in_document {
+                        let _ = self.native_focus.focus(focus);
+                    }
                     return Some(speech);
                 }
             }
