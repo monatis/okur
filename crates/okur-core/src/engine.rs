@@ -262,14 +262,23 @@ impl ScreenReaderEngine {
             return KeyAction::Consume;
         }
 
+        // Who takes the keys, after the JAWS keys and the Virtual Viewer: an open menu, then
+        // forms mode (a page's field or application region), then the focused control outside
+        // a document, and last the virtual PC cursor in a page. JAWS reads a page with the
+        // virtual cursor, and anything outside it (the browser's address bar, its menus) with
+        // the PC cursor.
+        //
+        // A menu takes every key, Escape too, which closes it, whatever cursor was active
+        // before it: a page's ARIA menu (Google Docs', in forms mode), a WinUI context menu,
+        // or Chrome's app menu over a page, which opens with no item focused: the Down that
+        // focuses its first item went to the virtual cursor, and the menu never had a focus
+        // (dev box, 2026-10-17).
+        if self.menus.in_menu_mode() {
+            return KeyAction::PassThrough;
+        }
+
         // 3. Handle Forms Mode
         if self.forms_mode {
-            // A page's menu takes every key, Escape too, which closes it (JAWS in Google Docs'
-            // menus, dev box, 2026-10-16); the menu's items are focus changes, not a field's
-            // text.
-            if self.menus.is_active() && self.app_mode == AppMode::VirtualBuffer {
-                return KeyAction::PassThrough;
-            }
             // In a page's application region every key is the page's (JAWS on the dev box:
             // Escape closes VS Code's command palette).
             if self.web_application.is_some() {

@@ -603,11 +603,27 @@ pub struct Menus {
     /// A page's menus (ARIA), whose items say where they are themselves ([`Self::page_focus`]):
     /// popups opening and closing say nothing.
     page: bool,
+    /// The system reported menu mode starting (`EVENT_SYSTEM_MENUSTART`), maybe before any
+    /// item has the focus: Chrome's app menu opens with none, and its first item is focused
+    /// by the next Down.
+    started: bool,
 }
 
 impl Menus {
+    /// Whether a menu item has been said since menus became active.
     pub fn is_active(&self) -> bool {
         self.active
+    }
+
+    /// Whether a menu is open, its items said yet or not: a menu then takes the keys,
+    /// whatever cursor was active before it ([`Self::started`], an open popup, an item).
+    pub fn in_menu_mode(&self) -> bool {
+        self.active || self.started || !self.open.is_empty()
+    }
+
+    /// The system reported menu mode starting.
+    pub fn start(&mut self) {
+        self.started = true;
     }
 
     /// The menu item that has the focus, while menus are active.
@@ -683,24 +699,54 @@ impl Menus {
             return None;
         }
         let first = !self.active;
+        // A popup that opened before any item had the focus, from no menu bar item: Chrome's
+        // app menu (Alt+F), "Context Menu | | To navigate press Up or Down Arrow. | Yeni
+        // pencere Ctrl+N | 2 of 23 | n" (JAWS on the dev box, 2026-10-17).
+        let context_menu =
+            first && self.popup_pending && self.open.last().is_some_and(|parent| parent.is_empty());
         self.active = true;
         self.current = Some(name.to_owned());
         self.popup_pending = false;
         self.popup_shown = true;
         self.closed = None;
-        let mut lines = vec![match item.accelerator_key.as_deref() {
+        let mut lines = Vec::new();
+        if context_menu {
+            lines.push(role_marker("Context Menu"));
+            lines.push(String::new());
+            lines.push("To navigate press Up or Down Arrow.".to_owned());
+        }
+        // An accelerator of one character is the letter that chooses the item in its menu
+        // (Chrome reports "n" for "Yeni pencere Ctrl+N"), said as its access key; a longer one is
+        // its shortcut, said with its name (Explorer's "Cut<tab>Ctrl+X", "Delete<tab>Delete").
+        let accelerator = item
+            .accelerator_key
+            .as_deref()
+            .map(str::trim)
+            .filter(|k| !k.is_empty());
+        let mnemonic = accelerator.filter(|k| k.chars().count() == 1);
+        let shortcut = accelerator.filter(|k| k.chars().count() > 1);
+        let mut line = match shortcut {
             Some(shortcut) => format!("{name}\t{shortcut}"),
             None => name.to_owned(),
-        }];
+        };
+        // An item that opens a menu (Chrome's "Your Chrome … sub menu").
+        if item.states.expanded.is_some() {
+            line.push(' ');
+            line.push_str(&state_marker("sub menu"));
+        }
+        lines.push(line);
         lines.extend(position(item).map(|p| p.render()));
-        if first {
+        if first && !context_menu {
             lines.push("To move through items press up or down arrow.".to_owned());
         }
+        // Its access key, a key sequence ("Alt, T": "Alt followed by T"), or its letter.
         lines.extend(
             item.access_key
                 .as_deref()
-                .filter(|k| k.contains(", "))
-                .map(|k| k.replace(", ", " followed by ")),
+                .map(str::trim)
+                .filter(|k| !k.is_empty())
+                .map(|k| k.replace(", ", " followed by "))
+                .or_else(|| mnemonic.map(str::to_owned)),
         );
         Some(lines.join("\n"))
     }
@@ -775,7 +821,7 @@ impl Menus {
 
     /// Ends menu mode; true when menus were active ("Leaving menus").
     pub fn end(&mut self) -> bool {
-        let was_active = self.active;
+        let was_active = self.in_menu_mode();
         *self = Self::default();
         was_active
     }

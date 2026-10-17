@@ -48,8 +48,9 @@ impl ScreenReaderEngine {
         }
         if focus.role == Role::MenuItem {
             // A page's menu (an ARIA menu): its keys are the page's, as in forms mode, and
-            // none of them reads the field focused before it.
-            if self.app_mode == AppMode::VirtualBuffer {
+            // none of them reads the field focused before it. The browser's own menu (Chrome's
+            // app menu over a page) leaves forms mode as it was: menu mode takes its keys.
+            if focus.in_document && self.app_mode == AppMode::VirtualBuffer {
                 self.forms_mode = true;
                 self.cursor.forms_mode_active = true;
                 self.page_focus_is_field = false;
@@ -77,7 +78,7 @@ impl ScreenReaderEngine {
         // A native focus outside the menus while they are active: a modern menu closed with
         // no menu-end event (File Explorer's context menu, Escape: "Leaving menus | Items View
         // MultiSelect ListBox | backlog | …"; JAWS on the dev box, 2026-10-17).
-        let leaving_menus = !focus.in_document && self.menus.is_active() && self.menus.end();
+        let leaving_menus = !focus.in_document && self.menus.in_menu_mode() && self.menus.end();
         let with_leaving = |speech: String| {
             if leaving_menus {
                 format!("Leaving menus\n{speech}")
@@ -125,7 +126,7 @@ impl ScreenReaderEngine {
             // A page's menu closed with the focus back in the page: a browser ends no menu
             // mode (no menu-end event), and JAWS says it left menus (Google Docs, dev box,
             // 2026-10-16).
-            let leaving_menus = self.menus.is_active() && self.menus.end();
+            let leaving_menus = self.menus.in_menu_mode() && self.menus.end();
             // Back in the page from the browser's own controls in the same window (Escape in
             // the address bar).
             let from_browser_ui = self.app_mode == AppMode::NativeControl
@@ -483,7 +484,10 @@ impl ScreenReaderEngine {
     pub fn handle_menu_event(&mut self, event: crate::event::MenuEvent) -> Option<String> {
         use crate::event::MenuEvent;
         match event {
-            MenuEvent::Start => None,
+            MenuEvent::Start => {
+                self.menus.start();
+                None
+            }
             MenuEvent::PopupStart => {
                 self.menus.popup_start();
                 None
@@ -497,7 +501,13 @@ impl ScreenReaderEngine {
                     return None;
                 }
                 let mut speech = "Leaving menus".to_owned();
-                if let Some(focus) = &self.last_native_focus {
+                // The control focused before the menu, when it was a native one; a page's
+                // menu returns to the page, whose focus says itself.
+                if let Some(focus) = self
+                    .last_native_focus
+                    .as_ref()
+                    .filter(|_| self.app_mode != AppMode::VirtualBuffer)
+                {
                     speech.push('\n');
                     speech.push_str(&crate::native_focus::focus_speech(focus, None).render());
                 }

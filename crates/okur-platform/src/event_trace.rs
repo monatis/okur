@@ -565,10 +565,17 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     }
     // Menus: UIA keeps reporting the control focused before the menu (WinForms MenuStrip),
     // while the MSAA focus event names the menu item, as JAWS reads it [obs, 302].
+    // Where UIA has the menu item itself (Chrome's app menu), it is read from UIA, which gives
+    // its position and keys.
+    let uia_has_item = event.focus_chain.last().is_some_and(|f| {
+        f.control_type == UIA_MENUITEM
+            && f.name.is_some()
+            && f.name == event.object.as_ref().and_then(|o| o.name.clone())
+    });
     if let Some(object) = event
         .object
         .as_ref()
-        .filter(|o| o.role == Some(MSAA_MENUITEM))
+        .filter(|o| o.role == Some(MSAA_MENUITEM) && !uia_has_item)
     {
         return Some(
             okur_core::FocusEvent::new(okur_core::Role::MenuItem)

@@ -2363,3 +2363,85 @@ fn another_tabs_page_says_its_name_and_the_window() {
         Some("Web Menus \u{1d} document \u{1e} \nWeb Menus - Google Chrome")
     );
 }
+
+/// A page in the virtual cursor, with the focus on its document.
+fn engine_on_a_page() -> (ScreenReaderEngine, SharedSpeech) {
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Web Menus"),
+            AomNode::new(2, Role::Paragraph).with_text("Notes"),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.handle_focus_event(&page_document());
+    (engine, speech)
+}
+
+fn page_document() -> FocusEvent {
+    let mut document = FocusEvent::new(Role::Document)
+        .with_name("Web Menus")
+        .with_window_title("Web Menus - Google Chrome");
+    document.in_document = true;
+    document.node_id = Some(0);
+    document
+}
+
+fn key(key: Key) -> KeyEvent {
+    KeyEvent::new(key, Modifiers::none(), true)
+}
+
+/// Chrome's app menu over a page (Alt+F; dev box, 2026-10-17): the system says menu mode
+/// started and a popup opened, and no item has the focus until the next Down. That Down is the
+/// menu's, not the virtual cursor's; after the menu, the virtual cursor has the keys again.
+#[test]
+fn a_menu_takes_the_keys_before_any_item_is_focused() {
+    let (mut engine, _speech) = engine_on_a_page();
+    let down = key(Key::DownArrow);
+    assert_eq!(engine.handle_key_event(&down), KeyAction::Consume);
+    engine.handle_accessibility_event(&AccessibilityEvent::Menu(crate::event::MenuEvent::Start));
+    engine.handle_accessibility_event(&AccessibilityEvent::Menu(
+        crate::event::MenuEvent::PopupStart,
+    ));
+    assert_eq!(engine.handle_key_event(&down), KeyAction::PassThrough);
+    // The menu's first item, outside the page: forms mode stays off.
+    let mut item = FocusEvent::new(Role::MenuItem)
+        .with_name("Yeni pencere Ctrl+N")
+        .with_item_index(2)
+        .with_item_count(23)
+        .with_window_title("Web Menus - Google Chrome");
+    item.accelerator_key = Some("n".to_owned());
+    assert_eq!(
+        engine.handle_focus_event(&item).as_deref(),
+        Some(
+            " \u{1d} Context Menu \u{1e} \n\nTo navigate press Up or Down Arrow.\n\
+             Yeni pencere Ctrl+N\n2 of 23\nn"
+        )
+    );
+    assert_eq!(engine.handle_key_event(&down), KeyAction::PassThrough);
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&AccessibilityEvent::Menu(crate::event::MenuEvent::End))
+            .as_deref(),
+        Some("Leaving menus")
+    );
+    engine.handle_focus_event(&page_document());
+    assert_eq!(engine.handle_key_event(&down), KeyAction::Consume);
+}
+
+/// A menu item reporting no position (Win32) still takes the keys over a page, and a focus
+/// landing back in the page ends the menu even with no menu-end event.
+#[test]
+fn the_page_takes_the_keys_back_when_its_focus_returns_from_a_menu() {
+    let (mut engine, _speech) = engine_on_a_page();
+    let down = key(Key::DownArrow);
+    engine.handle_focus_event(
+        &FocusEvent::new(Role::MenuItem)
+            .with_name("Open")
+            .with_window_title("Web Menus - Google Chrome"),
+    );
+    assert_eq!(engine.handle_key_event(&down), KeyAction::PassThrough);
+    engine.handle_focus_event(&page_document());
+    assert_eq!(engine.handle_key_event(&down), KeyAction::Consume);
+}
