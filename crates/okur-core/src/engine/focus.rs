@@ -90,6 +90,7 @@ impl ScreenReaderEngine {
             app_mode: &mut self.app_mode,
             window_title: &mut self.last_window_title,
             window_kind: &mut self.last_window_kind,
+            selecting: self.last_key_selects,
         };
         for app in &mut self.apps {
             match app.focus(focus, &mut cx) {

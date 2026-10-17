@@ -80,6 +80,8 @@ pub struct ScreenReaderEngine {
     /// An edit key's result was read in a field its application also announces (a console):
     /// its announcements of the same change, until the next key, are not said.
     edit_read_in_console: bool,
+    /// The last key extended a selection: Shift with an arrow key, Home, End or a page key.
+    last_key_selects: bool,
     menus: crate::native_focus::Menus,
     /// The page re-read after a change, waiting for the change's events to be handled.
     pending_page: Option<VirtualBuffer>,
@@ -134,6 +136,7 @@ impl ScreenReaderEngine {
             last_selected: None,
             last_typed: None,
             edit_read_in_console: false,
+            last_key_selects: false,
             menus: crate::native_focus::Menus::default(),
             pending_edit: None,
             forms_mode_by_enter: false,
@@ -191,6 +194,19 @@ impl ScreenReaderEngine {
         let event = &resolved;
         self.last_typed = event.text;
         self.edit_read_in_console = false;
+        self.last_key_selects = event.modifiers.shift
+            && !event.modifiers.alt
+            && matches!(
+                event.key,
+                Key::UpArrow
+                    | Key::DownArrow
+                    | Key::LeftArrow
+                    | Key::RightArrow
+                    | Key::Home
+                    | Key::End
+                    | Key::PageUp
+                    | Key::PageDown
+            );
         self.apply_pending_page();
 
         // 1. Any key press interrupts speech immediately (NVDA & JAWS standard behavior)

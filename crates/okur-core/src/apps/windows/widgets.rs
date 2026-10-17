@@ -51,6 +51,7 @@ mod tests {
                     app_mode: &mut crate::engine::AppMode::NativeControl,
                     window_title: &mut None,
                     window_kind: &mut None,
+                    selecting: false,
                 }
             ),
             FocusResponse::Silent

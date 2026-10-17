@@ -38,6 +38,8 @@ pub struct AppContext<'a> {
     /// The active window's title (Insert+T) and kind, which tell the next window apart.
     pub window_title: &'a mut Option<String>,
     pub window_kind: &'a mut Option<String>,
+    /// The last key extended a selection (Shift with an arrow key, Home, End or a page key).
+    pub selecting: bool,
 }
 
 impl AppContext<'_> {

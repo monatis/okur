@@ -97,6 +97,10 @@ impl AppModule for Explorer {
                 total,
                 hint: !(window_changed && from_other_app),
             })
+        } else if cx.selecting && focus.states.selected == Some(true) {
+            // Shift+Down extending the selection (JAWS on the dev box, 2026-10-17):
+            // "selected | handoff", no position.
+            Announcement::from_text(&format!("selected\n{name}"))
         } else {
             Announcement::from_text(&format!("{name}\n{index} of {total}"))
         })
@@ -165,6 +169,7 @@ mod tests {
             app_mode: &mut mode,
             window_title: &mut title,
             window_kind: &mut kind,
+            selecting: false,
         };
         match explorer.focus(focus, &mut cx) {
             FocusResponse::Speak(announcement) => announcement.render(),
@@ -218,10 +223,40 @@ mod tests {
             app_mode: &mut mode,
             window_title: &mut title,
             window_kind: &mut kind,
+            selecting: false,
         };
         assert!(matches!(
             explorer.focus(&view, &mut cx),
             FocusResponse::Silent
         ));
+    }
+
+    /// Shift+Down extends the selection: "selected | handoff" (JAWS on the dev box, 2026-10-17).
+    #[test]
+    fn extending_the_selection_says_selected_and_the_item() {
+        let mut explorer = Explorer::default();
+        let mut mode = AppMode::NativeControl;
+        let mut title = Some("docs - File Explorer".to_owned());
+        let mut kind = Some(EXPLORER_WINDOW.to_owned());
+        let mut say = |focus: &FocusEvent, selecting: bool| {
+            let mut cx = AppContext {
+                app_mode: &mut mode,
+                window_title: &mut title,
+                window_kind: &mut kind,
+                selecting,
+            };
+            match explorer.focus(focus, &mut cx) {
+                FocusResponse::Speak(announcement) => announcement.render(),
+                _ => String::new(),
+            }
+        };
+        say(
+            &item("docs - File Explorer", "docs", "backlog", true).with_item_count(4),
+            false,
+        );
+        let handoff = item("docs - File Explorer", "docs", "handoff", true)
+            .with_item_index(2)
+            .with_item_count(4);
+        assert_eq!(say(&handoff, true), "selected\nhandoff");
     }
 }
