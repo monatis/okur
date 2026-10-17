@@ -19,10 +19,48 @@ const UIA_DOCUMENT: i32 = 50030;
 /// What the page worker is asked to capture.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum PageRequest {
-    /// The page after live region changes, once they settle.
+    /// The page after live region changes or other page changes, once they settle.
     Refresh(ForegroundWindow),
-    /// The page just read quickly through UIA, now in full through IA2, at once.
+    /// The page in full through IA2, at once: just read quickly through UIA, or changed
+    /// while the engine was not reading it (forms mode).
     Refine(ForegroundWindow),
+    /// The page quickly through UIA, then in full through IA2: for a focus the engine's
+    /// buffer does not hold (content a web application added).
+    Focus(ForegroundWindow),
+}
+
+/// The running listener's page worker, for the engine's page requests.
+static PAGE_REQUESTS: std::sync::Mutex<Option<std::sync::mpsc::Sender<PageRequest>>> =
+    std::sync::Mutex::new(None);
+
+/// Asks the page worker for a capture of the window in front now. False when no listener
+/// runs.
+fn request_page(request: fn(ForegroundWindow) -> PageRequest) -> bool {
+    PAGE_REQUESTS
+        .lock()
+        .ok()
+        .and_then(|pages| {
+            pages
+                .as_ref()
+                .map(|tx| tx.send(request(ForegroundWindow::now())).is_ok())
+        })
+        .unwrap_or(false)
+}
+
+/// Asks the page worker to read the page in front again, for a focus the engine's buffer
+/// does not hold. False when no listener runs.
+pub fn refresh_page_for_focus() -> bool {
+    request_page(PageRequest::Focus)
+}
+
+/// Asks the page worker to read the page in front again after it changed: once the changes
+/// settle, or at once (`now`) when they are over. False when no listener runs.
+pub fn refresh_changed_page(now: bool) -> bool {
+    request_page(if now {
+        PageRequest::Refine
+    } else {
+        PageRequest::Refresh
+    })
 }
 
 /// The top-level window a page request is for, as a plain handle value: the page is captured
@@ -66,15 +104,22 @@ impl AccessibilityEventListener for WindowsAccessibilityEventListener {
         self.stop.store(false, Ordering::Relaxed);
         let stop = Arc::clone(&self.stop);
         let pages = start_page_worker(sender.clone())?;
+        if let Ok(mut requests) = PAGE_REQUESTS.lock() {
+            *requests = Some(pages.clone());
+        }
         let thread = std::thread::Builder::new()
             .name("okur-winevents".to_owned())
             .spawn(move || {
                 let mut page: Option<String> = None;
                 let mut converter = EventConverter::default();
+                let changes = sender.clone();
+                let page_changed = move || {
+                    let _ = changes.send(AccessibilityEvent::PageChanged);
+                };
                 let sink = move |event: TraceEvent| {
                     deliver(&event, &mut converter, &mut page, &sender, &pages)
                 };
-                let count = run_live(Box::new(sink), &stop);
+                let count = run_live(Box::new(sink), Box::new(page_changed), &stop);
                 tracing::debug!(count, "WinEvent listener stopped");
             })
             .map_err(|e| PlatformError::EventListenerError(e.to_string()))?;
@@ -86,6 +131,10 @@ impl AccessibilityEventListener for WindowsAccessibilityEventListener {
         self.stop.store(true, Ordering::Relaxed);
         if let Some(thread) = self.thread.take() {
             let _ = thread.join();
+        }
+        // The worker ends with its last sender.
+        if let Ok(mut requests) = PAGE_REQUESTS.lock() {
+            *requests = None;
         }
         Ok(())
     }
@@ -161,7 +210,9 @@ fn start_page_worker(
             // SAFETY: COM initialization for this worker thread.
             let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
             while let Ok(request) = rx.recv() {
-                let (PageRequest::Refresh(window) | PageRequest::Refine(window)) = request;
+                let (PageRequest::Refresh(window)
+                | PageRequest::Refine(window)
+                | PageRequest::Focus(window)) = request;
                 if matches!(request, PageRequest::Refresh(_))
                     && !settle(&rx, REFRESH_QUIET, REFRESH_MAX_DELAY)
                 {
@@ -172,6 +223,19 @@ fn start_page_worker(
                     continue;
                 }
                 let started = std::time::Instant::now();
+                if matches!(request, PageRequest::Focus(_)) {
+                    // The full capture below serves every request queued meanwhile.
+                    rx.try_iter().for_each(drop);
+                    match crate::actions::capture_foreground_page_quick() {
+                        Ok(root) => {
+                            let title = root.name.clone().unwrap_or_default();
+                            let ms = started.elapsed().as_millis();
+                            tracing::debug!(%title, ms, "page read again for the focus");
+                            let _ = sender.send(AccessibilityEvent::DocumentLoaded { title, root });
+                        }
+                        Err(e) => tracing::debug!("quick page capture for the focus failed: {e}"),
+                    }
+                }
                 match crate::actions::capture_foreground_page() {
                     Ok(root) => {
                         let title = root.name.clone().unwrap_or_default();
@@ -180,7 +244,9 @@ fn start_page_worker(
                             PageRequest::Refresh(_) => {
                                 tracing::debug!(%title, ms, "page refreshed")
                             }
-                            PageRequest::Refine(_) => tracing::debug!(%title, ms, "page refined"),
+                            PageRequest::Refine(_) | PageRequest::Focus(_) => {
+                                tracing::debug!(%title, ms, "page refined")
+                            }
                         }
                         let _ = sender.send(AccessibilityEvent::DocumentLoaded { title, root });
                     }
@@ -233,12 +299,11 @@ fn load_page_if_new(
         .focus_chain
         .iter()
         .find(|n| n.control_type == UIA_DOCUMENT);
-    let key = document.map(|d| {
-        format!(
-            "{}\u{1}{}",
-            d.name.as_deref().unwrap_or_default(),
-            d.value.as_deref().unwrap_or_default()
-        )
+    // A page is known by its address (its title can change on it: WhatsApp's counts unread
+    // chats), by its title when it has none.
+    let key = document.map(|d| match d.value.as_deref().filter(|url| !url.is_empty()) {
+        Some(url) => url.to_owned(),
+        None => d.name.clone().unwrap_or_default(),
     });
     if key == *page {
         return;

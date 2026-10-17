@@ -204,6 +204,10 @@ pub struct VirtualBuffer {
     pub progress_bars: Vec<usize>,
     pub tree_parents: HashMap<usize, usize>,
     pub tab_stops: Vec<usize>,
+    /// Elements that can take the focus but are not controls (WhatsApp's messages, a
+    /// `tabindex` card), as (their first line's offset, node id), in offset order; of
+    /// nested ones starting on one line, the innermost.
+    pub focus_stops: Vec<(usize, usize)>,
     pub tabs: Vec<TabInfo>,
     pub tables: Vec<TableGrid>,
     pub table_offsets: Vec<usize>,

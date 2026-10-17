@@ -656,6 +656,19 @@ pub struct Menus {
     /// item has the focus: Chrome's app menu opens with none, and its first item is focused
     /// by the next Down.
     started: bool,
+    /// The page's menu session began on a menu bar or in one of its menus.
+    from_bar: bool,
+}
+
+/// Where a page's menu item is ([`Menus::page_focus`]).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum PageMenuPlace {
+    /// On a menu bar.
+    Bar,
+    /// In a menu of a menu bar.
+    BarMenu,
+    /// In a menu of its own: a popup some control opened (WhatsApp's message menu).
+    Popup,
 }
 
 impl Menus {
@@ -678,6 +691,12 @@ impl Menus {
     /// The menu item that has the focus, while menus are active.
     pub fn current(&self) -> Option<&str> {
         self.current.as_deref().filter(|_| self.active)
+    }
+
+    /// The focus moved off the menu's items but stays in the menu (one of WhatsApp's
+    /// reactions): the item it comes back to is said again.
+    pub fn off_items(&mut self) {
+        self.current = None;
     }
 
     /// Focus landed on a menu item.
@@ -822,11 +841,14 @@ impl Menus {
     /// in a menu its name, and "sub menu" for one that opens a menu ("Verbalize to screen
     /// reader s ► sub menu"). The first item of the session begins with "menu" and ends with
     /// the hint ("menu | Accessibility | 10 of 10 | To move through items press left or
-    /// right arrow."). The same item reported again says nothing.
+    /// right arrow."). A popup menu of its own says each item's position and no "menu"
+    /// ("Mesaj bilgisi | 1 of 9 | To move through items press up or down arrow.", then
+    /// "Cevapla | 2 of 9": WhatsApp's message menu, dev box 2026-10-17). The same item
+    /// reported again says nothing.
     pub fn page_focus(
         &mut self,
         name: &str,
-        on_bar: bool,
+        place: PageMenuPlace,
         position: Option<(usize, usize)>,
         opens_menu: bool,
     ) -> Option<String> {
@@ -835,25 +857,29 @@ impl Menus {
             return None;
         }
         let first = !self.active;
+        if first {
+            self.from_bar = place != PageMenuPlace::Popup;
+        }
+        let on_bar = place == PageMenuPlace::Bar;
         self.active = true;
         self.page = true;
         self.current = Some(name.to_owned());
         self.popup_pending = false;
         self.closed = None;
         let mut lines = Vec::new();
-        if first {
+        if first && self.from_bar {
             lines.push(role_marker("menu"));
             lines.push(String::new());
         }
-        if on_bar {
-            lines.push(name.to_owned());
-            if let Some((index, count)) = position {
-                lines.push(format!("{index} of {count}"));
-            }
-        } else if opens_menu {
+        if opens_menu && !on_bar {
             lines.push(format!("{name} {}", state_marker("sub menu")));
         } else {
             lines.push(name.to_owned());
+        }
+        if on_bar || !self.from_bar {
+            if let Some((index, count)) = position {
+                lines.push(format!("{index} of {count}"));
+            }
         }
         if first {
             lines.push(
@@ -1125,7 +1151,7 @@ To activate press Enter."
         let mut m = Menus::default();
         m.popup_start();
         assert_eq!(
-            m.page_focus("Accessibility", true, Some((10, 10)), true)
+            m.page_focus("Accessibility", PageMenuPlace::Bar, Some((10, 10)), true)
                 .as_deref()
                 .map(norm),
             Some(norm(
@@ -1135,20 +1161,34 @@ To activate press Enter."
         );
         m.popup_end();
         assert_eq!(
-            m.page_focus("Help", true, Some((9, 10)), true).as_deref(),
+            m.page_focus("Help", PageMenuPlace::Bar, Some((9, 10)), true)
+                .as_deref(),
             Some("Help\n9 of 10")
         );
         m.popup_start();
         assert_eq!(
-            m.page_focus("Search the menus", false, Some((1, 3)), false)
-                .as_deref(),
+            m.page_focus(
+                "Search the menus",
+                PageMenuPlace::Popup,
+                Some((1, 3)),
+                false
+            )
+            .as_deref(),
             Some("Search the menus")
         );
-        assert_eq!(m.page_focus("Search the menus", false, None, false), None);
         assert_eq!(
-            m.page_focus("Verbalize to screen reader", false, None, true)
-                .as_deref()
-                .map(norm),
+            m.page_focus("Search the menus", PageMenuPlace::Popup, None, false),
+            None
+        );
+        assert_eq!(
+            m.page_focus(
+                "Verbalize to screen reader",
+                PageMenuPlace::Popup,
+                None,
+                true
+            )
+            .as_deref()
+            .map(norm),
             Some(norm("Verbalize to screen reader \u{1d}sub menu\u{1e}"))
         );
         m.popup_end();

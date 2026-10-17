@@ -63,6 +63,13 @@ impl ScreenReaderEngine {
                 self.speech.speak(&speech, true);
                 return Some(speech);
             }
+            // "Enter key to pass through" (JAWS on the dev box, 2026-10-17, WhatsApp).
+            Command::PassKeyThrough => {
+                self.pass_next_key = true;
+                let speech = "Enter key to pass through".to_owned();
+                self.speech.speak(&speech, true);
+                return Some(speech);
+            }
             Command::SayWindowTitle => {
                 // The Virtual Viewer is a window of its own: JAWS names it, whatever it shows
                 // ("Virtual Viewer", without "Title is"; dev box, Windows Terminal and Notepad,

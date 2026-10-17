@@ -179,7 +179,17 @@ pub struct NodeStates {
     pub hidden: bool,
     #[serde(default)]
     pub modal: bool,
+    /// Whether the element can take the keyboard focus (`tabindex` included), when the
+    /// capture says: Tab from the virtual cursor goes to the next element that can. Web
+    /// applications make plain elements focusable (WhatsApp's messages) and leave some
+    /// buttons out (a message's time).
+    #[serde(default)]
+    pub focusable: Option<bool>,
 }
+
+/// AOM attribute holding a node's IA2 `uniqueID`: the live object's identity, the same in
+/// every capture of a page while the object lives.
+pub const UNIQUE_ID_ATTR: &str = "ia2_unique_id";
 
 /// Accessibility Object Model (AOM) node.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

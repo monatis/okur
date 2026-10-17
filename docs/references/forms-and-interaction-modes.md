@@ -44,8 +44,10 @@ In screen readers (following JAWS 2025 standards and cross-referenced with NVDA 
 
 ### Who takes a key (`ScreenReaderEngine::handle_key_event`)
 
-Each key goes to the first of these that applies (as of `b3b49cc`):
+Each key goes to the first of these that applies (as of `67df569`, plus Pass Key Through):
 
+0. **Pass Key Through** (Insert+3, "Enter key to pass through"): the next key goes to the
+   application as it is, with the modifiers held for it, whatever the mode.
 1. **The JAWS key** (Insert, or CapsLock in the laptop layout) and every chord with it: JAWS
    commands, in any mode.
 2. **The Virtual Viewer** (Insert+Alt+W, the results viewer), while it is open.
@@ -53,10 +55,15 @@ Each key goes to the first of these that applies (as of `b3b49cc`):
    (`EVENT_SYSTEM_MENUSTART`), a popup is open, or a menu item has the focus. Every key goes
    to the menu, Escape too. Menu mode ends with the menu-end event, or when a focus lands
    outside the menus (back in the page, or on a native control), which says "Leaving
-   menus". It does not wait for an item's focus: Chrome's app menu opens with none, and the
+   menus". A focus on something else inside a page's menu (WhatsApp's reaction buttons
+   above its message menu's items) is still in the menu. It does not wait for an item's focus: Chrome's app menu opens with none, and the
    Down that focuses its first item must reach it.
 4. **Forms mode**: a page's field, editable combo box, ARIA menu or application region has the
-   focus. Keys go to the page; caret and edit keys are read, typed keys echoed by the typing
+   focus; or an item of a list, grid, tree or table (WhatsApp's chats and messages) that Tab
+   or Shift+Tab put the focus on, or that the arrows reached from forms mode (Down from a
+   search box into its results). JAWS 2025 stays in browse mode on such an item; Okur gives
+   the page its arrows, as a list box's. Enter on such an item that opens something
+   elsewhere (a chat, whose message field the page focuses) ends forms mode. Keys go to the page; caret and edit keys are read, typed keys echoed by the typing
    echo setting. Escape leaves forms mode ("virtual PC Cursor"), except in an application
    region, whose keys are all the page's.
 5. **Escape** closes the virtual cursor's element list, expanded combo box or dialog.

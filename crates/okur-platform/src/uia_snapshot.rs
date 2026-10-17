@@ -324,6 +324,7 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> okur_core::AomNode {
         disabled: !node.is_enabled,
         hidden: false,
         modal: aria_property(node, "modal") == Some("true"),
+        focusable: Some(node.is_keyboard_focusable),
     };
     if let Some(aria) = node.aria_role.as_deref() {
         aom.attributes

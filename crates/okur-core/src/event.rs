@@ -116,6 +116,14 @@ pub struct FocusEvent {
     /// The focused menu item is on a menu bar (a page's ARIA menu bar), not in a menu.
     #[serde(default)]
     pub in_menu_bar: bool,
+    /// The focused menu item is on a menu bar or in one of its menus: a page's menu, not a
+    /// popup of its own (WhatsApp's message menu).
+    #[serde(default)]
+    pub under_menu_bar: bool,
+    /// The focus is inside a page's menu without being one of its items (WhatsApp's
+    /// reaction buttons at the top of its message menu): the menu keeps its keys.
+    #[serde(default)]
+    pub in_menu: bool,
     /// The named groups and the lists a native control is in, outermost first, up to its
     /// window: Windows Settings' "Brightness & color", "Night light"; "Advanced",
     /// "Troubleshoot common sound problems", then that list. Empty where none, and where the
@@ -128,6 +136,9 @@ pub struct FocusEvent {
     pub in_document: bool,
     /// The element's DOM id, when it is in a document and has one.
     pub dom_id: Option<String>,
+    /// The element's IA2 uniqueID, when it is in a page whose window reports it: the page's
+    /// node with the same [`crate::aom::UNIQUE_ID_ATTR`] is the focus.
+    pub unique_id: Option<String>,
     /// The page region with ARIA role "application" the focus is in (VS Code's workbench), by
     /// its name: the page takes every key there, as JAWS gives them.
     #[serde(default)]
@@ -254,10 +265,13 @@ impl FocusEvent {
             container_name: None,
             container_is_list_view: false,
             in_menu_bar: false,
+            under_menu_bar: false,
+            in_menu: false,
             groups: Vec::new(),
             columns: Vec::new(),
             in_document: false,
             dom_id: None,
+            unique_id: None,
             web_application: None,
             tree_level: None,
             child_count: None,
@@ -403,6 +417,10 @@ pub enum AccessibilityEvent {
     PageElements(Vec<crate::aom::AomNode>),
     /// What the user did to one of Okur's own windows (`okur-ui`).
     Ui(crate::ui::FromUi),
+    /// The page in front changed outside its live regions: a web application added or
+    /// removed content (WhatsApp renders a chat's messages after the chat opens). Its
+    /// buffer is captured again ([`crate::actions::ApplicationActions::page_changed`]).
+    PageChanged,
     DocumentLoaded {
         title: String,
         root: crate::aom::AomNode,

@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use crate::aom::{AomNode, Role};
 use crate::buffer::{BufferLine, VirtualBuffer};
 use crate::speech::SpeechFormatter;
@@ -723,19 +725,27 @@ impl VirtualCursor {
                 "{}  \u{1d}\u{1e}",
                 self.control_focus_speech(self.offset, previous)
             ),
+            // A grid's cell that takes the focus itself is said by its name, all of it, as
+            // JAWS says WhatsApp's chats moving through its list (the chat's name, its last
+            // message's date and the message; dev box, 2026-10-17).
+            Role::TableCell if !name.is_empty() => name.to_owned(),
             _ => self.control_focus_speech(self.offset, previous),
         };
         if speech.trim().is_empty() {
             speech = name.to_owned();
         }
+        // Such a cell says its position only entering the grid: JAWS said no row moving on.
+        let focused_cell = node.role == Role::TableCell && !name.is_empty();
         if let Some((header, position)) =
             self.table_focus_context(self.offset, from.unwrap_or(previous))
         {
             if let Some(header) = header {
                 speech = format!("{header}\n{speech}");
             }
-            speech.push('\n');
-            speech.push_str(&position);
+            if !focused_cell || position.starts_with("column") {
+                speech.push('\n');
+                speech.push_str(&position);
+            }
         }
         if let Some(hint) = SpeechFormatter::web_focus_hint(node) {
             speech.push('\n');
@@ -1571,7 +1581,19 @@ impl VirtualCursor {
 
     /// Aligns the virtual cursor offset with the specified node id.
     pub fn move_to_node_id(&mut self, node_id: usize) -> bool {
-        if let Some(span) = self.buffer.spans.iter().find(|s| s.node_id == node_id) {
+        // An element whose lines are its children's (WhatsApp's focused message) is at its
+        // first line.
+        let span = self
+            .buffer
+            .spans
+            .iter()
+            .find(|s| s.node_id == node_id)
+            .or_else(|| {
+                let mut ids = HashSet::new();
+                collect_ids(self.buffer.node(node_id)?, &mut ids);
+                self.buffer.spans.iter().find(|s| ids.contains(&s.node_id))
+            });
+        if let Some(span) = span {
             self.offset = span.start_offset;
             self.current_node_id = Some(node_id);
             true
@@ -2268,5 +2290,13 @@ impl VirtualCursor {
             let speech = self.jump_to_element_offset(last_offset);
             Some(format!("wrapping to bottom\n{}", speech))
         }
+    }
+}
+
+/// The ids of `node` and of everything under it, into `ids`.
+fn collect_ids(node: &AomNode, ids: &mut HashSet<usize>) {
+    ids.insert(node.id);
+    for child in &node.children {
+        collect_ids(child, ids);
     }
 }

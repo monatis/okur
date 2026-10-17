@@ -117,6 +117,8 @@ pub enum Command {
     JumpToFormField(String),
 
     // Windows, focus and time.
+    /// The next key goes to the application as it is (JAWS's Pass Key Through).
+    PassKeyThrough,
     SayWindow,
     SayCurrentFocus,
     SayWindowTitle,
@@ -272,6 +274,7 @@ impl Command {
             "SelectAFormField" | "FormFieldList" | "FormFieldsList" | "Insert+F5"
             | "JAWSKey+F5" | "Insert+Ctrl+F" | "JAWSKey+Ctrl+F" => SelectAFormField,
 
+            "PassKeyThrough" | "Insert+3" | "JAWSKey+3" => PassKeyThrough,
             "SayWindow" => SayWindow,
             "SayCurrentFocus" => SayCurrentFocus,
             "SayWindowTitle" => SayWindowTitle,
@@ -452,6 +455,7 @@ static BINDINGS: &[Binding] = &{
         bind(Key::Escape, ALONE, Command::Escape),
         bind(Space, ALONE, Activate),
         // Windows and focus.
+        bind(Digit(3), JAWS, PassKeyThrough),
         bind(Alpha('B'), JAWS, SayWindow),
         bind(Key::Tab, JAWS, SayCurrentFocus),
         bind(Alpha('T'), JAWS, SayWindowTitle),

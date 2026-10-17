@@ -321,9 +321,10 @@ impl SpeechFormatter {
                     s.push_str("\n \u{1d}Required\u{1e} ");
                 }
                 // A multi-line field with text says so, not its text (a text area, a web code
-                // editor): "Notes edit | Contains text" (JAWS on the dev box).
+                // editor): "Notes edit | Contains text" (JAWS on the dev box). A field holding
+                // only a line break is blank: WhatsApp's empty composer (JAWS on the dev box).
                 if !password {
-                    match node.value.as_deref().filter(|v| !v.is_empty()) {
+                    match node.value.as_deref().filter(|v| !v.trim().is_empty()) {
                         Some(_) if attr("multiline") == Some("true") => {
                             s.push_str("\nContains text")
                         }
@@ -373,6 +374,16 @@ impl SpeechFormatter {
                 node.role_description().unwrap_or("check box"),
                 checked(node.states.checked)
             ),
+            // A toggle button (`aria-pressed`): "Sohbetler Toggle button Pressed", "👍 Toggle
+            // button Not pressed" (WhatsApp, JAWS on the dev box, 2026-10-17).
+            Role::Button if node.states.checked.is_some() => {
+                let pressed = if node.states.checked == Some(true) {
+                    "Pressed"
+                } else {
+                    "Not pressed"
+                };
+                format!("{name}   Toggle button   {pressed} ")
+            }
             Role::Button => {
                 // A disclosure button speaks its state [obs, 29/s1].
                 let state = match node.states.expanded {
@@ -410,6 +421,9 @@ impl SpeechFormatter {
                 Some("To clear checkmark press Spacebar.")
             }
             Role::CheckBox => Some("To check press Spacebar."),
+            Role::Button if node.states.checked.is_some() => {
+                Some("To toggle the state press spacebar.")
+            }
             Role::Link { .. } | Role::Button => Some("To activate press Enter."),
             _ => None,
         }

@@ -671,7 +671,7 @@ fn test_jaws_key_combinations_are_consumed_in_native_apps() {
 
 /// Speech shared with the test, for commands spoken from key events.
 #[derive(Clone, Default)]
-struct SharedSpeech(std::sync::Arc<std::sync::Mutex<Vec<String>>>);
+pub(super) struct SharedSpeech(std::sync::Arc<std::sync::Mutex<Vec<String>>>);
 
 impl SpeechOutput for SharedSpeech {
     fn speak(&mut self, text: &str, _interrupt: bool) {
@@ -683,7 +683,7 @@ impl SpeechOutput for SharedSpeech {
 }
 
 impl SharedSpeech {
-    fn take(&self) -> Vec<String> {
+    pub(super) fn take(&self) -> Vec<String> {
         self.0
             .lock()
             .map(|mut s| s.drain(..).collect())

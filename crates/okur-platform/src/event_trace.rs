@@ -356,6 +356,16 @@ pub fn focus_event_from_chain(
     let in_browser = window_class
         .is_some_and(|c| c == CHROMIUM_TOP_WINDOW || WEB_CONTENT_WINDOW_CLASSES.contains(&c));
     event.in_document = in_browser && chain.iter().any(|a| a.control_type == UIA_DOCUMENT);
+    // Inside a page's menu without being one of its items: WhatsApp's reactions, buttons in
+    // its message menu.
+    const UIA_MENU: i32 = 50009;
+    event.in_menu = event.in_document
+        && chain
+            .iter()
+            .rev()
+            .skip(1)
+            .take_while(|a| a.control_type != UIA_DOCUMENT)
+            .any(|a| a.control_type == UIA_MENU);
     // Groups that are a control's content name nothing: not even as the nearest container.
     let (groups, inside_control) = nested_groups(chain);
     let control_content = !event.in_document && inside_control;
@@ -551,6 +561,27 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             .rev()
             .nth(1)
             .is_some_and(|parent| parent.control_type == UIA_MENUBAR);
+        focus.under_menu_bar = event
+            .focus_chain
+            .iter()
+            .any(|n| n.control_type == UIA_MENUBAR);
+        // Without a reported position, the item's place among its menu's items: "Mesaj
+        // bilgisi | 1 of 9" (WhatsApp's message menu, JAWS on the dev box, 2026-10-17).
+        if focus.item_index.is_none() {
+            let peers: Vec<&UiaNode> = event
+                .focus_siblings
+                .iter()
+                .filter(|s| s.control_type == UIA_MENUITEM)
+                .collect();
+            let index = peers
+                .iter()
+                .position(|s| s.has_keyboard_focus)
+                .or_else(|| peers.iter().position(|s| s.name == item.name));
+            if let Some(index) = index {
+                focus.item_index = Some(index + 1);
+                focus.item_count = Some(peers.len());
+            }
+        }
         return Some(focus);
     }
     // A page's menu item focused through MSAA when UIA has the focus elsewhere: the page
@@ -610,6 +641,17 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         top_window,
     )?;
     let focused = event.focus_chain.last()?;
+    // A page's window reports its focus by the object's IA2 uniqueID (negative), the identity
+    // its captures give each node: WhatsApp renames a message as it takes the focus.
+    if focus.in_document
+        && event.id_child < 0
+        && event
+            .window_class
+            .as_deref()
+            .is_some_and(|c| WEB_CONTENT_WINDOW_CLASSES.contains(&c))
+    {
+        focus.unique_id = Some(event.id_child.to_string());
+    }
     // The window's kind is its class: the desktop's, the window in front, or (older traces)
     // the UIA window around the focus.
     focus.platform.top_window_class = if event.virtual_desktop.is_some() {
@@ -1191,7 +1233,17 @@ mod capture {
         /// The last focus event read, of any kind: a selection or value change for its
         /// element right after is its echo.
         last_focus_read: Option<SeenFocus>,
+        /// Told when the page in front changes (live only), at most every
+        /// [`PAGE_CHANGE_INTERVAL`].
+        page_changed: Option<Box<dyn FnMut()>>,
+        page_changed_at: Option<std::time::Instant>,
+        /// Page changes not told since the last one, for the debug log.
+        page_changes_dropped: usize,
     }
+
+    /// The shortest time between two page changes told: a page being built reports its
+    /// objects shown and reordered by the hundred.
+    const PAGE_CHANGE_INTERVAL: std::time::Duration = std::time::Duration::from_millis(200);
 
     thread_local! {
         // The out-of-context hook calls back on the installing thread, so thread-local
@@ -1453,6 +1505,70 @@ mod capture {
         };
         record(name, win_event, hwnd, id_object, id_child, None);
     }
+
+    /// Objects shown, hidden or reordered in the page in front (`EVENT_OBJECT_SHOW`, `_HIDE`,
+    /// `_REORDER`): the page changed. Chromium reports its web objects on the page's
+    /// "Chrome Legacy Window" by their negative uniqueIDs. Nothing is read across processes:
+    /// a page being built sends these by the hundred.
+    unsafe extern "system" fn on_page_change(
+        _hook: HWINEVENTHOOK,
+        win_event: u32,
+        hwnd: HWND,
+        id_object: i32,
+        id_child: i32,
+        _thread: u32,
+        _time: u32,
+    ) {
+        use windows::Win32::UI::WindowsAndMessaging::{
+            GetAncestor, GetClassNameW, GetForegroundWindow, IsWindowVisible, GA_ROOT,
+        };
+        const OBJID_CLIENT: i32 = -4;
+        if id_object != OBJID_CLIENT || id_child >= 0 {
+            return;
+        }
+        let mut class = [0u16; 32];
+        // SAFETY: plain Win32 queries on the event's window, with a valid buffer.
+        let in_page_in_front = unsafe {
+            let length = GetClassNameW(hwnd, &mut class);
+            class
+                .get(..length as usize)
+                .is_some_and(|class| CHROME_PAGE_WINDOW.encode_utf16().eq(class.iter().copied()))
+                && IsWindowVisible(hwnd).as_bool()
+                && GetAncestor(hwnd, GA_ROOT) == GetForegroundWindow()
+        };
+        if !in_page_in_front {
+            return;
+        }
+        STATE.with(|s| {
+            let Ok(mut state) = s.try_borrow_mut() else {
+                return;
+            };
+            let Some(state) = state.as_mut() else {
+                return;
+            };
+            if state
+                .page_changed_at
+                .is_some_and(|at| at.elapsed() < PAGE_CHANGE_INTERVAL)
+            {
+                state.page_changes_dropped += 1;
+                return;
+            }
+            if let Some(page_changed) = state.page_changed.as_mut() {
+                tracing::debug!(
+                    event = win_event,
+                    object = id_child,
+                    dropped_before = state.page_changes_dropped,
+                    "page changed"
+                );
+                state.page_changed_at = Some(std::time::Instant::now());
+                state.page_changes_dropped = 0;
+                page_changed();
+            }
+        });
+    }
+
+    /// The window class of a Chromium page ("Chrome Legacy Window").
+    const CHROME_PAGE_WINDOW: &str = "Chrome_RenderWidgetHostHWND";
 
     /// UIA's focus-changed event id.
     const UIA_FOCUS_CHANGED: u32 = 20005;
@@ -2155,7 +2271,7 @@ mod capture {
             }
         };
         let deadline = std::time::Instant::now() + std::time::Duration::from_millis(max_ms);
-        Ok(run_hooks(Box::new(sink), false, || {
+        Ok(run_hooks(Box::new(sink), None, || {
             std::time::Instant::now() < deadline && !stop_file.is_some_and(|p| p.exists())
         }))
     }
@@ -2163,22 +2279,26 @@ mod capture {
     /// Delivers accessibility events to `sink` as they happen, with the same capture as
     /// [`run_trace`], until `stop` is set. This is the live screen reader's event source,
     /// so the engine consumes exactly the event stream the harness records and replays.
+    /// `page_changed` is told when the page in front changes outside live regions.
     pub fn run_live(
         sink: Box<dyn FnMut(TraceEvent)>,
+        page_changed: Box<dyn FnMut()>,
         stop: &std::sync::atomic::AtomicBool,
     ) -> usize {
-        run_hooks(sink, true, || {
+        run_hooks(sink, Some(page_changed), || {
             !stop.load(std::sync::atomic::Ordering::Relaxed)
         })
     }
 
     /// Installs the WinEvent hooks on this thread, pumps messages while `keep_running`,
-    /// and returns the number of events delivered.
+    /// and returns the number of events delivered. Live (with `page_changed`), page changes
+    /// are hooked too.
     fn run_hooks(
         sink: Box<dyn FnMut(TraceEvent)>,
-        live: bool,
+        page_changed: Option<Box<dyn FnMut()>>,
         keep_running: impl Fn() -> bool,
     ) -> usize {
+        let live = page_changed.is_some();
         // SAFETY: COM for UIA queries on this thread, which also pumps the hook's messages.
         let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
         STATE.with(|s| {
@@ -2189,6 +2309,9 @@ mod capture {
                 live,
                 last_object_focus: None,
                 last_focus_read: None,
+                page_changed,
+                page_changed_at: None,
+                page_changes_dropped: 0,
             })
         });
 
@@ -2198,6 +2321,12 @@ mod capture {
             [
                 SetWinEventHook(0x0002, 0x0011, None, Some(on_event), 0, 0, flags),
                 SetWinEventHook(0x8005, 0x8019, None, Some(on_event), 0, 0, flags),
+                // EVENT_OBJECT_SHOW to EVENT_OBJECT_REORDER.
+                if live {
+                    SetWinEventHook(0x8002, 0x8004, None, Some(on_page_change), 0, 0, flags)
+                } else {
+                    HWINEVENTHOOK::default()
+                },
             ]
         };
 

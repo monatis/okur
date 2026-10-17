@@ -2,7 +2,7 @@
 //! regions.
 
 use super::{AppMode, ScreenReaderEngine};
-use crate::aom::{AomNode, Role};
+use crate::aom::{AomNode, Role, UNIQUE_ID_ATTR};
 use crate::buffer::VirtualBuffer;
 use crate::event::{AccessibilityEvent, FocusEvent, LiveRegionEvent, Politeness};
 use crate::settings::LiveRegionAppend;
@@ -46,8 +46,14 @@ impl ScreenReaderEngine {
     pub fn handle_document_loaded(&mut self, title: &str, buffer: VirtualBuffer) -> Option<String> {
         // The page already in the buffer, captured again (the first focus in it after
         // start-up): refresh it without announcing it or leaving forms mode.
+        // A page is known by its address, by its title when it has none: a title can change
+        // on the page (WhatsApp's counts unread chats, "(8) WhatsApp"), and JAWS keeps its
+        // place then (dev box, 2026-10-17).
         let same_page = self.app_mode == AppMode::VirtualBuffer
-            && self.cursor.buffer.document_title() == Some(title);
+            && match (self.cursor.buffer.document_url(), buffer.document_url()) {
+                (Some(old), Some(new)) => old == new,
+                _ => self.cursor.buffer.document_title() == Some(title),
+            };
         if same_page {
             // Applied once the events of this change are handled: several live regions can
             // change at once, and each is compared with the page before the change
@@ -56,6 +62,7 @@ impl ScreenReaderEngine {
             return None;
         }
         self.pending_page = None;
+        self.page_stale = false;
         self.last_page_focus = None;
         self.tab_start = None;
         self.option_list = None;
@@ -247,6 +254,15 @@ impl ScreenReaderEngine {
         let mut ids: Vec<usize> = buffer.node_ids().collect();
         ids.sort_unstable();
         let node = |id: &usize| buffer.node(*id);
+        if let Some(object) = focus.unique_id.as_deref() {
+            if let Some(id) = ids.iter().find(|id| {
+                node(id).is_some_and(|n| {
+                    n.attributes.get(UNIQUE_ID_ATTR).map(String::as_str) == Some(object)
+                })
+            }) {
+                return Some(*id);
+            }
+        }
         if let Some(dom_id) = focus.dom_id.as_deref() {
             if let Some(id) = ids.iter().find(|id| {
                 node(id).is_some_and(|n| n.attributes.get("id").map(String::as_str) == Some(dom_id))
@@ -318,6 +334,36 @@ impl ScreenReaderEngine {
         Some(speech)
     }
 
+    /// The page in front changed outside its live regions
+    /// ([`AccessibilityEvent::PageChanged`]): in browse mode it is captured again once the
+    /// changes settle. In forms mode it waits: typing changes a page with each key
+    /// (WhatsApp's composer, a search box's results), and forms mode reads the focus, not
+    /// the buffer.
+    pub(super) fn page_changed(&mut self) {
+        if self.app_mode != AppMode::VirtualBuffer {
+            return;
+        }
+        if self.forms_mode {
+            self.page_stale = true;
+        } else if let Some(actions) = &self.actions {
+            actions.page_changed(false);
+        }
+    }
+
+    /// Captures a page that changed during forms mode, now that forms mode is over: at once,
+    /// since its changes are.
+    pub(super) fn refresh_stale_page(&mut self) {
+        if !self.page_stale || self.forms_mode {
+            return;
+        }
+        self.page_stale = false;
+        if self.app_mode == AppMode::VirtualBuffer {
+            if let Some(actions) = &self.actions {
+                actions.page_changed(true);
+            }
+        }
+    }
+
     /// Replaces the buffer with the page refreshed after a change, keeping the virtual
     /// cursor's place.
     pub(super) fn apply_pending_page(&mut self) {
@@ -328,11 +374,18 @@ impl ScreenReaderEngine {
             // its line's text can change (the full capture knows more of a control than the
             // quick one: "edit combo" for "Combo box").
             let on_focus = line.is_some_and(|l| Some(l.node_id) == self.last_page_focus);
+            let object = |buffer: &VirtualBuffer, id: usize| {
+                buffer
+                    .node(id)
+                    .and_then(|n| n.attributes.get(UNIQUE_ID_ATTR))
+                    .cloned()
+            };
             let place = line.map(|line| {
                 (
                     line.text.clone(),
                     line.start_offset,
                     offset.saturating_sub(line.start_offset),
+                    object(&self.cursor.buffer, line.node_id),
                 )
             });
             let old_focus = self
@@ -340,24 +393,39 @@ impl ScreenReaderEngine {
                 .and_then(|id| self.cursor.buffer.node(id))
                 .map(|n| {
                     (
+                        n.attributes.get(UNIQUE_ID_ATTR).cloned(),
                         n.attributes.get("id").cloned(),
                         n.role.clone(),
                         n.name.clone(),
                     )
                 });
             self.cursor.buffer = buffer;
-            // Node ids are the capture's own: the focus is found again by its DOM id, else as
-            // the focused node with its role and name, else by its state alone. A page can
+            // Node ids are the capture's own: the focus is found again as the same object (IA2
+            // captures), else by its DOM id, else as the focused node with its role and name,
+            // else by its state alone. A page can
             // leave the state on more than its focus: Google Docs' menu bar is still "focused"
             // through IA2 after a menu closes, while the document has the keyboard (dev box,
             // 2026-10-16), and its document's field has no DOM id.
             let buffer = &self.cursor.buffer;
             self.last_page_focus = old_focus
                 .as_ref()
-                .and_then(|(dom_id, _, _)| dom_id.as_deref())
-                .and_then(|id| buffer.node_with_dom_id(id))
+                .and_then(|(object, ..)| object.as_deref())
+                .and_then(|object| {
+                    buffer
+                        .nodes()
+                        .find(|n| {
+                            n.attributes
+                                .get(UNIQUE_ID_ATTR)
+                                .is_some_and(|o| o == object)
+                        })
+                        .map(|n| n.id)
+                })
                 .or_else(|| {
-                    let (_, role, name) = old_focus.as_ref()?;
+                    let dom_id = old_focus.as_ref()?.1.as_deref()?;
+                    buffer.node_with_dom_id(dom_id)
+                })
+                .or_else(|| {
+                    let (_, _, role, name) = old_focus.as_ref()?;
                     buffer
                         .nodes()
                         .find(|n| n.states.focused && &n.role == role && &n.name == name)
@@ -365,15 +433,25 @@ impl ScreenReaderEngine {
                 })
                 .or_else(|| buffer.focused_node());
             self.tab_start = self.last_page_focus;
+            // A capture asked for a focus the old one did not hold puts the cursor on it.
+            let to_focus = std::mem::take(&mut self.cursor_to_focus);
             let focus_line = self
                 .last_page_focus
-                .filter(|_| on_focus)
+                .filter(|_| on_focus || to_focus)
                 .and_then(|id| self.cursor.buffer.lines.iter().find(|l| l.node_id == id))
                 .map(|l| l.start_offset);
             self.cursor.offset = match (focus_line, place) {
                 (Some(start), _) => start,
-                (None, Some((text, start, column))) => same_line(&self.cursor.buffer, &text, start)
-                    .map(|line_start| line_start + column)
+                // The same object's line (IA2 captures): WhatsApp repeats lines ("Siz:") and
+                // loads older messages above as it is read up, so the line with the same
+                // text nearest the old offset can be another copy.
+                (None, Some((text, start, column, object))) => object
+                    .and_then(|object| same_object_line(&self.cursor.buffer, &object, &text))
+                    .map(|(line_start, length)| line_start + column.min(length))
+                    .or_else(|| {
+                        same_line(&self.cursor.buffer, &text, start)
+                            .map(|line_start| line_start + column)
+                    })
                     .unwrap_or(offset),
                 (None, None) => offset,
             }
@@ -673,6 +751,11 @@ fn same_role(node: &Role, focus: &Role) -> bool {
             (node, focus),
             (Role::Button, Role::MenuButton) | (Role::MenuButton, Role::Button)
         )
+        // The focus on an item's own focusable content, named after the item: WhatsApp's
+        // chat, a grid cell whose inner group takes the focus (dev box, 2026-10-17).
+        // Not its row, which has no line of its own.
+        || (focus == &Role::Group
+            && matches!(node, Role::TableCell | Role::ListItem | Role::TreeItem))
 }
 
 /// Where a line with `text` starts in `buffer`, the one nearest to `near`: the cursor's line in
@@ -687,8 +770,64 @@ fn same_line(buffer: &VirtualBuffer, text: &str, near: usize) -> Option<usize> {
         .min_by_key(|start| start.abs_diff(near))
 }
 
+/// The line of the object with IA2 uniqueID `object`, preferring one with `text` (an object
+/// can have several lines), as its start offset and length.
+fn same_object_line(buffer: &VirtualBuffer, object: &str, text: &str) -> Option<(usize, usize)> {
+    let mut lines = buffer.lines.iter().filter(|line| {
+        buffer
+            .node(line.node_id)
+            .and_then(|n| n.attributes.get(UNIQUE_ID_ATTR))
+            .is_some_and(|id| id == object)
+    });
+    let first = lines.next()?;
+    let line = std::iter::once(first)
+        .chain(lines)
+        .find(|line| line.text == text)
+        .unwrap_or(first);
+    Some((
+        line.start_offset,
+        line.end_offset.saturating_sub(line.start_offset),
+    ))
+}
+
 /// The nodes from `node` down to node `id`, without it, into `out`: its ancestors, outermost
 /// first. False when `id` is not below `node`.
+impl ScreenReaderEngine {
+    /// Whether page node `id` is an item of a list, grid, table row, tab list or tree, or a
+    /// plain element inside one: WhatsApp's chats are grid cells, its messages groups inside
+    /// rows. A link, button or field inside an item is not: it is a control of its own.
+    pub(super) fn in_widget_item(&self, id: usize) -> bool {
+        let item = |role: &Role| {
+            matches!(
+                role,
+                Role::TableCell | Role::TableRow | Role::ListItem | Role::TreeItem | Role::Tab
+            )
+        };
+        let Some(node) = self.cursor.buffer.node(id) else {
+            return false;
+        };
+        if item(&node.role) {
+            return true;
+        }
+        if !matches!(
+            node.role,
+            Role::Group | Role::Generic | Role::Text | Role::Paragraph
+        ) {
+            return false;
+        }
+        let Some(root) = self
+            .cursor
+            .buffer
+            .root_id
+            .and_then(|r| self.cursor.buffer.node(r))
+        else {
+            return false;
+        };
+        let mut path = Vec::new();
+        ancestors_of(root, id, &mut path) && path.iter().rev().take(8).any(|n| item(&n.role))
+    }
+}
+
 fn ancestors_of<'a>(node: &'a AomNode, id: usize, out: &mut Vec<&'a AomNode>) -> bool {
     if node.id == id {
         return true;

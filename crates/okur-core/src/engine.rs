@@ -24,6 +24,8 @@ mod state;
 #[cfg(test)]
 mod tests;
 mod text_feedback;
+#[cfg(test)]
+mod web_app_tests;
 
 pub use state::{ActiveElementList, AppMode};
 
@@ -62,6 +64,14 @@ pub struct ScreenReaderEngine {
     last_page_focus: Option<usize>,
     /// The page node the browser starts Tab from: the focus, or where Tab was last sent from.
     tab_start: Option<usize>,
+    /// The list or grid item Enter was passed to in forms mode, until the next key: a focus
+    /// that then lands elsewhere was put there by what the item opened.
+    activated_item: Option<usize>,
+    /// The page was asked to be captured again for a focus the buffer did not hold: the
+    /// virtual cursor goes to the focus when the capture arrives.
+    cursor_to_focus: bool,
+    /// The page changed while forms mode was on: it is captured again when forms mode ends.
+    page_stale: bool,
     /// The list whose option the focused field points at (aria-activedescendant), by name.
     option_list: Option<String>,
     /// The page's application region (ARIA role "application") the focus is in, by name:
@@ -82,6 +92,11 @@ pub struct ScreenReaderEngine {
     edit_read_in_console: bool,
     /// The last key extended a selection: Shift with an arrow key, Home, End or a page key.
     last_key_selects: bool,
+    /// The last key was Tab or Shift+Tab: the focus it moves is the user's.
+    last_key_tabs: bool,
+    /// The next key, with the modifiers held with it, goes to the application as it is
+    /// (Pass Key Through).
+    pass_next_key: bool,
     menus: crate::native_focus::Menus,
     /// The page re-read after a change, waiting for the change's events to be handled.
     pending_page: Option<VirtualBuffer>,
@@ -141,6 +156,9 @@ impl ScreenReaderEngine {
             native_focus: crate::native_focus::NativeFocus::default(),
             last_page_focus: None,
             tab_start: None,
+            activated_item: None,
+            cursor_to_focus: false,
+            page_stale: false,
             option_list: None,
             web_application: None,
             page_focus_is_field: false,
@@ -149,6 +167,8 @@ impl ScreenReaderEngine {
             last_typed: None,
             edit_read_in_console: false,
             last_key_selects: false,
+            last_key_tabs: false,
+            pass_next_key: false,
             menus: crate::native_focus::Menus::default(),
             pending_edit: None,
             forms_mode_by_enter: false,
@@ -204,14 +224,32 @@ impl ScreenReaderEngine {
     /// Intercepts navigation keys, manages forms mode transitions, silences ongoing speech,
     /// and returns whether the key was consumed or should pass through to the OS.
     pub fn handle_key_event(&mut self, event: &KeyEvent) -> KeyAction {
+        let action = self.handle_key(event);
+        self.refresh_stale_page();
+        action
+    }
+
+    fn handle_key(&mut self, event: &KeyEvent) -> KeyAction {
         if !event.is_down {
             return KeyAction::PassThrough;
         }
         // Which held keys act as the JAWS key depends on the keyboard settings.
+        // Pass Key Through: the next key goes to the application as it is, with the modifiers
+        // held for it.
+        if self.pass_next_key
+            && !matches!(
+                event.key,
+                Key::Control | Key::Alt | Key::Shift | Key::Windows | Key::Insert | Key::CapsLock
+            )
+        {
+            self.pass_next_key = false;
+            return KeyAction::PassThrough;
+        }
         let resolved = self.settings.keyboard.resolve(event);
         let event = &resolved;
         self.last_typed = event.text;
         self.edit_read_in_console = false;
+        self.last_key_tabs = event.key == Key::Tab && !event.modifiers.ctrl && !event.modifiers.alt;
         self.last_key_selects = event.modifiers.shift
             && !event.modifiers.alt
             && matches!(
@@ -300,6 +338,13 @@ impl ScreenReaderEngine {
         if self.menus.in_menu_mode() {
             return KeyAction::PassThrough;
         }
+
+        // Enter on a list or grid item in forms mode may open something (a chat from its
+        // list): the next focus elsewhere is then the page's, not the user's.
+        self.activated_item = (self.forms_mode && event.key == Key::Enter)
+            .then_some(self.last_page_focus)
+            .flatten()
+            .filter(|&id| self.in_widget_item(id));
 
         // 3. Handle Forms Mode
         if self.forms_mode {
@@ -455,21 +500,41 @@ impl ScreenReaderEngine {
         if within_start {
             return false;
         }
+        // The controls that can take the focus (a capture can say one cannot: WhatsApp's
+        // message times are buttons nothing focuses), and the other elements that can
+        // (WhatsApp's messages), as JAWS goes to them.
+        let controls = buffer.tab_stops.iter().filter_map(|&start| {
+            let node = buffer.node(buffer.line_at_offset(start)?.node_id)?;
+            (node.states.focusable != Some(false)).then_some((start, node.id))
+        });
+        let others = buffer.focus_stops.iter().copied();
         let stop = if backwards {
-            buffer.tab_stops.iter().rfind(|&&s| s < line.start_offset)
+            controls
+                .filter(|&(s, _)| s < line.start_offset)
+                .chain(others.filter(|&(s, _)| s < line.start_offset))
+                .max_by_key(|&(s, _)| s)
         } else {
-            buffer.tab_stops.iter().find(|&&s| s > line.start_offset)
+            controls
+                .filter(|&(s, _)| s > line.start_offset)
+                .chain(others.filter(|&(s, _)| s > line.start_offset))
+                .min_by_key(|&(s, _)| s)
         };
-        let Some(node) = stop
-            .and_then(|&s| buffer.line_at_offset(s))
-            .and_then(|l| buffer.node(l.node_id))
-        else {
+        let Some(node) = stop.and_then(|(_, id)| buffer.node(id)) else {
             return false;
         };
         let focused = self
             .actions
             .as_ref()
             .is_some_and(|actions| actions.focus(node));
+        tracing::debug!(
+            backwards,
+            from = line.node_id,
+            to = node.id,
+            role = ?node.role,
+            name = node.name.as_deref().unwrap_or_default(),
+            focused,
+            "tab from the virtual cursor"
+        );
         if !focused {
             return false;
         }
@@ -501,11 +566,13 @@ impl ScreenReaderEngine {
     pub fn handle_accessibility_event(&mut self, event: &AccessibilityEvent) -> Option<String> {
         if !matches!(
             event,
-            AccessibilityEvent::LiveRegion(_) | AccessibilityEvent::DocumentLoaded { .. }
+            AccessibilityEvent::LiveRegion(_)
+                | AccessibilityEvent::DocumentLoaded { .. }
+                | AccessibilityEvent::PageChanged
         ) {
             self.apply_pending_page();
         }
-        match event {
+        let spoken = match event {
             // Back from one of Okur's dialogs, the focus returns to where it was and is taken
             // in silently, as JAWS returns from its own Links List (dev box, 2026-10-17).
             AccessibilityEvent::Focus(focus) if self.quiet_return() => {
@@ -526,10 +593,16 @@ impl ScreenReaderEngine {
             AccessibilityEvent::ViewerText(lines) => self.open_screen_viewer(lines),
             AccessibilityEvent::PageElements(elements) => self.say_page_font(elements),
             AccessibilityEvent::Ui(message) => self.handle_ui_event(message),
+            AccessibilityEvent::PageChanged => {
+                self.page_changed();
+                None
+            }
             AccessibilityEvent::DocumentLoaded { title, root } => {
                 self.handle_document_loaded(title, VirtualBuffer::from_aom(root))
             }
-        }
+        };
+        self.refresh_stale_page();
+        spoken
     }
 
     /// Connects the engine to the real application, so that commands such as Enter on an

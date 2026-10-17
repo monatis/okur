@@ -58,13 +58,17 @@ impl ScreenReaderEngine {
             }
             let name = focus.name.as_deref().unwrap_or_default();
             let speech = if focus.in_document {
+                use crate::native_focus::PageMenuPlace;
                 let position = focus.item_index.zip(focus.item_count);
-                self.menus.page_focus(
-                    name,
-                    focus.in_menu_bar,
-                    position,
-                    focus.states.expanded.is_some(),
-                )
+                let place = if focus.in_menu_bar {
+                    PageMenuPlace::Bar
+                } else if focus.under_menu_bar {
+                    PageMenuPlace::BarMenu
+                } else {
+                    PageMenuPlace::Popup
+                };
+                self.menus
+                    .page_focus(name, place, position, focus.states.expanded.is_some())
             } else if focus.item_index.is_some() && focus.item_count.is_some() && !focus.in_menu_bar
             {
                 // A modern menu reports its items' positions; a Win32 one does not (302).
@@ -126,7 +130,11 @@ impl ScreenReaderEngine {
             // A page's menu closed with the focus back in the page: a browser ends no menu
             // mode (no menu-end event), and JAWS says it left menus (Google Docs, dev box,
             // 2026-10-16).
-            let leaving_menus = self.menus.in_menu_mode() && self.menus.end();
+            // A focus still inside the page's menu (one of WhatsApp's reactions) has not left it.
+            let leaving_menus = !focus.in_menu && self.menus.in_menu_mode() && self.menus.end();
+            if focus.in_menu {
+                self.menus.off_items();
+            }
             // Back in the page from the browser's own controls in the same window (Escape in
             // the address bar).
             let from_browser_ui = self.app_mode == AppMode::NativeControl
@@ -160,6 +168,16 @@ impl ScreenReaderEngine {
                 target = ?target_id.and_then(|id| self.cursor.buffer.node(id)).map(|n| (&n.role, &n.name)),
                 "page focus target"
             );
+
+            // A focus the buffer does not hold: the page changed since it was captured
+            // (WhatsApp's search results, built as its search box is typed in). It is captured
+            // again, and the virtual cursor goes to the focus when it arrives.
+            if target_id.is_none()
+                && focus.role != Role::Document
+                && self.actions.as_ref().is_some_and(|a| a.refresh_page())
+            {
+                self.cursor_to_focus = true;
+            }
 
             // If focus target is a dialog, enter modal confinement and announce Dialog <Title>
             if matches!(focus.role, Role::Dialog | Role::AlertDialog) {
@@ -246,9 +264,29 @@ impl ScreenReaderEngine {
             let is_edit = target_role == Some(Role::Edit) || focus.role == Role::Edit;
             self.page_focus_is_field =
                 is_edit || focus.role == Role::ComboBox || target_role == Some(Role::ComboBox);
-            let in_forms_mode = is_edit
-                || (target_role == Some(Role::ComboBox) && self.forms_mode)
-                || self.web_application.is_some();
+            // A list's, grid's or tree's item keeps the forms mode the focus brings to it:
+            // Down from WhatsApp's search box into its results, then the arrows through them,
+            // are the page's (JAWS on the dev box, 2026-10-17). Tab onto one turns forms mode
+            // on, as on a list box: WhatsApp's messages are rows its arrows move through.
+            // JAWS 2025 stays in browse mode there, and the user has to turn forms mode on
+            // (dev box, 2026-10-17); Okur gives the item its keys, as the user asked.
+            let widget_item = (self.forms_mode || self.last_key_tabs)
+                && (target_id.is_some_and(|id| self.in_widget_item(id))
+                    || (target_id.is_none() && focus_in_widget(focus)));
+            // Enter on such an item that sends the focus elsewhere has opened something, and
+            // the page put the focus there: the virtual cursor reads on from it. WhatsApp's
+            // chat, opened from its list, focuses its message field; the user goes on with
+            // Ctrl+End, Shift+E and Enter, typing nothing by accident.
+            let opened = self
+                .activated_item
+                .take()
+                .is_some_and(|item| Some(item) != target_id);
+            let in_forms_mode = !opened
+                && (is_edit
+                    || (target_role == Some(Role::ComboBox) && self.forms_mode)
+                    || self.web_application.is_some()
+                    || focus.in_menu
+                    || widget_item);
             self.forms_mode = in_forms_mode;
             self.cursor.forms_mode_active = in_forms_mode;
             // Chrome can report focus on the same element again (while typing in it); JAWS
@@ -317,9 +355,50 @@ impl ScreenReaderEngine {
             if let Some(offset) = previous_focus_offset {
                 self.cursor.offset = offset;
             }
+            // A focus the buffer does not hold yet is said from the event, as the buffer would
+            // say it: WhatsApp's message options button, shown once its message has the focus
+            // ("Mesaj seçeneklerini aç Button collapsed | To activate press Enter.", JAWS on
+            // the dev box, 2026-10-17).
             let mut speech = target_id
                 .and_then(|id| self.cursor.focus_node_from(id, Some(cursor_offset)))
+                .or_else(|| {
+                    let mut node = crate::aom::AomNode::new(usize::MAX, focus.role.clone());
+                    node.name = focus.name.clone();
+                    node.value = focus.value.clone();
+                    node.states = focus.states.clone();
+                    let mut speech = SpeechFormatter::format_control_focus(&node, |_| false);
+                    if let Some(hint) = SpeechFormatter::web_focus_hint(&node) {
+                        speech.push('\n');
+                        speech.push_str(hint);
+                    }
+                    Some(speech).filter(|s| !s.trim().is_empty())
+                })
                 .or_else(|| focus.name.clone());
+            // A plain element that takes the focus is said by the name the page gives it then:
+            // "Siz okur 1 14:46 Okundu Daha fazla seçenek için sol veya sağ ok tuşuna basarak
+            // bağlam menüsüne erişin", WhatsApp's message (JAWS on the dev box, 2026-10-17).
+            let plain = target_id
+                .and_then(|id| self.cursor.buffer.node(id))
+                .is_some_and(|n| {
+                    matches!(
+                        n.role,
+                        Role::Group | Role::Generic | Role::Text | Role::Paragraph | Role::TableRow
+                    ) && n.attributes.get("aria_role").is_none_or(|r| r == "row")
+                        && self.cursor.buffer.shows(n.id)
+                });
+            if let Some(name) = focus
+                .name
+                .as_deref()
+                .map(str::trim)
+                .filter(|n| plain && !n.is_empty())
+            {
+                speech = Some(name.to_owned());
+            }
+            // Inside a page's menu JAWS adds no usage hint: "👍 Toggle button Not pressed"
+            // (WhatsApp's reactions, dev box, 2026-10-17).
+            if focus.in_menu {
+                speech = speech.map(|s| without_usage_hint(&s));
+            }
             let editable_combo = target_id
                 .and_then(|id| self.cursor.buffer.node(id))
                 .is_some_and(|n| n.attributes.get("editable").is_some_and(|e| e == "true"));
@@ -516,4 +595,30 @@ impl ScreenReaderEngine {
             }
         }
     }
+}
+
+/// `speech` without the usage hint a page control's focus ends with.
+fn without_usage_hint(speech: &str) -> String {
+    [
+        "To toggle the state press spacebar.",
+        "To activate press Enter.",
+    ]
+    .iter()
+    .find_map(|hint| speech.strip_suffix(hint))
+    .map(|rest| rest.trim_end_matches('\n').to_owned())
+    .unwrap_or_else(|| speech.to_owned())
+}
+
+/// Whether a focus the buffer does not hold is a list's, grid's or tree's item, by what the
+/// focus event says of it: an item's role, or a plain element in such a container (WhatsApp's
+/// search result, a group in a table).
+fn focus_in_widget(focus: &FocusEvent) -> bool {
+    matches!(
+        focus.role,
+        Role::TableCell | Role::TableRow | Role::ListItem | Role::TreeItem | Role::Tab
+    ) || (matches!(focus.role, Role::Group | Role::Generic | Role::Text)
+        && matches!(
+            focus.container_role,
+            Some(Role::Table | Role::List | Role::Tree | Role::TabList)
+        ))
 }

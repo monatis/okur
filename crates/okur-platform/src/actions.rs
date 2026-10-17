@@ -6,8 +6,7 @@
 //! calls `accSelect(SELFLAG_TAKEFOCUS)` or `accDoDefaultAction`. The calls cross into the browser process, so they run on a worker
 //! thread: the engine calls actions from the keyboard hook, which must return at once.
 
-/// AOM attribute holding a node's IA2 `uniqueID`.
-pub const UNIQUE_ID_ATTR: &str = "ia2_unique_id";
+pub use okur_core::aom::UNIQUE_ID_ATTR;
 
 /// AOM attribute holding a node's UIA RuntimeId (comma-separated), for a page read through
 /// UIA, whose nodes have no IA2 `uniqueID`.
@@ -429,6 +428,14 @@ mod windows_actions {
             self.send(Request::PageElements(
                 ids.iter().map(|id| (*id).to_owned()).collect(),
             ))
+        }
+
+        fn refresh_page(&self) -> bool {
+            crate::events::windows::refresh_page_for_focus()
+        }
+
+        fn page_changed(&self, now: bool) -> bool {
+            crate::events::windows::refresh_changed_page(now)
         }
 
         fn press(&self, chord: &[okur_core::Key]) -> bool {

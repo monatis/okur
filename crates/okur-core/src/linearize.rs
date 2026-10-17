@@ -423,6 +423,7 @@ impl<'a> Builder<'a> {
 
     /// Visits `node`; inside a preformatted element (`<pre>`) text keeps its whitespace.
     fn visit(&mut self, node: &AomNode, parent: Option<&AomNode>) {
+        let first_line = self.buffer.lines.len();
         let preformatted = node.attributes.contains_key("preformatted");
         if preformatted {
             self.flush();
@@ -432,6 +433,27 @@ impl<'a> Builder<'a> {
         if preformatted {
             self.flush();
             self.preformatted -= 1;
+        }
+        self.record_focus_stop(node, first_line);
+    }
+
+    /// Records `node` as a focus stop when it can take the focus and is not a Tab stop
+    /// already, at its first line from `first_line` on.
+    fn record_focus_stop(&mut self, node: &AomNode, first_line: usize) {
+        if node.states.focusable != Some(true) || node.role == Role::Document {
+            return;
+        }
+        let start = self
+            .buffer
+            .lines
+            .iter()
+            .skip(first_line)
+            .find(|line| line.node_id == node.id || node.find_by_id(line.node_id).is_some())
+            .map(|line| line.start_offset);
+        if let Some(start) = start {
+            if self.buffer.tab_stops.binary_search(&start).is_err() {
+                self.buffer.focus_stops.push((start, node.id));
+            }
         }
     }
 
@@ -733,7 +755,7 @@ impl<'a> Builder<'a> {
                     s.push_str(&state_marker("Required"));
                 }
                 s.push_str(&role_marker(kind));
-                if let Some(v) = node.value.as_deref().filter(|v| !v.is_empty()) {
+                if let Some(v) = node.value.as_deref().filter(|v| !v.trim().is_empty()) {
                     s.push_str(v);
                 }
                 s
@@ -1140,6 +1162,9 @@ pub fn build(root: &AomNode) -> VirtualBuffer {
     builder.end_paragraph_since(0);
 
     let mut buffer = builder.buffer;
+    // Recorded innermost first: of the stops on one line, the innermost stays.
+    buffer.focus_stops.sort_by_key(|&(start, _)| start);
+    buffer.focus_stops.dedup_by_key(|&mut (start, _)| start);
     buffer.paragraphs = paragraphs(&buffer.lines, &builder.paragraph_ends);
     let mut words = Vec::new();
     for line in &buffer.lines {
@@ -1480,5 +1505,41 @@ mod tests {
             ]
         );
         assert_eq!(buffer.edits.len(), 1);
+    }
+}
+
+#[cfg(test)]
+mod focus_stop_tests {
+    use super::build;
+    use crate::aom::{AomNode, Role};
+
+    fn focusable(mut node: AomNode) -> AomNode {
+        node.states.focusable = Some(true);
+        node
+    }
+
+    /// Elements that take the focus without being controls (WhatsApp's messages: a row and
+    /// the group inside it) are focus stops at their first line, the innermost of those
+    /// starting on one line; a control there is a Tab stop already.
+    #[test]
+    fn focusable_plain_elements_are_focus_stops() {
+        let page = AomNode::new(0, Role::Document)
+            .with_name("Chat")
+            .with_children(vec![focusable(
+                AomNode::new(1, Role::TableRow).with_children(vec![focusable(
+                    AomNode::new(2, Role::Group).with_children(vec![
+                        AomNode::new(3, Role::Paragraph).with_text("hello"),
+                        focusable(AomNode::new(4, Role::Button).with_name("13:14 Okundu")),
+                    ]),
+                )]),
+            )]);
+        let buffer = build(&page);
+        let hello = buffer
+            .lines
+            .iter()
+            .find(|l| l.text == "hello")
+            .map(|l| (l.start_offset, 2));
+        assert!(hello.is_some());
+        assert_eq!(buffer.focus_stops, hello.into_iter().collect::<Vec<_>>());
     }
 }

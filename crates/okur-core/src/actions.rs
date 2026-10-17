@@ -72,6 +72,24 @@ pub trait ApplicationActions: Send {
         let _ = chord;
         false
     }
+
+    /// Captures the page in front again and delivers it as
+    /// [`crate::event::AccessibilityEvent::DocumentLoaded`]: the focus landed on an element
+    /// the buffer does not hold yet (WhatsApp's search results, built as the search box is
+    /// typed in). Returns false when unsupported.
+    fn refresh_page(&self) -> bool {
+        false
+    }
+
+    /// Captures the page in front again after it changed
+    /// ([`crate::event::AccessibilityEvent::PageChanged`]), and delivers it as
+    /// [`crate::event::AccessibilityEvent::DocumentLoaded`]: once its changes settle, or at
+    /// once (`now`) when they are over (they came while forms mode was on). Returns false
+    /// when unsupported.
+    fn page_changed(&self, now: bool) -> bool {
+        let _ = now;
+        false
+    }
 }
 
 /// Records requested actions; for tests and headless runs.
@@ -83,6 +101,8 @@ pub struct RecordingActions {
     windows: bool,
     /// Takes `read_page_elements`, as a live platform does; replay leaves it off too.
     page_elements: bool,
+    /// Takes `refresh_page`, as a live platform does; replay leaves it off too.
+    pages: bool,
 }
 
 impl RecordingActions {
@@ -99,6 +119,14 @@ impl RecordingActions {
     pub fn reading_page_elements() -> Self {
         Self {
             page_elements: true,
+            ..Self::default()
+        }
+    }
+
+    /// Records actions and takes `refresh_page` requests; the test delivers the page.
+    pub fn refreshing_pages() -> Self {
+        Self {
+            pages: true,
             ..Self::default()
         }
     }
@@ -169,5 +197,28 @@ impl ApplicationActions for RecordingActions {
             log.push((format!("press {chord:?}"), 0));
         }
         true
+    }
+
+    fn refresh_page(&self) -> bool {
+        self.page_request("refresh page")
+    }
+
+    fn page_changed(&self, now: bool) -> bool {
+        self.page_request(if now {
+            "page changed, now"
+        } else {
+            "page changed"
+        })
+    }
+}
+
+impl RecordingActions {
+    fn page_request(&self, action: &str) -> bool {
+        if self.pages {
+            if let Ok(mut log) = self.log.lock() {
+                log.push((action.to_owned(), 0));
+            }
+        }
+        self.pages
     }
 }

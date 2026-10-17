@@ -120,6 +120,26 @@ const LANDMARKS: [&str; 8] = [
     "search",
 ];
 
+/// Whether Chromium reports `node` as a grouping of its own (a fieldset, `role=group`, a
+/// log): MSAA calls every generic `div` and `span` a grouping too, and only IA2's role
+/// (`IA2_ROLE_SECTION`) tells them apart. WhatsApp names its message wrappers with
+/// `aria-label`, and JAWS reads them as plain text, not as groups.
+fn is_grouping(node: &Ia2Node) -> bool {
+    use xa11y_windows::ia2::roles::IA2_ROLE_SECTION;
+    node.msaa_role == Some(msaa_role::GROUPING) && node.ia2_role != Some(IA2_ROLE_SECTION)
+}
+
+/// Whether `node` is a generic element (`div`, `span`) with an `aria-label` and nothing
+/// inside: it reads as its label (WhatsApp's "Siz:" before each of the user's messages,
+/// which JAWS reads as a line of its own).
+fn is_labelled_empty_generic(node: &Ia2Node) -> bool {
+    use xa11y_windows::ia2::roles::IA2_ROLE_SECTION;
+    node.ia2_role == Some(IA2_ROLE_SECTION)
+        && node.children.is_empty()
+        && node.attributes.get("name-from").map(String::as_str) == Some("attribute")
+        && node.name.as_deref().is_some_and(|n| !n.trim().is_empty())
+}
+
 /// Whether a CSS `display` value makes a block-level box (anything but inline content).
 fn is_block_display(display: Option<&str>) -> bool {
     display.is_some_and(|d| !d.is_empty() && !d.starts_with("inline") && d != "contents")
@@ -235,7 +255,7 @@ fn map_role(node: &Ia2Node) -> okur_core::Role {
         // An editing host (contenteditable without a role): editable and focusable.
         // Its text children are editable too, but not focusable.
         _ if editable && node.msaa_states & FOCUSABLE != 0 => Role::Edit,
-        msaa_role::GROUPING if named => Role::Group,
+        msaa_role::GROUPING if named && is_grouping(node) => Role::Group,
         // Any other element reads by its CSS box: block boxes break lines, inline
         // elements (strong, em, time, label) flow with the surrounding text.
         _ if is_block_display(attr("display")) => Role::Group,
@@ -260,11 +280,13 @@ pub fn ia2_to_aom(root: &Ia2Node) -> okur_core::AomNode {
 fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     use okur_core::{AomNode, NodeStates, Role};
     use xa11y_windows::ia2::msaa_states::{
-        STATE_SYSTEM_CHECKED, STATE_SYSTEM_COLLAPSED, STATE_SYSTEM_EXPANDED, STATE_SYSTEM_FOCUSED,
-        STATE_SYSTEM_INVISIBLE, STATE_SYSTEM_PROTECTED, STATE_SYSTEM_READONLY,
-        STATE_SYSTEM_SELECTED, STATE_SYSTEM_TRAVERSED, STATE_SYSTEM_UNAVAILABLE,
+        STATE_SYSTEM_CHECKED, STATE_SYSTEM_COLLAPSED, STATE_SYSTEM_EXPANDED,
+        STATE_SYSTEM_FOCUSABLE, STATE_SYSTEM_FOCUSED, STATE_SYSTEM_INVISIBLE, STATE_SYSTEM_PRESSED,
+        STATE_SYSTEM_PROTECTED, STATE_SYSTEM_READONLY, STATE_SYSTEM_SELECTED,
+        STATE_SYSTEM_TRAVERSED, STATE_SYSTEM_UNAVAILABLE,
     };
 
+    use xa11y_windows::ia2::roles::IA2_ROLE_TOGGLE_BUTTON;
     let id = *next_id;
     *next_id += 1;
     let role = map_role(node);
@@ -275,6 +297,9 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     aom.name = node.name.clone().filter(|n| !n.is_empty());
     match role {
         Role::Text if node.msaa_role == Some(msaa_role::STATICTEXT) => {
+            aom.text = node.name.clone();
+        }
+        Role::Text | Role::Group if is_labelled_empty_generic(node) => {
             aom.text = node.name.clone();
         }
         Role::Edit | Role::ComboBox => aom.value = node.value.clone(),
@@ -292,8 +317,12 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
         .first()
         .and_then(|run| text_formatting(&run.attributes));
     aom.states = NodeStates {
-        checked: matches!(role, Role::CheckBox | Role::RadioButton)
-            .then(|| has(STATE_SYSTEM_CHECKED)),
+        // A toggle button (`aria-pressed`) is checked when pressed.
+        checked: if node.ia2_role == Some(IA2_ROLE_TOGGLE_BUTTON) {
+            Some(has(STATE_SYSTEM_PRESSED))
+        } else {
+            matches!(role, Role::CheckBox | Role::RadioButton).then(|| has(STATE_SYSTEM_CHECKED))
+        },
         selected: has(STATE_SYSTEM_SELECTED).then_some(true),
         expanded: if has(STATE_SYSTEM_EXPANDED) {
             Some(true)
@@ -306,6 +335,7 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
         disabled: has(STATE_SYSTEM_UNAVAILABLE),
         hidden: has(STATE_SYSTEM_INVISIBLE),
         modal: node.ia2_states & ia2_state::MODAL != 0,
+        focusable: Some(has(STATE_SYSTEM_FOCUSABLE)),
     };
 
     let mut set_attr = |key: &str, value: String| {
@@ -314,7 +344,7 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     match (&role, node.msaa_role) {
         (Role::Group, Some(msaa_role::DOCUMENT)) => set_attr("aria_role", "article".to_owned()),
         // A fieldset: a named grouping. An unnamed one (a form, a section) keeps its xml-roles.
-        (Role::Group, Some(msaa_role::GROUPING)) if aom.name.is_some() => {
+        (Role::Group, Some(msaa_role::GROUPING)) if aom.name.is_some() && is_grouping(node) => {
             set_attr("aria_role", "group".to_owned())
         }
         (_, Some(msaa_role::COLUMNHEADER)) => {
@@ -402,4 +432,103 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
 
     aom.children = node.children.iter().map(|c| convert(c, next_id)).collect();
     aom
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{ia2_to_aom, msaa_role, Ia2Node};
+    use okur_core::Role;
+    use xa11y_windows::ia2::msaa_states::{STATE_SYSTEM_FOCUSABLE, STATE_SYSTEM_PRESSED};
+    use xa11y_windows::ia2::roles::{IA2_ROLE_SECTION, IA2_ROLE_TOGGLE_BUTTON};
+
+    fn node(msaa: i32, ia2: i32, name: &str, attributes: &[(&str, &str)]) -> Ia2Node {
+        Ia2Node {
+            msaa_role: Some(msaa),
+            ia2_role: Some(ia2),
+            name: Some(name.to_owned()).filter(|n| !n.is_empty()),
+            attributes: attributes
+                .iter()
+                .map(|(k, v)| ((*k).to_owned(), (*v).to_owned()))
+                .collect(),
+            ..Default::default()
+        }
+    }
+
+    /// Chromium calls every `div` and `span` an MSAA grouping; only IA2's role tells a
+    /// generic one (a section) from a fieldset. WhatsApp names its messages' wrappers with
+    /// `aria-label` ("Siz test 14:13 Okundu"), and JAWS reads them as plain text, with no
+    /// "group start" (dev box, 2026-10-17); a fieldset stays a group.
+    #[test]
+    fn a_labelled_div_is_not_a_group() {
+        let text = Ia2Node {
+            msaa_role: Some(msaa_role::STATICTEXT),
+            name: Some("test".to_owned()),
+            ..Default::default()
+        };
+        let mut wrapper = node(
+            msaa_role::GROUPING,
+            IA2_ROLE_SECTION,
+            "Siz test 14:13 Okundu",
+            &[("display", "flex"), ("name-from", "attribute")],
+        );
+        wrapper.children = vec![text];
+        let aom = ia2_to_aom(&wrapper);
+        assert_eq!(aom.role, Role::Group);
+        assert_eq!(aom.attributes.get("aria_role"), None);
+
+        let fieldset = node(
+            msaa_role::GROUPING,
+            msaa_role::GROUPING,
+            "Membership type",
+            &[("display", "block"), ("tag", "fieldset")],
+        );
+        let aom = ia2_to_aom(&fieldset);
+        assert_eq!(aom.role, Role::Group);
+        assert_eq!(
+            aom.attributes.get("aria_role").map(String::as_str),
+            Some("group")
+        );
+    }
+
+    /// An empty `span` with an `aria-label` reads as its label: WhatsApp's "Siz:" before the
+    /// first of the user's messages, a line of its own for JAWS (dev box, 2026-10-17).
+    #[test]
+    fn an_empty_labelled_span_reads_its_label() {
+        let label = node(
+            msaa_role::GROUPING,
+            IA2_ROLE_SECTION,
+            "Siz:",
+            &[("display", "inline"), ("name-from", "attribute")],
+        );
+        let aom = ia2_to_aom(&label);
+        assert_eq!(aom.role, Role::Text);
+        assert_eq!(aom.text.as_deref(), Some("Siz:"));
+    }
+
+    /// A toggle button (`aria-pressed`) is checked when pressed (WhatsApp's "Sohbetler"), and
+    /// a capture says which elements can take the focus.
+    #[test]
+    fn a_toggle_button_is_checked_when_pressed() {
+        let mut pressed = node(
+            msaa_role::PUSHBUTTON,
+            IA2_ROLE_TOGGLE_BUTTON,
+            "Sohbetler",
+            &[],
+        );
+        pressed.msaa_states = STATE_SYSTEM_PRESSED | STATE_SYSTEM_FOCUSABLE;
+        let aom = ia2_to_aom(&pressed);
+        assert_eq!(aom.role, Role::Button);
+        assert_eq!(aom.states.checked, Some(true));
+        assert_eq!(aom.states.focusable, Some(true));
+
+        let plain = node(
+            msaa_role::PUSHBUTTON,
+            msaa_role::PUSHBUTTON,
+            "14:13 Okundu",
+            &[],
+        );
+        let aom = ia2_to_aom(&plain);
+        assert_eq!(aom.states.checked, None);
+        assert_eq!(aom.states.focusable, Some(false));
+    }
 }
