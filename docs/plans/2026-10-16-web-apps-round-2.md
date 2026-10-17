@@ -60,8 +60,11 @@ still stand; this plan adds tonight's.
 
 - File Explorer, Windows search and Windows Terminal match JAWS on their common keys
   (handoff). Left there: Ctrl+A in Explorer's list (JAWS reads every selected item with its
-  columns); when JAWS reads a native control's help text (Explorer's view buttons yes,
-  Settings' toggles no) and counts a radio button's position; Home, End and Ctrl+Left in a
+  columns); when JAWS reads a native control's help text: Explorer's DirectUI view buttons
+  yes (UIA HelpText; their MSAA description, `LegacyIAccessibleDescription`, is empty, and the
+  focus event's MSAA object is the pane), its XAML command bar buttons and Settings' toggles
+  no (HelpText too): the framework (`DirectUI`, `XAML`) is the one difference found; and
+  when it counts a radio button's position; Home, End and Ctrl+Left in a
   console; JAWS's "Popup" as a WinUI menu opens.
 - Calculator: JAWS's own wording (handoff), as a Calculator module.
 - Next applications: the classic console (conhost, if Windows Terminal is not the default),
