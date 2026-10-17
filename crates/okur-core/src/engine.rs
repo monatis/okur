@@ -74,6 +74,9 @@ pub struct ScreenReaderEngine {
     /// The item a field's list last selected, since the focus last moved: the same one again
     /// says its name alone.
     last_selected: Option<String>,
+    /// The character the last key typed, if it typed one: a console's notification of just
+    /// that character is its echo of the key.
+    last_typed: Option<char>,
     menus: crate::native_focus::Menus,
     /// The page re-read after a change, waiting for the change's events to be handled.
     pending_page: Option<VirtualBuffer>,
@@ -126,6 +129,7 @@ impl ScreenReaderEngine {
             page_focus_is_field: false,
             last_native_focus: None,
             last_selected: None,
+            last_typed: None,
             menus: crate::native_focus::Menus::default(),
             pending_edit: None,
             forms_mode_by_enter: false,
@@ -181,6 +185,7 @@ impl ScreenReaderEngine {
         // Which held keys act as the JAWS key depends on the keyboard settings.
         let resolved = self.settings.keyboard.resolve(event);
         let event = &resolved;
+        self.last_typed = event.text;
         self.apply_pending_page();
 
         // 1. Any key press interrupts speech immediately (NVDA & JAWS standard behavior)
@@ -294,6 +299,26 @@ impl ScreenReaderEngine {
         if self.app_mode != AppMode::VirtualBuffer {
             if self.editing_text() {
                 self.edit_key_feedback(event);
+            } else {
+                // A field typing goes into though it is not an edit (Windows Terminal's text
+                // area): typed characters are echoed as in any field, and the application's
+                // own edit keys are read (its output arrives as notifications, but Escape's
+                // cleared line does not).
+                let (types_into, own_key) = self
+                    .last_native_focus
+                    .as_ref()
+                    .and_then(|field| {
+                        self.app_for(field)
+                            .map(|app| (app.types_into(field), app.edit_key(field, event)))
+                    })
+                    .unwrap_or((false, None));
+                if types_into {
+                    if let Some(key) = own_key {
+                        self.expect_text_change(key);
+                    } else if let Some(c) = event.text {
+                        self.echo_typed(c);
+                    }
+                }
             }
             return KeyAction::PassThrough;
         }

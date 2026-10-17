@@ -9,7 +9,9 @@
 
 use crate::aom::Role;
 use crate::apps::AppModule;
+use crate::editing::EditKey;
 use crate::event::FocusEvent;
+use crate::input::{Key, KeyEvent};
 
 /// Windows Terminal's text area (its UIA class name).
 const TERMINAL_TEXT_AREA: &str = "TermControl";
@@ -65,11 +67,32 @@ impl AppModule for Terminal {
     fn line_after_viewer(&self, text: &str, caret: usize) -> Option<String> {
         Some(cursor_line(text, caret))
     }
+
+    fn types_into(&self, field: &FocusEvent) -> bool {
+        owns(field)
+    }
+
+    /// Escape clears the input line (PowerShell's and Command Prompt's), and JAWS reads the
+    /// line then: the prompt (Windows Terminal, JAWS on the dev box, 2026-10-17).
+    fn edit_key(&self, _field: &FocusEvent, key: &KeyEvent) -> Option<EditKey> {
+        (key.key == Key::Escape && key.modifiers.is_empty()).then_some(EditKey::Line)
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn escape_in_a_console_reads_its_line() {
+        use crate::input::Modifiers;
+        let field = FocusEvent::new(Role::Text);
+        let escape = KeyEvent::new(Key::Escape, Modifiers::none(), true);
+        assert_eq!(Terminal.edit_key(&field, &escape), Some(EditKey::Line));
+        let mut shift_escape = escape.clone();
+        shift_escape.modifiers.shift = true;
+        assert_eq!(Terminal.edit_key(&field, &shift_escape), None);
+    }
 
     #[test]
     fn a_terminal_text_area_and_a_classic_console_are_consoles() {

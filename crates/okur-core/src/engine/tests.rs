@@ -2286,3 +2286,27 @@ fn a_result_selected_again_says_its_name_alone() {
         Some("Find results in search the web, click enter to see more\n2 of 2")
     );
 }
+
+/// Windows Terminal notifies the console's echo of a typed "ı" (Turkish layout, dev box,
+/// 2026-10-17): typing echo says typed characters, so that notification says nothing; the
+/// output after it is said.
+#[test]
+fn a_notification_echoing_the_typed_character_says_nothing() {
+    let (mut engine, _speech) = engine_with_speech();
+    let mut key = KeyEvent::new(Key::Alpha('I'), Modifiers::none(), true);
+    key.text = Some('ı');
+    engine.handle_key_event(&key);
+    let notification = |text: &str| {
+        let mut live = LiveRegionEvent::new(text, Politeness::Polite);
+        live.region_id = Some("uia-notification".to_owned());
+        live.atomic = true;
+        AccessibilityEvent::LiveRegion(live)
+    };
+    assert_eq!(engine.handle_accessibility_event(&notification("ı")), None);
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&notification("hı"))
+            .as_deref(),
+        Some("hı")
+    );
+}

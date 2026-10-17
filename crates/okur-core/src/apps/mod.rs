@@ -80,6 +80,18 @@ pub trait AppModule: Send {
         false
     }
 
+    /// Whether typing goes into `field` though it is not an edit (a console's text area), so
+    /// that typed characters are echoed there as in any text field.
+    fn types_into(&self, _field: &FocusEvent) -> bool {
+        false
+    }
+
+    /// An edit key of this application's own, where the field's text changes for a key that
+    /// changes no other field's (a console's Escape clears its input line).
+    fn edit_key(&self, _field: &FocusEvent, _key: &KeyEvent) -> Option<crate::editing::EditKey> {
+        None
+    }
+
     /// Whether Virtualize Window shows the focus's text, read fresh (a console's buffer).
     fn virtualizes_text(&self) -> bool {
         false

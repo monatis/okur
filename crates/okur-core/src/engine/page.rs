@@ -412,6 +412,17 @@ impl ScreenReaderEngine {
 
     /// Handles an ARIA live region announcement event with politeness consideration.
     pub fn handle_live_region_event(&mut self, live: &LiveRegionEvent) -> Option<String> {
+        // A notification of just the character the last key typed is the application's echo
+        // of it (Windows Terminal with the Turkish "ı"; dev box, 2026-10-17): typing echo says
+        // typed characters, as the setting has it.
+        let mut text = live.text.trim().chars();
+        if live.region_id.as_deref() == Some("uia-notification")
+            && self.last_typed.is_some()
+            && text.next() == self.last_typed
+            && text.next().is_none()
+        {
+            return None;
+        }
         if live.politeness == Politeness::Off {
             // Kept current, never spoken.
             self.live_region_additions(live);

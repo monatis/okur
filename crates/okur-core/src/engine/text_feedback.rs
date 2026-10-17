@@ -25,7 +25,11 @@ impl ScreenReaderEngine {
         {
             return;
         }
-        if let Some(key) = crate::editing::EditKey::of(event) {
+        let own_key = self.last_native_focus.as_ref().and_then(|field| {
+            self.app_for(field)
+                .and_then(|app| app.edit_key(field, event))
+        });
+        if let Some(key) = crate::editing::EditKey::of(event).or(own_key) {
             // A document (Windows 11 Notepad; a page's multi-line field, Google Docs' with
             // braille support, where JAWS said "top of file" for Ctrl+Home and the character
             // for Home on the dev box, 2026-10-16) reads some keys otherwise.
@@ -36,15 +40,7 @@ impl ScreenReaderEngine {
             };
             self.expect_text_change(key);
         } else if let Some(c) = event.text {
-            if self.settings.typing_echo == crate::settings::TypingEcho::Characters {
-                let echo = if c == ' ' {
-                    "space".to_owned()
-                } else {
-                    SpeechFormatter::format_char(c)
-                };
-                tracing::debug!(%echo, "typing echo");
-                self.speech.speak_echo(&echo);
-            }
+            self.echo_typed(c);
             // Keep the field's known text current (no speech follows), so the next edit key
             // (Backspace) is spoken from the text as typed.
             if let Some(actions) = &self.actions {
@@ -54,6 +50,20 @@ impl ScreenReaderEngine {
                 );
             }
         }
+    }
+
+    /// Says a typed character, as the typing echo setting has it.
+    pub(super) fn echo_typed(&mut self, c: char) {
+        if self.settings.typing_echo != crate::settings::TypingEcho::Characters {
+            return;
+        }
+        let echo = if c == ' ' {
+            "space".to_owned()
+        } else {
+            SpeechFormatter::format_char(c)
+        };
+        tracing::debug!(%echo, "typing echo");
+        self.speech.speak_echo(&echo);
     }
 
     /// Remembers the edit key until the field reports its new text, and asks the platform
