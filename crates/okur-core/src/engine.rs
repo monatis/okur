@@ -77,6 +77,9 @@ pub struct ScreenReaderEngine {
     /// The character the last key typed, if it typed one: a console's notification of just
     /// that character is its echo of the key.
     last_typed: Option<char>,
+    /// An edit key's result was read in a field its application also announces (a console):
+    /// its announcements of the same change, until the next key, are not said.
+    edit_read_in_console: bool,
     menus: crate::native_focus::Menus,
     /// The page re-read after a change, waiting for the change's events to be handled.
     pending_page: Option<VirtualBuffer>,
@@ -130,6 +133,7 @@ impl ScreenReaderEngine {
             last_native_focus: None,
             last_selected: None,
             last_typed: None,
+            edit_read_in_console: false,
             menus: crate::native_focus::Menus::default(),
             pending_edit: None,
             forms_mode_by_enter: false,
@@ -186,6 +190,7 @@ impl ScreenReaderEngine {
         let resolved = self.settings.keyboard.resolve(event);
         let event = &resolved;
         self.last_typed = event.text;
+        self.edit_read_in_console = false;
         self.apply_pending_page();
 
         // 1. Any key press interrupts speech immediately (NVDA & JAWS standard behavior)
@@ -313,10 +318,29 @@ impl ScreenReaderEngine {
                     })
                     .unwrap_or((false, None));
                 if types_into {
-                    if let Some(key) = own_key {
+                    use crate::editing::EditKey;
+                    // Left, Right and Backspace read as in a field (JAWS: "c", "b"; the
+                    // deleted "b"); Up and Down recall history, which the application
+                    // announces itself. Ctrl+Left and Right are left out: the word read at
+                    // the caret came out "blank" where JAWS said "ac" (dev box, 2026-10-17).
+                    let caret_key = EditKey::of(event).filter(|k| {
+                        matches!(
+                            k,
+                            EditKey::Character | EditKey::DeleteBackward | EditKey::DeleteForward
+                        )
+                    });
+                    if let Some(key) = own_key.or(caret_key) {
                         self.expect_text_change(key);
-                    } else if let Some(c) = event.text {
-                        self.echo_typed(c);
+                    } else {
+                        if let Some(c) = event.text {
+                            self.echo_typed(c);
+                        }
+                        // The field's known text kept current with no speech, so that the
+                        // next key read finds its own change (Escape after Ctrl+Left read the
+                        // line before it was cleared).
+                        if let Some(actions) = &self.actions {
+                            actions.read_at_caret(self.last_text.as_ref(), false);
+                        }
                     }
                 }
             }

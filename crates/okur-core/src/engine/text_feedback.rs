@@ -93,6 +93,10 @@ impl ScreenReaderEngine {
         let field = self.text_field_line();
         let speech = crate::editing::speech(key, before.as_ref(), context, &field)?;
         tracing::debug!(?key, %speech, "edit speech");
+        self.edit_read_in_console = self
+            .last_native_focus
+            .as_ref()
+            .is_some_and(|field| self.app_for(field).is_some_and(|app| app.types_into(field)));
         use crate::editing::EditKey;
         let character = matches!(
             key,

@@ -276,7 +276,13 @@ fn deleted_before_caret(before: Option<&TextContext>, after: &TextContext) -> St
         return String::new();
     };
     let was = chars(&before.text);
-    let removed = was.len().saturating_sub(chars(&after.text).len());
+    // What the text lost, or how far the caret came back where a console's rows, padded to
+    // its width, keep the text's length (Windows Terminal: Backspace in "echo abc" deleted
+    // "b"; dev box, 2026-10-17).
+    let removed = was
+        .len()
+        .saturating_sub(chars(&after.text).len())
+        .max(before.caret.saturating_sub(after.caret));
     let end = before.caret.min(was.len());
     was.get(end.saturating_sub(removed)..end)
         .unwrap_or_default()
@@ -606,6 +612,18 @@ mod tests {
         assert_eq!(
             speech(EditKey::SelectMore, Some(&before), &to_end, "").as_deref(),
             Some("selected\nsecond\nthird")
+        );
+    }
+
+    /// A console's rows are padded to its width: Backspace keeps the text's length, and the
+    /// caret coming back tells what went (Windows Terminal, dev box, 2026-10-17).
+    #[test]
+    fn backspace_in_a_padded_console_row_says_the_deleted_character() {
+        let before = ctx("> echo abc    ", 9, None);
+        let after = ctx("> echo ac     ", 8, None);
+        assert_eq!(
+            speech(EditKey::DeleteBackward, Some(&before), &after, "").as_deref(),
+            Some("b")
         );
     }
 }

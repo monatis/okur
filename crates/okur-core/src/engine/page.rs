@@ -416,10 +416,26 @@ impl ScreenReaderEngine {
         // of it (Windows Terminal with the Turkish "ı"; dev box, 2026-10-17): typing echo says
         // typed characters, as the setting has it.
         let mut text = live.text.trim().chars();
-        if live.region_id.as_deref() == Some("uia-notification")
+        let notification = live.region_id.as_deref() == Some("uia-notification");
+        if notification
             && self.last_typed.is_some()
             && text.next() == self.last_typed
             && text.next().is_none()
+        {
+            return None;
+        }
+        // While an edit key's result is being read in a field the application also announces,
+        // and after it until the next key (a console redrawing the line after Backspace:
+        // Windows Terminal said "c" after deleting "b"), the reading says it.
+        if notification && self.edit_read_in_console {
+            return None;
+        }
+        if notification
+            && self.pending_edit.is_some()
+            && self
+                .last_native_focus
+                .as_ref()
+                .is_some_and(|field| self.app_for(field).is_some_and(|app| app.types_into(field)))
         {
             return None;
         }
