@@ -116,6 +116,11 @@ There are no ready-made downloads yet: Okur is built from its source code.
 
 4. To stop it, Alt+Tab to the command prompt it runs in and press Ctrl+C.
 
+Run it from a command prompt opened as administrator to hear applications that run as
+administrator. Windows keeps their windows from programs that do not, so otherwise Okur is
+silent there (Windows Settings' "Rename this PC" dialog is one). JAWS runs that way too.
+Okur says so when it starts without administrator rights.
+
 Two screen readers speaking at once is hard to follow. Unload your usual screen reader first,
 or if you keep it running, give Okur another JAWS key so the two do not both act on the same
 command: `--jaws-key scrolllock` (then ScrollLock+T says the window title, and so on).

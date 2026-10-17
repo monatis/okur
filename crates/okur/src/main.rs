@@ -764,6 +764,15 @@ async fn main() {
                     println!("[Okur] Ready in live native Windows navigation mode.");
                 }
             }
+            // An application running as administrator shows nothing to an Okur that is not
+            // (Windows Settings' Rename dialog); JAWS runs elevated.
+            if !okur_platform::elevation::is_elevated() {
+                let note = "Okur is not running as administrator: windows of applications \
+                            that are (Settings' \"Rename this PC\", an elevated terminal) cannot \
+                            be read. Start Okur from an administrator terminal to read them.";
+                println!("[Okur] {note}");
+                tracing::warn!("{note}");
+            }
 
             // Install low-level keyboard hook
             let mut hook = create_keyboard_hook();

@@ -2,6 +2,7 @@ pub mod actions;
 pub mod audio;
 pub mod bridge;
 pub mod clock;
+pub mod elevation;
 pub mod event_trace;
 pub mod events;
 pub mod harness;
