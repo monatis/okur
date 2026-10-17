@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Web Chat</title>
+  <style>
+    .message:focus { outline: 2px solid #4a4; }
+    .options { margin-left: 1em; }
+    [aria-pressed=true] { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <!-- The patterns of WhatsApp Web (observed on the dev box, 2026-10-17), with neutral text:
+       toggle buttons, generic elements named with aria-label, message rows whose groups take
+       the focus and are moved through with the arrows, a button shown only on the focused
+       message, and a popup menu with reaction toggle buttons above its items. -->
+  <header>
+    <button aria-pressed="true">Chats</button>
+    <button aria-pressed="false">Status</button>
+  </header>
+  <main>
+    <h1>Web Chat</h1>
+    <h2>Messages</h2>
+    <div id="messages">
+      <div role="row">
+        <div class="message" tabindex="-1" data-label="You Good morning 09:00 Read">
+          <div aria-label="You Good morning 09:00 Read">
+            <span aria-label="You:"></span>
+            <div>Good morning</div>
+            <div role="button">09:00 Read</div>
+          </div>
+        </div>
+      </div>
+      <div role="row">
+        <div class="message" tabindex="-1" data-label="You See you at noon 09:05 Read">
+          <div aria-label="You See you at noon 09:05 Read">
+            <div>See you at noon</div>
+            <div role="button">09:05 Read</div>
+          </div>
+        </div>
+      </div>
+      <div role="row">
+        <div class="message" tabindex="-1" data-label="You Bring the notes 09:10 Read">
+          <div aria-label="You Bring the notes 09:10 Read">
+            <div>Bring the notes</div>
+            <div role="button">09:10 Read</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h2>Compose</h2>
+    <div role="textbox" contenteditable="true" aria-label="Type a message"><br></div>
+  </main>
+
+  <div role="dialog" id="menu" hidden>
+    <div role="menu" aria-label="Reactions">
+      <button aria-pressed="false">👍</button>
+      <button aria-pressed="false">❤️</button>
+    </div>
+    <div role="menu" id="items">
+      <div role="menuitem" tabindex="-1">Message info</div>
+      <div role="menuitem" tabindex="-1">Reply</div>
+      <div role="menuitem" tabindex="-1">Copy</div>
+      <div role="menuitem" tabindex="-1">Star</div>
+      <div role="menuitem" tabindex="-1">Delete</div>
+    </div>
+  </div>
+
+  <script>
+    const hint = ' Press the right or left arrow key for more options';
+    const messages = [...document.querySelectorAll('.message')];
+    const menu = document.getElementById('menu');
+    const items = [...document.querySelectorAll('[role=menuitem]')];
+    let opener = null;
+
+    // A message takes its label, with the hint, while it has the focus.
+    for (const message of messages) {
+      message.addEventListener('focus', () => {
+        message.setAttribute('aria-label', message.dataset.label + hint);
+      });
+      message.addEventListener('blur', () => message.removeAttribute('aria-label'));
+      message.addEventListener('keydown', (e) => {
+        const i = messages.indexOf(message);
+        if (e.key === 'ArrowUp' && i > 0) { messages[i - 1].focus(); e.preventDefault(); }
+        if (e.key === 'ArrowDown' && i < messages.length - 1) { messages[i + 1].focus(); e.preventDefault(); }
+        if (e.key === 'ArrowRight') { showOptions(message); e.preventDefault(); }
+      });
+    }
+
+    // The options button exists only once its message asks for it.
+    function showOptions(message) {
+      let button = message.querySelector('.options');
+      if (!button) {
+        button = document.createElement('button');
+        button.className = 'options';
+        button.textContent = 'Open message options';
+        button.setAttribute('aria-expanded', 'false');
+        button.addEventListener('click', () => openMenu(button));
+        button.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') { message.focus(); e.preventDefault(); }
+        });
+        message.appendChild(button);
+      }
+      button.focus();
+    }
+
+    function openMenu(button) {
+      opener = button;
+      button.setAttribute('aria-expanded', 'true');
+      menu.hidden = false;
+      items[0].focus();
+      setTimeout(() => menu.querySelector('[aria-pressed]').focus(), 300);
+    }
+
+    function closeMenu() {
+      menu.hidden = true;
+      if (opener) {
+        opener.setAttribute('aria-expanded', 'false');
+        opener.closest('.message').focus();
+      }
+    }
+
+    menu.addEventListener('keydown', (e) => {
+      const i = items.indexOf(document.activeElement);
+      if (e.key === 'Escape') { closeMenu(); e.preventDefault(); return; }
+      if (e.key === 'Tab') { (i >= 0 ? menu.querySelector('[aria-pressed]') : items[0]).focus(); e.preventDefault(); return; }
+      if (i < 0) return;
+      if (e.key === 'ArrowDown') { items[(i + 1) % items.length].focus(); e.preventDefault(); }
+      if (e.key === 'ArrowUp') { items[(i + items.length - 1) % items.length].focus(); e.preventDefault(); }
+      if (e.key === 'Enter') { closeMenu(); e.preventDefault(); }
+    });
+  </script>
+</body>
+</html>

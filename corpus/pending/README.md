@@ -31,6 +31,7 @@ To record one:
 | 216 | Tab through links in a table: column header and position | `web-app-patterns.html` (here) |
 | 217 | Tab into links in complementary, search, region and contentinfo landmarks | `web-app-patterns.html` (here) |
 | 218 | An ARIA menu bar: Tab in, Down, a sub menu, Escape out, and Alt+Shift+F from the editor | `web-menus.html` (here) |
+| 219 | WhatsApp Web's patterns: toggle buttons, labelled divs, Shift+Tab onto a message, Insert+3 and the page's arrows, an options button, a popup menu with reactions | `web-chat.html` (here) |
 
 216: on the dev box, JAWS's first Tab into a table said "Name | alpha.rs … | column 1 row 2"
 on two pages, but "alpha.rs … | Row 2" (no header) on this fixture once. Okur says the header
@@ -40,6 +41,17 @@ and the full position when the focus enters the table from outside it; the recor
 said "menu | Accessibility | 10 of 10 | To move through items press left or right arrow." for
 Alt+Shift+A, only the item for the next one, and "Leaving menus" when the menu closed; Okur
 words them as native menus until this is recorded.
+
+219 (2026-10-17) records what JAWS did in WhatsApp Web on the dev box (handoff
+`docs/handoff/2026-10-17-whatsapp-web.md`), on a page of its own with neutral text, since
+WhatsApp needs the user's account. On the dev box JAWS said "Chats Toggle button Pressed | To
+toggle the state press spacebar." for a pressed toggle (WhatsApp's "Sohbetler"), read an empty
+`span` with an `aria-label` as a line ("Siz:"), stayed in browse mode after Shift+Tab onto a
+message, said "Enter key to pass through" for Insert+3, and in the popup menu its first item
+with its position and the hint ("Mesaj bilgisi | 1 of 9 | To move through items press up or
+down arrow."), then the dialog and "👍 Toggle button Not pressed" with no hint, and the next
+items with their positions ("Cevapla | 2 of 9"). The fixture's menu moves the focus to the first
+reaction 300 ms after its first item, as WhatsApp's did.
 
 210–217 were written on 2026-10-16 from dev-box JAWS observations (research); the handoff
 `docs/handoff/2026-10-16-responsiveness-and-web-apps.md` quotes what JAWS said there. The dev

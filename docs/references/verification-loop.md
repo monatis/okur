@@ -281,6 +281,13 @@ the morning. This is how it was done; it needs fresh permission each time.
   Insert+F5 reloaded the page, and Ctrl+Right selected words. `okur keys` now sends a chord in
   one batch, releases keys left down before its first step, and says when a higher window
   hides the key state. If keys act strangely after a JAWS dialog, suspect this first.
+- **Okur beside JAWS: keys Okur passes on can still be JAWS's** (dev box, 2026-10-17). JAWS
+  sees each key after Okur; in browse mode it takes arrows and letters for its virtual
+  cursor, so a key Okur passes to the page in forms mode never reaches the page (WhatsApp's
+  arrows through its messages, typing in a search box Okur focused). Put JAWS in forms mode
+  too: Okur's `Enter` on the field, then a second `Enter` that Okur passes and JAWS takes; it
+  stays in forms mode as the page moves the focus. In WhatsApp an `Up` reaching an empty
+  message field opens "edit last message", and an `Escape` in browse mode closes the chat.
 - **JAWS's dialogs are closed to normal-integrity tools.** They refuse our keys and
   `WM_CLOSE`, and UI Automation sees only their titles. Drive them through FSAPI: `RunScript`
   opens one by its script name (`SelectAPlaceMarker`, `QuickSettings`, `RunJAWSManager`,
