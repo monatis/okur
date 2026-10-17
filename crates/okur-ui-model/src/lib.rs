@@ -66,15 +66,32 @@ pub enum ControlKind {
     Button {
         default: bool,
     },
+    /// A list of items, one selected. Its label names it and is not shown: JAWS's "links
+    /// List view".
+    List {
+        items: Vec<String>,
+        selected: usize,
+    },
+    /// Radio buttons in a group box that the label names; each option's label has its own
+    /// access key.
+    Radios {
+        options: Vec<String>,
+        selected: usize,
+    },
+    /// A read-only line of text, outside the tab order: the Links List's link address.
+    Text {
+        text: String,
+    },
 }
 
 /// A control's value, as the user set it or Okur sets it.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "kind", content = "value", rename_all = "snake_case")]
 pub enum Value {
     Checked(bool),
     Selected(usize),
     Number(i32),
+    Text(String),
 }
 
 /// What Okur asks `okur-ui` to show.
@@ -89,6 +106,13 @@ pub enum ToUi {
         id: u32,
         control: String,
         value: Value,
+    },
+    /// Replace a list's items, and select one.
+    DialogItems {
+        id: u32,
+        control: String,
+        items: Vec<String>,
+        selected: usize,
     },
     /// Close a dialog.
     DialogClose { id: u32 },

@@ -695,7 +695,7 @@ pub(crate) mod capture {
                 }
                 let mut node = read_node(&el, usize::MAX);
                 if node.control_type == super::CT_LIST && node.name.is_none() {
-                    node.label = text_before(&walker, &request, &el);
+                    node.label = text_before(&walker, &request, &el).or_else(|| control_text(&el));
                 }
                 // An unnamed dialog (Settings' InfoBar) by its first text.
                 if node.is_dialog == Some(true) && node.name.is_none() {
@@ -724,6 +724,22 @@ pub(crate) mod capture {
             .flatten()
             .map(|name| name.trim().to_owned())
             .filter(|name| !name.is_empty())
+    }
+
+    /// A Win32 control's window text, which MSAA gives as its name where UI Automation gives
+    /// none: a list dialog names its list view so, as JAWS's Links List does ("links List
+    /// view"; JAWS 2025 on Okur's and its own, dev box, 2026-10-17).
+    fn control_text(element: &IUIAutomationElement) -> Option<String> {
+        // SAFETY: a UIA query, then a Win32 query into a buffer of the given size.
+        let hwnd = unsafe { element.CurrentNativeWindowHandle() }.ok()?;
+        if hwnd.is_invalid() {
+            return None;
+        }
+        let mut buf = [0u16; 256];
+        let len = unsafe { GetWindowTextW(hwnd, &mut buf) };
+        let text = String::from_utf16_lossy(buf.get(..usize::try_from(len).ok()?)?);
+        let text = text.trim();
+        (!text.is_empty()).then(|| text.to_owned())
     }
 
     /// The name of `element`'s first child text, if any (among its first few children).

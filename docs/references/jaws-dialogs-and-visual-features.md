@@ -281,7 +281,8 @@ they belong in Okur's key state machine, beside menu mode and forms mode.
 
 | Feature | Okur | Gap |
 |---|---|---|
-| Links, headings and form fields lists | speech only (`ActiveElementList`): the engine speaks a dialog that has no window; arrows, Enter and Escape | no window; Tab, mnemonics, sorting, filtering, the other buttons, first-letter moves, mouse and braille missing; keys Okur doesn't take go to the page; empty-list messages differ ("There are no form fields on this page." against JAWS's "no form fields were found") |
+| Links List | a real dialog drawn by `okur-ui` since 2026-10-17, read as JAWS reads its own | visited links unknown; the radio groups' places on screen (JAWS shows Display left of Sort Links) |
+| Headings and form fields lists | speech only (`ActiveElementList`): the engine speaks a dialog that has no window; arrows, Enter and Escape | the real dialogs, as the Links List's; empty-list messages differ ("There are no form fields on this page." against JAWS's "no form fields were found") |
 | Frames, graphics, lists, regions, Insert+Ctrl+letter, Insert+F3 lists | none | all |
 | JAWS Find | speaks the dialog's opening line, no field (`Command::VirtualFind`); F3 and Shift+F3 search | the dialog |
 | PlaceMarkers, custom labels, Flexible Web, skim reading | none | all |

@@ -366,6 +366,9 @@ impl ScreenReaderEngine {
                     Some(speech)
                 }
             }
+            // With Okur's windows, a real Links List; without (replay, headless), the list
+            // is spoken, as before.
+            Command::SelectALink if self.ui.is_some() => return self.open_links_list(),
             Command::SelectALink => {
                 let items = self.cursor.buffer.get_links_list();
                 if items.is_empty() {

@@ -35,7 +35,10 @@ impl Desktop {
         !super::explorer::is_explorer_window(focus)
             && (focus.container_name.as_deref() == Some("FolderView")
                 || window_class.is_some_and(in_desktop_window)
+                // A list view in the desktop's window, not one in a dialog (Okur's Links
+                // List, dev box, 2026-10-17).
                 || (window_class == Some("SysListView32")
+                    && top.is_none_or(in_desktop_window)
                     && !matches!(
                         focus.container_name.as_deref(),
                         Some("Items View" | "Items view")

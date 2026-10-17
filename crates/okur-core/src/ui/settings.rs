@@ -186,7 +186,7 @@ impl SettingsDialog {
     pub fn handle(&mut self, event: &FromUi) -> Outcome {
         match event {
             FromUi::DialogChanged { id, control, value } if *id == self.id => {
-                self.change(control, *value)
+                self.change(control, value.clone())
             }
             FromUi::DialogPressed { id, control } if *id == self.id => match control.as_str() {
                 "ok" => Outcome::Apply {

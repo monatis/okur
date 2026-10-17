@@ -101,6 +101,10 @@ pub struct ScreenReaderEngine {
     settings_store: Option<Box<dyn crate::settings::SettingsStore>>,
     /// The settings dialog, while it is open.
     settings_dialog: Option<crate::ui::settings::SettingsDialog>,
+    /// The Links List dialog, while it is open.
+    links_dialog: Option<crate::ui::links::LinksListDialog>,
+    /// Until when the focus returning from one of Okur's dialogs is not announced.
+    quiet_focus_until: Option<std::time::Instant>,
     /// Dialogs opened so far: each gets the next number.
     dialog_count: u32,
     /// The last JAWS-key command and when it was pressed, to tell a double press.
@@ -155,6 +159,8 @@ impl ScreenReaderEngine {
             ui: None,
             settings_store: None,
             settings_dialog: None,
+            links_dialog: None,
+            quiet_focus_until: None,
             dialog_count: 0,
             last_press: None,
             settings: crate::settings::Settings::default(),
@@ -220,6 +226,9 @@ impl ScreenReaderEngine {
                     | Key::PageDown
             );
         self.apply_pending_page();
+
+        // A key ends the quiet return from Okur's dialogs: what it does is said.
+        self.quiet_focus_until = None;
 
         // 1. Any key press interrupts speech immediately (NVDA & JAWS standard behavior)
         self.speech.stop();
@@ -497,6 +506,17 @@ impl ScreenReaderEngine {
             self.apply_pending_page();
         }
         match event {
+            // Back from one of Okur's dialogs, the focus returns to where it was and is taken
+            // in silently, as JAWS returns from its own Links List (dev box, 2026-10-17).
+            AccessibilityEvent::Focus(focus) if self.quiet_return() => {
+                let speech = std::mem::replace(
+                    &mut self.speech,
+                    Box::new(crate::speech::MockSpeechOutput::new()),
+                );
+                self.handle_focus_event(focus);
+                self.speech = speech;
+                None
+            }
             AccessibilityEvent::Focus(focus) => self.handle_focus_event(focus),
             AccessibilityEvent::Menu(menu) => self.handle_menu_event(*menu),
             AccessibilityEvent::Change { kind, control } => self.handle_change(*kind, control),
@@ -584,6 +604,13 @@ impl ScreenReaderEngine {
                 self.viewer = None;
                 None
             }
+            _ if self
+                .links_dialog
+                .as_ref()
+                .is_some_and(|d| Some(d.id) == dialog_of(message)) =>
+            {
+                self.handle_links_event(message)
+            }
             _ => {
                 let outcome = self.settings_dialog.as_mut()?.handle(message);
                 match outcome {
@@ -601,10 +628,87 @@ impl ScreenReaderEngine {
                                     ui.send(crate::ui::ToUi::DialogClose { id: dialog.id });
                                 }
                             }
+                            self.returning_from_dialog();
                         }
                     }
-                    Outcome::Closed => self.settings_dialog = None,
+                    Outcome::Closed => {
+                        self.settings_dialog = None;
+                        self.returning_from_dialog();
+                    }
                 }
+                None
+            }
+        }
+    }
+
+    /// Whether the focus is still returning from one of Okur's dialogs.
+    fn quiet_return(&self) -> bool {
+        self.quiet_focus_until
+            .is_some_and(|until| std::time::Instant::now() < until)
+    }
+
+    /// Starts the quiet return after one of Okur's dialogs closed: the window it came from
+    /// takes the focus back within this.
+    fn returning_from_dialog(&mut self) {
+        const RETURN: std::time::Duration = std::time::Duration::from_millis(800);
+        self.quiet_focus_until = Some(std::time::Instant::now() + RETURN);
+    }
+
+    /// Opens the Links List dialog on the page's links; with none, says so, as JAWS does.
+    pub(crate) fn open_links_list(&mut self) -> Option<String> {
+        let links = self.cursor.buffer.get_links_list();
+        if links.is_empty() {
+            let speech = "There are no links on this page.".to_owned();
+            self.speech.speak(&speech, true);
+            return Some(speech);
+        }
+        let ui = self.ui.as_ref()?;
+        self.dialog_count += 1;
+        let dialog = crate::ui::links::LinksListDialog::new(self.dialog_count, links);
+        ui.send(crate::ui::ToUi::DialogShow {
+            dialog: dialog.spec(),
+        });
+        self.links_dialog = Some(dialog);
+        None
+    }
+
+    /// What the user did to the Links List.
+    fn handle_links_event(&mut self, message: &crate::ui::FromUi) -> Option<String> {
+        use crate::ui::links::Outcome;
+        let outcome = self.links_dialog.as_mut()?.handle(message);
+        let close = |engine: &mut Self| {
+            if let (Some(dialog), Some(ui)) = (engine.links_dialog.take(), &engine.ui) {
+                ui.send(crate::ui::ToUi::DialogClose { id: dialog.id });
+            }
+            engine.returning_from_dialog();
+        };
+        match outcome {
+            Outcome::Nothing => None,
+            Outcome::Send(messages) => {
+                if let Some(ui) = &self.ui {
+                    messages.into_iter().for_each(|m| ui.send(m));
+                }
+                None
+            }
+            // JAWS 2025 after Move To Link (dev box, 2026-10-17): "same page link Reputation
+            // for Quality Service | To activate press Enter."
+            Outcome::MoveTo(link) => {
+                close(self);
+                let speech = format!(
+                    "{}\nTo activate press Enter.",
+                    self.cursor.jump_to_element_offset(link.offset)
+                );
+                self.speech.speak(&speech, true);
+                Some(speech)
+            }
+            Outcome::Activate(link) => {
+                close(self);
+                self.cursor.jump_to_element_offset(link.offset);
+                self.execute(crate::command::Command::Enter)
+            }
+            Outcome::Closed => {
+                self.links_dialog = None;
+                self.returning_from_dialog();
                 None
             }
         }
@@ -641,5 +745,16 @@ impl ScreenReaderEngine {
         if let Some(ui) = &self.ui {
             ui.send(crate::ui::ToUi::ViewerClose);
         }
+    }
+}
+
+/// The dialog an event from one of Okur's windows is about.
+fn dialog_of(message: &crate::ui::FromUi) -> Option<u32> {
+    use crate::ui::FromUi;
+    match message {
+        FromUi::DialogChanged { id, .. }
+        | FromUi::DialogPressed { id, .. }
+        | FromUi::DialogClosed { id } => Some(*id),
+        FromUi::ViewerDismissed => None,
     }
 }

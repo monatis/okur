@@ -4,9 +4,8 @@
 //! button, Escape) and UI Automation exposes as any application's. JAWS's own dialogs are
 //! built this way.
 //!
-//! Layout, in dialog units: groups one under the other, each control on a row of its own,
-//! labels left of their drop-down lists and sliders, and the buttons in a row at the bottom
-//! right. Pure, so it is tested anywhere.
+//! Layout, in dialog units ([`layout`]): a form, or a list dialog as JAWS's are. Pure, so it
+//! is tested anywhere.
 
 use okur_ui_model::{ControlKind, DialogSpec};
 
@@ -28,6 +27,14 @@ const BS_DEFPUSHBUTTON: u32 = 1;
 const BS_AUTOCHECKBOX: u32 = 3;
 const BS_GROUPBOX: u32 = 7;
 const CBS_DROPDOWNLIST: u32 = 3;
+const BS_AUTORADIOBUTTON: u32 = 9;
+const WS_BORDER: u32 = 0x0080_0000;
+const ES_AUTOHSCROLL: u32 = 0x80;
+const ES_READONLY: u32 = 0x800;
+const LVS_REPORT: u32 = 0x1;
+const LVS_SINGLESEL: u32 = 0x4;
+const LVS_SHOWSELALWAYS: u32 = 0x8;
+const LVS_NOCOLUMNHEADER: u32 = 0x4000;
 const TBS_AUTOTICKS: u32 = 1;
 
 /// The dialog manager's ids for OK and Cancel: Enter without a default button presses OK,
@@ -38,6 +45,9 @@ pub const IDCANCEL: u16 = 2;
 const LABEL_ID: u16 = 0xFFFF;
 /// Other controls are numbered from here, in the description's order.
 const FIRST_ID: u16 = 100;
+/// Radio buttons are numbered from here, a block of ids for each group.
+const FIRST_RADIO_ID: u16 = 1000;
+const RADIO_STRIDE: u16 = 16;
 
 /// Dialog units.
 const MARGIN: i16 = 7;
@@ -46,6 +56,8 @@ const LABEL_WIDTH: i16 = 84;
 const ROW_GAP: i16 = 4;
 const BUTTON_WIDTH: i16 = 50;
 const BUTTON_HEIGHT: i16 = 14;
+/// A list dialog's list: eight rows.
+const LIST_HEIGHT: i16 = 86;
 
 /// The font JAWS's and Windows's dialogs use.
 const FONT: &str = "Segoe UI";
@@ -55,6 +67,7 @@ const FONT_POINTS: u16 = 9;
 pub enum Class {
     Button,
     Static,
+    Edit,
     ComboBox,
     Named(&'static str),
 }
@@ -91,8 +104,200 @@ pub fn window_id(index: usize, id: &str) -> u16 {
     }
 }
 
-/// Lays out `dialog`.
+/// The window id of option `option` of the radio group at `index` in the description.
+pub fn radio_id(index: usize, option: usize) -> u16 {
+    let index = u16::try_from(index).unwrap_or(0);
+    let option = u16::try_from(option).unwrap_or(0);
+    FIRST_RADIO_ID
+        .saturating_add(index.saturating_mul(RADIO_STRIDE))
+        .saturating_add(option)
+}
+
+/// The radio group (its index in the description) and option a window id stands for.
+pub fn radio_of(id: u16) -> Option<(usize, usize)> {
+    let offset = id.checked_sub(FIRST_RADIO_ID)?;
+    Some((
+        usize::from(offset / RADIO_STRIDE),
+        usize::from(offset % RADIO_STRIDE),
+    ))
+}
+
+/// Lays out `dialog`: a dialog with a list as JAWS's list dialogs are (the list at the top
+/// left, the buttons beside it, the radio groups side by side below), any other as a form.
+/// Items are in the description's order, which is the tab order.
 pub fn layout(dialog: &DialogSpec) -> Layout {
+    if dialog
+        .controls
+        .iter()
+        .any(|c| matches!(c.kind, ControlKind::List { .. }))
+    {
+        list_layout(dialog)
+    } else {
+        form_layout(dialog)
+    }
+}
+
+/// A radio group's box and buttons, at `x`, `y`, `width` wide; returns the bottom.
+fn push_radios(
+    items: &mut Vec<Item>,
+    index: usize,
+    id: u16,
+    label: &str,
+    options: &[String],
+    (x, y, width): (i16, i16, i16),
+) -> i16 {
+    let rows = i16::try_from(options.len()).unwrap_or(0);
+    let height = 12 + rows * 12 + 2;
+    items.push(Item {
+        class: Class::Button,
+        style: WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
+        x,
+        y,
+        cx: width,
+        cy: height,
+        id,
+        text: label.to_owned(),
+    });
+    for (option, text) in options.iter().enumerate() {
+        // The first starts the group and is its tab stop; the arrows move between them.
+        let first = if option == 0 {
+            WS_TABSTOP | WS_GROUP
+        } else {
+            0
+        };
+        items.push(Item {
+            class: Class::Button,
+            style: WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON | first,
+            x: x + 6,
+            y: y + 12 + i16::try_from(option).unwrap_or(0) * 12,
+            cx: width - 12,
+            cy: 10,
+            id: radio_id(index, option),
+            text: text.clone(),
+        });
+    }
+    y + height
+}
+
+fn read_only_text(x: i16, y: i16, cx: i16, id: u16) -> Item {
+    Item {
+        class: Class::Edit,
+        style: WS_CHILD | WS_VISIBLE | WS_BORDER | ES_READONLY | ES_AUTOHSCROLL,
+        x,
+        y,
+        cx,
+        cy: 12,
+        id,
+        text: String::new(),
+    }
+}
+
+fn button(id: u16, text: &str, default: bool, (x, y): (i16, i16)) -> Item {
+    let kind = if default {
+        BS_DEFPUSHBUTTON
+    } else {
+        BS_PUSHBUTTON
+    };
+    Item {
+        class: Class::Button,
+        style: WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_GROUP | kind,
+        x,
+        y,
+        cx: BUTTON_WIDTH,
+        cy: BUTTON_HEIGHT,
+        id,
+        text: text.to_owned(),
+    }
+}
+
+fn list_layout(dialog: &DialogSpec) -> Layout {
+    let mut items = Vec::new();
+    let mut ids = Vec::new();
+    let list_width = WIDTH - 2 * MARGIN - BUTTON_WIDTH - 6;
+    let button_x = WIDTH - MARGIN - BUTTON_WIDTH;
+    let mut button_y = MARGIN;
+    // Below the list: radio groups two to a row, then the rest.
+    let column_width = (WIDTH - 2 * MARGIN - 6) / 2;
+    let mut row_top = MARGIN + LIST_HEIGHT + 6;
+    let mut column = 0;
+    let mut row_bottom = row_top;
+    let mut y = row_top;
+    for (index, control) in dialog.controls.iter().enumerate() {
+        let id = window_id(index, &control.id);
+        ids.push(id);
+        match &control.kind {
+            ControlKind::List { .. } => items.push(Item {
+                class: Class::Named("SysListView32"),
+                style: WS_CHILD
+                    | WS_VISIBLE
+                    | WS_BORDER
+                    | WS_TABSTOP
+                    | WS_GROUP
+                    | LVS_REPORT
+                    | LVS_SINGLESEL
+                    | LVS_SHOWSELALWAYS
+                    | LVS_NOCOLUMNHEADER,
+                x: MARGIN,
+                y: MARGIN,
+                cx: list_width,
+                cy: LIST_HEIGHT,
+                id,
+                // Its name, which JAWS's list dialogs show nowhere ("links").
+                text: control.label.clone(),
+            }),
+            ControlKind::Button { default } => {
+                items.push(button(id, &control.label, *default, (button_x, button_y)));
+                button_y += BUTTON_HEIGHT + 4;
+            }
+            ControlKind::Radios { options, .. } => {
+                let x = MARGIN + column * (column_width + 6);
+                let bottom = push_radios(
+                    &mut items,
+                    index,
+                    id,
+                    &control.label,
+                    options,
+                    (x, row_top, column_width),
+                );
+                row_bottom = row_bottom.max(bottom);
+                column += 1;
+                if column == 2 {
+                    column = 0;
+                    row_top = row_bottom + 4;
+                }
+                y = row_bottom + 4;
+            }
+            ControlKind::Text { .. } => {
+                items.push(read_only_text(MARGIN, y, WIDTH - 2 * MARGIN, id));
+                y += 12 + ROW_GAP;
+            }
+            ControlKind::CheckBox { .. } => {
+                items.push(Item {
+                    class: Class::Button,
+                    style: WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_GROUP | BS_AUTOCHECKBOX,
+                    x: MARGIN,
+                    y,
+                    cx: WIDTH - 2 * MARGIN,
+                    cy: 10,
+                    id,
+                    text: control.label.clone(),
+                });
+                y += 10 + ROW_GAP;
+            }
+            // Not used in list dialogs yet.
+            ControlKind::Group | ControlKind::Choice { .. } | ControlKind::Slider { .. } => {}
+        }
+    }
+    let height = y.max(button_y).max(MARGIN + LIST_HEIGHT) + MARGIN;
+    Layout {
+        width: WIDTH,
+        height,
+        items,
+        ids,
+    }
+}
+
+fn form_layout(dialog: &DialogSpec) -> Layout {
     let mut items = Vec::new();
     let mut ids = Vec::new();
     let mut buttons = Vec::new();
@@ -147,17 +352,7 @@ pub fn layout(dialog: &DialogSpec) -> Layout {
                 });
                 y += 10 + ROW_GAP;
             }
-            ControlKind::Choice { .. } | ControlKind::Slider { .. } => {
-                let (class, style, cy, height) = match &control.kind {
-                    ControlKind::Choice { .. } => (
-                        Class::ComboBox,
-                        CBS_DROPDOWNLIST | WS_VSCROLL,
-                        // The list's height when it drops down.
-                        120,
-                        12,
-                    ),
-                    _ => (Class::Named("msctls_trackbar32"), TBS_AUTOTICKS, 16, 16),
-                };
+            ControlKind::Choice { .. } | ControlKind::Slider { .. } | ControlKind::Text { .. } => {
                 // The label first: in the tab order before its control, it names it and
                 // gives it its access key.
                 items.push(Item {
@@ -170,18 +365,61 @@ pub fn layout(dialog: &DialogSpec) -> Layout {
                     id: LABEL_ID,
                     text: control.label.clone(),
                 });
-                items.push(Item {
-                    class,
-                    style: WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_GROUP | style,
-                    x: left + LABEL_WIDTH + 4,
-                    y,
-                    cx: right - left - LABEL_WIDTH - 4,
-                    cy,
-                    id,
-                    text: String::new(),
-                });
+                let x = left + LABEL_WIDTH + 4;
+                let cx = right - left - LABEL_WIDTH - 4;
+                let height = match &control.kind {
+                    ControlKind::Choice { .. } => {
+                        items.push(Item {
+                            class: Class::ComboBox,
+                            style: WS_CHILD
+                                | WS_VISIBLE
+                                | WS_TABSTOP
+                                | WS_GROUP
+                                | CBS_DROPDOWNLIST
+                                | WS_VSCROLL,
+                            x,
+                            y,
+                            cx,
+                            // The list's height when it drops down.
+                            cy: 120,
+                            id,
+                            text: String::new(),
+                        });
+                        12
+                    }
+                    ControlKind::Slider { .. } => {
+                        items.push(Item {
+                            class: Class::Named("msctls_trackbar32"),
+                            style: WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_GROUP | TBS_AUTOTICKS,
+                            x,
+                            y,
+                            cx,
+                            cy: 16,
+                            id,
+                            text: String::new(),
+                        });
+                        16
+                    }
+                    _ => {
+                        items.push(read_only_text(x, y, cx, id));
+                        12
+                    }
+                };
                 y += height + ROW_GAP;
             }
+            ControlKind::Radios { options, .. } => {
+                close(&mut items, &mut group, &mut y);
+                y = push_radios(
+                    &mut items,
+                    index,
+                    id,
+                    &control.label,
+                    options,
+                    (MARGIN, y, WIDTH - 2 * MARGIN),
+                ) + ROW_GAP
+                    + 2;
+            }
+            ControlKind::List { .. } => {}
             ControlKind::Button { default } => {
                 buttons.push((id, control.label.clone(), *default));
             }
@@ -193,21 +431,7 @@ pub fn layout(dialog: &DialogSpec) -> Layout {
         let count = i16::try_from(buttons.len()).unwrap_or(1);
         let mut x = WIDTH - MARGIN - count * BUTTON_WIDTH - (count - 1) * 4;
         for (id, text, default) in buttons {
-            let kind = if default {
-                BS_DEFPUSHBUTTON
-            } else {
-                BS_PUSHBUTTON
-            };
-            items.push(Item {
-                class: Class::Button,
-                style: WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_GROUP | kind,
-                x,
-                y,
-                cx: BUTTON_WIDTH,
-                cy: BUTTON_HEIGHT,
-                id,
-                text,
-            });
+            items.push(button(id, &text, default, (x, y)));
             x += BUTTON_WIDTH + 4;
         }
         y += BUTTON_HEIGHT;
@@ -265,6 +489,7 @@ pub fn encode(title: &str, layout: &Layout) -> Vec<u32> {
         match item.class {
             Class::Button => words.extend([0xFFFF, 0x0080]),
             Class::Static => words.extend([0xFFFF, 0x0082]),
+            Class::Edit => words.extend([0xFFFF, 0x0081]),
             Class::ComboBox => words.extend([0xFFFF, 0x0085]),
             Class::Named(name) => push_text(&mut words, name),
         }

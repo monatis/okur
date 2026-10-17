@@ -35,6 +35,10 @@ settings follow as Okur's configurability and parity grow.
 
 ### 1. Spike S1: one real Links List on Windows
 
+**Done 2026-10-17**: Insert+F7 opens it from Chrome; Okur and JAWS read it alike; Move To
+Link, Activate Link and Escape return to the page as JAWS's do. The dialog came to the front
+without UIAccess, by the thread-input method. What follows is the original outline.
+
 - Crate `okur-ui-model`: the description (list, radio group, check box, combo box, edit, tree,
   button, group, label) and the protocol (show, update, close; events). Serde, versioned.
 - Binary `okur-ui`: a Win32 renderer that builds a dialog template in memory; started by

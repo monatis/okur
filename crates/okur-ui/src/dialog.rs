@@ -6,26 +6,42 @@
 use std::cell::RefCell;
 
 use okur_ui_model::{ControlKind, DialogSpec, FromUi, Value};
+use windows::core::PWSTR;
 use windows::Win32::Foundation::{HWND, LPARAM, WPARAM};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::System::Threading::{AttachThreadInput, GetCurrentThreadId};
 use windows::Win32::UI::Controls::{
-    BST_CHECKED, BST_UNCHECKED, TBM_SETPAGESIZE, TBM_SETPOS, TBM_SETRANGEMAX, TBM_SETRANGEMIN,
-    TBM_SETTICFREQ,
+    BST_CHECKED, BST_UNCHECKED, LVCF_WIDTH, LVCOLUMNW, LVIF_STATE, LVIF_TEXT, LVIS_FOCUSED,
+    LVIS_SELECTED, LVITEMW, LVM_DELETEALLITEMS, LVM_ENSUREVISIBLE, LVM_INSERTCOLUMNW,
+    LVM_INSERTITEMW, LVM_SETEXTENDEDLISTVIEWSTYLE, LVM_SETITEMSTATE, LVN_ITEMCHANGED,
+    LVS_EX_FULLROWSELECT, NMHDR, NMLISTVIEW, NM_DBLCLK, TBM_SETPAGESIZE, TBM_SETPOS,
+    TBM_SETRANGEMAX, TBM_SETRANGEMIN, TBM_SETTICFREQ,
 };
 use windows::Win32::UI::Input::KeyboardAndMouse::EnableWindow;
 use windows::Win32::UI::WindowsAndMessaging::{
-    BringWindowToTop, CreateDialogIndirectParamW, DestroyWindow, GetDlgCtrlID, GetDlgItem,
-    GetForegroundWindow, GetWindowThreadProcessId, IsDialogMessageW, IsWindow, SendMessageW,
-    SetForegroundWindow, ShowWindow, BM_GETCHECK, BM_SETCHECK, BN_CLICKED, CBN_SELCHANGE,
-    CB_ADDSTRING, CB_GETCURSEL, CB_RESETCONTENT, CB_SETCURSEL, DLGTEMPLATE, MSG, SW_SHOW,
-    WM_COMMAND, WM_HSCROLL, WM_INITDIALOG,
+    BringWindowToTop, CreateDialogIndirectParamW, DestroyWindow, GetClientRect, GetDlgCtrlID,
+    GetDlgItem, GetForegroundWindow, GetWindowThreadProcessId, IsDialogMessageW, IsWindow,
+    SendMessageW, SetForegroundWindow, SetWindowTextW, ShowWindow, BM_GETCHECK, BM_SETCHECK,
+    BN_CLICKED, CBN_SELCHANGE, CB_ADDSTRING, CB_GETCURSEL, CB_RESETCONTENT, CB_SETCURSEL,
+    DLGTEMPLATE, MSG, SW_SHOW, WM_COMMAND, WM_HSCROLL, WM_INITDIALOG, WM_NOTIFY,
 };
 
 use crate::template::{self, IDCANCEL};
 
 /// TBM_GETPOS: a slider's position.
 const TBM_GETPOS: u32 = 0x0400;
+
+/// One control of an open dialog.
+struct OpenControl {
+    /// Its window id (a radio group's: its box's).
+    window_id: u16,
+    /// Its id in the description.
+    name: String,
+    kind: ControlKind,
+    /// The value last told to Okur: sliders send a message per step and another when they
+    /// stop, and a list selects an item twice (focus, then selection).
+    last: Option<Value>,
+}
 
 /// A dialog on screen.
 struct OpenDialog {
@@ -34,13 +50,28 @@ struct OpenDialog {
     /// The window in front when the dialog opened: it has the focus back when the dialog
     /// closes, as when a dialog of its own closes.
     previous: HWND,
-    /// Each control's window id, its id in the description, its kind, and the value last
-    /// told to Okur (sliders send a message per step and another when they stop).
-    controls: Vec<(u16, String, ControlKind, Option<Value>)>,
+    controls: Vec<OpenControl>,
 }
 
 thread_local! {
     static DIALOGS: RefCell<Vec<OpenDialog>> = const { RefCell::new(Vec::new()) };
+}
+
+fn wide(text: &str) -> Vec<u16> {
+    text.encode_utf16().chain([0]).collect()
+}
+
+/// A control's value as the dialog opens: Okur knows it, so it is never told back.
+fn initial(kind: &ControlKind) -> Option<Value> {
+    match kind {
+        ControlKind::Choice { selected, .. }
+        | ControlKind::List { selected, .. }
+        | ControlKind::Radios { selected, .. } => Some(Value::Selected(*selected)),
+        ControlKind::CheckBox { checked } => Some(Value::Checked(*checked)),
+        ControlKind::Slider { value, .. } => Some(Value::Number(*value)),
+        ControlKind::Text { text } => Some(Value::Text(text.clone())),
+        ControlKind::Group | ControlKind::Button { .. } => None,
+    }
 }
 
 fn window_of(id: u32) -> Option<HWND> {
@@ -81,7 +112,12 @@ pub fn show(spec: &DialogSpec) {
         .controls
         .iter()
         .zip(&layout.ids)
-        .map(|(c, &id)| (id, c.id.clone(), c.kind.clone(), None))
+        .map(|(c, &window_id)| OpenControl {
+            window_id,
+            name: c.id.clone(),
+            kind: c.kind.clone(),
+            last: initial(&c.kind),
+        })
         .collect();
     DIALOGS.with(|d| {
         if let Ok(mut d) = d.try_borrow_mut() {
@@ -93,12 +129,12 @@ pub fn show(spec: &DialogSpec) {
             });
         }
     });
-    for (control, &id) in spec.controls.iter().zip(&layout.ids) {
+    for (index, (control, &id)) in spec.controls.iter().zip(&layout.ids).enumerate() {
         // SAFETY: a child of the dialog just created.
         let Ok(item) = (unsafe { GetDlgItem(Some(window), i32::from(id)) }) else {
             continue;
         };
-        fill(item, &control.kind);
+        fill(window, index, item, &control.kind);
         if !control.enabled {
             // SAFETY: disabling our own control.
             let _ = unsafe { EnableWindow(item, false) };
@@ -108,14 +144,14 @@ pub fn show(spec: &DialogSpec) {
 }
 
 /// Gives a control its initial value.
-fn fill(item: HWND, kind: &ControlKind) {
+fn fill(window: HWND, index: usize, item: HWND, kind: &ControlKind) {
     // SAFETY: messages to our own controls; the strings outlive each call.
     unsafe {
         match kind {
             ControlKind::Choice { options, selected } => {
                 SendMessageW(item, CB_RESETCONTENT, None, None);
                 for option in options {
-                    let text: Vec<u16> = option.encode_utf16().chain([0]).collect();
+                    let text = wide(option);
                     SendMessageW(
                         item,
                         CB_ADDSTRING,
@@ -123,9 +159,11 @@ fn fill(item: HWND, kind: &ControlKind) {
                         Some(LPARAM(text.as_ptr() as isize)),
                     );
                 }
-                set(item, kind, Value::Selected(*selected));
+                set(window, index, item, kind, &Value::Selected(*selected));
             }
-            ControlKind::CheckBox { checked } => set(item, kind, Value::Checked(*checked)),
+            ControlKind::CheckBox { checked } => {
+                set(window, index, item, kind, &Value::Checked(*checked));
+            }
             ControlKind::Slider { min, max, value } => {
                 SendMessageW(
                     item,
@@ -143,23 +181,105 @@ fn fill(item: HWND, kind: &ControlKind) {
                 // About ten ticks, whatever the range.
                 let step = usize::try_from((max - min) / 10).unwrap_or(1).max(1);
                 SendMessageW(item, TBM_SETTICFREQ, Some(WPARAM(step)), None);
-                set(item, kind, Value::Number(*value));
+                set(window, index, item, kind, &Value::Number(*value));
+            }
+            ControlKind::List { items, selected } => {
+                SendMessageW(
+                    item,
+                    LVM_SETEXTENDEDLISTVIEWSTYLE,
+                    Some(WPARAM(LVS_EX_FULLROWSELECT as usize)),
+                    Some(LPARAM(LVS_EX_FULLROWSELECT as isize)),
+                );
+                // One column, as wide as the list.
+                let mut client = windows::Win32::Foundation::RECT::default();
+                let _ = GetClientRect(item, &mut client);
+                let column = LVCOLUMNW {
+                    mask: LVCF_WIDTH,
+                    cx: client.right - client.left,
+                    ..Default::default()
+                };
+                SendMessageW(
+                    item,
+                    LVM_INSERTCOLUMNW,
+                    Some(WPARAM(0)),
+                    Some(LPARAM(&column as *const LVCOLUMNW as isize)),
+                );
+                set_items(item, items, *selected);
+            }
+            ControlKind::Radios { selected, .. } => {
+                set(window, index, item, kind, &Value::Selected(*selected));
+            }
+            ControlKind::Text { text } => {
+                set(window, index, item, kind, &Value::Text(text.clone()));
             }
             ControlKind::Group | ControlKind::Button { .. } => {}
         }
     }
 }
 
-/// Sets a control's value.
-fn set(item: HWND, kind: &ControlKind, value: Value) {
-    // SAFETY: messages to our own controls.
+/// A list's items, `selected` selected, focused and in view.
+fn set_items(list: HWND, items: &[String], selected: usize) {
+    // SAFETY: messages to our own list view; each text outlives its call.
+    unsafe {
+        SendMessageW(list, LVM_DELETEALLITEMS, None, None);
+        for (index, text) in items.iter().enumerate() {
+            let mut text = wide(text);
+            let item = LVITEMW {
+                mask: LVIF_TEXT,
+                iItem: i32::try_from(index).unwrap_or(i32::MAX),
+                pszText: PWSTR(text.as_mut_ptr()),
+                ..Default::default()
+            };
+            SendMessageW(
+                list,
+                LVM_INSERTITEMW,
+                None,
+                Some(LPARAM(&item as *const LVITEMW as isize)),
+            );
+        }
+        select_item(list, selected);
+    }
+}
+
+fn select_item(list: HWND, index: usize) {
+    let state = LVITEMW {
+        mask: LVIF_STATE,
+        state: windows::Win32::UI::Controls::LIST_VIEW_ITEM_STATE_FLAGS(
+            LVIS_SELECTED.0 | LVIS_FOCUSED.0,
+        ),
+        stateMask: windows::Win32::UI::Controls::LIST_VIEW_ITEM_STATE_FLAGS(
+            LVIS_SELECTED.0 | LVIS_FOCUSED.0,
+        ),
+        ..Default::default()
+    };
+    // SAFETY: messages to our own list view; the item state outlives the call.
+    unsafe {
+        SendMessageW(
+            list,
+            LVM_SETITEMSTATE,
+            Some(WPARAM(index)),
+            Some(LPARAM(&state as *const LVITEMW as isize)),
+        );
+        SendMessageW(
+            list,
+            LVM_ENSUREVISIBLE,
+            Some(WPARAM(index)),
+            Some(LPARAM(0)),
+        );
+    }
+}
+
+/// Sets the value of a control: `item` is its window (a radio group's box), `index` its
+/// place in the description.
+fn set(window: HWND, index: usize, item: HWND, kind: &ControlKind, value: &Value) {
+    // SAFETY: messages to our own controls; the strings outlive each call.
     unsafe {
         match (kind, value) {
-            (ControlKind::Choice { .. }, Value::Selected(index)) => {
-                SendMessageW(item, CB_SETCURSEL, Some(WPARAM(index)), None);
+            (ControlKind::Choice { .. }, Value::Selected(i)) => {
+                SendMessageW(item, CB_SETCURSEL, Some(WPARAM(*i)), None);
             }
             (ControlKind::CheckBox { .. }, Value::Checked(checked)) => {
-                let state = if checked { BST_CHECKED } else { BST_UNCHECKED };
+                let state = if *checked { BST_CHECKED } else { BST_UNCHECKED };
                 SendMessageW(item, BM_SETCHECK, Some(WPARAM(state.0 as usize)), None);
             }
             (ControlKind::Slider { .. }, Value::Number(number)) => {
@@ -167,32 +287,70 @@ fn set(item: HWND, kind: &ControlKind, value: Value) {
                     item,
                     TBM_SETPOS,
                     Some(WPARAM(1)),
-                    Some(LPARAM(number as isize)),
+                    Some(LPARAM(*number as isize)),
                 );
+            }
+            (ControlKind::List { .. }, Value::Selected(i)) => select_item(item, *i),
+            (ControlKind::Radios { options, .. }, Value::Selected(chosen)) => {
+                for option in 0..options.len() {
+                    let id = template::radio_id(index, option);
+                    if let Ok(radio) = GetDlgItem(Some(window), i32::from(id)) {
+                        let state = if option == *chosen {
+                            BST_CHECKED
+                        } else {
+                            BST_UNCHECKED
+                        };
+                        SendMessageW(radio, BM_SETCHECK, Some(WPARAM(state.0 as usize)), None);
+                    }
+                }
+            }
+            (ControlKind::Text { .. }, Value::Text(text)) => {
+                let text = wide(text);
+                let _ = SetWindowTextW(item, windows::core::PCWSTR(text.as_ptr()));
             }
             _ => {}
         }
     }
 }
 
-/// Sets the value of `control` in dialog `id`, as Okur asks.
-pub fn set_value(id: u32, control: &str, value: Value) {
-    let found = DIALOGS.with(|d| {
+/// The open dialog `id`'s window, and the window id, place and kind of its `control`.
+fn find(id: u32, control: &str) -> Option<(HWND, u16, usize, ControlKind)> {
+    DIALOGS.with(|d| {
         d.try_borrow().ok().and_then(|d| {
             let dialog = d.iter().find(|o| o.id == id)?;
-            let (window_id, _, kind, _) = dialog.controls.iter().find(|c| c.1 == control)?;
-            Some((dialog.window, *window_id, kind.clone()))
+            let (index, c) = dialog
+                .controls
+                .iter()
+                .enumerate()
+                .find(|(_, c)| c.name == control)?;
+            Some((dialog.window, c.window_id, index, c.kind.clone()))
         })
-    });
-    if let Some((window, window_id, kind)) = found {
+    })
+}
+
+/// Sets the value of `control` in dialog `id`, as Okur asks.
+pub fn set_value(id: u32, control: &str, value: Value) {
+    if let Some((window, window_id, index, kind)) = find(id, control) {
         // SAFETY: a child of our own dialog.
         if let Ok(item) = unsafe { GetDlgItem(Some(window), i32::from(window_id)) } {
-            set(item, &kind, value);
+            remember(window, window_id, value.clone());
+            set(window, index, item, &kind, &value);
         }
     }
 }
 
-/// Closes dialog `id`.
+/// Replaces the items of the list `control` in dialog `id`.
+pub fn set_list(id: u32, control: &str, items: &[String], selected: usize) {
+    if let Some((window, window_id, _, _)) = find(id, control) {
+        // SAFETY: a child of our own dialog.
+        if let Ok(list) = unsafe { GetDlgItem(Some(window), i32::from(window_id)) } {
+            remember(window, window_id, Value::Selected(selected));
+            set_items(list, items, selected);
+        }
+    }
+}
+
+/// Closes dialog `id`, and gives the focus back to the window it came from.
 pub fn close(id: u32) {
     let window = DIALOGS.with(|d| {
         d.try_borrow_mut().ok().and_then(|mut d| {
@@ -242,23 +400,48 @@ fn bring_forward(window: HWND) {
     }
 }
 
-/// The dialog and control a window id belongs to.
-fn lookup(window: HWND, control_id: u16) -> Option<(u32, String, ControlKind, Option<Value>)> {
+/// What a window id of dialog `window` stands for: the dialog's id, the control's name and
+/// kind, and the value last told; for a radio button, its group and the option.
+struct Hit {
+    dialog: u32,
+    name: String,
+    kind: ControlKind,
+    window_id: u16,
+    last: Option<Value>,
+    option: Option<usize>,
+}
+
+fn lookup(window: HWND, control_id: u16) -> Option<Hit> {
+    let radio = template::radio_of(control_id);
     DIALOGS.with(|d| {
         d.try_borrow().ok().and_then(|d| {
             let dialog = d.iter().find(|o| o.window == window)?;
-            let (_, name, kind, last) = dialog.controls.iter().find(|c| c.0 == control_id)?;
-            Some((dialog.id, name.clone(), kind.clone(), *last))
+            let control = match radio {
+                Some((index, _)) => dialog.controls.get(index)?,
+                None => dialog.controls.iter().find(|c| c.window_id == control_id)?,
+            };
+            Some(Hit {
+                dialog: dialog.id,
+                name: control.name.clone(),
+                kind: control.kind.clone(),
+                window_id: control.window_id,
+                last: control.last.clone(),
+                option: radio.map(|(_, option)| option),
+            })
         })
     })
 }
 
-fn remember(window: HWND, control_id: u16, value: Value) {
+fn remember(window: HWND, window_id: u16, value: Value) {
     DIALOGS.with(|d| {
         if let Ok(mut d) = d.try_borrow_mut() {
             if let Some(dialog) = d.iter_mut().find(|o| o.window == window) {
-                if let Some(control) = dialog.controls.iter_mut().find(|c| c.0 == control_id) {
-                    control.3 = Some(value);
+                if let Some(control) = dialog
+                    .controls
+                    .iter_mut()
+                    .find(|c| c.window_id == window_id)
+                {
+                    control.last = Some(value);
                 }
             }
         }
@@ -274,19 +457,33 @@ fn dialog_id(window: HWND) -> Option<u32> {
 }
 
 /// Tells Okur that `value` was set, once per change.
-fn changed(window: HWND, control_id: u16, value: Value) {
-    let Some((id, name, _, last)) = lookup(window, control_id) else {
-        return;
-    };
-    if last == Some(value) {
+fn changed(window: HWND, hit: &Hit, value: Value) {
+    if hit.last.as_ref() == Some(&value) {
         return;
     }
-    remember(window, control_id, value);
+    remember(window, hit.window_id, value.clone());
     crate::win32::tell(&FromUi::DialogChanged {
-        id,
-        control: name,
+        id: hit.dialog,
+        control: hit.name.clone(),
         value,
     });
+}
+
+/// Presses the dialog's default button, as a double click on a list does.
+fn press_default(window: HWND) {
+    let default = DIALOGS.with(|d| {
+        d.try_borrow().ok().and_then(|d| {
+            let dialog = d.iter().find(|o| o.window == window)?;
+            let button = dialog
+                .controls
+                .iter()
+                .find(|c| matches!(c.kind, ControlKind::Button { default: true }))?;
+            Some((dialog.id, button.name.clone()))
+        })
+    });
+    if let Some((id, control)) = default {
+        crate::win32::tell(&FromUi::DialogPressed { id, control });
+    }
 }
 
 unsafe extern "system" fn dialog_proc(
@@ -310,26 +507,60 @@ unsafe extern "system" fn dialog_proc(
                 }
                 return 1;
             }
-            let Some((id, name, kind, _)) = lookup(window, control_id) else {
+            let Some(hit) = lookup(window, control_id) else {
                 return 0;
             };
-            match kind {
-                ControlKind::Button { .. } if code == BN_CLICKED => {
-                    crate::win32::tell(&FromUi::DialogPressed { id, control: name });
+            match (&hit.kind, hit.option) {
+                (ControlKind::Radios { .. }, Some(option)) if code == BN_CLICKED => {
+                    changed(window, &hit, Value::Selected(option));
                 }
-                ControlKind::CheckBox { .. } if code == BN_CLICKED => {
+                (ControlKind::Button { .. }, _) if code == BN_CLICKED => {
+                    crate::win32::tell(&FromUi::DialogPressed {
+                        id: hit.dialog,
+                        control: hit.name,
+                    });
+                }
+                (ControlKind::CheckBox { .. }, _) if code == BN_CLICKED => {
                     // SAFETY: a state query on our own check box.
                     let state = unsafe { SendMessageW(item, BM_GETCHECK, None, None) };
                     let checked = state.0 == BST_CHECKED.0 as isize;
-                    changed(window, control_id, Value::Checked(checked));
+                    changed(window, &hit, Value::Checked(checked));
                 }
-                ControlKind::Choice { .. } if code == CBN_SELCHANGE => {
+                (ControlKind::Choice { .. }, _) if code == CBN_SELCHANGE => {
                     // SAFETY: a state query on our own combo box.
                     let index = unsafe { SendMessageW(item, CB_GETCURSEL, None, None) };
                     if let Ok(index) = usize::try_from(index.0) {
-                        changed(window, control_id, Value::Selected(index));
+                        changed(window, &hit, Value::Selected(index));
                     }
                 }
+                _ => return 0,
+            }
+            1
+        }
+        WM_NOTIFY => {
+            // SAFETY: WM_NOTIFY's lparam is the sender's NMHDR, an NMLISTVIEW for a list
+            // view's item change.
+            let header = unsafe { &*(lparam.0 as *const NMHDR) };
+            let Ok(control_id) = u16::try_from(header.idFrom) else {
+                return 0;
+            };
+            let Some(hit) = lookup(window, control_id) else {
+                return 0;
+            };
+            if !matches!(hit.kind, ControlKind::List { .. }) {
+                return 0;
+            }
+            match header.code {
+                LVN_ITEMCHANGED => {
+                    // SAFETY: as above.
+                    let change = unsafe { &*(lparam.0 as *const NMLISTVIEW) };
+                    let now_selected = change.uNewState & LVIS_SELECTED.0 != 0
+                        && change.uOldState & LVIS_SELECTED.0 == 0;
+                    if let (true, Ok(index)) = (now_selected, usize::try_from(change.iItem)) {
+                        changed(window, &hit, Value::Selected(index));
+                    }
+                }
+                NM_DBLCLK => press_default(window),
                 _ => return 0,
             }
             1
@@ -346,7 +577,9 @@ unsafe extern "system" fn dialog_proc(
             if let (Ok(control_id), Ok(position)) =
                 (u16::try_from(control_id), i32::try_from(position.0))
             {
-                changed(window, control_id, Value::Number(position));
+                if let Some(hit) = lookup(window, control_id) {
+                    changed(window, &hit, Value::Number(position));
+                }
             }
             1
         }

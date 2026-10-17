@@ -2563,6 +2563,92 @@ fn engine_on_a_page() -> (ScreenReaderEngine, SharedSpeech) {
     (engine, speech)
 }
 
+/// With Okur's windows, Insert+F7 opens a real Links List; Move To Link closes it, moves
+/// the virtual cursor to the link and says it with JAWS's hint; the focus coming back to the
+/// page is taken in silently (JAWS on the dev box, 2026-10-17).
+#[test]
+fn the_links_list_moves_the_cursor_to_the_chosen_link() {
+    use crate::ui::{ControlKind, FromUi, ToUi, Value};
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Web Menus"),
+            AomNode::new(
+                2,
+                Role::Link {
+                    href: Some("https://example.com/a".into()),
+                },
+            )
+            .with_name("Alpha"),
+            AomNode::new(3, Role::Paragraph).with_text("Notes"),
+            AomNode::new(
+                4,
+                Role::Link {
+                    href: Some("https://example.com/b".into()),
+                },
+            )
+            .with_name("Beta"),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.handle_focus_event(&page_document());
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    speech.take();
+    let mut f7 = KeyEvent::new(Key::F(7), Modifiers::none(), true);
+    f7.modifiers.insert = true;
+    assert_eq!(engine.handle_key_event(&f7), KeyAction::Consume);
+    let sent = ui.take();
+    let Some(ToUi::DialogShow { dialog }) = sent.first() else {
+        panic_free_fail(&format!("no dialog shown: {sent:?}"));
+        return;
+    };
+    assert_eq!(dialog.title, "Links List");
+    assert_eq!(
+        dialog.controls.first().map(|c| c.kind.clone()),
+        Some(ControlKind::List {
+            items: vec!["Alpha".into(), "Beta".into()],
+            selected: 0
+        })
+    );
+    let id = dialog.id;
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "links".into(),
+        value: Value::Selected(1),
+    }));
+    assert_eq!(
+        ui.take(),
+        [ToUi::DialogSet {
+            id,
+            control: "address".into(),
+            value: Value::Text("https://example.com/b".into()),
+        }]
+    );
+    let moved = engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "move".into(),
+    }));
+    assert!(
+        moved
+            .as_deref()
+            .is_some_and(|s| s.contains("Beta") && s.ends_with("To activate press Enter.")),
+        "{moved:?}"
+    );
+    assert_eq!(ui.take(), [ToUi::DialogClose { id }]);
+    speech.take();
+    // The page's focus comes back: nothing is said, and the cursor stays on the link.
+    assert_eq!(
+        engine.handle_accessibility_event(&AccessibilityEvent::Focus(page_document())),
+        None
+    );
+    assert!(speech.take().is_empty());
+    assert!(engine
+        .execute_command("SayLine")
+        .is_some_and(|line| line.contains("Beta")));
+}
+
 fn page_document() -> FocusEvent {
     let mut document = FocusEvent::new(Role::Document)
         .with_name("Web Menus")

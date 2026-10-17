@@ -69,6 +69,32 @@ Observed on the dev box (research), recorded in
 - **Tests.** `cargo test --workspace`: all passed (okur-core 180, okur-platform 48 with 3
   ignored, okur-ui 2, okur-ui-model 3, the rest unchanged). Strict clippy printed nothing.
 
+## Then the Links List
+
+- **JAWS's, captured** with JAWS's own `TypeKey` through FSAPI (its dialog refuses our keys):
+  - tab order: the list, Move To Link (alt+M), Activate Link (alt+A), Cancel (alt+C),
+    "Sort Links In Tab Order" (alt+T), "Display All Links" (alt+l);
+  - after Move To Link: "same page link Reputation for Quality Service | To activate press
+    Enter."; nothing after Escape or Enter.
+- **Okur's.** Three new control kinds (list view, radio group, read-only text), a list
+  layout as JAWS's (list, buttons beside it, groups below), and `DialogItems` to refill the
+  list. okur-core's `LinksListDialog` sorts and filters; the engine moves to or activates the
+  link and returns to the page silently. Without `okur-ui` the speech-only list stays.
+- **Two general fixes found on the way:**
+  - the desktop module claimed any `SysListView32` outside File Explorer; it now needs the
+    desktop's window;
+  - an unnamed list (UIA gives none) takes its window text as its name, as MSAA, and so JAWS,
+    does: "links List view".
+- **Live, dev box.**
+  - JAWS read Okur's Links List with its own strings.
+  - Okur's opening speech: `Links List dialog | links List view | Reputation for Quality
+    Service | 1 of 13 | To move to items use the Arrow keys.`
+  - Down: `Dishes and Appetizers | 2 of 13`.
+  - Move To Link: `same page link Driving Directions | To activate press Enter.`, and nothing
+    more; Say Line then read the link.
+  - Escape and Enter: silent.
+- **Parity** unchanged after this too: `diff -r` against the `a047048` snapshot printed nothing.
+
 ## Found, not fixed
 
 - When the Claude desktop window had the focus, Okur's page worker built a buffer from

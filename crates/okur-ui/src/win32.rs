@@ -355,6 +355,12 @@ fn handle(message: ToUi) {
         ToUi::DialogShow { dialog } => crate::dialog::show(&dialog),
         ToUi::DialogSet { id, control, value } => crate::dialog::set_value(id, &control, value),
         ToUi::DialogClose { id } => crate::dialog::close(id),
+        ToUi::DialogItems {
+            id,
+            control,
+            items,
+            selected,
+        } => crate::dialog::set_list(id, &control, &items, selected),
     }
 }
 
