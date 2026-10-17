@@ -317,6 +317,27 @@ impl VirtualBuffer {
         self.page.as_ref().and_then(find)
     }
 
+    /// Where the node `id` starts in the buffer: its own span, else the first span of a node
+    /// inside it (an element whose lines are its children's: WhatsApp's focused message, its
+    /// PDF viewer's content).
+    pub fn start_of(&self, id: usize) -> Option<usize> {
+        if let Some(span) = self.spans.iter().find(|s| s.node_id == id) {
+            return Some(span.start_offset);
+        }
+        fn subtree(node: &AomNode, ids: &mut HashSet<usize>) {
+            ids.insert(node.id);
+            for child in &node.children {
+                subtree(child, ids);
+            }
+        }
+        let mut ids = HashSet::new();
+        subtree(self.node(id)?, &mut ids);
+        self.spans
+            .iter()
+            .find(|s| ids.contains(&s.node_id))
+            .map(|s| s.start_offset)
+    }
+
     /// Whether the buffer has text of the node `id` or of a node inside it.
     pub fn shows(&self, id: usize) -> bool {
         fn subtree(node: &AomNode, ids: &mut HashSet<usize>) {

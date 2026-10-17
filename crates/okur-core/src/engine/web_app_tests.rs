@@ -445,3 +445,35 @@ fn the_next_key_passes_through() {
     assert_eq!(engine.handle_key_event(&ctrl_end), KeyAction::PassThrough);
     assert_eq!(engine.handle_key_event(&ctrl_end), KeyAction::Consume);
 }
+
+/// A viewer the page opens over itself (WhatsApp's PDF preview) takes the focus on an
+/// element whose lines are its children's: once the page is captured again, the virtual
+/// cursor is on its first line, and the arrows read the document from there.
+#[test]
+fn the_cursor_goes_to_a_focus_whose_lines_are_its_childrens() {
+    let actions = RecordingActions::refreshing_pages();
+    let mut engine = engine_on(&chat("(7) WhatsApp", messages()), &actions);
+    let mut focus = FocusEvent::new(Role::Group).with_name("PDF content");
+    focus.in_document = true;
+    focus.unique_id = Some("-800".to_owned());
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(focus));
+    assert_eq!(page_requests(&actions), ["refresh page"]);
+
+    let mut content = AomNode::new(800, Role::Group)
+        .with_name("PDF content")
+        .with_children(vec![
+            AomNode::new(801, Role::Paragraph).with_text("Page 1"),
+            AomNode::new(802, Role::Paragraph).with_text("First line of the document"),
+        ]);
+    content.states.focused = true;
+    let mut page = chat("(7) WhatsApp", messages());
+    page.children.push(object(content, -800));
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentLoaded {
+        title: "(7) WhatsApp".to_owned(),
+        root: page,
+    });
+    engine.handle_key_event(&key(Key::Control, false));
+    assert_eq!(engine.cursor.current_line(), "Page 1");
+    engine.handle_key_event(&key(Key::DownArrow, false));
+    assert_eq!(engine.cursor.current_line(), "First line of the document");
+}

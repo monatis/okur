@@ -438,8 +438,7 @@ impl ScreenReaderEngine {
             let focus_line = self
                 .last_page_focus
                 .filter(|_| on_focus || to_focus)
-                .and_then(|id| self.cursor.buffer.lines.iter().find(|l| l.node_id == id))
-                .map(|l| l.start_offset);
+                .and_then(|id| self.cursor.buffer.start_of(id));
             self.cursor.offset = match (focus_line, place) {
                 (Some(start), _) => start,
                 // The same object's line (IA2 captures): WhatsApp repeats lines ("Siz:") and

@@ -1,5 +1,3 @@
-use std::collections::HashSet;
-
 use crate::aom::{AomNode, Role};
 use crate::buffer::{BufferLine, VirtualBuffer};
 use crate::speech::SpeechFormatter;
@@ -1583,18 +1581,8 @@ impl VirtualCursor {
     pub fn move_to_node_id(&mut self, node_id: usize) -> bool {
         // An element whose lines are its children's (WhatsApp's focused message) is at its
         // first line.
-        let span = self
-            .buffer
-            .spans
-            .iter()
-            .find(|s| s.node_id == node_id)
-            .or_else(|| {
-                let mut ids = HashSet::new();
-                collect_ids(self.buffer.node(node_id)?, &mut ids);
-                self.buffer.spans.iter().find(|s| ids.contains(&s.node_id))
-            });
-        if let Some(span) = span {
-            self.offset = span.start_offset;
+        if let Some(start) = self.buffer.start_of(node_id) {
+            self.offset = start;
             self.current_node_id = Some(node_id);
             true
         } else if self.buffer.contains_node(node_id) {
@@ -2290,13 +2278,5 @@ impl VirtualCursor {
             let speech = self.jump_to_element_offset(last_offset);
             Some(format!("wrapping to bottom\n{}", speech))
         }
-    }
-}
-
-/// The ids of `node` and of everything under it, into `ids`.
-fn collect_ids(node: &AomNode, ids: &mut HashSet<usize>) {
-    ids.insert(node.id);
-    for child in &node.children {
-        collect_ids(child, ids);
     }
 }
