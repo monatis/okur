@@ -710,6 +710,7 @@ impl ScreenReaderEngine {
                 ]);
                 let speech = viewer.message_speech();
                 self.viewer = Some(viewer);
+                self.show_viewer_window();
                 speech
             }
             (_, Some(font)) => match paragraph {
@@ -799,6 +800,7 @@ impl ScreenReaderEngine {
         let what = if window { "window" } else { "control" };
         let speech = format!("Virtualizing current {what}\n{}", viewer.line_text());
         self.viewer = Some(viewer);
+        self.show_viewer_window();
         self.speech.speak(&speech, true);
         Some(speech)
     }

@@ -95,6 +95,8 @@ pub struct ScreenReaderEngine {
     actions: Option<Box<dyn crate::actions::ApplicationActions>>,
     /// The local time and locale formats for Say System Time; None when headless.
     clock: Option<Box<dyn crate::clock::Clock>>,
+    /// Okur's own windows (`okur-ui`); None when headless.
+    ui: Option<Box<dyn crate::ui::UiHost>>,
     /// The last JAWS-key command and when it was pressed, to tell a double press.
     last_press: Option<(Press, u64)>,
     /// User settings (JAWS defaults unless configured).
@@ -144,6 +146,7 @@ impl ScreenReaderEngine {
             last_text: None,
             actions: None,
             clock: None,
+            ui: None,
             last_press: None,
             settings: crate::settings::Settings::default(),
             caps_lock_on: false,
@@ -232,6 +235,7 @@ impl ScreenReaderEngine {
                 ViewerAction::Speak(speech) => {
                     if let Some(speech) = speech {
                         self.speech.speak(&speech, true);
+                        self.mark_viewer_window();
                     }
                     return KeyAction::Consume;
                 }
@@ -239,6 +243,7 @@ impl ScreenReaderEngine {
                     if !text.is_empty() {
                         self.speech.speak_character(&text, true);
                     }
+                    self.mark_viewer_window();
                     return KeyAction::Consume;
                 }
                 ViewerAction::Copy(text) => {
@@ -251,6 +256,7 @@ impl ScreenReaderEngine {
                 }
                 ViewerAction::Close => {
                     self.viewer = None;
+                    self.close_viewer_window();
                     self.speak_focus_again();
                     return KeyAction::Consume;
                 }
@@ -490,6 +496,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::LiveRegion(live) => self.handle_live_region_event(live),
             AccessibilityEvent::ViewerText(lines) => self.open_screen_viewer(lines),
             AccessibilityEvent::PageElements(elements) => self.say_page_font(elements),
+            AccessibilityEvent::Ui(message) => self.handle_ui_event(message),
             AccessibilityEvent::DocumentLoaded { title, root } => {
                 self.handle_document_loaded(title, VirtualBuffer::from_aom(root))
             }
@@ -505,5 +512,56 @@ impl ScreenReaderEngine {
     /// Gives the engine the system clock and locale formats (Say System Time).
     pub fn set_clock(&mut self, clock: Box<dyn crate::clock::Clock>) {
         self.clock = Some(clock);
+    }
+
+    /// Gives the engine its own windows (`okur-ui`).
+    pub fn set_ui(&mut self, ui: Box<dyn crate::ui::UiHost>) {
+        self.ui = Some(ui);
+    }
+
+    /// What the user did to one of Okur's windows.
+    fn handle_ui_event(&mut self, message: &crate::ui::FromUi) -> Option<String> {
+        match message {
+            // The viewer's window took the focus or was closed: the viewer ends silently, and
+            // the focus says where the user is (JAWS on the dev box, 2026-10-17: Alt+Tab to
+            // its viewer's window ended the viewer, and the page took the focus back).
+            crate::ui::FromUi::ViewerDismissed => {
+                self.viewer = None;
+                None
+            }
+        }
+    }
+
+    /// Shows the open Virtual Viewer in its window, when the settings show it on screen.
+    pub(crate) fn show_viewer_window(&self) {
+        if self.settings.viewer_display != crate::settings::ViewerDisplay::OnScreen {
+            return;
+        }
+        if let (Some(ui), Some(viewer)) = (&self.ui, &self.viewer) {
+            ui.send(crate::ui::ToUi::ViewerShow {
+                title: "Virtual Viewer".to_owned(),
+                lines: viewer.lines(),
+                mark: viewer.mark(),
+            });
+        }
+    }
+
+    /// Moves the viewer window's mark to what the viewer read last.
+    fn mark_viewer_window(&self) {
+        if self.settings.viewer_display != crate::settings::ViewerDisplay::OnScreen {
+            return;
+        }
+        if let (Some(ui), Some(viewer)) = (&self.ui, &self.viewer) {
+            ui.send(crate::ui::ToUi::ViewerMark {
+                mark: viewer.mark(),
+            });
+        }
+    }
+
+    /// Closes the viewer's window, if one is showing.
+    fn close_viewer_window(&self) {
+        if let Some(ui) = &self.ui {
+            ui.send(crate::ui::ToUi::ViewerClose);
+        }
     }
 }

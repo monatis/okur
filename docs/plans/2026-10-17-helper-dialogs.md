@@ -27,6 +27,11 @@ old-pc work stay valid; this plan comes first.
 
 ## Steps
 
+Order the user chose on 2026-10-17: the Virtual Viewer on screen first (step 7, done), then
+the Links List and a simple settings dialog for what are command-line flags today (step 9,
+reduced to those settings). "They should be configurable on the UI just like JAWS." Broader
+settings follow as Okur's configurability and parity grow.
+
 ### 1. Spike S1: one real Links List on Windows
 
 - Crate `okur-ui-model`: the description (list, radio group, check box, combo box, edit, tree,
@@ -89,9 +94,10 @@ bridge gains the element at a point, bounds, pointer moves and clicks.
 
 ### 7. The Virtual Viewer on screen
 
-A document window in `okur-ui` mirrors Okur's viewer text, with Okur's virtual cursor shown
-as the selection; it holds the focus, so stray keys no longer reach the application behind.
-Links in results (skim summaries, later) are followed with Enter.
+**Done 2026-10-17, first** (the user chose it as the first target): `okur-ui` shows the
+viewer as JAWS's does, never taking the focus, with a red frame on what was read; see
+[virtual-viewer.md](../references/virtual-viewer.md#on-screen). Links in results (skim
+summaries, later) are followed with Enter.
 
 ### 8. PlaceMarkers and custom labels
 

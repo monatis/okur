@@ -204,10 +204,12 @@ move ...". [Picture](jaws-dialogs/managers.png).
 - Lists that are text (hot key help, skim reading summaries, PlaceMarker summaries, Insert+F1
   help) open in JAWS's Virtual Viewer. JAWS reads it with its virtual cursor; links in it are
   followed with Enter; Escape or Alt+F4 closes it.
-- With "Show Virtual Viewer on Screen" checked (Settings Center, User group; checked on the dev
-  box), the text is also shown in a window of `VIRTVIEW.EXE` (class `VIRTVIEWHELP`, title
-  "Virtual Viewer"): plain text with a status bar. That window accepts normal-integrity input,
-  unlike JAWS's dialogs. [Picture](jaws-dialogs/virtualviewer.png).
+- With "Show Virtual Viewer on Screen" checked (Settings Center, User group; on in JAWS's
+  default settings), the text is also shown in a window of `VIRTVIEW.EXE` (class
+  `VIRTVIEWHELP`, title "Virtual Viewer"): plain text with a status bar, topmost, never
+  focused. The application keeps the focus and JAWS takes every key; focusing the window ends
+  the viewer. [Virtual Viewer, "On screen"](virtual-viewer.md#on-screen) has the details.
+  [Picture](jaws-dialogs/virtualviewer.png).
 - Insert+H in Chrome opened the hot key help in the Virtual Viewer, shown on screen, and JAWS
   read it ("Go Back a page, ALT+LEFT ARROW. ...").
 
@@ -284,7 +286,7 @@ they belong in Okur's key state machine, beside menu mode and forms mode.
 | JAWS Find | speaks the dialog's opening line, no field (`Command::VirtualFind`); F3 and Shift+F3 search | the dialog |
 | PlaceMarkers, custom labels, Flexible Web, skim reading | none | all |
 | Quick Settings, Settings Center | none; settings come from the command line and JAWS's `.jcf` (`TypingEcho::from_jcf`) | all |
-| Virtual Viewer | speech only, read with the reading keys | no window, so stray keys reach the application behind |
+| Virtual Viewer | on screen since 2026-10-17, drawn by `okur-ui` as JAWS's | none known |
 | Visual tracking | none | all |
 | Routing and mouse keys | none | all |
 | Layers | none | all |

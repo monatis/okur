@@ -844,6 +844,7 @@ dependencies = [
 name = "okur-core"
 version = "0.1.0"
 dependencies = [
+ "okur-ui-model",
  "regex",
  "serde",
  "serde_json",
@@ -870,6 +871,7 @@ name = "okur-platform"
 version = "0.1.0"
 dependencies = [
  "okur-core",
+ "okur-ui-model",
  "serde",
  "serde_json",
  "thiserror",
@@ -890,6 +892,22 @@ dependencies = [
  "serde_json",
  "windows",
  "windows-core",
+]
+
+[[package]]
+name = "okur-ui"
+version = "0.1.0"
+dependencies = [
+ "okur-ui-model",
+ "windows",
+]
+
+[[package]]
+name = "okur-ui-model"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

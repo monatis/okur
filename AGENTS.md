@@ -154,6 +154,7 @@ These exist because an audit (2026-10-14) found parity claims that no tool had e
 - `crates/okur-platform/`: Platform accessibility bindings (xa11y, UIA, AXUIElement).
 - `crates/okur-corpus/`: Test harness, normalizer, differential comparison engine.
 - `crates/okur/`: CLI daemon and regression test binary.
+- `crates/okur-ui/`: draws Okur's own windows (the Virtual Viewer on screen, later its dialogs), natively per platform, in a process of its own; `crates/okur-ui-model/` is what Okur and it say to each other (see `docs/references/helper-ui-architecture.md`).
 - `crates/xa11y/`: our accessibility-API layer, vendored from xa11y 0.15.2 (MIT) and extended in-tree. See `crates/xa11y/VENDORED.md` for import changes, the hardening ratchet, and planned extensions.
 - `corpus/`: Reference speech corpus (manifest, fixtures, scenarios, evidence, quality report). `corpus/pending/` holds scenarios written but not yet recorded; the manifest and parity ignore it.
 - `skills/jaws-reference/`: Reusable automation skill for JAWS COM and speech extraction.

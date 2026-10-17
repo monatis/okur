@@ -551,6 +551,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::ViewerText(_)) => "viewer text",
         Some(AccessibilityEvent::PageElements(_)) => "page elements",
         Some(AccessibilityEvent::DocumentLoaded { .. }) => "document loaded",
+        Some(AccessibilityEvent::Ui(_)) => "okur window",
     }
 }
 
@@ -740,6 +741,10 @@ async fn main() {
             engine.set_actions(Box::new(okur_platform::actions::WindowsActions::start(
                 Some(event_tx.clone()),
             )));
+            // Okur's own windows (the Virtual Viewer on screen), drawn by okur-ui.
+            if let Some(ui) = okur_platform::ui_host::ProcessUiHost::start(event_tx.clone()) {
+                engine.set_ui(Box::new(ui));
+            }
             engine.settings.keyboard = keyboard;
             engine.settings.typing_echo = typing_echo;
             if live_region_whole_text {

@@ -114,12 +114,23 @@ impl TypingEcho {
     }
 }
 
+/// Whether the Virtual Viewer also shows in a window, for someone watching the screen:
+/// JAWS's "Show Virtual Viewer on Screen" (`bVirtViewer`, on in its default settings). The
+/// keys stay with the viewer either way.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub enum ViewerDisplay {
+    #[default]
+    OnScreen,
+    SpeechOnly,
+}
+
 /// All user settings.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct Settings {
     pub keyboard: KeyboardSettings,
     pub live_region_append: LiveRegionAppend,
     pub typing_echo: TypingEcho,
+    pub viewer_display: ViewerDisplay,
 }
 
 impl Settings {
@@ -131,6 +142,7 @@ impl Settings {
             keyboard: KeyboardSettings::for_layout(KeyboardLayout::Laptop),
             live_region_append: LiveRegionAppend::WholeText,
             typing_echo: TypingEcho::None,
+            viewer_display: ViewerDisplay::OnScreen,
         }
     }
 }

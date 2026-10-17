@@ -53,7 +53,9 @@ From what JAWS does, what Okur must be, and what was measured on 2026-10-17:
     taking the mouse or the focus, with the page scrolled to it.
 11. **Pointer routing.** Hit testing, element bounds, pointer moves and clicks.
 12. **Document windows.** The Virtual Viewer and Results Viewer are Okur's own text, read with
-    Okur's virtual cursor; on screen they need a window to show it and to hold the focus.
+    Okur's virtual cursor. On screen they need a window that shows the text and the cursor
+    without taking the focus: JAWS's never has it, takes every key itself, and ends the
+    viewer when the window is focused.
 13. **Extensions.** The extension SDK will need dialogs. An extension should describe one and
     get an accessible native dialog, not ship its own toolkit.
 
@@ -75,7 +77,7 @@ From what JAWS does, what Okur must be, and what was measured on 2026-10-17:
 | Surface | Examples | Who owns the content | How Okur reads it |
 |---|---|---|---|
 | **Dialog** | element lists, JAWS Find, PlaceMarkers, custom label, Quick Settings, Settings Center, skim reading, Flexible Web | okur-core controllers | through the accessibility API, like any application's dialog |
-| **Document window** | Virtual Viewer, Results Viewer (hot key help, skim summaries, PlaceMarker summaries) | okur-core's buffer | with Okur's virtual cursor, from its own buffer; the window shows the text and holds the focus |
+| **Document window** | Virtual Viewer, Results Viewer (hot key help, skim summaries, PlaceMarker summaries) | okur-core's buffer | with Okur's virtual cursor, from its own buffer; the window shows the text and the cursor, never taking the focus |
 | **Overlay** | reading highlight; later the mouse echo and Smart Glance marks | okur-core says what, the platform draws | not read: it is an output, like speech and braille |
 
 ### Where things live
@@ -143,7 +145,8 @@ its window is above other topmost windows, as JAWS's is.
 - **Key routing** ([forms and interaction modes](forms-and-interaction-modes.md), "Who takes a
   key"). An Okur dialog in front is a native window outside a document, so step 6 (the PC
   cursor) applies: keys go to the dialog, and Okur reads it with its native focus reading. A
-  document window in front is step 2 (the Virtual Viewer takes the keys). Layers (Insert+Space)
+  document window never comes to the front: while it shows, step 2 applies (the Virtual
+  Viewer takes the keys). Layers (Insert+Space)
   become a step of their own.
 - **The page behind.** Opening a dialog records the page it came from (window, buffer,
   virtual cursor) and keeps its buffer while the dialog is in front. On close, the page comes

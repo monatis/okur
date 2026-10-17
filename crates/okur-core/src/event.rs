@@ -396,6 +396,8 @@ pub enum AccessibilityEvent {
     /// Page elements asked for by DOM id, each with its subtree, as they are now; empty when
     /// none was found ([`crate::actions::ApplicationActions::read_page_elements`]).
     PageElements(Vec<crate::aom::AomNode>),
+    /// What the user did to one of Okur's own windows (`okur-ui`).
+    Ui(crate::ui::FromUi),
     DocumentLoaded {
         title: String,
         root: crate::aom::AomNode,

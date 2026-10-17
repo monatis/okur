@@ -5,6 +5,8 @@ members= [
     "crates/okur-platform",
     "crates/okur-corpus",
     "crates/okur",
+    "crates/okur-ui",
+    "crates/okur-ui-model",
     "crates/okur-speech-recorder",
     "crates/xa11y/xa11y",
     "crates/xa11y/xa11y-core",
@@ -23,6 +25,7 @@ license = "Apache-2.0"
 okur-core = { path = "crates/okur-core" }
 okur-platform = { path = "crates/okur-platform" }
 okur-corpus = { path = "crates/okur-corpus" }
+okur-ui-model = { path = "crates/okur-ui-model" }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 thiserror = "2.0"

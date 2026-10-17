@@ -150,6 +150,47 @@ What stays as before:
 | "paragraph" (Notepad) | the text | the user asked for the text |
 | focused control only (WinForms, old-pc) | the window by rows | the dev box's JAWS shows the window; Okur reads it through UIA, whatever JAWS's capture sees |
 
+## On screen
+
+JAWS also shows the viewer's text in a window, for someone watching. Observed with JAWS
+2025.2505.43 on the dev box, 2026-10-17 (Insert+H in Chrome, Insert+Alt+W on About Windows):
+- **The setting.** "Show Virtual Viewer on Screen" (Settings Center, User group;
+  `bVirtViewer=1` in JAWS's default settings). Off, the viewer is speech only.
+- **A process per viewer.** `VIRTVIEW.EXE` starts when the viewer opens (its window shows
+  150 to 360 ms after the key) and exits when it closes (Escape hides the window at once; the
+  process is gone 600 ms later).
+- **The window.**
+  - Title "Virtual Viewer", class `VIRTVIEWHELP`: an overlapped window with an empty menu bar,
+    topmost (extended style `0x108`).
+  - Three quarters of the screen, centred (192,108, 1152×648 on a 1536×864 screen).
+  - The text is in a read-only rich edit control (`RICHEDIT50W`), Arial 12 point on white,
+    lines separated by paragraph breaks. Below it, a status bar says "Ready".
+  - UI Automation sees the window, a document "RichEdit Control", and a pane "Ready".
+  - [Picture](jaws-dialogs/virtualviewer.png).
+- **It never has the focus.** The window shows without activation; the application keeps
+  the focus, and JAWS takes every key while the viewer is open. F5 did not reload Chrome's
+  page; letters are the viewer's quick keys ("There are no headings on this page.").
+- **The cursor shows on it.** The control's caret follows the virtual cursor, and JAWS's red
+  reading highlight frames the word at the cursor on the window. JAWS's selection ("selected"
+  after Shift+Down) is not drawn.
+- **Focusing it ends the viewer.** When the window was brought to the front, JAWS read it as
+  an application ("Virtual Viewer, edit, Read Only, Contains text") and, 320 ms later, closed
+  the viewer and gave the page the focus back.
+
+Okur does the same (`ViewerDisplay::OnScreen`, the default):
+- `okur-ui` draws the window as JAWS's: the same title, size, position and styles, a
+  read-only rich edit control in Arial 12 point, and a status bar saying "Ready". It shows
+  without activation; Okur keeps the keys, as before.
+- Each key that moves the viewer moves the window's caret and a red frame, JAWS's colour,
+  around what was read: the line, the word, or the character. Okur draws that frame itself,
+  inside `okur-ui`, until the general reading highlight exists.
+- When the window is activated or closed, it hides, and Okur ends its viewer.
+- Measured live, 2026-10-17: the window geometry matched JAWS's to the pixel, Escape hid it,
+  and bringing it to the front hid it and let the next Insert+Alt+W virtualize again.
+
+What JAWS's window has that Okur's does not: the empty menu bar, and a new process for each
+viewer (`okur-ui` stays running, so the window opens without a process start).
+
 ## Opening a property sheet
 
 When a property sheet opens, JAWS names the page. On the dev box: "Local Disk (C:)

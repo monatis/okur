@@ -16,6 +16,7 @@ pub mod native_focus;
 pub mod pronounce;
 pub mod settings;
 pub mod speech;
+pub mod ui;
 pub mod viewer;
 pub mod viewer_text;
 

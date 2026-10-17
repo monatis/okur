@@ -17,6 +17,7 @@
 //!   in a virtual view" (311/s32).
 
 use crate::input::{Key, KeyEvent};
+use crate::ui::TextSpan;
 
 /// What the viewer does with a key.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -39,6 +40,9 @@ pub struct VirtualViewer {
     line: usize,
     column: usize,
     all_selected: bool,
+    /// What was read last on the line, as (start column, length): the line, a word or a
+    /// character. A window showing the viewer marks it.
+    read: (usize, usize),
 }
 
 /// Word classes: a word is a run of one class.
@@ -72,12 +76,15 @@ impl VirtualViewer {
             lines.push(Vec::new());
         }
         let line = line.min(lines.len() - 1);
-        Self {
+        let mut viewer = Self {
             lines,
             line,
             column: 0,
             all_selected: false,
-        }
+            read: (0, 0),
+        };
+        viewer.read_line();
+        viewer
     }
 
     /// A JAWS message (Say Font twice quickly): JAWS reads it all on opening, so the cursor
@@ -86,6 +93,7 @@ impl VirtualViewer {
     pub fn message(lines: Vec<String>) -> Self {
         let mut viewer = Self::new(lines);
         viewer.line = viewer.lines.len() - 1;
+        viewer.read_line();
         viewer
     }
 
@@ -120,6 +128,26 @@ impl VirtualViewer {
         self.current().iter().collect()
     }
 
+    /// The viewer's lines.
+    pub fn lines(&self) -> Vec<String> {
+        self.lines.iter().map(|l| l.iter().collect()).collect()
+    }
+
+    /// What the cursor read last: the line, the word or the character.
+    pub fn mark(&self) -> TextSpan {
+        TextSpan {
+            line: self.line,
+            column: self.read.0,
+            length: self.read.1,
+        }
+    }
+
+    /// Marks the whole current line as read, its cursor at its start.
+    fn read_line(&mut self) {
+        self.column = 0;
+        self.read = (0, self.current().len());
+    }
+
     fn char_text(&self) -> String {
         self.current()
             .get(self.column)
@@ -145,7 +173,7 @@ impl VirtualViewer {
         } else if !down && self.line > 0 {
             self.line -= 1;
         }
-        self.column = 0;
+        self.read_line();
         self.line_text()
     }
 
@@ -164,7 +192,9 @@ impl VirtualViewer {
             self.line -= 1;
             self.column = self.current().len().saturating_sub(1);
         }
-        self.char_text()
+        let text = self.char_text();
+        self.read = (self.column, text.chars().count());
+        text
     }
 
     /// The start of the next (or previous) word on the line, then on the following lines.
@@ -201,7 +231,9 @@ impl VirtualViewer {
             }
             None => {}
         }
-        self.word_text()
+        let text = self.word_text();
+        self.read = (self.column, text.chars().count());
+        text
     }
 
     /// The viewer's response to a key press.
@@ -232,7 +264,7 @@ impl VirtualViewer {
                 } else {
                     self.lines.len() - 1
                 };
-                self.column = 0;
+                self.read_line();
                 speak(self.line_text())
             }
             Key::Alpha(c) if ctrl_only && c.eq_ignore_ascii_case(&'A') => {
@@ -336,5 +368,29 @@ mod tests {
         assert_eq!(said(press(&mut viewer, Key::RightArrow, true)), "Button");
         assert_eq!(said(press(&mut viewer, Key::LeftArrow, true)), "...");
         assert_eq!(said(press(&mut viewer, Key::LeftArrow, true)), "Save");
+    }
+
+    /// The window that shows the viewer marks what was read: a line, a word, a character.
+    #[test]
+    fn the_mark_follows_what_was_read() {
+        let span = |line, column, length| TextSpan {
+            line,
+            column,
+            length,
+        };
+        let mut viewer = VirtualViewer::new(vec!["Save... Button".into(), "OK".into()]);
+        assert_eq!(viewer.mark(), span(0, 0, 14));
+        press(&mut viewer, Key::RightArrow, true);
+        assert_eq!(viewer.mark(), span(0, 4, 3));
+        press(&mut viewer, Key::RightArrow, false);
+        assert_eq!(viewer.mark(), span(0, 5, 1));
+        press(&mut viewer, Key::DownArrow, false);
+        assert_eq!(viewer.mark(), span(1, 0, 2));
+        press(&mut viewer, Key::Home, true);
+        assert_eq!(viewer.mark(), span(0, 0, 14));
+        assert_eq!(viewer.lines(), ["Save... Button", "OK"]);
+        // A message opens on its last line.
+        let message = VirtualViewer::message(vec!["Font information:".into(), "Press".into()]);
+        assert_eq!(message.mark(), span(1, 0, 5));
     }
 }

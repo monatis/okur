@@ -1021,6 +1021,111 @@ fn a_dialog_is_virtualized_from_its_screen() {
     );
 }
 
+/// An engine with its Virtual Viewer open on a dialog's three lines, and the window host
+/// that shows it.
+fn engine_with_open_viewer() -> (ScreenReaderEngine, crate::ui::RecordingUiHost) {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.set_actions(Box::new(crate::actions::RecordingActions::reading_windows()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let focus = FocusEvent::new(Role::Button)
+        .with_name("OK")
+        .with_window_title("About Windows");
+    engine.handle_focus_event(&focus);
+    assert_eq!(engine.execute_command("VirtualizeWindow"), None);
+    let lines = ["About Windows", "Version 25H2 (OS Build 26200)", "OK"]
+        .map(str::to_owned)
+        .to_vec();
+    engine.handle_accessibility_event(&AccessibilityEvent::ViewerText(lines));
+    (engine, ui)
+}
+
+fn span(line: usize, column: usize, length: usize) -> crate::ui::TextSpan {
+    crate::ui::TextSpan {
+        line,
+        column,
+        length,
+    }
+}
+
+/// With "Show Virtual Viewer on Screen" on (JAWS's default), the viewer's text shows in a
+/// window that marks what was read last; the keys stay with the viewer, and Escape closes
+/// the window (JAWS on the dev box, 2026-10-17).
+#[test]
+fn the_virtual_viewer_shows_on_screen_and_marks_what_was_read() {
+    use crate::ui::ToUi;
+    let (mut engine, ui) = engine_with_open_viewer();
+    assert_eq!(
+        ui.take(),
+        [ToUi::ViewerShow {
+            title: "Virtual Viewer".to_owned(),
+            lines: ["About Windows", "Version 25H2 (OS Build 26200)", "OK"]
+                .map(str::to_owned)
+                .to_vec(),
+            mark: span(0, 0, 13),
+        }]
+    );
+    let down = KeyEvent::new(Key::DownArrow, Modifiers::none(), true);
+    assert_eq!(engine.handle_key_event(&down), KeyAction::Consume);
+    assert_eq!(
+        ui.take(),
+        [ToUi::ViewerMark {
+            mark: span(1, 0, 29)
+        }]
+    );
+    let mut next_word = KeyEvent::new(Key::RightArrow, Modifiers::none(), true);
+    next_word.modifiers.ctrl = true;
+    engine.handle_key_event(&next_word);
+    assert_eq!(
+        ui.take(),
+        [ToUi::ViewerMark {
+            mark: span(1, 8, 4)
+        }]
+    );
+    let escape = KeyEvent::new(Key::Escape, Modifiers::none(), true);
+    engine.handle_key_event(&escape);
+    assert_eq!(ui.take(), [ToUi::ViewerClose]);
+}
+
+/// The viewer's window taking the focus, or closed by its close button, ends the viewer, as
+/// JAWS's does: the next key is no viewer key, and Virtualize Window opens a new one.
+#[test]
+fn a_dismissed_viewer_window_ends_the_viewer() {
+    let (mut engine, ui) = engine_with_open_viewer();
+    ui.take();
+    assert_eq!(
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(
+            crate::ui::FromUi::ViewerDismissed
+        )),
+        None
+    );
+    // Not "The current location is already in a virtual view": the window is read anew.
+    assert_eq!(engine.execute_command("VirtualizeWindow"), None);
+    assert!(ui.take().is_empty());
+}
+
+/// With the viewer shown by speech only, no window opens.
+#[test]
+fn a_speech_only_viewer_opens_no_window() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.settings.viewer_display = crate::settings::ViewerDisplay::SpeechOnly;
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let focus = FocusEvent::new(Role::Button)
+        .with_name("Save...")
+        .with_window_title("SR Dialog Fixture");
+    engine.handle_focus_event(&focus);
+    assert!(engine.execute_command("VirtualizeWindow").is_some());
+    let down = KeyEvent::new(Key::DownArrow, Modifiers::none(), true);
+    engine.handle_key_event(&down);
+    assert!(ui
+        .take()
+        .iter()
+        .all(|m| !matches!(m, crate::ui::ToUi::ViewerShow { .. })));
+}
+
 /// When the screen gives nothing, the viewer shows what the focus says, as on old-pc
 /// [obs, 311/s1]: the control's name and type, then a blank line.
 #[test]

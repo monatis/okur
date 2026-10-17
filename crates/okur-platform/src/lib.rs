@@ -11,6 +11,7 @@ pub mod ia2_snapshot;
 pub mod screen_lines;
 pub mod text_context;
 pub mod tts;
+pub mod ui_host;
 pub mod uia_snapshot;
 pub mod virtual_desktop;
 pub mod window_text;
