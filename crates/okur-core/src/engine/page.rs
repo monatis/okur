@@ -305,8 +305,13 @@ impl ScreenReaderEngine {
             .map(str::trim)
             .filter(|n| !n.is_empty())?;
         self.pending_edit = None;
+        // The same result selected again as the results change (Windows search, typing):
+        // JAWS says its name alone ("Settings, System, Press right to view options" after
+        // "… | 1 of 4"; dev box, 2026-10-17).
+        let again = self.last_selected.as_deref() == Some(name);
+        self.last_selected = Some(name.to_owned());
         let speech = match (item.item_index, item.item_count) {
-            (Some(i), Some(n)) => format!("{name}\n{i} of {n}"),
+            (Some(i), Some(n)) if !again => format!("{name}\n{i} of {n}"),
             _ => name.to_owned(),
         };
         self.speech.speak(&speech, true);

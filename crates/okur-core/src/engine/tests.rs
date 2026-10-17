@@ -2250,3 +2250,39 @@ fn typing_echo_follows_the_setting() {
         assert_eq!(speech.take(), expected, "{echo:?}");
     }
 }
+
+/// Windows search as the results change while typing (JAWS on the dev box, 2026-10-17): the
+/// same result selected again says its name alone; another says its position.
+#[test]
+fn a_result_selected_again_says_its_name_alone() {
+    let (mut engine, _speech) = engine_with_speech();
+    engine.handle_focus_event(&FocusEvent::new(Role::Edit).with_name("Search box"));
+    let result = |name: &str, index: usize, count: usize| {
+        AccessibilityEvent::Selected(
+            FocusEvent::new(Role::ListItem)
+                .with_name(name)
+                .with_item_index(index)
+                .with_item_count(count),
+        )
+    };
+    let settings = "Settings, System, Press right to view options";
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&result(settings, 1, 4))
+            .as_deref(),
+        Some("Settings, System, Press right to view options\n1 of 4")
+    );
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&result(settings, 1, 6))
+            .as_deref(),
+        Some(settings)
+    );
+    let web = "Find results in search the web, click enter to see more";
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&result(web, 2, 2))
+            .as_deref(),
+        Some("Find results in search the web, click enter to see more\n2 of 2")
+    );
+}

@@ -71,6 +71,9 @@ pub struct ScreenReaderEngine {
     page_focus_is_field: bool,
     /// The last native focus outside menus, re-announced when menus close.
     last_native_focus: Option<FocusEvent>,
+    /// The item a field's list last selected, since the focus last moved: the same one again
+    /// says its name alone.
+    last_selected: Option<String>,
     menus: crate::native_focus::Menus,
     /// The page re-read after a change, waiting for the change's events to be handled.
     pending_page: Option<VirtualBuffer>,
@@ -122,6 +125,7 @@ impl ScreenReaderEngine {
             web_application: None,
             page_focus_is_field: false,
             last_native_focus: None,
+            last_selected: None,
             menus: crate::native_focus::Menus::default(),
             pending_edit: None,
             forms_mode_by_enter: false,

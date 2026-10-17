@@ -41,6 +41,7 @@ impl ScreenReaderEngine {
     /// Synchronizes cursor position, activates/deactivates forms mode,
     /// and emits canonical JAWS speech announcements.
     pub fn handle_focus_event(&mut self, focus: &FocusEvent) -> Option<String> {
+        self.last_selected = None;
         if focus.role != Role::MenuItem {
             self.last_text = focus.text.clone();
             self.pending_edit = None;
