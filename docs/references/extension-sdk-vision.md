@@ -48,6 +48,8 @@ reader script.
 - Change what an announcement says: drop, replace or add parts of it.
 - React to events: focus, value, selection, live regions, windows opening.
 - Keep its own state and settings per application.
+- Show dialogs, described as data and rendered natively by `okur-ui`, as Okur's own are
+  ([helper UI architecture](helper-ui-architecture.md)).
 - Read Okur's accessibility objects, never raw UI Automation or AX objects, so that one
   extension works on Windows and macOS.
 
