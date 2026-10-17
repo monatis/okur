@@ -2338,3 +2338,28 @@ fn the_address_bar_says_its_shortcut_and_the_page_its_name_on_return() {
         Some("Web Menus \u{1d} document \u{1e} ")
     );
 }
+
+/// Ctrl+Tab from a new tab's address bar back to a page (JAWS on the dev box, 2026-10-17):
+/// "Web Menus document | Web Menus - Google Chrome".
+#[test]
+fn another_tabs_page_says_its_name_and_the_window() {
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![AomNode::new(1, Role::Paragraph).with_text("Notes")]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let address = FocusEvent::new(Role::Edit)
+        .with_name("Address and search bar")
+        .with_window_title("New Tab - Google Chrome");
+    engine.handle_focus_event(&address);
+    let mut document = FocusEvent::new(Role::Document)
+        .with_name("Web Menus")
+        .with_window_title("Web Menus - Google Chrome");
+    document.in_document = true;
+    document.node_id = Some(0);
+    assert_eq!(
+        engine.handle_focus_event(&document).as_deref(),
+        Some("Web Menus \u{1d} document \u{1e} \nWeb Menus - Google Chrome")
+    );
+}

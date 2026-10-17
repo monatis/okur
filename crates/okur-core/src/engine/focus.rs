@@ -131,6 +131,13 @@ impl ScreenReaderEngine {
             let from_browser_ui = self.app_mode == AppMode::NativeControl
                 && focus.window_title.is_some()
                 && self.last_window_title.as_deref() == focus.window_title.as_deref();
+            // Another tab's page (Ctrl+Tab, Ctrl+W): the window's title changed with it.
+            // A page just loaded has been named already: its load keeps the page's title as the
+            // window's.
+            let tab_switched = focus.window_title.is_some()
+                && self.last_window_title.is_some()
+                && self.last_window_title.as_deref() != focus.window_title.as_deref()
+                && self.last_window_title.as_deref() != focus.name.as_deref();
             self.app_mode = AppMode::VirtualBuffer;
             // The page is in the same top-level window as anything focused next in the
             // browser (toolbar, address bar), so that focus does not announce a new window.
@@ -203,11 +210,24 @@ impl ScreenReaderEngine {
                 self.last_page_focus = None;
                 self.tab_start = None;
                 // JAWS names the page coming back to it: "Web Menus document" (Escape in
-                // Chrome's address bar; dev box, 2026-10-17).
-                if from_browser_ui && !leaving_menus {
-                    if let Some(title) = self.cursor.buffer.document_title().map(str::to_owned) {
-                        let speech =
+                // Chrome's address bar), and another tab's page with the window then ("Web
+                // Menus document | Web Menus - Google Chrome", Ctrl+Tab and Ctrl+W; dev box,
+                // 2026-10-17). The page is named by its document, which the buffer may not
+                // hold yet.
+                if (from_browser_ui || tab_switched) && !leaving_menus {
+                    let title = focus
+                        .name
+                        .clone()
+                        .filter(|n| !n.trim().is_empty())
+                        .or_else(|| self.cursor.buffer.document_title().map(str::to_owned));
+                    if let Some(title) = title {
+                        let mut speech =
                             format!("{title}{}", crate::linearize::role_marker("document"));
+                        if let Some(window) = focus.window_title.as_deref().filter(|_| tab_switched)
+                        {
+                            speech.push('\n');
+                            speech.push_str(window);
+                        }
                         self.speech.speak(&speech, true);
                         return Some(speech);
                     }
