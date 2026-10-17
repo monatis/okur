@@ -87,6 +87,18 @@ pub enum TtsEngineType {
     OneCore,
 }
 
+impl From<okur_core::settings::Synthesizer> for TtsEngineType {
+    fn from(synthesizer: okur_core::settings::Synthesizer) -> Self {
+        use okur_core::settings::Synthesizer;
+        match synthesizer {
+            Synthesizer::Auto => Self::Auto,
+            Synthesizer::OneCore => Self::OneCore,
+            Synthesizer::Sapi5 => Self::Sapi5,
+            Synthesizer::NoSpeech => Self::NoSpeech,
+        }
+    }
+}
+
 impl std::str::FromStr for TtsEngineType {
     type Err = String;
 
@@ -107,12 +119,26 @@ impl std::str::FromStr for TtsEngineType {
 /// Synthesizer manager managing the active TTS engine and runtime fallback.
 pub struct TtsManager {
     engine: Box<dyn TtsEngine>,
+    /// The synthesizer asked for, and the voice chosen by name (the synthesizer's default
+    /// when none), as the settings last set them.
+    kind: TtsEngineType,
+    voice: Option<String>,
     speech_log: Option<SpeechLog>,
 }
 
 impl TtsManager {
     /// Creates a new TTS manager with the specified engine driver.
     pub fn new(engine_type: TtsEngineType) -> Result<Self, TtsError> {
+        Ok(Self {
+            engine: Self::create_engine(engine_type)?,
+            kind: engine_type,
+            voice: None,
+            speech_log: None,
+        })
+    }
+
+    /// A synthesizer of the given type.
+    fn create_engine(engine_type: TtsEngineType) -> Result<Box<dyn TtsEngine>, TtsError> {
         let engine: Box<dyn TtsEngine> = match engine_type {
             TtsEngineType::NoSpeech => Box::new(NoSpeechEngine::new()),
             TtsEngineType::Sapi5 => {
@@ -144,11 +170,7 @@ impl TtsManager {
                 }
             }
         };
-
-        Ok(Self {
-            engine,
-            speech_log: None,
-        })
+        Ok(engine)
     }
 
     /// Records every utterance (and stop) to `log`, the screen reader's equivalent of
@@ -259,6 +281,43 @@ impl okur_core::speech::SpeechOutput for TtsManager {
 
     fn is_speaking(&self) -> bool {
         self.is_speaking()
+    }
+
+    fn voices(&self) -> Vec<String> {
+        self.get_voices().into_iter().map(|v| v.name).collect()
+    }
+
+    /// A new synthesizer, or a voice back to the synthesizer's default, starts the
+    /// synthesizer anew; then the voice, rate and volume are set.
+    fn configure(&mut self, voice: &okur_core::settings::VoiceSettings) {
+        let kind = TtsEngineType::from(voice.synthesizer);
+        if kind != self.kind || (voice.voice.is_none() && self.voice.is_some()) {
+            match Self::create_engine(kind) {
+                Ok(engine) => {
+                    self.engine = engine;
+                    self.kind = kind;
+                }
+                Err(e) => tracing::warn!(error = %e, ?kind, "synthesizer did not start"),
+            }
+        }
+        if let Some(name) = &voice.voice {
+            // By name, as the settings keep it, or by id (`okur run --voice`).
+            match self
+                .get_voices()
+                .into_iter()
+                .find(|v| &v.name == name || &v.id == name)
+            {
+                Some(found) => {
+                    if let Err(e) = self.set_voice(&found.id) {
+                        tracing::warn!(error = %e, %name, "voice not set");
+                    }
+                }
+                None => tracing::warn!(%name, "no such voice"),
+            }
+        }
+        self.voice = voice.voice.clone();
+        let _ = self.set_rate(voice.rate);
+        let _ = self.set_volume(voice.volume);
     }
 }
 

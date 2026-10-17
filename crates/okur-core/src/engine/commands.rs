@@ -93,6 +93,7 @@ impl ScreenReaderEngine {
             }
             Command::VirtualizeWindow => return self.virtualize(true),
             Command::VirtualizeControl => return self.virtualize(false),
+            Command::QuickSettings | Command::SettingsCenter => return self.open_settings(),
             Command::SayFont => return self.say_font(false),
             Command::SayFontInViewer => return self.say_font(true),
             _ => {}

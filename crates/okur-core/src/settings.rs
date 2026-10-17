@@ -5,10 +5,13 @@
 //! [`Settings::reference_machine`], and every behavior that depends on a setting reads it from
 //! here instead of assuming the reference configuration.
 
+use serde::{Deserialize, Serialize};
+
 use crate::input::{Key, KeyEvent};
 
 /// JAWS's keyboard layouts (Basic Settings: Keyboard Layout).
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum KeyboardLayout {
     /// The default: Insert is the JAWS key.
     #[default]
@@ -19,7 +22,8 @@ pub enum KeyboardLayout {
 }
 
 /// The keys that can be the JAWS key (Settings Center: JAWS Key for Current Layout).
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum JawsKey {
     Insert,
     CapsLock,
@@ -27,7 +31,8 @@ pub enum JawsKey {
 }
 
 /// Which keys act as the JAWS key.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(default)]
 pub struct KeyboardSettings {
     pub layout: KeyboardLayout,
     /// The JAWS key chosen for `layout`.
@@ -78,7 +83,8 @@ impl KeyboardSettings {
 }
 
 /// What a live region's change speaks when text was appended to what it already said.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum LiveRegionAppend {
     /// Only the appended text, from the start of a word the old text ended in: a streamed
     /// chat reply is read as it grows, once.
@@ -91,7 +97,8 @@ pub enum LiveRegionAppend {
 }
 
 /// What typing a character says (Basic Settings: Typing Echo).
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum TypingEcho {
     /// Each character as it is typed: JAWS's default (no `TypingEcho` in `DEFAULT.JCF`).
     #[default]
@@ -117,20 +124,91 @@ impl TypingEcho {
 /// Whether the Virtual Viewer also shows in a window, for someone watching the screen:
 /// JAWS's "Show Virtual Viewer on Screen" (`bVirtViewer`, on in its default settings). The
 /// keys stay with the viewer either way.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum ViewerDisplay {
     #[default]
     OnScreen,
     SpeechOnly,
 }
 
-/// All user settings.
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
+/// The speech synthesizers Okur can use.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum Synthesizer {
+    /// OneCore, else SAPI 5, else none.
+    #[default]
+    Auto,
+    #[serde(rename = "onecore")]
+    OneCore,
+    #[serde(rename = "sapi5")]
+    Sapi5,
+    NoSpeech,
+}
+
+/// The voice Okur speaks with (JAWS: Voice Adjustment).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(default)]
+pub struct VoiceSettings {
+    pub synthesizer: Synthesizer,
+    /// The voice's name; the synthesizer's own default when none.
+    pub voice: Option<String>,
+    /// -10 to 10.
+    pub rate: i32,
+    /// 0 to 100.
+    pub volume: u16,
+}
+
+impl Default for VoiceSettings {
+    fn default() -> Self {
+        Self {
+            synthesizer: Synthesizer::Auto,
+            voice: None,
+            rate: 0,
+            volume: 100,
+        }
+    }
+}
+
+/// All user settings: what the settings dialog shows and the settings file keeps. A setting
+/// missing from the file has its default.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(default)]
 pub struct Settings {
+    pub voice: VoiceSettings,
     pub keyboard: KeyboardSettings,
     pub live_region_append: LiveRegionAppend,
     pub typing_echo: TypingEcho,
     pub viewer_display: ViewerDisplay,
+}
+
+/// Where changed settings are kept, so that they hold the next time Okur starts.
+pub trait SettingsStore: Send {
+    fn save(&self, settings: &Settings);
+}
+
+/// A store that keeps what it was given, for tests.
+#[derive(Debug, Clone, Default)]
+pub struct RecordingSettingsStore {
+    saved: std::sync::Arc<std::sync::Mutex<Vec<Settings>>>,
+}
+
+impl RecordingSettingsStore {
+    /// The settings saved so far, emptied.
+    pub fn take(&self) -> Vec<Settings> {
+        self.saved
+            .lock()
+            .map(|mut saved| std::mem::take(&mut *saved))
+            .unwrap_or_default()
+    }
+}
+
+impl SettingsStore for RecordingSettingsStore {
+    fn save(&self, settings: &Settings) {
+        if let Ok(mut saved) = self.saved.lock() {
+            saved.push(settings.clone());
+        }
+    }
 }
 
 impl Settings {
@@ -139,6 +217,7 @@ impl Settings {
     /// and JAWS's own reading of growing live regions, so replay compares like with like.
     pub fn reference_machine() -> Self {
         Self {
+            voice: VoiceSettings::default(),
             keyboard: KeyboardSettings::for_layout(KeyboardLayout::Laptop),
             live_region_append: LiveRegionAppend::WholeText,
             typing_echo: TypingEcho::None,

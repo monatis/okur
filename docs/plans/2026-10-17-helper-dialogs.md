@@ -29,7 +29,8 @@ old-pc work stay valid; this plan comes first.
 
 Order the user chose on 2026-10-17: the Virtual Viewer on screen first (step 7, done), then
 the Links List and a simple settings dialog for what are command-line flags today (step 9,
-reduced to those settings). "They should be configurable on the UI just like JAWS." Broader
+reduced to those settings; done the same day: "Okur Settings", Insert+6 and Insert+V, see
+[the handoff](../handoff/2026-10-17-okur-ui-viewer-and-settings.md)). "They should be configurable on the UI just like JAWS." Broader
 settings follow as Okur's configurability and parity grow.
 
 ### 1. Spike S1: one real Links List on Windows

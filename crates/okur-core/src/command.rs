@@ -130,6 +130,10 @@ pub enum Command {
     VirtualizeControl,
     SayFont,
     SayFontInViewer,
+
+    // Okur's settings: one dialog for both, until there are enough settings for two.
+    QuickSettings,
+    SettingsCenter,
 }
 
 impl Command {
@@ -280,6 +284,8 @@ impl Command {
             "VirtualizeControl" => VirtualizeControl,
             "Insert+F" | "SayFont" | "WhatFont" => SayFont,
             "SayFontInViewer" => SayFontInViewer,
+            "QuickSettings" => QuickSettings,
+            "SettingsCenter" => SettingsCenter,
             _ => return None,
         })
     }
@@ -471,6 +477,9 @@ static BINDINGS: &[Binding] = &{
             VirtualizeControl,
         ),
         bind(Alpha('F'), JAWS, SayFont),
+        // Settings.
+        bind(Alpha('V'), JAWS, QuickSettings),
+        bind(Digit(6), JAWS, SettingsCenter),
         // Finding, and the form fields list.
         bind(
             Alpha('F'),

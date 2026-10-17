@@ -6,6 +6,10 @@
 #![cfg_attr(windows, windows_subsystem = "windows")]
 
 #[cfg(windows)]
+mod dialog;
+#[cfg(any(windows, test))]
+mod template;
+#[cfg(windows)]
 mod win32;
 
 fn main() {

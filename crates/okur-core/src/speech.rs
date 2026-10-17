@@ -779,6 +779,16 @@ pub trait SpeechOutput: Send + Sync {
     fn is_speaking(&self) -> bool {
         false
     }
+
+    /// The voices the synthesizer offers, by name, for the settings dialog.
+    fn voices(&self) -> Vec<String> {
+        Vec::new()
+    }
+
+    /// Speaks from now on with `voice`: its synthesizer, voice, rate and volume.
+    fn configure(&mut self, voice: &crate::settings::VoiceSettings) {
+        let _ = voice;
+    }
 }
 
 /// Mock speech synthesizer output for testing and headless execution.

@@ -16,10 +16,82 @@ pub struct TextSpan {
     pub length: usize,
 }
 
+/// A dialog: standard controls in tab order, with the exact labels the user hears. An "&" in
+/// a label marks its access key, as in Windows dialog resources. Layout is the renderer's:
+/// a description never says where a control goes.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct DialogSpec {
+    /// Okur's number for this dialog; events carry it back.
+    pub id: u32,
+    pub title: String,
+    pub controls: Vec<Control>,
+}
+
+/// One control of a dialog.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Control {
+    /// Names the control in events and updates. The buttons "ok" and "cancel" are the
+    /// dialog's own: Escape and the close box press "cancel".
+    pub id: String,
+    pub label: String,
+    pub kind: ControlKind,
+    #[serde(default = "enabled")]
+    pub enabled: bool,
+}
+
+fn enabled() -> bool {
+    true
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum ControlKind {
+    /// A group box around the controls that follow it, up to the next group or the buttons.
+    Group,
+    CheckBox {
+        checked: bool,
+    },
+    /// A drop-down list of `options`, one selected.
+    Choice {
+        options: Vec<String>,
+        selected: usize,
+    },
+    /// A slider from `min` to `max`.
+    Slider {
+        min: i32,
+        max: i32,
+        value: i32,
+    },
+    /// A push button; Enter presses the `default` one.
+    Button {
+        default: bool,
+    },
+}
+
+/// A control's value, as the user set it or Okur sets it.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(tag = "kind", content = "value", rename_all = "snake_case")]
+pub enum Value {
+    Checked(bool),
+    Selected(usize),
+    Number(i32),
+}
+
 /// What Okur asks `okur-ui` to show.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum ToUi {
+    /// Show a dialog in front, with the focus on its first control; one already showing
+    /// with this id comes to the front instead.
+    DialogShow { dialog: DialogSpec },
+    /// Set a control's value.
+    DialogSet {
+        id: u32,
+        control: String,
+        value: Value,
+    },
+    /// Close a dialog.
+    DialogClose { id: u32 },
     /// Show the Virtual Viewer's text on screen, without taking the focus, with `mark` on
     /// what the virtual cursor read last. Okur keeps the keys: the window only shows them
     /// to someone watching, as JAWS's does.
@@ -41,6 +113,16 @@ pub enum FromUi {
     /// The viewer's window took the focus (a click, Alt+Tab) or was closed by its close
     /// button. JAWS ends its viewer then, and so does Okur.
     ViewerDismissed,
+    /// The user changed a control's value.
+    DialogChanged {
+        id: u32,
+        control: String,
+        value: Value,
+    },
+    /// The user pressed a button other than "cancel".
+    DialogPressed { id: u32, control: String },
+    /// The dialog was cancelled (its Cancel button, Escape, its close box) and is gone.
+    DialogClosed { id: u32 },
 }
 
 /// One message as a line of JSON, without the line break.
@@ -95,6 +177,45 @@ mod tests {
             decode::<FromUi>(r#"{"type":"viewer_dismissed"}"#).ok(),
             Some(FromUi::ViewerDismissed)
         );
+    }
+
+    #[test]
+    fn dialogs_round_trip_with_enabled_by_default() {
+        let dialog = DialogSpec {
+            id: 3,
+            title: "Okur Settings".into(),
+            controls: vec![
+                Control {
+                    id: "speech".into(),
+                    label: "Speech".into(),
+                    kind: ControlKind::Group,
+                    enabled: true,
+                },
+                Control {
+                    id: "rate".into(),
+                    label: "&Rate:".into(),
+                    kind: ControlKind::Slider {
+                        min: -10,
+                        max: 10,
+                        value: 0,
+                    },
+                    enabled: true,
+                },
+            ],
+        };
+        let show = ToUi::DialogShow { dialog };
+        let line = encode(&show).unwrap_or_default();
+        assert_eq!(decode::<ToUi>(&line).ok(), Some(show));
+        let control: Result<Control, _> =
+            decode(r#"{"id":"ok","label":"OK","kind":{"kind":"button","default":true}}"#);
+        assert_eq!(control.map(|c| c.enabled).ok(), Some(true));
+        let changed = FromUi::DialogChanged {
+            id: 3,
+            control: "rate".into(),
+            value: Value::Number(-2),
+        };
+        let line = encode(&changed).unwrap_or_default();
+        assert_eq!(decode::<FromUi>(&line).ok(), Some(changed));
     }
 
     #[test]

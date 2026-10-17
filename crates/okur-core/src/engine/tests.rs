@@ -1126,6 +1126,85 @@ fn a_speech_only_viewer_opens_no_window() {
         .all(|m| !matches!(m, crate::ui::ToUi::ViewerShow { .. })));
 }
 
+/// Insert+6 and Insert+V open the settings dialog; OK applies what was changed, keeps it in
+/// the settings store, and closes the dialog. Okur says nothing itself: it reads the dialog
+/// when the dialog takes the focus.
+#[test]
+fn the_settings_dialog_applies_and_keeps_changes() {
+    use crate::ui::{FromUi, ToUi, Value};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let store = crate::settings::RecordingSettingsStore::default();
+    engine.set_settings_store(Box::new(store.clone()));
+    let mut six = KeyEvent::new(Key::Digit(6), Modifiers::none(), true);
+    six.modifiers.insert = true;
+    assert_eq!(engine.handle_key_event(&six), KeyAction::Consume);
+    let sent = ui.take();
+    let Some(ToUi::DialogShow { dialog }) = sent.first() else {
+        panic_free_fail(&format!("no dialog shown: {sent:?}"));
+        return;
+    };
+    assert_eq!(dialog.title, "Okur Settings");
+    let id = dialog.id;
+    // Insert+V brings the same dialog forward.
+    assert_eq!(engine.execute_command("QuickSettings"), None);
+    assert!(matches!(ui.take().first(), Some(ToUi::DialogShow { dialog }) if dialog.id == id));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "typing_echo".into(),
+        value: Value::Selected(0),
+    }));
+    assert_eq!(
+        engine.settings.typing_echo,
+        crate::settings::TypingEcho::Characters
+    );
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "ok".into(),
+    }));
+    assert_eq!(
+        engine.settings.typing_echo,
+        crate::settings::TypingEcho::None
+    );
+    assert_eq!(store.take(), [engine.settings.clone()]);
+    assert_eq!(ui.take(), [ToUi::DialogClose { id }]);
+    // Cancelled, a new dialog changes nothing.
+    engine.execute_command("SettingsCenter");
+    let id = match ui.take().first() {
+        Some(ToUi::DialogShow { dialog }) => dialog.id,
+        _ => 0,
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "typing_echo".into(),
+        value: Value::Selected(1),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogClosed { id }));
+    assert_eq!(
+        engine.settings.typing_echo,
+        crate::settings::TypingEcho::None
+    );
+    assert!(store.take().is_empty());
+}
+
+/// Fails a test without the panic macros the commit gate refuses.
+fn panic_free_fail(message: &str) {
+    assert!(message.is_empty(), "{message}");
+}
+
+/// Without Okur's window process, the settings dialog says it cannot open.
+#[test]
+fn without_okur_ui_the_settings_dialog_says_so() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    assert_eq!(
+        engine.execute_command("SettingsCenter").as_deref(),
+        Some("The settings dialog is not available")
+    );
+}
+
 /// When the screen gives nothing, the viewer shows what the focus says, as on old-pc
 /// [obs, 311/s1]: the control's name and type, then a blank line.
 #[test]

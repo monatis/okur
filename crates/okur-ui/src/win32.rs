@@ -133,7 +133,7 @@ fn mark_range() -> Option<(usize, usize)> {
 }
 
 /// Tells Okur what the user did.
-fn tell(message: &FromUi) {
+pub(crate) fn tell(message: &FromUi) {
     if let Ok(line) = encode(message) {
         let mut out = std::io::stdout().lock();
         let _ = writeln!(out, "{line}");
@@ -149,8 +149,45 @@ fn low_word(value: usize) -> u32 {
     u32::try_from(value & 0xFFFF).unwrap_or(0)
 }
 
+/// Makes Windows draw our controls in the current style (Common Controls 6), as an
+/// application manifest would: the activation context of the manifest Windows keeps in
+/// shell32.dll for this (resource 124) becomes the process's default, before any window.
+fn use_current_controls() {
+    use windows::Win32::System::ApplicationInstallationAndServicing::{CreateActCtxW, ACTCTXW};
+    use windows::Win32::System::SystemInformation::GetSystemDirectoryW;
+    use windows::Win32::System::WindowsProgramming::{
+        ACTCTX_FLAG_ASSEMBLY_DIRECTORY_VALID, ACTCTX_FLAG_RESOURCE_NAME_VALID,
+        ACTCTX_FLAG_SET_PROCESS_DEFAULT,
+    };
+    let mut buffer = [0u16; 260];
+    // SAFETY: fills our buffer with the system folder's path.
+    let length = unsafe { GetSystemDirectoryW(Some(&mut buffer)) };
+    let folder = String::from_utf16_lossy(buffer.get(..length as usize).unwrap_or_default());
+    let source = wide(&format!(r"{folder}\shell32.dll"));
+    let folder = wide(&folder);
+    let context = ACTCTXW {
+        cbSize: u32::try_from(std::mem::size_of::<ACTCTXW>()).unwrap_or(0),
+        dwFlags: ACTCTX_FLAG_RESOURCE_NAME_VALID
+            | ACTCTX_FLAG_SET_PROCESS_DEFAULT
+            | ACTCTX_FLAG_ASSEMBLY_DIRECTORY_VALID,
+        lpSource: PCWSTR(source.as_ptr()),
+        lpAssemblyDirectory: PCWSTR(folder.as_ptr()),
+        lpResourceName: PCWSTR(124 as *const u16),
+        ..Default::default()
+    };
+    // SAFETY: the strings outlive the call; the context stays for the process's life.
+    // Made the process's default, the context has no handle to return: success reads as an
+    // error whose code is S_OK.
+    if let Err(e) = unsafe { CreateActCtxW(&context) } {
+        if e.code().is_err() {
+            eprintln!("okur-ui: controls keep the classic style: {e}");
+        }
+    }
+}
+
 /// Draws Okur's windows until Okur closes our input.
 pub fn run() {
+    use_current_controls();
     // SAFETY: process-wide setup calls with constant arguments, made before any window.
     unsafe {
         let _ = SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
@@ -230,6 +267,10 @@ pub fn run() {
     // SAFETY: the standard message loop of this thread's windows.
     unsafe {
         while GetMessageW(&mut msg, None, 0, 0).as_bool() {
+            // A dialog's keys (Tab, access keys, Enter, Escape) go to the dialog manager.
+            if crate::dialog::is_dialog_message(&msg) {
+                continue;
+            }
             let _ = TranslateMessage(&msg);
             DispatchMessageW(&msg);
         }
@@ -311,6 +352,9 @@ fn handle(message: ToUi) {
             apply_mark();
         }
         ToUi::ViewerClose => hide_viewer(),
+        ToUi::DialogShow { dialog } => crate::dialog::show(&dialog),
+        ToUi::DialogSet { id, control, value } => crate::dialog::set_value(id, &control, value),
+        ToUi::DialogClose { id } => crate::dialog::close(id),
     }
 }
 

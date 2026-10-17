@@ -23,24 +23,25 @@ struct Cli {
 
 #[derive(Subcommand, Debug)]
 enum Commands {
-    /// Run Okur, the live screen reader
+    /// Run Okur, the live screen reader. Its settings are the ones its settings dialog
+    /// (Insert+6 or Insert+V) saved; the options below change them for this run only.
     Run {
-        /// TTS synthesizer engine: auto (default: OneCore, else SAPI 5, else none), onecore,
-        /// sapi5, or no-speech
-        #[arg(short, long, default_value = "auto")]
-        engine: String,
+        /// TTS synthesizer engine: auto (OneCore, else SAPI 5, else none), onecore, sapi5, or
+        /// no-speech
+        #[arg(short, long)]
+        engine: Option<String>,
 
-        /// Specific synthesizer voice name or ID
+        /// Synthesizer voice, by name
         #[arg(long)]
         voice: Option<String>,
 
         /// Speech rate (-10 to 10)
-        #[arg(short, long, default_value_t = 0)]
-        rate: i32,
+        #[arg(short, long)]
+        rate: Option<i32>,
 
         /// Volume (0 to 100)
-        #[arg(long, default_value_t = 100)]
-        volume: u16,
+        #[arg(long)]
+        volume: Option<u16>,
 
         /// UIA snapshot to load instead of the active application (okur snapshot output)
         #[arg(short, long)]
@@ -55,10 +56,10 @@ enum Commands {
         #[arg(long)]
         debug_log: Option<String>,
 
-        /// JAWS keyboard layout: desktop (default; Insert is the JAWS key) or laptop (CapsLock
-        /// is the JAWS key, and Insert works as well)
-        #[arg(long, default_value = "desktop")]
-        keyboard_layout: String,
+        /// JAWS keyboard layout: desktop (Insert is the JAWS key) or laptop (CapsLock is the
+        /// JAWS key, and Insert works as well)
+        #[arg(long)]
+        keyboard_layout: Option<String>,
 
         /// The JAWS key for the layout: insert, capslock or scrolllock (default: the
         /// layout's own)
@@ -70,9 +71,14 @@ enum Commands {
         #[arg(long)]
         live_region_whole_text: bool,
 
-        /// Typing echo: characters (default, as JAWS's) or none (JAWS's TypingEcho=0)
-        #[arg(long, default_value = "characters")]
-        typing_echo: String,
+        /// Typing echo: characters (as JAWS's default) or none (JAWS's TypingEcho=0)
+        #[arg(long)]
+        typing_echo: Option<String>,
+
+        /// The settings file to read and save instead of the user's own, so that a test run
+        /// never changes the user's settings
+        #[arg(long)]
+        settings_file: Option<String>,
     },
     /// Compare engine speech with recorded JAWS speech for every genuine corpus scenario
     Parity {
@@ -502,6 +508,65 @@ fn print_evidence(evidence: &str, trial: usize, trace: bool) -> Result<(), Strin
 }
 
 /// The JAWS keyboard settings named on the command line (`--keyboard-layout`, `--jaws-key`).
+/// `okur run`'s options that change a setting for the run.
+struct RunOptions {
+    engine: Option<String>,
+    voice: Option<String>,
+    rate: Option<i32>,
+    volume: Option<u16>,
+    keyboard_layout: Option<String>,
+    jaws_key: Option<String>,
+    live_region_whole_text: bool,
+    typing_echo: Option<String>,
+}
+
+impl RunOptions {
+    /// Changes `settings` as the options ask; an error names an option's bad value.
+    fn apply(self, settings: &mut okur_core::settings::Settings) -> Result<(), String> {
+        use okur_core::settings::{LiveRegionAppend, Synthesizer, TypingEcho};
+        if let Some(engine) = self.engine {
+            settings.voice.synthesizer = match TtsEngineType::from_str(&engine)? {
+                TtsEngineType::Auto => Synthesizer::Auto,
+                TtsEngineType::OneCore => Synthesizer::OneCore,
+                TtsEngineType::Sapi5 => Synthesizer::Sapi5,
+                TtsEngineType::NoSpeech => Synthesizer::NoSpeech,
+            };
+        }
+        if self.voice.is_some() {
+            settings.voice.voice = self.voice;
+        }
+        if let Some(rate) = self.rate {
+            settings.voice.rate = rate.clamp(-10, 10);
+        }
+        if let Some(volume) = self.volume {
+            settings.voice.volume = volume.min(100);
+        }
+        if self.keyboard_layout.is_some() || self.jaws_key.is_some() {
+            let layout = match (&self.keyboard_layout, settings.keyboard.layout) {
+                (Some(layout), _) => layout.clone(),
+                (None, okur_core::settings::KeyboardLayout::Desktop) => "desktop".to_owned(),
+                (None, okur_core::settings::KeyboardLayout::Laptop) => "laptop".to_owned(),
+            };
+            settings.keyboard = keyboard_settings(&layout, self.jaws_key.as_deref())?;
+        }
+        if self.live_region_whole_text {
+            settings.live_region_append = LiveRegionAppend::WholeText;
+        }
+        if let Some(echo) = self.typing_echo {
+            settings.typing_echo = match echo.to_ascii_lowercase().as_str() {
+                "characters" => TypingEcho::Characters,
+                "none" => TypingEcho::None,
+                other => {
+                    return Err(format!(
+                        "--typing-echo must be characters or none, not {other:?}"
+                    ))
+                }
+            };
+        }
+        Ok(())
+    }
+}
+
 fn keyboard_settings(
     layout: &str,
     jaws_key: Option<&str>,
@@ -652,24 +717,32 @@ async fn main() {
             jaws_key,
             live_region_whole_text,
             typing_echo,
+            settings_file,
         }) => {
-            let typing_echo = match typing_echo.to_ascii_lowercase().as_str() {
-                "characters" => okur_core::settings::TypingEcho::Characters,
-                "none" => okur_core::settings::TypingEcho::None,
-                other => {
-                    eprintln!("Error: --typing-echo must be characters or none, not {other:?}");
-                    std::process::exit(1);
-                }
+            // The saved settings, then this run's options over them.
+            let settings_file = match settings_file {
+                Some(path) => Some(okur_platform::settings_file::SettingsFile::at(path)),
+                None => okur_platform::settings_file::SettingsFile::user(),
             };
-            let keyboard =
-                keyboard_settings(&keyboard_layout, jaws_key.as_deref()).unwrap_or_else(|e| {
-                    eprintln!("Error: {e}");
-                    std::process::exit(1);
-                });
-            let engine_type = TtsEngineType::from_str(&engine).unwrap_or_else(|e| {
-                eprintln!("Error: {}", e);
+            let mut settings = settings_file
+                .as_ref()
+                .and_then(|file| file.load())
+                .unwrap_or_default();
+            let options = RunOptions {
+                engine,
+                voice,
+                rate,
+                volume,
+                keyboard_layout,
+                jaws_key,
+                live_region_whole_text,
+                typing_echo,
+            };
+            if let Err(e) = options.apply(&mut settings) {
+                eprintln!("Error: {e}");
                 std::process::exit(1);
-            });
+            }
+            let engine_type = TtsEngineType::from(settings.voice.synthesizer);
 
             let mut tts = TtsManager::new(engine_type).unwrap_or_else(|e| {
                 eprintln!("Failed to initialize TTS engine: {}", e);
@@ -685,13 +758,7 @@ async fn main() {
                 }
             }
 
-            let _ = tts.set_rate(rate);
-            let _ = tts.set_volume(volume);
-            if let Some(ref v) = voice {
-                if let Err(e) = tts.set_voice(v) {
-                    eprintln!("Warning: failed to set voice '{}': {}", v, e);
-                }
-            }
+            okur_core::speech::SpeechOutput::configure(&mut tts, &settings.voice);
 
             println!("============================================================");
             println!("  Okur, an open screen reader");
@@ -745,11 +812,10 @@ async fn main() {
             if let Some(ui) = okur_platform::ui_host::ProcessUiHost::start(event_tx.clone()) {
                 engine.set_ui(Box::new(ui));
             }
-            engine.settings.keyboard = keyboard;
-            engine.settings.typing_echo = typing_echo;
-            if live_region_whole_text {
-                engine.settings.live_region_append =
-                    okur_core::settings::LiveRegionAppend::WholeText;
+            engine.settings = settings;
+            // The settings dialog keeps what it changes in the settings file.
+            if let Some(file) = settings_file {
+                engine.set_settings_store(Box::new(file));
             }
             // Say System Time (Insert+F12) in the user's locale formats.
             #[cfg(windows)]

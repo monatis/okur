@@ -97,6 +97,12 @@ pub struct ScreenReaderEngine {
     clock: Option<Box<dyn crate::clock::Clock>>,
     /// Okur's own windows (`okur-ui`); None when headless.
     ui: Option<Box<dyn crate::ui::UiHost>>,
+    /// Where changed settings are kept; None when headless.
+    settings_store: Option<Box<dyn crate::settings::SettingsStore>>,
+    /// The settings dialog, while it is open.
+    settings_dialog: Option<crate::ui::settings::SettingsDialog>,
+    /// Dialogs opened so far: each gets the next number.
+    dialog_count: u32,
     /// The last JAWS-key command and when it was pressed, to tell a double press.
     last_press: Option<(Press, u64)>,
     /// User settings (JAWS defaults unless configured).
@@ -147,6 +153,9 @@ impl ScreenReaderEngine {
             actions: None,
             clock: None,
             ui: None,
+            settings_store: None,
+            settings_dialog: None,
+            dialog_count: 0,
             last_press: None,
             settings: crate::settings::Settings::default(),
             caps_lock_on: false,
@@ -519,14 +528,83 @@ impl ScreenReaderEngine {
         self.ui = Some(ui);
     }
 
+    /// Gives the engine where changed settings are kept.
+    pub fn set_settings_store(&mut self, store: Box<dyn crate::settings::SettingsStore>) {
+        self.settings_store = Some(store);
+    }
+
+    /// Makes `settings` Okur's, now: the voice included, and kept in the settings store.
+    pub fn apply_settings(&mut self, settings: crate::settings::Settings) {
+        if settings.voice != self.settings.voice {
+            self.speech.configure(&settings.voice);
+        }
+        if settings.viewer_display != crate::settings::ViewerDisplay::OnScreen {
+            self.close_viewer_window();
+        }
+        if let Some(store) = &self.settings_store {
+            store.save(&settings);
+        }
+        self.settings = settings;
+    }
+
+    /// Opens the settings dialog, or brings it to the front. Okur speaks nothing itself: it
+    /// reads the dialog when the dialog takes the focus, as any application's.
+    pub(crate) fn open_settings(&mut self) -> Option<String> {
+        let Some(ui) = &self.ui else {
+            let speech = "The settings dialog is not available".to_owned();
+            self.speech.speak(&speech, true);
+            return Some(speech);
+        };
+        let dialog = match self.settings_dialog.take() {
+            Some(dialog) => dialog,
+            None => {
+                self.dialog_count += 1;
+                crate::ui::settings::SettingsDialog::new(
+                    self.dialog_count,
+                    &self.settings,
+                    self.speech.voices(),
+                )
+            }
+        };
+        ui.send(crate::ui::ToUi::DialogShow {
+            dialog: dialog.spec(),
+        });
+        self.settings_dialog = Some(dialog);
+        None
+    }
+
     /// What the user did to one of Okur's windows.
     fn handle_ui_event(&mut self, message: &crate::ui::FromUi) -> Option<String> {
+        use crate::ui::settings::Outcome;
         match message {
             // The viewer's window took the focus or was closed: the viewer ends silently, and
             // the focus says where the user is (JAWS on the dev box, 2026-10-17: Alt+Tab to
             // its viewer's window ended the viewer, and the page took the focus back).
             crate::ui::FromUi::ViewerDismissed => {
                 self.viewer = None;
+                None
+            }
+            _ => {
+                let outcome = self.settings_dialog.as_mut()?.handle(message);
+                match outcome {
+                    Outcome::Nothing => {}
+                    Outcome::Send(messages) => {
+                        if let Some(ui) = &self.ui {
+                            messages.into_iter().for_each(|m| ui.send(m));
+                        }
+                    }
+                    Outcome::Apply { settings, close } => {
+                        self.apply_settings(settings);
+                        if close {
+                            if let Some(dialog) = self.settings_dialog.take() {
+                                if let Some(ui) = &self.ui {
+                                    ui.send(crate::ui::ToUi::DialogClose { id: dialog.id });
+                                }
+                            }
+                        }
+                    }
+                    Outcome::Closed => self.settings_dialog = None,
+                }
                 None
             }
         }
