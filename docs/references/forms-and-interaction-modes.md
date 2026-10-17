@@ -42,6 +42,33 @@ In screen readers (following JAWS 2025 standards and cross-referenced with NVDA 
    - **Exit Trigger**: Pressing `Escape` exits Forms Mode back to Virtual PC Cursor mode (`cursor.forms_mode_active = false`).
    - **Exit Announcement**: `"virtual PC Cursor"`.
 
+### Who takes a key (`ScreenReaderEngine::handle_key_event`)
+
+Each key goes to the first of these that applies (as of `b3b49cc`):
+
+1. **The JAWS key** (Insert, or CapsLock in the laptop layout) and every chord with it: JAWS
+   commands, in any mode.
+2. **The Virtual Viewer** (Insert+Alt+W, the results viewer), while it is open.
+3. **Menu mode**: a menu is open (`Menus::in_menu_mode`): the system said menu mode started
+   (`EVENT_SYSTEM_MENUSTART`), a popup is open, or a menu item has the focus. Every key goes
+   to the menu, Escape too. Menu mode ends with the menu-end event, or when a focus lands
+   outside the menus (back in the page, or on a native control), which says "Leaving
+   menus". It does not wait for an item's focus: Chrome's app menu opens with none, and the
+   Down that focuses its first item must reach it.
+4. **Forms mode**: a page's field, editable combo box, ARIA menu or application region has the
+   focus. Keys go to the page; caret and edit keys are read, typed keys echoed by the typing
+   echo setting. Escape leaves forms mode ("virtual PC Cursor"), except in an application
+   region, whose keys are all the page's.
+5. **Escape** closes the virtual cursor's element list, expanded combo box or dialog.
+6. **The PC cursor**: the focus is outside a document (an application, the browser's address
+   bar or toolbar). Keys go to the application; edit fields, and fields typed into such as a
+   console, read their keys.
+7. **The virtual PC cursor** in a page: Tab moves from the cursor, and reading and quick
+   navigation keys are its commands.
+
+The focus decides between 6 and 7 (`AppMode`: a page's document or not); a browser's own menu
+over a page leaves forms mode as it was, so the page has its keys back when the menu closes.
+
 ---
 
 ## 3. Checkbox State Toggling (`Spacebar`)

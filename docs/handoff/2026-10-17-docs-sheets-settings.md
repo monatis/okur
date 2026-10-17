@@ -2,7 +2,10 @@
 
 Follows [`2026-10-16-google-docs.md`](2026-10-16-google-docs.md). The user restarted JAWS,
 allowed changing Google Docs' settings, chose the copyright holder ("M. Yusuf Sarıgöz"), and
-left the dev box to the agent until 07:00: Docs, then Sheets, then Windows Settings screens.
+left the dev box to the agent until 07:00: Docs, then Sheets, then Windows Settings screens. At
+about 04:40 the user came back, asked why the test Chrome was in Turkish (it is a separate
+profile in the session scratchpad, whose own locale is `tr`; the user's Chrome is still
+`en-US`), and asked for the menu fix below and this wrap-up.
 
 Everything here was observed on the dev box with the user's JAWS configuration: research,
 not evidence. old-pc stayed offline. JAWS's process still showed `Responding=False` all
@@ -58,6 +61,12 @@ arrows, Enter on page links and Escape, and change no setting.
   now matches (parity numbers below).
 - `9103505` fix(windows): a search result selected again says its name alone.
 - `247dac7`, `80100b9`: Windows Terminal (below).
+- `8d5ee8a` feat: Chrome's address bar says its shortcut ("Ctrl+L"), and the page its name
+  ("Web Menus document") when the focus returns to it.
+- `9fe7cc7` fix(web): switching to a page's tab (Ctrl+Tab, Ctrl+W) says the page and the
+  window; Okur said nothing.
+- `b3b49cc` fix: a menu takes the keys whatever cursor was active (below, after the user
+  found Chrome's app menu unusable with Okur over a page).
 
 ## Docs and Sheets: where they stand (dev box)
 
@@ -151,6 +160,39 @@ no file or setting changed. Compared as collapsed text with JAWS's speech histor
   as in a field ("c", "b", the deleted "b"). With `--typing-echo none`, the same as JAWS but
   for Home, End and Ctrl+Left (JAWS: " ", "ac"; Okur reads none of them).
 
+## Chrome's own controls, and who takes a key (dev box)
+
+The user found Chrome's app menu (Alt+F) unusable with Okur running over a page: the
+arrows moved the virtual cursor. Traced: Chrome reports menu mode starting and its popup
+opening with no item focused, and the next Down focuses the first item. A Down arrived 180 ms
+after Alt+F with nothing typed (likely JAWS), went to the virtual cursor, and the menu never
+had a focus. Okur knew menus only from a focused menu item.
+
+The fix (`b3b49cc`) makes the key routing an explicit order, documented in
+[`forms-and-interaction-modes.md`](../references/forms-and-interaction-modes.md#who-takes-a-key-screenreaderenginehandle_key_event):
+the JAWS keys, the Virtual Viewer, menu mode, forms mode, Escape out of the cursor's lists
+and dialogs, the PC cursor (a focus outside a document), the virtual PC cursor. Menu mode
+starts with the system's menu-start event, an open popup or a focused menu item, and ends
+with menu-end or a focus outside the menus. JAWS's public documentation, as far as it could
+be reached (Freedom Scientific's site refuses automated reads; JAWS's help is not installed on
+the dev box), says the same of the virtual cursor, forms mode and the PC cursor in the
+browser's own controls; menus were checked against JAWS live.
+- Chrome's menu, Down x3, Escape, then Down x2: Okur keeps no key in the menu and reads it
+  as JAWS does ("Context Menu | | To navigate press Up or Down Arrow. | Yeni pencere Ctrl+N |
+  2 of 23 | n", "… sub menu"), says "Leaving menus", and the virtual cursor reads on.
+  JAWS also names the window after leaving, and says "Y" for one item Okur gives no letter.
+- File Explorer's context menu, the recorded Win32 menus (302, parity) and a page's ARIA menu
+  read as before.
+- Not explained: in `web-menus.html`'s ARIA menu, Down reaches the page under JAWS alone but
+  not with Okur running beside it (Okur passes the key on; no focus event follows), on this
+  build and the one before it. JAWS runs during every Okur check on the dev box and sees each
+  key after Okur, so its virtual cursor may be taking them; old-pc, with only one screen
+  reader at a time, can tell.
+
+Chrome's address bar: "Adres ve arama çubuğu Edit | <url> | Type in text. | Ctrl+L", then
+Escape: "Web Menus document", the same as JAWS. Tab switching: "Web Menus document | Web
+Menus - Google Chrome" (JAWS also says "<window> page" and the page's line).
+
 ## Verification
 
 - `cargo test --workspace` (gate, each commit): passes; clippy with the gate's flags clean.
@@ -203,7 +245,7 @@ no file or setting changed. Compared as collapsed text with JAWS's speech histor
 ## Left in the user's account
 
 - Google Docs' braille support is on (Tools > Accessibility > Accessibility settings). The
-  user allowed it; it can be turned off there.
+  user keeps it on: Docs exposes its document to screen readers through it.
 - The test document "Untitled document" and the test spreadsheet "Untitled spreadsheet" (a
   five-row table) in the user's Google Drive.
 - The clipboard: one Enter meant for "Rename this PC" may have pressed About's "Copy"

@@ -67,6 +67,12 @@ still stand; this plan adds tonight's.
   when it counts a radio button's position; Home, End and Ctrl+Left in a
   console; JAWS's "Popup" as a WinUI menu opens.
 - Calculator: JAWS's own wording (handoff), as a Calculator module.
+- Chrome's own controls (handoff): record on old-pc its app menu over a page, the address bar
+  and back, and Ctrl+Tab/Ctrl+W, as evidence. There, with Okur alone (no JAWS beside it),
+  check why Down in `web-menus.html`'s ARIA menu did not reach the page on the dev box.
+- Key routing (`handle_key_event`, documented in `forms-and-interaction-modes.md`): look for
+  other states the focus can leave the page by without a focus event first (a dialog or a
+  permission bubble Chrome opens over the page; the find bar), as the app menu did.
 - Next applications: the classic console (conhost, if Windows Terminal is not the default),
   Notepad's settings page, the Microsoft Store.
 
