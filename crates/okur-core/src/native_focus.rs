@@ -339,12 +339,19 @@ impl NativeFocus {
         self.groups = focus.groups.clone();
         if focus.role == Role::TreeItem {
             if !within {
-                self.tree_level = None;
+                // Tab into the tree names no level (303/s4), and the arrows go on from the
+                // item's: the first Down at that level says the item alone (303/s5, trial 1:
+                // "Pictures"; File Explorer's navigation pane, "Gallery", dev box 2026-10-17).
+                self.tree_level = focus.tree_level;
             } else if let Some(level) = focus.tree_level {
                 // Arrow keys in a tree announce a level different from the last one
-                // announced [obs, 303/s5, s8]; Tab into the tree does not (303/s4).
+                // announced, and the item's position with it [obs, 303/s8: "level 1 |
+                // Reports | 1 of 2"]; within one level, no position (303/s6: "Documents
+                // closed"; File Explorer: "OneDrive Closed").
                 if self.tree_level != Some(level) {
                     speech.lines.insert(0, Line::text(format!("level {level}")));
+                } else if let Some(at) = position(focus).map(|p| p.render()) {
+                    speech.lines.retain(|line| line.render() != at);
                 }
                 self.tree_level = Some(level);
             }
@@ -1370,5 +1377,42 @@ To activate press Enter."
             None
         );
         assert!(menus.end());
+    }
+}
+
+#[cfg(test)]
+mod tree_tests {
+    use super::*;
+
+    fn tree_item(name: &str, level: usize, index: usize, count: usize) -> FocusEvent {
+        let mut item = FocusEvent::new(Role::TreeItem).with_name(name);
+        item.container_role = Some(Role::Tree);
+        item.tree_level = Some(level);
+        item.item_index = Some(index);
+        item.item_count = Some(count);
+        item.states.expanded = Some(false);
+        item
+    }
+
+    /// Arrows in a tree say a position with a new level only (303/s5 trial 1, s6, s8; File
+    /// Explorer's navigation pane on the dev box, 2026-10-17).
+    #[test]
+    fn arrows_in_a_tree_say_a_position_with_a_new_level_only() {
+        let mut native = NativeFocus::default();
+        let say = |native: &mut NativeFocus, focus: &FocusEvent| {
+            native.focus(focus).map(|a| a.render()).unwrap_or_default()
+        };
+        let entered = say(&mut native, &tree_item("Documents", 0, 1, 2));
+        assert!(entered.contains("1 of 2"), "{entered}");
+        let mut pictures = tree_item("Pictures", 0, 2, 2);
+        pictures.states.expanded = None;
+        assert_eq!(say(&mut native, &pictures), "Pictures");
+        assert_eq!(
+            say(&mut native, &tree_item("Documents", 0, 1, 2)),
+            "Documents \u{1d}closed\u{1e} "
+        );
+        let mut reports = tree_item("Reports", 1, 1, 2);
+        reports.states.expanded = None;
+        assert_eq!(say(&mut native, &reports), "level 1\nReports\n1 of 2");
     }
 }
