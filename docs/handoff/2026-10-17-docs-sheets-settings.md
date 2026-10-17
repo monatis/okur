@@ -49,6 +49,7 @@ arrows, Enter on page links and Escape, and change no setting.
   Alt+Left back to Display now says "Brightness Change brightness for the built-in display
   | Show more settings". The WinEvent read for a native live region, which took 970 ms as
   Settings opened, is gone.
+- `384de93` feat(windows): `okur run` says when it is not elevated (below, Rename this PC).
 - `2f27ecf` feat: a typing echo setting (`okur run --typing-echo none`); both old-pc and the
   dev box have JAWS's `TypingEcho=0`, and replay reads it from the evidence.
 
@@ -136,8 +137,10 @@ arrows, Enter on page links and Escape, and change no setting.
     (`Shell_Dialog`, a XAML island). JAWS reads "Rename your PC | Current PC name:
     DESKTOP-… Edit"; a UIA client without UIAccess (PowerShell's, Okur's) sees only two
     empty panes, and keys sent with `okur keys` did not reach it (it was closed with
-    `WM_CLOSE`, nothing renamed). Okur is silent there: likely needs UIAccess (a signed build
-    in a secure folder), as NVDA's installed copy has.
+    `WM_CLOSE`, nothing renamed). The cause is the integrity level: the dialog's process runs
+    at High (0x3000), Okur at Medium (0x2000), and JAWS's `jfw` at High (process tokens).
+    An elevated Okur should read it; not tried, the agent's shell is not elevated. `384de93`
+    makes `okur run` say so at startup.
   - The search box: JAWS said each "No results for …" twice (a second source not found).
   - Okur echoes typed letters by default (JAWS's default); the user's JAWS has it off:
     run with `--typing-echo none` to match.

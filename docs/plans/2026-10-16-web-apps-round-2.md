@@ -47,10 +47,11 @@ still stand; this plan adds tonight's.
 - 31 pages, the navigation list, a subpage, Alt+Left and the search box match JAWS (handoff
   `2026-10-17-docs-sheets-settings.md`). Left: "1 of 1" on Sound's "All sound devices", the
   order of a live region and the focus after Alt+Left, and "No results for …" said twice.
-- **Dialogs Settings opens in `SystemSettingsAdminFlows`** (Rename this PC): Okur, without
-  UIAccess, sees no content in them. Find out whether UIAccess is what JAWS has that Okur
-  lacks (a build with `uiAccess=true`, signed, run from Program Files), and what it takes to
-  ship one. This blocks every such dialog.
+- **Elevated windows** (Settings' Rename this PC, in `SystemSettingsAdminFlows` at High
+  integrity): Okur at Medium sees none of them (UIPI); JAWS's `jfw` runs at High. With the
+  user, run Okur from an administrator prompt and check the Rename dialog against JAWS
+  (`384de93` prints a note when Okur is not elevated). Then decide how Okur gets there by
+  itself (a launcher that elevates, or UIAccess: signed, from Program Files).
 - Other WinUI apps with the same rules: the Microsoft Store, the new Notepad's settings,
   Calculator (JAWS's wording is in the handoff: a Calculator module could say it, from the
   notification, the display's child pane and the expression element, not from English text).
