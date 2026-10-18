@@ -12,6 +12,7 @@ pub mod event;
 pub mod input;
 pub mod linearize;
 pub mod live_text;
+pub mod messages;
 pub mod native_focus;
 pub mod pronounce;
 pub mod settings;

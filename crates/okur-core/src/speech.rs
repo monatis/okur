@@ -1,5 +1,6 @@
 use crate::aom::{AomNode, Role, TextFormatting};
 use crate::buffer::BufferLine;
+use crate::messages::msg;
 
 /// Formats virtual buffer elements and reading events into canonical JAWS speech tokens.
 pub struct SpeechFormatter;
@@ -15,24 +16,28 @@ impl SpeechFormatter {
         match role {
             Role::Heading { level } => {
                 // JAWS format: " \u001d heading level {level} \u001e {text}"
-                format!(" \u{001d} heading level {} \u{001e} {}", level, text)
+                format!(
+                    " \u{001d} {} \u{001e} {}",
+                    msg::role_heading_level(*level),
+                    text
+                )
             }
             Role::Link { href } => {
                 let is_same_page = href.as_deref().map(|h| h.starts_with('#')).unwrap_or(false);
                 if is_same_page {
-                    format!(" \u{001d} same page link \u{001e} {}", text)
+                    format!(" \u{001d} {} \u{001e} {}", msg::role_link_same_page(), text)
                 } else {
-                    format!(" \u{001d} Link \u{001e} {}", text)
+                    format!(" \u{001d} {} \u{001e} {}", msg::role_link(), text)
                 }
             }
-            Role::Button => format!("button {}", text),
-            Role::CheckBox => format!("checkbox {}", text),
-            Role::Edit => format!("edit {}", text),
-            Role::ComboBox => format!("combo box {}", text),
-            Role::TreeItem => format!("tree item {}", text),
-            Role::Slider => format!("slider {}", text),
+            Role::Button => format!("{} {}", msg::role_button_line(), text),
+            Role::CheckBox => format!("{} {}", msg::role_check_box_line(), text),
+            Role::Edit => format!("{} {}", msg::role_edit_multiline(), text),
+            Role::ComboBox => format!("{} {}", msg::role_combo_box(), text),
+            Role::TreeItem => format!("{} {}", msg::role_tree_item(), text),
+            Role::Slider => format!("{} {}", msg::role_slider(), text),
             Role::IFrame => {
-                if text.ends_with("frame end") || text.ends_with("frame") {
+                if Self::is_frame_line(text) {
                     text.to_string()
                 } else {
                     Self::format_frame(text)
@@ -42,19 +47,24 @@ impl SpeechFormatter {
         }
     }
 
+    /// Whether a line's text already says it is a frame's ("Comments frame", "frame end").
+    pub fn is_frame_line(text: &str) -> bool {
+        text.ends_with(msg::frame_end().as_str()) || text.ends_with(msg::frame().as_str())
+    }
+
     /// Formats an inline frame entry announcement matching JAWS conventions: `"<Name> frame"`.
     pub fn format_frame(name: &str) -> String {
         let trimmed = name.trim();
         if trimmed.is_empty() {
-            "frame".to_string()
+            msg::frame().to_string()
         } else {
-            format!("{} frame", trimmed)
+            msg::frame_named(trimmed).render()
         }
     }
 
     /// Formats page title update or SPA route transition matching JAWS.
     pub fn format_page_title_change(title: &str) -> String {
-        format!("Page has loaded: {}", title.trim())
+        msg::page_loaded(title.trim()).render()
     }
 
     fn format_number(val: f64) -> String {
@@ -68,17 +78,22 @@ impl SpeechFormatter {
     /// Formats an ARIA combobox announcement matching JAWS conventions.
     /// Canonical JAWS pattern: `"<Label>  \u{001d} combo box \u{001e} <Value> \u{001d} <collapsed|expanded> \u{001e}"`
     pub fn format_combobox(name: &str, value: Option<&str>, expanded: bool) -> String {
-        let state_str = if expanded { "expanded" } else { "collapsed" };
+        let state_str = if expanded {
+            msg::state_expanded()
+        } else {
+            msg::state_collapsed()
+        };
+        let role = msg::role_combo_box();
         let val_str = value.unwrap_or("").trim();
         if val_str.is_empty() {
             format!(
-                "{}  \u{001d} combo box \u{001e} \u{001d} {} \u{001e}",
-                name, state_str
+                "{}  \u{001d} {} \u{001e} \u{001d} {} \u{001e}",
+                name, role, state_str
             )
         } else {
             format!(
-                "{}  \u{001d} combo box \u{001e} {} \u{001d} {} \u{001e}",
-                name, val_str, state_str
+                "{}  \u{001d} {} \u{001e} {} \u{001d} {} \u{001e}",
+                name, role, val_str, state_str
             )
         }
     }
@@ -86,10 +101,21 @@ impl SpeechFormatter {
     /// Formats an ARIA treeitem announcement matching JAWS conventions.
     /// Canonical JAWS pattern: `"<Name>  \u{001d} level <N> \u{001e} <collapsed|expanded>"`
     pub fn format_tree_item(name: &str, level: u32, expanded: Option<bool>) -> String {
+        let level = msg::role_tree_level(level);
         match expanded {
-            Some(true) => format!("{}  \u{001d} level {} \u{001e} expanded", name, level),
-            Some(false) => format!("{}  \u{001d} level {} \u{001e} collapsed", name, level),
-            None => format!("{}  \u{001d} level {} \u{001e}", name, level),
+            Some(true) => format!(
+                "{}  \u{001d} {} \u{001e} {}",
+                name,
+                level,
+                msg::state_expanded()
+            ),
+            Some(false) => format!(
+                "{}  \u{001d} {} \u{001e} {}",
+                name,
+                level,
+                msg::state_collapsed()
+            ),
+            None => format!("{}  \u{001d} {} \u{001e}", name, level),
         }
     }
 
@@ -97,8 +123,9 @@ impl SpeechFormatter {
     /// Canonical JAWS pattern: `"<Name>  \u{001d} slider \u{001e} <value>"`
     pub fn format_slider(name: &str, value: f64) -> String {
         format!(
-            "{}  \u{001d} slider \u{001e} {}",
+            "{}  \u{001d} {} \u{001e} {}",
             name,
+            msg::role_slider(),
             Self::format_number(value)
         )
     }
@@ -107,25 +134,27 @@ impl SpeechFormatter {
     /// Canonical JAWS pattern: `"<Name>  \u{001d} progress bar \u{001e} <value>%"`
     pub fn format_progressbar(name: &str, value: f64) -> String {
         format!(
-            "{}  \u{001d} progress bar \u{001e} {}%",
+            "{}  \u{001d} {} \u{001e} {}",
             name,
-            Self::format_number(value)
+            msg::role_progress_bar(),
+            msg::progress_percent(Self::format_number(value))
         )
     }
 
     /// Formats an edit control announcement.
     pub fn format_edit(name: &str, value: Option<&str>) -> String {
         let val_str = value.unwrap_or("");
+        let role = msg::role_edit();
         if val_str.is_empty() {
-            format!("{}  \u{001d} Edit \u{001e}", name)
+            format!("{}  \u{001d} {} \u{001e}", name, role)
         } else {
-            format!("{}  \u{001d} Edit \u{001e}  \n{}", name, val_str)
+            format!("{}  \u{001d} {} \u{001e}  \n{}", name, role, val_str)
         }
     }
 
     /// Formats a push button announcement.
     pub fn format_button(name: &str) -> String {
-        format!("{}  \u{001d} Button \u{001e}", name)
+        format!("{}  \u{001d} {} \u{001e}", name, msg::role_button())
     }
 
     /// Formats a push button with expansion state and optional document title.
@@ -140,12 +169,26 @@ impl SpeechFormatter {
                 parts.push(title.to_string());
             }
         }
-        let exp_str = match expanded {
-            Some(true) => "   \u{001d}expanded\u{001e}  \nTo activate press Enter.",
-            Some(false) => "   \u{001d}collapsed\u{001e}  \nTo activate press Enter.",
-            None => "",
+        let state = match expanded {
+            Some(true) => Some(msg::state_expanded()),
+            Some(false) => Some(msg::state_collapsed()),
+            None => None,
         };
-        parts.push(format!("{}  \u{001d} Button \u{001e}{}", name, exp_str));
+        let exp_str = state
+            .map(|state| {
+                format!(
+                    "   \u{001d}{}\u{001e}  \n{}",
+                    state,
+                    msg::hint_activate_enter()
+                )
+            })
+            .unwrap_or_default();
+        parts.push(format!(
+            "{}  \u{001d} {} \u{001e}{}",
+            name,
+            msg::role_button(),
+            exp_str
+        ));
         parts.join("\n")
     }
 
@@ -162,24 +205,30 @@ impl SpeechFormatter {
         if announce_group {
             if let Some(grp) = group_name {
                 if !grp.is_empty() {
-                    parts.push(format!("{} \u{001d} group \u{001e}", grp));
+                    parts.push(format!("{} \u{001d} {} \u{001e}", grp, msg::role_group()));
                 }
             }
         }
-        parts.push(format!("{}  \u{001d} Tab \u{001e}", name));
-        parts.push(format!("{} of {}", index, total));
+        parts.push(format!("{}  \u{001d} {} \u{001e}", name, msg::role_tab()));
+        parts.push(msg::position(index, total).render());
         if selected {
-            parts.push(" \u{001d}selected\u{001e}".to_string());
+            parts.push(format!(" \u{001d}{}\u{001e}", msg::state_selected()));
         }
         parts.join("\n")
     }
 
     /// Formats a checkbox announcement.
     pub fn format_checkbox(name: &str, checked: bool) -> String {
-        let state_str = if checked { "checked" } else { "not checked" };
+        let state_str = if checked {
+            msg::state_checked()
+        } else {
+            msg::state_not_checked()
+        };
         format!(
-            " {}  \u{001d} check box \u{001e}   \u{001d}{}\u{001e}",
-            name, state_str
+            " {}  \u{001d} {} \u{001e}   \u{001d}{}\u{001e}",
+            name,
+            msg::role_check_box(),
+            state_str
         )
     }
 
@@ -235,50 +284,52 @@ impl SpeechFormatter {
         value: Option<&str>,
     ) -> String {
         let val_str = value.unwrap_or("");
+        let edit = msg::role_edit();
+        let hint = msg::hint_type_in_text();
+        let region = msg::role_form_region();
         if doc_title.is_empty() {
             if val_str.is_empty() {
-                format!("{}  \u{001d} Edit \u{001e}  \nType in text.", field_name)
+                format!("{field_name}  \u{001d} {edit} \u{001e}  \n{hint}")
             } else {
-                format!(
-                    "{}  \u{001d} Edit \u{001e}   \n{}\nType in text.",
-                    field_name, val_str
-                )
+                format!("{field_name}  \u{001d} {edit} \u{001e}   \n{val_str}\n{hint}")
             }
         } else if val_str.is_empty() {
             format!(
-                "{} \n \u{001d} FormRegion \u{001e} \n{}  \u{001d} Edit \u{001e}\nType in text.",
-                doc_title, field_name
+                "{doc_title} \n \u{001d} {region} \u{001e} \n{field_name}  \u{001d} {edit} \u{001e}\n{hint}"
             )
         } else {
             format!(
-                "{} \n \u{001d} FormRegion \u{001e} \n{}  \u{001d} Edit \u{001e}   \n{}\nType in text.",
-                doc_title, field_name, val_str
+                "{doc_title} \n \u{001d} {region} \u{001e} \n{field_name}  \u{001d} {edit} \u{001e}   \n{val_str}\n{hint}"
             )
         }
     }
 
     /// Formats announcement when exiting Forms Mode back to Virtual PC Cursor.
     pub fn format_forms_mode_exit() -> String {
-        "virtual PC Cursor".to_string()
+        msg::cursor_virtual_pc().to_string()
     }
 
     /// Formats announcement when toggling a checkbox via Spacebar.
     pub fn format_checkbox_toggle(doc_title: &str, name: &str, checked: bool) -> String {
-        let state_str = if checked { "checked" } else { "not checked" };
-        let action_hint = if checked {
-            "To clear checkmark press Spacebar."
+        let state_str = if checked {
+            msg::state_checked()
         } else {
-            "To check press Spacebar."
+            msg::state_not_checked()
         };
+        let action_hint = if checked {
+            msg::hint_clear_checkmark_spacebar()
+        } else {
+            msg::hint_check_spacebar()
+        };
+        let role = msg::role_check_box();
         if doc_title.is_empty() {
             format!(
-                "{}  \u{001d} check box \u{001e}   \u{001d}{}\u{001e}  \n{}",
-                name, state_str, action_hint
+                "{name}  \u{001d} {role} \u{001e}   \u{001d}{state_str}\u{001e}  \n{action_hint}"
             )
         } else {
             format!(
-                "{} \n \u{001d} FormRegion \u{001e} \n{}  \u{001d} check box \u{001e}   \u{001d}{}\u{001e}  \n{}",
-                doc_title, name, state_str, action_hint
+                "{doc_title} \n \u{001d} {} \u{001e} \n{name}  \u{001d} {role} \u{001e}   \u{001d}{state_str}\u{001e}  \n{action_hint}",
+                msg::role_form_region()
             )
         }
     }
@@ -297,28 +348,28 @@ impl SpeechFormatter {
         let required = attr("required") == Some("true");
         let checked = |c: Option<bool>| {
             if c == Some(true) {
-                "checked"
+                msg::state_checked()
             } else {
-                "not checked"
+                msg::state_not_checked()
             }
         };
         match &node.role {
             Role::Edit => {
                 let password = attr("password") == Some("true");
                 let kind = if password {
-                    "password edit"
+                    msg::role_edit_password().as_str()
                 } else if let Some(description) = node.role_description() {
                     description
                 } else if attr("readonly") == Some("true") {
-                    "read only edit"
+                    msg::role_edit_read_only().as_str()
                 } else if attr("multiline") == Some("true") {
-                    "edit"
+                    msg::role_edit_multiline().as_str()
                 } else {
-                    "Edit"
+                    msg::role_edit().as_str()
                 };
                 let mut s = format!("{name} \u{1d} {kind} \u{1e} ");
                 if required {
-                    s.push_str("\n \u{1d}Required\u{1e} ");
+                    s.push_str(&format!("\n \u{1d}{}\u{1e} ", msg::state_required()));
                 }
                 // A multi-line field with text says so, not its text (a text area, a web code
                 // editor): "Notes edit | Contains text" (JAWS on the dev box). A field holding
@@ -326,10 +377,10 @@ impl SpeechFormatter {
                 if !password {
                     match node.value.as_deref().filter(|v| !v.trim().is_empty()) {
                         Some(_) if attr("multiline") == Some("true") => {
-                            s.push_str("\nContains text")
+                            s.push_str(&format!("\n{}", msg::field_contains_text()))
                         }
                         Some(v) => s.push_str(&format!("\n{v}")),
-                        None => s.push_str("\nblank"),
+                        None => s.push_str(&format!("\n{}", msg::field_blank())),
                     }
                 }
                 if let Some(d) = attr("description") {
@@ -342,15 +393,16 @@ impl SpeechFormatter {
                 if let (Some(group), Some(group_id)) = (attr("group_name"), attr("group_id")) {
                     let inside = group_id.parse().is_ok_and(&was_inside);
                     if !inside {
-                        s.push_str(&format!("{group} \u{1d} group \u{1e} \n"));
+                        s.push_str(&format!("{group} \u{1d} {} \u{1e} \n", msg::role_group()));
                     }
                 }
                 s.push_str(&format!(
-                    "{name}  \u{1d} radio button \u{1e}   \u{1d}{}\u{1e} ",
+                    "{name}  \u{1d} {} \u{1e}   \u{1d}{}\u{1e} ",
+                    msg::role_radio_button(),
                     checked(node.states.checked)
                 ));
                 if let (Some(p), Some(n)) = (attr("posinset"), attr("setsize")) {
-                    s.push_str(&format!("\n{p} of {n}"));
+                    s.push_str(&format!("\n{}", msg::position(p, n)));
                 }
                 s
             }
@@ -359,11 +411,14 @@ impl SpeechFormatter {
             }
             Role::ComboBox => {
                 let state = if node.states.expanded == Some(true) {
-                    "expanded"
+                    msg::state_expanded()
                 } else {
-                    "collapsed"
+                    msg::state_collapsed()
                 };
-                let mut s = format!("{name}  \u{1d} Combo box \u{1e}   \u{1d}{state}\u{1e} ");
+                let mut s = format!(
+                    "{name}  \u{1d} {} \u{1e}   \u{1d}{state}\u{1e} ",
+                    msg::role_combo_box_focus()
+                );
                 if let Some(v) = node.value.as_deref() {
                     s.push_str(&format!("\n{v}"));
                 }
@@ -371,25 +426,29 @@ impl SpeechFormatter {
             }
             Role::CheckBox => format!(
                 "{name}  \u{1d} {} \u{1e}   \u{1d}{}\u{1e}",
-                node.role_description().unwrap_or("check box"),
+                node.role_description()
+                    .unwrap_or(msg::role_check_box().as_str()),
                 checked(node.states.checked)
             ),
             // A toggle button (`aria-pressed`): "Sohbetler Toggle button Pressed", "👍 Toggle
             // button Not pressed" (WhatsApp, JAWS on the dev box, 2026-10-17).
             Role::Button if node.states.checked.is_some() => {
                 let pressed = if node.states.checked == Some(true) {
-                    "Pressed"
+                    msg::state_pressed()
                 } else {
-                    "Not pressed"
+                    msg::state_not_pressed()
                 };
-                format!("{name}   Toggle button   {pressed} ")
+                format!(
+                    "{name}  \u{1d} {} \u{1e}  \u{1d}{pressed}\u{1e} ",
+                    msg::role_toggle_button()
+                )
             }
             Role::Button => {
                 // A disclosure button speaks its state [obs, 29/s1].
                 let state = match node.states.expanded {
-                    Some(true) => " \u{1d}expanded\u{1e}",
-                    Some(false) => " \u{1d}collapsed\u{1e}",
-                    None => "",
+                    Some(true) => format!(" \u{1d}{}\u{1e}", msg::state_expanded()),
+                    Some(false) => format!(" \u{1d}{}\u{1e}", msg::state_collapsed()),
+                    None => String::new(),
                 };
                 let current = node
                     .current_phrase()
@@ -398,14 +457,18 @@ impl SpeechFormatter {
                 let popup = node
                     .attributes
                     .get("haspopup")
-                    .map(|p| format!(" \u{1d}Has Popup\u{1e} {p}"))
+                    .map(|p| format!(" \u{1d}{}\u{1e} {p}", msg::state_has_popup()))
                     .unwrap_or_default();
-                let role = node.role_description().unwrap_or("Button");
+                let role = node
+                    .role_description()
+                    .unwrap_or(msg::role_button().as_str());
                 format!("{name}  \u{1d} {role} \u{1e}{state}{popup}{current}")
             }
             // On focus a menu button says no state and no hint (JAWS on the dev box).
             Role::MenuButton => {
-                let role = node.role_description().unwrap_or("button menu");
+                let role = node
+                    .role_description()
+                    .unwrap_or(msg::role_button_menu().as_str());
                 format!("{name}  \u{1d} {role} \u{1e} ")
             }
             _ => name.to_owned(),
@@ -418,20 +481,24 @@ impl SpeechFormatter {
         use crate::aom::Role;
         match node.role {
             Role::CheckBox if node.states.checked == Some(true) => {
-                Some("To clear checkmark press Spacebar.")
+                Some(msg::hint_clear_checkmark_spacebar().as_str())
             }
-            Role::CheckBox => Some("To check press Spacebar."),
+            Role::CheckBox => Some(msg::hint_check_spacebar().as_str()),
             Role::Button if node.states.checked.is_some() => {
-                Some("To toggle the state press spacebar.")
+                Some(msg::hint_toggle_spacebar().as_str())
             }
-            Role::Link { .. } | Role::Button => Some("To activate press Enter."),
+            Role::Link { .. } | Role::Button => Some(msg::hint_activate_enter().as_str()),
             _ => None,
         }
     }
 
     /// Formats a heading announcement for quick navigation (`H` / `1`–`6`).
     pub fn format_heading(level: u32, text: &str) -> String {
-        format!("{}\n \u{001d} heading level {} \u{001e}", text, level)
+        format!(
+            "{}\n \u{001d} {} \u{001e}",
+            text,
+            msg::role_heading_level(level)
+        )
     }
 
     /// A combo box one types in (an autocomplete): "Fruit edit combo collapsed | blank" (JAWS
@@ -440,9 +507,9 @@ impl SpeechFormatter {
         // One that opens nothing (Google Sheets' cell editor: no expanded state) has no state
         // to say, and JAWS says none (dev box, 2026-10-16).
         let state = match node.states.expanded {
-            Some(true) => "   \u{1d}expanded\u{1e} ",
-            Some(false) => "   \u{1d}collapsed\u{1e} ",
-            None => " ",
+            Some(true) => format!("   \u{1d}{}\u{1e} ", msg::state_expanded()),
+            Some(false) => format!("   \u{1d}{}\u{1e} ", msg::state_collapsed()),
+            None => " ".to_owned(),
         };
         // Google Sheets' cell editor holds a zero-width no-break space and a line break
         // around its text.
@@ -452,8 +519,9 @@ impl SpeechFormatter {
             .map(|v| v.trim_matches(|c: char| c.is_whitespace() || c == '\u{feff}'))
             .filter(|v| !v.is_empty());
         format!(
-            "{name}  \u{1d} edit combo \u{1e}{state}\n{}",
-            value.unwrap_or("blank")
+            "{name}  \u{1d} {} \u{1e}{state}\n{}",
+            msg::role_edit_combo(),
+            value.unwrap_or(msg::field_blank().as_str())
         )
     }
 
@@ -469,9 +537,12 @@ impl SpeechFormatter {
             .get("same_page")
             .is_some_and(|v| v == "true")
         {
-            format!("{name}  \u{1d} same page link \u{1e} {current}")
+            format!(
+                "{name}  \u{1d} {} \u{1e} {current}",
+                msg::role_link_same_page()
+            )
         } else {
-            format!("{name}{current}  \u{1d} Link \u{1e} ")
+            format!("{name}{current}  \u{1d} {} \u{1e} ", msg::role_link())
         };
         // Its description follows (GitHub's commit links: the whole message, dev box).
         if let Some(description) = node.attributes.get("description") {
@@ -502,13 +573,13 @@ impl SpeechFormatter {
         cell_text: &str,
     ) -> String {
         let mut parts = Vec::new();
-        parts.push(format!("table with {} columns and {} rows", cols, rows));
+        parts.push(msg::table_entry(cols, rows).render());
         if let Some(cap) = caption {
             if !cap.is_empty() {
                 parts.push(cap.to_string());
             }
         }
-        parts.push(format!("Column {}, Row {}", col, row));
+        parts.push(msg::table_cell(col, row).render());
         if !cell_text.is_empty() {
             parts.push(cell_text.to_string());
         }
@@ -534,9 +605,9 @@ impl SpeechFormatter {
             parts.push(text.to_string());
         }
         if col_span > 1 {
-            parts.push(format!("Spans {} columns", col_span));
+            parts.push(msg::table_spans_columns(col_span).render());
         }
-        parts.push(format!("Column {} of {}", col, total_cols));
+        parts.push(msg::table_column_of(col, total_cols).render());
         parts.join("\n")
     }
 
@@ -560,9 +631,9 @@ impl SpeechFormatter {
             parts.push(text.to_string());
         }
         if row_span > 1 {
-            parts.push(format!("cell {} of row spanning {} rows", col, row_span));
+            parts.push(msg::table_cell_of_spanning_row(col, row_span).render());
         }
-        parts.push(format!("Row {} of {}", row, total_rows));
+        parts.push(msg::table_row_of(row, total_rows).render());
         parts.join("\n")
     }
 
@@ -591,33 +662,33 @@ impl SpeechFormatter {
             parts.push(text.to_string());
         }
         if row_span > 1 {
-            parts.push(format!("cell {} of row spanning {} rows", col, row_span));
+            parts.push(msg::table_cell_of_spanning_row(col, row_span).render());
         }
         if col_span > 1 {
-            parts.push(format!("Spans {} columns", col_span));
+            parts.push(msg::table_spans_columns(col_span).render());
         }
-        parts.push(format!("Column {}, Row {}", col, row));
+        parts.push(msg::table_cell(col, row).render());
         parts.join("\n")
     }
 
     /// Formats beginning of row announcement (`Ctrl+Alt+Shift+LeftArrow`).
     pub fn format_table_row_start(text: &str) -> String {
-        format!("beginning of row\n{}", text)
+        format!("{}\n{}", msg::table_row_start(), text)
     }
 
     /// Formats end of row announcement (`Ctrl+Alt+Shift+RightArrow`).
     pub fn format_table_row_end(text: &str) -> String {
-        format!("end of row\n{}", text)
+        format!("{}\n{}", msg::table_row_end(), text)
     }
 
     /// Formats top of column announcement (`Ctrl+Alt+Shift+UpArrow`).
     pub fn format_table_col_top(text: &str) -> String {
-        format!("top of column\n{}", text)
+        format!("{}\n{}", msg::table_column_top(), text)
     }
 
     /// Formats bottom of column announcement (`Ctrl+Alt+Shift+DownArrow`).
     pub fn format_table_col_bottom(text: &str) -> String {
-        format!("bottom of column\n{}", text)
+        format!("{}\n{}", msg::table_column_bottom(), text)
     }
 
     /// Formats column header direct query (`Ctrl+Alt+Shift+H`).
@@ -627,7 +698,7 @@ impl SpeechFormatter {
                 return hdr.to_string();
             }
         }
-        format!("Column {}", col)
+        msg::table_column(col).render()
     }
 
     /// Formats row header direct query (`Ctrl+Alt+Shift+R`).
@@ -637,7 +708,7 @@ impl SpeechFormatter {
                 return hdr.to_string();
             }
         }
-        format!("Row {}", row)
+        msg::table_row(row).render()
     }
 
     /// The font part of Say Font: attributes, then family and size, e.g. `bold  Times New
@@ -645,20 +716,20 @@ impl SpeechFormatter {
     pub fn font_description(formatting: &TextFormatting) -> Option<String> {
         let mut attributes = Vec::new();
         if formatting.bold {
-            attributes.push("bold");
+            attributes.push(msg::font_bold().as_str());
         }
         if formatting.italic {
-            attributes.push("italic");
+            attributes.push(msg::font_italic().as_str());
         }
         if formatting.underline {
-            attributes.push("underline");
+            attributes.push(msg::font_underline().as_str());
         }
         let mut font = Vec::new();
         font.extend(formatting.font_family.clone());
         font.extend(
             formatting
                 .font_size_pt
-                .map(|size| format!("{size:.0} point")),
+                .map(|size| msg::font_size(format!("{size:.0}")).render()),
         );
         if font.is_empty() {
             return None;
@@ -674,52 +745,66 @@ impl SpeechFormatter {
     /// Say Font (`Insert+F`): `Font is bold  Times New Roman 24 point`, or `No font` when the
     /// text has none [obs, 209/s3; 313/s1].
     pub fn format_font(formatting: Option<&TextFormatting>) -> String {
-        formatting
-            .and_then(Self::font_description)
-            .map_or_else(|| "No font".to_owned(), |f| format!("Font is {f}"))
+        formatting.and_then(Self::font_description).map_or_else(
+            || msg::font_none().to_string(),
+            |f| msg::font_is(f).render(),
+        )
     }
 
     /// A text field's alignment as Say Font words it: "Paragraph formatting left justified"
     /// (observed; the other alignments' words are assumed to follow it).
     pub fn paragraph_formatting(alignment: &str) -> String {
         let words = match alignment {
-            "left" => "left justified",
-            "right" => "right justified",
+            "left" => msg::paragraph_left_justified().as_str(),
+            "right" => msg::paragraph_right_justified().as_str(),
             other => other,
         };
-        format!("Paragraph formatting {words}")
+        msg::paragraph_formatting(words).render()
     }
 
     /// Formats selection action announcement matching JAWS conventions.
     pub fn format_selection(selected: bool, text: &str) -> String {
         if selected {
-            format!("selected {}", text)
+            msg::selection_selected(text).render()
         } else {
-            format!("unselected {}", text)
+            msg::selection_unselected(text).render()
         }
     }
 
     /// Formats modal dialog entry announcement.
     pub fn format_dialog_entry(title: &str) -> String {
         if title.is_empty() {
-            "Dialog".to_string()
+            msg::dialog_entered().to_string()
         } else {
-            format!("Dialog {}", title)
+            msg::dialog_entered_named(title).render()
         }
     }
 
     /// Formats modal dialog exit announcement.
     pub fn format_dialog_exit() -> String {
-        "Leaving Dialog".to_string()
+        msg::dialog_left().to_string()
+    }
+
+    /// The opening of an element list dialog, as JAWS says it: its title and role, its list's
+    /// name and role, the first item and its position, and the hint.
+    fn format_list_dialog(title: &str, list: &str, first: &str, count: usize) -> String {
+        format!(
+            "{title}  \u{001d} {} \u{001e} \n{list}  \u{001d} {} \u{001e} \n{first}\n{}\n{}",
+            msg::role_dialog(),
+            msg::role_list_view(),
+            msg::position(1, count),
+            msg::hint_move_to_items_arrows()
+        )
     }
 
     /// Formats the opening announcement of a Links List dialog matching JAWS.
     pub fn format_links_list_dialog(items: &[crate::buffer::LinkListItem]) -> String {
         let first_text = items.first().map(|i| i.text.as_str()).unwrap_or("");
-        format!(
-            "Links List  \u{001d} dialog \u{001e} \nlinks  \u{001d} List view \u{001e} \n{}\n1 of {}\nTo move to items use the Arrow keys.",
+        Self::format_list_dialog(
+            msg::list_dialog_links().as_str(),
+            msg::list_dialog_links_list().as_str(),
             first_text,
-            items.len()
+            items.len(),
         )
     }
 
@@ -729,39 +814,43 @@ impl SpeechFormatter {
             .first()
             .map(|i| format!("{} : {}", i.text, i.level))
             .unwrap_or_default();
-        format!(
-            "Heading List  \u{001d} dialog \u{001e} \nheadings  \u{001d} List view \u{001e} \n{}\n1 of {}\nTo move to items use the Arrow keys.",
-            first_text,
-            items.len()
+        Self::format_list_dialog(
+            msg::list_dialog_headings().as_str(),
+            msg::list_dialog_headings_list().as_str(),
+            &first_text,
+            items.len(),
         )
+    }
+
+    /// The type word of an item in the Form Fields list.
+    pub fn form_field_list_role(role: &Role) -> &'static str {
+        match role {
+            Role::Button => msg::role_button().as_str(),
+            Role::Edit => msg::role_edit().as_str(),
+            Role::CheckBox => msg::role_check_box().as_str(),
+            Role::ComboBox => msg::role_combo_box().as_str(),
+            Role::Slider => msg::role_slider().as_str(),
+            _ => msg::role_field().as_str(),
+        }
     }
 
     /// Formats the opening announcement of a Form Fields List dialog matching JAWS.
     pub fn format_form_fields_list_dialog(items: &[crate::buffer::FormFieldListItem]) -> String {
         let first_text = items
             .first()
-            .map(|i| {
-                let role_label = match i.role {
-                    Role::Button => "Button",
-                    Role::Edit => "Edit",
-                    Role::CheckBox => "check box",
-                    Role::ComboBox => "combo box",
-                    Role::Slider => "slider",
-                    _ => "Field",
-                };
-                format!("{} {}", i.name, role_label)
-            })
+            .map(|i| format!("{} {}", i.name, Self::form_field_list_role(&i.role)))
             .unwrap_or_default();
-        format!(
-            "Select a Form Field  \u{001d} dialog \u{001e} \nList1  \u{001d} List view \u{001e} \n{}\n1 of {}\nTo move to items use the Arrow keys.",
-            first_text,
-            items.len()
+        Self::format_list_dialog(
+            msg::list_dialog_form_fields().as_str(),
+            msg::list_dialog_form_fields_list().as_str(),
+            &first_text,
+            items.len(),
         )
     }
 
     /// Formats negative text search feedback matching JAWS.
     pub fn format_text_not_found(query: &str) -> String {
-        format!("Text not found: {}", query)
+        msg::find_not_found(query).render()
     }
 }
 
