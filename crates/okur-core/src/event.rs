@@ -421,6 +421,13 @@ pub enum AccessibilityEvent {
     /// removed content (WhatsApp renders a chat's messages after the chat opens). Its
     /// buffer is captured again ([`crate::actions::ApplicationActions::page_changed`]).
     PageChanged,
+    /// A part of the page in front read again after it changed (the object whose children
+    /// changed, with its subtree): spliced into the page where the same live object is
+    /// ([`crate::aom::UNIQUE_ID_ATTR`]).
+    PagePartLoaded(crate::aom::AomNode),
+    /// The window in front was renamed: a console takes the title what runs in it sets
+    /// ("SR Console Fixture" after PowerShell's own, 321).
+    WindowRenamed(String),
     DocumentLoaded {
         title: String,
         root: crate::aom::AomNode,

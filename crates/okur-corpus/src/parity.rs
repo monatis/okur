@@ -11,7 +11,9 @@ use crate::scenario::Scenario;
 use crate::snapshots::{self, Api};
 use okur_core::clock::{FixedClock, LocalDateTime, LocaleFormats};
 use okur_core::{Modifiers, ScreenReaderEngine, VirtualBuffer, VirtualCursor};
-use okur_platform::event_trace::{is_focus, menu_event_from_trace, EventConverter, TraceEvent};
+use okur_platform::event_trace::{
+    is_focus, is_window_renamed, menu_event_from_trace, EventConverter, TraceEvent,
+};
 use serde::Serialize;
 use serde_json::Value;
 use std::collections::BTreeMap;
@@ -252,7 +254,8 @@ fn run_scenario(
     }
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(spoken.clone()));
     // Actions succeed as they did live; their effects arrive as the recorded events.
-    engine.set_actions(Box::new(okur_core::actions::RecordingActions::default()));
+    let actions = okur_core::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
     // JAWS's settings when the evidence was recorded.
     engine.settings = replay_settings(&evidence);
     if desktop {
@@ -263,19 +266,29 @@ fn run_scenario(
     if let Some((clock, _)) = &clock {
         engine.set_clock(Box::new(clock.clone()));
     }
-    for chord in scenario.reset.iter().flat_map(|r| r.keys.iter().flatten()) {
-        press(&mut engine, chord, 0, Modifiers::none())?;
-    }
-    spoken.take();
-    spoken.take_spoken();
-
     let replay = StepEvents::load(corpus_dir, &scenario.id, &evidence)?;
     // One converter for the whole run, as live: it tracks the focused object.
     let mut converter = EventConverter::default();
+    // The reset keys and the focus events recorded before step 1, in the order they came: a
+    // page's load events come before its reset keys, which act on the virtual cursor (E, then
+    // Enter into a field: without Auto Forms Mode only that Enter turns forms mode on); an
+    // application answers its reset keys (Ctrl+Home in an editor reads the line it reaches).
+    let press_reset = |engine: &mut ScreenReaderEngine| -> Result<(), String> {
+        for chord in scenario.reset.iter().flat_map(|r| r.keys.iter().flatten()) {
+            press(engine, &actions, chord, 0, Modifiers::none())?;
+        }
+        Ok(())
+    };
+    if desktop {
+        press_reset(&mut engine)?;
+    }
     for event in &replay.setup {
         for converted in converter.convert(event) {
             let _ = engine.handle_accessibility_event(&converted);
         }
+    }
+    if !desktop {
+        press_reset(&mut engine)?;
     }
     spoken.take();
     spoken.take_spoken();
@@ -297,24 +310,34 @@ fn run_scenario(
                 *offset,
             ));
         }
-        let engine_speech = match step.step_type.as_str() {
+        // A key JAWS typed into its own dialog (`TypeKey("Tab")`) is the user's key in Okur's.
+        let typed = (step.step_type == "jaws_function")
+            .then(|| typed_key(&step.command))
+            .flatten();
+        let (step_type, command) = match typed {
+            Some(key) => ("key", key),
+            None => (step.step_type.as_str(), step.command.as_str()),
+        };
+        let engine_speech = match step_type {
             "key" | "key_down" | "key_up" => {
-                match step.step_type.as_str() {
+                match step_type {
                     // A key held across steps (Alt through several Tabs), and its release.
                     "key_down" | "key_up" => {
-                        let down = step.step_type == "key_down";
-                        let mut event = crate::keys::parse_chord(&step.command)?;
+                        let down = step_type == "key_down";
+                        let mut event = crate::keys::parse_chord(command)?;
                         hold(&mut held, event.key, down);
                         event.modifiers = with_held(event.modifiers, held);
                         event.is_down = down;
                         event.time_ms = start;
                         let _ = engine.handle_key_event(&event);
+                        hand_back(&mut engine, &actions, start);
                     }
                     _ => {
                         for press_index in 0..step.repeat.unwrap_or(1).max(1) {
                             press(
                                 &mut engine,
-                                &step.command,
+                                &actions,
+                                command,
                                 start + u64::from(press_index) * REPEAT_GAP_MS,
                                 held,
                             )?;
@@ -583,6 +606,18 @@ fn replay_settings(evidence: &Value) -> okur_core::settings::Settings {
             .and_then(Value::as_str)
             .map(TypingEcho::from_jcf)
             .unwrap_or_default();
+        // A missing option is JAWS's default: on, for both.
+        let jcf = |section: &str, key: &str| {
+            evidence
+                .pointer(&format!(
+                    "/provenance/jaws_settings/DEFAULT.JCF/{section}/{key}"
+                ))
+                .and_then(Value::as_str)
+                .map(str::to_owned)
+        };
+        settings.auto_forms_mode = jcf("FormsMode", "AutoFormsMode").is_none_or(|v| v != "0");
+        // "speech|braille|…|name": the first field is the speech output.
+        settings.access_keys = jcf("OutputModes", "ACCESS_KEY").is_none_or(|v| !v.starts_with('0'));
     }
     settings
 }
@@ -591,6 +626,7 @@ fn replay_settings(evidence: &Value) -> okur_core::settings::Settings {
 /// key-handling entry point.
 fn press(
     engine: &mut ScreenReaderEngine,
+    actions: &okur_core::actions::RecordingActions,
     chord: &str,
     time_ms: u64,
     held: Modifiers,
@@ -599,9 +635,54 @@ fn press(
     event.modifiers = with_held(event.modifiers, held);
     event.time_ms = time_ms;
     let _ = engine.handle_key_event(&event);
+    hand_back(engine, actions, time_ms);
     event.is_down = false;
     let _ = engine.handle_key_event(&event);
     Ok(())
+}
+
+/// The key a `TypeKey("…")` JAWS function call types, as a chord name.
+fn typed_key(call: &str) -> Option<&str> {
+    call.trim()
+        .strip_prefix("TypeKey(\"")?
+        .strip_suffix("\")")
+        .filter(|key| !key.is_empty())
+}
+
+/// Keys the engine sent the application come back through the keyboard hook live, as plain
+/// keys carrying only their own modifiers (a laptop reading key's Down Arrow, read as Down
+/// Arrow is); replay hands them back the same way. A few rounds at most, in case a key sent
+/// sends another.
+fn hand_back(
+    engine: &mut ScreenReaderEngine,
+    actions: &okur_core::actions::RecordingActions,
+    time_ms: u64,
+) {
+    use okur_core::input::Key;
+    for _ in 0..4 {
+        let chords = actions.take_pressed();
+        if chords.is_empty() {
+            return;
+        }
+        for chord in chords {
+            let mut modifiers = Modifiers::none();
+            let mut key = None;
+            for k in chord {
+                match k {
+                    Key::Control => modifiers.ctrl = true,
+                    Key::Shift => modifiers.shift = true,
+                    Key::Alt => modifiers.alt = true,
+                    other => key = Some(other),
+                }
+            }
+            let Some(key) = key else { continue };
+            let mut event = okur_core::input::KeyEvent::new(key, modifiers, true);
+            event.time_ms = time_ms;
+            let _ = engine.handle_key_event(&event);
+            event.is_down = false;
+            let _ = engine.handle_key_event(&event);
+        }
+    }
 }
 
 /// Events the engine consumes: focus changes (with a UIA chain or an MSAA object) and menu
@@ -620,6 +701,7 @@ fn replayable(event: &TraceEvent) -> bool {
                 | "state_change"
                 | "value_change"
                 | "selection"
+                | "name_change"
         ) && (!event.focus_chain.is_empty() || event.object.is_some()))
 }
 
@@ -628,8 +710,9 @@ fn replayable(event: &TraceEvent) -> bool {
 #[derive(Default)]
 struct StepEvents {
     by_step: std::collections::HashMap<String, Vec<okur_platform::event_trace::TraceEvent>>,
-    /// Focus events before the first step (launch and reset), replayed silently so the
-    /// engine knows the window and focus JAWS saw when step 1 began.
+    /// Focus events before the first step (launch and reset), and the window in front with
+    /// its renaming (a console titled by what runs in it), replayed silently so the engine
+    /// knows the window and focus JAWS saw when step 1 began.
     setup: Vec<okur_platform::event_trace::TraceEvent>,
     /// When each step began (unix ms), for the replay clock and key times.
     starts: std::collections::HashMap<String, u64>,
@@ -665,7 +748,11 @@ impl StepEvents {
             .unwrap_or(0);
         let setup = events
             .iter()
-            .filter(|e| is_focus(e) && e.t_ms < first_start && replayable(e))
+            .filter(|e| {
+                (is_focus(e) || e.event == "foreground" || is_window_renamed(e))
+                    && e.t_ms < first_start
+                    && replayable(e)
+            })
             .cloned()
             .collect();
         for step in steps {

@@ -220,6 +220,14 @@ pub fn read_trace(
 /// Name of a recorded `EVENT_*` id, or `None` for events the tracer ignores.
 pub fn event_name(win_event: u32, id_object: i32) -> Option<&'static str> {
     const OBJID_CARET: i32 = -8;
+    // A window's scroll bars (OBJID_VSCROLL, OBJID_HSCROLL): nothing about them is said. A
+    // combo box's list scrolling sent 264 state changes as the Run dialog opened, and reading
+    // each held the focus behind them for 5 s (old-pc, 319).
+    const OBJID_VSCROLL: i32 = -5;
+    const OBJID_HSCROLL: i32 = -6;
+    if matches!(id_object, OBJID_VSCROLL | OBJID_HSCROLL) {
+        return None;
+    }
     Some(match win_event {
         0x0002 => "alert",
         0x0003 => "foreground",
@@ -823,7 +831,9 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
 }
 
 #[cfg(windows)]
-pub use capture::{run_live, run_trace};
+pub use capture::{
+    run_live, run_trace, PageChange, IA2_EVENT_TEXT_INSERTED, IA2_EVENT_TEXT_REMOVED,
+};
 
 /// The menu mode transition a recorded event reports, if any.
 pub fn menu_event_from_trace(event: &TraceEvent) -> Option<okur_core::MenuEvent> {
@@ -849,6 +859,8 @@ pub struct EventConverter {
     focused: Option<(isize, i32, i32, Option<String>)>,
     /// The last focus as the engine received it.
     last_focus: Option<okur_core::FocusEvent>,
+    /// The window last brought to the front, whose renaming the engine is told of.
+    foreground: Option<isize>,
     /// The focused control's own name, from the last focus event's focus chain.
     focused_control: Option<String>,
     /// The last UIA notification and when it came: the same text again within
@@ -859,6 +871,14 @@ pub struct EventConverter {
     /// [`NOTIFICATION_REPEAT_MS`] as notifications are.
     last_live_region: Option<(String, u128)>,
 }
+
+/// A window's own name changed (its title), not a control's in it.
+pub fn is_window_renamed(event: &TraceEvent) -> bool {
+    event.event == "name_change" && event.id_object == OBJID_WINDOW
+}
+
+/// `OBJID_WINDOW`: an event about the window itself.
+const OBJID_WINDOW: i32 = 0;
 
 /// File Explorer's top-level window class.
 const EXPLORER_WINDOW_CLASS: &str = "CabinetWClass";
@@ -907,6 +927,15 @@ impl EventConverter {
         use okur_core::{AccessibilityEvent, ChangeKind};
         if let Some(menu) = menu_event_from_trace(event) {
             return Some(AccessibilityEvent::Menu(menu));
+        }
+        if event.event == "foreground" {
+            self.foreground = Some(event.hwnd);
+        }
+        if is_window_renamed(event) && self.foreground == Some(event.hwnd) {
+            return event
+                .window_title
+                .clone()
+                .map(AccessibilityEvent::WindowRenamed);
         }
         let kind = match event.event.as_str() {
             // A list item selected while the focus stays in a field (Windows search).
@@ -1235,10 +1264,13 @@ mod capture {
         last_focus_read: Option<SeenFocus>,
         /// Told when the page in front changes (live only), at most every
         /// [`PAGE_CHANGE_INTERVAL`].
-        page_changed: Option<Box<dyn FnMut()>>,
+        page_changed: Option<Box<dyn FnMut(PageChange)>>,
         page_changed_at: Option<std::time::Instant>,
         /// Page changes not told since the last one, for the debug log.
         page_changes_dropped: usize,
+        /// Tracing (not live): every page change is recorded as a `page_change` event, with
+        /// its object and nothing read (`okur trace --page-changes`).
+        record_page_changes: bool,
     }
 
     /// The shortest time between two page changes told: a page being built reports its
@@ -1456,6 +1488,22 @@ mod capture {
         event_pid != 0 && event_pid == foreground_pid
     }
 
+    /// Whether `hwnd` belongs to an application other than the one in front, both known (a
+    /// window in front is briefly none while windows switch).
+    fn in_background_process(hwnd: HWND) -> bool {
+        use windows::Win32::UI::WindowsAndMessaging::{
+            GetForegroundWindow, GetWindowThreadProcessId,
+        };
+        let mut event_pid = 0u32;
+        let mut foreground_pid = 0u32;
+        // SAFETY: plain Win32 queries with valid out-pointers.
+        unsafe {
+            GetWindowThreadProcessId(hwnd, Some(&mut event_pid));
+            GetWindowThreadProcessId(GetForegroundWindow(), Some(&mut foreground_pid));
+        }
+        event_pid != 0 && foreground_pid != 0 && event_pid != foreground_pid
+    }
+
     fn msaa_object(hwnd: HWND, id_object: i32, id_child: i32) -> Option<TraceObject> {
         let mut acc: Option<IAccessible> = None;
         let mut child = VARIANT::default();
@@ -1498,12 +1546,30 @@ mod capture {
         id_object: i32,
         id_child: i32,
         _thread: u32,
-        _time: u32,
+        time: u32,
     ) {
         let Some(name) = event_name(win_event, id_object) else {
             return;
         };
-        record(name, win_event, hwnd, id_object, id_child, None);
+        record_at(
+            event_ms(time),
+            name,
+            win_event,
+            hwnd,
+            id_object,
+            id_child,
+            None,
+        );
+    }
+
+    /// When an event happened, in Unix milliseconds, from its `dwmsEventTime` (the tick count
+    /// when Windows raised it): events wait in the hook's queue while the ones before them are
+    /// read, and a trace places each in the step it belongs to by this time.
+    fn event_ms(time: u32) -> u128 {
+        use windows::Win32::System::SystemInformation::GetTickCount;
+        // SAFETY: plain Win32 call with no preconditions.
+        let waited = unsafe { GetTickCount() }.wrapping_sub(time);
+        now_ms().saturating_sub(u128::from(waited))
     }
 
     /// Objects shown, hidden or reordered in the page in front (`EVENT_OBJECT_SHOW`, `_HIDE`,
@@ -1546,14 +1612,45 @@ mod capture {
             let Some(state) = state.as_mut() else {
                 return;
             };
-            if state
-                .page_changed_at
-                .is_some_and(|at| at.elapsed() < PAGE_CHANGE_INTERVAL)
-            {
-                state.page_changes_dropped += 1;
+            if state.record_page_changes {
+                let event = TraceEvent {
+                    t_ms: now_ms(),
+                    event: "page_change".to_owned(),
+                    win_event,
+                    hwnd: hwnd.0 as isize,
+                    id_object,
+                    id_child,
+                    window_class: Some(CHROME_PAGE_WINDOW.to_owned()),
+                    window_title: None,
+                    process: None,
+                    object: None,
+                    focus_chain: Vec::new(),
+                    focus_siblings: Vec::new(),
+                    focus_subtree: None,
+                    list_position: None,
+                    text_context: None,
+                    region: None,
+                    page: None,
+                    top_window_title: None,
+                    top_window_class: None,
+                    virtual_desktop: None,
+                    dialog_lines: Vec::new(),
+                    dialog_text: Vec::new(),
+                    dialog_page: None,
+                    group_box: None,
+                    dialog_tree: None,
+                    notification: None,
+                };
+                (state.sink)(event);
+                state.count += 1;
                 return;
             }
-            if let Some(page_changed) = state.page_changed.as_mut() {
+            // Every change is passed on with its object; the engine is told at most every
+            // PAGE_CHANGE_INTERVAL.
+            let notify = !state
+                .page_changed_at
+                .is_some_and(|at| at.elapsed() < PAGE_CHANGE_INTERVAL);
+            if notify {
                 tracing::debug!(
                     event = win_event,
                     object = id_child,
@@ -1562,13 +1659,36 @@ mod capture {
                 );
                 state.page_changed_at = Some(std::time::Instant::now());
                 state.page_changes_dropped = 0;
-                page_changed();
+            } else {
+                state.page_changes_dropped += 1;
+            }
+            if let Some(page_changed) = state.page_changed.as_mut() {
+                page_changed(PageChange {
+                    event: win_event,
+                    object: id_child,
+                    notify,
+                });
             }
         });
     }
 
     /// The window class of a Chromium page ("Chrome Legacy Window").
     const CHROME_PAGE_WINDOW: &str = "Chrome_RenderWidgetHostHWND";
+
+    /// IA2 text inserted into and removed from an object's text (`AccessibleEventId.idl`).
+    pub const IA2_EVENT_TEXT_INSERTED: u32 = 0x011E;
+    pub const IA2_EVENT_TEXT_REMOVED: u32 = 0x011F;
+
+    /// An object shown, hidden or reordered in the page in front (`EVENT_OBJECT_SHOW`,
+    /// `_HIDE`, `_REORDER`), or whose text changed (`IA2_EVENT_TEXT_INSERTED`, `_REMOVED`),
+    /// by its (negative) IA2 uniqueID. `notify`: the engine is to be
+    /// told now (at most every [`PAGE_CHANGE_INTERVAL`]).
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub struct PageChange {
+        pub event: u32,
+        pub object: i32,
+        pub notify: bool,
+    }
 
     /// UIA's focus-changed event id.
     const UIA_FOCUS_CHANGED: u32 = 20005;
@@ -1994,7 +2114,27 @@ mod capture {
         id_child: i32,
         element: Option<&IUIAutomationElement>,
     ) {
-        let t_ms = now_ms();
+        record_at(
+            now_ms(),
+            name,
+            win_event,
+            hwnd,
+            id_object,
+            id_child,
+            element,
+        );
+    }
+
+    /// [`record`] for an event raised at `t_ms`.
+    fn record_at(
+        t_ms: u128,
+        name: &'static str,
+        win_event: u32,
+        hwnd: HWND,
+        id_object: i32,
+        id_child: i32,
+        element: Option<&IUIAutomationElement>,
+    ) {
         let (title, class) = if hwnd.is_invalid() {
             (String::new(), String::new())
         } else {
@@ -2011,8 +2151,39 @@ mod capture {
             // Live, every cross-process read on this thread delays the events behind it: drop
             // what the engine never uses (name and description changes, alerts) and changes
             // in other applications (the taskbar, the tray clock) before reading anything.
+            // The window in front renaming itself is kept: its title is read anew.
+            let foreground_renamed = name == "name_change" && id_object == super::OBJID_WINDOW && {
+                use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+                // SAFETY: plain Win32 call with no preconditions.
+                let front = unsafe { GetForegroundWindow() };
+                front == hwnd
+            };
+            // A focus in an application not in front is not the user's: Windows Settings,
+            // running behind Chrome, reported its search box focused while the page kept the
+            // focus, and JAWS said nothing of it (221, old-pc, 2026-10-18).
+            if name == "focus" && in_background_process(hwnd) {
+                return;
+            }
+            // Nor are its changes recorded: nothing replays them, and the taskbar's news and
+            // weather widget put the reference machine's location into traces (its MSN
+            // links, old-pc, 2026-10-18).
+            let change = matches!(
+                name,
+                "name_change"
+                    | "description_change"
+                    | "value_change"
+                    | "state_change"
+                    | "selection"
+                    | "selection_add"
+                    | "selection_remove"
+                    | "selection_within"
+                    | "text_selection_change"
+            );
+            if change && in_background_process(hwnd) {
+                return;
+            }
             if state.live
-                && (!LIVE_EVENTS.contains(&name)
+                && ((!LIVE_EVENTS.contains(&name) && !foreground_renamed)
                     || (changes_focus_context && !in_foreground_process(hwnd)))
             {
                 return;
@@ -2245,11 +2416,14 @@ mod capture {
     }
 
     /// Records accessibility events to `out` (JSON Lines) until `stop_file` exists or
-    /// `max_ms` elapses. Returns the number of events recorded.
+    /// `max_ms` elapses. Returns the number of events recorded. With `page_changes`, the page
+    /// in front's objects shown, hidden and reordered are recorded too, as `page_change`
+    /// events with their object ids and nothing read.
     pub fn run_trace(
         out: &std::path::Path,
         stop_file: Option<&std::path::Path>,
         max_ms: u64,
+        page_changes: bool,
     ) -> Result<usize, PlatformError> {
         let io_err = |e: std::io::Error| PlatformError::EventListenerError(format!("{out:?}: {e}"));
         let mut file = std::fs::File::create(out).map_err(io_err)?;
@@ -2271,7 +2445,7 @@ mod capture {
             }
         };
         let deadline = std::time::Instant::now() + std::time::Duration::from_millis(max_ms);
-        Ok(run_hooks(Box::new(sink), None, || {
+        Ok(run_hooks(Box::new(sink), None, page_changes, || {
             std::time::Instant::now() < deadline && !stop_file.is_some_and(|p| p.exists())
         }))
     }
@@ -2279,13 +2453,13 @@ mod capture {
     /// Delivers accessibility events to `sink` as they happen, with the same capture as
     /// [`run_trace`], until `stop` is set. This is the live screen reader's event source,
     /// so the engine consumes exactly the event stream the harness records and replays.
-    /// `page_changed` is told when the page in front changes outside live regions.
+    /// `page_changed` is told of each change to the page in front outside live regions.
     pub fn run_live(
         sink: Box<dyn FnMut(TraceEvent)>,
-        page_changed: Box<dyn FnMut()>,
+        page_changed: Box<dyn FnMut(PageChange)>,
         stop: &std::sync::atomic::AtomicBool,
     ) -> usize {
-        run_hooks(sink, Some(page_changed), || {
+        run_hooks(sink, Some(page_changed), false, || {
             !stop.load(std::sync::atomic::Ordering::Relaxed)
         })
     }
@@ -2295,7 +2469,8 @@ mod capture {
     /// are hooked too.
     fn run_hooks(
         sink: Box<dyn FnMut(TraceEvent)>,
-        page_changed: Option<Box<dyn FnMut()>>,
+        page_changed: Option<Box<dyn FnMut(PageChange)>>,
+        record_page_changes: bool,
         keep_running: impl Fn() -> bool,
     ) -> usize {
         let live = page_changed.is_some();
@@ -2312,6 +2487,7 @@ mod capture {
                 page_changed,
                 page_changed_at: None,
                 page_changes_dropped: 0,
+                record_page_changes,
             })
         });
 
@@ -2322,8 +2498,27 @@ mod capture {
                 SetWinEventHook(0x0002, 0x0011, None, Some(on_event), 0, 0, flags),
                 SetWinEventHook(0x8005, 0x8019, None, Some(on_event), 0, 0, flags),
                 // EVENT_OBJECT_SHOW to EVENT_OBJECT_REORDER.
-                if live {
+                if live || record_page_changes {
                     SetWinEventHook(0x8002, 0x8004, None, Some(on_page_change), 0, 0, flags)
+                } else {
+                    HWINEVENTHOOK::default()
+                },
+                // IA2's own events: text changed in place (a React time stamp) raises no show,
+                // hide or reorder, only IA2_EVENT_TEXT_REMOVED and _INSERTED on the block holding
+                // it (old-pc, 2026-10-18). Live takes those two; a trace of page changes takes
+                // all of IA2's (IA2_EVENT_ACTION_CHANGED to IA2_EVENT_ROLE_CHANGED).
+                if record_page_changes {
+                    SetWinEventHook(0x0101, 0x0123, None, Some(on_page_change), 0, 0, flags)
+                } else if live {
+                    SetWinEventHook(
+                        IA2_EVENT_TEXT_INSERTED,
+                        IA2_EVENT_TEXT_REMOVED,
+                        None,
+                        Some(on_page_change),
+                        0,
+                        0,
+                        flags,
+                    )
                 } else {
                     HWINEVENTHOOK::default()
                 },
@@ -2497,6 +2692,16 @@ mod tests {
             is_enabled: true,
             ..UiaNode::default()
         }
+    }
+
+    /// A window's scroll bars are not traced: a scrolling list's state changes held the Run
+    /// dialog's focus back 5 s (319). The window's own changes are.
+    #[test]
+    fn scroll_bar_events_are_ignored() {
+        assert_eq!(event_name(0x800A, -5), None);
+        assert_eq!(event_name(0x800A, -6), None);
+        assert_eq!(event_name(0x800A, -4), Some("state_change"));
+        assert_eq!(event_name(0x800C, 0), Some("name_change"));
     }
 
     #[test]

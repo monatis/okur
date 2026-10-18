@@ -398,7 +398,7 @@ impl SpeechFormatter {
                 let popup = node
                     .attributes
                     .get("haspopup")
-                    .map(|p| format!(" \u{1d}Has Popup {p}\u{1e}"))
+                    .map(|p| format!(" \u{1d}Has Popup\u{1e} {p}"))
                     .unwrap_or_default();
                 let role = node.role_description().unwrap_or("Button");
                 format!("{name}  \u{1d} {role} \u{1e}{state}{popup}{current}")

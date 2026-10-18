@@ -109,6 +109,8 @@ pub enum Command {
     SelectAHeading,
     SelectALink,
     SelectAFormField,
+    /// The page's regions (landmarks), JAWS's Insert+Ctrl+R.
+    SelectARegion,
     /// Moves to the heading with this text.
     JumpToHeading(String),
     /// Moves to the link with this text.
@@ -273,6 +275,7 @@ impl Command {
             "SelectALink" | "LinkList" | "LinksList" | "Insert+F7" | "JAWSKey+F7" => SelectALink,
             "SelectAFormField" | "FormFieldList" | "FormFieldsList" | "Insert+F5"
             | "JAWSKey+F5" | "Insert+Ctrl+F" | "JAWSKey+Ctrl+F" => SelectAFormField,
+            "SelectARegion" | "RegionsList" | "Insert+Ctrl+R" | "JAWSKey+Ctrl+R" => SelectARegion,
 
             "PassKeyThrough" | "Insert+3" | "JAWSKey+3" => PassKeyThrough,
             "SayWindow" => SayWindow,
@@ -494,6 +497,11 @@ static BINDINGS: &[Binding] = &{
             Alpha('F'),
             ANY.ctrl(Yes).insert(Yes).alt(No).shift(No),
             SelectAFormField,
+        ),
+        bind(
+            Alpha('R'),
+            ANY.ctrl(Yes).insert(Yes).alt(No).shift(No),
+            SelectARegion,
         ),
         // Table headers.
         bind(Alpha('H'), CTRL_ALT.shift(Yes), SayColumnHeader),

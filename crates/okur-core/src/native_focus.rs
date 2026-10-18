@@ -683,6 +683,11 @@ impl Menus {
         self.active || self.started || !self.open.is_empty()
     }
 
+    /// Whether the menus are a page's (ARIA menus).
+    pub fn is_page(&self) -> bool {
+        self.page
+    }
+
     /// The system reported menu mode starting.
     pub fn start(&mut self) {
         self.started = true;

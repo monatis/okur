@@ -4,6 +4,7 @@ use super::{AppMode, ScreenReaderEngine};
 use crate::announcement::{Announcement, Line, Part};
 use crate::aom::Role;
 use crate::apps::{AppContext, FocusResponse};
+use crate::cursor::FocusFrom;
 use crate::event::FocusEvent;
 use crate::speech::SpeechFormatter;
 
@@ -41,6 +42,28 @@ impl ScreenReaderEngine {
     /// Synchronizes cursor position, activates/deactivates forms mode,
     /// and emits canonical JAWS speech announcements.
     pub fn handle_focus_event(&mut self, focus: &FocusEvent) -> Option<String> {
+        // Access keys are said only with JAWS's Access Key output on; old-pc's JAWS has it off
+        // (`ACCESS_KEY=0|0|0`, 306 recorded 2026-10-18). That takes a menu item's letter
+        // ("Yeni sekme Ctrl+T | 2 of 24", without "e") and a field's shortcut (Chrome's address
+        // bar without "Ctrl+L") with it; a menu item's shortcut is part of the item [obs, 220].
+        let without_key;
+        let menu_shortcut =
+            |k: &String| focus.role == Role::MenuItem && k.trim().chars().count() > 1;
+        let has_key = focus.access_key.is_some()
+            || focus
+                .accelerator_key
+                .as_ref()
+                .is_some_and(|k| !menu_shortcut(k));
+        let focus = if has_key && !self.settings.access_keys {
+            without_key = FocusEvent {
+                access_key: None,
+                accelerator_key: focus.accelerator_key.clone().filter(menu_shortcut),
+                ..focus.clone()
+            };
+            &without_key
+        } else {
+            focus
+        };
         self.last_selected = None;
         if focus.role != Role::MenuItem {
             self.last_text = focus.text.clone();
@@ -50,7 +73,10 @@ impl ScreenReaderEngine {
             // A page's menu (an ARIA menu): its keys are the page's, as in forms mode, and
             // none of them reads the field focused before it. The browser's own menu (Chrome's
             // app menu over a page) leaves forms mode as it was: menu mode takes its keys.
-            if focus.in_document && self.app_mode == AppMode::VirtualBuffer {
+            if focus.in_document
+                && self.app_mode == AppMode::VirtualBuffer
+                && self.settings.auto_forms_mode
+            {
                 self.forms_mode = true;
                 self.cursor.forms_mode_active = true;
                 self.page_focus_is_field = false;
@@ -227,6 +253,7 @@ impl ScreenReaderEngine {
             if target_role == Some(Role::Document) {
                 // The page itself has focus: the next control focus enters the page.
                 self.last_page_focus = None;
+                self.focus_table_unsaid = false;
                 self.tab_start = None;
                 // JAWS names the page coming back to it: "Web Menus document" (Escape in
                 // Chrome's address bar), and another tab's page with the window then ("Web
@@ -270,7 +297,8 @@ impl ScreenReaderEngine {
             // on, as on a list box: WhatsApp's messages are rows its arrows move through.
             // JAWS 2025 stays in browse mode there, and the user has to turn forms mode on
             // (dev box, 2026-10-17); Okur gives the item its keys, as the user asked.
-            let widget_item = (self.forms_mode || self.last_key_tabs)
+            let auto_forms = self.settings.auto_forms_mode;
+            let widget_item = (self.forms_mode || (self.last_key_tabs && auto_forms))
                 && (target_id.is_some_and(|id| self.in_widget_item(id))
                     || (target_id.is_none() && focus_in_widget(focus)));
             // Enter on such an item that sends the focus elsewhere has opened something, and
@@ -281,11 +309,13 @@ impl ScreenReaderEngine {
                 .activated_item
                 .take()
                 .is_some_and(|item| Some(item) != target_id);
+            // Without Auto Forms Mode a field keeps the mode it finds: forms mode is turned on by
+            // Enter, and Tab from one field to the next keeps it (old-pc's JAWS, 212 and 213).
             let in_forms_mode = !opened
-                && (is_edit
+                && ((is_edit && (auto_forms || self.forms_mode))
                     || (target_role == Some(Role::ComboBox) && self.forms_mode)
                     || self.web_application.is_some()
-                    || focus.in_menu
+                    || (focus.in_menu && auto_forms)
                     || widget_item);
             self.forms_mode = in_forms_mode;
             self.cursor.forms_mode_active = in_forms_mode;
@@ -359,8 +389,17 @@ impl ScreenReaderEngine {
             // say it: WhatsApp's message options button, shown once its message has the focus
             // ("Mesaj seçeneklerini aç Button collapsed | To activate press Enter.", JAWS on
             // the dev box, 2026-10-17).
-            let mut speech = target_id
-                .and_then(|id| self.cursor.focus_node_from(id, Some(cursor_offset)))
+            let from = if std::mem::take(&mut self.focus_table_unsaid) {
+                FocusFrom::Outside
+            } else {
+                FocusFrom::Offset(cursor_offset)
+            };
+            let line = target_id
+                .filter(|_| entering_page)
+                .and_then(|id| self.cursor.focus_line(id));
+            self.focus_table_unsaid = line.is_some();
+            let mut speech = line
+                .or_else(|| target_id.and_then(|id| self.cursor.focus_node_from(id, from)))
                 .or_else(|| {
                     let mut node = crate::aom::AomNode::new(usize::MAX, focus.role.clone());
                     node.name = focus.name.clone();
@@ -470,6 +509,7 @@ impl ScreenReaderEngine {
         self.web_application = None;
         self.option_list = None;
         self.last_page_focus = None;
+        self.focus_table_unsaid = false;
         self.tab_start = None;
         self.app_mode = AppMode::NativeControl;
         if self.forms_mode {
@@ -515,6 +555,19 @@ impl ScreenReaderEngine {
         }
     }
 
+    /// The window in front was renamed. An application's window keeps its focus under its new
+    /// name, unsaid: the Virtual Viewer's first line is the title as it is now [obs, 321/s1]. A
+    /// browser's title follows its page, which the page's own events say.
+    pub(super) fn window_renamed(&mut self, title: &str) {
+        if self.app_mode == AppMode::VirtualBuffer || title.trim().is_empty() {
+            return;
+        }
+        if let Some(focus) = self.last_native_focus.as_mut() {
+            focus.window_title = Some(title.to_owned());
+            self.last_window_title = Some(title.to_owned());
+        }
+    }
+
     /// A new active window: its title, or what its application calls it, then the control.
     /// A dialog box adds its role and its text [obs, 306/s1, s3, s10]; a property sheet the
     /// page it opens on (JAWS 2025 on the dev box: "Local Disk (C:) Properties dialog |
@@ -550,9 +603,11 @@ impl ScreenReaderEngine {
                 Part::Role("page".to_owned()),
             ])
         }));
-        // The control, unless it only repeats the window's name.
+        // The control, unless it only repeats the window's name or the application names its
+        // windows alone.
         let control_speech = control.render();
-        if !control_speech.is_empty() && control_speech != win {
+        let with_control = app.is_none_or(|app| app.names_control_with_window(focus));
+        if with_control && !control_speech.is_empty() && control_speech != win {
             lines.extend(control.lines);
         }
         Announcement::new(lines)

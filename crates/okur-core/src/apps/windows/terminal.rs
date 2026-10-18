@@ -1,11 +1,16 @@
 //! Consoles: Windows Terminal and the classic console window (Command Prompt, PowerShell).
 //!
 //! Their text area holds the console's whole buffer, read through its text pattern. JAWS's
-//! Virtual Viewer shows that text (JAWS 2025 on the dev box, Windows Terminal, 2026-10-15):
+//! Virtual Viewer shows that text. In Windows Terminal (JAWS 2025 on the dev box,
+//! 2026-10-15):
 //! - opening speaks "Virtualizing current window" and the line the cursor is on (the
 //!   prompt);
 //! - Ctrl+Home reads the console's first line: there is no window title line above it;
 //! - Ctrl+End reads the last line with text (the prompt), not the empty rows below it.
+//!
+//! In the classic console window, as any other window [obs, 321]: the window title is the
+//! first line and the viewer opens on it, the rows follow, and Ctrl+End reaches the empty rows
+//! below the text ("blank").
 
 use crate::aom::Role;
 use crate::apps::AppModule;
@@ -48,6 +53,14 @@ pub fn cursor_line(text: &str, caret: usize) -> String {
     lines.into_iter().nth(line).unwrap_or_default()
 }
 
+/// The classic console's Virtual Viewer: the window title, then every row of the buffer
+/// without its padding, opened on the title.
+pub fn window_viewer_lines(title: &str, text: &str) -> Vec<String> {
+    std::iter::once(title.to_owned())
+        .chain(text.split('\n').map(|row| row.trim_end().to_owned()))
+        .collect()
+}
+
 /// Consoles.
 pub struct Terminal;
 
@@ -60,7 +73,22 @@ impl AppModule for Terminal {
         true
     }
 
-    fn viewer_lines(&self, text: &str, caret: usize) -> Option<(Vec<String>, usize)> {
+    /// The classic console is named by its title alone, not its text area: "Command Prompt -
+    /// opendesk serve" on Alt+Tab to it [obs, 317/s5].
+    fn names_control_with_window(&self, focus: &FocusEvent) -> bool {
+        focus.platform.top_window_class.as_deref() != Some(CONSOLE_WINDOW)
+    }
+
+    fn viewer_lines(
+        &self,
+        focus: &FocusEvent,
+        text: &str,
+        caret: usize,
+    ) -> Option<(Vec<String>, usize)> {
+        if focus.platform.top_window_class.as_deref() == Some(CONSOLE_WINDOW) {
+            let title = focus.window_title.as_deref().unwrap_or_default();
+            return Some((window_viewer_lines(title, text), 0));
+        }
         Some(viewer_lines(text, caret))
     }
 
@@ -129,5 +157,26 @@ mod tests {
             ]
         );
         assert_eq!(line, 3);
+    }
+
+    /// The classic console as old-pc's JAWS shows it [obs, 321]: "SR Console Fixture", then
+    /// its rows, then the empty ones below.
+    #[test]
+    fn the_classic_console_viewer_starts_at_its_title() {
+        let mut console = FocusEvent::new(Role::Document);
+        console.platform.top_window_class = Some(CONSOLE_WINDOW.to_owned());
+        console.window_title = Some("SR Console Fixture".to_owned());
+        let text = "First console line\r\nType here:\r\n\r\n\r\n";
+        let caret = text.find("Type").unwrap_or_default() + 10;
+        let (lines, line) = Terminal
+            .viewer_lines(&console, text, caret)
+            .unwrap_or_default();
+        assert_eq!(line, 0);
+        assert_eq!(
+            lines.first().map(String::as_str),
+            Some("SR Console Fixture")
+        );
+        assert_eq!(lines.get(1).map(String::as_str), Some("First console line"));
+        assert_eq!(lines.last().map(String::as_str), Some(""));
     }
 }

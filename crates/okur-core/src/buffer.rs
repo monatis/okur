@@ -261,6 +261,37 @@ impl VirtualBuffer {
         Some(VirtualBuffer::from_aom(&root))
     }
 
+    /// The buffer rebuilt from its page with one part read again: `subtree` replaces the node
+    /// that is the same live object (its [`crate::aom::UNIQUE_ID_ATTR`]), and its nodes get ids
+    /// the page does not use. `None` when the page has no such object (it is new: the caller
+    /// reads the whole page again).
+    pub fn with_subtree_replaced(&self, subtree: &AomNode) -> Option<VirtualBuffer> {
+        use crate::aom::UNIQUE_ID_ATTR;
+        fn max_id(node: &AomNode) -> usize {
+            node.children.iter().map(max_id).fold(node.id, usize::max)
+        }
+        fn renumber(node: &mut AomNode, next: &mut usize) {
+            node.id = *next;
+            *next += 1;
+            for child in &mut node.children {
+                renumber(child, next);
+            }
+        }
+        fn find<'a>(node: &'a mut AomNode, object: &str) -> Option<&'a mut AomNode> {
+            if node.attributes.get(UNIQUE_ID_ATTR).map(String::as_str) == Some(object) {
+                return Some(node);
+            }
+            node.children.iter_mut().find_map(|c| find(c, object))
+        }
+        let object = subtree.attributes.get(UNIQUE_ID_ATTR)?;
+        let mut root = self.page.clone()?;
+        let mut next = max_id(&root) + 1;
+        let mut replacement = subtree.clone();
+        renumber(&mut replacement, &mut next);
+        *find(&mut root, object)? = replacement;
+        Some(VirtualBuffer::from_aom(&root))
+    }
+
     /// Makes `page` the page the buffer reads its nodes from, and indexes where its nodes
     /// sit (the linearizer then marks the ones it reads).
     pub(crate) fn set_page(&mut self, page: AomNode) {

@@ -9,6 +9,9 @@ use crate::command::{Command, Element};
 use crate::input::{Key, KeyAction, KeyEvent};
 use crate::speech::SpeechFormatter;
 
+/// The Links List on a page without links [obs, 221/s1].
+pub(super) const NO_LINKS: &str = "no links";
+
 impl ScreenReaderEngine {
     /// Runs the command a name calls ([`Command::from_name`]): a JAWS script name or the key
     /// notation of JAWS's key maps. Speaks the result and returns it.
@@ -379,7 +382,7 @@ impl ScreenReaderEngine {
             Command::SelectALink => {
                 let items = self.cursor.buffer.get_links_list();
                 if items.is_empty() {
-                    Some("There are no links on this page.".to_string())
+                    Some(NO_LINKS.to_owned())
                 } else {
                     let speech = SpeechFormatter::format_links_list_dialog(&items);
                     self.active_element_list = Some(ActiveElementList::Links {
@@ -392,7 +395,15 @@ impl ScreenReaderEngine {
             Command::SelectAFormField => {
                 let items = self.cursor.buffer.get_form_fields_list();
                 if items.is_empty() {
-                    Some("There are no form fields on this page.".to_string())
+                    // Then the page, as when the focus comes back to it: "no form fields were
+                    // found | Document Reading Reference Fixture document" [obs, 221/s2].
+                    let page = self.cursor.buffer.document_title().map(|title| {
+                        format!("\n{title}{}", crate::linearize::role_marker("document"))
+                    });
+                    Some(format!(
+                        "no form fields were found{}",
+                        page.unwrap_or_default()
+                    ))
                 } else {
                     let speech = SpeechFormatter::format_form_fields_list_dialog(&items);
                     self.active_element_list = Some(ActiveElementList::FormFields {
@@ -401,6 +412,11 @@ impl ScreenReaderEngine {
                     });
                     Some(speech)
                 }
+            }
+            // The list of a page's regions itself is not built yet; a page without regions
+            // says so [obs, 221/s3].
+            Command::SelectARegion if self.cursor.buffer.landmarks.is_empty() => {
+                Some("No regions were found on the page".to_owned())
             }
 
             _ => None,
@@ -481,12 +497,17 @@ impl ScreenReaderEngine {
                                 .trim_matches(|c: char| c.is_whitespace() || c == '﻿')
                                 .to_owned(),
                         )
-                        .filter(|l| !l.is_empty())
                     } else {
                         crate::editing::speech(key, None, &context, &self.text_field_line())
                     };
-                    if let Some(speech) = speech {
-                        self.speech.speak(&speech, true);
+                    match speech {
+                        // An empty line is read as its line break: "blank", kept out of
+                        // JAWS's history [obs, 315, Insert+Up].
+                        Some(line) if line.trim().is_empty() => {
+                            self.speech.speak_character("\n", true);
+                        }
+                        Some(speech) => self.speech.speak(&speech, true),
+                        None => {}
                     }
                 }
                 None => self.expect_text_change(key),
@@ -607,8 +628,8 @@ impl ScreenReaderEngine {
             (Element::OnMouseOver, false) => c.move_prior_on_mouse_over(),
             (Element::Tab, true) => c.move_next_tab(),
             (Element::Tab, false) => c.move_prior_tab(),
-            // Place markers are not implemented: K moves nowhere.
-            (Element::PlaceMarker, _) => None,
+            // Place markers are not built yet, so a page has none [obs, 221/s4-s5].
+            (Element::PlaceMarker, _) => Some("There are no PlaceMarkers on this page.".to_owned()),
             (Element::Graphic, true) => c.move_next_graphic(),
             (Element::Graphic, false) => c.move_prior_graphic(),
             (Element::RadioButton, true) => c.move_next_radio_button(),
@@ -829,9 +850,12 @@ impl ScreenReaderEngine {
         self.last_text = Some(context.clone());
         // The application that virtualizes its text lays the lines out (a console).
         let (lines, line) = self
-            .apps
-            .iter()
-            .find_map(|app| app.viewer_lines(&context.text, context.caret))
+            .last_native_focus
+            .as_ref()
+            .and_then(|focus| {
+                self.app_for(focus)?
+                    .viewer_lines(focus, &context.text, context.caret)
+            })
             .unwrap_or_default();
         if lines.is_empty() {
             // Nothing read: the viewer shows the control, as for any other.

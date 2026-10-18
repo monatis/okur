@@ -11,10 +11,11 @@ use okur_core::input::{Key, KeyEvent, Modifiers};
 fn key_from_name(name: &str) -> Option<Key> {
     let lower = name.to_ascii_lowercase();
     let key = match lower.as_str() {
-        "down" => Key::DownArrow,
-        "up" => Key::UpArrow,
-        "left" => Key::LeftArrow,
-        "right" => Key::RightArrow,
+        // JAWS's own key names ("DownArrow", in TypeKey steps) too.
+        "down" | "downarrow" => Key::DownArrow,
+        "up" | "uparrow" => Key::UpArrow,
+        "left" | "leftarrow" => Key::LeftArrow,
+        "right" | "rightarrow" => Key::RightArrow,
         "home" => Key::Home,
         "end" => Key::End,
         "pageup" => Key::PageUp,

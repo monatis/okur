@@ -242,13 +242,22 @@ impl VirtualViewer {
         let plain = !m.ctrl && !m.alt && !m.shift && !m.win && !m.insert;
         let ctrl_only = m.ctrl && !m.alt && !m.shift && !m.win && !m.insert;
         let speak = |s: String| ViewerAction::Speak(Some(s));
+        // An empty line is read as its line break: JAWS's history keeps nothing and the
+        // synthesizer says "blank" (Ctrl+End to a console's empty rows) [obs, 321/s6].
+        let line = |s: String| {
+            if s.trim().is_empty() {
+                ViewerAction::Character("\n".to_owned())
+            } else {
+                ViewerAction::Speak(Some(s))
+            }
+        };
         match event.key {
             Key::Escape if plain => ViewerAction::Close,
             Key::DownArrow | Key::UpArrow if plain => {
                 self.all_selected = false;
-                speak(self.move_line(event.key == Key::DownArrow))
+                line(self.move_line(event.key == Key::DownArrow))
             }
-            Key::UpArrow if m.insert && !m.ctrl && !m.alt && !m.shift => speak(self.line_text()),
+            Key::UpArrow if m.insert && !m.ctrl && !m.alt && !m.shift => line(self.line_text()),
             Key::RightArrow | Key::LeftArrow if plain => {
                 self.all_selected = false;
                 ViewerAction::Character(self.move_char(event.key == Key::RightArrow))
@@ -265,7 +274,7 @@ impl VirtualViewer {
                     self.lines.len() - 1
                 };
                 self.read_line();
-                speak(self.line_text())
+                line(self.line_text())
             }
             Key::Alpha(c) if ctrl_only && c.eq_ignore_ascii_case(&'A') => {
                 self.all_selected = true;
@@ -353,12 +362,14 @@ mod tests {
         );
     }
 
-    /// The button of 311 (s1–s9).
+    /// The button of 311 (s1–s9). Its blank line is read as a line break: JAWS was heard,
+    /// with nothing in its history [obs, 311/s2–s3].
     #[test]
     fn characters_and_words_split_punctuation_runs() {
         let mut viewer = VirtualViewer::new(vec!["Save... Button".into(), " ".into()]);
-        assert_eq!(said(press(&mut viewer, Key::DownArrow, false)), " ");
-        assert_eq!(said(press(&mut viewer, Key::End, true)), " ");
+        let blank = ViewerAction::Character("\n".to_owned());
+        assert_eq!(press(&mut viewer, Key::DownArrow, false), blank);
+        assert_eq!(press(&mut viewer, Key::End, true), blank);
         assert_eq!(
             said(press(&mut viewer, Key::UpArrow, false)),
             "Save... Button"

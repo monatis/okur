@@ -62,6 +62,9 @@ pub struct ScreenReaderEngine {
     native_focus: crate::native_focus::NativeFocus,
     /// The page node that last had focus, to drop repeated focus events on it.
     last_page_focus: Option<usize>,
+    /// The last page focus was said as its line, without the table it is in: the next focus
+    /// says the table as newly entered.
+    focus_table_unsaid: bool,
     /// The page node the browser starts Tab from: the focus, or where Tab was last sent from.
     tab_start: Option<usize>,
     /// The list or grid item Enter was passed to in forms mode, until the next key: a focus
@@ -155,6 +158,7 @@ impl ScreenReaderEngine {
             last_window_kind: None,
             native_focus: crate::native_focus::NativeFocus::default(),
             last_page_focus: None,
+            focus_table_unsaid: false,
             tab_start: None,
             activated_item: None,
             cursor_to_focus: false,
@@ -335,7 +339,11 @@ impl ScreenReaderEngine {
         // or Chrome's app menu over a page, which opens with no item focused: the Down that
         // focuses its first item went to the virtual cursor, and the menu never had a focus
         // (dev box, 2026-10-17).
-        if self.menus.in_menu_mode() {
+        // Without Auto Forms Mode a page's menu leaves the arrows to the virtual cursor, as
+        // JAWS did on old-pc (218: Tab onto an ARIA menu bar, then Down read the bar's next
+        // items as lines).
+        let page_menu_in_browse = self.menus.is_page() && !self.settings.auto_forms_mode;
+        if self.menus.in_menu_mode() && !page_menu_in_browse {
             return KeyAction::PassThrough;
         }
 
@@ -569,6 +577,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::LiveRegion(_)
                 | AccessibilityEvent::DocumentLoaded { .. }
                 | AccessibilityEvent::PageChanged
+                | AccessibilityEvent::PagePartLoaded(_)
         ) {
             self.apply_pending_page();
         }
@@ -595,6 +604,14 @@ impl ScreenReaderEngine {
             AccessibilityEvent::Ui(message) => self.handle_ui_event(message),
             AccessibilityEvent::PageChanged => {
                 self.page_changed();
+                None
+            }
+            AccessibilityEvent::PagePartLoaded(part) => {
+                self.page_part_loaded(part);
+                None
+            }
+            AccessibilityEvent::WindowRenamed(title) => {
+                self.window_renamed(title);
                 None
             }
             AccessibilityEvent::DocumentLoaded { title, root } => {
@@ -731,7 +748,7 @@ impl ScreenReaderEngine {
     pub(crate) fn open_links_list(&mut self) -> Option<String> {
         let links = self.cursor.buffer.get_links_list();
         if links.is_empty() {
-            let speech = "There are no links on this page.".to_owned();
+            let speech = commands::NO_LINKS.to_owned();
             self.speech.speak(&speech, true);
             return Some(speech);
         }

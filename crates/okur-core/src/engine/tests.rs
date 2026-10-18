@@ -1826,10 +1826,8 @@ fn focus_names_every_landmark_it_enters() {
     );
 }
 
-/// Tab through links in a table, JAWS on the dev box (2026-10-16): the column header when the
-/// column changes, then the position that changed after the link.
-#[test]
-fn tab_in_a_table_says_the_header_and_position_that_changed() {
+/// A files table under a "Files" heading: Name and Message columns, a link in each cell.
+fn files_table_engine() -> ScreenReaderEngine {
     let header = |id: usize, text: &str| {
         let mut cell = AomNode::new(id, Role::TableCell).with_text(text);
         cell.attributes.insert("tag".to_owned(), "th".to_owned());
@@ -1864,34 +1862,64 @@ fn tab_in_a_table_says_the_header_and_position_that_changed() {
             table,
         ]);
     let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
-    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
-    let focus = |id: usize, name: &str| {
-        let mut focus = FocusEvent::new(Role::Link {
-            href: Some("#x".to_owned()),
-        })
-        .with_node_id(id)
-        .with_name(name);
-        focus.in_document = true;
-        AccessibilityEvent::Focus(focus)
-    };
+    ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()))
+}
+
+/// The lines the focus on the files table's link `id` speaks.
+fn link_focus_lines(engine: &mut ScreenReaderEngine, id: usize, name: &str) -> Vec<String> {
+    let mut focus = FocusEvent::new(Role::Link {
+        href: Some("#x".to_owned()),
+    })
+    .with_node_id(id)
+    .with_name(name);
+    focus.in_document = true;
+    engine
+        .handle_accessibility_event(&AccessibilityEvent::Focus(focus))
+        .unwrap_or_default()
+        .lines()
+        .map(str::to_owned)
+        .collect()
+}
+
+/// Tab through links in a table, JAWS on the dev box (2026-10-16): the column header when the
+/// column changes, then the position that changed after the link.
+#[test]
+fn tab_in_a_table_says_the_header_and_position_that_changed() {
+    let mut engine = files_table_engine();
     let mut heading = FocusEvent::new(Role::Heading { level: 2 })
         .with_node_id(90)
         .with_name("Files");
     heading.in_document = true;
     engine.handle_accessibility_event(&AccessibilityEvent::Focus(heading));
     let mut said = |id: usize, name: &str| {
-        let speech = engine
-            .handle_accessibility_event(&focus(id, name))
-            .unwrap_or_default();
-        speech
-            .lines()
+        link_focus_lines(&mut engine, id, name)
+            .into_iter()
             .filter(|l| !l.contains("link") && !l.starts_with("To activate"))
-            .map(str::to_owned)
             .collect::<Vec<_>>()
     };
     assert_eq!(said(11, "alpha.rs"), ["Name", "column 1 row 2"]);
     assert_eq!(said(21, "first commit"), ["Message", "Column 2"]);
     assert_eq!(said(41, "second commit"), ["Row 3"]);
+}
+
+/// The page's first focus on a link is said as the virtual cursor's line, with the page title
+/// and no table [obs, 216/s10]; the next focus then says the table as entered: "Message |
+/// first commit same page link | column 2 row 2" [obs, 216/s11].
+#[test]
+fn a_first_focus_on_a_link_is_said_as_its_line() {
+    let mut engine = files_table_engine();
+    let first = link_focus_lines(&mut engine, 11, "alpha.rs");
+    assert_eq!(first.first().map(String::as_str), Some("Files"));
+    assert!(first
+        .iter()
+        .any(|l| l.contains("link") && l.contains("alpha.rs")));
+    assert!(
+        !first.iter().any(|l| l.contains("column") || l == "Name"),
+        "{first:?}"
+    );
+    let next = link_focus_lines(&mut engine, 21, "first commit");
+    assert_eq!(next.first().map(String::as_str), Some("Message"));
+    assert!(next.iter().any(|l| l == "column 2 row 2"), "{next:?}");
 }
 
 /// Google Docs draws its document itself, and keys go to an empty element in an application
@@ -2714,4 +2742,102 @@ fn the_page_takes_the_keys_back_when_its_focus_returns_from_a_menu() {
     assert_eq!(engine.handle_key_event(&down), KeyAction::PassThrough);
     engine.handle_focus_event(&page_document());
     assert_eq!(engine.handle_key_event(&down), KeyAction::Consume);
+}
+
+/// Without Auto Forms Mode (old-pc's JAWS, `AutoFormsMode=0`), the focus landing on a field
+/// leaves the virtual cursor in charge: Escape says nothing and Up reads the line above, as
+/// 212 recorded. Enter turns forms mode on, and Tab to the next field keeps it.
+#[test]
+fn without_auto_forms_mode_a_field_waits_for_enter() {
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(create_test_buffer()),
+        Box::new(MockSpeechOutput::new()),
+    );
+    engine.settings.auto_forms_mode = false;
+    let search = || {
+        let mut focus = FocusEvent::new(Role::Edit)
+            .with_node_id(3)
+            .with_name("Search Input");
+        focus.in_document = true;
+        focus
+    };
+    engine.handle_focus_event(&search());
+    assert!(!engine.forms_mode);
+    assert_eq!(
+        engine.handle_key_event(&KeyEvent::new(Key::UpArrow, Modifiers::none(), true)),
+        KeyAction::Consume
+    );
+
+    engine.execute_command("E");
+    engine.handle_key_event(&KeyEvent::new(Key::Enter, Modifiers::none(), true));
+    assert!(engine.forms_mode);
+    engine.handle_focus_event(&search());
+    assert!(engine.forms_mode, "a field keeps the forms mode it finds");
+}
+
+/// Without Auto Forms Mode a page's menu says its item but leaves the arrows to the virtual
+/// cursor (218 on old-pc: Down read the menu bar's next item as a line).
+#[test]
+fn without_auto_forms_mode_a_page_menu_leaves_the_arrows_to_the_cursor() {
+    let (mut engine, _speech) = engine_on_a_page();
+    engine.settings.auto_forms_mode = false;
+    let mut file = FocusEvent::new(Role::MenuItem).with_name("File");
+    file.in_document = true;
+    file.in_menu_bar = true;
+    file.under_menu_bar = true;
+    engine.handle_focus_event(&file);
+    assert!(!engine.forms_mode);
+    assert_eq!(
+        engine.handle_key_event(&key(Key::DownArrow)),
+        KeyAction::Consume
+    );
+}
+
+/// A control's access key is said only with JAWS's Access Key output on: old-pc's JAWS has it
+/// off (`ACCESS_KEY=0|0|0`), and said "Yes Button | To activate press spacebar." (306).
+#[test]
+fn access_keys_follow_the_access_key_output() {
+    let button = || {
+        let mut focus = FocusEvent::new(Role::Button).with_name("Yes");
+        focus.access_key = Some("alt+Y".to_owned());
+        focus
+    };
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(create_test_buffer()),
+        Box::new(MockSpeechOutput::new()),
+    );
+    let with_key = engine.handle_focus_event(&button()).unwrap_or_default();
+    assert!(with_key.contains("alt+Y"), "{with_key:?}");
+
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(create_test_buffer()),
+        Box::new(MockSpeechOutput::new()),
+    );
+    engine.settings.access_keys = false;
+    let without = engine.handle_focus_event(&button()).unwrap_or_default();
+    assert!(without.contains("Yes"), "{without:?}");
+    assert!(!without.contains("alt+Y"), "{without:?}");
+}
+
+/// The Access Key output also takes a field's shortcut: Chrome's address bar says "Ctrl+L"
+/// with it on (dev box) and not with it off (old-pc, 220/s7).
+#[test]
+fn a_fields_shortcut_follows_the_access_key_output() {
+    let address_bar = || {
+        let mut focus = FocusEvent::new(Role::Edit).with_name("Address and search bar");
+        focus.accelerator_key = Some("Ctrl+L".to_owned());
+        focus
+    };
+    let said = |access_keys: bool| {
+        let mut engine = ScreenReaderEngine::new(
+            VirtualCursor::new(create_test_buffer()),
+            Box::new(MockSpeechOutput::new()),
+        );
+        engine.settings.access_keys = access_keys;
+        engine
+            .handle_focus_event(&address_bar())
+            .unwrap_or_default()
+    };
+    assert!(said(true).contains("Ctrl+L"), "{:?}", said(true));
+    assert!(!said(false).contains("Ctrl+L"), "{:?}", said(false));
 }

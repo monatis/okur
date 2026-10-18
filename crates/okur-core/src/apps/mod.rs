@@ -76,6 +76,11 @@ pub trait AppModule: Send {
         None
     }
 
+    /// Whether the announcement of a new window says the focused control after its name.
+    fn names_control_with_window(&self, _focus: &FocusEvent) -> bool {
+        true
+    }
+
     /// Whether the application reads what `key` does in its `field` itself, so the engine
     /// says nothing for the key.
     fn reads_key(&self, _field: &FocusEvent, _key: &KeyEvent) -> bool {
@@ -101,7 +106,12 @@ pub trait AppModule: Send {
 
     /// The Virtual Viewer's lines for the focus's text, and the line to open on, when the
     /// viewer shows that text.
-    fn viewer_lines(&self, _text: &str, _caret: usize) -> Option<(Vec<String>, usize)> {
+    fn viewer_lines(
+        &self,
+        _focus: &FocusEvent,
+        _text: &str,
+        _caret: usize,
+    ) -> Option<(Vec<String>, usize)> {
         None
     }
 

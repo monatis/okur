@@ -23,6 +23,10 @@ const STAGING_WINDOW: &str = "ForegroundStaging";
 pub struct TaskSwitcher {
     /// An item was spoken since the switcher came up.
     entered: bool,
+    /// The item last spoken: Windows 10 reports each selection two or three times (a WinEvent
+    /// focus, then UIA's, with its staging window's between), and JAWS says it once [obs,
+    /// 317/s2-s4].
+    last_item: Option<String>,
 }
 
 impl TaskSwitcher {
@@ -39,12 +43,16 @@ impl TaskSwitcher {
             || (item && window == Some(STAGING_WINDOW));
         if !ours {
             self.entered = false;
+            self.last_item = None;
             return None;
         }
         if !item {
             return Some(String::new());
         }
         let name = focus.name.clone().unwrap_or_default();
+        if self.last_item.replace(name.clone()).as_ref() == Some(&name) {
+            return Some(String::new());
+        }
         Some(if std::mem::replace(&mut self.entered, true) {
             name
         } else {
@@ -115,6 +123,29 @@ mod tests {
         assert!(switcher
             .speech_for(&in_switcher(Role::ListItem, "Claude"))
             .is_some_and(|s| s.ends_with("Arrow keys.")));
+    }
+
+    /// Windows 10 reports a selection more than once, its staging window between: said once.
+    #[test]
+    fn an_item_reported_again_is_said_once() {
+        let mut switcher = TaskSwitcher::default();
+        let item = in_switcher(Role::ListItem, "SR Dialog Fixture");
+        assert!(switcher
+            .speech_for(&item)
+            .is_some_and(|s| s.starts_with("SR Dialog")));
+        assert_eq!(
+            switcher
+                .speech_for(&in_switcher(Role::Window, ""))
+                .as_deref(),
+            Some("")
+        );
+        assert_eq!(switcher.speech_for(&item).as_deref(), Some(""));
+        assert_eq!(
+            switcher
+                .speech_for(&in_switcher(Role::ListItem, "Windows PowerShell"))
+                .as_deref(),
+            Some("Windows PowerShell")
+        );
     }
 
     #[test]

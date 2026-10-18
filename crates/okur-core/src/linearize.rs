@@ -806,9 +806,10 @@ impl<'a> Builder<'a> {
                     Some(false) => s.push_str(&state_marker("collapsed")),
                     None => {}
                 }
-                // Any other popup: "Pick one ‹ Button › ‹Has Popup listbox›" (dev box).
+                // Any other popup: "Pick one ‹ Button › ‹Has Popup› listbox" [obs, 210/s15].
                 if let Some(popup) = attr(node, "haspopup") {
-                    s.push_str(&state_marker(&format!("Has Popup {popup}")));
+                    s.push_str(&state_marker("Has Popup"));
+                    s.push_str(&format!(" {popup}"));
                 }
                 if let Some(current) = node.current_phrase() {
                     s.push_str(&state_marker(current));
@@ -834,7 +835,25 @@ impl<'a> Builder<'a> {
             Role::ProgressBar => format!("{name}{}", role_marker("progress bar")),
             _ => name.clone(),
         };
-        let text = squash(&speech.replace([RS, RE], " "));
+        // A field's line reads as its label and its text: the role and states between markers
+        // are speech only, since JAWS's virtual cursor moves by the field's own words ("lazy"
+        // after the focus lands at a text area's start; 213, old-pc, 2026-10-18).
+        let text = if node.role == Role::Edit {
+            let mut inside = false;
+            let words: String = speech
+                .chars()
+                .filter(|&c| {
+                    let marker = c == RS || c == RE;
+                    if marker {
+                        inside = c == RS;
+                    }
+                    !marker && !inside
+                })
+                .collect();
+            squash(&words)
+        } else {
+            squash(&speech.replace([RS, RE], " "))
+        };
         let off = self.emit(node.id, node.role.clone(), &text, speech);
 
         match &node.role {
@@ -1098,11 +1117,18 @@ pub fn segment_words(text: &str) -> Vec<(usize, usize)> {
         let separator = (c == '.' || c == '-')
             && !(prev.is_some_and(|p| p.is_ascii_digit())
                 && next.is_some_and(|n| n.is_ascii_digit()));
+        // Colons stay with the word before them, and a letter after them begins a word:
+        // "std::" then "io" (213, old-pc, 2026-10-18).
+        let after_colons = prev == Some(':') && c.is_alphanumeric();
         if separator {
             if let Some(s) = start.take() {
                 words.push((s, offset));
             }
             words.push((offset, offset + c.len_utf8()));
+        } else if after_colons {
+            if let Some(s) = start.replace(offset) {
+                words.push((s, offset));
+            }
         } else if start.is_none() {
             start = Some(offset);
         }
@@ -1221,6 +1247,22 @@ mod tests {
                 "3.5%"
             ]
         );
+    }
+
+    /// Ctrl+Right through a text area on old-pc (213, 2026-10-18): "std::" then "io", and the
+    /// field's role is not a word of its line.
+    #[test]
+    fn a_text_area_line_reads_by_its_own_words() {
+        assert_eq!(
+            words("then reads std::io again"),
+            vec!["then", "reads", "std::", "io", "again"]
+        );
+        let area = AomNode::new(1, Role::Edit).with_value("the lazy dog");
+        let root = AomNode::new(0, Role::Document).with_children(vec![area]);
+        let buffer = crate::buffer::VirtualBuffer::from_aom(&root);
+        let line = buffer.lines.first();
+        assert_eq!(line.map(|l| l.text.as_str()), Some("the lazy dog"));
+        assert!(line.is_some_and(|l| l.speech.contains(&role_marker("Edit"))));
     }
 
     /// Line breaks recorded from JAWS on `news-article.html` [obs, 101/s18, s22, s52–s53].
@@ -1425,9 +1467,9 @@ mod tests {
                     state_marker("collapsed")
                 ),
                 format!(
-                    "Pick one{}{}",
+                    "Pick one{}{} listbox",
                     role_marker("Button"),
-                    state_marker("Has Popup listbox")
+                    state_marker("Has Popup")
                 ),
             ]
         );

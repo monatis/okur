@@ -61,7 +61,7 @@ fn chat(title: &str, messages: Vec<AomNode>) -> AomNode {
     let mut page = AomNode::new(0, Role::Document)
         .with_name(title)
         .with_children(vec![
-            AomNode::new(1, Role::Group).with_children(messages),
+            object(AomNode::new(1, Role::Group).with_children(messages), -1),
             object(focusable(composer, true), -900),
         ]);
     page.attributes.insert("url".to_owned(), URL.to_owned());
@@ -476,4 +476,35 @@ fn the_cursor_goes_to_a_focus_whose_lines_are_its_childrens() {
     assert_eq!(engine.cursor.current_line(), "Page 1");
     engine.handle_key_event(&key(Key::DownArrow, false));
     assert_eq!(engine.cursor.current_line(), "First line of the document");
+}
+
+/// A part of the page read again (the message list, after a message arrived) is spliced in
+/// where the same object is: the new message is there, and the cursor stays on its line.
+/// A part the page does not hold makes the whole page read again.
+#[test]
+fn a_part_read_again_is_spliced_into_the_page() {
+    let actions = RecordingActions::refreshing_pages();
+    let mut engine = engine_on(&chat("(7) WhatsApp", messages()), &actions);
+    cursor_to(&mut engine, "test", false);
+
+    let mut list = messages();
+    list.push(message(70, "a new one", "15:00", false));
+    let part = object(AomNode::new(1, Role::Group).with_children(list), -1);
+    engine.handle_accessibility_event(&AccessibilityEvent::PagePartLoaded(part));
+    engine.handle_key_event(&key(Key::Control, false));
+    assert_eq!(engine.cursor.current_line(), "test");
+    assert!(
+        engine
+            .cursor
+            .buffer
+            .lines
+            .iter()
+            .any(|l| l.text == "a new one"),
+        "the new message is in the buffer"
+    );
+    assert!(page_requests(&actions).is_empty());
+
+    let unknown = object(AomNode::new(1, Role::Group), -12345);
+    engine.handle_accessibility_event(&AccessibilityEvent::PagePartLoaded(unknown));
+    assert_eq!(page_requests(&actions), ["page changed, now"]);
 }

@@ -290,11 +290,16 @@ fn deleted_before_caret(before: Option<&TextContext>, after: &TextContext) -> St
         .collect()
 }
 
-fn blank_if_empty(text: String) -> String {
-    if text.trim().is_empty() {
-        "blank".to_owned()
+/// `text` trimmed, or a line break when nothing is left. JAWS's reading keys keep nothing of
+/// an empty line or word in its history, and its synthesizer is given "blank"
+/// ([`crate::pronounce::character`]) [obs, 315/s2, s7; 320/s7, s11]. "blank" goes into the
+/// history only for an empty field's value (202-204).
+fn or_line_break(text: String) -> String {
+    let text = text.trim();
+    if text.is_empty() {
+        "\n".to_owned()
     } else {
-        text.trim().to_owned()
+        text.to_owned()
     }
 }
 
@@ -311,8 +316,10 @@ pub fn speech(
         EditKey::Character | EditKey::DeleteForward => {
             char_at(after).map_or_else(|| "blank".to_owned(), |c| c.to_string())
         }
-        EditKey::Word => blank_if_empty(word_at(after)),
-        EditKey::Line => blank_if_empty(line_at(after)),
+        // A word move that stops at a line's end reads the line break, as a character move onto
+        // it does [obs, 320/s7, s11].
+        EditKey::Word => or_line_break(word_at(after)),
+        EditKey::Line => or_line_break(line_at(after)),
         EditKey::SelectCharacter => {
             let added = newly_selected(before, after);
             if added.is_empty() {
@@ -416,6 +423,20 @@ mod tests {
         assert_eq!(
             speech(EditKey::DeleteWordBackward, Some(&before), &after, "").as_deref(),
             Some("test")
+        );
+    }
+
+    /// A word move says the word it reaches, and at a line's end the line break, which the
+    /// synthesizer says as "blank" [obs, 320/s11-s12].
+    #[test]
+    fn a_word_move_to_a_line_end_reads_the_line_break() {
+        let text = "fn main() {\r\n    let total";
+        let at_end = speech(EditKey::Word, None, &ctx(text, 11, None), "");
+        assert_eq!(at_end.as_deref(), Some("\n"));
+        assert_eq!(crate::pronounce::character("\n"), "blank");
+        assert_eq!(
+            speech(EditKey::Word, None, &ctx(text, 17, None), "").as_deref(),
+            Some("let")
         );
     }
 

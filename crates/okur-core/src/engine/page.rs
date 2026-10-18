@@ -64,6 +64,7 @@ impl ScreenReaderEngine {
         self.pending_page = None;
         self.page_stale = false;
         self.last_page_focus = None;
+        self.focus_table_unsaid = false;
         self.tab_start = None;
         self.option_list = None;
         self.web_application = None;
@@ -347,6 +348,25 @@ impl ScreenReaderEngine {
             self.page_stale = true;
         } else if let Some(actions) = &self.actions {
             actions.page_changed(false);
+        }
+    }
+
+    /// A part of the page read again after it changed ([`AccessibilityEvent::PagePartLoaded`]):
+    /// spliced into the page (the one waiting to be applied, if any) and applied as a page
+    /// captured again, keeping the cursor's place. A part the page does not hold is new: the
+    /// whole page is read again.
+    pub(super) fn page_part_loaded(&mut self, part: &AomNode) {
+        if self.app_mode != AppMode::VirtualBuffer {
+            return;
+        }
+        let base = self.pending_page.as_ref().unwrap_or(&self.cursor.buffer);
+        match base.with_subtree_replaced(part) {
+            Some(buffer) => self.pending_page = Some(buffer),
+            None => {
+                if let Some(actions) = &self.actions {
+                    actions.page_changed(true);
+                }
+            }
         }
     }
 

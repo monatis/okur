@@ -133,6 +133,11 @@ enum Commands {
         /// Hard limit on the trace duration (milliseconds)
         #[arg(long, default_value_t = 600_000)]
         max_ms: u64,
+
+        /// Also record the page in front's objects shown, hidden and reordered, with their
+        /// object ids (Chromium pages; nothing is read for them)
+        #[arg(long)]
+        page_changes: bool,
     },
     /// Send key chords to the application in front, each only while it is one of --allow:
     /// for live checks on a machine the user lets the agent drive ("Insert+Alt+W",
@@ -198,6 +203,16 @@ enum Commands {
         /// Regenerate corpus/invariants-baseline.json from the current results
         #[arg(long)]
         write_baseline: bool,
+    },
+    /// Print the virtual buffer a page snapshot builds, line by line: offset, node, role,
+    /// the line's text and its speech (for debugging replay and quick navigation)
+    Lines {
+        /// Snapshot file (corpus/snapshots/*.chrome.ia2.json or .uia.json)
+        snapshot: String,
+
+        /// Only lines whose text contains this
+        #[arg(long)]
+        grep: Option<String>,
     },
     /// Capture the foreground window's document as a raw UIA snapshot (Windows)
     Snapshot {
@@ -618,6 +633,8 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::DocumentLoaded { .. }) => "document loaded",
         Some(AccessibilityEvent::Ui(_)) => "okur window",
         Some(AccessibilityEvent::PageChanged) => "page changed",
+        Some(AccessibilityEvent::PagePartLoaded(_)) => "page part loaded",
+        Some(AccessibilityEvent::WindowRenamed(_)) => "window renamed",
     }
 }
 
@@ -1350,12 +1367,14 @@ async fn main() {
             out,
             stop_file,
             max_ms,
+            page_changes,
         }) => {
             #[cfg(windows)]
             match okur_platform::event_trace::run_trace(
                 Path::new(&out),
                 stop_file.as_deref().map(Path::new),
                 max_ms,
+                page_changes,
             ) {
                 Ok(n) => println!("Recorded {n} events -> {out}"),
                 Err(e) => {
@@ -1455,6 +1474,27 @@ async fn main() {
                     eprintln!("{e}");
                     std::process::exit(1);
                 }
+            }
+        }
+        Some(Commands::Lines { snapshot, grep }) => {
+            let loaded = okur_corpus::snapshots::load(Path::new(&snapshot)).unwrap_or_else(|e| {
+                eprintln!("{e}");
+                std::process::exit(1);
+            });
+            let buffer = VirtualBuffer::from_aom(&loaded.aom);
+            for line in &buffer.lines {
+                if grep.as_deref().is_some_and(|g| !line.text.contains(g)) {
+                    continue;
+                }
+                println!(
+                    "{:>5} {:>6}  node {:<5} {:<16} {:?}  speech {:?}",
+                    line.line_index,
+                    line.start_offset,
+                    line.node_id,
+                    format!("{:?}", line.role),
+                    line.text,
+                    line.speech
+                );
             }
         }
         Some(Commands::Invariants {

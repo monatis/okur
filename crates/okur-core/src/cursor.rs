@@ -34,6 +34,28 @@ pub struct SearchState {
     pub case_sensitive: bool,
 }
 
+/// Where a focus is judged to come from, for the table position JAWS says with it.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum FocusFrom {
+    /// Where the virtual cursor was before the focus moved it.
+    Cursor,
+    /// Another place in the page: the virtual cursor, when it is not the previous focus.
+    Offset(usize),
+    /// Outside the page's tables: the focus before it was said without its table, so the
+    /// next one says header and full position, "Message | ... | column 2 row 2" [obs, 216/s11].
+    Outside,
+}
+
+impl FocusFrom {
+    fn offset(self, cursor: usize) -> Option<usize> {
+        match self {
+            Self::Cursor => Some(cursor),
+            Self::Offset(offset) => Some(offset),
+            Self::Outside => None,
+        }
+    }
+}
+
 /// The Virtual Cursor providing reading navigation and quick key primitives over a VirtualBuffer.
 #[derive(Debug, Clone)]
 pub struct VirtualCursor {
@@ -655,13 +677,32 @@ impl VirtualCursor {
     /// virtual cursor follows, and JAWS speaks the control as the F/E/X quick keys do, plus
     /// the usage hint for check boxes, links and buttons [obs, 204].
     pub fn focus_node(&mut self, node_id: usize) -> Option<String> {
-        self.focus_node_from(node_id, None)
+        self.focus_node_from(node_id, FocusFrom::Cursor)
     }
 
-    /// [`Self::focus_node`], with the table position judged from `from` (where the virtual
-    /// cursor was, when it is not the previous focus): JAWS says a table's header and position
-    /// as entered from its virtual cursor (GitHub's files table from its heading, dev box).
-    pub fn focus_node_from(&mut self, node_id: usize, from: Option<usize>) -> Option<String> {
+    /// The first focus in a page landing on a link, said as the virtual cursor's line there
+    /// with the link's usage hint: "• same page link Current Page README", its list item's
+    /// bullet first [obs, 214/s8]; no table position or region [obs, 216/s10, 217/s11]. A
+    /// link sharing its line with other text is left to the focus phrasing.
+    pub fn focus_line(&mut self, node_id: usize) -> Option<String> {
+        self.move_to_node_id(node_id);
+        let node = self.buffer.node(node_id)?;
+        let line = self
+            .buffer
+            .line_at_offset(self.offset)
+            .filter(|l| l.node_id == node_id && matches!(node.role, Role::Link { .. }))?;
+        let mut speech = self.format_line_announcement(line);
+        if let Some(hint) = SpeechFormatter::web_focus_hint(node) {
+            speech.push('\n');
+            speech.push_str(hint);
+        }
+        Some(speech)
+    }
+
+    /// [`Self::focus_node`], with the table position judged from `from`: JAWS says a table's
+    /// header and position as entered from its virtual cursor (GitHub's files table from its
+    /// heading, dev box).
+    pub fn focus_node_from(&mut self, node_id: usize, from: FocusFrom) -> Option<String> {
         let previous = self.offset;
         self.move_to_node_id(node_id);
         let node = self.buffer.node(node_id)?;
@@ -735,7 +776,7 @@ impl VirtualCursor {
         // Such a cell says its position only entering the grid: JAWS said no row moving on.
         let focused_cell = node.role == Role::TableCell && !name.is_empty();
         if let Some((header, position)) =
-            self.table_focus_context(self.offset, from.unwrap_or(previous))
+            self.table_focus_context(self.offset, from.offset(previous))
         {
             if let Some(header) = header {
                 speech = format!("{header}\n{speech}");
@@ -759,7 +800,7 @@ impl VirtualCursor {
     fn table_focus_context(
         &self,
         offset: usize,
-        previous: usize,
+        previous: Option<usize>,
     ) -> Option<(Option<String>, String)> {
         let cell_at = |at: usize| {
             let table = self.buffer.table_at_offset(at)?;
@@ -772,7 +813,8 @@ impl VirtualCursor {
             Some((table.table_id, cell.row, cell.col, cell.col_header.clone()))
         };
         let (table, row, col, header) = cell_at(offset)?;
-        let before = cell_at(previous)
+        let before = previous
+            .and_then(cell_at)
             .filter(|(t, ..)| *t == table)
             .map(|(_, r, c, _)| (r, c));
         let header = match before {

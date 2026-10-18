@@ -172,7 +172,7 @@ impl Default for VoiceSettings {
 
 /// All user settings: what the settings dialog shows and the settings file keeps. A setting
 /// missing from the file has its default.
-#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(default)]
 pub struct Settings {
     pub voice: VoiceSettings,
@@ -180,6 +180,27 @@ pub struct Settings {
     pub live_region_append: LiveRegionAppend,
     pub typing_echo: TypingEcho,
     pub viewer_display: ViewerDisplay,
+    /// Forms mode turns on by itself when the focus lands on a field, as JAWS's Auto Forms
+    /// Mode (`[FormsMode] AutoFormsMode`, on by default). Off, a field takes Enter first,
+    /// and arrows in a page's menu stay the virtual cursor's (old-pc, 2026-10-18).
+    pub auto_forms_mode: bool,
+    /// A control's access key is said after it ("alt+Y"), as JAWS's Access Key output
+    /// (`[OutputModes] ACCESS_KEY`, on by default).
+    pub access_keys: bool,
+}
+
+impl Default for Settings {
+    fn default() -> Self {
+        Self {
+            voice: VoiceSettings::default(),
+            keyboard: KeyboardSettings::default(),
+            live_region_append: LiveRegionAppend::default(),
+            typing_echo: TypingEcho::default(),
+            viewer_display: ViewerDisplay::default(),
+            auto_forms_mode: true,
+            access_keys: true,
+        }
+    }
 }
 
 /// Where changed settings are kept, so that they hold the next time Okur starts.
@@ -213,8 +234,9 @@ impl SettingsStore for RecordingSettingsStore {
 
 impl Settings {
     /// The reference machine's JAWS configuration (`old-pc`'s `DEFAULT.JCF`, unchanged since
-    /// 2025-08-19, before any evidence was recorded): `KeyboardType=Laptop`, `TypingEcho=0`;
-    /// and JAWS's own reading of growing live regions, so replay compares like with like.
+    /// 2025-08-19, before any evidence was recorded): `KeyboardType=Laptop`, `TypingEcho=0`,
+    /// `AutoFormsMode=0`, `ACCESS_KEY=0|0|0`; and JAWS's own reading of growing live regions,
+    /// so replay compares like with like.
     pub fn reference_machine() -> Self {
         Self {
             voice: VoiceSettings::default(),
@@ -222,6 +244,8 @@ impl Settings {
             live_region_append: LiveRegionAppend::WholeText,
             typing_echo: TypingEcho::None,
             viewer_display: ViewerDisplay::OnScreen,
+            auto_forms_mode: false,
+            access_keys: false,
         }
     }
 }
@@ -236,6 +260,18 @@ mod tests {
         e.modifiers.insert = insert;
         e.modifiers.caps_lock = caps_lock;
         e
+    }
+
+    /// JAWS's defaults turn Auto Forms Mode and the Access Key output on; old-pc's JCF turns
+    /// both off, and a settings file that names neither keeps the defaults.
+    #[test]
+    fn forms_mode_and_access_keys_default_to_jaws() {
+        let defaults = Settings::default();
+        assert!(defaults.auto_forms_mode && defaults.access_keys);
+        let reference = Settings::reference_machine();
+        assert!(!reference.auto_forms_mode && !reference.access_keys);
+        let older: Result<Settings, _> = serde_json::from_str(r#"{"typing_echo":"none"}"#);
+        assert!(older.is_ok_and(|s| s.auto_forms_mode && s.access_keys));
     }
 
     #[test]

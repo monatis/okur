@@ -98,10 +98,13 @@ impl ScreenReaderEngine {
             .as_ref()
             .is_some_and(|field| self.app_for(field).is_some_and(|app| app.types_into(field)));
         use crate::editing::EditKey;
-        let character = matches!(
+        // An empty line or word is read as its line break, which the synthesizer says as
+        // "blank" ([`crate::editing::speech`]).
+        let character = (matches!(
             key,
             EditKey::Character | EditKey::DeleteForward | EditKey::DeleteBackward
-        ) && speech.chars().count() == 1;
+        ) && speech.chars().count() == 1)
+            || (!speech.is_empty() && speech.chars().all(crate::editing::is_line_break));
         if character {
             self.speech.speak_character(&speech, true);
         } else {

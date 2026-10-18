@@ -68,7 +68,7 @@ mod reader {
             // A Chromium page whose focused object has no text.
             Ok(None) => None,
             // Not a Chromium window.
-            Err(_) => read_uia(uia).or_else(read_win32_edit),
+            Err(_) => read_uia(uia).map(with_edit_font).or_else(read_win32_edit),
         }
     }
 
@@ -98,7 +98,40 @@ mod reader {
     /// The focused field of an application other than a page: a browser's own controls (its
     /// address bar), whose page still names a focus of its own, which is not the one typed in.
     pub fn read_focused_outside_page(uia: &IUIAutomation) -> Option<TextContext> {
-        read_uia(uia).or_else(read_win32_edit)
+        read_uia(uia).map(with_edit_font).or_else(read_win32_edit)
+    }
+
+    /// `context` with a plain Win32 edit's own font (Notepad's on Windows 10): UIA's edit
+    /// proxy gives its character cell's height for the size, 24 point for a Consolas of 22,
+    /// where JAWS says "Font is Consolas 22 point", with no paragraph formatting [obs, 314/s1].
+    fn with_edit_font(mut context: TextContext) -> TextContext {
+        if let Some(font) = focused_window()
+            .filter(|(_, class)| class == "EDIT")
+            .and_then(|(hwnd, _)| win32_font(hwnd))
+        {
+            context.font = Some(font);
+        }
+        context
+    }
+
+    /// The focused window of the application in front, with its class in capitals.
+    fn focused_window() -> Option<(windows::Win32::Foundation::HWND, String)> {
+        use windows::Win32::UI::WindowsAndMessaging::{
+            GetClassNameW, GetGUIThreadInfo, GetWindowThreadProcessId, GUITHREADINFO,
+        };
+        // SAFETY: Win32 queries with valid out-structures.
+        unsafe {
+            let thread = GetWindowThreadProcessId(GetForegroundWindow(), None);
+            let mut info = GUITHREADINFO {
+                cbSize: std::mem::size_of::<GUITHREADINFO>() as u32,
+                ..Default::default()
+            };
+            GetGUIThreadInfo(thread, &mut info).ok()?;
+            let mut class = [0u16; 128];
+            let n = usize::try_from(GetClassNameW(info.hwndFocus, &mut class)).ok()?;
+            let class = String::from_utf16_lossy(class.get(..n)?).to_ascii_uppercase();
+            Some((info.hwndFocus, class))
+        }
     }
 
     /// A Chromium text object's state, its UTF-16 offsets made character offsets. Its word
@@ -136,27 +169,15 @@ mod reader {
     /// A Win32 edit control read with window messages, as for subclassed edits that UIA's
     /// edit proxy does not recognize (WinForms `WindowsForms10.EDIT…`, rich edits).
     fn read_win32_edit() -> Option<TextContext> {
-        use windows::Win32::Foundation::{HWND, LPARAM, WPARAM};
-        use windows::Win32::UI::WindowsAndMessaging::{
-            GetClassNameW, GetGUIThreadInfo, GetWindowThreadProcessId, SendMessageTimeoutW,
-            GUITHREADINFO, SMTO_ABORTIFHUNG,
-        };
+        use windows::Win32::Foundation::{LPARAM, WPARAM};
+        use windows::Win32::UI::WindowsAndMessaging::{SendMessageTimeoutW, SMTO_ABORTIFHUNG};
         const WM_GETTEXT: u32 = 0x000D;
         const WM_GETTEXTLENGTH: u32 = 0x000E;
         const EM_GETSEL: u32 = 0x00B0;
         // SAFETY: Win32 queries with valid out-structures; messages to another process use
         // a timeout, and WM_GETTEXT's buffer is marshalled by the system.
         unsafe {
-            let thread = GetWindowThreadProcessId(GetForegroundWindow(), None);
-            let mut info = GUITHREADINFO {
-                cbSize: std::mem::size_of::<GUITHREADINFO>() as u32,
-                ..Default::default()
-            };
-            GetGUIThreadInfo(thread, &mut info).ok()?;
-            let hwnd: HWND = info.hwndFocus;
-            let mut class = [0u16; 128];
-            let n = usize::try_from(GetClassNameW(hwnd, &mut class)).ok()?;
-            let class = String::from_utf16_lossy(class.get(..n)?).to_ascii_uppercase();
+            let (hwnd, class) = focused_window()?;
             if !class.contains("EDIT") {
                 return None;
             }

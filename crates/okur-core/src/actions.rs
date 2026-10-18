@@ -96,6 +96,9 @@ pub trait ApplicationActions: Send {
 #[derive(Debug, Default, Clone)]
 pub struct RecordingActions {
     log: std::sync::Arc<std::sync::Mutex<Vec<(String, usize)>>>,
+    /// Chords sent to the application, until taken: a replay hands them back to the engine
+    /// as the keyboard hook does live.
+    pressed: std::sync::Arc<std::sync::Mutex<Vec<Vec<crate::input::Key>>>>,
     /// Takes `read_window`, as a live platform does. Replay leaves it off: recorded traces
     /// hold no window text to answer with.
     windows: bool,
@@ -129,6 +132,14 @@ impl RecordingActions {
             pages: true,
             ..Self::default()
         }
+    }
+
+    /// The chords sent to the application since last asked, emptied.
+    pub fn take_pressed(&self) -> Vec<Vec<crate::input::Key>> {
+        self.pressed
+            .lock()
+            .map(|mut pressed| std::mem::take(&mut *pressed))
+            .unwrap_or_default()
     }
 
     /// The requested actions so far, as `(action, node id)`.
@@ -195,6 +206,9 @@ impl ApplicationActions for RecordingActions {
     fn press(&self, chord: &[crate::input::Key]) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push((format!("press {chord:?}"), 0));
+        }
+        if let Ok(mut pressed) = self.pressed.lock() {
+            pressed.push(chord.to_vec());
         }
         true
     }

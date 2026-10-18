@@ -27,6 +27,93 @@ enum PageRequest {
     /// The page quickly through UIA, then in full through IA2: for a focus the engine's
     /// buffer does not hold (content a web application added).
     Focus(ForegroundWindow),
+    /// The page's changes at once, now that they are over (they came while forms mode was on):
+    /// the changed parts when they are known, else the whole page.
+    Changes(ForegroundWindow),
+}
+
+/// The objects of the page in front whose children changed since its last capture
+/// (`EVENT_OBJECT_REORDER`), so that only those parts are read again.
+#[derive(Debug, Default)]
+struct ChangedParts {
+    objects: Vec<i32>,
+    /// More parts changed than are worth reading one by one: the whole page is read.
+    whole_page: bool,
+}
+
+/// The changes the hook has passed on since the last capture.
+static CHANGED_PARTS: std::sync::Mutex<ChangedParts> = std::sync::Mutex::new(ChangedParts {
+    objects: Vec::new(),
+    whole_page: false,
+});
+
+/// The most changed parts read one by one; past it the whole page is read.
+const MAX_CHANGED_PARTS: usize = 8;
+
+/// Notes a change the hook passed on. Chromium reorders the parent of every object shown or
+/// hidden, and raises IA2's text events on the block whose text changed in place, so these
+/// name each changed part; shows and hides alone add nothing to read (old-pc, 2026-10-18).
+fn note_page_change(change: crate::event_trace::PageChange) {
+    use crate::event_trace::{IA2_EVENT_TEXT_INSERTED, IA2_EVENT_TEXT_REMOVED};
+    const EVENT_OBJECT_REORDER: u32 = 0x8004;
+    if !matches!(
+        change.event,
+        EVENT_OBJECT_REORDER | IA2_EVENT_TEXT_INSERTED | IA2_EVENT_TEXT_REMOVED
+    ) {
+        return;
+    }
+    if let Ok(mut parts) = CHANGED_PARTS.lock() {
+        if parts.objects.contains(&change.object) {
+            return;
+        }
+        if parts.objects.len() >= MAX_CHANGED_PARTS {
+            parts.whole_page = true;
+        } else {
+            parts.objects.push(change.object);
+        }
+    }
+}
+
+/// The parts changed since the last capture, forgotten as they are taken: `None` when the
+/// whole page is to be read (too many parts, or none named).
+fn take_changed_parts() -> Option<Vec<i32>> {
+    let parts = CHANGED_PARTS
+        .lock()
+        .ok()
+        .map(|mut parts| std::mem::take(&mut *parts))?;
+    (!parts.whole_page && !parts.objects.is_empty()).then_some(parts.objects)
+}
+
+/// Reads the changed parts of the page in `window` again, through IA2, and sends each as
+/// [`AccessibilityEvent::PagePartLoaded`]. False when one cannot be read: the caller reads the
+/// whole page.
+fn read_changed_parts(
+    window: ForegroundWindow,
+    objects: &[i32],
+    sender: &UnboundedSender<AccessibilityEvent>,
+) -> bool {
+    use windows::Win32::Foundation::HWND;
+    let started = std::time::Instant::now();
+    let top = HWND(window.0 as *mut core::ffi::c_void);
+    let mut parts = Vec::with_capacity(objects.len());
+    for &object in objects {
+        match xa11y_windows::ia2::capture_chromium_object(top, object) {
+            Ok(node) => parts.push(crate::ia2_snapshot::ia2_to_aom(&node)),
+            Err(e) => {
+                tracing::debug!(object, "page part not read again ({e}): the whole page is");
+                return false;
+            }
+        }
+    }
+    tracing::debug!(
+        parts = parts.len(),
+        ms = started.elapsed().as_millis(),
+        "page parts read again"
+    );
+    for part in parts {
+        let _ = sender.send(AccessibilityEvent::PagePartLoaded(part));
+    }
+    true
 }
 
 /// The running listener's page worker, for the engine's page requests.
@@ -57,7 +144,7 @@ pub fn refresh_page_for_focus() -> bool {
 /// settle, or at once (`now`) when they are over. False when no listener runs.
 pub fn refresh_changed_page(now: bool) -> bool {
     request_page(if now {
-        PageRequest::Refine
+        PageRequest::Changes
     } else {
         PageRequest::Refresh
     })
@@ -113,8 +200,11 @@ impl AccessibilityEventListener for WindowsAccessibilityEventListener {
                 let mut page: Option<String> = None;
                 let mut converter = EventConverter::default();
                 let changes = sender.clone();
-                let page_changed = move || {
-                    let _ = changes.send(AccessibilityEvent::PageChanged);
+                let page_changed = move |change: crate::event_trace::PageChange| {
+                    note_page_change(change);
+                    if change.notify {
+                        let _ = changes.send(AccessibilityEvent::PageChanged);
+                    }
                 };
                 let sink = move |event: TraceEvent| {
                     deliver(&event, &mut converter, &mut page, &sender, &pages)
@@ -212,7 +302,8 @@ fn start_page_worker(
             while let Ok(request) = rx.recv() {
                 let (PageRequest::Refresh(window)
                 | PageRequest::Refine(window)
-                | PageRequest::Focus(window)) = request;
+                | PageRequest::Focus(window)
+                | PageRequest::Changes(window)) = request;
                 if matches!(request, PageRequest::Refresh(_))
                     && !settle(&rx, REFRESH_QUIET, REFRESH_MAX_DELAY)
                 {
@@ -221,6 +312,21 @@ fn start_page_worker(
                 if ForegroundWindow::now() != window {
                     tracing::debug!(?request, "page request skipped: its window left the front");
                     continue;
+                }
+                // After changes, only the changed parts when they are known; a whole-page read
+                // covers every change noted so far. A focus the buffer lacks is in a part that
+                // changed (WhatsApp's options button, shown with its message's focus): reading
+                // that part takes tens of milliseconds, the whole chat 2 s.
+                let changed = take_changed_parts();
+                if matches!(
+                    request,
+                    PageRequest::Refresh(_) | PageRequest::Changes(_) | PageRequest::Focus(_)
+                ) {
+                    if let Some(objects) = changed {
+                        if read_changed_parts(window, &objects, &sender) {
+                            continue;
+                        }
+                    }
                 }
                 let started = std::time::Instant::now();
                 if matches!(request, PageRequest::Focus(_)) {
@@ -241,7 +347,7 @@ fn start_page_worker(
                         let title = root.name.clone().unwrap_or_default();
                         let ms = started.elapsed().as_millis();
                         match request {
-                            PageRequest::Refresh(_) => {
+                            PageRequest::Refresh(_) | PageRequest::Changes(_) => {
                                 tracing::debug!(%title, ms, "page refreshed")
                             }
                             PageRequest::Refine(_) | PageRequest::Focus(_) => {
