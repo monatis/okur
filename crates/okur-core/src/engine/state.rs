@@ -71,11 +71,9 @@ impl ActiveElementList {
                     Some(it) => it,
                     None => return String::new(),
                 };
-                let role_label = crate::speech::SpeechFormatter::form_field_list_role(&item.role);
                 format!(
-                    "{} {}\n{}\n{}",
-                    item.name,
-                    role_label,
+                    "{}\n{}\n{}",
+                    crate::speech::SpeechFormatter::form_field_list_entry(item),
                     msg::position(*selected_index + 1, items.len()),
                     msg::hint_move_to_items_arrows()
                 )
@@ -133,11 +131,9 @@ impl ActiveElementList {
                     Some(it) => it,
                     None => return String::new(),
                 };
-                let role_label = crate::speech::SpeechFormatter::form_field_list_role(&item.role);
                 format!(
-                    "{} {}\n{}\n{}",
-                    item.name,
-                    role_label,
+                    "{}\n{}\n{}",
+                    crate::speech::SpeechFormatter::form_field_list_entry(item),
                     msg::position(*selected_index + 1, items.len()),
                     msg::hint_move_to_items_arrows()
                 )

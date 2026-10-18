@@ -124,6 +124,9 @@ pub struct ScreenReaderEngine {
     list_dialog: Option<crate::ui::lists::ListDialog>,
     /// Until when the focus returning from one of Okur's dialogs is not announced.
     quiet_focus_until: Option<std::time::Instant>,
+    /// The field Select a Form Field gave the focus to: its focus is said even while the
+    /// focus returns quietly from the dialog, as JAWS says it [obs, 225/s10].
+    dialog_focus_target: Option<usize>,
     /// Dialogs opened so far: each gets the next number.
     dialog_count: u32,
     /// The last JAWS-key command and when it was pressed, to tell a double press.
@@ -186,6 +189,7 @@ impl ScreenReaderEngine {
             settings_dialog: None,
             list_dialog: None,
             quiet_focus_until: None,
+            dialog_focus_target: None,
             dialog_count: 0,
             last_press: None,
             settings: crate::settings::Settings::default(),
@@ -272,6 +276,7 @@ impl ScreenReaderEngine {
 
         // A key ends the quiet return from Okur's dialogs: what it does is said.
         self.quiet_focus_until = None;
+        self.dialog_focus_target = None;
 
         // 1. Any key press interrupts speech immediately (NVDA & JAWS standard behavior)
         self.speech.stop();
@@ -586,7 +591,9 @@ impl ScreenReaderEngine {
         let spoken = match event {
             // Back from one of Okur's dialogs, the focus returns to where it was and is taken
             // in silently, as JAWS returns from its own Links List (dev box, 2026-10-17).
-            AccessibilityEvent::Focus(focus) if self.quiet_return() => {
+            AccessibilityEvent::Focus(focus)
+                if self.quiet_return() && !self.reaches_dialog_focus_target(focus) =>
+            {
                 let speech = std::mem::replace(
                     &mut self.speech,
                     Box::new(crate::speech::MockSpeechOutput::new()),
@@ -739,6 +746,29 @@ impl ScreenReaderEngine {
             .is_some_and(|until| std::time::Instant::now() < until)
     }
 
+    /// Whether `focus` is the field a dialog gave the focus to. Its arrival ends the quiet
+    /// return.
+    fn reaches_dialog_focus_target(&mut self, focus: &crate::event::FocusEvent) -> bool {
+        let reached = self.dialog_focus_target.is_some()
+            && self.page_node_for(focus) == self.dialog_focus_target;
+        if reached {
+            self.dialog_focus_target = None;
+            self.quiet_focus_until = None;
+        }
+        reached
+    }
+
+    /// The page as JAWS names it when the focus comes back to it from one of its dialogs:
+    /// "Web App Patterns document" [obs, 221/s2, 227/s11].
+    fn page_on_return(&self) -> Option<String> {
+        self.cursor.buffer.document_title().map(|title| {
+            format!(
+                "{title}{}",
+                crate::linearize::role_marker(msg::role_document().as_str())
+            )
+        })
+    }
+
     /// Starts the quiet return after one of Okur's dialogs closed: the window it came from
     /// takes the focus back within this.
     fn returning_from_dialog(&mut self) {
@@ -764,6 +794,19 @@ impl ScreenReaderEngine {
                 (
                     (!headings.is_empty()).then(|| ListDialog::headings(id, &headings)),
                     msg::quicknav_none_headings().to_string(),
+                )
+            }
+            // With none, JAWS says so and then the page [obs, 221/s2].
+            ListKind::FormFields => {
+                let fields = self.cursor.buffer.get_form_fields_list();
+                let page = self.page_on_return().map(|page| format!("\n{page}"));
+                (
+                    (!fields.is_empty()).then(|| ListDialog::form_fields(id, &fields)),
+                    format!(
+                        "{}{}",
+                        msg::form_fields_list_none(),
+                        page.unwrap_or_default()
+                    ),
                 )
             }
         };
@@ -808,7 +851,7 @@ impl ScreenReaderEngine {
                 let said = self.cursor.jump_to_element_offset(entry.offset);
                 let speech = match kind {
                     ListKind::Links => format!("{said}\n{}", msg::hint_activate_enter()),
-                    ListKind::Headings => self.cursor.current_line(),
+                    ListKind::Headings | ListKind::FormFields => self.cursor.current_line(),
                 };
                 self.speech.speak(&speech, true);
                 Some(speech)
@@ -829,10 +872,41 @@ impl ScreenReaderEngine {
                     None => hint,
                 })
             }
+            // OK in Select a Form Field: JAWS names the page, reads the field as the virtual
+            // cursor does, and says it again as it takes the focus ("Web App Patterns | Outline
+            // button menu | Outline button menu"); an edit then takes typing [obs, 225/s10,
+            // 228/s9, s10].
+            Outcome::Focus(field) => {
+                close(self);
+                self.cursor.jump_to_element_offset(field.offset);
+                let speech = [
+                    self.cursor.buffer.document_title().map(str::to_owned),
+                    Some(self.cursor.current_line()),
+                ]
+                .into_iter()
+                .flatten()
+                .collect::<Vec<_>>()
+                .join("\n");
+                let focused = match (self.cursor.buffer.node(field.node_id), &self.actions) {
+                    (Some(node), Some(actions)) => actions.focus(node),
+                    _ => false,
+                };
+                if focused {
+                    self.dialog_focus_target = Some(field.node_id);
+                }
+                self.speech.speak(&speech, true);
+                Some(speech)
+            }
+            // Select a Form Field gives the page back named; the Links List quietly [obs,
+            // 227/s11, 223/s3].
             Outcome::Closed => {
                 self.list_dialog = None;
                 self.returning_from_dialog();
-                None
+                let page = (kind == ListKind::FormFields)
+                    .then(|| self.page_on_return())
+                    .flatten()?;
+                self.speech.speak(&page, true);
+                Some(page)
             }
         }
     }

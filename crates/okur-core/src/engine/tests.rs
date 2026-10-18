@@ -2731,6 +2731,112 @@ fn the_heading_list_reads_the_chosen_heading_as_its_line() {
     assert_eq!(level_first, Some(true), "{moved:?}");
 }
 
+/// Insert+F5 opens a real Select a Form Field. OK moves to the chosen field and focuses it,
+/// naming the page and reading the field's line; the field's own focus is then said
+/// although the focus is coming back from the dialog [obs, 225/s10, 228/s9]. Escape names
+/// the page [obs, 227/s11].
+#[test]
+fn select_a_form_field_focuses_the_chosen_field() {
+    use crate::ui::{ControlKind, FromUi, ToUi, Value};
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Web Menus"),
+            AomNode::new(2, Role::Button).with_name("Start"),
+            AomNode::new(3, Role::CheckBox)
+                .with_name("Wrap")
+                .with_states(crate::aom::NodeStates {
+                    checked: Some(false),
+                    ..crate::aom::NodeStates::default()
+                }),
+            AomNode::new(4, Role::Edit)
+                .with_name("Notes")
+                .with_value("the lazy dog"),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.handle_focus_event(&page_document());
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut f5 = KeyEvent::new(Key::F(5), Modifiers::none(), true);
+    f5.modifiers.insert = true;
+    assert_eq!(engine.handle_key_event(&f5), KeyAction::Consume);
+    let sent = ui.take();
+    let Some(ToUi::DialogShow { dialog }) = sent.first() else {
+        panic_free_fail(&format!("no dialog shown: {sent:?}"));
+        return;
+    };
+    assert_eq!(dialog.title, "Select a Form Field");
+    assert_eq!(
+        dialog
+            .controls
+            .first()
+            .map(|c| (c.label.clone(), c.kind.clone())),
+        Some((
+            "List1".into(),
+            ControlKind::List {
+                items: vec![
+                    "Start Button".into(),
+                    "Wrap check box not checked".into(),
+                    "Notes Edit the lazy dog".into()
+                ],
+                selected: 0
+            }
+        ))
+    );
+    let id = dialog.id;
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "fields".into(),
+        value: Value::Selected(2),
+    }));
+    let chosen =
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+            id,
+            control: "ok".into(),
+        }));
+    assert_eq!(ui.take(), [ToUi::DialogClose { id }]);
+    assert_eq!(actions.requests(), [("focus".to_owned(), 4)]);
+    assert!(
+        chosen
+            .as_deref()
+            .is_some_and(|s| s.starts_with("Web Menus\n") && s.contains("the lazy dog")),
+        "{chosen:?}"
+    );
+    // The page takes the focus back quietly; the field's focus is said.
+    assert_eq!(
+        engine.handle_accessibility_event(&AccessibilityEvent::Focus(page_document())),
+        None
+    );
+    let mut notes = FocusEvent::new(Role::Edit)
+        .with_name("Notes")
+        .with_value("the lazy dog")
+        .with_node_id(4)
+        .with_window_title("Web Menus - Google Chrome");
+    notes.in_document = true;
+    let focused = engine.handle_accessibility_event(&AccessibilityEvent::Focus(notes));
+    assert!(
+        focused.as_deref().is_some_and(|s| s.contains("Notes")),
+        "{focused:?}"
+    );
+
+    // Escape: the dialog goes and JAWS names the page.
+    engine.handle_key_event(&f5);
+    let id = match ui.take().first() {
+        Some(ToUi::DialogShow { dialog }) => dialog.id,
+        other => {
+            panic_free_fail(&format!("no dialog shown: {other:?}"));
+            return;
+        }
+    };
+    let closed =
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogClosed { id }));
+    assert_eq!(closed.as_deref(), Some("Web Menus \u{1d} document \u{1e} "));
+}
+
 fn page_document() -> FocusEvent {
     let mut document = FocusEvent::new(Role::Document)
         .with_name("Web Menus")

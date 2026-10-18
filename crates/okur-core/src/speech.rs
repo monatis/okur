@@ -862,23 +862,43 @@ impl SpeechFormatter {
         )
     }
 
-    /// The type word of an item in the Form Fields list.
-    pub fn form_field_list_role(role: &Role) -> &'static str {
-        match role {
-            Role::Button => msg::role_button().as_str(),
-            Role::Edit => msg::role_edit().as_str(),
-            Role::CheckBox => msg::role_check_box().as_str(),
-            Role::ComboBox => msg::role_combo_box().as_str(),
-            Role::Slider => msg::role_slider().as_str(),
-            _ => msg::role_field().as_str(),
-        }
+    /// A form field as Select a Form Field lists it: its name, its type, then its value or
+    /// state ("Wrap check box not checked", "Fruit edit combo", "Notes Edit the lazy dog")
+    /// [obs, 227]. A button of any kind is a "Button" ("Outline Button" for a button menu).
+    pub fn form_field_list_entry(item: &crate::buffer::FormFieldListItem) -> String {
+        let kind = match item.role {
+            Role::Button | Role::MenuButton => msg::role_button(),
+            Role::Edit => msg::role_edit(),
+            Role::CheckBox => msg::role_check_box(),
+            Role::RadioButton => msg::role_radio_button(),
+            Role::ComboBox if item.editable => msg::role_edit_combo(),
+            Role::ComboBox => msg::role_combo_box(),
+            Role::Slider => msg::role_slider(),
+            _ => msg::role_field(),
+        };
+        let state = match (&item.role, item.checked) {
+            (Role::CheckBox | Role::RadioButton, Some(true)) => Some(msg::state_checked()),
+            (Role::CheckBox | Role::RadioButton, Some(false)) => Some(msg::state_not_checked()),
+            _ => None,
+        };
+        [
+            Some(item.name.as_str()),
+            Some(kind.as_str()),
+            item.value.as_deref(),
+            state.map(|s| s.as_str()),
+        ]
+        .into_iter()
+        .flatten()
+        .filter(|part| !part.is_empty())
+        .collect::<Vec<_>>()
+        .join(" ")
     }
 
     /// Formats the opening announcement of a Form Fields List dialog matching JAWS.
     pub fn format_form_fields_list_dialog(items: &[crate::buffer::FormFieldListItem]) -> String {
         let first_text = items
             .first()
-            .map(|i| format!("{} {}", i.name, Self::form_field_list_role(&i.role)))
+            .map(Self::form_field_list_entry)
             .unwrap_or_default();
         Self::format_list_dialog(
             msg::list_dialog_form_fields().as_str(),

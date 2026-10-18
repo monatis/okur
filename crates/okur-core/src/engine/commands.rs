@@ -401,17 +401,15 @@ impl ScreenReaderEngine {
                     Some(speech)
                 }
             }
+            Command::SelectAFormField if self.ui.is_some() => {
+                return self.open_list(crate::ui::lists::ListKind::FormFields)
+            }
             Command::SelectAFormField => {
                 let items = self.cursor.buffer.get_form_fields_list();
                 if items.is_empty() {
                     // Then the page, as when the focus comes back to it: "no form fields were
                     // found | Document Reading Reference Fixture document" [obs, 221/s2].
-                    let page = self.cursor.buffer.document_title().map(|title| {
-                        format!(
-                            "\n{title}{}",
-                            crate::linearize::role_marker(msg::role_document().as_str())
-                        )
-                    });
+                    let page = self.page_on_return().map(|page| format!("\n{page}"));
                     Some(format!(
                         "{}{}",
                         msg::form_fields_list_none(),

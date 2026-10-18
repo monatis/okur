@@ -72,6 +72,31 @@ mod tests {
         out
     }
 
+    /// Select a Form Field over web-app-patterns' IA2 snapshot lists its ten fields as JAWS
+    /// does: name, type, then value or state, button menus as "Button" [obs, 227/s1-s10].
+    #[test]
+    fn the_form_field_list_holds_every_field_as_jaws_lists_it() {
+        let doc = snapshot_aom("web-app-patterns", snapshots::Api::Ia2);
+        let buffer = okur_core::buffer::VirtualBuffer::from_aom(&doc);
+        let dialog =
+            okur_core::ui::lists::ListDialog::form_fields(1, &buffer.get_form_fields_list());
+        assert_eq!(
+            dialog.texts(),
+            [
+                "Next slide Button",
+                "Wrap check box not checked",
+                "Outline Button",
+                "Actions Button",
+                "Pick one Button",
+                "Fruit edit combo",
+                "Start Button",
+                "Notes Edit the lazy dog, then reads std::io again",
+                "First tool Button",
+                "Second tool Button",
+            ]
+        );
+    }
+
     /// The UIA→AOM mapping on real Chrome data: semantics come from control types, ARIA
     /// roles and UIA properties (old-pc's localized names are Turkish and must not matter).
     #[test]

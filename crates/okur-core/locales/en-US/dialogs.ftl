@@ -63,3 +63,10 @@ heading-list-display = Display
 heading-list-display-all = A&ll Headings
 # One option per heading level, 1 to 6; Alt and the level's digit choose it, as in JAWS.
 heading-list-display-level = Level &{ $level } Headings
+
+## Select a Form Field (Insert+F5), as JAWS's. Its title and its list's name are
+## list-dialog-form-fields and list-dialog-form-fields-list.
+
+# Enter chooses it, as in JAWS: JAWS's labels have no access key.
+form-field-list-ok = OK
+form-field-list-cancel = Cancel

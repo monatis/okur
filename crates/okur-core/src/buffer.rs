@@ -48,6 +48,10 @@ pub struct FormFieldListItem {
     pub name: String,
     pub role: Role,
     pub value: Option<String>,
+    /// A check box's or radio button's state.
+    pub checked: Option<bool>,
+    /// A combo box one types in (an edit combo).
+    pub editable: bool,
     pub offset: usize,
 }
 
@@ -1105,26 +1109,46 @@ impl VirtualBuffer {
         items
     }
 
-    /// Returns the list of all interactive form controls in the document for Form Fields List.
+    /// The document's form fields in its order, for Select a Form Field: every element
+    /// `form_controls` holds, button menus and radio buttons too [obs, 227].
     pub fn get_form_fields_list(&self) -> Vec<FormFieldListItem> {
-        let mut items = Vec::new();
-        for &offset in &self.form_controls {
-            if let Some(node) = self.find_form_control_node(offset) {
-                let name = node
-                    .name
-                    .clone()
-                    .or_else(|| node.text.clone())
-                    .unwrap_or_default();
-                items.push(FormFieldListItem {
+        let field = |offset: usize| {
+            self.spans
+                .iter()
+                .find(|s| {
+                    s.start_offset == offset
+                        && matches!(
+                            s.role,
+                            Role::Edit
+                                | Role::Button
+                                | Role::MenuButton
+                                | Role::CheckBox
+                                | Role::RadioButton
+                                | Role::ComboBox
+                                | Role::Slider
+                        )
+                })
+                .and_then(|s| self.node(s.node_id))
+        };
+        self.form_controls
+            .iter()
+            .filter_map(|&offset| {
+                let node = field(offset)?;
+                Some(FormFieldListItem {
                     node_id: node.id,
-                    name,
+                    name: node
+                        .name
+                        .clone()
+                        .or_else(|| node.text.clone())
+                        .unwrap_or_default(),
                     role: node.role.clone(),
                     value: node.value.clone(),
+                    checked: node.states.checked,
+                    editable: node.attributes.get("editable").is_some_and(|e| e == "true"),
                     offset,
-                });
-            }
-        }
-        items
+                })
+            })
+            .collect()
     }
 }
 

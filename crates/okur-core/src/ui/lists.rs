@@ -5,13 +5,15 @@
 //!   Cancel, Sort Links and Display (all, visited, unvisited), the link's address
 //!   [obs, 222];
 //! - the Heading List (Insert+F6): list "headings" of "text : level", Move To Heading (the
-//!   default), Cancel, Sort Headings and Display (all, or one level of 1 to 6) [obs, 224].
+//!   default), Cancel, Sort Headings and Display (all, or one level of 1 to 6) [obs, 224];
+//! - Select a Form Field (Insert+F5): list "List1" of "name type value" entries, OK (the
+//!   default) and Cancel [obs, 225, 227].
 //!
 //! See `docs/references/jaws-dialogs-and-visual-features.md` for the dialogs' layout.
 
 use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
 
-use crate::buffer::{HeadingListItem, LinkListItem};
+use crate::buffer::{FormFieldListItem, HeadingListItem, LinkListItem};
 use crate::messages::{msg, StaticMessage};
 
 const LINK_SORTS: [fn() -> StaticMessage; 2] = [
@@ -35,6 +37,7 @@ const HEADING_LEVELS: u32 = 6;
 pub enum ListKind {
     Links,
     Headings,
+    FormFields,
 }
 
 /// One of the page's elements, as the list shows it and acts on it.
@@ -50,6 +53,8 @@ pub struct Entry {
     pub address: Option<String>,
     /// A link within the page.
     pub same_page: bool,
+    /// The element's buffer node.
+    pub node_id: usize,
     /// Where the element is in the page's buffer.
     pub offset: usize,
 }
@@ -67,6 +72,7 @@ impl Entry {
             level: None,
             address: link.href.clone(),
             same_page: link.is_same_page,
+            node_id: link.node_id,
             offset: link.offset,
         }
     }
@@ -79,7 +85,22 @@ impl Entry {
             level: Some(heading.level),
             address: None,
             same_page: false,
+            node_id: heading.node_id,
             offset: heading.offset,
+        }
+    }
+
+    /// A form field: its name, type, then value or state ("Wrap check box not checked")
+    /// [obs, 227].
+    pub fn form_field(field: &FormFieldListItem) -> Self {
+        Self {
+            text: crate::speech::SpeechFormatter::form_field_list_entry(field),
+            sort_key: field.name.to_lowercase(),
+            level: None,
+            address: None,
+            same_page: false,
+            node_id: field.node_id,
+            offset: field.offset,
         }
     }
 }
@@ -95,6 +116,8 @@ pub enum Outcome {
     MoveTo(Entry),
     /// Close the dialog, move to the link and activate it (Activate Link).
     Activate(Entry),
+    /// Close the dialog, move to the field and give it the focus (OK in Select a Form Field).
+    Focus(Entry),
     /// The dialog is gone; the cursor stays.
     Closed,
 }
@@ -143,6 +166,15 @@ impl ListDialog {
         )
     }
 
+    /// Select a Form Field over the page's `fields`, in their order, the first selected.
+    pub fn form_fields(id: u32, fields: &[FormFieldListItem]) -> Self {
+        Self::new(
+            id,
+            ListKind::FormFields,
+            fields.iter().map(Entry::form_field).collect(),
+        )
+    }
+
     fn new(id: u32, kind: ListKind, entries: Vec<Entry>) -> Self {
         let mut dialog = Self {
             id,
@@ -166,6 +198,7 @@ impl ListDialog {
         match self.kind {
             ListKind::Links => "links",
             ListKind::Headings => "headings",
+            ListKind::FormFields => "fields",
         }
     }
 
@@ -179,6 +212,7 @@ impl ListDialog {
                         .map(|level| msg::heading_list_display_level(level).to_string()),
                 )
                 .collect(),
+            ListKind::FormFields => Vec::new(),
         }
     }
 
@@ -192,6 +226,8 @@ impl ListDialog {
             (ListKind::Links, 1) => false,
             (ListKind::Links, _) => true,
             (ListKind::Headings, level) => entry.level == u32::try_from(level).ok(),
+            // Select a Form Field has no Display options.
+            (ListKind::FormFields, _) => true,
         };
         let mut shown: Vec<usize> = (0..self.entries.len())
             .filter(|&i| self.entries.get(i).is_some_and(keep))
@@ -298,6 +334,14 @@ impl ListDialog {
                     ),
                 ],
             ),
+            ListKind::FormFields => (
+                msg::list_dialog_form_fields(),
+                vec![
+                    list(msg::list_dialog_form_fields_list()),
+                    button("ok", msg::form_field_list_ok(), true),
+                    button("cancel", msg::form_field_list_cancel(), false),
+                ],
+            ),
         };
         DialogSpec {
             id: self.id,
@@ -314,7 +358,7 @@ impl ListDialog {
                 control: "address".to_owned(),
                 value: Value::Text(self.address()),
             }],
-            ListKind::Headings => Vec::new(),
+            ListKind::Headings | ListKind::FormFields => Vec::new(),
         }
     }
 
@@ -363,6 +407,7 @@ impl ListDialog {
                 match (control.as_str(), self.selected_entry(), self.kind) {
                     ("move", Some(entry), _) => Outcome::MoveTo(entry.clone()),
                     ("activate", Some(entry), ListKind::Links) => Outcome::Activate(entry.clone()),
+                    ("ok", Some(entry), ListKind::FormFields) => Outcome::Focus(entry.clone()),
                     _ => Outcome::Nothing,
                 }
             }
