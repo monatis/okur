@@ -61,6 +61,11 @@ divergences! {
      main window as one of them opens: a side effect, not a feature to copy.",
     "the owner, 2026-10-18";
 
+    Difference::JawsAlsoSays(",") => ["230-web-element-lists-items/s18"],
+    "Virtual HTML Features shows \"Radio Buttons List,\" with a stray comma, where every other \
+     list is \"... List\": a typo in JAWS's text, not a name to copy.",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
+
     Difference::OkurAlsoSays("\u{1f600}") => [
         "312-desktop-virtualize-control/s3",
         "312-desktop-virtualize-control/s4",

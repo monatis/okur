@@ -54,6 +54,14 @@ parity gap audit proposed say so until the owner has reviewed them.
   is a side effect, not something a user needs.
 - Decided by the owner, 2026-10-18.
 
+### A stray comma in Virtual HTML Features
+
+- Step: `230-web-element-lists-items/s18`.
+- Difference: JAWS also says "," after "Radio Buttons List".
+- Why: Virtual HTML Features (Insert+F3) shows "Radio Buttons List," where every other list is
+  named "... List". It is a typo in JAWS's text; Okur shows "Radio Buttons List".
+- Decided under the owner's rule on JAWS's accidents, 2026-10-18.
+
 ### JAWS's control view drops an emoji
 
 - Steps: `312-desktop-virtualize-control/s3`, `/s4`, `/s9`, `/s14` (the full keys:
