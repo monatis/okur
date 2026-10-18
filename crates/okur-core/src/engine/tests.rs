@@ -2837,6 +2837,61 @@ fn select_a_form_field_focuses_the_chosen_field() {
     assert_eq!(closed.as_deref(), Some("Web Menus \u{1d} document \u{1e} "));
 }
 
+/// Space with the virtual cursor is JAWS's VirtualSpacebar: the control under the cursor takes
+/// the focus and gets a click, never the Space key [obs, 229 event log]. A field one types in
+/// takes the focus in forms mode; a combo box's list opens; on text Space does nothing.
+#[test]
+fn space_focuses_and_clicks_the_control_under_the_virtual_cursor() {
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Activation")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Plain text"),
+            AomNode::new(2, Role::Button).with_name("Count"),
+            AomNode::new(3, Role::CheckBox).with_name("Subscribe"),
+            AomNode::new(
+                4,
+                Role::Link {
+                    href: Some("#status".into()),
+                },
+            )
+            .with_name("Show status"),
+            AomNode::new(5, Role::Edit)
+                .with_name("City")
+                .with_value("Izmir"),
+            AomNode::new(6, Role::ComboBox)
+                .with_name("Color")
+                .with_value("Red"),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.handle_focus_event(&page_document());
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut space_on = |id: usize| {
+        let line = engine.cursor.buffer.lines.iter().find(|l| l.node_id == id);
+        assert!(line.is_some(), "no line for node {id}");
+        engine.cursor.offset = line.map(|l| l.start_offset).unwrap_or_default();
+        engine.forms_mode = false;
+        engine.cursor.forms_mode_active = false;
+        let before = actions.requests().len();
+        let action = engine.handle_key_event(&KeyEvent::new(Key::Space, Modifiers::none(), true));
+        let requests: Vec<(String, usize)> = actions.requests().into_iter().skip(before).collect();
+        (action, requests, engine.forms_mode)
+    };
+    let clicked = |id: usize| vec![("focus".to_owned(), id), ("activate".to_owned(), id)];
+    assert_eq!(space_on(2), (KeyAction::Consume, clicked(2), false));
+    assert_eq!(space_on(3), (KeyAction::Consume, clicked(3), false));
+    assert_eq!(space_on(4), (KeyAction::Consume, clicked(4), false));
+    assert_eq!(
+        space_on(5),
+        (KeyAction::Consume, vec![("focus".to_owned(), 5)], true)
+    );
+    assert_eq!(space_on(6), (KeyAction::Consume, clicked(6), true));
+    // Text: nothing happens, and the page does not get the key [obs, 229/s2].
+    assert_eq!(space_on(1), (KeyAction::Consume, Vec::new(), false));
+}
+
 fn page_document() -> FocusEvent {
     let mut document = FocusEvent::new(Role::Document)
         .with_name("Web Menus")

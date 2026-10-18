@@ -245,15 +245,40 @@ impl ScreenReaderEngine {
             // Interactive navigation & actions
             Command::NextTabStop => self.cursor.move_next_tab_stop(),
             Command::PriorTabStop => self.cursor.move_prior_tab_stop(),
+            // Space with the virtual cursor, JAWS's VirtualSpacebar: the element under the
+            // cursor takes the focus and is clicked, as Enter clicks it. Buttons, check boxes,
+            // radio buttons and links get a click and no key [obs, 229 event log]; the focus
+            // event and the page's state change then speak ("Count Button | To activate press
+            // Enter.", "Subscribe check box not checked | ... | checked"). A field one types
+            // in takes the focus in forms mode, typing nothing [obs, 229/s14], and a combo
+            // box's list opens [obs, 229/s21]. Freedom Scientific: "the SPACEBAR toggles the
+            // check mark on or off for check boxes ... moves the selection of a radio button
+            // ... and activates buttons" (Surf's Up, Using Forms with JAWS).
+            // Space on text does nothing, and the page never gets the key [obs, 229/s2: no
+            // "page keydown Space" in its event log].
             Command::Activate => {
                 if let (Some(actions), Some(node)) = (&self.actions, self.node_under_cursor()) {
-                    let is_link = matches!(node.role, Role::Link { .. });
-                    if node.role.is_interactive_control() && !is_link && actions.activate(&node) {
-                        // The page's own state change and focus events report the result.
-                        return Some(String::new());
+                    let editable = node.attributes.get("editable").is_some_and(|e| e == "true");
+                    let (handled, forms_mode) = match node.role {
+                        Role::Edit => (actions.focus(&node), true),
+                        Role::ComboBox if editable => (actions.focus(&node), true),
+                        Role::ComboBox => (actions.focus(&node) && actions.activate(&node), true),
+                        Role::Link { .. }
+                        | Role::Button
+                        | Role::MenuButton
+                        | Role::SplitButton
+                        | Role::CheckBox
+                        | Role::RadioButton
+                        | Role::Tab => (actions.focus(&node) && actions.activate(&node), false),
+                        _ => (false, false),
+                    };
+                    if handled && forms_mode {
+                        self.forms_mode = true;
+                        self.cursor.forms_mode_active = true;
+                        self.forms_mode_by_enter = true;
                     }
                 }
-                None
+                Some(String::new())
             }
             Command::Enter => {
                 let node = self.node_under_cursor();

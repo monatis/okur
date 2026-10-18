@@ -78,25 +78,35 @@ over a page leaves forms mode as it was, so the page has its keys back when the 
 
 ---
 
-## 3. Checkbox State Toggling (`Spacebar`)
+## 3. Space with the virtual cursor (JAWS's `VirtualSpacebar`)
 
-- **Key**: `Space` (`{SPACE}`)
-- **Behavior**: Toggles the boolean state of `node.states.checked` (`checked` <-> `not checked`).
-- **Announcement**:
-  - When checked:
-    ```
-    {DocumentTitle} 
-      \u001d FormRegion \u001e 
-    {Label}  \u001d check box \u001e   \u001dchecked\u001e  
-    To clear checkmark press Spacebar.
-    ```
-  - When cleared:
-    ```
-    {DocumentTitle} 
-      \u001d FormRegion \u001e 
-    {Label}  \u001d check box \u001e   \u001dnot checked\u001e  
-    To check press Spacebar.
-    ```
+Space acts on the element under the virtual cursor as Enter does, and moves the focus to it.
+
+Sources:
+- **JAWS's key map**: in `Default.JKM`, section `[virtual keys]` (the virtual cursor's keys), `Space=VirtualSpacebar`, beside `Enter=Enter`. Read on old-pc (JAWS 2025).
+- **Freedom Scientific's documentation** (Surf's Up, "Using Forms with JAWS"): Space toggles a check box, selects a radio button and activates buttons such as OK, Cancel or Submit, all without forms mode. In a multiple-selection list, Space selects an item.
+- **Observation**: scenario 229 on `activation.html`, three trials on old-pc. The page logs what reaches each control: a key, or a click alone.
+
+What JAWS does [obs, 229]:
+
+| Under the virtual cursor | What the page gets | What JAWS says |
+|---|---|---|
+| Text | nothing: the key does not reach the page | nothing |
+| A button, an ARIA button, a link (same-page too) | the focus and a click, no key | the focus: "Activation Fixture \| Count Button \| To activate press Enter." (the page title on the first control focused after the page) |
+| A check box, native or ARIA | the focus and a click | the focus and the new state, in either order: "Subscribe check box not checked \| To check press Spacebar. \| checked" |
+| A radio button | the focus and a click | "Size group \| Small radio button checked \| 1 of 2" |
+| An edit | the focus; no space is typed | "City Edit \| Izmir \| Type in text.", in forms mode (Escape: "virtual PC Cursor") |
+| A combo box | the focus; its list opens | "list with 2 items \| Red \| To move to an item press the Arrow keys.", in forms mode |
+
+The log on every trial reads: "count click, custom click, subscribe click, small click, notify click, show click". No control ever got a Space key. Like Enter, Space reaches the page as a click, never as the key.
+
+Okur (`Command::Activate`, `engine/commands.rs`):
+- On a control, Okur asks for the focus, then the element's default action. The focus event and the page's state change events speak.
+- An edit or an editable combo box gets the focus and forms mode.
+- A combo box gets the focus, its default action (Chrome opens it) and forms mode.
+- On anything else, the key is consumed and nothing is said.
+
+Test: `space_focuses_and_clicks_the_control_under_the_virtual_cursor`.
 
 ---
 
