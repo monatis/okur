@@ -1138,7 +1138,7 @@ Harness first:
    - The changes are made in Quick Settings or Settings Center: elevated JAWS windows, so keys
      go through `elev.ps1` or `TypeKey`.
    - Make them before the first trial, never inside a trial.
-   - Afterwards delete the JSI JAWS created, and put back the JCFs from a copy. Record the files
+   - Afterwards delete the JSI JAWS created, and put back the JCFs from a copy. Record the JCFs
      before and after.
 
 Fixture: `corpus/fixtures/site/index.html` and `site/second.html`. Each page has:
@@ -1329,7 +1329,7 @@ described in §9.5. It is served under two host names.
 2. **Contextual settings** (item 9). The owner made them core features before the extension
    SDK, and they decide where every later setting is stored and looked up.
    - Harness: serve the site fixture under two host names, and record the application JCF and
-     site JSI files (§11.6).
+     the settings each scenario asks for (§11.6).
    - Read the Personalize Web Settings group.
    - Record the per-site override on site A's two pages and on site B.
    - Record the site, then application, then default fallback.

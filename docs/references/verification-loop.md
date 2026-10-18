@@ -145,9 +145,16 @@ Write down what JAWS should say before writing code.
   the output out of Dropbox; `lab-fetch.sh` brings it home.
 - **What a run records:**
   - each step's JAWS speech history (`speech_raw`);
-  - the synthesizer text (`spoken`, `spoken_records` with pitch);
+  - the synthesizer text (`spoken`, `spoken_records` with pitch), up to JAWS's copy
+    confirmation (`spoken_end`; skill, speech recorder section);
   - provenance: OS, JAWS version, settings, culture, capture-script hash;
   - with `-TraceDir`, our tracer's accessibility events for each trial.
+- **A JAWS setting for a scenario** (`jaws_settings`): recorded through `run-batch.ps1`, which
+  sets it and restarts JAWS, and puts old-pc's own settings back afterwards (skill, "Settings
+  for a scenario").
+- **Keys by their place:** the numpad as with Num Lock off (`Numpad5`, `Insert+Numpad5`), and
+  `Comma`, `Period`, `Slash` by their US places, since JAWS takes keys by scan code and old-pc
+  types on Turkish Q (`run-scenario.ps1`'s `$ScanTable`).
 - **Snapshots** of a page's IA2 and UIA trees, for page fixtures, come from
   `capture-snapshot.ps1` (skill Workflow F).
 

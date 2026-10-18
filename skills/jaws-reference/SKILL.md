@@ -108,7 +108,21 @@ Microsoft David, so speech stays audible and timed for silence detection.
 
 `run-scenario.ps1` then stores, per step, `observation.spoken` (the text of each synthesizer
 call) and `observation.spoken_records` (fragments with SAPI action, pitch, rate and volume)
-next to `speech_raw`. The log is read before the history copy, whose confirmation JAWS speaks.
+next to `speech_raw`. A step's records end where JAWS's "Copy speech history to clipboard"
+confirmation begins: JAWS queues it behind the speech it still holds, so the records cover what
+the copied history holds, even when JAWS paused longer than the settle window between its
+utterances (`observation.spoken_end`: `confirmation`, or `timeout`, which fails the step).
+
+### Settings for a scenario
+A scenario that needs a JAWS setting other than old-pc's names it in `jaws_settings`, in the
+shape the provenance records them (`{"DEFAULT.JCF": {"Options": {"TypingEcho": "1"}},
+"voiceprofiles/SAPI 5X 64.VPF": {"ENU-PCCursor": {"Punctuation": "3"}}}`; `null` removes a
+key). `run-batch.ps1` stops JAWS, writes them with `jaws-settings.ps1 -Apply` (copies of the
+files kept in `sr-harness\settings-backup`), starts JAWS, and puts the files back (`-Restore`)
+before the next scenario that doesn't ask for them, and at the end. `run-scenario.ps1` refuses
+to record when the files don't hold what the scenario asks for, or hold settings another
+scenario applied. Learn a setting's file encoding first: change it in JAWS's own dialog on
+old-pc and compare the files.
 
 ### Workflow H: Quick Live Checks Without a Scenario
 For a quick look at what JAWS says, and what ours says, on a machine where that is allowed

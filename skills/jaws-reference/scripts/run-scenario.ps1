@@ -33,6 +33,8 @@ Step types:
   key          Readable key chord, sent as scan-coded SendInput with the extended-key flag
                where the physical key has one: "Down", "H", "Shift+H", "Ctrl+Alt+Right",
                "Insert+Down", "Insert+F7". Modifiers: Ctrl, Alt, Shift, Insert, Win.
+               The keypad as with Num Lock off: "Numpad5", "Numpad4", "Insert+Numpad5",
+               "NumpadPlus"; "Comma", "Period", "Slash" by their US places ($ScanTable).
                An optional "repeat": N presses the chord N times quickly ("twice quickly").
                "capture_clipboard": true stores the clipboard after the step (observation.clipboard).
   jaws_script  JAWS script name dispatched through FSAPI RunScript.
@@ -116,12 +118,22 @@ public static class SrKeyInput {
     const uint KEYEVENTF_EXTENDEDKEY = 0x1, KEYEVENTF_KEYUP = 0x2;
 
     public static bool Key(ushort vk, bool extended, bool up) {
+        return Key(vk, extended, up, 0);
+    }
+
+    /// A key with its scan code given (0: the active layout's for vk).
+    public static bool Key(ushort vk, bool extended, bool up, ushort scan) {
         INPUT[] input = new INPUT[1];
         input[0].type = 1;
         input[0].u.ki.wVk = vk;
-        input[0].u.ki.wScan = (ushort)MapVirtualKey(vk, 0);
+        input[0].u.ki.wScan = scan != 0 ? scan : (ushort)MapVirtualKey(vk, 0);
         input[0].u.ki.dwFlags = (extended ? KEYEVENTF_EXTENDEDKEY : 0) | (up ? KEYEVENTF_KEYUP : 0);
         return SendInput(1, input, Marshal.SizeOf(typeof(INPUT))) == 1;
+    }
+
+    /// The virtual key the active layout gives the key with this scan code.
+    public static ushort VkForScan(ushort scan) {
+        return (ushort)MapVirtualKey(scan, 1);
     }
 }
 "@
@@ -137,14 +149,36 @@ $KeyTable = @{
     'escape'=@(0x1B,$false); 'esc'=@(0x1B,$false); 'space'=@(0x20,$false); 'backspace'=@(0x08,$false);
     'semicolon'=@(0xBA,$false); 'apostrophe'=@(0xDE,$false);
     'ctrl'=@(0xA2,$false); 'alt'=@(0xA4,$false); 'shift'=@(0xA0,$false); 'win'=@(0x5B,$true);
-    'capslock'=@(0x14,$false); 'scrolllock'=@(0x91,$false)
+    'capslock'=@(0x14,$false); 'scrolllock'=@(0x91,$false);
+    # The numeric keypad as it sends with Num Lock off, as JAWS's desktop layout uses it: the
+    # same virtual keys as the gray keys, without the extended flag (numpad 5 is VK_CLEAR).
+    'numpad0'=@(0x2D,$false); 'numpad1'=@(0x23,$false); 'numpad2'=@(0x28,$false);
+    'numpad3'=@(0x22,$false); 'numpad4'=@(0x25,$false); 'numpad5'=@(0x0C,$false);
+    'numpad6'=@(0x27,$false); 'numpad7'=@(0x24,$false); 'numpad8'=@(0x26,$false);
+    'numpad9'=@(0x21,$false); 'numpaddelete'=@(0x2E,$false);
+    'numpadplus'=@(0x6B,$false); 'numpadminus'=@(0x6D,$false); 'numpadstar'=@(0x6A,$false);
+    'numpadslash'=@(0x6F,$true); 'numpadenter'=@(0x0D,$true)
 }
 
+# Keys named by their place on a US keyboard, sent by scan code: JAWS takes keys by scan code
+# (Use Virtual Key Codes is off by default), and old-pc's Turkish Q layout gives these virtual
+# keys to other keys. The virtual key sent is the one the active layout gives that place, so
+# on Turkish Q "comma" types what that key types there, and JAWS hears its Comma.
+$ScanTable = @{
+    'comma' = 0x33; 'period' = 0x34; 'slash' = 0x35; 'leftbracket' = 0x1A; 'rightbracket' = 0x1B;
+    'backslash' = 0x2B; 'grave' = 0x29; 'minus' = 0x0C; 'equals' = 0x0D
+}
+
+# name -> @(virtual key, extended, scan code or 0 for the layout's)
 function Resolve-Key([string]$name) {
     $n = $name.Trim().ToLowerInvariant()
-    if ($KeyTable.ContainsKey($n)) { return $KeyTable[$n] }
-    if ($n -match '^f([1-9]|1[0-2])$') { return @((0x6F + [int]$Matches[1]), $false) }
-    if ($n -match '^[a-z0-9]$') { return @([int][char]$n.ToUpperInvariant(), $false) }
+    if ($KeyTable.ContainsKey($n)) { return @($KeyTable[$n][0], $KeyTable[$n][1], 0) }
+    if ($ScanTable.ContainsKey($n)) {
+        $scan = [uint16]$ScanTable[$n]
+        return @([int][SrKeyInput]::VkForScan($scan), $false, [int]$scan)
+    }
+    if ($n -match '^f([1-9]|1[0-2])$') { return @((0x6F + [int]$Matches[1]), $false, 0) }
+    if ($n -match '^[a-z0-9]$') { return @([int][char]$n.ToUpperInvariant(), $false, 0) }
     throw "Unknown key name '$name'"
 }
 
@@ -156,12 +190,12 @@ function Send-Chord([string]$chord) {
     # Ctrl down for the scenarios that followed (old-pc, 2026-10-18).
     $ok = $true
     foreach ($k in $keys) {
-        if (-not [SrKeyInput]::Key([uint16]$k[0], $k[1], $false)) { $ok = $false }
+        if (-not [SrKeyInput]::Key([uint16]$k[0], $k[1], $false, [uint16]$k[2])) { $ok = $false }
         Start-Sleep -Milliseconds 30
     }
     [array]::Reverse($keys)
     foreach ($k in $keys) {
-        if (-not [SrKeyInput]::Key([uint16]$k[0], $k[1], $true)) { $ok = $false }
+        if (-not [SrKeyInput]::Key([uint16]$k[0], $k[1], $true, [uint16]$k[2])) { $ok = $false }
         Start-Sleep -Milliseconds 30
     }
     # A release Windows refused leaves the key down: an elevated helper releases it. Windows
@@ -238,7 +272,7 @@ if ($jfwProcess) { $script:JawsPid = [uint32]$jfwProcess.Id }
 # read once its audio is quiet).
 function Read-ReaderHistory([long]$SpokenStart) {
     if ($Reader -ne 'okur') { return Read-SpeechHistoryOnce $SpokenStart }
-    $records = Read-SpokenSince $SpokenStart
+    $records = @(Read-SpokenSince $SpokenStart)
     if (-not (Test-Path $OkurSpeechLog)) { return [pscustomobject]@{ text = ''; records = $records; spoken_end = 'silence' } }
     $fs = [System.IO.File]::Open($OkurSpeechLog, 'Open', 'Read', 'ReadWrite')
     try {
@@ -297,13 +331,15 @@ function Read-SpeechHistoryOnce([long]$SpokenStart) {
         $spokenEnd = 'timeout'
         $deadline = [DateTime]::UtcNow.AddMilliseconds($ConfirmationWaitMs)
         do {
-            $records = Read-SpokenSince $SpokenStart
+            # @(): Windows PowerShell returns one record as itself, and a lone object has no Count.
+            $records = @(Read-SpokenSince $SpokenStart)
             $at = -1
             for ($i = 0; $i -lt $records.Count; $i++) {
                 if ((Get-SpokenText $records[$i]).Trim() -eq $CopyConfirmation) { $at = $i; break }
             }
             if ($at -ge 0) {
-                $records = if ($at -gt 0) { @($records[0..($at - 1)]) } else { @() }
+                # Assigned in each branch: an if's output would turn an empty array into $null.
+                if ($at -gt 0) { $records = @($records[0..($at - 1)]) } else { $records = @() }
                 $spokenEnd = 'confirmation'
                 break
             }
@@ -358,12 +394,12 @@ function Invoke-Step($type, [string]$command, [int]$repeat = 1) {
         'key_down' {
             $k = Resolve-Key $command
             $script:HeldKeys += ,$k
-            return [SrKeyInput]::Key([uint16]$k[0], $k[1], $false)
+            return [SrKeyInput]::Key([uint16]$k[0], $k[1], $false, [uint16]$k[2])
         }
         'key_up' {
             $k = Resolve-Key $command
             $script:HeldKeys = @($script:HeldKeys | Where-Object { $_[0] -ne $k[0] })
-            return [SrKeyInput]::Key([uint16]$k[0], $k[1], $true)
+            return [SrKeyInput]::Key([uint16]$k[0], $k[1], $true, [uint16]$k[2])
         }
         'jaws_script' { if (-not $jaws) { return $false }; return [bool]$jaws.RunScript($command) }
         # A JAWS function call through FSAPI RunFunction, e.g. TypeKey("Down"): keys JAWS types
@@ -381,7 +417,7 @@ function Invoke-Step($type, [string]$command, [int]$repeat = 1) {
 
 $script:HeldKeys = @()
 function Release-HeldKeys {
-    foreach ($k in $script:HeldKeys) { [void][SrKeyInput]::Key([uint16]$k[0], $k[1], $true) }
+    foreach ($k in $script:HeldKeys) { [void][SrKeyInput]::Key([uint16]$k[0], $k[1], $true, [uint16]$k[2]) }
     $script:HeldKeys = @()
 }
 
@@ -414,6 +450,25 @@ if ($targetProc -eq 'chrome') { $jawsSettings['Chrome.JCF'] = Read-JawsSettings 
 Get-ChildItem (Join-Path $env:APPDATA 'Freedom Scientific\JAWS\2025\Settings\voiceprofiles') -Filter *.VPF -ErrorAction SilentlyContinue |
     ForEach-Object { $jawsSettings["voiceprofiles/$($_.Name)"] = Read-JawsSettings "..\voiceprofiles\$($_.Name)" }
 
+# A scenario's "jaws_settings" (jaws-settings.ps1): JAWS must be running with them, and with
+# nothing else changed, or the evidence would hold another setting's speech. run-batch.ps1
+# applies them and restarts JAWS. Every file they name is recorded with the others.
+if ($Reader -eq 'jaws') {
+    $settingsTool = Join-Path $PSScriptRoot 'jaws-settings.ps1'
+    $asks = $scenario.PSObject.Properties.Name -contains 'jaws_settings' -and $null -ne $scenario.jaws_settings
+    $applied = Test-Path (Join-Path $env:USERPROFILE 'sr-harness\settings-backup\manifest.json')
+    if ($asks) {
+        $out = & powershell -NoProfile -ExecutionPolicy Bypass -File $settingsTool -Check $ScenarioFile
+        if ($LASTEXITCODE -ne 0) { throw "JAWS's settings are not the scenario's (run it through run-batch.ps1): $out" }
+        foreach ($name in $scenario.jaws_settings.PSObject.Properties.Name) {
+            if ($jawsSettings.Contains($name)) { continue }
+            $jawsSettings[$name] = if ($name -match '^voiceprofiles/(.+)$') { Read-JawsSettings "..\voiceprofiles\$($Matches[1])" } else { Read-JawsSettings $name }
+        }
+    } elseif ($applied) {
+        throw "JAWS runs with settings another scenario applied: put them back first (jaws-settings.ps1 -Restore, then restart JAWS)."
+    }
+}
+
 $expectedTitle = $null
 if ($fixturePath -and (Test-Path $fixturePath)) {
     $html = Get-Content -Raw $fixturePath
@@ -432,6 +487,8 @@ $evidence = [ordered]@{
         host = $env:COMPUTERNAME
         os_build = (cmd /c ver | Out-String).Trim()
         keyboard_layout = [System.Windows.Forms.InputLanguage]::CurrentInputLanguage.LayoutName
+        # The numpad keys are sent as with Num Lock off; JAWS may also look at the lock itself.
+        num_lock = [System.Windows.Forms.Control]::IsKeyLocked([System.Windows.Forms.Keys]::NumLock)
         # Time and date announcements follow the user locale and time zone.
         culture = (Get-Culture).Name
         utc_offset_minutes = [int][TimeZoneInfo]::Local.GetUtcOffset((Get-Date)).TotalMinutes
