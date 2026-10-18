@@ -67,6 +67,32 @@ parity gap audit proposed say so until the owner has reviewed them.
 
 A step can be in more than one entry; all of its entries apply.
 
+### What JAWS says before naming its own dialog
+
+- Difference: `JawsSaysBeforeItsDialog`. JAWS's speech before the line that names its dialog
+  ("Select a Button ‹ dialog ›") is left out; from that line on, the step is compared.
+- Why: opening one of its list dialogs, JAWS's speech passes through its own windows before it
+  names the dialog. It may say its main window (its version, a list's tutor message), the
+  browser's title, or the dialog's list before the dialog itself. Okur's dialog opens without
+  them, and some trials of the same keys have none of it either.
+- Steps (the step that opens the dialog, s1, of each):
+  `222-web-links-list/s1`, `223-web-links-list-escape/s1`, `224-web-headings-list/s1`,
+  `225-web-form-fields-list/s1`, `226-web-element-lists/s1`, `227-web-form-fields-list-items/s1`,
+  `228-web-form-fields-list-edit/s1`, `230-web-element-lists-items/s1`,
+  `232-web-list-buttons/s1`, `233-web-list-combo-boxes/s1`, `234-web-list-edits/s1`,
+  `235-web-list-check-boxes/s1`, `236-web-list-graphics/s1`, `237-web-list-lists/s1`,
+  `239-web-list-paragraphs/s1`, `240-web-list-block-quotes/s1`, `241-web-list-regions/s1`,
+  `242-web-list-tables/s1`, `243-web-list-glance-highlights/s1`, `244-web-list-divisions/s1`,
+  `245-web-list-tabs/s1`, `246-web-list-radio-buttons-enter/s1`,
+  `247-web-list-buttons-enter/s1`, `248-web-list-combo-boxes-enter/s1`,
+  `249-web-list-edits-enter/s1`, `250-web-list-check-boxes-enter/s1`,
+  `251-web-list-graphics-enter/s1`, `252-web-list-lists-enter/s1`,
+  `253-web-list-articles-enter/s1`, `254-web-list-paragraphs-enter/s1`,
+  `255-web-list-block-quotes-enter/s1`, `256-web-list-regions-enter/s1`,
+  `257-web-list-tables-enter/s1`, `258-web-list-glance-highlights-enter/s1`,
+  `259-web-list-divisions-enter/s1`, `260-web-list-tabs-enter/s1`.
+- Decided under the owner's ruling on JAWS's version, 2026-10-18.
+
 ### A stray comma in Virtual HTML Features
 
 - Step: `230-web-element-lists-items/s18`.

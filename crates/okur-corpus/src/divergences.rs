@@ -22,7 +22,21 @@ use crate::parity::normalize;
 pub enum Difference {
     JawsAlsoSays(&'static str),
     OkurAlsoSays(&'static str),
+    /// JAWS speaks its own windows (its main window, the list, the browser's title) before
+    /// the line that names the dialog it opens: what comes before that line is left out.
+    JawsSaysBeforeItsDialog,
     Step,
+}
+
+/// The role mark JAWS says after a dialog's title ("Select a Button  ‹ dialog ›").
+const DIALOG_MARK: &str = "\u{1d} dialog \u{1e}";
+
+/// JAWS's transcript from the line that names its dialog on, if it names one after saying
+/// something else.
+fn from_its_dialog(text: &str) -> Option<&str> {
+    let mark = text.find(DIALOG_MARK)?;
+    let line = text.get(..mark)?.rfind('\n').map_or(0, |n| n + 1);
+    (line > 0).then(|| text.get(line..)).flatten()
 }
 
 /// One decision: the steps it covers (`<scenario_id>/<step_id>`), what differs, why, and who
@@ -60,6 +74,50 @@ divergences! {
     "JAWS's list dialogs belong to its own process (jfw.exe), and JAWS reads the version on its \
      main window as one of them opens: a side effect, not a feature to copy.",
     "the owner, 2026-10-18";
+
+    Difference::JawsSaysBeforeItsDialog => [
+        "222-web-links-list/s1",
+        "223-web-links-list-escape/s1",
+        "224-web-headings-list/s1",
+        "225-web-form-fields-list/s1",
+        "226-web-element-lists/s1",
+        "227-web-form-fields-list-items/s1",
+        "228-web-form-fields-list-edit/s1",
+        "230-web-element-lists-items/s1",
+        "232-web-list-buttons/s1",
+        "233-web-list-combo-boxes/s1",
+        "234-web-list-edits/s1",
+        "235-web-list-check-boxes/s1",
+        "236-web-list-graphics/s1",
+        "237-web-list-lists/s1",
+        "239-web-list-paragraphs/s1",
+        "240-web-list-block-quotes/s1",
+        "241-web-list-regions/s1",
+        "242-web-list-tables/s1",
+        "243-web-list-glance-highlights/s1",
+        "244-web-list-divisions/s1",
+        "245-web-list-tabs/s1",
+        "246-web-list-radio-buttons-enter/s1",
+        "247-web-list-buttons-enter/s1",
+        "248-web-list-combo-boxes-enter/s1",
+        "249-web-list-edits-enter/s1",
+        "250-web-list-check-boxes-enter/s1",
+        "251-web-list-graphics-enter/s1",
+        "252-web-list-lists-enter/s1",
+        "253-web-list-articles-enter/s1",
+        "254-web-list-paragraphs-enter/s1",
+        "255-web-list-block-quotes-enter/s1",
+        "256-web-list-regions-enter/s1",
+        "257-web-list-tables-enter/s1",
+        "258-web-list-glance-highlights-enter/s1",
+        "259-web-list-divisions-enter/s1",
+        "260-web-list-tabs-enter/s1",
+    ],
+    "Opening one of its list dialogs, JAWS's speech passes through its own windows before it \
+     names the dialog: its main window (its version, a list's tutor message) and the browser's \
+     title, or the dialog's list read before the dialog itself. Okur's dialog opens without \
+     them. Some trials of the same keys have none of it.",
+    "the owner's ruling on JAWS's version, 2026-10-18";
 
     Difference::JawsAlsoSays("JAWS Professional") => ["226-web-element-lists/s3"],
     "Going from Virtual HTML Features to the list chosen in it, JAWS's speech passes through \
@@ -142,6 +200,9 @@ pub fn compare(step: &str, okur: &str, jaws: &[String]) -> Comparison {
                 match (difference, okur_side) {
                     (Difference::JawsAlsoSays(phrase), false)
                     | (Difference::OkurAlsoSays(phrase), true) => text.replace(phrase, " "),
+                    (Difference::JawsSaysBeforeItsDialog, false) => {
+                        from_its_dialog(&text).map_or(text.clone(), str::to_owned)
+                    }
                     _ => text,
                 }
             });
@@ -173,6 +234,11 @@ pub fn check(steps: &[(&str, &str, &[String])]) -> Result<(), String> {
                 }
                 Difference::OkurAlsoSays(phrase) if !okur.contains(phrase) => {
                     stale.push(format!("{key}: Okur no longer says {phrase:?}"));
+                }
+                Difference::JawsSaysBeforeItsDialog
+                    if !jaws.iter().any(|v| from_its_dialog(v).is_some()) =>
+                {
+                    stale.push(format!("{key}: JAWS says nothing before its dialog"));
                 }
                 Difference::Step if jaws.iter().any(|v| normalize(v) == normalize(okur)) => {
                     stale.push(format!("{key}: Okur now matches JAWS"));
