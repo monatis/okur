@@ -120,8 +120,8 @@ pub struct ScreenReaderEngine {
     settings_store: Option<Box<dyn crate::settings::SettingsStore>>,
     /// The settings dialog, while it is open.
     settings_dialog: Option<crate::ui::settings::SettingsDialog>,
-    /// The Links List dialog, while it is open.
-    links_dialog: Option<crate::ui::links::LinksListDialog>,
+    /// The list dialog open (the Links List, the Heading List).
+    list_dialog: Option<crate::ui::lists::ListDialog>,
     /// Until when the focus returning from one of Okur's dialogs is not announced.
     quiet_focus_until: Option<std::time::Instant>,
     /// Dialogs opened so far: each gets the next number.
@@ -184,7 +184,7 @@ impl ScreenReaderEngine {
             ui: None,
             settings_store: None,
             settings_dialog: None,
-            links_dialog: None,
+            list_dialog: None,
             quiet_focus_until: None,
             dialog_count: 0,
             last_press: None,
@@ -697,11 +697,11 @@ impl ScreenReaderEngine {
                 None
             }
             _ if self
-                .links_dialog
+                .list_dialog
                 .as_ref()
                 .is_some_and(|d| Some(d.id) == dialog_of(message)) =>
             {
-                self.handle_links_event(message)
+                self.handle_list_event(message)
             }
             _ => {
                 let outcome = self.settings_dialog.as_mut()?.handle(message);
@@ -746,30 +746,47 @@ impl ScreenReaderEngine {
         self.quiet_focus_until = Some(std::time::Instant::now() + RETURN);
     }
 
-    /// Opens the Links List dialog on the page's links; with none, says so, as JAWS does.
-    pub(crate) fn open_links_list(&mut self) -> Option<String> {
-        let links = self.cursor.buffer.get_links_list();
-        if links.is_empty() {
-            let speech = msg::links_list_none().to_string();
-            self.speech.speak(&speech, true);
-            return Some(speech);
-        }
+    /// Opens one of JAWS's list dialogs on the page's elements of its kind; with none, says
+    /// so, as JAWS does.
+    pub(crate) fn open_list(&mut self, kind: crate::ui::lists::ListKind) -> Option<String> {
+        use crate::ui::lists::{ListDialog, ListKind};
+        let id = self.dialog_count + 1;
+        let (dialog, none) = match kind {
+            ListKind::Links => {
+                let links = self.cursor.buffer.get_links_list();
+                (
+                    (!links.is_empty()).then(|| ListDialog::links(id, &links)),
+                    msg::links_list_none().to_string(),
+                )
+            }
+            ListKind::Headings => {
+                let headings = self.cursor.buffer.get_headings_list();
+                (
+                    (!headings.is_empty()).then(|| ListDialog::headings(id, &headings)),
+                    msg::quicknav_none_headings().to_string(),
+                )
+            }
+        };
+        let Some(dialog) = dialog else {
+            self.speech.speak(&none, true);
+            return Some(none);
+        };
         let ui = self.ui.as_ref()?;
-        self.dialog_count += 1;
-        let dialog = crate::ui::links::LinksListDialog::new(self.dialog_count, links);
+        self.dialog_count = id;
         ui.send(crate::ui::ToUi::DialogShow {
             dialog: dialog.spec(),
         });
-        self.links_dialog = Some(dialog);
+        self.list_dialog = Some(dialog);
         None
     }
 
-    /// What the user did to the Links List.
-    fn handle_links_event(&mut self, message: &crate::ui::FromUi) -> Option<String> {
-        use crate::ui::links::Outcome;
-        let outcome = self.links_dialog.as_mut()?.handle(message);
+    /// What the user did to the open list dialog.
+    fn handle_list_event(&mut self, message: &crate::ui::FromUi) -> Option<String> {
+        use crate::ui::lists::{ListKind, Outcome};
+        let kind = self.list_dialog.as_ref()?.kind();
+        let outcome = self.list_dialog.as_mut()?.handle(message);
         let close = |engine: &mut Self| {
-            if let (Some(dialog), Some(ui)) = (engine.links_dialog.take(), &engine.ui) {
+            if let (Some(dialog), Some(ui)) = (engine.list_dialog.take(), &engine.ui) {
                 ui.send(crate::ui::ToUi::DialogClose { id: dialog.id });
             }
             engine.returning_from_dialog();
@@ -784,13 +801,14 @@ impl ScreenReaderEngine {
             }
             // JAWS 2025 after Move To Link (dev box, 2026-10-17): "same page link Reputation
             // for Quality Service | To activate press Enter."
-            Outcome::MoveTo(link) => {
+            // A heading is said as the virtual cursor reads it [obs, 224/s10].
+            Outcome::MoveTo(entry) => {
                 close(self);
-                let speech = format!(
-                    "{}\n{}",
-                    self.cursor.jump_to_element_offset(link.offset),
-                    msg::hint_activate_enter()
-                );
+                let line = self.cursor.jump_to_element_offset(entry.offset);
+                let speech = match kind {
+                    ListKind::Links => format!("{line}\n{}", msg::hint_activate_enter()),
+                    ListKind::Headings => line,
+                };
                 self.speech.speak(&speech, true);
                 Some(speech)
             }
@@ -798,7 +816,7 @@ impl ScreenReaderEngine {
                 close(self);
                 self.cursor.jump_to_element_offset(link.offset);
                 let activated = self.execute(crate::command::Command::Enter);
-                if !link.is_same_page {
+                if !link.same_page {
                     return activated;
                 }
                 // A link within the page keeps the focus, which coming back from the dialog
@@ -811,7 +829,7 @@ impl ScreenReaderEngine {
                 })
             }
             Outcome::Closed => {
-                self.links_dialog = None;
+                self.list_dialog = None;
                 self.returning_from_dialog();
                 None
             }

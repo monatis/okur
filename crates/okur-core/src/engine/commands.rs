@@ -366,6 +366,9 @@ impl ScreenReaderEngine {
             Command::FindPrior => self.cursor.find_prior(),
 
             // Element list dialogs
+            Command::SelectAHeading if self.ui.is_some() => {
+                return self.open_list(crate::ui::lists::ListKind::Headings)
+            }
             Command::SelectAHeading => {
                 let items = self.cursor.buffer.get_headings_list();
                 if items.is_empty() {
@@ -381,7 +384,9 @@ impl ScreenReaderEngine {
             }
             // With Okur's windows, a real Links List; without (replay, headless), the list
             // is spoken, as before.
-            Command::SelectALink if self.ui.is_some() => return self.open_links_list(),
+            Command::SelectALink if self.ui.is_some() => {
+                return self.open_list(crate::ui::lists::ListKind::Links)
+            }
             Command::SelectALink => {
                 let items = self.cursor.buffer.get_links_list();
                 if items.is_empty() {

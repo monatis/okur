@@ -1,0 +1,601 @@
+//! JAWS's list dialogs as one kind of window: a list of the page's elements of one kind,
+//! buttons that act on the selected one, and radio groups that sort and filter the list.
+//! Each list is a [`ListKind`], whose labels, options and items are JAWS 2025's:
+//! - the Links List (Insert+F7): list "links", Move To Link, Activate Link (the default),
+//!   Cancel, Sort Links and Display (all, visited, unvisited), the link's address
+//!   [obs, 222];
+//! - the Heading List (Insert+F6): list "headings" of "text : level", Move To Heading (the
+//!   default), Cancel, Sort Headings and Display (all, or one level of 1 to 6) [obs, 224].
+//!
+//! See `docs/references/jaws-dialogs-and-visual-features.md` for the dialogs' layout.
+
+use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
+
+use crate::buffer::{HeadingListItem, LinkListItem};
+use crate::messages::{msg, StaticMessage};
+
+const LINK_SORTS: [fn() -> StaticMessage; 2] = [
+    msg::links_list_sort_tab_order,
+    msg::links_list_sort_alphabetical,
+];
+const LINK_DISPLAYS: [fn() -> StaticMessage; 3] = [
+    msg::links_list_display_all,
+    msg::links_list_display_visited,
+    msg::links_list_display_unvisited,
+];
+const HEADING_SORTS: [fn() -> StaticMessage; 2] = [
+    msg::heading_list_sort_tab_order,
+    msg::heading_list_sort_alphabetical,
+];
+/// Heading levels the Display group offers after "All Headings".
+const HEADING_LEVELS: u32 = 6;
+
+/// Which of JAWS's list dialogs.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ListKind {
+    Links,
+    Headings,
+}
+
+/// One of the page's elements, as the list shows it and acts on it.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Entry {
+    /// What the list shows.
+    pub text: String,
+    /// What sorting alphabetically goes by.
+    pub sort_key: String,
+    /// A heading's level, which the Heading List's Display options filter by.
+    pub level: Option<u32>,
+    /// A link's address, which the Links List shows for the selected link.
+    pub address: Option<String>,
+    /// A link within the page.
+    pub same_page: bool,
+    /// Where the element is in the page's buffer.
+    pub offset: usize,
+}
+
+impl Entry {
+    /// A link, after its current state when it has one: "Current Page Overview" [obs,
+    /// 222/s1, s9].
+    pub fn link(link: &LinkListItem) -> Self {
+        Self {
+            text: match link.current {
+                Some(current) => format!("{current} {}", link.text),
+                None => link.text.clone(),
+            },
+            sort_key: link.text.to_lowercase(),
+            level: None,
+            address: link.href.clone(),
+            same_page: link.is_same_page,
+            offset: link.offset,
+        }
+    }
+
+    /// A heading, with its level after a colon: "Web App Patterns : 1" [obs, 224/s1].
+    pub fn heading(heading: &HeadingListItem) -> Self {
+        Self {
+            text: format!("{} : {}", heading.text, heading.level),
+            sort_key: heading.text.to_lowercase(),
+            level: Some(heading.level),
+            address: None,
+            same_page: false,
+            offset: heading.offset,
+        }
+    }
+}
+
+/// What the engine does after the dialog handled an event.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Outcome {
+    Nothing,
+    /// Send these to the dialog.
+    Send(Vec<ToUi>),
+    /// Close the dialog and move the virtual cursor to the element (Move To Link, Move To
+    /// Heading).
+    MoveTo(Entry),
+    /// Close the dialog, move to the link and activate it (Activate Link).
+    Activate(Entry),
+    /// The dialog is gone; the cursor stays.
+    Closed,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ListDialog {
+    pub id: u32,
+    kind: ListKind,
+    entries: Vec<Entry>,
+    /// 0: in tab order, 1: alphabetically.
+    sort: usize,
+    /// The Display group's option: 0 shows everything; for links 1 is visited only and 2
+    /// unvisited only, for headings 1 to 6 one level.
+    display: usize,
+    /// The entries shown, as indices into `entries`, in the list's order.
+    shown: Vec<usize>,
+    /// The selected entry of `shown`.
+    selected: usize,
+}
+
+fn control(id: &str, label: &str, kind: ControlKind) -> Control {
+    Control {
+        id: id.to_owned(),
+        label: label.to_owned(),
+        kind,
+        enabled: true,
+    }
+}
+
+fn texts_of(names: &[fn() -> StaticMessage]) -> Vec<String> {
+    names.iter().map(|n| n().to_string()).collect()
+}
+
+impl ListDialog {
+    /// The Links List over the page's `links`, in tab order, the first selected.
+    pub fn links(id: u32, links: &[LinkListItem]) -> Self {
+        Self::new(id, ListKind::Links, links.iter().map(Entry::link).collect())
+    }
+
+    /// The Heading List over the page's `headings`, in tab order, the first selected.
+    pub fn headings(id: u32, headings: &[HeadingListItem]) -> Self {
+        Self::new(
+            id,
+            ListKind::Headings,
+            headings.iter().map(Entry::heading).collect(),
+        )
+    }
+
+    fn new(id: u32, kind: ListKind, entries: Vec<Entry>) -> Self {
+        let mut dialog = Self {
+            id,
+            kind,
+            entries,
+            sort: 0,
+            display: 0,
+            shown: Vec::new(),
+            selected: 0,
+        };
+        dialog.shown = dialog.order();
+        dialog
+    }
+
+    pub fn kind(&self) -> ListKind {
+        self.kind
+    }
+
+    /// The list control's id: the list's name in JAWS's dialog.
+    fn list_id(&self) -> &'static str {
+        match self.kind {
+            ListKind::Links => "links",
+            ListKind::Headings => "headings",
+        }
+    }
+
+    /// The Display group's options.
+    fn displays(&self) -> Vec<String> {
+        match self.kind {
+            ListKind::Links => texts_of(&LINK_DISPLAYS),
+            ListKind::Headings => std::iter::once(msg::heading_list_display_all().to_string())
+                .chain(
+                    (1..=HEADING_LEVELS)
+                        .map(|level| msg::heading_list_display_level(level).to_string()),
+                )
+                .collect(),
+        }
+    }
+
+    /// The entries the options show, in their order. Okur does not know yet which links were
+    /// visited: none are.
+    fn order(&self) -> Vec<usize> {
+        let display = self.display;
+        let kind = self.kind;
+        let keep = |entry: &Entry| match (kind, display) {
+            (_, 0) => true,
+            (ListKind::Links, 1) => false,
+            (ListKind::Links, _) => true,
+            (ListKind::Headings, level) => entry.level == u32::try_from(level).ok(),
+        };
+        let mut shown: Vec<usize> = (0..self.entries.len())
+            .filter(|&i| self.entries.get(i).is_some_and(keep))
+            .collect();
+        if self.sort == 1 {
+            shown.sort_by_cached_key(|&i| {
+                self.entries
+                    .get(i)
+                    .map(|e| e.sort_key.clone())
+                    .unwrap_or_default()
+            });
+        }
+        shown
+    }
+
+    /// What the list shows, in its order.
+    pub fn texts(&self) -> Vec<String> {
+        self.shown
+            .iter()
+            .filter_map(|&i| self.entries.get(i))
+            .map(|e| e.text.clone())
+            .collect()
+    }
+
+    fn selected_entry(&self) -> Option<&Entry> {
+        self.shown
+            .get(self.selected)
+            .and_then(|&i| self.entries.get(i))
+    }
+
+    fn address(&self) -> String {
+        self.selected_entry()
+            .and_then(|e| e.address.clone())
+            .unwrap_or_default()
+    }
+
+    pub fn spec(&self) -> DialogSpec {
+        let list = |label: StaticMessage| {
+            control(
+                self.list_id(),
+                label.as_str(),
+                ControlKind::List {
+                    items: self.texts(),
+                    selected: self.selected,
+                },
+            )
+        };
+        let button = |id: &str, label: StaticMessage, default: bool| {
+            control(id, label.as_str(), ControlKind::Button { default })
+        };
+        let radios = |id: &str, label: StaticMessage, options: Vec<String>, selected: usize| {
+            control(
+                id,
+                label.as_str(),
+                ControlKind::Radios { options, selected },
+            )
+        };
+        let (title, controls) = match self.kind {
+            ListKind::Links => (
+                msg::list_dialog_links(),
+                vec![
+                    list(msg::list_dialog_links_list()),
+                    button("move", msg::links_list_move(), false),
+                    button("activate", msg::links_list_activate(), true),
+                    button("cancel", msg::links_list_cancel(), false),
+                    radios(
+                        "sort",
+                        msg::links_list_sort(),
+                        texts_of(&LINK_SORTS),
+                        self.sort,
+                    ),
+                    radios(
+                        "display",
+                        msg::links_list_display(),
+                        self.displays(),
+                        self.display,
+                    ),
+                    control(
+                        "address",
+                        "",
+                        ControlKind::Text {
+                            text: self.address(),
+                        },
+                    ),
+                ],
+            ),
+            ListKind::Headings => (
+                msg::list_dialog_headings(),
+                vec![
+                    list(msg::list_dialog_headings_list()),
+                    button("move", msg::heading_list_move(), true),
+                    button("cancel", msg::heading_list_cancel(), false),
+                    radios(
+                        "sort",
+                        msg::heading_list_sort(),
+                        texts_of(&HEADING_SORTS),
+                        self.sort,
+                    ),
+                    radios(
+                        "display",
+                        msg::heading_list_display(),
+                        self.displays(),
+                        self.display,
+                    ),
+                ],
+            ),
+        };
+        DialogSpec {
+            id: self.id,
+            title: title.to_string(),
+            controls,
+        }
+    }
+
+    /// The Links List's address field, after the selection changed; nothing for other lists.
+    fn address_update(&self) -> Vec<ToUi> {
+        match self.kind {
+            ListKind::Links => vec![ToUi::DialogSet {
+                id: self.id,
+                control: "address".to_owned(),
+                value: Value::Text(self.address()),
+            }],
+            ListKind::Headings => Vec::new(),
+        }
+    }
+
+    /// Shows the entries the options now choose, keeping the selected one where it stays.
+    fn reorder(&mut self) -> Outcome {
+        let current = self.shown.get(self.selected).copied();
+        self.shown = self.order();
+        self.selected = current
+            .and_then(|c| self.shown.iter().position(|&i| i == c))
+            .unwrap_or(0);
+        let mut messages = vec![ToUi::DialogItems {
+            id: self.id,
+            control: self.list_id().to_owned(),
+            items: self.texts(),
+            selected: self.selected,
+        }];
+        messages.extend(self.address_update());
+        Outcome::Send(messages)
+    }
+
+    /// Handles what the user did to the dialog; other dialogs' events change nothing.
+    pub fn handle(&mut self, event: &FromUi) -> Outcome {
+        match event {
+            FromUi::DialogChanged { id, control, value } if *id == self.id => {
+                let displays = self.displays().len();
+                match (control.as_str(), value) {
+                    (list, Value::Selected(i)) if list == self.list_id() => {
+                        self.selected = *i;
+                        match self.address_update() {
+                            update if update.is_empty() => Outcome::Nothing,
+                            update => Outcome::Send(update),
+                        }
+                    }
+                    ("sort", Value::Selected(i)) => {
+                        self.sort = (*i).min(1);
+                        self.reorder()
+                    }
+                    ("display", Value::Selected(i)) => {
+                        self.display = (*i).min(displays.saturating_sub(1));
+                        self.reorder()
+                    }
+                    _ => Outcome::Nothing,
+                }
+            }
+            FromUi::DialogPressed { id, control } if *id == self.id => {
+                match (control.as_str(), self.selected_entry(), self.kind) {
+                    ("move", Some(entry), _) => Outcome::MoveTo(entry.clone()),
+                    ("activate", Some(entry), ListKind::Links) => Outcome::Activate(entry.clone()),
+                    _ => Outcome::Nothing,
+                }
+            }
+            FromUi::DialogClosed { id } if *id == self.id => Outcome::Closed,
+            _ => Outcome::Nothing,
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn link(text: &str, offset: usize) -> LinkListItem {
+        LinkListItem {
+            node_id: offset,
+            text: text.to_owned(),
+            href: Some(format!("https://example.com/{offset}")),
+            is_same_page: false,
+            offset,
+            current: None,
+        }
+    }
+
+    fn heading(text: &str, level: u32, offset: usize) -> HeadingListItem {
+        HeadingListItem {
+            node_id: offset,
+            text: text.to_owned(),
+            level,
+            offset,
+        }
+    }
+
+    fn changed(control: &str, value: Value) -> FromUi {
+        FromUi::DialogChanged {
+            id: 2,
+            control: control.to_owned(),
+            value,
+        }
+    }
+
+    fn pressed(control: &str) -> FromUi {
+        FromUi::DialogPressed {
+            id: 2,
+            control: control.into(),
+        }
+    }
+
+    fn links() -> Vec<LinkListItem> {
+        vec![
+            link("Driving Directions", 10),
+            link("complete menu", 20),
+            link("Beef", 30),
+        ]
+    }
+
+    #[test]
+    fn the_dialog_is_jaws_links_list() {
+        let spec = ListDialog::links(2, &links()).spec();
+        assert_eq!(spec.title, "Links List");
+        let labels: Vec<&str> = spec.controls.iter().map(|c| c.label.as_str()).collect();
+        assert_eq!(
+            labels,
+            [
+                "links",
+                "&Move To Link",
+                "&Activate Link",
+                "&Cancel",
+                "Sort Links",
+                "Display",
+                ""
+            ]
+        );
+        assert_eq!(
+            spec.controls.first().map(|c| c.kind.clone()),
+            Some(ControlKind::List {
+                items: vec![
+                    "Driving Directions".into(),
+                    "complete menu".into(),
+                    "Beef".into()
+                ],
+                selected: 0
+            })
+        );
+        assert_eq!(
+            spec.controls.last().map(|c| c.kind.clone()),
+            Some(ControlKind::Text {
+                text: "https://example.com/10".into()
+            })
+        );
+    }
+
+    #[test]
+    fn sorting_keeps_the_selected_link_and_the_buttons_act_on_it() {
+        let mut dialog = ListDialog::links(2, &links());
+        assert_eq!(
+            dialog.handle(&changed("links", Value::Selected(1))),
+            Outcome::Send(vec![ToUi::DialogSet {
+                id: 2,
+                control: "address".into(),
+                value: Value::Text("https://example.com/20".into()),
+            }])
+        );
+        // Alphabetically, ignoring case: Beef, complete menu, Driving Directions.
+        assert_eq!(
+            dialog.handle(&changed("sort", Value::Selected(1))),
+            Outcome::Send(vec![
+                ToUi::DialogItems {
+                    id: 2,
+                    control: "links".into(),
+                    items: vec![
+                        "Beef".into(),
+                        "complete menu".into(),
+                        "Driving Directions".into()
+                    ],
+                    selected: 1,
+                },
+                ToUi::DialogSet {
+                    id: 2,
+                    control: "address".into(),
+                    value: Value::Text("https://example.com/20".into()),
+                },
+            ])
+        );
+        let menu = Entry::link(&link("complete menu", 20));
+        assert_eq!(
+            dialog.handle(&pressed("move")),
+            Outcome::MoveTo(menu.clone())
+        );
+        assert_eq!(dialog.handle(&pressed("activate")), Outcome::Activate(menu));
+        assert_eq!(
+            dialog.handle(&FromUi::DialogClosed { id: 2 }),
+            Outcome::Closed
+        );
+    }
+
+    /// A link's current state comes before its text in the list, and sorting still goes by the
+    /// text [obs, 222/s1, s9].
+    #[test]
+    fn a_current_link_says_its_state_first() {
+        let mut overview = link("Overview", 1);
+        overview.current = Some("Current Page");
+        let dialog = ListDialog::links(2, &[overview, link("Settings", 2)]);
+        assert_eq!(dialog.texts(), vec!["Current Page Overview", "Settings"]);
+    }
+
+    /// Okur knows no visited links yet: "Visited Links Only" shows none.
+    #[test]
+    fn visited_links_only_is_empty_until_okur_knows_visits() {
+        let mut dialog = ListDialog::links(2, &links());
+        let outcome = dialog.handle(&changed("display", Value::Selected(1)));
+        assert!(
+            matches!(&outcome, Outcome::Send(sent)
+                if matches!(sent.first(), Some(ToUi::DialogItems { items, .. }) if items.is_empty())),
+            "{outcome:?}"
+        );
+        assert_eq!(dialog.handle(&pressed("activate")), Outcome::Nothing);
+    }
+
+    /// JAWS's Heading List: "headings" of "text : level", Move To Heading as the default, and
+    /// a Display group of all headings and levels 1 to 6 [obs, 224/s1-s6].
+    #[test]
+    fn the_dialog_is_jaws_heading_list() {
+        let headings = [
+            heading("Web App Patterns", 1, 0),
+            heading("Current links", 2, 10),
+            heading("Beef", 3, 20),
+        ];
+        let spec = ListDialog::headings(2, &headings).spec();
+        assert_eq!(spec.title, "Heading List");
+        let labels: Vec<&str> = spec.controls.iter().map(|c| c.label.as_str()).collect();
+        assert_eq!(
+            labels,
+            [
+                "headings",
+                "&Move To Heading",
+                "&Cancel",
+                "Sort Headings",
+                "Display"
+            ]
+        );
+        assert_eq!(
+            spec.controls.first().map(|c| c.kind.clone()),
+            Some(ControlKind::List {
+                items: vec![
+                    "Web App Patterns : 1".into(),
+                    "Current links : 2".into(),
+                    "Beef : 3".into()
+                ],
+                selected: 0
+            })
+        );
+        assert!(spec
+            .controls
+            .iter()
+            .any(|c| c.kind == ControlKind::Button { default: true } && c.id == "move"));
+        let display = spec.controls.last().map(|c| c.kind.clone());
+        assert!(
+            matches!(&display, Some(ControlKind::Radios { options, selected: 0 })
+                if options.len() == 7
+                    && options.first().map(String::as_str) == Some("A&ll Headings")
+                    && options.get(2).map(String::as_str) == Some("Level &2 Headings")),
+            "{display:?}"
+        );
+    }
+
+    /// A level shows only its headings; Move To Heading goes to the selected one.
+    #[test]
+    fn a_level_shows_its_headings_only() {
+        let headings = [
+            heading("Web App Patterns", 1, 0),
+            heading("Current links", 2, 10),
+            heading("Described controls", 2, 20),
+        ];
+        let mut dialog = ListDialog::headings(2, &headings);
+        let outcome = dialog.handle(&changed("display", Value::Selected(2)));
+        assert_eq!(
+            outcome,
+            Outcome::Send(vec![ToUi::DialogItems {
+                id: 2,
+                control: "headings".into(),
+                items: vec!["Current links : 2".into(), "Described controls : 2".into()],
+                selected: 0,
+            }])
+        );
+        assert_eq!(
+            dialog.handle(&changed("headings", Value::Selected(1))),
+            Outcome::Nothing
+        );
+        assert_eq!(
+            dialog.handle(&pressed("move")),
+            Outcome::MoveTo(Entry::heading(&heading("Described controls", 2, 20)))
+        );
+        assert_eq!(dialog.handle(&pressed("activate")), Outcome::Nothing);
+    }
+}

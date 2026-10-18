@@ -49,3 +49,17 @@ links-list-display = Display
 links-list-display-all = A&ll Links
 links-list-display-visited = &Visited Links Only
 links-list-display-unvisited = &Unvisited Links
+
+## The Heading List (Insert+F6), as JAWS's. Its title and its list's name are
+## list-dialog-headings and list-dialog-headings-list.
+
+heading-list-move = &Move To Heading
+heading-list-cancel = &Cancel
+heading-list-sort = Sort Headings
+heading-list-sort-tab-order = In &Tab Order
+heading-list-sort-alphabetical = Al&phabetically
+heading-list-display = Display
+# Alt+L chooses it, as in JAWS.
+heading-list-display-all = A&ll Headings
+# One option per heading level, 1 to 6; Alt and the level's digit choose it, as in JAWS.
+heading-list-display-level = Level &{ $level } Headings
