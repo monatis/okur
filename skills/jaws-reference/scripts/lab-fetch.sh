@@ -25,7 +25,9 @@ trap 'rm -f "$query"' EXIT
 cat > "$query" <<EOF
 \$root = (Resolve-Path -LiteralPath '$REMOTE').Path.TrimEnd('\\')
 Get-ChildItem -LiteralPath \$root -Recurse -File | ForEach-Object {
-    (Get-FileHash -Algorithm SHA256 -LiteralPath \$_.FullName).Hash.ToLower() + ' ' + \$_.FullName.Substring(\$root.Length + 1).Replace('\\', '/')
+    # A file still being written (a trace during a run) is locked: it comes on a later fetch.
+    try { \$hash = (Get-FileHash -Algorithm SHA256 -LiteralPath \$_.FullName -ErrorAction Stop).Hash.ToLower() } catch { return }
+    \$hash + ' ' + \$_.FullName.Substring(\$root.Length + 1).Replace('\\', '/')
 }
 EOF
 listing=$(opendesk exec --peer "$PEER" --timeout 300 --file "$query" | tr -d '\r' | grep -E '^[0-9a-f]{64} ' || true)

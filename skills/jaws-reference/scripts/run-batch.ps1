@@ -3,7 +3,8 @@
     Runs many scenarios unattended on the reference machine, serially, with a progress log.
 
 .DESCRIPTION
-    For each scenario file (sorted), runs run-scenario.ps1 and writes
+    For each scenario file (sorted) matching ScenarioGlob, one wildcard path or several separated
+    by commas (a batch re-recording chosen scenarios), runs run-scenario.ps1 and writes
     <OutputDir>\<scenario-id>-evidence.json. Progress lines go to <OutputDir>\batch.log, and
     <OutputDir>\batch.done is written last, so a remote caller can launch this detached
     (Start-Process) and poll for completion instead of holding a long-lived connection.
@@ -28,7 +29,7 @@ $done = Join-Path $OutputDir 'batch.done'
 Remove-Item $done -ErrorAction SilentlyContinue
 $runner = Join-Path $PSScriptRoot 'run-scenario.ps1'
 
-$files = @(Get-ChildItem $ScenarioGlob | Sort-Object Name)
+$files = @(Get-ChildItem ($ScenarioGlob -split ',') | Sort-Object Name -Unique)
 "=== batch started $(Get-Date -Format o): $($files.Count) scenario(s), $Repetitions trial(s) each" | Out-File $log -Encoding utf8
 $i = 0
 foreach ($f in $files) {

@@ -26,9 +26,13 @@ Step types:
                An optional "repeat": N presses the chord N times quickly ("twice quickly").
                "capture_clipboard": true stores the clipboard after the step (observation.clipboard).
   jaws_script  JAWS script name dispatched through FSAPI RunScript.
+  jaws_function  JAWS function call through FSAPI RunFunction: TypeKey("Down") for keys inside
+               JAWS's own dialogs (Links List, Find), which run elevated and refuse our keys.
   key_down     A key pressed and held across the following steps ("Alt" through several
                Tabs); key_up releases it. Held keys are released when a trial ends.
   keyboard     Legacy .NET SendKeys string (kept so scenarios 01-30 stay reproducible).
+Reset: "reset": {"keys": [...]} runs before each trial; "window_title" names the window the
+reset leaves in front when it is not the launched one (a trial fails if another is in front).
 
 Settling: after each action the default audio endpoint is metered (okur wait-silence; JAWS is
 the only audio source on the reference machine) until it has been silent for quiet_ms (default
@@ -66,6 +70,8 @@ public static class SrKeyInput {
     [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hWnd);
     [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
     [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern IntPtr FindWindow(string cls, string name);
+    [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr hWnd);
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern int GetWindowText(IntPtr hWnd, StringBuilder s, int n);
     const uint KEYEVENTF_EXTENDEDKEY = 0x1, KEYEVENTF_KEYUP = 0x2;
 
@@ -204,6 +210,9 @@ function Invoke-Step($type, [string]$command, [int]$repeat = 1) {
             return [SrKeyInput]::Key([uint16]$k[0], $k[1], $true)
         }
         'jaws_script' { return [bool]$jaws.RunScript($command) }
+        # A JAWS function call through FSAPI RunFunction, e.g. TypeKey("Down"): keys JAWS types
+        # itself reach its own elevated dialogs, which refuse ours.
+        'jaws_function' { return [bool]$jaws.RunFunction($command) }
         'keyboard'    { [System.Windows.Forms.SendKeys]::SendWait($command); return $true }
         default       { throw "Unsupported step type '$type'" }
     }
@@ -305,6 +314,21 @@ function Find-WindowByTitle([string]$title) {
     }
 }
 
+# JAWS's own window comes forward after its dialogs close (the Links List, 222) and, JAWS
+# running elevated, keeps the foreground from the fixture: every step of the scenarios after
+# it heard nothing (223-226, old-pc, 2026-10-18). It is hidden, as when JAWS starts, by an
+# elevated helper; the lab's UAC elevates without asking.
+function Hide-JawsWindow {
+    $window = [SrKeyInput]::FindWindow('JFWUI2', [NullString]::Value)
+    if ($window -eq [IntPtr]::Zero) { return }
+    $inFront = [SrKeyInput]::GetForegroundWindow() -eq $window
+    if (-not $inFront -and -not [SrKeyInput]::IsWindowVisible($window)) { return }
+    $helper = Join-Path $PSScriptRoot 'hide-jaws-window.ps1'
+    $p = Start-Process powershell -Verb RunAs -WindowStyle Hidden -PassThru -ArgumentList @(
+        '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$helper`"")
+    if ($p) { [void]$p.WaitForExit(15000) }
+}
+
 function Start-DesktopFixture {
     $old = Find-WindowByTitle $launch.window_title
     if ($old) { Stop-Process -Id $old.Id -Force; Start-Sleep -Milliseconds 500 }
@@ -359,6 +383,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     }
     # Identical setup for every trial: reload (or relaunch), let load speech finish, reset,
     # settle, clear.
+    Hide-JawsWindow
     if ($launch) {
         if (-not (Start-DesktopFixture)) { $trialResult.trial_success = $false }
         # A launch reads the window and the focused control, which takes long for a full edit.
@@ -386,7 +411,10 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     $trialResult.setup_settled = $resetQuiet.settled
     if (-not $resetQuiet.settled) { $trialResult.trial_success = $false }
     $trialResult.foreground_window_start = Get-ForegroundTitle
-    if ($expectedTitle -and -not $trialResult.foreground_window_start.StartsWith($expectedTitle)) {
+    # A reset can open another window on purpose ("reset": {"window_title": ...}): 317's Tab,
+    # Enter opens the fixture's second window, so that Alt+Tab has the first to go back to.
+    $startTitle = if ($scenario.reset -and $scenario.reset.window_title) { $scenario.reset.window_title } else { $expectedTitle }
+    if ($startTitle -and -not $trialResult.foreground_window_start.StartsWith($startTitle)) {
         $trialResult.trial_success = $false
     }
 
@@ -397,7 +425,10 @@ for ($t = 1; $t -le $Repetitions; $t++) {
 
         # Start every step from a silent baseline, so residual audio from the previous step
         # (e.g. the tail of the copy confirmation) cannot be mistaken for this step's speech.
-        $baseline = Wait-Silence -OnsetMs 150 -QuietMs 300 -MaxMs 3000
+        # Up to 10 s: a step can settle in a pause of JAWS's speech (between "Title is" and the
+        # title, between the symbols of a code line read with punctuation Most) and JAWS then
+        # speaks on for seconds; 3 s failed steps of 209, 314 and 315 on 2026-10-18.
+        $baseline = Wait-Silence -OnsetMs 150 -QuietMs 300 -MaxMs 10000
         [void]$jaws.RunScript("ClearSpeechHistory")
         $spokenStart = Get-SpokenOffset
 
