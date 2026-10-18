@@ -586,7 +586,7 @@ enum OutputMode { Off, On }        // more values only if JAWS's files show them
 | `KeyboardType=Laptop` | `keyboard.layout = laptop` | exists (`settings.rs:12-83`) |
 | `TypingEcho=0` | `typing_echo = none` | exists (`settings.rs:99-122`) |
 | `AutoFormsMode=0` | `forms.auto_forms_mode = false` | being added in the working tree as `auto_forms_mode` |
-| `ACCESS_KEY=0\|0\|0` | `verbosity.output_modes.access_key = [Off, Off, Off]` | being added as the flat `access_keys` switch; becomes the output mode in M1 |
+| `ACCESS_KEY=0\|0\|0` | `verbosity.output_modes.access_key = [Off, Off, Off]` | exists: `Settings::verbosity`, filled by parity replay ([`messages-and-verbosity.md`](messages-and-verbosity.md)) |
 | `LanguageDetection=0` | `speech.language_switching = off` | new, M5 |
 | Chrome `VirtualCursorVerbosityLevel=2` | `web.verbosity_level`, application scope | new; the meaning of 2 to confirm on old-pc |
 | Chrome `AllowWebAppReservedKeystrokes=0` | an application-scope web setting | new; meaning to confirm from JAWS's help |
@@ -917,6 +917,8 @@ today; old-pc work follows [`verification-loop.md`](verification-loop.md).
 - Absorbs: structure plan step 4 and its spacing decision.
 - Done when: no role mark is written outside the renderer; the literal-outside-catalog test
   passes; parity output unchanged.
+- State (2026-10-18): the catalog, typed parts, the verbosity model and the catalog tests are
+  in; what is left is in [`messages-and-verbosity.md`](messages-and-verbosity.md).
 
 **M1. The settings registry and the JAWS import.**
 - The registry with scopes and lifetimes (§8).
