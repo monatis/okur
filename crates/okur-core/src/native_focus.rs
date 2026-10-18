@@ -269,7 +269,10 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
             let open = focus.states.expanded == Some(true);
             match focus.states.expanded {
                 // Said as a word, not a state mark: "Banner Opened" [obs, 274/s1].
-                Some(true) => parts.push(Part::new(PartKind::Message, msg::state_opened())),
+                Some(true) => parts.push(Part::new(
+                    PartKind::Message,
+                    format!(" {}", msg::state_opened()),
+                )),
                 Some(false) => parts.push(state(msg::state_closed().as_str())),
                 None => {}
             }
