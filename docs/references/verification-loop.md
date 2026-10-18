@@ -216,6 +216,12 @@ Write down what JAWS should say before writing code.
 - **Role markers.** History lines can carry `\u{1d}…\u{1e}` around role words ("‹ Edit ›");
   the engine produces the same markers.
 - **Typing echo** is never in the history, so it cannot be compared there.
+- **Some words are spoken but not kept in the history.** A space read alone ("space"), and
+  "blank" for an empty line or word reached with the reading keys or in the Virtual Viewer,
+  reach the synthesizer while the history keeps the character itself (empty). Such a step has
+  `observation.audio_without_text` set, and `spoken` shows what was said. Okur speaks them
+  through `SpeechOutput::speak_character`, which keeps the same split. "blank" for an empty
+  field's value on focus (F, E, Tab) is in the history.
 - **Variants.** Trials can differ (focus races, Chrome timing); `okur evidence` lists each
   variant. Parity accepts any recorded variant.
 - **Contamination.** A step whose history includes the copy confirmation or a Windows
@@ -300,6 +306,41 @@ the morning. This is how it was done; it needs fresh permission each time.
   `DoFlexibleWebDialog`, the way a layered key would not), `RunScript("ReadBoxInTabOrder")`
   reads it, `RunFunction('TypeKey("Escape")')` closes it.
 
+- **A key release refused leaves the key down for every scenario after it** (old-pc,
+  2026-10-18). Left Ctrl stayed down: Ctrl+R became Insert+Ctrl+R (JAWS's regions list) and
+  Win+R JAWS's Research It prompt. `run-scenario.ps1` now releases every key whatever failed,
+  checks that its keys came up, and starts each trial with `clear-lab-state.ps1` (elevated)
+  when a modifier is down or JAWS's main window is in the way. A trial records what it
+  cleared as `lab_state_cleared`.
+- **JAWS keeps its own record of a held JAWS key**, which Windows' key state does not show.
+  After an Insert+F7 whose release met JAWS's elevated dialog, a plain Ctrl+R opened JAWS's
+  regions list ("Document Regions") at every trial's start, though no key was down. A bare
+  release of Insert and CapsLock resets it; every trial now starts with one, and a chord with a
+  JAWS key that leaves a JAWS window in front is released elevated. If JAWS acts on keys as if
+  Insert were held, suspect this.
+- **A disturbed JAWS stays disturbed until it restarts.** After a day of stuck keys, JAWS stopped
+  toggling Caps Lock on CapsLock pressed twice, at any gap, though no key was held; a restart
+  cured it. Start long batches with `run-batch.ps1 -FreshJaws`, and run a two-minute canary
+  scenario (221) before them. A key check between the presses of a double press must stay
+  cheap: a process lookup there once stretched the gap.
+- **JAWS's main window comes forward after JAWS's dialogs close** and keeps the foreground from
+  ordinary processes. `clear-lab-state.ps1` hides it and passes the foreground on.
+- **A JAWS prompt left open spoils a whole batch.** Close it from an elevated process with
+  `BM_CLICK` on its button: neither OpenDesk's mouse nor our keys reach it.
+- **Traces can carry personal data from other applications.** Windows 10's taskbar news and
+  weather widget put links with the machine's location into traces through its name changes.
+  The tracer now drops changes (and focus events) from applications not in front before
+  reading them. Before committing a trace, search it for URLs (`grep -lE "https?://"`) and
+  anything about the owner.
+- **Events wait in the hook's queue while earlier ones are read.** A combo box's scrolling sent
+  264 scroll-bar state changes as the Run dialog opened, and each was read: the focus came 5 s
+  late, into the next step. The tracer now drops scroll-bar events and stamps each event with
+  the time Windows raised it.
+- **Evidence of JAWS's own dialogs cannot measure Okur's.** JAWS's dialogs run elevated, so
+  our tracer sees them thinly ("&Move To Link", no role), and Okur draws its own dialogs.
+  Replaying 222-226 compares Okur's reading of JAWS's dialog. Measuring Okur's dialog needs a
+  live run of Okur with the same keys.
+
 ## 9. Open questions to settle on old-pc
 
 - How Windows 10's task switcher, desktop, Run dialog and Notepad behave against the dev box's
@@ -308,3 +349,7 @@ the morning. This is how it was done; it needs fresh permission each time.
   layout matter (Turkish Q) or a different binding? JAWS binds physical keys by name in its
   `.jkm`; check `Default.JKM` (laptop section).
 - JAWS's Insert+Tab inside a web page.
+- Which window was "Document Regions" (225 and 226, trial 2): JAWS's regions list opened by a
+  stuck Ctrl, most likely; confirm it does not recur with the key fix.
+- JAWS's first Down in its font information message said "ESCAPE Press ESCAPE to close this
+  message." (314/s3): where does "ESCAPE" come from?
