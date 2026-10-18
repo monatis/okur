@@ -38,6 +38,9 @@ pub struct StepParity {
     /// Distinct transcripts JAWS produced for this step across successful trials.
     pub jaws_variants: Vec<String>,
     pub matched: bool,
+    /// An accepted divergence covers the whole step ([`crate::divergences`]): it is not
+    /// counted, on any layer.
+    pub accepted: bool,
     /// The spoken layer, for evidence recorded through the speech recorder voice: what our
     /// synthesizer is given, against what JAWS sent its synthesizer.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -64,11 +67,22 @@ impl ParityReport {
         self.steps.iter().filter(|s| s.matched).count()
     }
 
+    /// Steps an accepted divergence leaves out of the counts.
+    pub fn accepted(&self) -> usize {
+        self.steps.iter().filter(|s| s.accepted).count()
+    }
+
+    /// Steps compared with JAWS: every step but the accepted divergences.
+    pub fn compared(&self) -> usize {
+        self.steps.len() - self.accepted()
+    }
+
     /// Steps compared on the spoken layer: how many match, of how many.
     pub fn spoken(&self) -> (usize, usize) {
         let compared: Vec<&SpokenParity> = self
             .steps
             .iter()
+            .filter(|s| !s.accepted)
             .filter_map(|s| s.spoken.as_ref())
             .collect();
         (
@@ -381,24 +395,25 @@ fn run_scenario(
         if jaws.is_empty() {
             return Err(format!("no JAWS transcript recorded for step {}", step.id));
         }
-        let normalized = normalize(&engine_speech);
-        let matched = jaws.iter().any(|v| normalize(v) == normalized);
+        use crate::divergences::{compare, Comparison};
+        let key = format!("{}/{}", scenario.id, step.id);
+        let comparison = compare(&key, &engine_speech, &jaws);
         let engine_spoken = spoken.take_spoken().join(" ");
         let spoken_parity = spoken_variants.as_ref().map(|all| {
             let jaws_variants = all.get(&step.id).cloned().unwrap_or_default();
-            let ours = normalize(&engine_spoken);
             SpokenParity {
-                matched: jaws_variants.iter().any(|v| normalize(v) == ours),
+                matched: compare(&key, &engine_spoken, &jaws_variants) == Comparison::Matched,
                 engine: engine_spoken,
                 jaws_variants,
             }
         });
         steps.push(StepParity {
-            key: format!("{}/{}", scenario.id, step.id),
+            key,
             command: step.command.clone(),
             engine: engine_speech,
             jaws_variants: jaws,
-            matched,
+            matched: comparison == Comparison::Matched,
+            accepted: comparison == Comparison::Accepted,
             spoken: spoken_parity,
         });
     }
@@ -436,6 +451,7 @@ struct Baseline<'a> {
     notice: &'static str,
     matched_steps: usize,
     total_steps: usize,
+    accepted_divergences: usize,
     errors: &'a [String],
     steps: BTreeMap<&'a str, &'static str>,
 }
@@ -446,12 +462,20 @@ pub fn render_baseline(report: &ParityReport) -> Result<String, String> {
         notice:
             "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
         matched_steps: report.matched(),
-        total_steps: report.steps.len(),
+        total_steps: report.compared(),
+        accepted_divergences: report.accepted(),
         errors: &report.errors,
         steps: report
             .steps
             .iter()
-            .map(|s| (s.key.as_str(), if s.matched { "match" } else { "mismatch" }))
+            .map(|s| {
+                let status = match (s.matched, s.accepted) {
+                    (true, _) => "match",
+                    (false, true) => "accepted divergence",
+                    (false, false) => "mismatch",
+                };
+                (s.key.as_str(), status)
+            })
             .collect(),
     };
     serde_json::to_string_pretty(&baseline)

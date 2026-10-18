@@ -1,3 +1,4 @@
+pub mod divergences;
 pub mod invariants;
 pub mod keys;
 pub mod latency;
@@ -35,6 +36,37 @@ mod tests {
             report.errors
         );
         assert_eq!(parity::check_baseline(&dir, &report), Ok(()));
+        let steps: Vec<(&str, &str, &[String])> = report
+            .steps
+            .iter()
+            .map(|s| {
+                (
+                    s.key.as_str(),
+                    s.engine.as_str(),
+                    s.jaws_variants.as_slice(),
+                )
+            })
+            .collect();
+        assert_eq!(divergences::check(&steps), Ok(()));
+    }
+
+    /// The written list of accepted divergences names every step the table covers.
+    #[test]
+    fn the_written_list_names_every_divergence() {
+        let doc = std::fs::read_to_string(
+            Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("../../docs/references/accepted-divergences.md"),
+        )
+        .unwrap_or_default();
+        let missing: Vec<&str> = divergences::DIVERGENCES
+            .iter()
+            .flat_map(|d| d.steps.iter().copied())
+            .filter(|step| !doc.contains(step))
+            .collect();
+        assert!(
+            missing.is_empty(),
+            "docs/references/accepted-divergences.md does not list: {missing:?}"
+        );
     }
 
     /// Universal buffer invariants over every captured snapshot. Known violations are listed

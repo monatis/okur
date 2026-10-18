@@ -9,7 +9,8 @@
 //! It is never evidence: it lives outside `corpus/evidence/`, and evidence is never read as a
 //! run.
 
-use crate::parity::{jaws_variants, normalize};
+use crate::divergences::{compare as compare_step, Comparison};
+use crate::parity::jaws_variants;
 use serde_json::Value;
 
 /// One step of a live run against JAWS's transcripts for it.
@@ -23,6 +24,8 @@ pub struct LiveStep {
     /// Distinct transcripts JAWS produced for this step across successful trials.
     pub jaws_variants: Vec<String>,
     pub matched: bool,
+    /// An accepted divergence covers the whole step: not counted.
+    pub accepted: bool,
     /// Whether the runner heard Okur fall silent before the step's time ran out. An
     /// unsettled step may have been cut short.
     pub settled: bool,
@@ -80,15 +83,17 @@ pub fn compare(run: &Value, evidence: &Value) -> Result<Vec<LiveStep>, String> {
             if jaws.is_empty() {
                 return Err(format!("no JAWS transcript recorded for step {id}"));
             }
-            let ours = normalize(&okur);
+            let key = format!("{scenario}/{id}");
+            let comparison = compare_step(&key, &okur, &jaws);
             Ok(LiveStep {
-                key: format!("{scenario}/{id}"),
+                key,
                 command: step
                     .pointer("/action/command")
                     .and_then(Value::as_str)
                     .unwrap_or_default()
                     .to_owned(),
-                matched: jaws.iter().any(|v| normalize(v) == ours),
+                matched: comparison == Comparison::Matched,
+                accepted: comparison == Comparison::Accepted,
                 settled: step
                     .pointer("/observation/settled")
                     .and_then(Value::as_bool)

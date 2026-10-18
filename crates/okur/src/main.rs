@@ -1266,8 +1266,12 @@ async fn main() {
             );
             match okur_corpus::live::compare(&run, &evidence) {
                 Ok(steps) => {
-                    for step in steps.iter().filter(|s| all || !s.matched) {
-                        let tag = if step.matched { "MATCH" } else { "DIFF " };
+                    for step in steps.iter().filter(|s| all || !(s.matched || s.accepted)) {
+                        let tag = match (step.matched, step.accepted) {
+                            (true, _) => "MATCH",
+                            (false, true) => "ACCEPTED",
+                            (false, false) => "DIFF ",
+                        };
                         let unsettled = if step.settled { "" } else { "  unsettled" };
                         println!("[{tag}] {}  ({}){unsettled}", step.key, step.command);
                         println!("    okur: {:?}", okur_corpus::parity::normalize(&step.okur));
@@ -1278,9 +1282,11 @@ async fn main() {
                         }
                     }
                     let matched = steps.iter().filter(|s| s.matched).count();
+                    let accepted = steps.iter().filter(|s| s.accepted).count();
                     println!(
-                        "Okur live: {matched}/{} steps match JAWS exactly",
-                        steps.len()
+                        "Okur live: {matched}/{} steps match JAWS exactly; {accepted} accepted \
+                         divergences not counted",
+                        steps.len() - accepted
                     );
                 }
                 Err(e) => {
@@ -1327,13 +1333,17 @@ async fn main() {
                 std::process::exit(2);
             }
             let report = okur_corpus::parity::run_with(dir, api);
-            for step in report.steps.iter().filter(|s| all || !s.matched) {
-                println!(
-                    "[{}] {}  ({})",
-                    if step.matched { "MATCH" } else { "DIFF " },
-                    step.key,
-                    step.command
-                );
+            for step in report
+                .steps
+                .iter()
+                .filter(|s| all || !(s.matched || s.accepted))
+            {
+                let tag = match (step.matched, step.accepted) {
+                    (true, _) => "MATCH",
+                    (false, true) => "ACCEPTED",
+                    (false, false) => "DIFF ",
+                };
+                println!("[{tag}] {}  ({})", step.key, step.command);
                 println!(
                     "    ours: {:?}",
                     okur_corpus::parity::normalize(&step.engine)
@@ -1346,7 +1356,11 @@ async fn main() {
             }
             if spoken {
                 for step in &report.steps {
-                    let Some(s) = step.spoken.as_ref().filter(|s| all || !s.matched) else {
+                    let Some(s) = step
+                        .spoken
+                        .as_ref()
+                        .filter(|s| all || !(s.matched || step.accepted))
+                    else {
                         continue;
                     };
                     let tag = if s.matched { "MATCH" } else { "DIFF " };
@@ -1367,9 +1381,11 @@ async fn main() {
                 "JAWS spoken parity: {spoken_matched}/{spoken_total} steps match exactly (evidence recorded through the speech recorder voice)"
             );
             println!(
-                "JAWS parity ({api:?}): {}/{} steps match exactly ({} scenarios could not run)",
+                "JAWS parity ({api:?}): {}/{} steps match exactly; {} accepted divergences not \
+                 counted ({} scenarios could not run)",
                 report.matched(),
-                report.steps.len(),
+                report.compared(),
+                report.accepted(),
                 report.errors.len()
             );
             if write_baseline {
