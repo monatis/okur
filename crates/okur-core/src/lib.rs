@@ -608,7 +608,11 @@ mod tests {
             entry,
             "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter"
         );
-        assert_eq!(cursor.current_node().map(|n| &n.role), Some(&Role::Table));
+        // The cursor is on the first cell: Say Line reads it [obs, 257/s4].
+        assert_eq!(
+            cursor.current_node().map(|n| &n.role),
+            Some(&Role::TableCell)
+        );
         assert_eq!(cursor.current_table_col(), Some(1));
         assert_eq!(cursor.current_table_row(), Some(1));
 

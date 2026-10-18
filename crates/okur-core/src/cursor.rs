@@ -1776,19 +1776,16 @@ impl VirtualCursor {
         self.enter_table(index)
     }
 
-    /// Moves to table `table_idx` and says it: its size, caption and first cell.
+    /// Moves to table `table_idx` and says it: its size, caption and first cell. The cursor is
+    /// then on that cell: Say Line reads it [obs, 257/s4: "Branch"].
     fn enter_table(&mut self, table_idx: usize) -> Option<String> {
         let table = self.buffer.tables.get(table_idx)?;
-        self.offset = table.start_offset;
-        self.current_node_id = Some(table.table_id);
+        let first_cell = table.cells.first().and_then(|r| r.first());
+        self.offset = first_cell.map_or(table.start_offset, |c| c.offset);
+        self.current_node_id = Some(first_cell.map_or(table.table_id, |c| c.node_id));
         self.current_table_pos = Some((table_idx, 0, 0));
 
-        let first_cell_text = table
-            .cells
-            .first()
-            .and_then(|r| r.first())
-            .map(|c| c.speech.as_str())
-            .unwrap_or("");
+        let first_cell_text = first_cell.map(|c| c.speech.as_str()).unwrap_or("");
 
         let speech = SpeechFormatter::format_table_entry(
             table.cols,
