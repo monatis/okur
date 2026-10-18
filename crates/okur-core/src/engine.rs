@@ -746,14 +746,22 @@ impl ScreenReaderEngine {
             .is_some_and(|until| std::time::Instant::now() < until)
     }
 
-    /// Whether `focus` is the field a dialog gave the focus to. Its arrival ends the quiet
-    /// return.
+    /// Whether `focus` is the field a dialog gave the focus to: said once, while the rest of
+    /// the return (the page's own focus, Chrome's repeats of the field's) stays quiet.
     fn reaches_dialog_focus_target(&mut self, focus: &crate::event::FocusEvent) -> bool {
-        let reached = self.dialog_focus_target.is_some()
-            && self.page_node_for(focus) == self.dialog_focus_target;
+        let Some(target) = self.dialog_focus_target else {
+            return false;
+        };
+        let node = self.page_node_for(focus);
+        let reached = node == Some(target);
+        tracing::debug!(
+            target,
+            ?node,
+            reached,
+            "focus while returning from a dialog"
+        );
         if reached {
             self.dialog_focus_target = None;
-            self.quiet_focus_until = None;
         }
         reached
     }
@@ -887,12 +895,25 @@ impl ScreenReaderEngine {
                 .flatten()
                 .collect::<Vec<_>>()
                 .join("\n");
-                let focused = match (self.cursor.buffer.node(field.node_id), &self.actions) {
+                let node = self.cursor.buffer.node(field.node_id);
+                let typed_in = node.is_some_and(|n| {
+                    matches!(n.role, crate::aom::Role::Edit | crate::aom::Role::ComboBox)
+                });
+                let focused = match (node, &self.actions) {
                     (Some(node), Some(actions)) => actions.focus(node),
                     _ => false,
                 };
+                tracing::debug!(node = field.node_id, focused, "form field list: focus");
                 if focused {
                     self.dialog_focus_target = Some(field.node_id);
+                    // A field one types in is then in forms mode, as after Enter on it, whatever
+                    // Auto Forms Mode says [obs, 228/s10]; JAWS's documentation: "Forms mode is
+                    // automatically enabled" (Surf's Up, Using Forms with JAWS).
+                    if typed_in {
+                        self.forms_mode = true;
+                        self.cursor.forms_mode_active = true;
+                        self.forms_mode_by_enter = true;
+                    }
                 }
                 self.speech.speak(&speech, true);
                 Some(speech)

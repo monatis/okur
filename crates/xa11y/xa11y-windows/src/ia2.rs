@@ -188,7 +188,7 @@ pub fn parse_attributes(raw: &str) -> BTreeMap<String, String> {
 #[cfg(target_os = "windows")]
 pub use com::capture::{
     capture_chromium_document, capture_chromium_object, chromium_caret_text, chromium_text_state,
-    perform_chromium_action, ChromiumTextField, Ia2Action, Ia2CaptureError,
+    has_chromium_document, perform_chromium_action, ChromiumTextField, Ia2Action, Ia2CaptureError,
 };
 
 #[cfg(target_os = "windows")]
@@ -547,6 +547,21 @@ mod com {
             /// Its default action: click a button or link, toggle a check box
             /// (`accDoDefaultAction`).
             DefaultAction,
+        }
+
+        /// Whether a top-level window holds a Chromium page: a `Chrome_RenderWidgetHostHWND`.
+        pub fn has_chromium_document(top_level: HWND) -> bool {
+            let class: Vec<u16> = "Chrome_RenderWidgetHostHWND\0".encode_utf16().collect();
+            // SAFETY: the class name is NUL-terminated and outlives the call.
+            unsafe {
+                FindWindowExW(
+                    Some(top_level),
+                    None,
+                    PCWSTR(class.as_ptr()),
+                    PCWSTR::null(),
+                )
+            }
+            .is_ok()
         }
 
         /// Performs `action` on the object with IA2 `unique_id` in the document of a Chromium

@@ -49,12 +49,13 @@ mod windows_actions {
     use std::sync::Mutex;
     use std::time::{Duration, Instant};
     use tokio::sync::mpsc::UnboundedSender;
+    use windows::Win32::Foundation::HWND;
     use windows::Win32::System::Com::{
         CoCreateInstance, CoInitializeEx, CLSCTX_INPROC_SERVER, COINIT_MULTITHREADED,
     };
     use windows::Win32::UI::Accessibility::{CUIAutomation8, IUIAutomation};
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
-    use xa11y_windows::ia2::{perform_chromium_action, Ia2Action};
+    use xa11y_windows::ia2::{has_chromium_document, perform_chromium_action, Ia2Action};
 
     /// How long to wait for the application to act on a key.
     const SETTLE: Duration = Duration::from_millis(250);
@@ -64,6 +65,23 @@ mod windows_actions {
     /// The application's head start on the first read: an idle application has acted on a
     /// key within a millisecond or two of the hook passing it on.
     const HEAD_START: Duration = Duration::from_millis(3);
+    /// How long a page action waits for a page to be in front.
+    const PAGE_WAIT: Duration = Duration::from_millis(500);
+
+    /// The window in front, for a page action. An action asked for as one of Okur's own
+    /// windows closes (OK in Select a Form Field) finds that window still in front for some
+    /// tens of milliseconds, so a page is waited for (old-pc, 2026-10-18).
+    fn page_in_front() -> HWND {
+        let started = Instant::now();
+        loop {
+            // SAFETY: plain Win32 call with no preconditions.
+            let window = unsafe { GetForegroundWindow() };
+            if has_chromium_document(window) || started.elapsed() >= PAGE_WAIT {
+                return window;
+            }
+            std::thread::sleep(POLL);
+        }
+    }
 
     enum Request {
         Object(i32, Ia2Action),
@@ -139,8 +157,7 @@ mod windows_actions {
                                 }
                             }
                             Request::Object(id, action) => {
-                                // SAFETY: plain Win32 call with no preconditions.
-                                let window = unsafe { GetForegroundWindow() };
+                                let window = page_in_front();
                                 if let Err(e) = perform_chromium_action(window, id, action) {
                                     tracing::warn!("{action:?} on IA2 object {id} failed: {e}");
                                 }
