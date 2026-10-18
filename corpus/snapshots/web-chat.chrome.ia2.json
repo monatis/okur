@@ -1,0 +1,1155 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Web Chat - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "155.0.8059.84",
+    "fixture_sha256": "7cffa8086cde56610a5c00b4ad40f127d472b4fb98cf4c601e52c6609793cd4e",
+    "captured_at_unix_ms": 1792301978103,
+    "node_count": 33,
+    "capture_ms": 288
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Web Chat",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/web-chat.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "unique_id": -892,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼￼",
+    "lines": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 2,
+        "attributes": {
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -890,
+        "attributes": {
+          "display": "block",
+          "tag": "header",
+          "text-align": "left",
+          "xml-roles": "banner"
+        },
+        "text": "￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "font-family": "Arial",
+              "font-size": "10pt",
+              "font-weight": "bold"
+            }
+          },
+          {
+            "start": 1,
+            "end": 2,
+            "attributes": {
+              "font-family": "Arial",
+              "font-size": "10pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 43,
+            "ia2_role": 1066,
+            "name": "Chats",
+            "msaa_states": 1048584,
+            "ia2_states": 1024,
+            "unique_id": -876,
+            "attributes": {
+              "display": "inline-block",
+              "name-from": "contents",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "text": "Chats",
+            "lines": [
+              [
+                0,
+                5
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 5,
+                "attributes": {
+                  "font-family": "Arial",
+                  "font-size": "10pt",
+                  "font-weight": "bold"
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 43,
+            "ia2_role": 1066,
+            "name": "Status",
+            "msaa_states": 1048576,
+            "ia2_states": 1024,
+            "unique_id": -873,
+            "attributes": {
+              "display": "inline-block",
+              "name-from": "contents",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "text": "Status",
+            "lines": [
+              [
+                0,
+                6
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 6,
+                "attributes": {
+                  "font-family": "Arial",
+                  "font-size": "10pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -870,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "font-family": "Times New Roman",
+              "font-size": "24pt",
+              "font-weight": "bold"
+            }
+          },
+          {
+            "start": 1,
+            "end": 2,
+            "attributes": {
+              "font-family": "Times New Roman",
+              "font-size": "18pt",
+              "font-weight": "bold"
+            }
+          },
+          {
+            "start": 2,
+            "end": 3,
+            "attributes": {
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          },
+          {
+            "start": 3,
+            "end": 4,
+            "attributes": {
+              "font-family": "Times New Roman",
+              "font-size": "18pt",
+              "font-weight": "bold"
+            }
+          },
+          {
+            "start": 4,
+            "end": 5,
+            "attributes": {
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Web Chat",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -900,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Web Chat",
+            "lines": [
+              [
+                0,
+                8
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 8,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "24pt",
+                  "font-weight": "bold"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Web Chat",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -898,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Web Chat",
+                "lines": [
+                  [
+                    0,
+                    8
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 8,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "24pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Messages",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -896,
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "group_position": [
+              2,
+              0,
+              0
+            ],
+            "text": "Messages",
+            "lines": [
+              [
+                0,
+                8
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 8,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "18pt",
+                  "font-weight": "bold"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Messages",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -901,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Messages",
+                "lines": [
+                  [
+                    0,
+                    8
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 8,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "18pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -886,
+            "attributes": {
+              "display": "block",
+              "id": "messages",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 3,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 28,
+                "ia2_role": 28,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -877,
+                "attributes": {
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "row"
+                },
+                "text": "￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 1048576,
+                    "ia2_states": 1024,
+                    "unique_id": -872,
+                    "attributes": {
+                      "class": "message",
+                      "display": "block",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "text": "￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 20,
+                        "ia2_role": 1060,
+                        "name": "You Good morning 09:00 Read",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -902,
+                        "attributes": {
+                          "display": "block",
+                          "explicit-name": "true",
+                          "name-from": "attribute",
+                          "tag": "div",
+                          "text-align": "left"
+                        },
+                        "text": "￼￼￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ],
+                          [
+                            1,
+                            2
+                          ],
+                          [
+                            2,
+                            3
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 3,
+                            "attributes": {
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 20,
+                            "ia2_role": 1060,
+                            "name": "You:",
+                            "msaa_states": 65536,
+                            "ia2_states": 1024,
+                            "unique_id": -903,
+                            "attributes": {
+                              "display": "inline",
+                              "explicit-name": "true",
+                              "name-from": "attribute",
+                              "tag": "span",
+                              "text-align": "left"
+                            }
+                          },
+                          {
+                            "msaa_role": 20,
+                            "ia2_role": 1060,
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -897,
+                            "attributes": {
+                              "display": "block",
+                              "tag": "div",
+                              "text-align": "left"
+                            },
+                            "text": "Good morning",
+                            "lines": [
+                              [
+                                0,
+                                12
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 12,
+                                "attributes": {
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "Good morning",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -881,
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "text": "Good morning",
+                                "lines": [
+                                  [
+                                    0,
+                                    12
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 12,
+                                    "attributes": {
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 43,
+                            "ia2_role": 43,
+                            "name": "09:00 Read",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -880,
+                            "attributes": {
+                              "display": "block",
+                              "name-from": "contents",
+                              "tag": "div",
+                              "text-align": "left",
+                              "xml-roles": "button"
+                            },
+                            "text": "09:00 Read",
+                            "lines": [
+                              [
+                                0,
+                                10
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 10,
+                                "attributes": {
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 28,
+                "ia2_role": 28,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -875,
+                "attributes": {
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "row"
+                },
+                "text": "￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 1048576,
+                    "ia2_states": 1024,
+                    "unique_id": -908,
+                    "attributes": {
+                      "class": "message",
+                      "display": "block",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "text": "￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 20,
+                        "ia2_role": 1060,
+                        "name": "You See you at noon 09:05 Read",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -867,
+                        "attributes": {
+                          "display": "block",
+                          "explicit-name": "true",
+                          "name-from": "attribute",
+                          "tag": "div",
+                          "text-align": "left"
+                        },
+                        "text": "￼￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ],
+                          [
+                            1,
+                            2
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 2,
+                            "attributes": {
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 20,
+                            "ia2_role": 1060,
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -893,
+                            "attributes": {
+                              "display": "block",
+                              "tag": "div",
+                              "text-align": "left"
+                            },
+                            "text": "See you at noon",
+                            "lines": [
+                              [
+                                0,
+                                15
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 15,
+                                "attributes": {
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "See you at noon",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -879,
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "text": "See you at noon",
+                                "lines": [
+                                  [
+                                    0,
+                                    15
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 15,
+                                    "attributes": {
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 43,
+                            "ia2_role": 43,
+                            "name": "09:05 Read",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -889,
+                            "attributes": {
+                              "display": "block",
+                              "name-from": "contents",
+                              "tag": "div",
+                              "text-align": "left",
+                              "xml-roles": "button"
+                            },
+                            "text": "09:05 Read",
+                            "lines": [
+                              [
+                                0,
+                                10
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 10,
+                                "attributes": {
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 28,
+                "ia2_role": 28,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -887,
+                "attributes": {
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "row"
+                },
+                "text": "￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 1048576,
+                    "ia2_states": 1024,
+                    "unique_id": -868,
+                    "attributes": {
+                      "class": "message",
+                      "display": "block",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "text": "￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 20,
+                        "ia2_role": 1060,
+                        "name": "You Bring the notes 09:10 Read",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -905,
+                        "attributes": {
+                          "display": "block",
+                          "explicit-name": "true",
+                          "name-from": "attribute",
+                          "tag": "div",
+                          "text-align": "left"
+                        },
+                        "text": "￼￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ],
+                          [
+                            1,
+                            2
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 2,
+                            "attributes": {
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 20,
+                            "ia2_role": 1060,
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -906,
+                            "attributes": {
+                              "display": "block",
+                              "tag": "div",
+                              "text-align": "left"
+                            },
+                            "text": "Bring the notes",
+                            "lines": [
+                              [
+                                0,
+                                15
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 15,
+                                "attributes": {
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "Bring the notes",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -895,
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "text": "Bring the notes",
+                                "lines": [
+                                  [
+                                    0,
+                                    15
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 15,
+                                    "attributes": {
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 43,
+                            "ia2_role": 43,
+                            "name": "09:10 Read",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -899,
+                            "attributes": {
+                              "display": "block",
+                              "name-from": "contents",
+                              "tag": "div",
+                              "text-align": "left",
+                              "xml-roles": "button"
+                            },
+                            "text": "09:10 Read",
+                            "lines": [
+                              [
+                                0,
+                                10
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 10,
+                                "attributes": {
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Compose",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -883,
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "group_position": [
+              2,
+              0,
+              0
+            ],
+            "text": "Compose",
+            "lines": [
+              [
+                0,
+                7
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 7,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "18pt",
+                  "font-weight": "bold"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Compose",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -869,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Compose",
+                "lines": [
+                  [
+                    0,
+                    7
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 7,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "18pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 42,
+            "ia2_role": 42,
+            "name": "Type a message",
+            "value": "\n",
+            "msaa_states": 1048576,
+            "ia2_states": 5640,
+            "unique_id": -885,
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "attribute",
+              "tag": "div",
+              "text-align": "left",
+              "text-model": "a1",
+              "xml-roles": "textbox"
+            },
+            "text": "\n",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 59,
+                "ia2_role": 59,
+                "name": "\n",
+                "msaa_states": 0,
+                "ia2_states": 1032,
+                "unique_id": -878,
+                "attributes": {
+                  "name-from": "contents",
+                  "text-align": "left"
+                },
+                "text": "\n",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

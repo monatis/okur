@@ -7,7 +7,7 @@
   "target_app": "chrome",
   "reset": { "keys": ["Ctrl+Home"] },
   "steps": [
-    { "id": "s1", "type": "key", "command": "Insert+T" },
+    { "id": "s1", "type": "key", "command": "Insert+T", "quiet_ms": 1500 },
     { "id": "s2", "type": "key", "command": "H" },
     { "id": "s3", "type": "key", "command": "Insert+F" },
     { "id": "s4", "type": "key", "command": "Down" },

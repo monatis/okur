@@ -1,0 +1,16 @@
+{
+  "id": "221-web-empty-element-lists",
+  "name": "A page without links, form fields, regions or placemarkers: what JAWS says for its lists (Insert+F7, Insert+F5, Insert+Ctrl+R) and K and Shift+K, instead of opening a dialog",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Escape", "Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+F7" },
+    { "id": "s2", "type": "key", "command": "Insert+F5" },
+    { "id": "s3", "type": "key", "command": "Insert+Ctrl+R" },
+    { "id": "s4", "type": "key", "command": "K" },
+    { "id": "s5", "type": "key", "command": "Shift+K" }
+  ]
+}

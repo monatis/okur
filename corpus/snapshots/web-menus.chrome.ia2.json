@@ -1,0 +1,512 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Web Menus - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "155.0.8059.84",
+    "fixture_sha256": "e142e5ba076ebe9ea2a177900f98de0d8d7e62135005e4bd10bad01f92eac4da",
+    "captured_at_unix_ms": 1792301967576,
+    "node_count": 13,
+    "capture_ms": 163
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Web Menus",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/web-menus.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "unique_id": -881,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼￼￼￼￼",
+    "lines": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        5
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "font-family": "Times New Roman",
+          "font-size": "24pt",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "start": 1,
+        "end": 3,
+        "attributes": {
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      },
+      {
+        "start": 3,
+        "end": 4,
+        "attributes": {
+          "font-family": "Consolas",
+          "font-size": "10pt"
+        }
+      },
+      {
+        "start": 4,
+        "end": 5,
+        "attributes": {
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1044,
+        "name": "Web Menus",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -874,
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "group_position": [
+          1,
+          0,
+          0
+        ],
+        "text": "Web Menus",
+        "lines": [
+          [
+            0,
+            9
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 9,
+            "attributes": {
+              "font-family": "Times New Roman",
+              "font-size": "24pt",
+              "font-weight": "bold"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Web Menus",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -875,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Web Menus",
+            "lines": [
+              [
+                0,
+                9
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 9,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "24pt",
+                  "font-weight": "bold"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 2,
+        "ia2_role": 2,
+        "name": "Main menu",
+        "msaa_states": 4,
+        "ia2_states": 1040,
+        "unique_id": -883,
+        "attributes": {
+          "display": "flex",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "setsize": "3",
+          "tag": "ul",
+          "text-align": "left",
+          "xml-roles": "menubar"
+        },
+        "group_position": [
+          0,
+          3,
+          0
+        ],
+        "text": "￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 3,
+            "attributes": {
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 12,
+            "ia2_role": 12,
+            "name": "File",
+            "msaa_states": 1074791424,
+            "ia2_states": 1024,
+            "unique_id": -867,
+            "attributes": {
+              "display": "inline",
+              "haspopup": "menu",
+              "name-from": "contents",
+              "posinset": "1",
+              "setsize": "3",
+              "tag": "span",
+              "text-align": "left",
+              "xml-roles": "menuitem"
+            },
+            "group_position": [
+              0,
+              3,
+              1
+            ],
+            "text": "File",
+            "lines": [
+              [
+                0,
+                4
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 4,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 12,
+            "ia2_role": 12,
+            "name": "Edit",
+            "msaa_states": 1074791424,
+            "ia2_states": 1024,
+            "unique_id": -877,
+            "attributes": {
+              "display": "inline",
+              "haspopup": "menu",
+              "name-from": "contents",
+              "posinset": "2",
+              "setsize": "3",
+              "tag": "span",
+              "text-align": "left",
+              "xml-roles": "menuitem"
+            },
+            "group_position": [
+              0,
+              3,
+              2
+            ],
+            "text": "Edit",
+            "lines": [
+              [
+                0,
+                4
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 4,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 12,
+            "ia2_role": 12,
+            "name": "Help",
+            "msaa_states": 1048576,
+            "ia2_states": 1024,
+            "unique_id": -888,
+            "attributes": {
+              "display": "inline",
+              "name-from": "contents",
+              "posinset": "3",
+              "setsize": "3",
+              "tag": "span",
+              "text-align": "left",
+              "xml-roles": "menuitem"
+            },
+            "group_position": [
+              0,
+              3,
+              3
+            ],
+            "text": "Help",
+            "lines": [
+              [
+                0,
+                4
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 4,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -872,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "￼",
+        "lines": [
+          [
+            0,
+            1
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 42,
+            "ia2_role": 1049,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -868,
+            "attributes": {
+              "display": "inline",
+              "tag": "label",
+              "text-align": "left"
+            },
+            "text": "Notes",
+            "lines": [
+              [
+                0,
+                5
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 5,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Notes",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -884,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Notes",
+                "lines": [
+                  [
+                    0,
+                    5
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 5,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 42,
+        "ia2_role": 42,
+        "name": "Notes",
+        "value": "First line of notes.",
+        "msaa_states": 1048576,
+        "ia2_states": 5640,
+        "unique_id": -879,
+        "attributes": {
+          "display": "inline-block",
+          "explicit-name": "true",
+          "id": "editor",
+          "name-from": "related-element",
+          "tag": "textarea",
+          "text-align": "left",
+          "text-model": "a1"
+        },
+        "text": "First line of notes.",
+        "lines": [
+          [
+            0,
+            20
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 20,
+            "attributes": {
+              "font-family": "Consolas",
+              "font-size": "10pt"
+            }
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -878,
+        "attributes": {
+          "display": "block",
+          "id": "chosen",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Chosen: none",
+        "lines": [
+          [
+            0,
+            12
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 12,
+            "attributes": {
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Chosen: none",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -876,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Chosen: none",
+            "lines": [
+              [
+                0,
+                12
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 12,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

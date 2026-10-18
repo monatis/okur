@@ -1,0 +1,2951 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Web App Patterns - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "155.0.8059.84",
+    "fixture_sha256": "f8305f4a493bcca6966c5446363fd5993e3304fa415df45ec0820f7e420b7ef8",
+    "captured_at_unix_ms": 1792301962293,
+    "node_count": 113,
+    "capture_ms": 98
+  },
+  "root": {
+    "control_type": 50030,
+    "localized_control_type": "document",
+    "name": "Web App Patterns",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html",
+    "value_is_read_only": true,
+    "aria_role": "document",
+    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+    "automation_id": "RootWebArea",
+    "runtime_id": [
+      42,
+      5375180,
+      4,
+      6,
+      1,
+      52
+    ],
+    "heading_level": 80050,
+    "is_enabled": true,
+    "is_offscreen": false,
+    "is_password": false,
+    "is_required_for_form": false,
+    "is_keyboard_focusable": true,
+    "has_keyboard_focus": true,
+    "is_control_element": true,
+    "is_content_element": true,
+    "children": [
+      {
+        "control_type": 50020,
+        "localized_control_type": "heading",
+        "name": "Web App Patterns",
+        "aria_role": "heading",
+        "aria_properties": "readonly=true;expanded=false;level=1;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          59
+        ],
+        "heading_level": 80051,
+        "level": 1,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "Web App Patterns",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              3
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false
+          }
+        ]
+      },
+      {
+        "control_type": 50020,
+        "localized_control_type": "heading",
+        "name": "Current links",
+        "aria_role": "heading",
+        "aria_properties": "readonly=true;expanded=false;level=2;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          60
+        ],
+        "heading_level": 80052,
+        "level": 2,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "Current links",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              4
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false
+          }
+        ]
+      },
+      {
+        "control_type": 50008,
+        "localized_control_type": "list",
+        "aria_role": "list",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          61
+        ],
+        "heading_level": 80050,
+        "size_of_set": 3,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50007,
+            "localized_control_type": "list item",
+            "name": "Overview",
+            "aria_role": "listitem",
+            "aria_properties": "readonly=true;expanded=false;level=1;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              62
+            ],
+            "heading_level": 80050,
+            "position_in_set": 1,
+            "size_of_set": 3,
+            "level": 1,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "• ",
+                "aria_role": "description",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  5
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false
+              },
+              {
+                "control_type": 50005,
+                "localized_control_type": "link",
+                "name": "Overview",
+                "value": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html#overview",
+                "value_is_read_only": true,
+                "aria_role": "link",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false;current=page",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  63
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": true,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50020,
+                    "localized_control_type": "text",
+                    "name": "Overview",
+                    "aria_role": "description",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      5375180,
+                      4,
+                      6,
+                      1,
+                      6
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": false,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": false,
+                    "has_keyboard_focus": false,
+                    "is_control_element": false,
+                    "is_content_element": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "control_type": 50007,
+            "localized_control_type": "list item",
+            "name": "Settings",
+            "aria_role": "listitem",
+            "aria_properties": "readonly=true;expanded=false;level=1;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              64
+            ],
+            "heading_level": 80050,
+            "position_in_set": 2,
+            "size_of_set": 3,
+            "level": 1,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "• ",
+                "aria_role": "description",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  7
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false
+              },
+              {
+                "control_type": 50005,
+                "localized_control_type": "link",
+                "name": "Settings",
+                "value": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html#",
+                "value_is_read_only": true,
+                "aria_role": "link",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  65
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": true,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50020,
+                    "localized_control_type": "text",
+                    "name": "Settings",
+                    "aria_role": "description",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      5375180,
+                      4,
+                      6,
+                      1,
+                      8
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": false,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": false,
+                    "has_keyboard_focus": false,
+                    "is_control_element": false,
+                    "is_content_element": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "control_type": 50007,
+            "localized_control_type": "list item",
+            "name": "Step two",
+            "aria_role": "listitem",
+            "aria_properties": "readonly=true;expanded=false;level=1;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              66
+            ],
+            "heading_level": 80050,
+            "position_in_set": 3,
+            "size_of_set": 3,
+            "level": 1,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "• ",
+                "aria_role": "description",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  9
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false
+              },
+              {
+                "control_type": 50005,
+                "localized_control_type": "link",
+                "name": "Step two",
+                "value": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html#step2",
+                "value_is_read_only": true,
+                "aria_role": "link",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false;current=step",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  67
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": true,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50020,
+                    "localized_control_type": "text",
+                    "name": "Step two",
+                    "aria_role": "description",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      5375180,
+                      4,
+                      6,
+                      1,
+                      10
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": false,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": false,
+                    "has_keyboard_focus": false,
+                    "is_control_element": false,
+                    "is_content_element": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "control_type": 50020,
+        "localized_control_type": "heading",
+        "name": "Described controls",
+        "aria_role": "heading",
+        "aria_properties": "readonly=true;expanded=false;level=2;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          68
+        ],
+        "heading_level": 80052,
+        "level": 2,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "Described controls",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              11
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "group",
+        "aria_role": "group",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          69
+        ],
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": false,
+        "is_content_element": false,
+        "children": [
+          {
+            "control_type": 50000,
+            "localized_control_type": "slide control",
+            "name": "Next slide",
+            "aria_role": "button",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              70
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "group",
+        "aria_role": "group",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          71
+        ],
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": false,
+        "is_content_element": false,
+        "children": [
+          {
+            "control_type": 50005,
+            "localized_control_type": "chip",
+            "name": "Rust",
+            "value": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html#rust",
+            "value_is_read_only": true,
+            "aria_role": "link",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              72
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "Rust",
+                "aria_role": "description",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  13
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "group",
+        "aria_role": "group",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          73
+        ],
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": false,
+        "is_content_element": false,
+        "children": [
+          {
+            "control_type": 50002,
+            "localized_control_type": "toggle",
+            "name": "Wrap",
+            "value_is_read_only": false,
+            "aria_role": "checkbox",
+            "aria_properties": "checked=false;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "automation_id": "wrap",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              74
+            ],
+            "heading_level": 80050,
+            "toggle_state": 0,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true
+          }
+        ]
+      },
+      {
+        "control_type": 50020,
+        "localized_control_type": "heading",
+        "name": "Popup buttons",
+        "aria_role": "heading",
+        "aria_properties": "readonly=true;expanded=false;level=2;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          76
+        ],
+        "heading_level": 80052,
+        "level": 2,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "Popup buttons",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              15
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "group",
+        "aria_role": "group",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          77
+        ],
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": false,
+        "is_content_element": false,
+        "children": [
+          {
+            "control_type": 50000,
+            "localized_control_type": "button",
+            "name": "Outline",
+            "aria_role": "button",
+            "aria_properties": "readonly=true;expanded=false;haspopup=menu;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              78
+            ],
+            "heading_level": 80050,
+            "expand_collapse_state": 0,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "group",
+        "aria_role": "group",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          79
+        ],
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": false,
+        "is_content_element": false,
+        "children": [
+          {
+            "control_type": 50000,
+            "localized_control_type": "button",
+            "name": "Actions",
+            "aria_role": "button",
+            "aria_properties": "readonly=true;expanded=false;haspopup=menu;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              80
+            ],
+            "heading_level": 80050,
+            "expand_collapse_state": 0,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "group",
+        "aria_role": "group",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          81
+        ],
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": false,
+        "is_content_element": false,
+        "children": [
+          {
+            "control_type": 50000,
+            "localized_control_type": "button",
+            "name": "Pick one",
+            "aria_role": "button",
+            "aria_properties": "readonly=true;expanded=false;haspopup=listbox;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              82
+            ],
+            "heading_level": 80050,
+            "expand_collapse_state": 3,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true
+          }
+        ]
+      },
+      {
+        "control_type": 50020,
+        "localized_control_type": "heading",
+        "name": "Fruit search",
+        "aria_role": "heading",
+        "aria_properties": "readonly=true;expanded=false;level=2;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          83
+        ],
+        "heading_level": 80052,
+        "level": 2,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "Fruit search",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              19
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "group",
+        "aria_role": "description",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          84
+        ],
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": false,
+        "is_content_element": false,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "Fruit",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              20
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true
+          }
+        ]
+      },
+      {
+        "control_type": 50003,
+        "localized_control_type": "combo box",
+        "name": "Fruit",
+        "value_is_read_only": false,
+        "aria_role": "combobox",
+        "aria_properties": "expanded=false;haspopup=listbox;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "automation_id": "q",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          85
+        ],
+        "heading_level": 80050,
+        "expand_collapse_state": 0,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": true,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true
+      },
+      {
+        "control_type": 50020,
+        "localized_control_type": "heading",
+        "name": "Tab from here",
+        "aria_role": "heading",
+        "aria_properties": "readonly=true;expanded=false;level=2;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          91
+        ],
+        "heading_level": 80052,
+        "level": 2,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "Tab from here",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              22
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "group",
+        "aria_role": "group",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          92
+        ],
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": false,
+        "is_content_element": false,
+        "children": [
+          {
+            "control_type": 50000,
+            "localized_control_type": "button",
+            "name": "Start",
+            "aria_role": "button",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              93
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "group",
+        "aria_role": "group",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          94
+        ],
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": false,
+        "is_content_element": false,
+        "children": [
+          {
+            "control_type": 50005,
+            "localized_control_type": "link",
+            "name": "Skipped link",
+            "value": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html#skipped",
+            "value_is_read_only": true,
+            "aria_role": "link",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              95
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "Skipped link",
+                "aria_role": "description",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  24
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "group",
+        "name": "Featured",
+        "aria_role": "group",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          96
+        ],
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50026,
+            "localized_control_type": "group",
+            "aria_role": "group",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              97
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "Group text",
+                "aria_role": "description",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  25
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "group",
+        "aria_role": "group",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          98
+        ],
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": true,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": false,
+        "is_content_element": false,
+        "children": [
+          {
+            "control_type": 50026,
+            "localized_control_type": "group",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              99
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "Notes",
+                "aria_role": "description",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  27
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": true,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true
+              }
+            ]
+          },
+          {
+            "control_type": 50004,
+            "localized_control_type": "edit",
+            "name": "Notes",
+            "value": "the lazy dog, then reads std::io again",
+            "value_is_read_only": false,
+            "aria_role": "textbox",
+            "aria_properties": "expanded=false;multiline=true;multiselectable=false;required=false;hasactions=false",
+            "automation_id": "notes",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              100
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true
+          }
+        ]
+      },
+      {
+        "control_type": 50020,
+        "localized_control_type": "heading",
+        "name": "Repository files",
+        "aria_role": "heading",
+        "aria_properties": "readonly=true;expanded=false;level=2;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          102
+        ],
+        "heading_level": 80052,
+        "level": 2,
+        "is_enabled": true,
+        "is_offscreen": true,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "Repository files",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              29
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "gezinme",
+        "name": "Files",
+        "aria_role": "navigation",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          103
+        ],
+        "heading_level": 80050,
+        "landmark_type": 80003,
+        "localized_landmark_type": "navigation",
+        "is_enabled": true,
+        "is_offscreen": true,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50008,
+            "localized_control_type": "list",
+            "aria_role": "list",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              104
+            ],
+            "heading_level": 80050,
+            "size_of_set": 1,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50007,
+                "localized_control_type": "list item",
+                "name": "README",
+                "aria_role": "listitem",
+                "aria_properties": "readonly=true;expanded=false;level=1;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  105
+                ],
+                "heading_level": 80050,
+                "position_in_set": 1,
+                "size_of_set": 1,
+                "level": 1,
+                "is_enabled": true,
+                "is_offscreen": true,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50020,
+                    "localized_control_type": "text",
+                    "name": "• ",
+                    "aria_role": "description",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      5375180,
+                      4,
+                      6,
+                      1,
+                      30
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": true,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": false,
+                    "has_keyboard_focus": false,
+                    "is_control_element": false,
+                    "is_content_element": false
+                  },
+                  {
+                    "control_type": 50005,
+                    "localized_control_type": "link",
+                    "name": "README",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html#readme",
+                    "value_is_read_only": true,
+                    "aria_role": "link",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false;current=page",
+                    "runtime_id": [
+                      42,
+                      5375180,
+                      4,
+                      6,
+                      1,
+                      106
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": true,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": true,
+                    "has_keyboard_focus": false,
+                    "is_control_element": true,
+                    "is_content_element": true,
+                    "children": [
+                      {
+                        "control_type": 50020,
+                        "localized_control_type": "text",
+                        "name": "README",
+                        "aria_role": "description",
+                        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                        "runtime_id": [
+                          42,
+                          5375180,
+                          4,
+                          6,
+                          1,
+                          31
+                        ],
+                        "heading_level": 80050,
+                        "is_enabled": true,
+                        "is_offscreen": true,
+                        "is_password": false,
+                        "is_required_for_form": false,
+                        "is_keyboard_focusable": false,
+                        "has_keyboard_focus": false,
+                        "is_control_element": false,
+                        "is_content_element": false
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "control_type": 50020,
+        "localized_control_type": "heading",
+        "name": "Workbench region",
+        "aria_role": "heading",
+        "aria_properties": "readonly=true;expanded=false;level=2;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          107
+        ],
+        "heading_level": 80052,
+        "level": 2,
+        "is_enabled": true,
+        "is_offscreen": true,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "Workbench region",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              32
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false
+          }
+        ]
+      },
+      {
+        "control_type": 50033,
+        "localized_control_type": "application",
+        "name": "Workbench",
+        "aria_role": "application",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          108
+        ],
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": true,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50000,
+            "localized_control_type": "button",
+            "name": "First tool",
+            "aria_role": "button",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              109
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true
+          },
+          {
+            "control_type": 50000,
+            "localized_control_type": "button",
+            "name": "Second tool",
+            "aria_role": "button",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              110
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true
+          },
+          {
+            "control_type": 50026,
+            "localized_control_type": "group",
+            "aria_role": "group",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "automation_id": "keys",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              111
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "Keys:",
+                "aria_role": "description",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  36
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": true,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "group",
+        "aria_role": "group",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          112
+        ],
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": true,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": false,
+        "is_content_element": false,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "End of page",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              37
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true
+          }
+        ]
+      },
+      {
+        "control_type": 50020,
+        "localized_control_type": "heading",
+        "name": "Files table",
+        "aria_role": "heading",
+        "aria_properties": "readonly=true;expanded=false;level=2;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          113
+        ],
+        "heading_level": 80052,
+        "level": 2,
+        "is_enabled": true,
+        "is_offscreen": true,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "Files table",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              38
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false
+          }
+        ]
+      },
+      {
+        "control_type": 50036,
+        "localized_control_type": "table",
+        "aria_role": "grid",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          114
+        ],
+        "heading_level": 80050,
+        "grid_row_count": 4,
+        "grid_column_count": 2,
+        "is_enabled": true,
+        "is_offscreen": true,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50029,
+            "localized_control_type": "row",
+            "aria_role": "row",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              116
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50029,
+                "localized_control_type": "column header",
+                "name": "Name",
+                "aria_role": "columnheader",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  117
+                ],
+                "heading_level": 80050,
+                "grid_row": 0,
+                "grid_column": 0,
+                "grid_row_span": 1,
+                "grid_column_span": 1,
+                "is_enabled": true,
+                "is_offscreen": true,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50020,
+                    "localized_control_type": "text",
+                    "name": "Name",
+                    "aria_role": "description",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      5375180,
+                      4,
+                      6,
+                      1,
+                      39
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": true,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": false,
+                    "has_keyboard_focus": false,
+                    "is_control_element": false,
+                    "is_content_element": false
+                  }
+                ]
+              },
+              {
+                "control_type": 50029,
+                "localized_control_type": "column header",
+                "name": "Message",
+                "aria_role": "columnheader",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  118
+                ],
+                "heading_level": 80050,
+                "grid_row": 0,
+                "grid_column": 1,
+                "grid_row_span": 1,
+                "grid_column_span": 1,
+                "is_enabled": true,
+                "is_offscreen": true,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50020,
+                    "localized_control_type": "text",
+                    "name": "Message",
+                    "aria_role": "description",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      5375180,
+                      4,
+                      6,
+                      1,
+                      40
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": true,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": false,
+                    "has_keyboard_focus": false,
+                    "is_control_element": false,
+                    "is_content_element": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "control_type": 50029,
+            "localized_control_type": "row",
+            "aria_role": "row",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              119
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50029,
+                "localized_control_type": "item",
+                "name": "alpha.rs",
+                "aria_role": "gridcell",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  120
+                ],
+                "heading_level": 80050,
+                "grid_row": 1,
+                "grid_column": 0,
+                "grid_row_span": 1,
+                "grid_column_span": 1,
+                "is_enabled": true,
+                "is_offscreen": true,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50005,
+                    "localized_control_type": "link",
+                    "name": "alpha.rs",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html#alpha",
+                    "value_is_read_only": true,
+                    "aria_role": "link",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      5375180,
+                      4,
+                      6,
+                      1,
+                      121
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": true,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": true,
+                    "has_keyboard_focus": false,
+                    "is_control_element": true,
+                    "is_content_element": true,
+                    "children": [
+                      {
+                        "control_type": 50020,
+                        "localized_control_type": "text",
+                        "name": "alpha.rs",
+                        "aria_role": "description",
+                        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                        "runtime_id": [
+                          42,
+                          5375180,
+                          4,
+                          6,
+                          1,
+                          41
+                        ],
+                        "heading_level": 80050,
+                        "is_enabled": true,
+                        "is_offscreen": true,
+                        "is_password": false,
+                        "is_required_for_form": false,
+                        "is_keyboard_focusable": false,
+                        "has_keyboard_focus": false,
+                        "is_control_element": false,
+                        "is_content_element": false
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "control_type": 50029,
+                "localized_control_type": "item",
+                "name": "first commit",
+                "aria_role": "gridcell",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  122
+                ],
+                "heading_level": 80050,
+                "grid_row": 1,
+                "grid_column": 1,
+                "grid_row_span": 1,
+                "grid_column_span": 1,
+                "is_enabled": true,
+                "is_offscreen": true,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50005,
+                    "localized_control_type": "link",
+                    "name": "first commit",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html#first",
+                    "value_is_read_only": true,
+                    "aria_role": "link",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      5375180,
+                      4,
+                      6,
+                      1,
+                      123
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": true,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": true,
+                    "has_keyboard_focus": false,
+                    "is_control_element": true,
+                    "is_content_element": true,
+                    "children": [
+                      {
+                        "control_type": 50020,
+                        "localized_control_type": "text",
+                        "name": "first commit",
+                        "aria_role": "description",
+                        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                        "runtime_id": [
+                          42,
+                          5375180,
+                          4,
+                          6,
+                          1,
+                          42
+                        ],
+                        "heading_level": 80050,
+                        "is_enabled": true,
+                        "is_offscreen": true,
+                        "is_password": false,
+                        "is_required_for_form": false,
+                        "is_keyboard_focusable": false,
+                        "has_keyboard_focus": false,
+                        "is_control_element": false,
+                        "is_content_element": false
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "control_type": 50029,
+            "localized_control_type": "row",
+            "aria_role": "row",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              124
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50029,
+                "localized_control_type": "item",
+                "name": "beta.rs",
+                "aria_role": "gridcell",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  125
+                ],
+                "heading_level": 80050,
+                "grid_row": 2,
+                "grid_column": 0,
+                "grid_row_span": 1,
+                "grid_column_span": 1,
+                "is_enabled": true,
+                "is_offscreen": true,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50005,
+                    "localized_control_type": "link",
+                    "name": "beta.rs",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html#beta",
+                    "value_is_read_only": true,
+                    "aria_role": "link",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      5375180,
+                      4,
+                      6,
+                      1,
+                      126
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": true,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": true,
+                    "has_keyboard_focus": false,
+                    "is_control_element": true,
+                    "is_content_element": true,
+                    "children": [
+                      {
+                        "control_type": 50020,
+                        "localized_control_type": "text",
+                        "name": "beta.rs",
+                        "aria_role": "description",
+                        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                        "runtime_id": [
+                          42,
+                          5375180,
+                          4,
+                          6,
+                          1,
+                          43
+                        ],
+                        "heading_level": 80050,
+                        "is_enabled": true,
+                        "is_offscreen": true,
+                        "is_password": false,
+                        "is_required_for_form": false,
+                        "is_keyboard_focusable": false,
+                        "has_keyboard_focus": false,
+                        "is_control_element": false,
+                        "is_content_element": false
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "control_type": 50029,
+                "localized_control_type": "item",
+                "name": "no link",
+                "aria_role": "gridcell",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  127
+                ],
+                "heading_level": 80050,
+                "grid_row": 2,
+                "grid_column": 1,
+                "grid_row_span": 1,
+                "grid_column_span": 1,
+                "is_enabled": true,
+                "is_offscreen": true,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50020,
+                    "localized_control_type": "text",
+                    "name": "no link",
+                    "aria_role": "description",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      5375180,
+                      4,
+                      6,
+                      1,
+                      44
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": true,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": false,
+                    "has_keyboard_focus": false,
+                    "is_control_element": false,
+                    "is_content_element": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "control_type": 50029,
+            "localized_control_type": "row",
+            "aria_role": "row",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              128
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50029,
+                "localized_control_type": "item",
+                "name": "gamma.rs",
+                "aria_role": "gridcell",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  129
+                ],
+                "heading_level": 80050,
+                "grid_row": 3,
+                "grid_column": 0,
+                "grid_row_span": 1,
+                "grid_column_span": 1,
+                "is_enabled": true,
+                "is_offscreen": true,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50005,
+                    "localized_control_type": "link",
+                    "name": "gamma.rs",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html#gamma",
+                    "value_is_read_only": true,
+                    "aria_role": "link",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      5375180,
+                      4,
+                      6,
+                      1,
+                      130
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": true,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": true,
+                    "has_keyboard_focus": false,
+                    "is_control_element": true,
+                    "is_content_element": true,
+                    "children": [
+                      {
+                        "control_type": 50020,
+                        "localized_control_type": "text",
+                        "name": "gamma.rs",
+                        "aria_role": "description",
+                        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                        "runtime_id": [
+                          42,
+                          5375180,
+                          4,
+                          6,
+                          1,
+                          45
+                        ],
+                        "heading_level": 80050,
+                        "is_enabled": true,
+                        "is_offscreen": true,
+                        "is_password": false,
+                        "is_required_for_form": false,
+                        "is_keyboard_focusable": false,
+                        "has_keyboard_focus": false,
+                        "is_control_element": false,
+                        "is_content_element": false
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "control_type": 50029,
+                "localized_control_type": "item",
+                "name": "third commit",
+                "aria_role": "gridcell",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  131
+                ],
+                "heading_level": 80050,
+                "grid_row": 3,
+                "grid_column": 1,
+                "grid_row_span": 1,
+                "grid_column_span": 1,
+                "is_enabled": true,
+                "is_offscreen": true,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50005,
+                    "localized_control_type": "link",
+                    "name": "third commit",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html#third",
+                    "value_is_read_only": true,
+                    "aria_role": "link",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      5375180,
+                      4,
+                      6,
+                      1,
+                      132
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": true,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": true,
+                    "has_keyboard_focus": false,
+                    "is_control_element": true,
+                    "is_content_element": true,
+                    "children": [
+                      {
+                        "control_type": 50020,
+                        "localized_control_type": "text",
+                        "name": "third commit",
+                        "aria_role": "description",
+                        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                        "runtime_id": [
+                          42,
+                          5375180,
+                          4,
+                          6,
+                          1,
+                          46
+                        ],
+                        "heading_level": 80050,
+                        "is_enabled": true,
+                        "is_offscreen": true,
+                        "is_password": false,
+                        "is_required_for_form": false,
+                        "is_keyboard_focusable": false,
+                        "has_keyboard_focus": false,
+                        "is_control_element": false,
+                        "is_content_element": false
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "control_type": 50020,
+        "localized_control_type": "heading",
+        "name": "Landmarks",
+        "aria_role": "heading",
+        "aria_properties": "readonly=true;expanded=false;level=2;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          133
+        ],
+        "heading_level": 80052,
+        "level": 2,
+        "is_enabled": true,
+        "is_offscreen": true,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "Landmarks",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              47
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "complementary",
+        "name": "Related",
+        "aria_role": "complementary",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          134
+        ],
+        "heading_level": 80050,
+        "landmark_type": 80000,
+        "localized_landmark_type": "tamamlayıcı",
+        "is_enabled": true,
+        "is_offscreen": true,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50005,
+            "localized_control_type": "link",
+            "name": "Aside link",
+            "value": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html#aside",
+            "value_is_read_only": true,
+            "aria_role": "link",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              135
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "Aside link",
+                "aria_role": "description",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  48
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": true,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "ara",
+        "name": "Site",
+        "aria_role": "search",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          2
+        ],
+        "heading_level": 80050,
+        "landmark_type": 80004,
+        "localized_landmark_type": "search",
+        "is_enabled": true,
+        "is_offscreen": true,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50005,
+            "localized_control_type": "link",
+            "name": "Search link",
+            "value": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html#search",
+            "value_is_read_only": true,
+            "aria_role": "link",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              136
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "Search link",
+                "aria_role": "description",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  49
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": true,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "bölge",
+        "name": "Updates",
+        "aria_role": "region",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          137
+        ],
+        "heading_level": 80050,
+        "landmark_type": 80000,
+        "localized_landmark_type": "bölge",
+        "is_enabled": true,
+        "is_offscreen": true,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50005,
+            "localized_control_type": "link",
+            "name": "Region link",
+            "value": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html#region",
+            "value_is_read_only": true,
+            "aria_role": "link",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              138
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "Region link",
+                "aria_role": "description",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  50
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": true,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "altbilgi",
+        "aria_role": "contentinfo",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          5375180,
+          4,
+          6,
+          1,
+          139
+        ],
+        "heading_level": 80050,
+        "landmark_type": 80000,
+        "localized_landmark_type": "içerik bilgisi",
+        "is_enabled": true,
+        "is_offscreen": true,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50005,
+            "localized_control_type": "link",
+            "name": "Footer link",
+            "value": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html#footer",
+            "value_is_read_only": true,
+            "aria_role": "link",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              5375180,
+              4,
+              6,
+              1,
+              140
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": true,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "Footer link",
+                "aria_role": "description",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  5375180,
+                  4,
+                  6,
+                  1,
+                  51
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": true,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

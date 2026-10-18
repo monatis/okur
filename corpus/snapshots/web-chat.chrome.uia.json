@@ -1,0 +1,853 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Web Chat - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "155.0.8059.84",
+    "fixture_sha256": "7cffa8086cde56610a5c00b4ad40f127d472b4fb98cf4c601e52c6609793cd4e",
+    "captured_at_unix_ms": 1792301983255,
+    "node_count": 33,
+    "capture_ms": 68
+  },
+  "root": {
+    "control_type": 50030,
+    "localized_control_type": "document",
+    "name": "Web Chat",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/web-chat.html",
+    "value_is_read_only": true,
+    "aria_role": "document",
+    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+    "automation_id": "RootWebArea",
+    "runtime_id": [
+      42,
+      3867992,
+      4,
+      6,
+      1,
+      14
+    ],
+    "heading_level": 80050,
+    "is_enabled": true,
+    "is_offscreen": false,
+    "is_password": false,
+    "is_required_for_form": false,
+    "is_keyboard_focusable": true,
+    "has_keyboard_focus": true,
+    "is_control_element": true,
+    "is_content_element": true,
+    "children": [
+      {
+        "control_type": 50026,
+        "localized_control_type": "üst bilgi",
+        "aria_role": "banner",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          3867992,
+          4,
+          6,
+          1,
+          21
+        ],
+        "heading_level": 80050,
+        "landmark_type": 80000,
+        "localized_landmark_type": "banner",
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50000,
+            "localized_control_type": "geçiş düğmesi",
+            "name": "Chats",
+            "aria_role": "button",
+            "aria_properties": "pressed=true;readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              3867992,
+              4,
+              6,
+              1,
+              22
+            ],
+            "heading_level": 80050,
+            "toggle_state": 1,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true
+          },
+          {
+            "control_type": 50000,
+            "localized_control_type": "geçiş düğmesi",
+            "name": "Status",
+            "aria_role": "button",
+            "aria_properties": "pressed=false;readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              3867992,
+              4,
+              6,
+              1,
+              23
+            ],
+            "heading_level": 80050,
+            "toggle_state": 0,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "main",
+        "aria_role": "main",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          3867992,
+          4,
+          6,
+          1,
+          24
+        ],
+        "heading_level": 80050,
+        "landmark_type": 80002,
+        "localized_landmark_type": "main",
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "heading",
+            "name": "Web Chat",
+            "aria_role": "heading",
+            "aria_properties": "readonly=true;expanded=false;level=1;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              3867992,
+              4,
+              6,
+              1,
+              25
+            ],
+            "heading_level": 80051,
+            "level": 1,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "Web Chat",
+                "aria_role": "description",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  3867992,
+                  4,
+                  6,
+                  1,
+                  4
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false
+              }
+            ]
+          },
+          {
+            "control_type": 50020,
+            "localized_control_type": "heading",
+            "name": "Messages",
+            "aria_role": "heading",
+            "aria_properties": "readonly=true;expanded=false;level=2;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              3867992,
+              4,
+              6,
+              1,
+              26
+            ],
+            "heading_level": 80052,
+            "level": 2,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "Messages",
+                "aria_role": "description",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  3867992,
+                  4,
+                  6,
+                  1,
+                  5
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false
+              }
+            ]
+          },
+          {
+            "control_type": 50026,
+            "localized_control_type": "group",
+            "aria_role": "group",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "automation_id": "messages",
+            "runtime_id": [
+              42,
+              3867992,
+              4,
+              6,
+              1,
+              27
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false,
+            "children": [
+              {
+                "control_type": 50029,
+                "localized_control_type": "row",
+                "aria_role": "row",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  3867992,
+                  4,
+                  6,
+                  1,
+                  28
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50026,
+                    "localized_control_type": "group",
+                    "aria_role": "group",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "class_name": "message",
+                    "runtime_id": [
+                      42,
+                      3867992,
+                      4,
+                      6,
+                      1,
+                      29
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": false,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": true,
+                    "has_keyboard_focus": false,
+                    "is_control_element": true,
+                    "is_content_element": true,
+                    "children": [
+                      {
+                        "control_type": 50026,
+                        "localized_control_type": "group",
+                        "name": "You Good morning 09:00 Read",
+                        "aria_role": "group",
+                        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                        "runtime_id": [
+                          42,
+                          3867992,
+                          4,
+                          6,
+                          1,
+                          30
+                        ],
+                        "heading_level": 80050,
+                        "is_enabled": true,
+                        "is_offscreen": false,
+                        "is_password": false,
+                        "is_required_for_form": false,
+                        "is_keyboard_focusable": false,
+                        "has_keyboard_focus": false,
+                        "is_control_element": true,
+                        "is_content_element": true,
+                        "children": [
+                          {
+                            "control_type": 50026,
+                            "localized_control_type": "group",
+                            "name": "You:",
+                            "aria_role": "group",
+                            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                            "runtime_id": [
+                              42,
+                              3867992,
+                              4,
+                              6,
+                              1,
+                              31
+                            ],
+                            "heading_level": 80050,
+                            "is_enabled": true,
+                            "is_offscreen": true,
+                            "is_password": false,
+                            "is_required_for_form": false,
+                            "is_keyboard_focusable": false,
+                            "has_keyboard_focus": false,
+                            "is_control_element": true,
+                            "is_content_element": true
+                          },
+                          {
+                            "control_type": 50026,
+                            "localized_control_type": "group",
+                            "aria_role": "group",
+                            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                            "runtime_id": [
+                              42,
+                              3867992,
+                              4,
+                              6,
+                              1,
+                              32
+                            ],
+                            "heading_level": 80050,
+                            "is_enabled": true,
+                            "is_offscreen": false,
+                            "is_password": false,
+                            "is_required_for_form": false,
+                            "is_keyboard_focusable": false,
+                            "has_keyboard_focus": false,
+                            "is_control_element": false,
+                            "is_content_element": false,
+                            "children": [
+                              {
+                                "control_type": 50020,
+                                "localized_control_type": "text",
+                                "name": "Good morning",
+                                "aria_role": "description",
+                                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                                "runtime_id": [
+                                  42,
+                                  3867992,
+                                  4,
+                                  6,
+                                  1,
+                                  6
+                                ],
+                                "heading_level": 80050,
+                                "is_enabled": true,
+                                "is_offscreen": false,
+                                "is_password": false,
+                                "is_required_for_form": false,
+                                "is_keyboard_focusable": false,
+                                "has_keyboard_focus": false,
+                                "is_control_element": false,
+                                "is_content_element": false
+                              }
+                            ]
+                          },
+                          {
+                            "control_type": 50000,
+                            "localized_control_type": "button",
+                            "name": "09:00 Read",
+                            "aria_role": "button",
+                            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                            "runtime_id": [
+                              42,
+                              3867992,
+                              4,
+                              6,
+                              1,
+                              33
+                            ],
+                            "heading_level": 80050,
+                            "is_enabled": true,
+                            "is_offscreen": false,
+                            "is_password": false,
+                            "is_required_for_form": false,
+                            "is_keyboard_focusable": false,
+                            "has_keyboard_focus": false,
+                            "is_control_element": true,
+                            "is_content_element": true
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "control_type": 50029,
+                "localized_control_type": "row",
+                "aria_role": "row",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  3867992,
+                  4,
+                  6,
+                  1,
+                  34
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50026,
+                    "localized_control_type": "group",
+                    "aria_role": "group",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "class_name": "message",
+                    "runtime_id": [
+                      42,
+                      3867992,
+                      4,
+                      6,
+                      1,
+                      35
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": false,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": true,
+                    "has_keyboard_focus": false,
+                    "is_control_element": true,
+                    "is_content_element": true,
+                    "children": [
+                      {
+                        "control_type": 50026,
+                        "localized_control_type": "group",
+                        "name": "You See you at noon 09:05 Read",
+                        "aria_role": "group",
+                        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                        "runtime_id": [
+                          42,
+                          3867992,
+                          4,
+                          6,
+                          1,
+                          36
+                        ],
+                        "heading_level": 80050,
+                        "is_enabled": true,
+                        "is_offscreen": false,
+                        "is_password": false,
+                        "is_required_for_form": false,
+                        "is_keyboard_focusable": false,
+                        "has_keyboard_focus": false,
+                        "is_control_element": true,
+                        "is_content_element": true,
+                        "children": [
+                          {
+                            "control_type": 50026,
+                            "localized_control_type": "group",
+                            "aria_role": "group",
+                            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                            "runtime_id": [
+                              42,
+                              3867992,
+                              4,
+                              6,
+                              1,
+                              37
+                            ],
+                            "heading_level": 80050,
+                            "is_enabled": true,
+                            "is_offscreen": false,
+                            "is_password": false,
+                            "is_required_for_form": false,
+                            "is_keyboard_focusable": false,
+                            "has_keyboard_focus": false,
+                            "is_control_element": false,
+                            "is_content_element": false,
+                            "children": [
+                              {
+                                "control_type": 50020,
+                                "localized_control_type": "text",
+                                "name": "See you at noon",
+                                "aria_role": "description",
+                                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                                "runtime_id": [
+                                  42,
+                                  3867992,
+                                  4,
+                                  6,
+                                  1,
+                                  8
+                                ],
+                                "heading_level": 80050,
+                                "is_enabled": true,
+                                "is_offscreen": false,
+                                "is_password": false,
+                                "is_required_for_form": false,
+                                "is_keyboard_focusable": false,
+                                "has_keyboard_focus": false,
+                                "is_control_element": false,
+                                "is_content_element": false
+                              }
+                            ]
+                          },
+                          {
+                            "control_type": 50000,
+                            "localized_control_type": "button",
+                            "name": "09:05 Read",
+                            "aria_role": "button",
+                            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                            "runtime_id": [
+                              42,
+                              3867992,
+                              4,
+                              6,
+                              1,
+                              38
+                            ],
+                            "heading_level": 80050,
+                            "is_enabled": true,
+                            "is_offscreen": false,
+                            "is_password": false,
+                            "is_required_for_form": false,
+                            "is_keyboard_focusable": false,
+                            "has_keyboard_focus": false,
+                            "is_control_element": true,
+                            "is_content_element": true
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "control_type": 50029,
+                "localized_control_type": "row",
+                "aria_role": "row",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  3867992,
+                  4,
+                  6,
+                  1,
+                  39
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50026,
+                    "localized_control_type": "group",
+                    "aria_role": "group",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "class_name": "message",
+                    "runtime_id": [
+                      42,
+                      3867992,
+                      4,
+                      6,
+                      1,
+                      40
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": false,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": true,
+                    "has_keyboard_focus": false,
+                    "is_control_element": true,
+                    "is_content_element": true,
+                    "children": [
+                      {
+                        "control_type": 50026,
+                        "localized_control_type": "group",
+                        "name": "You Bring the notes 09:10 Read",
+                        "aria_role": "group",
+                        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                        "runtime_id": [
+                          42,
+                          3867992,
+                          4,
+                          6,
+                          1,
+                          41
+                        ],
+                        "heading_level": 80050,
+                        "is_enabled": true,
+                        "is_offscreen": false,
+                        "is_password": false,
+                        "is_required_for_form": false,
+                        "is_keyboard_focusable": false,
+                        "has_keyboard_focus": false,
+                        "is_control_element": true,
+                        "is_content_element": true,
+                        "children": [
+                          {
+                            "control_type": 50026,
+                            "localized_control_type": "group",
+                            "aria_role": "group",
+                            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                            "runtime_id": [
+                              42,
+                              3867992,
+                              4,
+                              6,
+                              1,
+                              42
+                            ],
+                            "heading_level": 80050,
+                            "is_enabled": true,
+                            "is_offscreen": false,
+                            "is_password": false,
+                            "is_required_for_form": false,
+                            "is_keyboard_focusable": false,
+                            "has_keyboard_focus": false,
+                            "is_control_element": false,
+                            "is_content_element": false,
+                            "children": [
+                              {
+                                "control_type": 50020,
+                                "localized_control_type": "text",
+                                "name": "Bring the notes",
+                                "aria_role": "description",
+                                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                                "runtime_id": [
+                                  42,
+                                  3867992,
+                                  4,
+                                  6,
+                                  1,
+                                  10
+                                ],
+                                "heading_level": 80050,
+                                "is_enabled": true,
+                                "is_offscreen": false,
+                                "is_password": false,
+                                "is_required_for_form": false,
+                                "is_keyboard_focusable": false,
+                                "has_keyboard_focus": false,
+                                "is_control_element": false,
+                                "is_content_element": false
+                              }
+                            ]
+                          },
+                          {
+                            "control_type": 50000,
+                            "localized_control_type": "button",
+                            "name": "09:10 Read",
+                            "aria_role": "button",
+                            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                            "runtime_id": [
+                              42,
+                              3867992,
+                              4,
+                              6,
+                              1,
+                              43
+                            ],
+                            "heading_level": 80050,
+                            "is_enabled": true,
+                            "is_offscreen": false,
+                            "is_password": false,
+                            "is_required_for_form": false,
+                            "is_keyboard_focusable": false,
+                            "has_keyboard_focus": false,
+                            "is_control_element": true,
+                            "is_content_element": true
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "control_type": 50020,
+            "localized_control_type": "heading",
+            "name": "Compose",
+            "aria_role": "heading",
+            "aria_properties": "readonly=true;expanded=false;level=2;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              3867992,
+              4,
+              6,
+              1,
+              44
+            ],
+            "heading_level": 80052,
+            "level": 2,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "Compose",
+                "aria_role": "description",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  3867992,
+                  4,
+                  6,
+                  1,
+                  12
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false
+              }
+            ]
+          },
+          {
+            "control_type": 50004,
+            "localized_control_type": "edit",
+            "name": "Type a message",
+            "value": "\n",
+            "value_is_read_only": false,
+            "aria_role": "textbox",
+            "aria_properties": "expanded=false;multiline=true;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              3867992,
+              4,
+              6,
+              1,
+              45
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "\n",
+                "aria_role": "description",
+                "aria_properties": "expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  3867992,
+                  4,
+                  6,
+                  1,
+                  13
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

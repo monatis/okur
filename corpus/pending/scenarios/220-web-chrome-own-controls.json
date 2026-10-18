@@ -1,0 +1,23 @@
+{
+  "id": "220-web-chrome-own-controls",
+  "name": "Chrome's own controls over a page: the app menu (Alt+F, Down, Escape) and reading on, the address bar (Ctrl+L, Escape), a new tab and back (Ctrl+T, Ctrl+W)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Escape", "Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Alt+F" },
+    { "id": "s2", "type": "key", "command": "Down" },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Down" },
+    { "id": "s5", "type": "key", "command": "Escape" },
+    { "id": "s6", "type": "key", "command": "Down" },
+    { "id": "s7", "type": "key", "command": "Ctrl+L" },
+    { "id": "s8", "type": "key", "command": "Escape" },
+    { "id": "s9", "type": "key", "command": "Down" },
+    { "id": "s10", "type": "key", "command": "Ctrl+T" },
+    { "id": "s11", "type": "key", "command": "Ctrl+W" },
+    { "id": "s12", "type": "key", "command": "Down" }
+  ]
+}
