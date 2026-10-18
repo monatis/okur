@@ -61,6 +61,26 @@ divergences! {
      main window as one of them opens: a side effect, not a feature to copy.",
     "the owner, 2026-10-18";
 
+    Difference::JawsAlsoSays("JAWS Professional") => ["226-web-element-lists/s3"],
+    "Going from Virtual HTML Features to the list chosen in it, JAWS's speech passes through \
+     its own main window: its title and the tutor message of a list in it. The same side \
+     effect as its version.",
+    "the owner's ruling on JAWS's version, 2026-10-18";
+
+    Difference::JawsAlsoSays("To move to an item press the Arrow keys.") => [
+        "226-web-element-lists/s3",
+    ],
+    "The tutor message of the list in JAWS's main window, heard as JAWS goes from Virtual \
+     HTML Features to the chosen list.",
+    "the owner's ruling on JAWS's version, 2026-10-18";
+
+    Difference::JawsAlsoSays("Web App Patterns - Google Chrome") => [
+        "226-web-element-lists/s1",
+    ],
+    "Opening Virtual HTML Features, JAWS's speech passed through the browser's window (its \
+     title) on the way to its dialog. The same keys recorded again (230/s1) have none of it.",
+    "the owner's ruling on JAWS's version, 2026-10-18";
+
     Difference::JawsAlsoSays(",") => ["230-web-element-lists-items/s18"],
     "Virtual HTML Features shows \"Radio Buttons List,\" with a stray comma, where every other \
      list is \"... List\": a typo in JAWS's text, not a name to copy.",
@@ -95,8 +115,8 @@ divergences! {
 }
 
 /// The divergence covering `step`, if any.
-pub fn for_step(step: &str) -> Option<&'static Divergence> {
-    DIVERGENCES.iter().find(|d| d.steps.contains(&step))
+pub fn for_step(step: &str) -> impl Iterator<Item = &'static Divergence> + '_ {
+    DIVERGENCES.iter().filter(move |d| d.steps.contains(&step))
 }
 
 /// How Okur's speech for a step compares with JAWS's.
@@ -108,24 +128,27 @@ pub enum Comparison {
     Accepted,
 }
 
-/// Compares Okur's speech for `step` with JAWS's transcripts, whitespace normalized, with the
-/// step's accepted divergence applied.
+/// Compares Okur's speech for `step` with JAWS's transcripts, whitespace normalized, with every
+/// accepted divergence of the step applied.
 pub fn compare(step: &str, okur: &str, jaws: &[String]) -> Comparison {
-    let difference = for_step(step).map(|d| d.difference);
-    if difference == Some(Difference::Step) {
+    let differences: Vec<Difference> = for_step(step).map(|d| d.difference).collect();
+    if differences.contains(&Difference::Step) {
         return Comparison::Accepted;
     }
-    let without = |text: &str, phrase: Option<&str>| match phrase {
-        Some(phrase) => normalize(&text.replace(phrase, " ")),
-        None => normalize(text),
+    let without = |text: &str, okur_side: bool| {
+        let removed = differences
+            .iter()
+            .fold(text.to_owned(), |text, difference| {
+                match (difference, okur_side) {
+                    (Difference::JawsAlsoSays(phrase), false)
+                    | (Difference::OkurAlsoSays(phrase), true) => text.replace(phrase, " "),
+                    _ => text,
+                }
+            });
+        normalize(&removed)
     };
-    let (jaws_extra, okur_extra) = match difference {
-        Some(Difference::JawsAlsoSays(phrase)) => (Some(phrase), None),
-        Some(Difference::OkurAlsoSays(phrase)) => (None, Some(phrase)),
-        _ => (None, None),
-    };
-    let ours = without(okur, okur_extra);
-    if jaws.iter().any(|v| without(v, jaws_extra) == ours) {
+    let ours = without(okur, true);
+    if jaws.iter().any(|v| without(v, false) == ours) {
         Comparison::Matched
     } else {
         Comparison::Differs

@@ -54,6 +54,19 @@ parity gap audit proposed say so until the owner has reviewed them.
   is a side effect, not something a user needs.
 - Decided by the owner, 2026-10-18.
 
+### JAWS's own windows between its dialogs
+
+- Steps: `226-web-element-lists/s1` (also says "Web App Patterns - Google Chrome", the browser
+  window's title) and `226-web-element-lists/s3` (also says "JAWS Professional" and "To move to
+  an item press the Arrow keys.").
+- Why: opening Virtual HTML Features, and going from it to the list chosen in it, JAWS's speech
+  passes through windows the user never visits: the browser's, and JAWS's own main window
+  with the tutor message of a list in it. The same keys recorded again (230/s1) have none of it.
+  It is the side effect of the version above.
+- Decided under the owner's ruling on JAWS's version, 2026-10-18.
+
+A step can be in more than one entry; all of its entries apply.
+
 ### A stray comma in Virtual HTML Features
 
 - Step: `230-web-element-lists-items/s18`.
