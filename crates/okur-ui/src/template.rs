@@ -255,25 +255,38 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
                 // Its name, which JAWS's list dialogs show nowhere ("links").
                 text: control.label.clone(),
             }),
-            ControlKind::Tree { .. } => items.push(Item {
-                class: Class::Named("SysTreeView32"),
-                style: WS_CHILD
-                    | WS_VISIBLE
-                    | WS_BORDER
-                    | WS_TABSTOP
-                    | WS_GROUP
-                    | TVS_HASBUTTONS
-                    | TVS_HASLINES
-                    | TVS_LINESATROOT
-                    | TVS_SHOWSELALWAYS,
-                x: MARGIN,
-                y: MARGIN,
-                cx: list_width,
-                cy: LIST_HEIGHT,
-                id,
-                // Its name, which JAWS's tree dialogs show nowhere ("Regions").
-                text: control.label.clone(),
-            }),
+            // A tree view takes its name from the label before it, as a dialog's tree does
+            // ("Regions Tree view", JAWS's Document Regions [obs, 274/s1]).
+            ControlKind::Tree { .. } => {
+                items.push(Item {
+                    class: Class::Static,
+                    style: WS_CHILD | WS_VISIBLE,
+                    x: MARGIN,
+                    y: MARGIN,
+                    cx: list_width,
+                    cy: 9,
+                    id: LABEL_ID,
+                    text: control.label.clone(),
+                });
+                items.push(Item {
+                    class: Class::Named("SysTreeView32"),
+                    style: WS_CHILD
+                        | WS_VISIBLE
+                        | WS_BORDER
+                        | WS_TABSTOP
+                        | WS_GROUP
+                        | TVS_HASBUTTONS
+                        | TVS_HASLINES
+                        | TVS_LINESATROOT
+                        | TVS_SHOWSELALWAYS,
+                    x: MARGIN,
+                    y: MARGIN + 10,
+                    cx: list_width,
+                    cy: LIST_HEIGHT - 10,
+                    id,
+                    text: control.label.clone(),
+                });
+            }
             ControlKind::Button { default } => {
                 items.push(button(
                     id,

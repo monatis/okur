@@ -340,6 +340,13 @@ mod tests {
         }
     }
 
+    /// A count picks the English plural: "1 item", "2 items" [obs, 274/s1, 303/s7].
+    #[test]
+    fn counts_take_their_plural() {
+        assert_eq!(msg::tree_items(1usize).render(), "1 item");
+        assert_eq!(msg::tree_items(2usize).render(), "2 items");
+    }
+
     /// A catalog made under the pseudo-locale still keeps English for everyone else.
     #[test]
     fn the_english_cache_is_english_whatever_thread_builds_it() {

@@ -5,6 +5,8 @@ state-checked = checked
 state-not-checked = not checked
 # A native tree item that shows its children.
 state-open = open
+# An open tree item as the focus lands on it, in JAWS's own trees [obs, 274/s1].
+state-opened = Opened
 # A native tree item that hides its children.
 state-closed = closed
 state-collapsed = collapsed

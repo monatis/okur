@@ -261,16 +261,23 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
             }
         }
         Role::TreeItem => {
-            // Expanded items say "open" [obs, 303/s7]. Moving up to an already visited
-            // parent drops the position (303/s6); that rule is not known yet.
+            // An open item the focus lands on says "Opened" and how many items it holds, not
+            // its position: "Banner Opened | 1 item" [obs, 274/s1]; a closed one its position
+            // [obs, 303/s4]. Moving up to an already visited parent drops the position
+            // (303/s6); that rule is not known yet.
             let mut parts = vec![name_part(name)];
+            let open = focus.states.expanded == Some(true);
             match focus.states.expanded {
-                Some(true) => parts.push(state(msg::state_open().as_str())),
+                // Said as a word, not a state mark: "Banner Opened" [obs, 274/s1].
+                Some(true) => parts.push(Part::new(PartKind::Message, msg::state_opened())),
                 Some(false) => parts.push(state(msg::state_closed().as_str())),
                 None => {}
             }
             lines.push(Line::new(parts));
-            lines.extend(position(focus));
+            match focus.child_count.filter(|_| open) {
+                Some(n) => lines.push(Line::of(PartKind::Message, msg::tree_items(n))),
+                None => lines.extend(position(focus)),
+            }
             if entering {
                 lines.push(Line::of(PartKind::Hint, msg::hint_tree_arrows()));
             }

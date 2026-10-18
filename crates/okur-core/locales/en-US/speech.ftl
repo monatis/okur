@@ -59,7 +59,11 @@ value-percent = { $number } percent
 toggle-on = On
 toggle-off = Off
 # A native tree item opened: how many items it holds.
-tree-items = { $count } items
+tree-items =
+    { $count ->
+        [one] { $count } item
+       *[other] { $count } items
+    }
 # Arrows in a native tree reached another level.
 tree-level-changed = level { $level }
 # A combo box's list opened (Alt+Down).

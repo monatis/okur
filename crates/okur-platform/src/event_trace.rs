@@ -700,10 +700,19 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         // control, not as the dialog's text: JAWS opened Okur's settings with "Okur Settings
         // dialog | Speech Synthesizer: Combo box", without "Voice:", "Rate:" (dev box,
         // 2026-10-17).
+        // So is a text naming a control the focus is inside: "Regions" of Okur's Document
+        // Regions tree, whose item has the focus (JAWS: "Document Regions dialog | Regions
+        // Tree view | Banner Opened" [obs, 274/s1]).
         let labels: Vec<&str> = event
             .focus_siblings
             .iter()
             .filter(|s| s.control_type != UIA_TEXT)
+            .chain(
+                event
+                    .focus_chain
+                    .iter()
+                    .filter(|n| n.control_type != UIA_WINDOW),
+            )
             .filter_map(|s| s.name.as_deref())
             .collect();
         let text: Vec<&str> = event
@@ -718,7 +727,13 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         // dialog's own static text is read from its window [JAWS on Windows 11, dev box:
         // "Run dialog | Type the name of a program, …"].
         focus.dialog_text = Some(if text.is_empty() {
-            event.dialog_text.join("\n")
+            event
+                .dialog_text
+                .iter()
+                .filter(|t| !labels.contains(&t.as_str()))
+                .cloned()
+                .collect::<Vec<_>>()
+                .join("\n")
         } else {
             text.join("\n")
         });
@@ -3284,6 +3299,25 @@ mod tests {
             Some("Changes apply when you press OK.".to_owned())
         );
         assert_eq!(focus.and_then(|f| f.group_box), Some("Speech".to_owned()));
+    }
+
+    /// A text that names the control the focus is inside is that control's label, not the
+    /// dialog's text: Document Regions' "Regions" names its tree [obs, 274/s1].
+    #[test]
+    fn the_label_of_the_control_around_the_focus_is_not_the_dialogs_text() {
+        const UIA_TREE: i32 = 50023;
+        let regions = TraceEvent {
+            focus_chain: vec![
+                dialog_node(UIA_WINDOW, "Document Regions"),
+                node(UIA_TREE, "Regions", false),
+                node(UIA_TREEITEM, "Banner", true),
+            ],
+            focus_siblings: vec![node(UIA_TREEITEM, "Main", false)],
+            dialog_text: vec!["Regions".to_owned()],
+            ..focus_event(Vec::new())
+        };
+        let focus = focus_event_from_trace(&regions);
+        assert_eq!(focus.and_then(|f| f.dialog_text), Some(String::new()));
     }
 
     /// A message box's text is beside its buttons; a property page's labels are the page's,
