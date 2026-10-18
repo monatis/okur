@@ -1,0 +1,13 @@
+{
+  "id": "272-web-list-divisions-none",
+  "name": "JAWS's divisions list (Ctrl+Insert+Z) on a page without any: what JAWS says, then Escape",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Escape", "Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Ctrl+Insert+Z", "settle_max_ms": 15000 },
+    { "id": "s2", "type": "key", "command": "Escape" }
+  ]
+}

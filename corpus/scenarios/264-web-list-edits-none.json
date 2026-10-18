@@ -1,0 +1,13 @@
+{
+  "id": "264-web-list-edits-none",
+  "name": "JAWS's edits list (Ctrl+Insert+E) on a page without any: what JAWS says, then Escape",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Escape", "Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Ctrl+Insert+E", "settle_max_ms": 15000 },
+    { "id": "s2", "type": "key", "command": "Escape" }
+  ]
+}

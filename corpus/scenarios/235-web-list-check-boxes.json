@@ -1,0 +1,19 @@
+{
+  "id": "235-web-list-check-boxes",
+  "name": "JAWS's check boxes list (Ctrl+Insert+X, SelectACheckboxFormField): its opening, Down twice, Tab four times through its controls, Escape",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Escape", "Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Ctrl+Insert+X", "settle_max_ms": 15000 },
+    { "id": "s2", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")" },
+    { "id": "s3", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")" },
+    { "id": "s4", "type": "jaws_function", "command": "TypeKey(\"Tab\")" },
+    { "id": "s5", "type": "jaws_function", "command": "TypeKey(\"Tab\")" },
+    { "id": "s6", "type": "jaws_function", "command": "TypeKey(\"Tab\")" },
+    { "id": "s7", "type": "jaws_function", "command": "TypeKey(\"Tab\")" },
+    { "id": "s8", "type": "jaws_function", "command": "TypeKey(\"Escape\")" }
+  ]
+}

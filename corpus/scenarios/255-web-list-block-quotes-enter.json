@@ -1,0 +1,16 @@
+{
+  "id": "255-web-list-block-quotes-enter",
+  "name": "JAWS's block quotes list (Ctrl+Insert+Q): Down to the second item, Enter, then Say Line and Down to show where the cursor is",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Escape", "Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Ctrl+Insert+Q", "settle_max_ms": 15000 },
+    { "id": "s2", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")" },
+    { "id": "s3", "type": "jaws_function", "command": "TypeKey(\"Enter\")" },
+    { "id": "s4", "type": "key", "command": "Insert+Up" },
+    { "id": "s5", "type": "key", "command": "Down" }
+  ]
+}

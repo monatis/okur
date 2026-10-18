@@ -1,0 +1,13 @@
+{
+  "id": "265-web-list-check-boxes-none",
+  "name": "JAWS's check boxes list (Ctrl+Insert+X) on a page without any: what JAWS says, then Escape",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Escape", "Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Ctrl+Insert+X", "settle_max_ms": 15000 },
+    { "id": "s2", "type": "key", "command": "Escape" }
+  ]
+}
