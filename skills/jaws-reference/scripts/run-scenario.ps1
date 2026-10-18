@@ -13,6 +13,13 @@ param(
     # voice, each step also records what JAWS sent the synthesizer: the text after JAWS's symbol
     # and punctuation processing, which the speech history does not show.
     [string]$SpokenLog = (Join-Path $env:USERPROFILE "sr-harness\recorder\spoken.jsonl"),
+    # Who reads: JAWS (evidence), or Okur (a live run, never evidence: JAWS is stopped for it,
+    # Okur runs with the reference machine's settings and speaks through OkurVoice, and each
+    # step reads Okur's speech log as it reads JAWS's speech history). Compare a run with
+    # `okur live-parity`.
+    [ValidateSet('jaws', 'okur')]
+    [string]$Reader = 'jaws',
+    [string]$OkurVoice = 'SR Speech Recorder',
     [switch]$Quiet
 )
 
@@ -114,6 +121,7 @@ $KeyTable = @{
     'down'=@(0x28,$true); 'up'=@(0x26,$true); 'left'=@(0x25,$true); 'right'=@(0x27,$true);
     'home'=@(0x24,$true); 'end'=@(0x23,$true); 'pageup'=@(0x21,$true); 'pagedown'=@(0x22,$true);
     'insert'=@(0x2D,$true); 'delete'=@(0x2E,$true); 'tab'=@(0x09,$false); 'enter'=@(0x0D,$false);
+    'downarrow'=@(0x28,$true); 'uparrow'=@(0x26,$true); 'leftarrow'=@(0x25,$true); 'rightarrow'=@(0x27,$true);
     'escape'=@(0x1B,$false); 'esc'=@(0x1B,$false); 'space'=@(0x20,$false); 'backspace'=@(0x08,$false);
     'semicolon'=@(0xBA,$false); 'apostrophe'=@(0xDE,$false);
     'ctrl'=@(0xA2,$false); 'alt'=@(0xA4,$false); 'shift'=@(0xA0,$false); 'win'=@(0x5B,$true);
@@ -164,7 +172,54 @@ function Focus-Target([string]$procName) {
     Start-Sleep -Milliseconds 250
 }
 
-$jaws = New-Object -ComObject "FreedomSci.JawsApi"
+# Runs jaws-process.ps1 elevated: JAWS runs elevated, and so must what stops it.
+function Invoke-JawsProcess([switch]$Stop, [switch]$Start) {
+    $helper = Join-Path $PSScriptRoot 'jaws-process.ps1'
+    $helperArgs = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$helper`"")
+    if ($Stop) { $helperArgs += '-Stop' }
+    if ($Start) { $helperArgs += '-Start' }
+    $p = Start-Process powershell -Verb RunAs -WindowStyle Hidden -PassThru -ArgumentList $helperArgs
+    if ($p) { [void]$p.WaitForExit(60000) }
+}
+
+$okurRun = $null
+if ($Reader -eq 'okur') {
+    $jaws = $null
+    $OkurSpeechLog = Join-Path $env:TEMP "okur-live-$([guid]::NewGuid().ToString('N')).jsonl"
+    $okurSettings = Join-Path $env:TEMP 'okur-live-settings.json'
+    & $Okur reference-settings $okurSettings | Out-Null
+    Invoke-JawsProcess -Stop
+    $okurRun = Start-Process -FilePath $Okur -WindowStyle Hidden -PassThru -ArgumentList @(
+        'run', '--settings-file', "`"$okurSettings`"", '--speech-log', "`"$OkurSpeechLog`"",
+        '--engine', 'sapi5', '--voice', "`"$OkurVoice`"")
+    Start-Sleep -Seconds 3
+} else {
+    $jaws = New-Object -ComObject "FreedomSci.JawsApi"
+}
+$script:OkurLogOffset = [long]0
+
+# What the reader said since the last clear: JAWS's speech history, or the utterances Okur
+# logged.
+function Read-ReaderHistory {
+    if ($Reader -ne 'okur') { return Read-SpeechHistoryOnce }
+    if (-not (Test-Path $OkurSpeechLog)) { return '' }
+    $fs = [System.IO.File]::Open($OkurSpeechLog, 'Open', 'Read', 'ReadWrite')
+    try {
+        [void]$fs.Seek($script:OkurLogOffset, 'Begin')
+        $text = (New-Object System.IO.StreamReader($fs, [System.Text.Encoding]::UTF8)).ReadToEnd()
+        $script:OkurLogOffset = $fs.Length
+    } finally { $fs.Dispose() }
+    $said = @($text -split "`n" | Where-Object { $_.Trim() } | ForEach-Object { $_ | ConvertFrom-Json } |
+        Where-Object { $_.kind -eq 'speak' } | ForEach-Object { $_.text })
+    return ($said -join "`n")
+}
+
+function Clear-ReaderHistory {
+    if ($Reader -ne 'okur') { [void]$jaws.RunScript("ClearSpeechHistory"); return }
+    $script:OkurLogOffset = if (Test-Path $OkurSpeechLog) { (Get-Item $OkurSpeechLog).Length } else { [long]0 }
+}
+
+function Stop-ReaderSpeech { if ($jaws) { $jaws.StopSpeech() } }
 
 $CopyConfirmation = 'Copy speech history to clipboard'
 
@@ -242,10 +297,15 @@ function Invoke-Step($type, [string]$command, [int]$repeat = 1) {
             $script:HeldKeys = @($script:HeldKeys | Where-Object { $_[0] -ne $k[0] })
             return [SrKeyInput]::Key([uint16]$k[0], $k[1], $true)
         }
-        'jaws_script' { return [bool]$jaws.RunScript($command) }
+        'jaws_script' { if (-not $jaws) { return $false }; return [bool]$jaws.RunScript($command) }
         # A JAWS function call through FSAPI RunFunction, e.g. TypeKey("Down"): keys JAWS types
-        # itself reach its own elevated dialogs, which refuse ours.
-        'jaws_function' { return [bool]$jaws.RunFunction($command) }
+        # itself reach its own elevated dialogs, which refuse ours. With Okur reading, the key
+        # is the user's key in Okur's dialog.
+        'jaws_function' {
+            if ($jaws) { return [bool]$jaws.RunFunction($command) }
+            if ($command -match '^TypeKey\("(.+)"\)$') { return Send-Chord $Matches[1] }
+            return $false
+        }
         'keyboard'    { [System.Windows.Forms.SendKeys]::SendWait($command); return $true }
         default       { throw "Unsupported step type '$type'" }
     }
@@ -310,6 +370,8 @@ $evidence = [ordered]@{
         chrome_version = if ($chromeExe) { (Get-Item $chromeExe).VersionInfo.FileVersion } else { $null }
         jaws_version = if (Test-Path $jfwExe) { (Get-Item $jfwExe).VersionInfo.ProductVersion } else { $null }
         jaws_settings = $jawsSettings
+        reader = $Reader
+        okur_sha256 = if ($Reader -eq 'okur') { Get-Sha256 $Okur } else { $null }
     }
     environment = [ordered]@{
         os_version = [System.Environment]::OSVersion.VersionString
@@ -371,8 +433,8 @@ function Clear-LabState {
     $window = [SrKeyInput]::FindWindow('JFWUI2', [NullString]::Value)
     $jawsInWay = $window -ne [IntPtr]::Zero -and (
         [SrKeyInput]::GetForegroundWindow() -eq $window -or [SrKeyInput]::IsWindowVisible($window))
-    $jaws = Get-Process jfw -ErrorAction SilentlyContinue | Select-Object -First 1
-    $dialogs = if ($jaws) { [SrKeyInput]::JawsDialogs([uint32]$jaws.Id).Count } else { 0 }
+    $jawsProcess = Get-Process jfw -ErrorAction SilentlyContinue | Select-Object -First 1
+    $dialogs = if ($jawsProcess) { [SrKeyInput]::JawsDialogs([uint32]$jawsProcess.Id).Count } else { 0 }
     if ($held.Count -eq 0 -and -not $jawsInWay -and $dialogs -eq 0) { return $null }
     Invoke-ClearLabState
     [ordered]@{
@@ -459,8 +521,8 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         [void](Send-Chord $rk)
         $resetQuiet = Wait-Silence -OnsetMs 800 -QuietMs 500 -MaxMs 10000
     }
-    $jaws.StopSpeech()
-    [void]$jaws.RunScript("ClearSpeechHistory")
+    Stop-ReaderSpeech
+    Clear-ReaderHistory
     Start-Sleep -Milliseconds 80
     $trialResult.page_load_settled = $loadQuiet.settled
     $trialResult.setup_settled = $resetQuiet.settled
@@ -484,7 +546,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         # title, between the symbols of a code line read with punctuation Most) and JAWS then
         # speaks on for seconds; 3 s failed steps of 209, 314 and 315 on 2026-10-18.
         $baseline = Wait-Silence -OnsetMs 150 -QuietMs 300 -MaxMs 10000
-        [void]$jaws.RunScript("ClearSpeechHistory")
+        Clear-ReaderHistory
         $spokenStart = Get-SpokenOffset
 
         $tStart = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
@@ -495,7 +557,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         # "capture_clipboard": what the step copied (e.g. Ctrl+C in the Virtual Viewer), read
         # before the speech history copy replaces it.
         $clipboard = if ($step.capture_clipboard) { Get-Clipboard -Raw -ErrorAction SilentlyContinue } else { $null }
-        $transcript = Read-SpeechHistoryOnce
+        $transcript = Read-ReaderHistory
         $tEnd = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
         if ($transcript -match "unknown script call" -or $transcript -match "unhandled script call") { $dispatchOk = $false }
         # A leaked copy confirmation, or a Windows notification JAWS announced mid-step (seen
@@ -544,6 +606,9 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     # holds the trace file and the harness binary.
     Release-HeldKeys
     if ($traceProc -and -not $traceProc.HasExited) { $traceProc.Kill() }
+    # A live run of Okur ends with Okur stopped and JAWS back.
+    if ($okurRun -and -not $okurRun.HasExited) { $okurRun.Kill() }
+    if ($Reader -eq 'okur') { Invoke-JawsProcess -Start }
 }
 
 # Close what this run opened: the desktop fixture app, or the browser tab.

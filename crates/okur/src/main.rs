@@ -312,6 +312,24 @@ enum Commands {
         /// Path of the debug log
         path: String,
     },
+    /// Compare Okur's live run of a scenario (`run-scenario.ps1 -Reader okur` on the reference
+    /// machine) with JAWS's evidence for it, step by step: what replay cannot measure, such
+    /// as Okur's own dialogs
+    LiveParity {
+        /// The run file
+        run: String,
+        #[arg(short, long, default_value = "corpus")]
+        corpus_dir: String,
+        /// Print every step, not only mismatches
+        #[arg(long)]
+        all: bool,
+    },
+    /// Write the reference machine's settings (old-pc's JAWS configuration) as a settings
+    /// file, for `run --settings-file` in a live run there
+    ReferenceSettings {
+        /// Where to write them
+        path: String,
+    },
     /// Query hardware soundcard / default playback audio meter
     Meter {
         /// Monitor duration in milliseconds (default 500ms)
@@ -1214,6 +1232,72 @@ async fn main() {
                 }
                 Err(e) => {
                     eprintln!("Failed to query audio endpoint: {}", e);
+                    std::process::exit(1);
+                }
+            }
+        }
+        Some(Commands::LiveParity {
+            run,
+            corpus_dir,
+            all,
+        }) => {
+            let read = |path: &Path| -> serde_json::Value {
+                let text = fs::read_to_string(path).unwrap_or_else(|e| {
+                    eprintln!("Error: {path:?}: {e}");
+                    std::process::exit(1);
+                });
+                serde_json::from_str(text.trim_start_matches('\u{feff}')).unwrap_or_else(|e| {
+                    eprintln!("Error: {path:?}: {e}");
+                    std::process::exit(1);
+                })
+            };
+            let run = read(Path::new(&run));
+            let scenario = run
+                .get("scenario_id")
+                .and_then(serde_json::Value::as_str)
+                .unwrap_or_default()
+                .to_owned();
+            let evidence = read(
+                &Path::new(&corpus_dir)
+                    .join("evidence")
+                    .join(format!("{scenario}-evidence.json")),
+            );
+            match okur_corpus::live::compare(&run, &evidence) {
+                Ok(steps) => {
+                    for step in steps.iter().filter(|s| all || !s.matched) {
+                        let tag = if step.matched { "MATCH" } else { "DIFF " };
+                        println!("[{tag}] {}  ({})", step.key, step.command);
+                        println!("    okur: {:?}", okur_corpus::parity::normalize(&step.okur));
+                        if !step.matched {
+                            for v in &step.jaws_variants {
+                                println!("    jaws: {:?}", okur_corpus::parity::normalize(v));
+                            }
+                        }
+                    }
+                    let matched = steps.iter().filter(|s| s.matched).count();
+                    println!(
+                        "Okur live: {matched}/{} steps match JAWS exactly",
+                        steps.len()
+                    );
+                }
+                Err(e) => {
+                    eprintln!("Error: {e}");
+                    std::process::exit(1);
+                }
+            }
+        }
+        Some(Commands::ReferenceSettings { path }) => {
+            let settings = okur_core::settings::Settings::reference_machine();
+            match serde_json::to_string_pretty(&settings) {
+                Ok(json) => {
+                    if let Err(e) = fs::write(&path, json) {
+                        eprintln!("Error: {path}: {e}");
+                        std::process::exit(1);
+                    }
+                    println!("Wrote {path:?}");
+                }
+                Err(e) => {
+                    eprintln!("Error: {e}");
                     std::process::exit(1);
                 }
             }

@@ -173,7 +173,7 @@ fn read_json(path: &Path) -> Result<Value, String> {
 }
 
 /// Distinct raw transcripts per step id, in first-seen order, from successful trials only.
-fn jaws_variants(evidence: &Value) -> BTreeMap<String, Vec<String>> {
+pub(crate) fn jaws_variants(evidence: &Value) -> BTreeMap<String, Vec<String>> {
     let mut variants: BTreeMap<String, Vec<String>> = BTreeMap::new();
     let trials = evidence
         .get("trials")
