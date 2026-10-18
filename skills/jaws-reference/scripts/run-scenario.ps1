@@ -72,6 +72,7 @@ public static class SrKeyInput {
     [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern IntPtr FindWindow(string cls, string name);
     [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr hWnd);
+    [DllImport("user32.dll")] public static extern short GetAsyncKeyState(int vk);
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern int GetWindowText(IntPtr hWnd, StringBuilder s, int n);
     const uint KEYEVENTF_EXTENDEDKEY = 0x1, KEYEVENTF_KEYUP = 0x2;
 
@@ -110,10 +111,22 @@ function Resolve-Key([string]$name) {
 function Send-Chord([string]$chord) {
     $parts = $chord.Split('+') | Where-Object { $_ -ne '' }
     $keys = @($parts | ForEach-Object { ,(Resolve-Key $_) })
+    # Every key is sent and every key released, whatever failed before it: a failed press
+    # (refused while a JAWS window came forward) once skipped the releases after it, and left
+    # Ctrl down for the scenarios that followed (old-pc, 2026-10-18).
     $ok = $true
-    foreach ($k in $keys) { $ok = $ok -and [SrKeyInput]::Key([uint16]$k[0], $k[1], $false); Start-Sleep -Milliseconds 30 }
+    foreach ($k in $keys) {
+        if (-not [SrKeyInput]::Key([uint16]$k[0], $k[1], $false)) { $ok = $false }
+        Start-Sleep -Milliseconds 30
+    }
     [array]::Reverse($keys)
-    foreach ($k in $keys) { $ok = $ok -and [SrKeyInput]::Key([uint16]$k[0], $k[1], $true); Start-Sleep -Milliseconds 30 }
+    foreach ($k in $keys) {
+        if (-not [SrKeyInput]::Key([uint16]$k[0], $k[1], $true)) { $ok = $false }
+        Start-Sleep -Milliseconds 30
+    }
+    # A release Windows refused leaves the key down: an elevated helper releases it.
+    $stuck = @($keys | Where-Object { [SrKeyInput]::GetAsyncKeyState([int]$_[0]) -band 0x8000 })
+    if ($stuck.Count -gt 0) { Invoke-ClearLabState -KeysOnly }
     return $ok
 }
 
@@ -314,19 +327,37 @@ function Find-WindowByTitle([string]$title) {
     }
 }
 
-# JAWS's own window comes forward after its dialogs close (the Links List, 222) and, JAWS
-# running elevated, keeps the foreground from the fixture: every step of the scenarios after
-# it heard nothing (223-226, old-pc, 2026-10-18). It is hidden, as when JAWS starts, by an
-# elevated helper; the lab's UAC elevates without asking.
-function Hide-JawsWindow {
-    $window = [SrKeyInput]::FindWindow('JFWUI2', [NullString]::Value)
-    if ($window -eq [IntPtr]::Zero) { return }
-    $inFront = [SrKeyInput]::GetForegroundWindow() -eq $window
-    if (-not $inFront -and -not [SrKeyInput]::IsWindowVisible($window)) { return }
-    $helper = Join-Path $PSScriptRoot 'hide-jaws-window.ps1'
-    $p = Start-Process powershell -Verb RunAs -WindowStyle Hidden -PassThru -ArgumentList @(
-        '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$helper`"")
+# Modifier keys left down and JAWS's own window in front spoil every step after them, and only
+# an elevated process can clear them while a JAWS window is in front: clear-lab-state.ps1
+# (which explains both) runs elevated when either is found. The lab's UAC elevates without
+# asking.
+$ModifierKeys = @(0xA2, 0xA3, 0xA4, 0xA5, 0xA0, 0xA1, 0x5B, 0x5C, 0x2D)
+
+function Get-HeldModifiers {
+    @($ModifierKeys | Where-Object { [SrKeyInput]::GetAsyncKeyState($_) -band 0x8000 })
+}
+
+function Invoke-ClearLabState([switch]$KeysOnly) {
+    $helper = Join-Path $PSScriptRoot 'clear-lab-state.ps1'
+    $helperArgs = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$helper`"")
+    if ($KeysOnly) { $helperArgs += '-KeysOnly' }
+    $p = Start-Process powershell -Verb RunAs -WindowStyle Hidden -PassThru -ArgumentList $helperArgs
     if ($p) { [void]$p.WaitForExit(15000) }
+}
+
+# Before a trial: what had to be cleared, for the trial's record (null when nothing).
+function Clear-LabState {
+    $held = Get-HeldModifiers
+    $window = [SrKeyInput]::FindWindow('JFWUI2', [NullString]::Value)
+    $jawsInWay = $window -ne [IntPtr]::Zero -and (
+        [SrKeyInput]::GetForegroundWindow() -eq $window -or [SrKeyInput]::IsWindowVisible($window))
+    if ($held.Count -eq 0 -and -not $jawsInWay) { return $null }
+    Invoke-ClearLabState
+    [ordered]@{
+        modifiers_held = @($held | ForEach-Object { '0x{0:X2}' -f $_ })
+        jaws_window_in_front = $jawsInWay
+        modifiers_still_held = @(Get-HeldModifiers | ForEach-Object { '0x{0:X2}' -f $_ })
+    }
 }
 
 function Start-DesktopFixture {
@@ -383,7 +414,8 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     }
     # Identical setup for every trial: reload (or relaunch), let load speech finish, reset,
     # settle, clear.
-    Hide-JawsWindow
+    $cleared = Clear-LabState
+    if ($cleared) { $trialResult.lab_state_cleared = $cleared }
     if ($launch) {
         if (-not (Start-DesktopFixture)) { $trialResult.trial_success = $false }
         # A launch reads the window and the focused control, which takes long for a full edit.
