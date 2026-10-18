@@ -18,7 +18,37 @@ if ($command -notmatch '(^|[\s;&|(])git(\s+(-[Cc]\s+\S+|--[\w-]+(=\S+)?))*\s+com
 
 $projectDir = $env:CLAUDE_PROJECT_DIR
 if (-not $projectDir) { $projectDir = Split-Path -Parent (Split-Path -Parent $PSScriptRoot) }
+
+# The repository the commit is made in: its directory is the command's ('git -C <dir>', or a
+# leading 'cd <dir>'), else the session's working directory. A git worktree (a subagent's)
+# is gated with its own code and its own copy of the gate, which finds its workspace from
+# where it lies, not with the main checkout's (2026-10-18: a worktree's commits were tested
+# against the main checkout's tree).
+function Get-CommitTree {
+    $dir = if ($payload.cwd) { [string]$payload.cwd } else { (Get-Location).Path }
+    $target = $null
+    if ($command -match 'git\s+-C\s+(?:"([^"]+)"|''([^'']+)''|(\S+))') {
+        $target = @($Matches[1], $Matches[2], $Matches[3]) | Where-Object { $_ } | Select-Object -First 1
+    } elseif ($command -match '(?:^|[;&|(]\s*)cd\s+(?:"([^"]+)"|''([^'']+)''|([^\s;&|]+))') {
+        $target = @($Matches[1], $Matches[2], $Matches[3]) | Where-Object { $_ } | Select-Object -First 1
+    }
+    if ($target) {
+        # Git Bash's drive form, /c/Users/..., as Windows names it.
+        if ($target -match '^/([a-zA-Z])(/.*)?$') { $target = "$($Matches[1]):$($Matches[2])" }
+        $dir = if ([System.IO.Path]::IsPathRooted($target)) { $target } else { Join-Path $dir $target }
+    }
+    if (-not (Test-Path -LiteralPath $dir)) { return $null }
+    $top = & git -C $dir rev-parse --show-toplevel 2>$null
+    if ($LASTEXITCODE -ne 0 -or -not $top) { return $null }
+    return ([string]$top).Trim()
+}
+
+$tree = Get-CommitTree
 $gate = Join-Path $projectDir '.agents\scripts\check-pre-commit.ps1'
+if ($tree) {
+    $treeGate = Join-Path $tree '.agents\scripts\check-pre-commit.ps1'
+    if (Test-Path -LiteralPath $treeGate) { $gate = $treeGate }
+}
 
 # The shared gate only matches '\bgit\s+commit\b'; prefix it so forms like
 # 'git -C dir commit' are still gated, while keeping the real command for flag checks.
