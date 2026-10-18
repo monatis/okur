@@ -9,6 +9,10 @@
 //!    list stays exact.
 //! 2. **Every message is used.** A message whose constructor (`msg::<id>`) no code outside tests
 //!    calls fails.
+//! 3. **The pseudo-locale run.** With every message wrapped in `⟦…⟧`
+//!    ([`okur_core::messages::with_pseudo_locale`]), the engine reads a page and native
+//!    controls; what it says holds no word that is neither wrapped nor the page's own. This
+//!    finds words built at run time that the scan cannot tell from identifiers.
 //!
 //! The source scan reads Rust as tokens: comments, attributes (`#[serde(rename = "…")]`),
 //! `tracing` macros and `eprintln!` (developer logs, never spoken) and `#[cfg(test)]` items
@@ -17,13 +21,16 @@
 //! holding `_` or `::` (`snake_case`, `Option::is_none`) is an identifier by its shape and
 //! needs no entry.
 //!
-//! Why a scan and not only a pseudo-locale run: a run finds only the words the paths it
-//! exercises say, while the scan sees every literal, including those of paths no test reaches.
+//! Why the scan is the main guard: a run finds only the words the paths it exercises say,
+//! while the scan sees every literal, including those of paths no test reaches.
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 
-use okur_core::messages::MessageId;
+use okur_core::aom::{AomNode, Role};
+use okur_core::event::FocusEvent;
+use okur_core::messages::{with_pseudo_locale, MessageId};
+use okur_core::{MockSpeechOutput, ScreenReaderEngine, VirtualBuffer, VirtualCursor};
 
 /// The crates whose literals are checked: those that hold what Okur says and shows.
 const CHECKED: &[&str] = &["okur-core", "okur-ui"];
@@ -530,4 +537,183 @@ fn the_scanner_sees_words_and_leaves_out_what_is_never_said() {
     assert!(!has_words("snake_case", false));
     assert!(!has_words("Option::is_none", false));
     assert!(!has_words("{a}:{b}", false));
+}
+
+/// What is left of `said` without the pseudo-locale's wrapped messages and `page_words`, when
+/// it still has words; `None` when only marks, spaces and punctuation are left.
+fn unwrapped_words(said: &str, page_words: &[&str]) -> Option<String> {
+    let mut rest = String::new();
+    let mut depth = 0usize;
+    for c in said.chars() {
+        match c {
+            '\u{27e6}' => depth += 1,
+            '\u{27e7}' => depth = depth.saturating_sub(1),
+            _ if depth == 0 => rest.push(c),
+            _ => {}
+        }
+    }
+    let mut words: Vec<&str> = page_words.to_vec();
+    words.sort_by_key(|w| std::cmp::Reverse(w.len()));
+    for word in words {
+        rest = rest.replace(word, " ");
+    }
+    has_words(&rest, true).then_some(rest)
+}
+
+fn page() -> AomNode {
+    let mut check = AomNode::new(9, Role::CheckBox).with_name("India");
+    check.states.checked = Some(false);
+    let mut combo = AomNode::new(11, Role::ComboBox)
+        .with_name("Lima")
+        .with_value("Mike");
+    combo.states.expanded = Some(false);
+    let item = |id, text: &str| {
+        AomNode::new(id, Role::ListItem)
+            .with_children(vec![AomNode::new(id + 100, Role::Text).with_text(text)])
+    };
+    let cell = |id, text: &str| {
+        AomNode::new(id, Role::TableCell)
+            .with_children(vec![AomNode::new(id + 100, Role::Text).with_text(text)])
+    };
+    AomNode::new(0, Role::Document)
+        .with_name("Alpha")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 2 }).with_text("Bravo"),
+            AomNode::new(2, Role::Paragraph).with_text("Charlie delta"),
+            AomNode::new(
+                3,
+                Role::Link {
+                    href: Some("https://example.com/echo".to_owned()),
+                },
+            )
+            .with_children(vec![AomNode::new(4, Role::Text).with_text("Echo")]),
+            AomNode::new(5, Role::List).with_children(vec![item(6, "Foxtrot"), item(7, "Golf")]),
+            AomNode::new(8, Role::Button).with_name("Hotel"),
+            check,
+            AomNode::new(10, Role::Edit)
+                .with_name("Juliet")
+                .with_value("Kilo"),
+            combo,
+            AomNode::new(12, Role::Table).with_children(vec![
+                AomNode::new(13, Role::TableRow)
+                    .with_children(vec![cell(14, "November"), cell(15, "Oscar")]),
+                AomNode::new(16, Role::TableRow)
+                    .with_children(vec![cell(17, "Papa"), cell(18, "Quebec")]),
+            ]),
+            AomNode::new(
+                19,
+                Role::Landmark {
+                    landmark_type: "navigation".to_owned(),
+                },
+            )
+            .with_name("Romeo")
+            .with_children(vec![AomNode::new(20, Role::Paragraph).with_text("Sierra")]),
+        ])
+}
+
+const PAGE_WORDS: &[&str] = &[
+    "Alpha", "Bravo", "Charlie", "delta", "Delta", "Echo", "Foxtrot", "Golf", "Hotel", "India",
+    "Juliet", "Kilo", "Lima", "Mike", "November", "Oscar", "Papa", "Quebec", "Romeo", "Sierra",
+    "Tango", "Uniform", "Victor", "Whiskey", "Xray", "Yankee", "Zulu", "Alt", "Ctrl",
+];
+
+/// Native controls taking the focus one after another, in one window.
+fn native_focuses() -> Vec<FocusEvent> {
+    let named = |role: Role, name: &str| {
+        let mut focus = FocusEvent::new(role).with_name(name);
+        focus.window_title = Some("Tango".to_owned());
+        focus
+    };
+    let mut button = named(Role::Button, "Uniform");
+    button.access_key = Some("Alt, v".to_owned());
+    button.states.expanded = Some(false);
+    let mut check = named(Role::CheckBox, "Victor");
+    check.states.checked = Some(true);
+    let mut radio = named(Role::RadioButton, "Whiskey");
+    radio.item_index = Some(1);
+    radio.item_count = Some(2);
+    let mut combo = named(Role::ComboBox, "Xray");
+    combo.value = Some("Yankee".to_owned());
+    let mut item = named(Role::ListItem, "Zulu");
+    item.container_role = Some(Role::List);
+    item.container_name = Some("Alpha".to_owned());
+    item.container_is_list_view = true;
+    item.item_index = Some(3);
+    item.item_count = Some(4);
+    let mut tree = named(Role::TreeItem, "Bravo");
+    tree.container_role = Some(Role::Tree);
+    tree.states.expanded = Some(true);
+    let mut slider = named(Role::Slider, "Charlie");
+    slider.value = Some("50%".to_owned());
+    let mut edit = named(Role::Edit, "Echo");
+    edit.accelerator_key = Some("Ctrl+L".to_owned());
+    vec![
+        named(Role::Edit, "Delta"),
+        button,
+        check,
+        radio,
+        combo,
+        item,
+        tree,
+        named(Role::Tab, "Foxtrot"),
+        named(Role::SplitButton, "Golf"),
+        named(Role::MenuButton, "Hotel"),
+        named(Role::Link { href: None }, "India"),
+        slider,
+        edit,
+    ]
+}
+
+/// Under the pseudo-locale every word Okur says itself is wrapped: the page's reading, quick
+/// navigation, tables, the element lists and native focus speech hold no other word than the
+/// page's and the controls' own.
+#[test]
+fn the_pseudo_locale_wraps_every_word_okur_says() {
+    with_pseudo_locale(|| {
+        let mut engine = ScreenReaderEngine::new(
+            VirtualCursor::new(VirtualBuffer::from_aom(&page())),
+            Box::new(MockSpeechOutput::new()),
+        );
+        let mut said = Vec::new();
+        for command in [
+            "SayAll",
+            "TopOfFile",
+            "MoveToNextHeading",
+            "MoveToNextHeadingLevelOne",
+            "MoveToNextLink",
+            "MoveToNextList",
+            "MoveToNextButton",
+            "MoveToNextCheckbox",
+            "MoveToNextEdit",
+            "MoveToNextComboBox",
+            "MoveToNextTable",
+            "TableCellRight",
+            "TableCellDown",
+            "TableCellDown",
+            "MoveToNextRegion",
+            "MoveToNextFrame",
+            "MoveToNextGraphic",
+            "MoveToNextRadioButton",
+            "MoveToNextPlaceMarker",
+            "MoveToNextArticle",
+            "SelectAHeading",
+            "SelectALink",
+            "SelectAFormField",
+            "SelectARegion",
+            "PassKeyThrough",
+        ] {
+            said.extend(engine.execute_command(command));
+        }
+        for focus in native_focuses() {
+            said.extend(engine.handle_focus_event(&focus));
+        }
+        assert!(said.len() > 30, "{said:?}");
+        let unwrapped: Vec<String> = said
+            .iter()
+            .filter_map(|s| {
+                unwrapped_words(s, PAGE_WORDS).map(|rest| format!("{s:?} leaves {rest:?}"))
+            })
+            .collect();
+        assert!(unwrapped.is_empty(), "\n{}\n", unwrapped.join("\n"));
+    });
 }

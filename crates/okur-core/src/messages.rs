@@ -264,7 +264,7 @@ impl Catalog {
             .iter()
             .map(|id| {
                 if id.variables().is_empty() {
-                    catalog.format(*id, None)
+                    catalog.english_text(*id, None)
                 } else {
                     String::new()
                 }
@@ -284,7 +284,18 @@ impl Catalog {
         plain.get(id as usize).map_or(id.id(), String::as_str)
     }
 
+    /// The message in the current locale: English, or the pseudo-locale on this thread.
     fn format(&self, id: MessageId, args: Option<&FluentArgs>) -> String {
+        let text = self.english_text(id, args);
+        if pseudo() {
+            wrap(&text)
+        } else {
+            text
+        }
+    }
+
+    /// The message in English, whatever the thread's locale: what the cache keeps.
+    fn english_text(&self, id: MessageId, args: Option<&FluentArgs>) -> String {
         let Some(pattern) = self.bundle.get_message(id.id()).and_then(|m| m.value()) else {
             tracing::error!(id = id.id(), "message missing from the catalog");
             return id.id().to_owned();
@@ -294,11 +305,7 @@ impl Catalog {
         if !errors.is_empty() {
             tracing::error!(id = id.id(), ?errors, "message did not render cleanly");
         }
-        if pseudo() {
-            wrap(&text)
-        } else {
-            text.into_owned()
-        }
+        text.into_owned()
     }
 }
 
@@ -331,6 +338,21 @@ mod tests {
                 );
             }
         }
+    }
+
+    /// A catalog made under the pseudo-locale still keeps English for everyone else.
+    #[test]
+    fn the_english_cache_is_english_whatever_thread_builds_it() {
+        let catalog = with_pseudo_locale(Catalog::english);
+        assert!(catalog
+            .plain
+            .iter()
+            .all(|text| !text.contains([PSEUDO_OPEN, PSEUDO_CLOSE])));
+        assert!(catalog
+            .plain_pseudo
+            .iter()
+            .filter(|text| !text.is_empty())
+            .all(|text| text.starts_with(PSEUDO_OPEN) && !text.starts_with("\u{27e6}\u{27e6}")));
     }
 
     #[test]
