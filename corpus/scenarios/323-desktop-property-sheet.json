@@ -14,7 +14,7 @@
     { "id": "s4", "type": "key", "command": "Down" },
     { "id": "s5", "type": "key", "command": "Down" },
     { "id": "s6", "type": "key", "command": "Down" },
-    { "id": "s7", "type": "key", "command": "Ctrl+A", "settle_max_ms": 30000, "quiet_ms": 1500 },
+    { "id": "s7", "type": "key", "command": "Ctrl+A", "settle_max_ms": 60000, "quiet_ms": 1500 },
     { "id": "s8", "type": "key", "command": "Ctrl+C", "capture_clipboard": true },
     { "id": "s9", "type": "key", "command": "Escape" },
     { "id": "s10", "type": "key", "command": "Ctrl+Tab" },

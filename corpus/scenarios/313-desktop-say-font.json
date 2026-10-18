@@ -11,9 +11,9 @@
     { "id": "s1", "type": "key", "command": "Insert+F" },
     { "id": "s2", "type": "key", "command": "Insert+F", "repeat": 2 },
     { "id": "s3", "type": "key", "command": "Down" },
-    { "id": "s4", "type": "key", "command": "Down" },
-    { "id": "s5", "type": "key", "command": "Down" },
-    { "id": "s6", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Down", "settle_max_ms": 30000, "quiet_ms": 1500 },
+    { "id": "s5", "type": "key", "command": "Down", "settle_max_ms": 30000, "quiet_ms": 1500 },
+    { "id": "s6", "type": "key", "command": "Down", "settle_max_ms": 30000, "quiet_ms": 1500 },
     { "id": "s7", "type": "key", "command": "Ctrl+A" },
     { "id": "s8", "type": "key", "command": "Ctrl+C", "capture_clipboard": true },
     { "id": "s9", "type": "key", "command": "Escape" }
