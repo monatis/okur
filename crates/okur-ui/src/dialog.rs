@@ -350,19 +350,26 @@ pub fn set_list(id: u32, control: &str, items: &[String], selected: usize) {
     }
 }
 
-/// Closes dialog `id`, and gives the focus back to the window it came from.
+/// Closes dialog `id`, and gives the focus back to the window it came from when the focus is
+/// in it. A dialog opened from this one (Virtual HTML Features opens the Heading List in its
+/// place) is in front already, keeps it, and will give the focus back to this one's window.
 pub fn close(id: u32) {
     let window = DIALOGS.with(|d| {
         d.try_borrow_mut().ok().and_then(|mut d| {
             let index = d.iter().position(|o| o.id == id)?;
             let dialog = d.remove(index);
+            for other in d.iter_mut().filter(|o| o.previous == dialog.window) {
+                other.previous = dialog.previous;
+            }
             Some((dialog.window, dialog.previous))
         })
     });
     if let Some((window, previous)) = window {
-        // SAFETY: destroying our own dialog, then a query on the window it came from.
+        // SAFETY: a query, destroying our own dialog, then a query on the window it came
+        // from.
+        let in_front = unsafe { GetForegroundWindow() } == window;
         let _ = unsafe { DestroyWindow(window) };
-        if unsafe { IsWindow(Some(previous)) }.as_bool() {
+        if in_front && unsafe { IsWindow(Some(previous)) }.as_bool() {
             bring_forward(previous);
         }
     }
