@@ -1,0 +1,19 @@
+{
+  "id": "274-web-list-regions-items",
+  "name": "JAWS's Document Regions (Ctrl+Insert+R): every region, Down through the tree, then Escape",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Escape", "Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Ctrl+Insert+R", "settle_max_ms": 15000 },
+    { "id": "s2", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")" },
+    { "id": "s3", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")" },
+    { "id": "s4", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")" },
+    { "id": "s5", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")" },
+    { "id": "s6", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")" },
+    { "id": "s7", "type": "jaws_function", "command": "TypeKey(\"UpArrow\")" },
+    { "id": "s8", "type": "jaws_function", "command": "TypeKey(\"Escape\")" }
+  ]
+}
