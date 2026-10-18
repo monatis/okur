@@ -85,6 +85,13 @@ public static class SrKeyInput {
     [DllImport("user32.dll")] static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint pid);
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] static extern int GetClassName(IntPtr hWnd, StringBuilder s, int n);
 
+    /// The process of the window in front.
+    public static uint ForegroundProcess() {
+        uint pid;
+        GetWindowThreadProcessId(GetForegroundWindow(), out pid);
+        return pid;
+    }
+
     /// JAWS's dialog boxes (`#32770`) visible on the screen, of the process `jaws`.
     public static System.Collections.Generic.List<IntPtr> JawsDialogs(uint jaws) {
         var found = new System.Collections.Generic.List<IntPtr>();
@@ -152,10 +159,26 @@ function Send-Chord([string]$chord) {
         if (-not [SrKeyInput]::Key([uint16]$k[0], $k[1], $true)) { $ok = $false }
         Start-Sleep -Milliseconds 30
     }
-    # A release Windows refused leaves the key down: an elevated helper releases it.
+    # A release Windows refused leaves the key down: an elevated helper releases it. Windows
+    # hides the key state while one of JAWS's windows is in front, and JAWS keeps its own idea
+    # of a held JAWS key: a chord with a JAWS key that brought a JAWS window forward (Insert+F7)
+    # is released elevated too.
     $stuck = @($keys | Where-Object { [SrKeyInput]::GetAsyncKeyState([int]$_[0]) -band 0x8000 })
-    if ($stuck.Count -gt 0) { Invoke-ClearLabState -KeysOnly }
+    $jawsKey = @($keys | Where-Object { $_[0] -eq 0x2D -or $_[0] -eq 0x14 }).Count -gt 0
+    $jawsInFront = $false
+    if ($jawsKey -or -not $ok) {
+        $jawsProcess = Get-Process jfw -ErrorAction SilentlyContinue | Select-Object -First 1
+        $jawsInFront = $jawsProcess -and [SrKeyInput]::ForegroundProcess() -eq [uint32]$jawsProcess.Id
+    }
+    if ($stuck.Count -gt 0 -or $jawsInFront) { Invoke-ClearLabState -KeysOnly }
     return $ok
+}
+
+# A bare release of the JAWS keys (Insert, CapsLock), harmless when nothing is held: it resets
+# JAWS's own idea of a held JAWS key (see clear-lab-state.ps1).
+function Release-JawsKeys {
+    [void][SrKeyInput]::Key(0x2D, $true, $true)
+    [void][SrKeyInput]::Key(0x14, $false, $true)
 }
 
 function Get-ForegroundTitle {
@@ -429,6 +452,7 @@ function Invoke-ClearLabState([switch]$KeysOnly) {
 
 # Before a trial: what had to be cleared, for the trial's record (null when nothing).
 function Clear-LabState {
+    Release-JawsKeys
     $held = Get-HeldModifiers
     $window = [SrKeyInput]::FindWindow('JFWUI2', [NullString]::Value)
     $jawsInWay = $window -ne [IntPtr]::Zero -and (

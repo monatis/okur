@@ -63,6 +63,11 @@ public static class SrLabState {
             keybd_event((byte)vk, scan, KEYEVENTF_KEYUP | (extended ? KEYEVENTF_EXTENDEDKEY : 0), UIntPtr.Zero);
             released++;
         }
+        // JAWS keeps its own idea of a held JAWS key, which Windows' key state does not show:
+        // after a lost release, every Ctrl+R was Insert+Ctrl+R to it (its regions list). A bare
+        // release of Insert and CapsLock, harmless when nothing is held, resets it.
+        keybd_event(0x2D, (byte)MapVirtualKey(0x2D, 0), KEYEVENTF_KEYUP | KEYEVENTF_EXTENDEDKEY, UIntPtr.Zero);
+        keybd_event(0x14, (byte)MapVirtualKey(0x14, 0), KEYEVENTF_KEYUP, UIntPtr.Zero);
         return released;
     }
 
