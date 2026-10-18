@@ -50,3 +50,23 @@ dialog-left = Leaving Dialog
 ## Find (Control+F)
 
 find-not-found = Text not found: { $text }
+
+## Native controls (outside a page)
+
+# A trackbar's value given in percent, said in words.
+value-percent = { $number } percent
+# A toggle switch's state.
+toggle-on = On
+toggle-off = Off
+# A native tree item opened: how many items it holds.
+tree-items = { $count } items
+# Arrows in a native tree reached another level.
+tree-level-changed = level { $level }
+# A combo box's list opened (Alt+Down).
+combo-box-opened = Open List Box
+# Keys pressed one after another, as an access key "Alt, I" is said: "Alt followed by I".
+key-followed-by = { $keys } followed by { $key }
+# The access key of a control whose own text holds the letter: "alt+S".
+access-key-alt = alt+{ $letter }
+# A menu named after the item it opened from: "File menu".
+menu-named = { $name } menu
