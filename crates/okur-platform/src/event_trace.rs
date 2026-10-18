@@ -1366,6 +1366,9 @@ mod capture {
             let index = ask(LVM_GETNEXTITEM, usize::MAX, LVNI_FOCUSED).filter(|&i| i >= 0)?;
             return Some([index, count]);
         }
+        if upper == "BUTTON" {
+            return win32_radio_position(hwnd);
+        }
         let (get_sel, get_count) = if upper.contains("COMBOBOX") {
             (0x0147, 0x0146)
         } else if upper.contains("LISTBOX") {
@@ -1410,6 +1413,62 @@ mod capture {
             .filter(|&i| i >= 0)
         })?;
         Some([index, count])
+    }
+
+    /// A radio button's place among the radio buttons of its group, as Windows groups them
+    /// (from a control with `WS_GROUP` to the next, the run its arrow keys move in): JAWS's
+    /// Links List says "Sort Links In Tab Order radio button checked 1 of 2" and, in the
+    /// group after it, "Display All Links ... 1 of 3" [obs, 222/s5-s6]. Not a radio button:
+    /// `None`.
+    fn win32_radio_position(hwnd: HWND) -> Option<[i32; 2]> {
+        use windows::Win32::UI::WindowsAndMessaging::{
+            GetWindow, GetWindowLongW, GWL_STYLE, GW_HWNDNEXT, GW_HWNDPREV,
+        };
+        const WS_GROUP: i32 = 0x0002_0000;
+        const BS_TYPEMASK: i32 = 0x000F;
+        const BS_RADIOBUTTON: i32 = 0x0004;
+        const BS_AUTORADIOBUTTON: i32 = 0x0009;
+        // Enough for any dialog; a broken window chain cannot loop forever.
+        const MOST: usize = 256;
+        // SAFETY: plain Win32 queries on window handles that may be gone (they then fail).
+        let style = |h: HWND| unsafe { GetWindowLongW(h, GWL_STYLE) };
+        let is_radio = |h: HWND| {
+            window_text(h).1.eq_ignore_ascii_case("Button")
+                && matches!(style(h) & BS_TYPEMASK, BS_RADIOBUTTON | BS_AUTORADIOBUTTON)
+        };
+        // SAFETY: as above.
+        let step = |h: HWND, way| {
+            unsafe { GetWindow(h, way) }
+                .ok()
+                .filter(|n| !n.is_invalid())
+        };
+        if !is_radio(hwnd) {
+            return None;
+        }
+        let mut first = hwnd;
+        for _ in 0..MOST {
+            if style(first) & WS_GROUP != 0 {
+                break;
+            }
+            match step(first, GW_HWNDPREV) {
+                Some(previous) => first = previous,
+                None => break,
+            }
+        }
+        let (mut index, mut count, mut window) = (None, 0, first);
+        for _ in 0..MOST {
+            if is_radio(window) {
+                if window == hwnd {
+                    index = Some(count);
+                }
+                count += 1;
+            }
+            match step(window, GW_HWNDNEXT).filter(|n| style(*n) & WS_GROUP == 0) {
+                Some(next) => window = next,
+                None => break,
+            }
+        }
+        Some([index?, count])
     }
 
     /// A Chromium live region that changed, with its subtree, and the page after the change.

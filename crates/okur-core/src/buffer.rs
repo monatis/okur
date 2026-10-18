@@ -28,6 +28,8 @@ pub struct LinkListItem {
     pub href: Option<String>,
     pub is_same_page: bool,
     pub offset: usize,
+    /// The link's current state (`aria-current`) as JAWS words it, "Current Page".
+    pub current: Option<&'static str>,
 }
 
 /// Item in a Headings list dialog.
@@ -1075,6 +1077,7 @@ impl VirtualBuffer {
                     href,
                     is_same_page,
                     offset,
+                    current: node.current_phrase(),
                 });
             }
         }

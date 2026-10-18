@@ -797,7 +797,18 @@ impl ScreenReaderEngine {
             Outcome::Activate(link) => {
                 close(self);
                 self.cursor.jump_to_element_offset(link.offset);
-                self.execute(crate::command::Command::Enter)
+                let activated = self.execute(crate::command::Command::Enter);
+                if !link.is_same_page {
+                    return activated;
+                }
+                // A link within the page keeps the focus, which coming back from the dialog
+                // is taken quietly: JAWS says its usage hint alone [obs, 222/s10].
+                let hint = msg::hint_activate_enter().to_string();
+                self.speech.speak(&hint, false);
+                Some(match activated.filter(|s| !s.trim().is_empty()) {
+                    Some(said) => format!("{said}\n{hint}"),
+                    None => hint,
+                })
             }
             Outcome::Closed => {
                 self.links_dialog = None;

@@ -95,11 +95,16 @@ impl LinksListDialog {
         shown
     }
 
+    /// The list's items: each link's text, after its current state when it has one ("Current
+    /// Page Overview", "Current Step Step two") [obs, 222/s1, s9].
     fn texts(&self) -> Vec<String> {
         self.shown
             .iter()
             .filter_map(|&i| self.links.get(i))
-            .map(|l| l.text.clone())
+            .map(|l| match l.current {
+                Some(current) => format!("{current} {}", l.text),
+                None => l.text.clone(),
+            })
             .collect()
     }
 
@@ -242,6 +247,7 @@ mod tests {
             href: Some(format!("https://example.com/{offset}")),
             is_same_page: false,
             offset,
+            current: None,
         }
     }
 
@@ -348,6 +354,16 @@ mod tests {
     }
 
     /// Okur knows no visited links yet: "Visited Links Only" shows none.
+    /// A link's current state comes before its text in the list, and sorting still goes by the
+    /// text [obs, 222/s1, s9].
+    #[test]
+    fn a_current_link_says_its_state_first() {
+        let mut overview = link("Overview", 1);
+        overview.current = Some("Current Page");
+        let dialog = LinksListDialog::new(2, vec![overview, link("Settings", 2)]);
+        assert_eq!(dialog.texts(), vec!["Current Page Overview", "Settings"]);
+    }
+
     #[test]
     fn visited_links_only_is_empty_until_okur_knows_visits() {
         let mut dialog = LinksListDialog::new(2, links());
