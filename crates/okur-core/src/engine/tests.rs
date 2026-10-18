@@ -2678,6 +2678,59 @@ fn the_links_list_moves_the_cursor_to_the_chosen_link() {
         .is_some_and(|line| line.contains("Beta")));
 }
 
+/// Insert+F6 opens a real Heading List; Move To Heading reads the heading's line as the
+/// virtual cursor does, its level first: "heading level 1 Web App Patterns" [obs, 224/s10].
+#[test]
+fn the_heading_list_reads_the_chosen_heading_as_its_line() {
+    use crate::ui::{ControlKind, FromUi, ToUi, Value};
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Web Menus"),
+            AomNode::new(2, Role::Paragraph).with_text("Notes"),
+            AomNode::new(3, Role::Heading { level: 2 }).with_text("Second part"),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.handle_focus_event(&page_document());
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let mut f6 = KeyEvent::new(Key::F(6), Modifiers::none(), true);
+    f6.modifiers.insert = true;
+    assert_eq!(engine.handle_key_event(&f6), KeyAction::Consume);
+    let sent = ui.take();
+    let Some(ToUi::DialogShow { dialog }) = sent.first() else {
+        panic_free_fail(&format!("no dialog shown: {sent:?}"));
+        return;
+    };
+    assert_eq!(dialog.title, "Heading List");
+    assert_eq!(
+        dialog.controls.first().map(|c| c.kind.clone()),
+        Some(ControlKind::List {
+            items: vec!["Web Menus : 1".into(), "Second part : 2".into()],
+            selected: 0
+        })
+    );
+    let id = dialog.id;
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "headings".into(),
+        value: Value::Selected(1),
+    }));
+    let moved = engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "move".into(),
+    }));
+    assert_eq!(ui.take(), [ToUi::DialogClose { id }]);
+    let line = engine.execute_command("SayLine");
+    assert_eq!(moved, line);
+    let level_first = moved
+        .as_deref()
+        .and_then(|s| Some(s.find("heading level 2")? < s.find("Second part")?));
+    assert_eq!(level_first, Some(true), "{moved:?}");
+}
+
 fn page_document() -> FocusEvent {
     let mut document = FocusEvent::new(Role::Document)
         .with_name("Web Menus")

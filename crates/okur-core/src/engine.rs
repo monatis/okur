@@ -801,13 +801,14 @@ impl ScreenReaderEngine {
             }
             // JAWS 2025 after Move To Link (dev box, 2026-10-17): "same page link Reputation
             // for Quality Service | To activate press Enter."
-            // A heading is said as the virtual cursor reads it [obs, 224/s10].
+            // A heading's line is read as the virtual cursor reads it, not as H says the
+            // heading: "heading level 1 Web App Patterns" [obs, 224/s10].
             Outcome::MoveTo(entry) => {
                 close(self);
-                let line = self.cursor.jump_to_element_offset(entry.offset);
+                let said = self.cursor.jump_to_element_offset(entry.offset);
                 let speech = match kind {
-                    ListKind::Links => format!("{line}\n{}", msg::hint_activate_enter()),
-                    ListKind::Headings => line,
+                    ListKind::Links => format!("{said}\n{}", msg::hint_activate_enter()),
+                    ListKind::Headings => self.cursor.current_line(),
                 };
                 self.speech.speak(&speech, true);
                 Some(speech)

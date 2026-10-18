@@ -150,7 +150,7 @@ fn push_radios(
     let height = 12 + rows * 12 + 2;
     items.push(Item {
         class: Class::Button,
-        style: WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
+        style: WS_CHILD | WS_VISIBLE | WS_GROUP | BS_GROUPBOX,
         x,
         y,
         cx: width,
@@ -182,7 +182,7 @@ fn push_radios(
 fn read_only_text(x: i16, y: i16, cx: i16, id: u16) -> Item {
     Item {
         class: Class::Edit,
-        style: WS_CHILD | WS_VISIBLE | WS_BORDER | ES_READONLY | ES_AUTOHSCROLL,
+        style: WS_CHILD | WS_VISIBLE | WS_GROUP | WS_BORDER | ES_READONLY | ES_AUTOHSCROLL,
         x,
         y,
         cx,
@@ -192,15 +192,18 @@ fn read_only_text(x: i16, y: i16, cx: i16, id: u16) -> Item {
     }
 }
 
-fn button(id: u16, text: &str, default: bool, (x, y): (i16, i16)) -> Item {
+/// A push button; `first` starts a group. Buttons side by side are one group, as in JAWS's
+/// dialogs: the arrows move between them and wrap [obs, 224/s8, s9].
+fn button(id: u16, text: &str, default: bool, first: bool, (x, y): (i16, i16)) -> Item {
     let kind = if default {
         BS_DEFPUSHBUTTON
     } else {
         BS_PUSHBUTTON
     };
+    let group = if first { WS_GROUP } else { 0 };
     Item {
         class: Class::Button,
-        style: WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_GROUP | kind,
+        style: WS_CHILD | WS_VISIBLE | WS_TABSTOP | group | kind,
         x,
         y,
         cx: BUTTON_WIDTH,
@@ -222,9 +225,12 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
     let mut column = 0;
     let mut row_bottom = row_top;
     let mut y = row_top;
+    let mut after_button = false;
     for (index, control) in dialog.controls.iter().enumerate() {
         let id = window_id(index, &control.id);
         ids.push(id);
+        let first = !after_button;
+        after_button = matches!(control.kind, ControlKind::Button { .. });
         match &control.kind {
             ControlKind::List { .. } => items.push(Item {
                 class: Class::Named("SysListView32"),
@@ -246,7 +252,13 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
                 text: control.label.clone(),
             }),
             ControlKind::Button { default } => {
-                items.push(button(id, &control.label, *default, (button_x, button_y)));
+                items.push(button(
+                    id,
+                    &control.label,
+                    *default,
+                    first,
+                    (button_x, button_y),
+                ));
                 button_y += BUTTON_HEIGHT + 4;
             }
             ControlKind::Radios { options, .. } => {
@@ -329,7 +341,7 @@ fn form_layout(dialog: &DialogSpec) -> Layout {
                 group = Some((items.len(), y));
                 items.push(Item {
                     class: Class::Button,
-                    style: WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
+                    style: WS_CHILD | WS_VISIBLE | WS_GROUP | BS_GROUPBOX,
                     x: MARGIN,
                     y,
                     cx: WIDTH - 2 * MARGIN,
@@ -430,8 +442,8 @@ fn form_layout(dialog: &DialogSpec) -> Layout {
         y += 3;
         let count = i16::try_from(buttons.len()).unwrap_or(1);
         let mut x = WIDTH - MARGIN - count * BUTTON_WIDTH - (count - 1) * 4;
-        for (id, text, default) in buttons {
-            items.push(button(id, &text, default, (x, y)));
+        for (n, (id, text, default)) in buttons.into_iter().enumerate() {
+            items.push(button(id, &text, default, n == 0, (x, y)));
             x += BUTTON_WIDTH + 4;
         }
         y += BUTTON_HEIGHT;
@@ -575,14 +587,17 @@ mod tests {
                 (&Class::Button, IDCANCEL, "Cancel"),
             ]
         );
-        // The group box holds its rows; the buttons sit below it, on one row, at the right.
+        // The group box holds its rows; the buttons sit below it, on one row, at the right,
+        // one group that the arrows move in.
         let group = layout.items.first().map(|g| g.y + g.cy).unwrap_or(0);
         let ok = layout.items.get(6).cloned();
         let cancel = layout.items.get(7).cloned();
         assert!(ok.as_ref().is_some_and(|ok| ok.y > group));
         assert!(ok.zip(cancel).is_some_and(|(ok, cancel)| ok.y == cancel.y
             && cancel.x + cancel.cx == WIDTH - MARGIN
-            && ok.style & BS_DEFPUSHBUTTON != 0));
+            && ok.style & BS_DEFPUSHBUTTON != 0
+            && ok.style & WS_GROUP != 0
+            && cancel.style & WS_GROUP == 0));
         assert!(layout.height > group);
     }
 
