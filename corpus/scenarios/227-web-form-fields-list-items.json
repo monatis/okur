@@ -1,0 +1,22 @@
+{
+  "id": "227-web-form-fields-list-items",
+  "name": "The Form Fields List (Insert+F5): every item, Down through all ten, then Escape",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Escape", "Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+F5", "settle_max_ms": 15000 },
+    { "id": "s2", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")" },
+    { "id": "s3", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")" },
+    { "id": "s4", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")" },
+    { "id": "s5", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")" },
+    { "id": "s6", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")" },
+    { "id": "s7", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")" },
+    { "id": "s8", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")" },
+    { "id": "s9", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")" },
+    { "id": "s10", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")" },
+    { "id": "s11", "type": "jaws_function", "command": "TypeKey(\"Escape\")" }
+  ]
+}
