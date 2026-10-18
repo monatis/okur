@@ -822,6 +822,7 @@ impl ScreenReaderEngine {
                     msg::quicknav_none_headings().to_string(),
                 )
             }
+            ListKind::Features => (Some(ListDialog::features(id)), String::new()),
             // With none, JAWS says so and then the page [obs, 221/s2].
             ListKind::FormFields => {
                 let fields = self.cursor.buffer.get_form_fields_list();
@@ -877,7 +878,9 @@ impl ScreenReaderEngine {
                 let said = self.cursor.jump_to_element_offset(entry.offset);
                 let speech = match kind {
                     ListKind::Links => format!("{said}\n{}", msg::hint_activate_enter()),
-                    ListKind::Headings | ListKind::FormFields => self.cursor.current_line(),
+                    ListKind::Headings | ListKind::FormFields | ListKind::Features => {
+                        self.cursor.current_line()
+                    }
                 };
                 self.speech.speak(&speech, true);
                 Some(speech)
@@ -935,6 +938,27 @@ impl ScreenReaderEngine {
                 }
                 self.speech.speak(&speech, true);
                 Some(speech)
+            }
+            // JAWS opens the chosen list in place of Virtual HTML Features [obs, 226/s3]: the
+            // new dialog is shown before this one goes, so the focus moves from one to the
+            // other. A list Okur has not built yet is said so.
+            Outcome::Open(feature) => {
+                let features = self.list_dialog.take();
+                let opened = match feature.list() {
+                    Some(kind) => self.open_list(kind),
+                    None => {
+                        let speech = msg::html_feature_not_yet(feature.name().as_str()).to_string();
+                        self.speech.speak(&speech, true);
+                        Some(speech)
+                    }
+                };
+                if let (Some(features), Some(ui)) = (features, &self.ui) {
+                    ui.send(crate::ui::ToUi::DialogClose { id: features.id });
+                }
+                if self.list_dialog.is_none() {
+                    self.returning_from_dialog();
+                }
+                opened
             }
             // Select a Form Field gives the page back named; the Links List quietly [obs,
             // 227/s11, 223/s3].

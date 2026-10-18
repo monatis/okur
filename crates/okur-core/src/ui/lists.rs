@@ -7,7 +7,9 @@
 //! - the Heading List (Insert+F6): list "headings" of "text : level", Move To Heading (the
 //!   default), Cancel, Sort Headings and Display (all, or one level of 1 to 6) [obs, 224];
 //! - Select a Form Field (Insert+F5): list "List1" of "name type value" entries, OK (the
-//!   default) and Cancel [obs, 225, 227].
+//!   default) and Cancel [obs, 225, 227];
+//! - Virtual HTML Features (Insert+F3): list "List1" of JAWS's 22 element lists, OK (the
+//!   default) and Cancel; OK opens the chosen list [obs, 226, 230].
 //!
 //! See `docs/references/jaws-dialogs-and-visual-features.md` for the dialogs' layout.
 
@@ -38,6 +40,100 @@ pub enum ListKind {
     Links,
     Headings,
     FormFields,
+    /// Virtual HTML Features: the lists themselves.
+    Features,
+}
+
+/// The element lists Virtual HTML Features offers, in JAWS's order [obs, 230/s1-s22].
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum HtmlFeature {
+    Anchors,
+    Articles,
+    BlockQuotes,
+    Buttons,
+    CheckBoxes,
+    Controls,
+    Divisions,
+    EditBoxes,
+    FormFields,
+    Frames,
+    Graphics,
+    Headings,
+    Links,
+    ListItems,
+    Lists,
+    Paragraphs,
+    PlaceMarkers,
+    RadioButtons,
+    Regions,
+    SmartGlance,
+    Tables,
+    Tabs,
+}
+
+impl HtmlFeature {
+    pub const ALL: [Self; 22] = [
+        Self::Anchors,
+        Self::Articles,
+        Self::BlockQuotes,
+        Self::Buttons,
+        Self::CheckBoxes,
+        Self::Controls,
+        Self::Divisions,
+        Self::EditBoxes,
+        Self::FormFields,
+        Self::Frames,
+        Self::Graphics,
+        Self::Headings,
+        Self::Links,
+        Self::ListItems,
+        Self::Lists,
+        Self::Paragraphs,
+        Self::PlaceMarkers,
+        Self::RadioButtons,
+        Self::Regions,
+        Self::SmartGlance,
+        Self::Tables,
+        Self::Tabs,
+    ];
+
+    /// The list's name, as Virtual HTML Features shows it.
+    pub fn name(self) -> StaticMessage {
+        match self {
+            Self::Anchors => msg::html_feature_anchors(),
+            Self::Articles => msg::html_feature_articles(),
+            Self::BlockQuotes => msg::html_feature_block_quotes(),
+            Self::Buttons => msg::html_feature_buttons(),
+            Self::CheckBoxes => msg::html_feature_check_boxes(),
+            Self::Controls => msg::html_feature_controls(),
+            Self::Divisions => msg::html_feature_divisions(),
+            Self::EditBoxes => msg::html_feature_edit_boxes(),
+            Self::FormFields => msg::html_feature_form_fields(),
+            Self::Frames => msg::html_feature_frames(),
+            Self::Graphics => msg::html_feature_graphics(),
+            Self::Headings => msg::html_feature_headings(),
+            Self::Links => msg::html_feature_links(),
+            Self::ListItems => msg::html_feature_list_items(),
+            Self::Lists => msg::html_feature_lists(),
+            Self::Paragraphs => msg::html_feature_paragraphs(),
+            Self::PlaceMarkers => msg::html_feature_placemarkers(),
+            Self::RadioButtons => msg::html_feature_radio_buttons(),
+            Self::Regions => msg::html_feature_regions(),
+            Self::SmartGlance => msg::html_feature_smart_glance(),
+            Self::Tables => msg::html_feature_tables(),
+            Self::Tabs => msg::html_feature_tabs(),
+        }
+    }
+
+    /// The list dialog Okur opens for it; the others are not built yet.
+    pub fn list(self) -> Option<ListKind> {
+        match self {
+            Self::Links => Some(ListKind::Links),
+            Self::Headings => Some(ListKind::Headings),
+            Self::FormFields => Some(ListKind::FormFields),
+            _ => None,
+        }
+    }
 }
 
 /// One of the page's elements, as the list shows it and acts on it.
@@ -57,6 +153,8 @@ pub struct Entry {
     pub node_id: usize,
     /// Where the element is in the page's buffer.
     pub offset: usize,
+    /// In Virtual HTML Features, the list the entry opens.
+    pub feature: Option<HtmlFeature>,
 }
 
 impl Entry {
@@ -74,6 +172,7 @@ impl Entry {
             same_page: link.is_same_page,
             node_id: link.node_id,
             offset: link.offset,
+            feature: None,
         }
     }
 
@@ -87,6 +186,7 @@ impl Entry {
             same_page: false,
             node_id: heading.node_id,
             offset: heading.offset,
+            feature: None,
         }
     }
 
@@ -101,6 +201,22 @@ impl Entry {
             same_page: false,
             node_id: field.node_id,
             offset: field.offset,
+            feature: None,
+        }
+    }
+
+    /// One of Virtual HTML Features' lists, by its name.
+    pub fn feature(feature: HtmlFeature) -> Self {
+        let name = feature.name().to_string();
+        Self {
+            sort_key: name.to_lowercase(),
+            text: name,
+            level: None,
+            address: None,
+            same_page: false,
+            node_id: 0,
+            offset: 0,
+            feature: Some(feature),
         }
     }
 }
@@ -118,6 +234,8 @@ pub enum Outcome {
     Activate(Entry),
     /// Close the dialog, move to the field and give it the focus (OK in Select a Form Field).
     Focus(Entry),
+    /// Open the chosen list in place of Virtual HTML Features (OK there).
+    Open(HtmlFeature),
     /// The dialog is gone; the cursor stays.
     Closed,
 }
@@ -175,6 +293,15 @@ impl ListDialog {
         )
     }
 
+    /// Virtual HTML Features: JAWS's element lists, the first selected.
+    pub fn features(id: u32) -> Self {
+        Self::new(
+            id,
+            ListKind::Features,
+            HtmlFeature::ALL.into_iter().map(Entry::feature).collect(),
+        )
+    }
+
     fn new(id: u32, kind: ListKind, entries: Vec<Entry>) -> Self {
         let mut dialog = Self {
             id,
@@ -199,6 +326,7 @@ impl ListDialog {
             ListKind::Links => "links",
             ListKind::Headings => "headings",
             ListKind::FormFields => "fields",
+            ListKind::Features => "lists",
         }
     }
 
@@ -212,7 +340,7 @@ impl ListDialog {
                         .map(|level| msg::heading_list_display_level(level).to_string()),
                 )
                 .collect(),
-            ListKind::FormFields => Vec::new(),
+            ListKind::FormFields | ListKind::Features => Vec::new(),
         }
     }
 
@@ -227,7 +355,7 @@ impl ListDialog {
             (ListKind::Links, _) => true,
             (ListKind::Headings, level) => entry.level == u32::try_from(level).ok(),
             // Select a Form Field has no Display options.
-            (ListKind::FormFields, _) => true,
+            (ListKind::FormFields | ListKind::Features, _) => true,
         };
         let mut shown: Vec<usize> = (0..self.entries.len())
             .filter(|&i| self.entries.get(i).is_some_and(keep))
@@ -342,6 +470,14 @@ impl ListDialog {
                     button("cancel", msg::form_field_list_cancel(), false),
                 ],
             ),
+            ListKind::Features => (
+                msg::list_dialog_features(),
+                vec![
+                    list(msg::list_dialog_features_list()),
+                    button("ok", msg::features_ok(), true),
+                    button("cancel", msg::features_cancel(), false),
+                ],
+            ),
         };
         DialogSpec {
             id: self.id,
@@ -358,7 +494,7 @@ impl ListDialog {
                 control: "address".to_owned(),
                 value: Value::Text(self.address()),
             }],
-            ListKind::Headings | ListKind::FormFields => Vec::new(),
+            ListKind::Headings | ListKind::FormFields | ListKind::Features => Vec::new(),
         }
     }
 
@@ -408,6 +544,9 @@ impl ListDialog {
                     ("move", Some(entry), _) => Outcome::MoveTo(entry.clone()),
                     ("activate", Some(entry), ListKind::Links) => Outcome::Activate(entry.clone()),
                     ("ok", Some(entry), ListKind::FormFields) => Outcome::Focus(entry.clone()),
+                    ("ok", Some(entry), ListKind::Features) => {
+                        entry.feature.map_or(Outcome::Nothing, Outcome::Open)
+                    }
                     _ => Outcome::Nothing,
                 }
             }
@@ -642,5 +781,30 @@ mod tests {
             Outcome::MoveTo(Entry::heading(&heading("Described controls", 2, 20)))
         );
         assert_eq!(dialog.handle(&pressed("activate")), Outcome::Nothing);
+    }
+
+    /// Virtual HTML Features lists JAWS's 22 element lists in its order, with OK (the
+    /// default) and Cancel; OK opens the selected list [obs, 230].
+    #[test]
+    fn the_dialog_is_jaws_virtual_html_features() {
+        let mut dialog = ListDialog::features(2);
+        let spec = dialog.spec();
+        assert_eq!(spec.title, "Virtual HTML Features");
+        let labels: Vec<&str> = spec.controls.iter().map(|c| c.label.as_str()).collect();
+        assert_eq!(labels, ["List1", "OK", "Cancel"]);
+        let texts = dialog.texts();
+        assert_eq!(texts.len(), 22);
+        assert_eq!(texts.first().map(String::as_str), Some("Anchors List"));
+        assert_eq!(texts.get(11).map(String::as_str), Some("Headings List"));
+        assert_eq!(texts.get(16).map(String::as_str), Some("PlaceMarkers"));
+        assert_eq!(texts.last().map(String::as_str), Some("Tabs List"));
+        assert_eq!(
+            dialog.handle(&changed("lists", Value::Selected(11))),
+            Outcome::Nothing
+        );
+        assert_eq!(
+            dialog.handle(&pressed("ok")),
+            Outcome::Open(HtmlFeature::Headings)
+        );
     }
 }

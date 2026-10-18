@@ -109,6 +109,8 @@ pub enum Command {
     SelectAHeading,
     SelectALink,
     SelectAFormField,
+    /// The lists of a page's elements (Virtual HTML Features, Insert+F3).
+    VirtualHtmlFeatures,
     /// The page's regions (landmarks), JAWS's Insert+Ctrl+R.
     SelectARegion,
     /// Moves to the heading with this text.
@@ -273,6 +275,7 @@ impl Command {
                 SelectAHeading
             }
             "SelectALink" | "LinkList" | "LinksList" | "Insert+F7" | "JAWSKey+F7" => SelectALink,
+            "VirtualHTMLFeatures" | "Insert+F3" | "JAWSKey+F3" => VirtualHtmlFeatures,
             "SelectAFormField" | "FormFieldList" | "FormFieldsList" | "Insert+F5"
             | "JAWSKey+F5" | "Insert+Ctrl+F" | "JAWSKey+Ctrl+F" => SelectAFormField,
             "SelectARegion" | "RegionsList" | "Insert+Ctrl+R" | "JAWSKey+Ctrl+R" => SelectARegion,
@@ -509,6 +512,7 @@ static BINDINGS: &[Binding] = &{
         // Find next and prior, and the element lists.
         bind(F(3), SHIFT.insert(No), FindPrior),
         bind(F(3), ALONE, FindNext),
+        bind(F(3), JAWS, VirtualHtmlFeatures),
         bind(F(5), JAWS, SelectAFormField),
         bind(F(6), JAWS, SelectAHeading),
         bind(F(7), JAWS, SelectALink),
@@ -677,7 +681,7 @@ mod tests {
             (key(Key::Alpha('f'), jaws), Some(SayFont)),
             (key(Key::Alpha('q'), none), Some(MoveToMainRegion)),
             (key(Key::Alpha('q'), shift), Some(MoveToMainRegion)),
-            (key(Key::F(3), jaws), None),
+            (key(Key::F(3), jaws), Some(VirtualHtmlFeatures)),
         ];
         for (event, command) in cases {
             assert_eq!(command_for(&event), command, "{event:?}");

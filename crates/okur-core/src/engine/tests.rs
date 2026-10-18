@@ -2731,6 +2731,67 @@ fn the_heading_list_reads_the_chosen_heading_as_its_line() {
     assert_eq!(level_first, Some(true), "{moved:?}");
 }
 
+/// Insert+F3 opens Virtual HTML Features; OK on Headings List opens the Heading List before
+/// the first dialog goes, as JAWS opens it in its place [obs, 226/s3]. A list Okur has not
+/// built yet is said so, and the dialog goes.
+#[test]
+fn virtual_html_features_opens_the_chosen_list() {
+    use crate::ui::{FromUi, ToUi, Value};
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Web Menus")
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.handle_focus_event(&page_document());
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let mut f3 = KeyEvent::new(Key::F(3), Modifiers::none(), true);
+    f3.modifiers.insert = true;
+    let open = |engine: &mut ScreenReaderEngine, item: usize| {
+        assert_eq!(engine.handle_key_event(&f3), KeyAction::Consume);
+        let id = match ui.take().first() {
+            Some(ToUi::DialogShow { dialog }) if dialog.title == "Virtual HTML Features" => {
+                dialog.id
+            }
+            other => {
+                panic_free_fail(&format!("no Virtual HTML Features: {other:?}"));
+                return (0, None);
+            }
+        };
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+            id,
+            control: "lists".into(),
+            value: Value::Selected(item),
+        }));
+        let said =
+            engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+                id,
+                control: "ok".into(),
+            }));
+        (id, said)
+    };
+    // Headings List, the 12th.
+    let (id, _) = open(&mut engine, 11);
+    let sent = ui.take();
+    let titles: Vec<String> = sent
+        .iter()
+        .map(|m| match m {
+            ToUi::DialogShow { dialog } => format!("show {}", dialog.title),
+            ToUi::DialogClose { id: closed } if *closed == id => "close features".to_owned(),
+            other => format!("{other:?}"),
+        })
+        .collect();
+    assert_eq!(titles, ["show Heading List", "close features"]);
+    // Anchors List, which Okur has not built.
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogClosed { id: id + 1 }));
+    let (id, said) = open(&mut engine, 0);
+    assert_eq!(said.as_deref(), Some("Okur has no Anchors List yet."));
+    assert_eq!(ui.take(), [ToUi::DialogClose { id }]);
+}
+
 /// Insert+F5 opens a real Select a Form Field. OK moves to the chosen field and focuses it,
 /// naming the page and reading the field's line; the field's own focus is then said
 /// although the focus is coming back from the dialog [obs, 225/s10, 228/s9]. Escape names

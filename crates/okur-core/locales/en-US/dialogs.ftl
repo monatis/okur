@@ -70,3 +70,10 @@ heading-list-display-level = Level &{ $level } Headings
 # Enter chooses it, as in JAWS: JAWS's labels have no access key.
 form-field-list-ok = OK
 form-field-list-cancel = Cancel
+
+## Virtual HTML Features (Insert+F3), as JAWS's. Its title and its list's name are
+## list-dialog-features and list-dialog-features-list.
+
+# Enter chooses it, as in JAWS: JAWS's labels have no access key.
+features-ok = OK
+features-cancel = Cancel
