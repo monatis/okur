@@ -4,6 +4,7 @@
 # Installs the harness on the reference machine straight into place with `opendesk push`, which
 # verifies each file's SHA-256 and replaces the destination only once the whole file arrived:
 #   bin/okur.exe            <- --okur (default target/agent/release/okur.exe), if built
+#   bin/okur-ui.exe         <- okur-ui.exe beside it, if built (Okur's windows)
 #   skill scripts           <- skills/jaws-reference/scripts/*.ps1
 #   corpus fixtures         <- corpus/fixtures/*.html, *.ps1
 #   corpus scenarios        <- corpus/scenarios/*.json
@@ -30,6 +31,10 @@ LAB=C:/Users/ailabs
 # One "local<TAB>remote" line per file to install.
 files() {
     [ -f "$OKUR" ] && printf '%s\t%s\n' "$OKUR" "$LAB/sr-harness/bin/okur.exe"
+    # Okur starts the program that draws its windows from its own folder.
+    local ui
+    ui="$(dirname "$OKUR")/okur-ui.exe"
+    [ -f "$ui" ] && printf '%s\t%s\n' "$ui" "$LAB/sr-harness/bin/okur-ui.exe"
     for f in skills/jaws-reference/scripts/*.ps1; do
         printf '%s\t%s\n' "$f" "$LAB/skills/jaws-reference/scripts/$(basename "$f")"
     done

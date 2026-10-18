@@ -30,6 +30,11 @@ our tracer sees thinly (JAWS runs elevated). Build a live comparison:
   JAWS transcripts as `okur parity` compares them.
 - Done when: 222 (Links List) runs live on old-pc and the comparison lists each step.
 
+Done on 2026-10-18 (`4d144e3`, `00cc733`): the first run measured Okur's Links List at 5/11 steps;
+fixed to 10/11 (radio groups by `WS_GROUP`, a link's current state in the list, the hint after
+Activate Link). Left: JAWS names its own window first ("JAWS Version 2025.2505.43"); the owner
+decides what Okur says there. Run every new dialog this way.
+
 ### 2. The rest of M0 (the catalog and verbosity are merged)
 
 Done on 2026-10-18: the catalog, the literal and unused-message tests, the pseudo-locale run,
@@ -47,6 +52,16 @@ of 222-226: the helper session in the engine (the page kept while the dialog is 
 result applied on close); Heading List (levels, Alt+1 to Alt+6), Select a Form Field (Enter
 turns forms mode on), Insert+F3 (Virtual HTML Features), the regions list with regions, the
 PlaceMarker list. Each compared live (step 1).
+
+### 3b. Forms in browse mode, studied again (the user's request, 2026-10-18)
+
+The user suspects Okur diverges from JAWS in how forms and form fields are announced when
+moving with Up and Down Arrow in browse mode. Record JAWS on old-pc: the form fixtures
+(`forms-interaction.html`, `signup-form.html`, `web-app-patterns.html`) arrowing through every
+field, group and form boundary; and real pages with forms that need no sign-in (GitHub's new
+issue form needs one: check whether old-pc's Chrome has a session; never sign in or submit).
+Real pages need their IA2 snapshot captured at the same time, and a privacy search before
+anything is committed. Then compare Okur with `okur parity` and fix what differs.
 
 ### 4. Parity left from round 3
 
