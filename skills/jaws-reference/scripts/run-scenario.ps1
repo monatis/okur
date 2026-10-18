@@ -73,6 +73,26 @@ public static class SrKeyInput {
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern IntPtr FindWindow(string cls, string name);
     [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr hWnd);
     [DllImport("user32.dll")] public static extern short GetAsyncKeyState(int vk);
+    [DllImport("user32.dll")] static extern IntPtr GetTopWindow(IntPtr hWnd);
+    [DllImport("user32.dll")] static extern IntPtr GetWindow(IntPtr hWnd, uint cmd);
+    [DllImport("user32.dll")] static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint pid);
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] static extern int GetClassName(IntPtr hWnd, StringBuilder s, int n);
+
+    /// JAWS's dialog boxes (`#32770`) visible on the screen, of the process `jaws`.
+    public static System.Collections.Generic.List<IntPtr> JawsDialogs(uint jaws) {
+        var found = new System.Collections.Generic.List<IntPtr>();
+        var cls = new StringBuilder(64);
+        for (IntPtr h = GetTopWindow(IntPtr.Zero); h != IntPtr.Zero; h = GetWindow(h, 2)) {
+            if (!IsWindowVisible(h)) continue;
+            uint pid;
+            GetWindowThreadProcessId(h, out pid);
+            if (pid != jaws) continue;
+            cls.Clear();
+            GetClassName(h, cls, cls.Capacity);
+            if (cls.ToString() == "#32770") found.Add(h);
+        }
+        return found;
+    }
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern int GetWindowText(IntPtr hWnd, StringBuilder s, int n);
     const uint KEYEVENTF_EXTENDEDKEY = 0x1, KEYEVENTF_KEYUP = 0x2;
 
@@ -351,11 +371,14 @@ function Clear-LabState {
     $window = [SrKeyInput]::FindWindow('JFWUI2', [NullString]::Value)
     $jawsInWay = $window -ne [IntPtr]::Zero -and (
         [SrKeyInput]::GetForegroundWindow() -eq $window -or [SrKeyInput]::IsWindowVisible($window))
-    if ($held.Count -eq 0 -and -not $jawsInWay) { return $null }
+    $jaws = Get-Process jfw -ErrorAction SilentlyContinue | Select-Object -First 1
+    $dialogs = if ($jaws) { [SrKeyInput]::JawsDialogs([uint32]$jaws.Id).Count } else { 0 }
+    if ($held.Count -eq 0 -and -not $jawsInWay -and $dialogs -eq 0) { return $null }
     Invoke-ClearLabState
     [ordered]@{
         modifiers_held = @($held | ForEach-Object { '0x{0:X2}' -f $_ })
         jaws_window_in_front = $jawsInWay
+        jaws_dialogs_closed = $dialogs
         modifiers_still_held = @(Get-HeldModifiers | ForEach-Object { '0x{0:X2}' -f $_ })
     }
 }

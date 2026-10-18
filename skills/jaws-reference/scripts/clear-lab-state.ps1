@@ -25,6 +25,7 @@ param(
 Add-Type @"
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 public static class SrLabState {
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern IntPtr FindWindow(string cls, string name);
     [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
@@ -36,6 +37,11 @@ public static class SrLabState {
     [DllImport("user32.dll")] public static extern bool IsIconic(IntPtr hWnd);
     [DllImport("user32.dll")] public static extern int GetWindowTextLength(IntPtr hWnd);
     [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr hWnd, IntPtr pid);
+    [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint pid);
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern int GetClassName(IntPtr hWnd, StringBuilder s, int n);
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern IntPtr FindWindowEx(IntPtr parent, IntPtr after, string cls, string name);
+    [DllImport("user32.dll")] public static extern IntPtr SendMessage(IntPtr hWnd, uint msg, IntPtr w, IntPtr l);
+    [DllImport("user32.dll")] public static extern bool PostMessage(IntPtr hWnd, uint msg, IntPtr w, IntPtr l);
     [DllImport("kernel32.dll")] public static extern uint GetCurrentThreadId();
     [DllImport("user32.dll")] public static extern bool AttachThreadInput(uint from, uint to, bool attach);
     [DllImport("user32.dll")] public static extern short GetAsyncKeyState(int vk);
@@ -58,6 +64,42 @@ public static class SrLabState {
             released++;
         }
         return released;
+    }
+
+/// JAWS's dialog boxes (`#32770`) visible on the screen, of the process `jaws`.
+    public static System.Collections.Generic.List<IntPtr> JawsDialogs(uint jaws) {
+        var found = new System.Collections.Generic.List<IntPtr>();
+        var cls = new StringBuilder(64);
+        for (IntPtr h = GetTopWindow(IntPtr.Zero); h != IntPtr.Zero; h = GetWindow(h, 2)) {
+            if (!IsWindowVisible(h)) continue;
+            uint pid;
+            GetWindowThreadProcessId(h, out pid);
+            if (pid != jaws) continue;
+            cls.Clear();
+            GetClassName(h, cls, cls.Capacity);
+            if (cls.ToString() == "#32770") found.Add(h);
+        }
+        return found;
+    }
+
+    /// Closes JAWS's dialog boxes left open, by their Cancel, No or Close button as a user
+    /// would (a button press reaches them from an elevated process), or with WM_CLOSE.
+    public static int CloseJawsDialogs(uint jaws) {
+        string[] buttons = { "&Cancel", "Cancel", "&No", "No", "&Close", "Close" };
+        var dialogs = JawsDialogs(jaws);
+        foreach (IntPtr dialog in dialogs) {
+            IntPtr button = IntPtr.Zero;
+            foreach (string name in buttons) {
+                button = FindWindowEx(dialog, IntPtr.Zero, "Button", name);
+                if (button != IntPtr.Zero) break;
+            }
+            if (button != IntPtr.Zero) {
+                SendMessage(button, 0x00F5, IntPtr.Zero, IntPtr.Zero);
+            } else {
+                PostMessage(dialog, 0x0010, IntPtr.Zero, IntPtr.Zero);
+            }
+        }
+        return dialogs.Count;
     }
 
     /// The first visible, titled, unowned top-level window in z-order other than `skip`.
@@ -83,6 +125,10 @@ public static class SrLabState {
 "@
 [void][SrLabState]::ReleaseModifiers()
 if ($KeysOnly) { return }
+# JAWS's dialogs left open by a scenario before (its regions list, its Research It prompt)
+# take the foreground at every trial's start (old-pc, 2026-10-18).
+$jaws = Get-Process jfw -ErrorAction SilentlyContinue | Select-Object -First 1
+if ($jaws) { [void][SrLabState]::CloseJawsDialogs([uint32]$jaws.Id) }
 $window = [SrLabState]::FindWindow('JFWUI2', [NullString]::Value)
 if ($window -ne [IntPtr]::Zero) {
     # SW_HIDE
