@@ -170,6 +170,155 @@ impl Default for VoiceSettings {
     }
 }
 
+/// JAWS's user verbosity levels (Settings Center: Verbosity). Each level has its own output
+/// modes and message length; JAWS starts at Beginner.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum VerbosityLevel {
+    #[default]
+    Beginner,
+    Intermediate,
+    Advanced,
+}
+
+impl VerbosityLevel {
+    /// The level's place in a per-level setting: Beginner first.
+    pub fn index(self) -> usize {
+        match self {
+            Self::Beginner => 0,
+            Self::Intermediate => 1,
+            Self::Advanced => 2,
+        }
+    }
+}
+
+/// Whether an output type is spoken at a level. More modes only if JAWS's files show them.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum OutputMode {
+    Off,
+    On,
+}
+
+/// Whether messages that have a short form are said long or short (JAWS's message length;
+/// a message's short form is its `.short` attribute in the catalog).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum MessageLength {
+    Long,
+    Short,
+}
+
+/// The kinds of speech verbosity switches on and off, as JAWS's output types: every message
+/// JAWS speaks belongs to one. These are Okur's ids; each maps to JAWS's `DEFAULT.JCF`
+/// `[OutputModes]` key where one is known. JAWS's full list is learned on the reference
+/// machine (proposal §6.5), so only the types Okur needs are here.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum OutputType {
+    /// A control's access key ("alt+Y") and a field's shortcut ("Ctrl+L"): JAWS's Access Key
+    /// output takes both [obs, 220/s7].
+    AccessKey,
+    /// Usage hints: "To activate press Enter."
+    Hint,
+}
+
+impl OutputType {
+    pub const ALL: [OutputType; 2] = [OutputType::AccessKey, OutputType::Hint];
+
+    /// JAWS's key for the type in `DEFAULT.JCF` `[OutputModes]`, where it is known.
+    pub fn jcf_key(self) -> Option<&'static str> {
+        match self {
+            Self::AccessKey => Some("ACCESS_KEY"),
+            Self::Hint => None,
+        }
+    }
+
+    /// The output type a part of an announcement belongs to; `None` for parts verbosity
+    /// does not switch.
+    pub fn of_part(kind: crate::announcement::PartKind) -> Option<OutputType> {
+        use crate::announcement::PartKind;
+        match kind {
+            PartKind::AccessKey | PartKind::Shortcut => Some(Self::AccessKey),
+            PartKind::Hint => Some(Self::Hint),
+            _ => None,
+        }
+    }
+}
+
+/// Verbosity, modeled on JAWS's (proposal §6.5): a level, and per level the output modes and
+/// the message length. An output type not listed in `output_modes` is on at every level, as
+/// JAWS's types are by default unless its settings say otherwise.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(default)]
+pub struct Verbosity {
+    pub level: VerbosityLevel,
+    /// One mode per level, Beginner first.
+    pub output_modes: std::collections::BTreeMap<OutputType, [OutputMode; 3]>,
+    /// One length per level, Beginner first.
+    pub message_length: [MessageLength; 3],
+}
+
+impl Default for Verbosity {
+    fn default() -> Self {
+        Self {
+            level: VerbosityLevel::Beginner,
+            output_modes: std::collections::BTreeMap::new(),
+            // Long at Beginner, short above (research §2.4).
+            message_length: [
+                MessageLength::Long,
+                MessageLength::Short,
+                MessageLength::Short,
+            ],
+        }
+    }
+}
+
+impl Verbosity {
+    /// Whether `output` is spoken at the current level.
+    pub fn is_on(&self, output: OutputType) -> bool {
+        self.mode(output) == OutputMode::On
+    }
+
+    /// `output`'s mode at the current level.
+    pub fn mode(&self, output: OutputType) -> OutputMode {
+        self.output_modes
+            .get(&output)
+            .and_then(|modes| modes.get(self.level.index()))
+            .copied()
+            .unwrap_or(OutputMode::On)
+    }
+
+    /// Sets `output`'s mode at each level, Beginner first.
+    pub fn set_modes(&mut self, output: OutputType, modes: [OutputMode; 3]) {
+        self.output_modes.insert(output, modes);
+    }
+
+    /// The message length at the current level.
+    pub fn message_length(&self) -> MessageLength {
+        self.message_length
+            .get(self.level.index())
+            .copied()
+            .unwrap_or(MessageLength::Long)
+    }
+
+    /// Whether a part of `kind` is said: its output type is on, or it has none.
+    pub fn says(&self, kind: crate::announcement::PartKind) -> bool {
+        OutputType::of_part(kind).is_none_or(|output| self.is_on(output))
+    }
+
+    /// The modes a `DEFAULT.JCF` `[OutputModes]` value gives: `0|0|0|Access Key` is one mode
+    /// per level, Beginner first ("0" off, anything else on), then the type's display name.
+    /// `None` when the value has fewer than three modes.
+    pub fn modes_from_jcf(value: &str) -> Option<[OutputMode; 3]> {
+        let mut fields = value.split('|').map(|f| match f.trim() {
+            "0" => OutputMode::Off,
+            _ => OutputMode::On,
+        });
+        Some([fields.next()?, fields.next()?, fields.next()?])
+    }
+}
+
 /// All user settings: what the settings dialog shows and the settings file keeps. A setting
 /// missing from the file has its default.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -184,9 +333,10 @@ pub struct Settings {
     /// Mode (`[FormsMode] AutoFormsMode`, on by default). Off, a field takes Enter first,
     /// and arrows in a page's menu stay the virtual cursor's (old-pc, 2026-10-18).
     pub auto_forms_mode: bool,
-    /// A control's access key is said after it ("alt+Y"), as JAWS's Access Key output
-    /// (`[OutputModes] ACCESS_KEY`, on by default).
-    pub access_keys: bool,
+    /// What is said and how much: a control's access key is said after it ("alt+Y") while
+    /// the `access_key` output type is on, as JAWS's Access Key output (`[OutputModes]
+    /// ACCESS_KEY`, on by default).
+    pub verbosity: Verbosity,
 }
 
 impl Default for Settings {
@@ -198,7 +348,7 @@ impl Default for Settings {
             typing_echo: TypingEcho::default(),
             viewer_display: ViewerDisplay::default(),
             auto_forms_mode: true,
-            access_keys: true,
+            verbosity: Verbosity::default(),
         }
     }
 }
@@ -238,6 +388,8 @@ impl Settings {
     /// `AutoFormsMode=0`, `ACCESS_KEY=0|0|0`; and JAWS's own reading of growing live regions,
     /// so replay compares like with like.
     pub fn reference_machine() -> Self {
+        let mut verbosity = Verbosity::default();
+        verbosity.set_modes(OutputType::AccessKey, [OutputMode::Off; 3]);
         Self {
             voice: VoiceSettings::default(),
             keyboard: KeyboardSettings::for_layout(KeyboardLayout::Laptop),
@@ -245,7 +397,7 @@ impl Settings {
             typing_echo: TypingEcho::None,
             viewer_display: ViewerDisplay::OnScreen,
             auto_forms_mode: false,
-            access_keys: false,
+            verbosity,
         }
     }
 }
@@ -266,12 +418,54 @@ mod tests {
     /// both off, and a settings file that names neither keeps the defaults.
     #[test]
     fn forms_mode_and_access_keys_default_to_jaws() {
+        let access_keys = |s: &Settings| s.verbosity.is_on(OutputType::AccessKey);
         let defaults = Settings::default();
-        assert!(defaults.auto_forms_mode && defaults.access_keys);
+        assert!(defaults.auto_forms_mode && access_keys(&defaults));
         let reference = Settings::reference_machine();
-        assert!(!reference.auto_forms_mode && !reference.access_keys);
+        assert!(!reference.auto_forms_mode && !access_keys(&reference));
         let older: Result<Settings, _> = serde_json::from_str(r#"{"typing_echo":"none"}"#);
-        assert!(older.is_ok_and(|s| s.auto_forms_mode && s.access_keys));
+        assert!(older.is_ok_and(|s| s.auto_forms_mode && access_keys(&s)));
+    }
+
+    /// Verbosity starts at Beginner with every output type on and long messages; a JCF
+    /// output mode gives one mode per level, and the level picks the one in force.
+    #[test]
+    fn verbosity_follows_its_level_and_the_jcf_modes() {
+        let mut verbosity = Verbosity::default();
+        assert_eq!(verbosity.level, VerbosityLevel::Beginner);
+        assert!(OutputType::ALL.iter().all(|t| verbosity.is_on(*t)));
+        assert_eq!(verbosity.message_length(), MessageLength::Long);
+
+        assert_eq!(
+            Verbosity::modes_from_jcf("0|0|0|Access Key"),
+            Some([OutputMode::Off; 3])
+        );
+        assert_eq!(Verbosity::modes_from_jcf("1|0"), None);
+        let modes = Verbosity::modes_from_jcf("1|0|0|Access Key");
+        verbosity.set_modes(OutputType::AccessKey, modes.unwrap_or([OutputMode::On; 3]));
+        assert!(verbosity.is_on(OutputType::AccessKey));
+        verbosity.level = VerbosityLevel::Advanced;
+        assert!(!verbosity.is_on(OutputType::AccessKey));
+        assert!(verbosity.is_on(OutputType::Hint));
+        assert_eq!(verbosity.message_length(), MessageLength::Short);
+
+        use crate::announcement::PartKind;
+        assert!(!verbosity.says(PartKind::AccessKey) && !verbosity.says(PartKind::Shortcut));
+        assert!(verbosity.says(PartKind::Hint) && verbosity.says(PartKind::Name));
+        assert_eq!(OutputType::AccessKey.jcf_key(), Some("ACCESS_KEY"));
+    }
+
+    /// The settings file keeps verbosity under Okur's ids.
+    #[test]
+    fn verbosity_round_trips_through_the_settings_file() {
+        let reference = Settings::reference_machine();
+        let json = serde_json::to_string(&reference).unwrap_or_default();
+        assert!(
+            json.contains(r#""verbosity":{"level":"beginner","output_modes":{"access_key":["off","off","off"]}"#),
+            "{json}"
+        );
+        let back: Result<Settings, _> = serde_json::from_str(&json);
+        assert!(back.is_ok_and(|s| s == reference));
     }
 
     #[test]

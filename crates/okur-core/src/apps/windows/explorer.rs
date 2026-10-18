@@ -136,22 +136,28 @@ struct Entry<'a> {
 fn entry(e: &Entry<'_>) -> Announcement {
     let mut lines = Vec::new();
     if let Some((title, folder)) = e.window {
-        lines.push(Line::text(title));
-        lines.extend(folder.map(Line::text));
+        lines.push(Line::of(PartKind::Container, title));
+        lines.extend(folder.map(|f| Line::of(PartKind::Container, f)));
     }
     lines.push(Line::new(vec![
         Part::new(PartKind::Container, "Items View"),
         Part::role(msg::role_list_box_multi_select().as_str()),
     ]));
-    lines.push(Line::text(if e.selected == Some(false) {
-        msg::explorer_item_not_selected(e.name).render()
-    } else {
-        e.name.to_owned()
-    }));
-    lines.extend(e.kind.map(Line::text));
-    lines.push(Line::text(msg::position(e.index, e.total)));
+    lines.push(Line::of(
+        PartKind::Name,
+        if e.selected == Some(false) {
+            msg::explorer_item_not_selected(e.name).render()
+        } else {
+            e.name.to_owned()
+        },
+    ));
+    lines.extend(e.kind.map(|k| Line::of(PartKind::Value, k)));
+    lines.push(Line::of(
+        PartKind::Position,
+        msg::position(e.index, e.total),
+    ));
     if e.hint {
-        lines.push(Line::text(msg::hint_move_to_an_item_arrows()));
+        lines.push(Line::of(PartKind::Hint, msg::hint_move_to_an_item_arrows()));
     }
     Announcement::new(lines)
 }

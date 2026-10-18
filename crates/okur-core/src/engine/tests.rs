@@ -2,6 +2,7 @@ use super::*;
 use crate::aom::{AomNode, Role};
 use crate::event::{LiveRegionEvent, Politeness};
 use crate::input::Modifiers;
+use crate::settings::{OutputMode, OutputType};
 use crate::speech::MockSpeechOutput;
 
 fn create_test_buffer() -> VirtualBuffer {
@@ -2813,7 +2814,10 @@ fn access_keys_follow_the_access_key_output() {
         VirtualCursor::new(create_test_buffer()),
         Box::new(MockSpeechOutput::new()),
     );
-    engine.settings.access_keys = false;
+    engine
+        .settings
+        .verbosity
+        .set_modes(OutputType::AccessKey, [OutputMode::Off; 3]);
     let without = engine.handle_focus_event(&button()).unwrap_or_default();
     assert!(without.contains("Yes"), "{without:?}");
     assert!(!without.contains("alt+Y"), "{without:?}");
@@ -2833,13 +2837,46 @@ fn a_fields_shortcut_follows_the_access_key_output() {
             VirtualCursor::new(create_test_buffer()),
             Box::new(MockSpeechOutput::new()),
         );
-        engine.settings.access_keys = access_keys;
+        let mode = if access_keys {
+            OutputMode::On
+        } else {
+            OutputMode::Off
+        };
+        engine
+            .settings
+            .verbosity
+            .set_modes(OutputType::AccessKey, [mode; 3]);
         engine
             .handle_focus_event(&address_bar())
             .unwrap_or_default()
     };
     assert!(said(true).contains("Ctrl+L"), "{:?}", said(true));
     assert!(!said(false).contains("Ctrl+L"), "{:?}", said(false));
+}
+
+/// Verbosity acts on a native focus's parts by kind: with the hint output type off at the
+/// current level, a button says no usage hint. Okur has no setting that turns it off yet
+/// (JAWS's default is on); this is the mechanism the verbosity settings will use.
+#[test]
+fn the_hint_output_type_drops_native_usage_hints() {
+    let said = |hints: OutputMode| {
+        let mut engine = ScreenReaderEngine::new(
+            VirtualCursor::new(create_test_buffer()),
+            Box::new(MockSpeechOutput::new()),
+        );
+        engine
+            .settings
+            .verbosity
+            .set_modes(OutputType::Hint, [hints; 3]);
+        engine
+            .handle_focus_event(&FocusEvent::new(Role::Button).with_name("Yes"))
+            .unwrap_or_default()
+    };
+    assert_eq!(
+        said(OutputMode::On),
+        "Yes \u{1d} Button \u{1e} \nTo activate press spacebar."
+    );
+    assert_eq!(said(OutputMode::Off), "Yes \u{1d} Button \u{1e} ");
 }
 
 /// Without Auto Forms Mode, Tab onto a page's menu bar leaves the virtual cursor there: the

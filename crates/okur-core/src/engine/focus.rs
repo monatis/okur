@@ -36,6 +36,13 @@ impl ScreenReaderEngine {
         Some(speech)
     }
 
+    /// `announcement` with the parts verbosity leaves out removed.
+    fn said(&self, mut announcement: Announcement) -> Announcement {
+        let verbosity = &self.settings.verbosity;
+        announcement.retain(|kind| verbosity.says(kind));
+        announcement
+    }
+
     /// Says that menus were left, when nothing else is said with it.
     fn say_leaving_menus(&mut self) -> String {
         let speech = msg::menus_left().to_string();
@@ -47,10 +54,12 @@ impl ScreenReaderEngine {
     /// Synchronizes cursor position, activates/deactivates forms mode,
     /// and emits canonical JAWS speech announcements.
     pub fn handle_focus_event(&mut self, focus: &FocusEvent) -> Option<String> {
-        // Access keys are said only with JAWS's Access Key output on; old-pc's JAWS has it off
-        // (`ACCESS_KEY=0|0|0`, 306 recorded 2026-10-18). That takes a menu item's letter
-        // ("Yeni sekme Ctrl+T | 2 of 24", without "e") and a field's shortcut (Chrome's address
-        // bar without "Ctrl+L") with it; a menu item's shortcut is part of the item [obs, 220].
+        // Access keys are said only with JAWS's Access Key output on (the `access_key` output
+        // type of the verbosity settings); old-pc's JAWS has it off (`ACCESS_KEY=0|0|0`, 306
+        // recorded 2026-10-18). That takes a menu item's letter ("Yeni sekme Ctrl+T | 2 of 24",
+        // without "e") and a field's shortcut (Chrome's address bar without "Ctrl+L") with it;
+        // a menu item's shortcut is part of the item [obs, 220]. The keys leave the event,
+        // since menus speak strings, not parts.
         let without_key;
         let menu_shortcut =
             |k: &String| focus.role == Role::MenuItem && k.trim().chars().count() > 1;
@@ -59,7 +68,11 @@ impl ScreenReaderEngine {
                 .accelerator_key
                 .as_ref()
                 .is_some_and(|k| !menu_shortcut(k));
-        let focus = if has_key && !self.settings.access_keys {
+        let access_keys = self
+            .settings
+            .verbosity
+            .is_on(crate::settings::OutputType::AccessKey);
+        let focus = if has_key && !access_keys {
             without_key = FocusEvent {
                 access_key: None,
                 accelerator_key: focus.accelerator_key.clone().filter(menu_shortcut),
@@ -148,7 +161,7 @@ impl ScreenReaderEngine {
                 }
                 FocusResponse::Silent => return None,
                 FocusResponse::Speak(announcement) => {
-                    let speech = with_leaving(announcement.render());
+                    let speech = with_leaving(self.said(announcement).render());
                     self.speech.speak(&speech, true);
                     // The focus is still the last one native focus knows, for the container
                     // the next one is in: File Explorer's column header after its list's item
@@ -563,7 +576,7 @@ impl ScreenReaderEngine {
         } else {
             control
         };
-        let speech = with_leaving(announcement.render());
+        let speech = with_leaving(self.said(announcement).render());
 
         if !speech.is_empty() {
             self.speech.speak(&speech, true);
