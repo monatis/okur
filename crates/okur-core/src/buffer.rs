@@ -398,6 +398,55 @@ impl VirtualBuffer {
             .map(|n| n.id)
     }
 
+    /// Every page node in document order, read or not: a paragraph or a division has no line
+    /// of its own, only its children's.
+    pub fn page_nodes(&self) -> impl Iterator<Item = &AomNode> + '_ {
+        let mut stack: Vec<&AomNode> = self.page.iter().collect();
+        std::iter::from_fn(move || {
+            let node = stack.pop()?;
+            stack.extend(node.children.iter().rev());
+            Some(node)
+        })
+    }
+
+    /// Where `node`'s subtree starts in the buffer: the first span of it.
+    pub fn start_of_subtree(&self, node: &AomNode) -> Option<usize> {
+        fn subtree(node: &AomNode, ids: &mut HashSet<usize>) {
+            ids.insert(node.id);
+            for child in &node.children {
+                subtree(child, ids);
+            }
+        }
+        let mut ids = HashSet::new();
+        subtree(node, &mut ids);
+        self.spans
+            .iter()
+            .find(|s| ids.contains(&s.node_id))
+            .map(|s| s.start_offset)
+    }
+
+    /// The page nodes around node `id`, nearest first: its parent, the parent's parent, up to
+    /// the page.
+    pub fn ancestors(&self, id: usize) -> Vec<&AomNode> {
+        let (Some(page), Some(path)) = (
+            self.page.as_ref(),
+            self.slot_of.get(&id).and_then(|&slot| self.path_to(slot)),
+        ) else {
+            return Vec::new();
+        };
+        let mut chain = vec![page];
+        let mut node = page;
+        for &index in path.iter().take(path.len().saturating_sub(1)) {
+            match node.children.get(index) {
+                Some(child) => node = child,
+                None => break,
+            }
+            chain.push(node);
+        }
+        chain.reverse();
+        chain
+    }
+
     /// The page node `id`, with its subtree, if the buffer reads it.
     pub fn node(&self, id: usize) -> Option<&AomNode> {
         if !self.readable.contains(&id) {

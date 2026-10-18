@@ -9,13 +9,16 @@
 //! - Select a Form Field (Insert+F5): list "List1" of "name type value" entries, OK (the
 //!   default) and Cancel [obs, 225, 227];
 //! - Virtual HTML Features (Insert+F3): list "List1" of JAWS's 22 element lists, OK (the
-//!   default) and Cancel; OK opens the chosen list [obs, 226, 230].
+//!   default) and Cancel; OK opens the chosen list [obs, 226, 230];
+//! - JAWS's element lists (Insert+Ctrl and a letter: "Select a Button", ...): list "List1",
+//!   OK (the default) and Cancel; their items are `crate::element_lists` [obs, 231-259].
 //!
 //! See `docs/references/jaws-dialogs-and-visual-features.md` for the dialogs' layout.
 
 use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
 
 use crate::buffer::{FormFieldListItem, HeadingListItem, LinkListItem};
+use crate::element_lists::{ElementItem, ElementList};
 use crate::messages::{msg, StaticMessage};
 
 const LINK_SORTS: [fn() -> StaticMessage; 2] = [
@@ -42,6 +45,8 @@ pub enum ListKind {
     FormFields,
     /// Virtual HTML Features: the lists themselves.
     Features,
+    /// One of JAWS's element lists.
+    Elements(ElementList),
 }
 
 /// The element lists Virtual HTML Features offers, in JAWS's order [obs, 230/s1-s22].
@@ -131,6 +136,19 @@ impl HtmlFeature {
             Self::Links => Some(ListKind::Links),
             Self::Headings => Some(ListKind::Headings),
             Self::FormFields => Some(ListKind::FormFields),
+            Self::RadioButtons => Some(ListKind::Elements(ElementList::RadioButtons)),
+            Self::Buttons => Some(ListKind::Elements(ElementList::Buttons)),
+            Self::Controls => Some(ListKind::Elements(ElementList::Controls)),
+            Self::EditBoxes => Some(ListKind::Elements(ElementList::Edits)),
+            Self::CheckBoxes => Some(ListKind::Elements(ElementList::CheckBoxes)),
+            Self::Graphics => Some(ListKind::Elements(ElementList::Graphics)),
+            Self::Lists => Some(ListKind::Elements(ElementList::Lists)),
+            Self::Articles => Some(ListKind::Elements(ElementList::Articles)),
+            Self::Paragraphs => Some(ListKind::Elements(ElementList::Paragraphs)),
+            Self::BlockQuotes => Some(ListKind::Elements(ElementList::BlockQuotes)),
+            Self::Tables => Some(ListKind::Elements(ElementList::Tables)),
+            Self::Divisions => Some(ListKind::Elements(ElementList::Divisions)),
+            Self::Tabs => Some(ListKind::Elements(ElementList::Tabs)),
             _ => None,
         }
     }
@@ -201,6 +219,20 @@ impl Entry {
             same_page: false,
             node_id: field.node_id,
             offset: field.offset,
+            feature: None,
+        }
+    }
+
+    /// An element of one of JAWS's element lists.
+    pub fn element(item: &ElementItem) -> Self {
+        Self {
+            sort_key: item.text.to_lowercase(),
+            text: item.text.clone(),
+            level: None,
+            address: None,
+            same_page: false,
+            node_id: item.node_id,
+            offset: item.offset,
             feature: None,
         }
     }
@@ -293,6 +325,15 @@ impl ListDialog {
         )
     }
 
+    /// One of JAWS's element lists over `items`, in page order, the first selected.
+    pub fn elements(id: u32, list: ElementList, items: &[ElementItem]) -> Self {
+        Self::new(
+            id,
+            ListKind::Elements(list),
+            items.iter().map(Entry::element).collect(),
+        )
+    }
+
     /// Virtual HTML Features: JAWS's element lists, the first selected.
     pub fn features(id: u32) -> Self {
         Self::new(
@@ -327,6 +368,7 @@ impl ListDialog {
             ListKind::Headings => "headings",
             ListKind::FormFields => "fields",
             ListKind::Features => "lists",
+            ListKind::Elements(_) => "elements",
         }
     }
 
@@ -340,7 +382,7 @@ impl ListDialog {
                         .map(|level| msg::heading_list_display_level(level).to_string()),
                 )
                 .collect(),
-            ListKind::FormFields | ListKind::Features => Vec::new(),
+            ListKind::FormFields | ListKind::Features | ListKind::Elements(_) => Vec::new(),
         }
     }
 
@@ -355,7 +397,7 @@ impl ListDialog {
             (ListKind::Links, _) => true,
             (ListKind::Headings, level) => entry.level == u32::try_from(level).ok(),
             // Select a Form Field has no Display options.
-            (ListKind::FormFields | ListKind::Features, _) => true,
+            (ListKind::FormFields | ListKind::Features | ListKind::Elements(_), _) => true,
         };
         let mut shown: Vec<usize> = (0..self.entries.len())
             .filter(|&i| self.entries.get(i).is_some_and(keep))
@@ -478,6 +520,14 @@ impl ListDialog {
                     button("cancel", msg::features_cancel(), false),
                 ],
             ),
+            ListKind::Elements(elements) => (
+                elements.title(),
+                vec![
+                    list(msg::list_dialog_form_fields_list()),
+                    button("ok", msg::features_ok(), true),
+                    button("cancel", msg::features_cancel(), false),
+                ],
+            ),
         };
         DialogSpec {
             id: self.id,
@@ -494,7 +544,10 @@ impl ListDialog {
                 control: "address".to_owned(),
                 value: Value::Text(self.address()),
             }],
-            ListKind::Headings | ListKind::FormFields | ListKind::Features => Vec::new(),
+            ListKind::Headings
+            | ListKind::FormFields
+            | ListKind::Features
+            | ListKind::Elements(_) => Vec::new(),
         }
     }
 
@@ -544,6 +597,10 @@ impl ListDialog {
                     ("move", Some(entry), _) => Outcome::MoveTo(entry.clone()),
                     ("activate", Some(entry), ListKind::Links) => Outcome::Activate(entry.clone()),
                     ("ok", Some(entry), ListKind::FormFields) => Outcome::Focus(entry.clone()),
+                    ("ok", Some(entry), ListKind::Elements(list)) if list.focuses() => {
+                        Outcome::Focus(entry.clone())
+                    }
+                    ("ok", Some(entry), ListKind::Elements(_)) => Outcome::MoveTo(entry.clone()),
                     ("ok", Some(entry), ListKind::Features) => {
                         entry.feature.map_or(Outcome::Nothing, Outcome::Open)
                     }

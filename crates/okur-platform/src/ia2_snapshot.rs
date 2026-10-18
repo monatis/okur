@@ -376,6 +376,11 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     ) {
         set_attr("preformatted", "true".to_owned());
     }
+    // Paragraphs and divisions are blocks like any other in the AOM; JAWS lists them apart
+    // (Select a Paragraph, Select a Division) by their tag [obs, 239, 244].
+    if let Some(tag) = attr("tag").filter(|t| matches!(t.as_str(), "p" | "div")) {
+        set_attr("tag", tag);
+    }
     // A read-only field (GitHub's code view is a read-only text area).
     if role == Role::Edit && has(STATE_SYSTEM_READONLY) {
         set_attr("readonly", "true".to_owned());

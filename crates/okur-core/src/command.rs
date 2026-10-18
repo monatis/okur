@@ -5,6 +5,7 @@
 //! tests call commands by JAWS script name ("MoveToNextHeading") or by the key notation JAWS's
 //! key maps use ("{DOWN}", "^%{RIGHT}"). Everywhere else a command is a [`Command`].
 
+use crate::element_lists::ElementList;
 use crate::input::{Key, KeyEvent};
 use crate::settings::{KeyboardLayout, KeyboardSettings};
 
@@ -111,6 +112,8 @@ pub enum Command {
     SelectAFormField,
     /// The lists of a page's elements (Virtual HTML Features, Insert+F3).
     VirtualHtmlFeatures,
+    /// One of JAWS's element lists (Insert+Ctrl and a letter: buttons, tables, ...).
+    SelectElement(crate::element_lists::ElementList),
     /// The page's regions (landmarks), JAWS's Insert+Ctrl+R.
     SelectARegion,
     /// Moves to the heading with this text.
@@ -276,6 +279,19 @@ impl Command {
             }
             "SelectALink" | "LinkList" | "LinksList" | "Insert+F7" | "JAWSKey+F7" => SelectALink,
             "VirtualHTMLFeatures" | "Insert+F3" | "JAWSKey+F3" => VirtualHtmlFeatures,
+            "SelectARadioButtonFormField" => SelectElement(ElementList::RadioButtons),
+            "SelectAButtonFormField" => SelectElement(ElementList::Buttons),
+            "SelectAComboFormField" => SelectElement(ElementList::Controls),
+            "SelectAnEditFormField" => SelectElement(ElementList::Edits),
+            "SelectACheckboxFormField" => SelectElement(ElementList::CheckBoxes),
+            "SelectAGraphic" => SelectElement(ElementList::Graphics),
+            "SelectAList" => SelectElement(ElementList::Lists),
+            "SelectAnArticle" => SelectElement(ElementList::Articles),
+            "SelectAParagraph" => SelectElement(ElementList::Paragraphs),
+            "SelectABlockQuote" => SelectElement(ElementList::BlockQuotes),
+            "SelectATable" => SelectElement(ElementList::Tables),
+            "SelectADivision" => SelectElement(ElementList::Divisions),
+            "SelectATabFormField" => SelectElement(ElementList::Tabs),
             "SelectAFormField" | "FormFieldList" | "FormFieldsList" | "Insert+F5"
             | "JAWSKey+F5" | "Insert+Ctrl+F" | "JAWSKey+Ctrl+F" => SelectAFormField,
             "SelectARegion" | "RegionsList" | "Insert+Ctrl+R" | "JAWSKey+Ctrl+R" => SelectARegion,
@@ -405,6 +421,8 @@ const SHIFT: Chord = ANY.shift(Yes).ctrl(No).alt(No);
 const JAWS: Chord = ANY.insert(Yes).ctrl(No).alt(No).shift(No);
 /// Ctrl and Alt, with or without Shift.
 const CTRL_ALT: Chord = ANY.ctrl(Yes).alt(Yes);
+/// Ctrl and the JAWS key: the element lists.
+const CTRL_INSERT: Chord = ANY.ctrl(Yes).insert(Yes).alt(No).shift(No);
 
 /// The key map, JAWS's desktop layout: the first binding that matches a key wins.
 static BINDINGS: &[Binding] = &{
@@ -506,6 +524,52 @@ static BINDINGS: &[Binding] = &{
             ANY.ctrl(Yes).insert(Yes).alt(No).shift(No),
             SelectARegion,
         ),
+        // JAWS's element lists: Insert+Ctrl and the element's letter (Default.JKM).
+        bind(
+            Alpha('A'),
+            CTRL_INSERT,
+            SelectElement(ElementList::RadioButtons),
+        ),
+        bind(Alpha('B'), CTRL_INSERT, SelectElement(ElementList::Buttons)),
+        bind(
+            Alpha('C'),
+            CTRL_INSERT,
+            SelectElement(ElementList::Controls),
+        ),
+        bind(Alpha('E'), CTRL_INSERT, SelectElement(ElementList::Edits)),
+        bind(
+            Alpha('X'),
+            CTRL_INSERT,
+            SelectElement(ElementList::CheckBoxes),
+        ),
+        bind(
+            Alpha('G'),
+            CTRL_INSERT,
+            SelectElement(ElementList::Graphics),
+        ),
+        bind(Alpha('L'), CTRL_INSERT, SelectElement(ElementList::Lists)),
+        bind(
+            Alpha('O'),
+            CTRL_INSERT,
+            SelectElement(ElementList::Articles),
+        ),
+        bind(
+            Alpha('P'),
+            CTRL_INSERT,
+            SelectElement(ElementList::Paragraphs),
+        ),
+        bind(
+            Alpha('Q'),
+            CTRL_INSERT,
+            SelectElement(ElementList::BlockQuotes),
+        ),
+        bind(Alpha('T'), CTRL_INSERT, SelectElement(ElementList::Tables)),
+        bind(
+            Alpha('Z'),
+            CTRL_INSERT,
+            SelectElement(ElementList::Divisions),
+        ),
+        bind(Apostrophe, CTRL_INSERT, SelectElement(ElementList::Tabs)),
         // Table headers.
         bind(Alpha('H'), CTRL_ALT.shift(Yes), SayColumnHeader),
         bind(Alpha('R'), CTRL_ALT.shift(Yes), SayRowHeader),

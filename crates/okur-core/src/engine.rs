@@ -838,6 +838,13 @@ impl ScreenReaderEngine {
                 )
             }
             ListKind::Features => (Some(ListDialog::features(id)), String::new()),
+            ListKind::Elements(elements) => {
+                let items = elements.items(&self.cursor.buffer);
+                (
+                    (!items.is_empty()).then(|| ListDialog::elements(id, elements, &items)),
+                    elements.none().to_string(),
+                )
+            }
             // With none, JAWS says so and then the page [obs, 221/s2].
             ListKind::FormFields => {
                 let fields = self.cursor.buffer.get_form_fields_list();
@@ -893,9 +900,15 @@ impl ScreenReaderEngine {
                 let said = self.cursor.jump_to_element_offset(entry.offset);
                 let speech = match kind {
                     ListKind::Links => format!("{said}\n{}", msg::hint_activate_enter()),
-                    ListKind::Headings | ListKind::FormFields | ListKind::Features => {
-                        self.cursor.current_line()
-                    }
+                    // Select a Table enters the table, as T does [obs, 257/s3].
+                    ListKind::Elements(crate::element_lists::ElementList::Tables) => self
+                        .cursor
+                        .enter_table_at(entry.offset)
+                        .unwrap_or_else(|| self.cursor.current_line()),
+                    ListKind::Headings
+                    | ListKind::FormFields
+                    | ListKind::Features
+                    | ListKind::Elements(_) => self.cursor.current_line(),
                 };
                 self.speech.speak(&speech, true);
                 Some(speech)
@@ -923,6 +936,9 @@ impl ScreenReaderEngine {
             Outcome::Focus(field) => {
                 close(self);
                 self.cursor.jump_to_element_offset(field.offset);
+                // JAWS's element lists leave the speech to the focus: the page and its regions
+                // as the focus enters them, then the control [obs, 247/s3, 250/s3].
+                let element_list = matches!(kind, ListKind::Elements(_));
                 let speech = [
                     self.cursor.buffer.document_title().map(str::to_owned),
                     Some(self.cursor.current_line()),
@@ -950,6 +966,12 @@ impl ScreenReaderEngine {
                         self.cursor.forms_mode_active = true;
                         self.forms_mode_by_enter = true;
                     }
+                }
+                if element_list {
+                    // The page's own focus on the way to the control is not the user's: the
+                    // control's focus enters the page.
+                    self.last_page_focus = None;
+                    return None;
                 }
                 self.speech.speak(&speech, true);
                 Some(speech)

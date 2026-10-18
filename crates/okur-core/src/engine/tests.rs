@@ -2731,6 +2731,59 @@ fn the_heading_list_reads_the_chosen_heading_as_its_line() {
     assert_eq!(level_first, Some(true), "{moved:?}");
 }
 
+/// Insert+Ctrl+B opens JAWS's Select a Button; OK gives the button the focus and leaves the
+/// speech to the focus [obs, 232, 247]. A list with nothing in it is said so, in JAWS's words,
+/// with no dialog [obs, 271].
+#[test]
+fn an_element_list_focuses_its_control_or_says_there_is_none() {
+    use crate::ui::{ControlKind, FromUi, ToUi};
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Sign up")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Fill in the form."),
+            AomNode::new(2, Role::Button).with_name("Create account"),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.handle_focus_event(&page_document());
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let chord = |letter: char| {
+        let mut key = KeyEvent::new(Key::Alpha(letter), Modifiers::none(), true);
+        key.modifiers.insert = true;
+        key.modifiers.ctrl = true;
+        key
+    };
+    assert_eq!(engine.handle_key_event(&chord('b')), KeyAction::Consume);
+    let sent = ui.take();
+    let Some(ToUi::DialogShow { dialog }) = sent.first() else {
+        panic_free_fail(&format!("no dialog shown: {sent:?}"));
+        return;
+    };
+    assert_eq!(dialog.title, "Select a Button");
+    assert_eq!(
+        dialog.controls.first().map(|c| c.kind.clone()),
+        Some(ControlKind::List {
+            items: vec!["Create account Button".into()],
+            selected: 0
+        })
+    );
+    let said = engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id: dialog.id,
+        control: "ok".into(),
+    }));
+    assert_eq!(said, None);
+    assert_eq!(ui.take(), [ToUi::DialogClose { id: dialog.id }]);
+    assert_eq!(actions.requests(), [("focus".to_owned(), 2)]);
+    // No tables: JAWS's sentence, and no dialog.
+    engine.handle_key_event(&chord('t'));
+    assert!(ui.take().is_empty());
+    assert!(speech.take().iter().any(|s| s == "No tables found"));
+}
+
 /// Insert+F3 opens Virtual HTML Features; OK on Headings List opens the Heading List before
 /// the first dialog goes, as JAWS opens it in its place [obs, 226/s3]. A list Okur has not
 /// built yet is said so, and the dialog goes.

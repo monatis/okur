@@ -50,6 +50,134 @@ mod tests {
         assert_eq!(divergences::check(&steps), Ok(()));
     }
 
+    /// JAWS's element lists hold the elements JAWS lists, worded as JAWS words them: the first
+    /// items and the count JAWS showed on the same pages [obs, 231-245].
+    #[test]
+    fn element_lists_hold_what_jaws_lists() {
+        use okur_core::element_lists::ElementList::{self, *};
+        let cases: [(ElementList, &str, usize, &[&str]); 13] = [
+            (
+                RadioButtons,
+                "signup-form",
+                3,
+                &[
+                    "Membership type Adult radio button checked",
+                    "Membership type Student radio button not checked",
+                    "Membership type Senior radio button not checked",
+                ],
+            ),
+            (
+                Buttons,
+                "signup-form",
+                2,
+                &["Save draft Button Unavailable", "Create account Button"],
+            ),
+            (Controls, "signup-form", 1, &["Home branch"]),
+            (
+                Edits,
+                "signup-form",
+                4,
+                &[
+                    "Full name Edit",
+                    "Email address Edit sam@example.com",
+                    "Password Edit",
+                ],
+            ),
+            (
+                CheckBoxes,
+                "signup-form",
+                2,
+                &[
+                    "Send me the monthly newsletter check box checked",
+                    "I agree to the terms of use check box not checked",
+                ],
+            ),
+            (
+                Graphics,
+                "news-article",
+                1,
+                &["Front entrance of the Riverside City Library at dusk"],
+            ),
+            (
+                Lists,
+                "news-article",
+                5,
+                &[
+                    "• News• Sports• Culture• Opinion",
+                    "• Weekday hours: 9 a.m. to 9 p.m.• Weekend hours, which do not change:◦ \
+                     Saturday: 10 a.m. to 6 p.m.◦ Sunday: noon to 5 p.m.• New study rooms open \
+                     in May.",
+                    "◦ Saturday: 10 a.m. to 6 p.m.◦ Sunday: noon to 5 p.m.",
+                ],
+            ),
+            (
+                Articles,
+                "news-article",
+                1,
+                &[
+                    "City Library Expands Evening HoursBy Maria Lopez, published March 14, \
+                   2026The Riverside City Library will stay open until 9 p.m. on weekdays \
+                   starting in April, the board announced on Tuesday. The change follows a \
+                   survey in which most respondents asked fo",
+                ],
+            ),
+            (
+                Paragraphs,
+                "news-article",
+                6,
+                &[
+                    "By Maria Lopez, published March 14, 2026",
+                    "The Riverside City Library will stay open until 9 p.m. on weekdays \
+                     starting in April, the board announced on Tuesday. The change follows a \
+                     survey in which most respondents asked for later hours.",
+                    "Membership costs $5.99 a month, e.g. for adults; children join free. \
+                     Questions go to help@riverside-library.org — or call 555-0142. Attendance \
+                     rose 3.5% last year, and staff say they can't wait.",
+                ],
+            ),
+            (
+                BlockQuotes,
+                "news-article",
+                1,
+                &["Finally, I can study after work."],
+            ),
+            (
+                Tables,
+                "news-article",
+                1,
+                &["Branch hours after the change 3x3"],
+            ),
+            (
+                Divisions,
+                "web-chat",
+                17,
+                &[
+                    "You:Good morning09:00 ReadSee you at noon09:05 ReadBring the notes09:10 \
+                     Read",
+                    "You:Good morning09:00 Read",
+                    "You:Good morning09:00 Read",
+                ],
+            ),
+            (
+                Tabs,
+                "boundaries-dynamic",
+                2,
+                &["Settings General Tab", "Settings Advanced Tab"],
+            ),
+        ];
+        let mut wrong = Vec::new();
+        for (list, fixture, count, first) in cases {
+            let doc = snapshot_aom(fixture, snapshots::Api::Ia2);
+            let buffer = okur_core::buffer::VirtualBuffer::from_aom(&doc);
+            let items: Vec<String> = list.items(&buffer).into_iter().map(|i| i.text).collect();
+            let shown: Vec<&str> = items.iter().take(first.len()).map(String::as_str).collect();
+            if items.len() != count || shown != first {
+                wrong.push(format!("{list:?} ({} items): {shown:#?}", items.len()));
+            }
+        }
+        assert!(wrong.is_empty(), "{}", wrong.join("\n"));
+    }
+
     /// The written list of accepted divergences names every step the table covers.
     #[test]
     fn the_written_list_names_every_divergence() {

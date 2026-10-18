@@ -7,6 +7,7 @@ pub mod clock;
 pub mod command;
 pub mod cursor;
 pub mod editing;
+pub mod element_lists;
 pub mod engine;
 pub mod event;
 pub mod input;

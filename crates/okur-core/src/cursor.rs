@@ -1763,7 +1763,21 @@ impl VirtualCursor {
             .tables
             .iter()
             .position(|t| t.start_offset > self.offset);
-        let table_idx = maybe_idx.unwrap_or(0);
+        self.enter_table(maybe_idx.unwrap_or(0))
+    }
+
+    /// Enters the table starting at `offset` (Select a Table), as T enters it.
+    pub fn enter_table_at(&mut self, offset: usize) -> Option<String> {
+        let index = self
+            .buffer
+            .tables
+            .iter()
+            .position(|t| t.start_offset == offset)?;
+        self.enter_table(index)
+    }
+
+    /// Moves to table `table_idx` and says it: its size, caption and first cell.
+    fn enter_table(&mut self, table_idx: usize) -> Option<String> {
         let table = self.buffer.tables.get(table_idx)?;
         self.offset = table.start_offset;
         self.current_node_id = Some(table.table_id);
