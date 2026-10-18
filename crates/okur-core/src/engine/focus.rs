@@ -6,6 +6,7 @@ use crate::aom::Role;
 use crate::apps::{AppContext, FocusResponse};
 use crate::cursor::FocusFrom;
 use crate::event::FocusEvent;
+use crate::messages::msg;
 use crate::speech::SpeechFormatter;
 
 impl ScreenReaderEngine {
@@ -17,15 +18,19 @@ impl ScreenReaderEngine {
         let mut lines = Vec::new();
         if self.option_list.as_deref() != Some(list.as_str()) {
             if let Some(count) = focus.item_count {
-                lines.push(format!("{list}  \u{1d} list \u{1e} \nwith {count} items"));
+                lines.push(format!(
+                    "{list}  \u{1d} {} \u{1e} \n{}",
+                    msg::role_list(),
+                    msg::list_items_count(count)
+                ));
             }
         }
         self.option_list = Some(list);
         lines.push(focus.name.clone().unwrap_or_default());
         if let (Some(index), Some(count)) = (focus.item_index, focus.item_count) {
-            lines.push(format!("{index} of {count}"));
+            lines.push(msg::position(index, count).render());
         }
-        lines.push("To move to an item press the Arrow keys.".to_owned());
+        lines.push(msg::hint_move_to_an_item_arrows().to_string());
         let speech = lines.join("\n");
         self.speech.speak(&speech, true);
         Some(speech)
@@ -33,7 +38,7 @@ impl ScreenReaderEngine {
 
     /// Says that menus were left, when nothing else is said with it.
     fn say_leaving_menus(&mut self) -> String {
-        let speech = "Leaving menus".to_owned();
+        let speech = msg::menus_left().to_string();
         self.speech.speak(&speech, true);
         speech
     }
@@ -121,7 +126,7 @@ impl ScreenReaderEngine {
         let leaving_menus = !focus.in_document && self.menus.in_menu_mode() && self.menus.end();
         let with_leaving = |speech: String| {
             if leaving_menus {
-                format!("Leaving menus\n{speech}")
+                format!("{}\n{speech}", msg::menus_left())
             } else {
                 speech
             }
@@ -137,7 +142,7 @@ impl ScreenReaderEngine {
             match app.focus(focus, &mut cx) {
                 FocusResponse::Pass => {}
                 FocusResponse::Silent if leaving_menus => {
-                    let speech = "Leaving menus".to_owned();
+                    let speech = msg::menus_left().to_string();
                     self.speech.speak(&speech, true);
                     return Some(speech);
                 }
@@ -277,8 +282,10 @@ impl ScreenReaderEngine {
                         .filter(|n| !n.trim().is_empty())
                         .or_else(|| self.cursor.buffer.document_title().map(str::to_owned));
                     if let Some(title) = title {
-                        let mut speech =
-                            format!("{title}{}", crate::linearize::role_marker("document"));
+                        let mut speech = format!(
+                            "{title}{}",
+                            crate::linearize::role_marker(msg::role_document().as_str())
+                        );
                         if let Some(window) = focus.window_title.as_deref().filter(|_| tab_switched)
                         {
                             speech.push('\n');
@@ -457,23 +464,20 @@ impl ScreenReaderEngine {
                 .is_some_and(|n| n.attributes.get("editable").is_some_and(|e| e == "true"));
             if target_role == Some(Role::ComboBox) && in_forms_mode && !editable_combo {
                 // In forms mode a combo box gets its usage hint [obs, 205/s8].
-                speech =
-                    speech.map(|s| format!("{s}\nTo change the selection use the Arrow keys."));
+                speech = speech.map(|s| format!("{s}\n{}", msg::hint_change_selection_arrows()));
             }
             // Forms mode turned on by Enter adds the regions the field is in and the edit's
             // hint [obs, 19/s2]; Tab's automatic forms mode does not (204/s1).
             let by_enter = std::mem::take(&mut self.forms_mode_by_enter) && is_edit;
             if by_enter {
-                speech = speech.map(|s| format!("{s}\nType in text."));
+                speech = speech.map(|s| format!("{s}\n{}", msg::hint_type_in_text()));
             }
             // Back in an autocomplete from its list: "Fruit edit combo collapsed | Apricot |
             // To set the value use the Arrow keys or type the value." (JAWS on the dev box),
             // and into a combo box one types in: Google Sheets' cell editor, "D1 edit combo |
             // n | To set the value use the Arrow keys or type the value." (dev box, 2026-10-16).
             if (from_options || editable_combo) && target_role == Some(Role::ComboBox) {
-                speech = speech.map(|s| {
-                    format!("{s}\nTo set the value use the Arrow keys or type the value.")
-                });
+                speech = speech.map(|s| format!("{s}\n{}", msg::hint_set_value_arrows_or_type()));
             }
             if entering_application {
                 let name = focus.web_application.clone().unwrap_or_default();
@@ -506,8 +510,8 @@ impl ScreenReaderEngine {
             }
             if leaving_menus {
                 speech = Some(match speech {
-                    Some(s) if !s.is_empty() => format!("Leaving menus\n{s}"),
-                    _ => "Leaving menus".to_owned(),
+                    Some(s) if !s.is_empty() => format!("{}\n{s}", msg::menus_left()),
+                    _ => msg::menus_left().to_string(),
                 });
             }
             if let Some(ref text) = speech {
@@ -607,7 +611,7 @@ impl ScreenReaderEngine {
         self.tab_start = Some(id);
         let mut lines = Vec::new();
         if first && place != PageMenuPlace::Popup {
-            lines.push(crate::linearize::role_marker("menu"));
+            lines.push(crate::linearize::role_marker(msg::role_menu().as_str()));
         }
         if entering_page {
             lines.extend(self.cursor.buffer.document_title().map(str::to_owned));
@@ -616,11 +620,11 @@ impl ScreenReaderEngine {
         if first {
             lines.push(
                 if place == PageMenuPlace::Bar {
-                    "To move through items press left or right arrow."
+                    msg::hint_menu_bar_items_left_right()
                 } else {
-                    "To move through items press up or down arrow."
+                    msg::hint_menu_items_up_down()
                 }
-                .to_owned(),
+                .to_string(),
             );
         }
         Some(lines.join(
@@ -647,7 +651,7 @@ impl ScreenReaderEngine {
         let mut lines = vec![match &focus.dialog_text {
             Some(_) => Line::new(vec![
                 Part::Text(win.to_owned()),
-                Part::Role("dialog".to_owned()),
+                Part::Role(msg::role_dialog().to_string()),
             ]),
             None => Line::text(win),
         }];
@@ -661,7 +665,7 @@ impl ScreenReaderEngine {
         lines.extend(focus.dialog_page.as_deref().map(|page| {
             Line::new(vec![
                 Part::Text(page.to_owned()),
-                Part::Role("page".to_owned()),
+                Part::Role(msg::role_page().to_string()),
             ])
         }));
         // The control, unless it only repeats the window's name or the application names its
@@ -695,7 +699,7 @@ impl ScreenReaderEngine {
                 if !self.menus.end() {
                     return None;
                 }
-                let mut speech = "Leaving menus".to_owned();
+                let mut speech = msg::menus_left().to_string();
                 // The control focused before the menu, when it was a native one; a page's
                 // menu returns to the page, whose focus says itself.
                 if let Some(focus) = self
@@ -715,14 +719,11 @@ impl ScreenReaderEngine {
 
 /// `speech` without the usage hint a page control's focus ends with.
 fn without_usage_hint(speech: &str) -> String {
-    [
-        "To toggle the state press spacebar.",
-        "To activate press Enter.",
-    ]
-    .iter()
-    .find_map(|hint| speech.strip_suffix(hint))
-    .map(|rest| rest.trim_end_matches('\n').to_owned())
-    .unwrap_or_else(|| speech.to_owned())
+    [msg::hint_toggle_spacebar(), msg::hint_activate_enter()]
+        .iter()
+        .find_map(|hint| speech.strip_suffix(hint.as_str()))
+        .map(|rest| rest.trim_end_matches('\n').to_owned())
+        .unwrap_or_else(|| speech.to_owned())
 }
 
 /// Whether a focus the buffer does not hold is a list's, grid's or tree's item, by what the

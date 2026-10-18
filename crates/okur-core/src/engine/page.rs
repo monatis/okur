@@ -5,6 +5,7 @@ use super::{AppMode, ScreenReaderEngine};
 use crate::aom::{AomNode, Role, UNIQUE_ID_ATTR};
 use crate::buffer::VirtualBuffer;
 use crate::event::{AccessibilityEvent, FocusEvent, LiveRegionEvent, Politeness};
+use crate::messages::msg;
 use crate::settings::LiveRegionAppend;
 use crate::speech::SpeechFormatter;
 
@@ -73,7 +74,11 @@ impl ScreenReaderEngine {
         self.load_buffer(buffer);
         self.app_mode = AppMode::VirtualBuffer;
         self.last_window_title = Some(title.to_owned());
-        let welcome = format!("{}  \u{001d} Virtual PC Cursor \u{001e}", title);
+        let welcome = format!(
+            "{}  \u{001d} {} \u{001e}",
+            title,
+            msg::role_virtual_pc_cursor()
+        );
         self.speech.speak(&welcome, true);
         Some(welcome)
     }
@@ -95,11 +100,11 @@ impl ScreenReaderEngine {
                 if before.states.checked != control.states.checked =>
             {
                 let state = if control.states.checked == Some(true) {
-                    "checked"
+                    msg::state_checked()
                 } else {
-                    "not checked"
+                    msg::state_not_checked()
                 };
-                crate::linearize::state_marker(state)
+                crate::linearize::state_marker(state.as_str())
             }
             // An autocomplete's list opened or closed as it is typed in: " expanded " (JAWS on
             // the dev box). Its value is the typing, already echoed.
@@ -114,11 +119,14 @@ impl ScreenReaderEngine {
                 {
                     return None;
                 }
-                crate::linearize::state_marker(if control.states.expanded == Some(true) {
-                    "expanded"
-                } else {
-                    "collapsed"
-                })
+                crate::linearize::state_marker(
+                    if control.states.expanded == Some(true) {
+                        msg::state_expanded()
+                    } else {
+                        msg::state_collapsed()
+                    }
+                    .as_str(),
+                )
             }
             Role::ComboBox if before.value != control.value => control.value.clone()?,
             // Space on a tab selects it [obs, 29/s4].
@@ -126,7 +134,7 @@ impl ScreenReaderEngine {
                 if before.states.selected != control.states.selected
                     && control.states.selected == Some(true) =>
             {
-                crate::linearize::state_marker("selected")
+                crate::linearize::state_marker(msg::state_selected().as_str())
             }
             // A disclosure button opened or closed (Space or Enter on it): JAWS 2025 says the
             // new state (dev box, GitHub's "Solutions" menu button: " expanded ").
@@ -134,11 +142,14 @@ impl ScreenReaderEngine {
                 if control.states.expanded.is_some()
                     && before.states.expanded != control.states.expanded =>
             {
-                crate::linearize::state_marker(if control.states.expanded == Some(true) {
-                    "expanded"
-                } else {
-                    "collapsed"
-                })
+                crate::linearize::state_marker(
+                    if control.states.expanded == Some(true) {
+                        msg::state_expanded()
+                    } else {
+                        msg::state_collapsed()
+                    }
+                    .as_str(),
+                )
             }
             _ => return None,
         };
@@ -191,14 +202,14 @@ impl ScreenReaderEngine {
                 };
                 match &n.role {
                     Role::Landmark { landmark_type } => match landmark_type.as_str() {
-                        "main" => Some(named("MainRegion")),
-                        "form" => Some(named("FormRegion")),
-                        "navigation" => Some(named("NavigationRegion")),
-                        "banner" => Some(named("BannerRegion")),
-                        "complementary" => Some(named("ComplementaryRegion")),
-                        "search" => Some(named("SearchRegion")),
-                        "contentinfo" => Some(named("ContentInfoRegion")),
-                        "region" => Some(named("Region")),
+                        "main" => Some(named(msg::role_region_main().as_str())),
+                        "form" => Some(named(msg::role_region_form().as_str())),
+                        "navigation" => Some(named(msg::role_region_navigation().as_str())),
+                        "banner" => Some(named(msg::role_region_banner().as_str())),
+                        "complementary" => Some(named(msg::role_region_complementary().as_str())),
+                        "search" => Some(named(msg::role_region_search().as_str())),
+                        "contentinfo" => Some(named(msg::role_region_content_info().as_str())),
+                        "region" => Some(named(msg::role_region().as_str())),
                         _ => None,
                     },
                     Role::List => {
@@ -207,7 +218,11 @@ impl ScreenReaderEngine {
                             .iter()
                             .filter(|c| c.role == Role::ListItem)
                             .count();
-                        Some(format!("{}with {items} items\n", named("list")))
+                        Some(format!(
+                            "{}{}\n",
+                            named(msg::role_list().as_str()),
+                            msg::list_items_count(items)
+                        ))
                     }
                     _ => None,
                 }
@@ -232,12 +247,12 @@ impl ScreenReaderEngine {
                 let aria = n.attributes.get("aria_role").map(String::as_str);
                 match &n.role {
                     Role::Landmark { landmark_type } if landmark_type == "main" => {
-                        Some("MainRegion")
+                        Some(msg::role_region_main())
                     }
                     Role::Landmark { landmark_type } if landmark_type == "form" => {
-                        Some("FormRegion")
+                        Some(msg::role_region_form())
                     }
-                    _ if aria == Some("form") => Some("FormRegion"),
+                    _ if aria == Some("form") => Some(msg::role_region_form()),
                     _ => None,
                 }
             })
@@ -328,7 +343,7 @@ impl ScreenReaderEngine {
         let again = self.last_selected.as_deref() == Some(name);
         self.last_selected = Some(name.to_owned());
         let speech = match (item.item_index, item.item_count) {
-            (Some(i), Some(n)) if !again => format!("{name}\n{i} of {n}"),
+            (Some(i), Some(n)) if !again => format!("{name}\n{}", msg::position(i, n)),
             _ => name.to_owned(),
         };
         self.speech.speak(&speech, true);

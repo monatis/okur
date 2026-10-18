@@ -286,7 +286,7 @@ impl SpeechFormatter {
         let val_str = value.unwrap_or("");
         let edit = msg::role_edit();
         let hint = msg::hint_type_in_text();
-        let region = msg::role_form_region();
+        let region = msg::role_region_form();
         if doc_title.is_empty() {
             if val_str.is_empty() {
                 format!("{field_name}  \u{001d} {edit} \u{001e}  \n{hint}")
@@ -329,7 +329,7 @@ impl SpeechFormatter {
         } else {
             format!(
                 "{doc_title} \n \u{001d} {} \u{001e} \n{name}  \u{001d} {role} \u{001e}   \u{001d}{state_str}\u{001e}  \n{action_hint}",
-                msg::role_form_region()
+                msg::role_region_form()
             )
         }
     }
@@ -380,7 +380,7 @@ impl SpeechFormatter {
                             s.push_str(&format!("\n{}", msg::field_contains_text()))
                         }
                         Some(v) => s.push_str(&format!("\n{v}")),
-                        None => s.push_str(&format!("\n{}", msg::field_blank())),
+                        None => s.push_str(&format!("\n{}", msg::blank())),
                     }
                 }
                 if let Some(d) = attr("description") {
@@ -521,7 +521,7 @@ impl SpeechFormatter {
         format!(
             "{name}  \u{1d} {} \u{1e}{state}\n{}",
             msg::role_edit_combo(),
-            value.unwrap_or(msg::field_blank().as_str())
+            value.unwrap_or(msg::blank().as_str())
         )
     }
 

@@ -28,21 +28,33 @@ role-edit-password = password edit
 role-edit-read-only = read only edit
 # A combo box one types into (an autocomplete).
 role-edit-combo = edit combo
+# A web page, said after its title.
+role-document = document
 # The fallback type of an item in the Form Fields list.
 role-field = Field
-# A form landmark. JAWS writes it as one word.
-role-form-region = FormRegion
 role-group = group
 role-heading-level = heading level { $level }
 role-link = Link
 role-link-say-window = link
 role-link-same-page = same page link
+role-list = list
 role-list-box = List box
 role-list-view = List view
 role-menu = menu
 role-menu-bar = Menu bar
+# A page of a dialog's tabs (a property sheet's page).
+role-page = page
 role-progress-bar = progress bar
 role-radio-button = radio button
+# The regions (landmarks) a focus is in. JAWS writes each as one word.
+role-region = Region
+role-region-banner = BannerRegion
+role-region-complementary = ComplementaryRegion
+role-region-content-info = ContentInfoRegion
+role-region-form = FormRegion
+role-region-main = MainRegion
+role-region-navigation = NavigationRegion
+role-region-search = SearchRegion
 role-slider = slider
 # A native slider (a trackbar) that moves left and right.
 role-slider-horizontal = left right slider
@@ -54,3 +66,5 @@ role-tree-item = tree item
 role-tree-view = Tree view
 # A tree item's depth, said where its role would be.
 role-tree-level = level { $level }
+# Said after a page's title as it loads: the cursor that reads it.
+role-virtual-pc-cursor = Virtual PC Cursor

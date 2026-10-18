@@ -17,8 +17,8 @@ frame-end = frame end
 # Said when forms mode ends and the virtual cursor reads the page again. JAWS's capitals.
 cursor-virtual-pc = virtual PC Cursor
 
-# Said in place of an empty field's value.
-field-blank = blank
+# Said for an empty line, or in place of an empty field's value.
+blank = blank
 # Said on arrival at a text field of several lines that holds text, in place of the text.
 field-contains-text = Contains text
 

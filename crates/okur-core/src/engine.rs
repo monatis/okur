@@ -11,6 +11,7 @@ use crate::buffer::VirtualBuffer;
 use crate::cursor::VirtualCursor;
 use crate::event::{AccessibilityEvent, FocusEvent};
 use crate::input::{Key, KeyAction, KeyEvent};
+use crate::messages::msg;
 use crate::speech::SpeechOutput;
 
 /// The longest gap between two presses of a JAWS command that counts as "twice quickly"
@@ -311,7 +312,8 @@ impl ScreenReaderEngine {
                         actions.copy_text(&text);
                     }
                     // [obs, 311/s11]
-                    self.speech.speak("Copied selection to clipboard", true);
+                    self.speech
+                        .speak(msg::clipboard_copied_selection().as_str(), true);
                     return KeyAction::Consume;
                 }
                 ViewerAction::Close => {
@@ -370,7 +372,7 @@ impl ScreenReaderEngine {
                 self.forms_mode = false;
                 let _ = self.cursor.exit_forms_mode();
                 // [obs, 205/s11]
-                self.speech.speak("virtual PC Cursor", true);
+                self.speech.speak(msg::cursor_virtual_pc().as_str(), true);
                 return KeyAction::Consume;
             }
             // In forms mode, pass all typing and navigation through to the active control;
@@ -383,7 +385,7 @@ impl ScreenReaderEngine {
         if event.key == Key::Escape && event.modifiers.is_empty() {
             if self.active_element_list.is_some() {
                 self.active_element_list = None;
-                self.speech.speak("virtual PC Cursor", true);
+                self.speech.speak(msg::cursor_virtual_pc().as_str(), true);
                 return KeyAction::Consume;
             }
             if self.cursor.is_combobox_expanded() {
@@ -661,7 +663,7 @@ impl ScreenReaderEngine {
     /// reads the dialog when the dialog takes the focus, as any application's.
     pub(crate) fn open_settings(&mut self) -> Option<String> {
         let Some(ui) = &self.ui else {
-            let speech = "The settings dialog is not available".to_owned();
+            let speech = msg::settings_dialog_unavailable().to_string();
             self.speech.speak(&speech, true);
             return Some(speech);
         };
@@ -748,7 +750,7 @@ impl ScreenReaderEngine {
     pub(crate) fn open_links_list(&mut self) -> Option<String> {
         let links = self.cursor.buffer.get_links_list();
         if links.is_empty() {
-            let speech = commands::NO_LINKS.to_owned();
+            let speech = msg::links_list_none().to_string();
             self.speech.speak(&speech, true);
             return Some(speech);
         }
@@ -785,8 +787,9 @@ impl ScreenReaderEngine {
             Outcome::MoveTo(link) => {
                 close(self);
                 let speech = format!(
-                    "{}\nTo activate press Enter.",
-                    self.cursor.jump_to_element_offset(link.offset)
+                    "{}\n{}",
+                    self.cursor.jump_to_element_offset(link.offset),
+                    msg::hint_activate_enter()
                 );
                 self.speech.speak(&speech, true);
                 Some(speech)
@@ -811,7 +814,7 @@ impl ScreenReaderEngine {
         }
         if let (Some(ui), Some(viewer)) = (&self.ui, &self.viewer) {
             ui.send(crate::ui::ToUi::ViewerShow {
-                title: "Virtual Viewer".to_owned(),
+                title: msg::viewer_title().to_string(),
                 lines: viewer.lines(),
                 mark: viewer.mark(),
             });

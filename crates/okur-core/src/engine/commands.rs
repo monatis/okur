@@ -7,10 +7,8 @@ use super::{
 use crate::aom::Role;
 use crate::command::{Command, Element};
 use crate::input::{Key, KeyAction, KeyEvent};
+use crate::messages::msg;
 use crate::speech::SpeechFormatter;
-
-/// The Links List on a page without links [obs, 221/s1].
-pub(super) const NO_LINKS: &str = "no links";
 
 impl ScreenReaderEngine {
     /// Runs the command a name calls ([`Command::from_name`]): a JAWS script name or the key
@@ -69,7 +67,7 @@ impl ScreenReaderEngine {
             // "Enter key to pass through" (JAWS on the dev box, 2026-10-17, WhatsApp).
             Command::PassKeyThrough => {
                 self.pass_next_key = true;
-                let speech = "Enter key to pass through".to_owned();
+                let speech = msg::pass_key_through().to_string();
                 self.speech.speak(&speech, true);
                 return Some(speech);
             }
@@ -78,7 +76,7 @@ impl ScreenReaderEngine {
                 // ("Virtual Viewer", without "Title is"; dev box, Windows Terminal and Notepad,
                 // 2026-10-15).
                 if self.viewer.is_some() {
-                    let speech = "Virtual Viewer".to_owned();
+                    let speech = msg::viewer_title().to_string();
                     self.speech.speak(&speech, true);
                     return Some(speech);
                 }
@@ -89,7 +87,7 @@ impl ScreenReaderEngine {
                         .then(|| self.cursor.buffer.document_title().map(str::to_owned))
                         .flatten()
                 })?;
-                let speech = format!("Title is\n{title}");
+                let speech = format!("{}\n{title}", msg::window_title_is());
                 self.speech.speak(&speech, true);
                 return Some(speech);
             }
@@ -135,7 +133,7 @@ impl ScreenReaderEngine {
                 }
                 Command::Escape => {
                     self.active_element_list = None;
-                    let speech = "virtual PC Cursor".to_string();
+                    let speech = msg::cursor_virtual_pc().to_string();
                     self.speech.speak(&speech, true);
                     return Some(speech);
                 }
@@ -349,16 +347,21 @@ impl ScreenReaderEngine {
                         .last_page_focus
                         .is_some_and(|id| !self.cursor.buffer.shows(id)) =>
             {
-                Some("blank".to_owned())
+                Some(msg::blank().to_string())
             }
             Command::SayLine => Some(self.cursor.current_line()),
             Command::SayWord => Some(self.cursor.current_word()),
             Command::SayCharacter => Some(self.cursor.current_char()),
 
             // In-buffer find commands
-            Command::VirtualFind => {
-                Some("JAWS Find  \u{001d} dialog \u{001e} \nFind what:  \u{001d} edit combo \u{001e} \nTo set the value use the Arrow keys or type the value.".to_string())
-            }
+            Command::VirtualFind => Some(format!(
+                "{}  \u{001d} {} \u{001e} \n{}  \u{001d} {} \u{001e} \n{}",
+                msg::find_dialog(),
+                msg::role_dialog(),
+                msg::find_dialog_field(),
+                msg::role_edit_combo(),
+                msg::hint_set_value_arrows_or_type()
+            )),
             Command::FindNext => self.cursor.find_next(),
             Command::FindPrior => self.cursor.find_prior(),
 
@@ -366,7 +369,7 @@ impl ScreenReaderEngine {
             Command::SelectAHeading => {
                 let items = self.cursor.buffer.get_headings_list();
                 if items.is_empty() {
-                    Some("There are no headings on this page.".to_string())
+                    Some(msg::quicknav_none_headings().to_string())
                 } else {
                     let speech = SpeechFormatter::format_headings_list_dialog(&items);
                     self.active_element_list = Some(ActiveElementList::Headings {
@@ -382,7 +385,8 @@ impl ScreenReaderEngine {
             Command::SelectALink => {
                 let items = self.cursor.buffer.get_links_list();
                 if items.is_empty() {
-                    Some(NO_LINKS.to_owned())
+                    // [obs, 221/s1]
+                    Some(msg::links_list_none().to_string())
                 } else {
                     let speech = SpeechFormatter::format_links_list_dialog(&items);
                     self.active_element_list = Some(ActiveElementList::Links {
@@ -398,10 +402,14 @@ impl ScreenReaderEngine {
                     // Then the page, as when the focus comes back to it: "no form fields were
                     // found | Document Reading Reference Fixture document" [obs, 221/s2].
                     let page = self.cursor.buffer.document_title().map(|title| {
-                        format!("\n{title}{}", crate::linearize::role_marker("document"))
+                        format!(
+                            "\n{title}{}",
+                            crate::linearize::role_marker(msg::role_document().as_str())
+                        )
                     });
                     Some(format!(
-                        "no form fields were found{}",
+                        "{}{}",
+                        msg::form_fields_list_none(),
                         page.unwrap_or_default()
                     ))
                 } else {
@@ -416,7 +424,7 @@ impl ScreenReaderEngine {
             // The list of a page's regions itself is not built yet; a page without regions
             // says so [obs, 221/s3].
             Command::SelectARegion if self.cursor.buffer.landmarks.is_empty() => {
-                Some("No regions were found on the page".to_owned())
+                Some(msg::regions_list_none().to_string())
             }
 
             _ => None,
@@ -590,11 +598,11 @@ impl ScreenReaderEngine {
         let was_on = event.caps_lock_on.unwrap_or(self.caps_lock_on);
         self.caps_lock_on = !was_on;
         let speech = if was_on {
-            "Caps lock off"
+            msg::caps_lock_off()
         } else {
-            "Caps lock on"
+            msg::caps_lock_on()
         };
-        self.speech.speak(speech, true);
+        self.speech.speak(speech.as_str(), true);
         KeyAction::PassThrough
     }
 
@@ -629,7 +637,7 @@ impl ScreenReaderEngine {
             (Element::Tab, true) => c.move_next_tab(),
             (Element::Tab, false) => c.move_prior_tab(),
             // Place markers are not built yet, so a page has none [obs, 221/s4-s5].
-            (Element::PlaceMarker, _) => Some("There are no PlaceMarkers on this page.".to_owned()),
+            (Element::PlaceMarker, _) => Some(msg::quicknav_none_placemarkers().to_string()),
             (Element::Graphic, true) => c.move_next_graphic(),
             (Element::Graphic, false) => c.move_prior_graphic(),
             (Element::RadioButton, true) => c.move_next_radio_button(),
@@ -733,12 +741,16 @@ impl ScreenReaderEngine {
         let speech = match (in_viewer, description) {
             (true, Some(font)) if self.viewer.is_none() => {
                 let viewer = crate::viewer::VirtualViewer::message(vec![
-                    "Font information:".to_owned(),
+                    msg::viewer_font_information().to_string(),
                     font,
                     paragraph.unwrap_or_default(),
                     String::new(),
-                    "\u{1d} Link \u{1e} List JAWS Hot Keys".to_owned(),
-                    "Press ESCAPE to close this message.".to_owned(),
+                    format!(
+                        "\u{1d} {} \u{1e} {}",
+                        msg::role_link(),
+                        msg::viewer_hot_keys_link()
+                    ),
+                    msg::viewer_close_hint().to_string(),
                 ]);
                 let speech = viewer.message_speech();
                 self.viewer = Some(viewer);
@@ -746,8 +758,8 @@ impl ScreenReaderEngine {
                 speech
             }
             (_, Some(font)) => match paragraph {
-                Some(paragraph) => format!("Font is {font}\n{paragraph}"),
-                None => format!("Font is {font}"),
+                Some(paragraph) => format!("{}\n{paragraph}", msg::font_is(font)),
+                None => msg::font_is(font).render(),
             },
             (_, None) => SpeechFormatter::format_font(None),
         };
@@ -764,7 +776,7 @@ impl ScreenReaderEngine {
         let in_page = self.app_mode == AppMode::VirtualBuffer && !self.forms_mode;
         if self.viewer.is_some() || in_page {
             // [obs, 311/s32]
-            let speech = "The current location is already in a virtual view".to_owned();
+            let speech = msg::viewer_already_virtual().to_string();
             self.speech.speak(&speech, true);
             return Some(speech);
         }
@@ -829,8 +841,12 @@ impl ScreenReaderEngine {
         viewer: crate::viewer::VirtualViewer,
         window: bool,
     ) -> Option<String> {
-        let what = if window { "window" } else { "control" };
-        let speech = format!("Virtualizing current {what}\n{}", viewer.line_text());
+        let what = if window {
+            msg::viewer_virtualizing_window()
+        } else {
+            msg::viewer_virtualizing_control()
+        };
+        let speech = format!("{what}\n{}", viewer.line_text());
         self.viewer = Some(viewer);
         self.show_viewer_window();
         self.speech.speak(&speech, true);
@@ -935,7 +951,7 @@ impl ScreenReaderEngine {
                 .last_native_focus
                 .as_ref()
                 .filter(|f| f.container_role == Some(Role::ComboBox))
-                .and_then(|f| Some(format!("{} of {}", f.item_index?, f.item_count?)));
+                .and_then(|f| Some(msg::position(f.item_index?, f.item_count?).render()));
             match (line, position) {
                 (Some(line), Some(position)) => Some(format!("{line}\n{position}")),
                 (line, _) => line,
