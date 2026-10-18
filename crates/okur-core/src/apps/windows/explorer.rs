@@ -6,6 +6,7 @@ use crate::aom::Role;
 use crate::apps::{AppContext, AppModule, FocusResponse};
 use crate::engine::AppMode;
 use crate::event::FocusEvent;
+use crate::messages::msg;
 
 /// Whether `focus` is in a File Explorer window, by its window's class, its list's name or
 /// its title.
@@ -63,7 +64,10 @@ impl AppModule for Explorer {
             self.folder_name = Some(folder.clone());
         }
 
-        let name = focus.name.as_deref().unwrap_or("Item");
+        let name = focus
+            .name
+            .as_deref()
+            .unwrap_or(msg::explorer_item_unnamed().as_str());
         let index = focus.item_index.unwrap_or(1);
         let total = focus.item_count.unwrap_or(1);
         if !first_entry && self.last_index == Some(index) && self.last_name.as_deref() == Some(name)
@@ -79,7 +83,7 @@ impl AppModule for Explorer {
                     .window_title
                     .as_deref()
                     .or(self.window_title.as_deref())
-                    .unwrap_or("File Explorer");
+                    .unwrap_or(msg::explorer_title().as_str());
                 let folder = focus.folder_name.as_deref().or(self.folder_name.as_deref());
                 (title, folder)
             });
@@ -100,9 +104,9 @@ impl AppModule for Explorer {
         } else if cx.selecting && focus.states.selected == Some(true) {
             // Shift+Down extending the selection (JAWS on the dev box, 2026-10-17):
             // "selected | handoff", no position.
-            Announcement::from_text(&format!("selected\n{name}"))
+            Announcement::from_text(&format!("{}\n{name}", msg::state_selected()))
         } else {
-            Announcement::from_text(&format!("{name}\n{index} of {total}"))
+            Announcement::from_text(&format!("{name}\n{}", msg::position(index, total)))
         })
     }
 }
@@ -137,17 +141,17 @@ fn entry(e: &Entry<'_>) -> Announcement {
     }
     lines.push(Line::new(vec![
         Part::Text("Items View".to_owned()),
-        Part::Role("MultiSelect ListBox".to_owned()),
+        Part::Role(msg::role_list_box_multi_select().to_string()),
     ]));
     lines.push(Line::text(if e.selected == Some(false) {
-        format!("Not Selected {}", e.name)
+        msg::explorer_item_not_selected(e.name).render()
     } else {
         e.name.to_owned()
     }));
     lines.extend(e.kind.map(Line::text));
-    lines.push(Line::text(format!("{} of {}", e.index, e.total)));
+    lines.push(Line::text(msg::position(e.index, e.total)));
     if e.hint {
-        lines.push(Line::text("To move to an item press the Arrow keys."));
+        lines.push(Line::text(msg::hint_move_to_an_item_arrows()));
     }
     Announcement::new(lines)
 }

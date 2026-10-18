@@ -74,7 +74,10 @@ impl AppModule for Desktop {
         cx.note_window(focus);
 
         let current = self.items.get(self.current);
-        let name = focus.name.as_deref().unwrap_or("Desktop");
+        let name = focus
+            .name
+            .as_deref()
+            .unwrap_or(crate::messages::msg::desktop_item_unnamed().as_str());
         let index = focus
             .item_index
             .unwrap_or_else(|| current.map(|it| it.index).unwrap_or(1));
@@ -112,11 +115,19 @@ impl AppModule for Desktop {
             // observed on the dev box (2026-10-15; research, scenario 316 records it on
             // old-pc): "desktop | FolderView List view | Dropbox | 7 of 11 | To move to items
             // use the Arrow keys. | To edit the selected item press f2."
+            use crate::messages::msg;
             format!(
-                "desktop\nFolderView    List view   \n{name}\n{index} of {total}\nTo move to items use the Arrow keys.\nTo edit the selected item press f2."
+                "{}\n{}    {}   \n{name}\n{}\n{}\n{}",
+                msg::desktop(),
+                // The list's name, as Windows gives it.
+                "FolderView",
+                msg::role_list_view(),
+                msg::position(index, total),
+                msg::hint_move_to_items_arrows(),
+                msg::hint_desktop_rename()
             )
         } else {
-            format!("{name}\n{index} of {total}")
+            format!("{name}\n{}", crate::messages::msg::position(index, total))
         }))
     }
 
@@ -124,6 +135,7 @@ impl AppModule for Desktop {
     /// (Insert+T) is the virtual desktop's name (JAWS on Windows 11: "desktop | FolderView List
     /// view").
     fn window_name(&self, focus: &FocusEvent) -> Option<String> {
-        (focus.platform.top_window_class.as_deref() == Some("Progman")).then(|| "desktop".into())
+        (focus.platform.top_window_class.as_deref() == Some("Progman"))
+            .then(|| crate::messages::msg::desktop().into())
     }
 }

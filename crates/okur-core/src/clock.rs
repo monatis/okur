@@ -292,7 +292,7 @@ pub fn say_date(clock: &dyn Clock, week: bool) -> String {
     let formats = clock.formats();
     let now = clock.now();
     if week {
-        format!("Week {}", formats.week_number(&now))
+        crate::messages::msg::week_number(formats.week_number(&now)).render()
     } else {
         formats.format(&formats.long_date, &now)
     }

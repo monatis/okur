@@ -41,6 +41,8 @@ role-link-same-page = same page link
 role-link-viewer = link
 role-list = list
 role-list-box = List box
+# File Explorer's file list. JAWS's spelling.
+role-list-box-multi-select = MultiSelect ListBox
 role-list-item = list item
 role-list-view = List view
 role-menu = menu

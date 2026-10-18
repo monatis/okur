@@ -48,3 +48,7 @@ selection-added = selected
 text-top-of-file = top of file
 # Control+End in a document. JAWS's capital.
 text-bottom-of-file = Bottom of file
+
+## Say System Date (twice: the week)
+
+week-number = Week { $week }

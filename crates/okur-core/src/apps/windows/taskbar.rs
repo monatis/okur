@@ -30,12 +30,14 @@ impl AppModule for Taskbar {
 /// A taskbar button, after the taskbar's name when it is being entered.
 fn button(container: Option<&str>, name: &str, help: Option<&str>) -> String {
     let mut lines = Vec::new();
-    if container == Some("Taskbar") && name == "Start Button" {
-        lines.push("Taskbar \n   Start Button   ".to_string());
-    } else if let Some(c) = container {
-        lines.push(format!("  {}    {}    Button   ", c, name));
-    } else {
-        lines.push(format!("{}    Button   ", name));
+    // The Start button is said without its role, as JAWS says it.
+    let role = crate::messages::msg::role_button();
+    match container {
+        Some(c @ "Taskbar") if name == "Start Button" => {
+            lines.push(format!("{c} \n   {name}   "));
+        }
+        Some(c) => lines.push(format!("  {}    {}    {role}   ", c, name)),
+        None => lines.push(format!("{}    {role}   ", name)),
     }
     if let Some(h) = help {
         lines.push(h.to_string());

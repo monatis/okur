@@ -56,7 +56,10 @@ impl TaskSwitcher {
         Some(if std::mem::replace(&mut self.entered, true) {
             name
         } else {
-            format!("{name}\nTo move to an item press the Arrow keys.")
+            format!(
+                "{name}\n{}",
+                crate::messages::msg::hint_move_to_an_item_arrows()
+            )
         })
     }
 }
