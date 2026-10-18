@@ -4,28 +4,83 @@
 //! marks them (`‹ Button ›`, `‹checked›`); Okur's speech text marks them the same way
 //! (`\u{1d}` … `\u{1e}`), and synthesizers drop the marks. Keeping an announcement as parts
 //! until it is rendered lets code change one part (an application module's own wording,
-//! later verbosity settings or braille) without editing strings.
+//! verbosity settings or braille) without editing strings.
+//!
+//! Every part has a kind ([`PartKind`]): what it says about the object (its name, its role,
+//! its position, a usage hint…). Verbosity filters parts by kind ([`Announcement::retain`]);
+//! the words themselves come from the catalog ([`crate::messages`]) or from the application.
 
 use crate::linearize::{role_marker, state_marker};
 
+/// What a part of an announcement says (proposal §6.1). Verbosity decides by kind which parts
+/// are said; only roles and states are rendered with JAWS's marks.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum PartKind {
+    /// The object's name: "Remember me".
+    Name,
+    /// Its value or text: "Germany", "50 percent", "Contains text".
+    Value,
+    /// Its type: "check box", "List view".
+    Role,
+    /// A state: "checked", "expanded".
+    State,
+    /// Its place among its siblings: "2 of 5".
+    Position,
+    /// Its depth: a tree item's "level 2".
+    Level,
+    /// Its description (aria-description, help text).
+    Description,
+    /// What a key does on it: "To activate press Enter."
+    Hint,
+    /// Its keyboard shortcut: "Ctrl+L".
+    Shortcut,
+    /// Its access key: "alt+S", "Alt followed by I".
+    AccessKey,
+    /// A container entered on the way to it: a named group, a list, a dialog.
+    Container,
+    /// One of Okur's own messages about it: "Open List Box".
+    Message,
+    /// Words with no kind of their own, or several kinds already joined.
+    Text,
+}
+
 /// One part of a line.
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Part {
-    /// Words: a name, a value, a position, a hint.
-    Text(String),
-    /// A control's type: "Button", "check box", "List view".
-    Role(String),
-    /// A state: "checked", "open", "selected".
-    State(String),
+pub struct Part {
+    pub kind: PartKind,
+    /// The words, without marks: the application's, or rendered from the catalog.
+    pub text: String,
 }
 
 impl Part {
+    pub fn new(kind: PartKind, text: impl Into<String>) -> Self {
+        Self {
+            kind,
+            text: text.into(),
+        }
+    }
+
+    /// Words with no kind of their own (spacing, words joined already).
+    pub fn text(text: impl Into<String>) -> Self {
+        Self::new(PartKind::Text, text)
+    }
+
+    /// A control's type: "Button", "check box", "List view".
+    pub fn role(role: impl Into<String>) -> Self {
+        Self::new(PartKind::Role, role)
+    }
+
+    /// A state: "checked", "open", "selected".
+    pub fn state(state: impl Into<String>) -> Self {
+        Self::new(PartKind::State, state)
+    }
+
     /// The part as speech text, with JAWS's marks around a role or state.
     pub fn render(&self) -> String {
-        match self {
-            Part::Text(text) => text.clone(),
-            Part::Role(role) => role_marker(role),
-            Part::State(state) => state_marker(state),
+        match self.kind {
+            PartKind::Role => role_marker(&self.text),
+            PartKind::State => state_marker(&self.text),
+            _ => self.text.clone(),
         }
     }
 }
@@ -46,9 +101,14 @@ impl Line {
         }
     }
 
-    /// A line of words.
+    /// A line of words with no kind of their own.
     pub fn text(text: impl Into<String>) -> Self {
-        Self::new(vec![Part::Text(text.into())])
+        Self::of(PartKind::Text, text)
+    }
+
+    /// A line of one part of `kind`: `Line::of(PartKind::Hint, "To activate press Enter.")`.
+    pub fn of(kind: PartKind, text: impl Into<String>) -> Self {
+        Self::new(vec![Part::new(kind, text)])
     }
 
     /// The same line, said only as focus arrives.
@@ -87,6 +147,32 @@ impl Announcement {
             .collect::<Vec<_>>()
             .join("\n")
     }
+
+    /// Every line joined as it is, empty ones included: text built line by line, as a string
+    /// joined with `\n` would be.
+    pub fn render_all(&self) -> String {
+        self.lines
+            .iter()
+            .map(Line::render)
+            .collect::<Vec<_>>()
+            .join("\n")
+    }
+
+    /// Keeps the parts whose kind `keep` accepts; a line left without parts goes.
+    pub fn retain(&mut self, keep: impl Fn(PartKind) -> bool) {
+        for line in &mut self.lines {
+            line.parts.retain(|part| keep(part.kind));
+        }
+        self.lines.retain(|line| !line.parts.is_empty());
+    }
+
+    /// The kinds of its parts, in order.
+    pub fn kinds(&self) -> Vec<PartKind> {
+        self.lines
+            .iter()
+            .flat_map(|line| line.parts.iter().map(|part| part.kind))
+            .collect()
+    }
 }
 
 #[cfg(test)]
@@ -97,16 +183,44 @@ mod tests {
     fn parts_render_with_jaws_marks_and_empty_lines_are_dropped() {
         let announcement = Announcement::new(vec![
             Line::new(vec![
-                Part::Text("Remember me".to_owned()),
-                Part::Role("check box".to_owned()),
-                Part::State("not checked".to_owned()),
+                Part::new(PartKind::Name, "Remember me"),
+                Part::role("check box"),
+                Part::state("not checked"),
             ]),
             Line::text(""),
-            Line::text("To check press Spacebar.").on_arrival(),
+            Line::of(PartKind::Hint, "To check press Spacebar.").on_arrival(),
         ]);
         assert_eq!(
             announcement.render(),
             "Remember me \u{1d} check box \u{1e}  \u{1d}not checked\u{1e} \nTo check press Spacebar."
         );
+        assert_eq!(
+            announcement.render_all(),
+            "Remember me \u{1d} check box \u{1e}  \u{1d}not checked\u{1e} \n\nTo check press Spacebar."
+        );
+    }
+
+    #[test]
+    fn parts_are_kept_or_dropped_by_kind() {
+        let mut announcement = Announcement::new(vec![
+            Line::new(vec![Part::new(PartKind::Name, "Yes"), Part::role("Button")]),
+            Line::of(PartKind::Hint, "To activate press spacebar."),
+            Line::of(PartKind::AccessKey, "alt+Y").on_arrival(),
+        ]);
+        assert_eq!(
+            announcement.kinds(),
+            [
+                PartKind::Name,
+                PartKind::Role,
+                PartKind::Hint,
+                PartKind::AccessKey
+            ]
+        );
+        announcement.retain(|kind| kind != PartKind::AccessKey);
+        assert_eq!(
+            announcement.render(),
+            "Yes \u{1d} Button \u{1e} \nTo activate press spacebar."
+        );
+        assert_eq!(announcement.lines.len(), 2);
     }
 }

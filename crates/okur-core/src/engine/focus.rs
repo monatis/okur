@@ -1,7 +1,7 @@
 //! Focus and menu events: what the engine says when the focus or a menu changes.
 
 use super::{AppMode, ScreenReaderEngine};
-use crate::announcement::{Announcement, Line, Part};
+use crate::announcement::{Announcement, Line, Part, PartKind};
 use crate::aom::Role;
 use crate::apps::{AppContext, FocusResponse};
 use crate::cursor::FocusFrom;
@@ -650,8 +650,8 @@ impl ScreenReaderEngine {
             .unwrap_or("");
         let mut lines = vec![match &focus.dialog_text {
             Some(_) => Line::new(vec![
-                Part::Text(win.to_owned()),
-                Part::Role(msg::role_dialog().to_string()),
+                Part::new(PartKind::Container, win),
+                Part::role(msg::role_dialog().as_str()),
             ]),
             None => Line::text(win),
         }];
@@ -664,8 +664,8 @@ impl ScreenReaderEngine {
         );
         lines.extend(focus.dialog_page.as_deref().map(|page| {
             Line::new(vec![
-                Part::Text(page.to_owned()),
-                Part::Role(msg::role_page().to_string()),
+                Part::new(PartKind::Container, page),
+                Part::role(msg::role_page().as_str()),
             ])
         }));
         // The control, unless it only repeats the window's name or the application names its

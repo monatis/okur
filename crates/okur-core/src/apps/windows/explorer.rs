@@ -1,7 +1,7 @@
 //! File Explorer's file list. Entering it reads the window, the folder, the list ("Items
 //! View MultiSelect ListBox") and the item; moving reads the item and its position.
 
-use crate::announcement::{Announcement, Line, Part};
+use crate::announcement::{Announcement, Line, Part, PartKind};
 use crate::aom::Role;
 use crate::apps::{AppContext, AppModule, FocusResponse};
 use crate::engine::AppMode;
@@ -140,8 +140,8 @@ fn entry(e: &Entry<'_>) -> Announcement {
         lines.extend(folder.map(Line::text));
     }
     lines.push(Line::new(vec![
-        Part::Text("Items View".to_owned()),
-        Part::Role(msg::role_list_box_multi_select().to_string()),
+        Part::new(PartKind::Container, "Items View"),
+        Part::role(msg::role_list_box_multi_select().as_str()),
     ]));
     lines.push(Line::text(if e.selected == Some(false) {
         msg::explorer_item_not_selected(e.name).render()

@@ -10,7 +10,7 @@
 //!
 //! Lines are separated by `\n`, as in JAWS's speech history.
 
-use crate::announcement::{Announcement, Line, Part};
+use crate::announcement::{Announcement, Line, Part, PartKind};
 use crate::aom::Role;
 use crate::event::FocusEvent;
 use crate::linearize::{role_marker, state_marker};
@@ -36,16 +36,16 @@ fn named(name: &str) -> String {
     name.trim().to_owned()
 }
 
-fn text(text: impl Into<String>) -> Part {
-    Part::Text(text.into())
+fn name_part(name: impl Into<String>) -> Part {
+    Part::new(PartKind::Name, name)
 }
 
 fn role(role: &str) -> Part {
-    Part::Role(role.to_owned())
+    Part::role(role)
 }
 
 fn state(state: &str) -> Part {
-    Part::State(state.to_owned())
+    Part::state(state)
 }
 
 /// The entry line for the focused control's container, or `None` when the container has
@@ -53,18 +53,21 @@ fn state(state: &str) -> Part {
 fn container_entry(focus: &FocusEvent) -> Option<Line> {
     let name = named(focus.container_name.as_deref().unwrap_or_default());
     let kind = match focus.container_role.as_ref()? {
-        Role::Group if !name.is_empty() => return Some(Line::text(name)),
+        Role::Group if !name.is_empty() => return Some(Line::of(PartKind::Container, name)),
         Role::List if focus.container_is_list_view => msg::role_list_view().as_str(),
         Role::List => msg::role_list_box().as_str(),
         Role::Tree => msg::role_tree_view().as_str(),
         _ => return None,
     };
-    Some(Line::new(vec![text(name), role(kind)]))
+    Some(Line::new(vec![
+        Part::new(PartKind::Container, name),
+        role(kind),
+    ]))
 }
 
 fn position(focus: &FocusEvent) -> Option<Line> {
     match (focus.item_index, focus.item_count) {
-        (Some(i), Some(n)) => Some(Line::text(msg::position(i, n))),
+        (Some(i), Some(n)) => Some(Line::of(PartKind::Position, msg::position(i, n))),
         _ => None,
     }
 }
@@ -89,7 +92,7 @@ fn access_key(focus: &FocusEvent, own_text: bool) -> Option<Line> {
         .map(str::trim)
         .filter(|k| !k.is_empty())?;
     if key.contains(", ") {
-        return Some(Line::text(key_sequence(key)).on_arrival());
+        return Some(Line::of(PartKind::AccessKey, key_sequence(key)).on_arrival());
     }
     let letter = key
         .strip_prefix("Alt+")
@@ -110,7 +113,7 @@ fn access_key(focus: &FocusEvent, own_text: bool) -> Option<Line> {
         }
         None => key.to_owned(),
     };
-    Some(Line::text(said).on_arrival())
+    Some(Line::of(PartKind::AccessKey, said).on_arrival())
 }
 
 /// A key sequence as UI Automation gives it ("Alt, I"), as JAWS says it: "Alt followed by I".
@@ -136,7 +139,7 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
         .as_deref()
         .map(named)
         .filter(|v| !v.is_empty())
-        .map(Line::text);
+        .map(|v| Line::of(PartKind::Value, v));
     let mut lines = Vec::new();
     match focus.role {
         // A combo box's text field. JAWS 2025 on the Run dialog's Open field, observed on the
@@ -144,20 +147,25 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
         // value use the Arrow keys or type the value. | Alt+o".
         Role::Edit if focus.container_role == Some(Role::ComboBox) => {
             lines.push(Line::new(vec![
-                text(name),
+                name_part(name),
                 role(msg::role_edit_combo().as_str()),
             ]));
             lines.extend(value);
             lines.extend(position(focus));
-            lines.push(Line::text(msg::hint_set_value_arrows_or_type()).on_arrival());
-            lines.extend(focus.access_key.clone().map(|k| Line::text(k).on_arrival()));
+            lines.push(Line::of(PartKind::Hint, msg::hint_set_value_arrows_or_type()).on_arrival());
+            lines.extend(
+                focus
+                    .access_key
+                    .clone()
+                    .map(|k| Line::of(PartKind::AccessKey, k).on_arrival()),
+            );
         }
         // A native text document (Windows 11 Notepad's RichEdit, MSAA "editable text"): an
         // edit whose text is not read on arrival. JAWS 2025, dev box: "viewer-test.txt -
         // Notepad | Text editor edit | Contains text".
         Role::Document if !focus.in_document && focus.read_only == Some(false) => {
             lines.push(Line::new(vec![
-                text(name),
+                name_part(name),
                 role(msg::role_edit_multiline().as_str()),
             ]));
             if focus
@@ -165,7 +173,7 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
                 .as_ref()
                 .is_some_and(|t| !t.text.trim().is_empty())
             {
-                lines.push(Line::text(msg::field_contains_text()).on_arrival());
+                lines.push(Line::of(PartKind::Value, msg::field_contains_text()).on_arrival());
             }
         }
         Role::Edit => {
@@ -175,9 +183,12 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
             } else {
                 name
             };
-            lines.push(Line::new(vec![text(name), role(msg::role_edit().as_str())]));
+            lines.push(Line::new(vec![
+                name_part(name),
+                role(msg::role_edit().as_str()),
+            ]));
             lines.extend(value);
-            lines.push(Line::text(msg::hint_type_in_text()));
+            lines.push(Line::of(PartKind::Hint, msg::hint_type_in_text()));
             // Its shortcut (UIA AcceleratorKey): Chrome's address bar, "… Type in text. |
             // Ctrl+L" (JAWS on the dev box, 2026-10-17). Buttons' shortcuts are not said (File
             // Explorer's Back, Alt+Left).
@@ -187,58 +198,72 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
                     .as_deref()
                     .map(str::trim)
                     .filter(|k| !k.is_empty())
-                    .map(|k| Line::text(k).on_arrival()),
+                    .map(|k| Line::of(PartKind::Shortcut, k).on_arrival()),
             );
         }
         Role::CheckBox => {
             lines.push(Line::new(vec![
-                text(name),
+                name_part(name),
                 role(msg::role_check_box().as_str()),
                 checked(focus),
             ]));
-            lines.push(Line::text(if focus.states.checked == Some(true) {
-                msg::hint_clear_checkmark_spacebar()
-            } else {
-                msg::hint_check_spacebar()
-            }));
+            lines.push(Line::of(
+                PartKind::Hint,
+                if focus.states.checked == Some(true) {
+                    msg::hint_clear_checkmark_spacebar()
+                } else {
+                    msg::hint_check_spacebar()
+                },
+            ));
             lines.extend(access_key(focus, true));
         }
         Role::RadioButton => {
             lines.push(Line::new(vec![
-                text(name),
+                name_part(name),
                 role(msg::role_radio_button().as_str()),
                 checked(focus),
             ]));
             lines.extend(position(focus));
-            lines.push(Line::text(msg::hint_radio_up_down()));
+            lines.push(Line::of(PartKind::Hint, msg::hint_radio_up_down()));
             lines.extend(access_key(focus, true));
         }
         Role::ComboBox => {
             lines.push(Line::new(vec![
-                text(name),
+                name_part(name),
                 role(msg::role_combo_box_focus().as_str()),
             ]));
             lines.extend(value);
             lines.extend(position(focus));
-            lines.push(Line::text(msg::hint_change_selection_arrows()));
+            lines.push(Line::of(
+                PartKind::Hint,
+                msg::hint_change_selection_arrows(),
+            ));
             lines.extend(access_key(focus, false));
         }
         Role::ListItem => {
-            lines.push(Line::text(name));
-            lines.extend(focus.columns.iter().map(|c| Line::text(named(c))));
+            lines.push(Line::of(PartKind::Name, name));
+            lines.extend(
+                focus
+                    .columns
+                    .iter()
+                    .map(|c| Line::of(PartKind::Value, named(c))),
+            );
             lines.extend(position(focus));
             if entering {
-                lines.push(Line::text(if focus.container_is_list_view {
-                    msg::hint_move_to_items_arrows()
-                } else {
-                    msg::hint_move_to_an_item_arrows()
-                }));
+                lines.push(Line::of(
+                    PartKind::Hint,
+                    if focus.container_is_list_view {
+                        msg::hint_move_to_items_arrows()
+                    } else {
+                        msg::hint_move_to_an_item_arrows()
+                    },
+                ));
             }
         }
         Role::TreeItem => {
             // Expanded items say "open" [obs, 303/s7]. Moving up to an already visited
             // parent drops the position (303/s6); that rule is not known yet.
-            let mut parts = vec![text(name)];
+            let mut parts = vec![name_part(name)];
             match focus.states.expanded {
                 Some(true) => parts.push(state(msg::state_open().as_str())),
                 Some(false) => parts.push(state(msg::state_closed().as_str())),
@@ -247,11 +272,11 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
             lines.push(Line::new(parts));
             lines.extend(position(focus));
             if entering {
-                lines.push(Line::text(msg::hint_tree_arrows()));
+                lines.push(Line::of(PartKind::Hint, msg::hint_tree_arrows()));
             }
         }
         Role::Tab => {
-            let mut parts = vec![text(name), role(msg::role_tab().as_str())];
+            let mut parts = vec![name_part(name), role(msg::role_tab().as_str())];
             if focus.states.selected == Some(true) {
                 parts.push(state(msg::state_selected().as_str()));
             }
@@ -259,24 +284,24 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
             // The position the application reports: File Explorer's tab, "docs Tab | selected |
             // 1 of 1" (dev box, 2026-10-17); a WinForms tab reports none (303/s12).
             lines.extend(position(focus));
-            lines.push(Line::text(msg::hint_switch_pages()));
+            lines.push(Line::of(PartKind::Hint, msg::hint_switch_pages()));
         }
         // File Explorer (JAWS on the dev box, 2026-10-17): a column header, "Name split button";
         // the address bar's breadcrumb, "This PC split button | 1 of 6", the position it
         // reports. No hint.
         Role::SplitButton => {
             lines.push(Line::new(vec![
-                text(name),
+                name_part(name),
                 role(msg::role_split_button().as_str()),
             ]));
             lines.extend(position(focus));
         }
         Role::MenuButton => {
             lines.push(Line::new(vec![
-                text(name),
+                name_part(name),
                 role(msg::role_button_menu().as_str()),
             ]));
-            lines.push(Line::text(msg::hint_menu_button()));
+            lines.push(Line::of(PartKind::Hint, msg::hint_menu_button()));
         }
         // A button says the position its application reports (Windows Settings' breadcrumb:
         // "Home Button | 1 of 1 | To activate press spacebar."; JAWS on the dev box,
@@ -284,7 +309,7 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
         Role::Button => {
             // An expander's button says its state: Windows Settings' "Show more settings Button
             // collapsed" (JAWS on the dev box, 2026-10-16).
-            let mut parts = vec![text(name), role(msg::role_button().as_str())];
+            let mut parts = vec![name_part(name), role(msg::role_button().as_str())];
             match focus.states.expanded {
                 Some(true) => parts.push(state(msg::state_expanded().as_str())),
                 Some(false) => parts.push(state(msg::state_collapsed().as_str())),
@@ -295,20 +320,20 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
             // reads: Windows Settings' "Night light Button | Off" (JAWS, dev box 2026-10-16).
             if focus.platform.element_class.as_deref() == Some("ToggleSwitch") {
                 match focus.states.checked {
-                    Some(true) => lines.push(Line::text(msg::toggle_on())),
-                    Some(false) => lines.push(Line::text(msg::toggle_off())),
+                    Some(true) => lines.push(Line::of(PartKind::Value, msg::toggle_on())),
+                    Some(false) => lines.push(Line::of(PartKind::Value, msg::toggle_off())),
                     None => {}
                 }
             }
             lines.extend(position(focus));
-            lines.push(Line::text(msg::hint_activate_spacebar()));
+            lines.push(Line::of(PartKind::Hint, msg::hint_activate_spacebar()));
             lines.extend(access_key(focus, true));
         }
         // Windows Settings' Brightness (JAWS, dev box 2026-10-16): "Brightness left right
         // slider | To increase or decrease use the Arrow keys."
         Role::Slider => {
             lines.push(Line::new(vec![
-                text(name),
+                name_part(name),
                 role(msg::role_slider_horizontal().as_str()),
             ]));
             // A percentage is said in words: a trackbar's "50 percent" (JAWS, dev box,
@@ -320,23 +345,28 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
                     .map(named)
                     .filter(|v| !v.is_empty())
                     .map(|v| match v.strip_suffix('%') {
-                        Some(number) => Line::text(msg::value_percent(number.trim_end())),
-                        None => Line::text(v),
+                        Some(number) => {
+                            Line::of(PartKind::Value, msg::value_percent(number.trim_end()))
+                        }
+                        None => Line::of(PartKind::Value, v),
                     }),
             );
-            lines.push(Line::text(msg::hint_slider_arrows()));
+            lines.push(Line::of(PartKind::Hint, msg::hint_slider_arrows()));
             lines.extend(access_key(focus, false));
         }
         // Windows Settings' "Rename" (JAWS, dev box 2026-10-16): "Rename Link | To activate
         // press Enter."
         Role::Link { .. } => {
-            lines.push(Line::new(vec![text(name), role(msg::role_link().as_str())]));
-            lines.push(Line::text(msg::hint_activate_enter()));
+            lines.push(Line::new(vec![
+                name_part(name),
+                role(msg::role_link().as_str()),
+            ]));
+            lines.push(Line::of(PartKind::Hint, msg::hint_activate_enter()));
         }
         // A window taking focus is announced by its title alone (the window change).
         Role::Window => {}
         _ => {
-            lines.push(Line::text(name));
+            lines.push(Line::of(PartKind::Name, name));
             lines.extend(value);
         }
     }
@@ -431,7 +461,7 @@ impl NativeFocus {
                 if self.tree_level != Some(level) {
                     speech
                         .lines
-                        .insert(0, Line::text(msg::tree_level_changed(level)));
+                        .insert(0, Line::of(PartKind::Level, msg::tree_level_changed(level)));
                 } else if let Some(at) = position(focus).map(|p| p.render()) {
                     speech.lines.retain(|line| line.render() != at);
                 }
@@ -479,7 +509,10 @@ fn focus_speech_within(
         for (i, entry) in entered.iter().enumerate() {
             let name = named(&entry.name);
             lines.push(if entry.dialog {
-                Line::new(vec![text(name), role(msg::role_dialog().as_str())])
+                Line::new(vec![
+                    Part::new(PartKind::Container, name),
+                    role(msg::role_dialog().as_str()),
+                ])
             } else if entry.list {
                 let kind = if i == last && focus.container_is_list_view {
                     msg::role_list_view()
@@ -487,9 +520,9 @@ fn focus_speech_within(
                     msg::role_list_box()
                 };
                 let kind = kind.as_str();
-                Line::new(vec![text(name), role(kind)])
+                Line::new(vec![Part::new(PartKind::Container, name), role(kind)])
             } else {
-                Line::text(name)
+                Line::of(PartKind::Container, name)
             });
         }
     } else if !within {
@@ -616,11 +649,15 @@ pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<String> 
         Role::TreeItem if before.states.expanded != after.states.expanded => {
             // [obs, 303/s7, 304/s16–s17]: "Documents | ‹open› | 2 items",
             // "Documents | ‹closed› | 1 of 2".
-            let mut lines = vec![Line::text(name)];
+            let mut lines = vec![Line::of(PartKind::Name, name)];
             match after.states.expanded {
                 Some(true) => {
                     lines.push(Line::new(vec![state(msg::state_open().as_str())]));
-                    lines.extend(after.child_count.map(|n| Line::text(msg::tree_items(n))));
+                    lines.extend(
+                        after
+                            .child_count
+                            .map(|n| Line::of(PartKind::Message, msg::tree_items(n))),
+                    );
                 }
                 _ => {
                     lines.push(Line::new(vec![state(msg::state_closed().as_str())]));
@@ -636,8 +673,13 @@ pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<String> 
         {
             if after.states.expanded == Some(true) {
                 // Alt+Down [obs, 304/s11]: "Open List Box | Germany | 2 of 3".
-                let mut lines = vec![Line::text(msg::combo_box_opened())];
-                lines.extend(after.value.iter().map(|v| Line::text(named(v))));
+                let mut lines = vec![Line::of(PartKind::Message, msg::combo_box_opened())];
+                lines.extend(
+                    after
+                        .value
+                        .iter()
+                        .map(|v| Line::of(PartKind::Value, named(v))),
+                );
                 lines.extend(position(after));
                 Some(joined(lines))
             } else {
@@ -646,7 +688,11 @@ pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<String> 
             }
         }
         Role::ComboBox if before.value != after.value => {
-            let mut lines: Vec<Line> = after.value.iter().map(|v| Line::text(named(v))).collect();
+            let mut lines: Vec<Line> = after
+                .value
+                .iter()
+                .map(|v| Line::of(PartKind::Value, named(v)))
+                .collect();
             lines.extend(position(after));
             Some(joined(lines))
         }
@@ -1642,5 +1688,84 @@ mod tree_tests {
         let mut reports = tree_item("Reports", 1, 1, 2);
         reports.states.expanded = None;
         assert_eq!(say(&mut native, &reports), "level 1\nReports\n1 of 2");
+    }
+}
+
+#[cfg(test)]
+mod kind_tests {
+    use super::*;
+    use crate::announcement::PartKind;
+
+    fn with_keys(role: Role, name: &str) -> FocusEvent {
+        let mut focus = FocusEvent::new(role).with_name(name);
+        focus.access_key = Some("Alt+v".to_owned());
+        focus.accelerator_key = Some("Ctrl+L".to_owned());
+        focus.value = Some("12".to_owned());
+        focus
+    }
+
+    /// Native focus speech says what each part is, so verbosity can act on kinds.
+    #[test]
+    fn native_focus_parts_have_kinds() {
+        let button = focus_speech(&with_keys(Role::Button, "Yes"), None);
+        assert_eq!(
+            button.kinds(),
+            [
+                PartKind::Name,
+                PartKind::Role,
+                PartKind::Hint,
+                PartKind::AccessKey
+            ]
+        );
+        let mut edit = FocusEvent::new(Role::Edit).with_name("Address and search bar");
+        edit.value = Some("example.com".to_owned());
+        edit.accelerator_key = Some("Ctrl+L".to_owned());
+        assert_eq!(
+            focus_speech(&edit, None).kinds(),
+            [
+                PartKind::Name,
+                PartKind::Role,
+                PartKind::Value,
+                PartKind::Hint,
+                PartKind::Shortcut
+            ]
+        );
+    }
+
+    /// Leaving out the access key and shortcut parts says what a focus without those keys
+    /// says, for every control type: the kinds mark exactly the keys' lines.
+    #[test]
+    fn dropping_key_parts_equals_a_focus_without_keys() {
+        for role in [
+            Role::Button,
+            Role::Edit,
+            Role::CheckBox,
+            Role::RadioButton,
+            Role::ComboBox,
+            Role::Slider,
+            Role::Link { href: None },
+            Role::Tab,
+        ] {
+            let focus = with_keys(role.clone(), "Volume");
+            let mut said = focus_speech(&focus, None);
+            said.retain(|kind| !matches!(kind, PartKind::AccessKey | PartKind::Shortcut));
+            let without = FocusEvent {
+                access_key: None,
+                accelerator_key: None,
+                ..focus
+            };
+            assert_eq!(
+                said.render(),
+                focus_speech(&without, None).render(),
+                "{role:?}"
+            );
+        }
+        // A combo box's text field says its access key as UI Automation gives it.
+        let mut field = with_keys(Role::Edit, "Open:");
+        field.container_role = Some(Role::ComboBox);
+        let mut said = focus_speech(&field, None);
+        said.retain(|kind| kind != PartKind::AccessKey);
+        field.access_key = None;
+        assert_eq!(said.render(), focus_speech(&field, None).render());
     }
 }

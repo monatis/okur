@@ -1,6 +1,16 @@
+use crate::announcement::{Announcement, Line, Part, PartKind};
 use crate::aom::{AomNode, Role, TextFormatting};
 use crate::buffer::BufferLine;
 use crate::messages::msg;
+
+/// A name, a space, and a role: "Name  ‹ check box ›", JAWS's spacing on focus.
+fn name_and_role(name: &str, role: &str) -> Vec<Part> {
+    vec![
+        Part::new(PartKind::Name, name),
+        Part::text(" "),
+        Part::role(role),
+    ]
+}
 
 /// Formats virtual buffer elements and reading events into canonical JAWS speech tokens.
 pub struct SpeechFormatter;
@@ -342,6 +352,15 @@ impl SpeechFormatter {
         node: &crate::aom::AomNode,
         was_inside: impl Fn(usize) -> bool,
     ) -> String {
+        Self::control_focus(node, was_inside).render_all()
+    }
+
+    /// [`Self::format_control_focus`] as parts with their kinds. A line whose spacing parts
+    /// cannot give (a check box's, a button's) is one part of kind `Text`.
+    pub fn control_focus(
+        node: &crate::aom::AomNode,
+        was_inside: impl Fn(usize) -> bool,
+    ) -> Announcement {
         use crate::aom::Role;
         let attr = |k: &str| node.attributes.get(k).map(String::as_str);
         let name = node.name.as_deref().unwrap_or_default().trim();
@@ -367,69 +386,75 @@ impl SpeechFormatter {
                 } else {
                     msg::role_edit().as_str()
                 };
-                let mut s = format!("{name} \u{1d} {kind} \u{1e} ");
+                let mut lines = vec![Line::new(vec![
+                    Part::new(PartKind::Name, name),
+                    Part::role(kind),
+                ])];
                 if required {
-                    s.push_str(&format!("\n \u{1d}{}\u{1e} ", msg::state_required()));
+                    lines.push(Line::new(vec![Part::state(msg::state_required())]));
                 }
                 // A multi-line field with text says so, not its text (a text area, a web code
                 // editor): "Notes edit | Contains text" (JAWS on the dev box). A field holding
                 // only a line break is blank: WhatsApp's empty composer (JAWS on the dev box).
                 if !password {
-                    match node.value.as_deref().filter(|v| !v.trim().is_empty()) {
-                        Some(_) if attr("multiline") == Some("true") => {
-                            s.push_str(&format!("\n{}", msg::field_contains_text()))
-                        }
-                        Some(v) => s.push_str(&format!("\n{v}")),
-                        None => s.push_str(&format!("\n{}", msg::blank())),
-                    }
+                    lines.push(Line::of(
+                        PartKind::Value,
+                        match node.value.as_deref().filter(|v| !v.trim().is_empty()) {
+                            Some(_) if attr("multiline") == Some("true") => {
+                                msg::field_contains_text().as_str()
+                            }
+                            Some(v) => v,
+                            None => msg::blank().as_str(),
+                        },
+                    ));
                 }
                 if let Some(d) = attr("description") {
-                    s.push_str(&format!("\n{d}"));
+                    lines.push(Line::of(PartKind::Description, d));
                 }
-                s
+                Announcement::new(lines)
             }
             Role::RadioButton => {
-                let mut s = String::new();
+                let mut lines = Vec::new();
                 if let (Some(group), Some(group_id)) = (attr("group_name"), attr("group_id")) {
                     let inside = group_id.parse().is_ok_and(&was_inside);
                     if !inside {
-                        s.push_str(&format!("{group} \u{1d} {} \u{1e} \n", msg::role_group()));
+                        lines.push(Line::new(vec![
+                            Part::new(PartKind::Container, group),
+                            Part::role(msg::role_group()),
+                        ]));
                     }
                 }
-                s.push_str(&format!(
-                    "{name}  \u{1d} {} \u{1e}   \u{1d}{}\u{1e} ",
-                    msg::role_radio_button(),
-                    checked(node.states.checked)
-                ));
+                let mut parts = name_and_role(name, msg::role_radio_button().as_str());
+                parts.push(Part::text(" "));
+                parts.push(Part::state(checked(node.states.checked)));
+                lines.push(Line::new(parts));
                 if let (Some(p), Some(n)) = (attr("posinset"), attr("setsize")) {
-                    s.push_str(&format!("\n{}", msg::position(p, n)));
+                    lines.push(Line::of(PartKind::Position, msg::position(p, n)));
                 }
-                s
+                Announcement::new(lines)
             }
-            Role::ComboBox if attr("editable") == Some("true") => {
-                Self::format_edit_combo(name, node)
-            }
+            Role::ComboBox if attr("editable") == Some("true") => Self::edit_combo(name, node),
             Role::ComboBox => {
                 let state = if node.states.expanded == Some(true) {
                     msg::state_expanded()
                 } else {
                     msg::state_collapsed()
                 };
-                let mut s = format!(
-                    "{name}  \u{1d} {} \u{1e}   \u{1d}{state}\u{1e} ",
-                    msg::role_combo_box_focus()
-                );
+                let mut parts = name_and_role(name, msg::role_combo_box_focus().as_str());
+                parts.push(Part::text(" "));
+                parts.push(Part::state(state));
+                let mut lines = vec![Line::new(parts)];
                 if let Some(v) = node.value.as_deref() {
-                    s.push_str(&format!("\n{v}"));
+                    lines.push(Line::of(PartKind::Value, v));
                 }
-                s
+                Announcement::new(lines)
             }
-            Role::CheckBox => format!(
+            Role::CheckBox => Announcement::from_text(&format!(
                 "{name}  \u{1d} {} \u{1e}   \u{1d}{}\u{1e}",
                 node.role_description()
                     .unwrap_or(msg::role_check_box().as_str()),
                 checked(node.states.checked)
-            ),
+            )),
             // A toggle button (`aria-pressed`): "Sohbetler Toggle button Pressed", "👍 Toggle
             // button Not pressed" (WhatsApp, JAWS on the dev box, 2026-10-17).
             Role::Button if node.states.checked.is_some() => {
@@ -438,10 +463,9 @@ impl SpeechFormatter {
                 } else {
                     msg::state_not_pressed()
                 };
-                format!(
-                    "{name}  \u{1d} {} \u{1e}  \u{1d}{pressed}\u{1e} ",
-                    msg::role_toggle_button()
-                )
+                let mut parts = name_and_role(name, msg::role_toggle_button().as_str());
+                parts.push(Part::state(pressed));
+                Announcement::new(vec![Line::new(parts)])
             }
             Role::Button => {
                 // A disclosure button speaks its state [obs, 29/s1].
@@ -462,16 +486,18 @@ impl SpeechFormatter {
                 let role = node
                     .role_description()
                     .unwrap_or(msg::role_button().as_str());
-                format!("{name}  \u{1d} {role} \u{1e}{state}{popup}{current}")
+                Announcement::from_text(&format!(
+                    "{name}  \u{1d} {role} \u{1e}{state}{popup}{current}"
+                ))
             }
             // On focus a menu button says no state and no hint (JAWS on the dev box).
             Role::MenuButton => {
                 let role = node
                     .role_description()
                     .unwrap_or(msg::role_button_menu().as_str());
-                format!("{name}  \u{1d} {role} \u{1e} ")
+                Announcement::new(vec![Line::new(name_and_role(name, role))])
             }
-            _ => name.to_owned(),
+            _ => Announcement::new(vec![Line::of(PartKind::Name, name)]),
         }
     }
 
@@ -504,13 +530,23 @@ impl SpeechFormatter {
     /// A combo box one types in (an autocomplete): "Fruit edit combo collapsed | blank" (JAWS
     /// on the dev box), on focus and at E.
     pub fn format_edit_combo(name: &str, node: &AomNode) -> String {
+        Self::edit_combo(name, node).render_all()
+    }
+
+    /// [`Self::format_edit_combo`] as parts with their kinds.
+    pub fn edit_combo(name: &str, node: &AomNode) -> Announcement {
+        let mut parts = name_and_role(name, msg::role_edit_combo().as_str());
         // One that opens nothing (Google Sheets' cell editor: no expanded state) has no state
         // to say, and JAWS says none (dev box, 2026-10-16).
         let state = match node.states.expanded {
-            Some(true) => format!("   \u{1d}{}\u{1e} ", msg::state_expanded()),
-            Some(false) => format!("   \u{1d}{}\u{1e} ", msg::state_collapsed()),
-            None => " ".to_owned(),
+            Some(true) => Some(msg::state_expanded()),
+            Some(false) => Some(msg::state_collapsed()),
+            None => None,
         };
+        if let Some(state) = state {
+            parts.push(Part::text(" "));
+            parts.push(Part::state(state));
+        }
         // Google Sheets' cell editor holds a zero-width no-break space and a line break
         // around its text.
         let value = node
@@ -518,38 +554,42 @@ impl SpeechFormatter {
             .as_deref()
             .map(|v| v.trim_matches(|c: char| c.is_whitespace() || c == '\u{feff}'))
             .filter(|v| !v.is_empty());
-        format!(
-            "{name}  \u{1d} {} \u{1e}{state}\n{}",
-            msg::role_edit_combo(),
-            value.unwrap_or(msg::blank().as_str())
-        )
+        Announcement::new(vec![
+            Line::new(parts),
+            Line::of(PartKind::Value, value.unwrap_or(msg::blank().as_str())),
+        ])
     }
 
     /// A link taking focus: "Page one ‹ same page link › ‹Current Page›". aria-current comes
     /// before a plain link's role: "README ‹Current Page› ‹ Link ›".
     pub fn format_link_focus(name: &str, node: &AomNode) -> String {
-        let current = node
-            .current_phrase()
-            .map(|c| format!(" \u{1d}{c}\u{1e} "))
-            .unwrap_or_default();
-        let mut speech = if node
+        Self::link_focus(name, node).render_all()
+    }
+
+    /// [`Self::format_link_focus`] as parts with their kinds.
+    pub fn link_focus(name: &str, node: &AomNode) -> Announcement {
+        let current = node.current_phrase().map(Part::state);
+        let parts = if node
             .attributes
             .get("same_page")
             .is_some_and(|v| v == "true")
         {
-            format!(
-                "{name}  \u{1d} {} \u{1e} {current}",
-                msg::role_link_same_page()
-            )
+            let mut parts = name_and_role(name, msg::role_link_same_page().as_str());
+            parts.extend(current);
+            parts
         } else {
-            format!("{name}{current}  \u{1d} {} \u{1e} ", msg::role_link())
+            let mut parts = vec![Part::new(PartKind::Name, name)];
+            parts.extend(current);
+            parts.push(Part::text(" "));
+            parts.push(Part::role(msg::role_link()));
+            parts
         };
+        let mut lines = vec![Line::new(parts)];
         // Its description follows (GitHub's commit links: the whole message, dev box).
         if let Some(description) = node.attributes.get("description") {
-            speech.push('\n');
-            speech.push_str(description);
+            lines.push(Line::of(PartKind::Description, description.as_str()));
         }
-        speech
+        Announcement::new(lines)
     }
 
     /// Formats a single word for speech.
@@ -920,4 +960,72 @@ impl SpeechOutput for MockSpeechOutput {
     }
 
     fn stop(&mut self) {}
+}
+
+#[cfg(test)]
+mod kind_tests {
+    use super::*;
+
+    fn with(mut node: AomNode, attributes: &[(&str, &str)]) -> AomNode {
+        for (key, value) in attributes {
+            node.attributes
+                .insert((*key).to_owned(), (*value).to_owned());
+        }
+        node
+    }
+
+    /// A page control's focus phrasing says what each part is, and renders as before.
+    #[test]
+    fn web_focus_phrasing_has_kinds() {
+        let mut radio = with(
+            AomNode::new(5, Role::RadioButton).with_name("Small"),
+            &[
+                ("group_name", "Size"),
+                ("group_id", "4"),
+                ("posinset", "1"),
+                ("setsize", "3"),
+            ],
+        );
+        radio.states.checked = Some(true);
+        let said = SpeechFormatter::control_focus(&radio, |_| false);
+        assert_eq!(
+            said.kinds(),
+            [
+                PartKind::Container,
+                PartKind::Role,
+                PartKind::Name,
+                PartKind::Text,
+                PartKind::Role,
+                PartKind::Text,
+                PartKind::State,
+                PartKind::Position
+            ]
+        );
+        assert_eq!(
+            said.render_all(),
+            "Size \u{1d} group \u{1e} \nSmall  \u{1d} radio button \u{1e}   \u{1d}checked\u{1e} \n1 of 3"
+        );
+
+        let edit = with(
+            AomNode::new(6, Role::Edit)
+                .with_name("Email")
+                .with_value("a@b.c"),
+            &[("required", "true"), ("description", "Work address")],
+        );
+        let said = SpeechFormatter::control_focus(&edit, |_| false);
+        assert_eq!(
+            said.kinds(),
+            [
+                PartKind::Name,
+                PartKind::Role,
+                PartKind::State,
+                PartKind::Value,
+                PartKind::Description
+            ]
+        );
+        assert_eq!(
+            said.render_all(),
+            "Email \u{1d} Edit \u{1e} \n \u{1d}Required\u{1e} \na@b.c\nWork address"
+        );
+    }
 }
