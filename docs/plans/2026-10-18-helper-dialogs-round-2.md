@@ -92,6 +92,14 @@ jaws, test it in old-pc, and only then can you implement it"):
 3. Implement it as a configurable Okur setting, with its JAWS name, and compare with
    `okur parity` and a live run.
 
+The owner, 2026-10-18: beyond scripting, JAWS is customized through settings, and these are
+core Okur features to build and prove before the extension SDK starts (otherwise they risk
+being built, needlessly, as extensions):
+- punctuation, typing echo, key repeat and verbosity, which decide what is heard;
+- per-application and per-site settings: contextual overrides of the same settings, falling
+  back to the defaults where none exist (scopes: default, then application, then site or page);
+- the virtual HTML and document reading and review options.
+
 Features to start with:
 - Punctuation levels (None, Some, Most, All), symbol names in running text, and
   per-context punctuation. The parity gap audit puts 59 spoken steps here.
