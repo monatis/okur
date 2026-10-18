@@ -1,6 +1,10 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- corpus-manifest --write",
   "fixtures": {
+    "activation.html": {
+      "sha256": "f9b85f7c2f7242756f2872a11c4ae9cfef44f61f544c93031f95015f6ad1bf8b",
+      "size_bytes": 3368
+    },
     "boundaries-dynamic.html": {
       "sha256": "4caaa7092df80f075b4fd5bfa8f3fbbdba558f90188e4f3711aec05dd9c71953",
       "size_bytes": 2383
@@ -980,6 +984,20 @@
       }
     },
     {
+      "scenario_id": "229-web-space-activates",
+      "fixture": "activation.html",
+      "evidence": {
+        "sha256": "26c503a99f82b0642aec0c1b83d2d7402ce6e2b0b9b9f20466aaccd5836136a7",
+        "capture_script_sha256": "4446448e4f562ed63a1b717397a70eaac607b63b38db98937b75078ee4d47f23",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "23-table-cell-left",
       "fixture": "tables-navigation.html",
       "evidence": {
@@ -1401,10 +1419,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 94,
-    "scenarios_with_evidence": 94,
-    "total_trials": 392,
-    "successful_trials": 387,
+    "scenarios": 95,
+    "scenarios_with_evidence": 95,
+    "total_trials": 395,
+    "successful_trials": 390,
     "deterministic_scenarios": 73
   }
 }

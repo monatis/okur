@@ -1,0 +1,33 @@
+{
+  "id": "229-web-space-activates",
+  "name": "Space with the virtual cursor (VirtualSpacebar) on text, a button, an ARIA button, a check box, a radio button, an ARIA check box, an edit and a link; the page's status and event log; then a combo box",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/activation.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Escape", "Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Down" },
+    { "id": "s2", "type": "key", "command": "Space" },
+    { "id": "s3", "type": "key", "command": "B" },
+    { "id": "s4", "type": "key", "command": "Space" },
+    { "id": "s5", "type": "key", "command": "B" },
+    { "id": "s6", "type": "key", "command": "Space" },
+    { "id": "s7", "type": "key", "command": "X" },
+    { "id": "s8", "type": "key", "command": "Space" },
+    { "id": "s9", "type": "key", "command": "A" },
+    { "id": "s10", "type": "key", "command": "Space" },
+    { "id": "s11", "type": "key", "command": "X" },
+    { "id": "s12", "type": "key", "command": "Space" },
+    { "id": "s13", "type": "key", "command": "E" },
+    { "id": "s14", "type": "key", "command": "Space" },
+    { "id": "s15", "type": "key", "command": "Escape" },
+    { "id": "s16", "type": "key", "command": "U" },
+    { "id": "s17", "type": "key", "command": "Space" },
+    { "id": "s18", "type": "key", "command": "Down" },
+    { "id": "s19", "type": "key", "command": "Ctrl+End" },
+    { "id": "s20", "type": "key", "command": "C" },
+    { "id": "s21", "type": "key", "command": "Space" },
+    { "id": "s22", "type": "key", "command": "Escape" }
+  ]
+}

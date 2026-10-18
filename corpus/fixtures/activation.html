@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Activation Fixture</title>
+</head>
+<body>
+  <h1>Activation</h1>
+  <p>Plain text before the controls.</p>
+  <p><button type="button" id="count">Count</button></p>
+  <p><span role="button" tabindex="0" id="custom">Custom button</span></p>
+  <p><input type="checkbox" id="subscribe"><label for="subscribe">Subscribe</label></p>
+  <fieldset>
+    <legend>Size</legend>
+    <input type="radio" name="size" id="small"><label for="small">Small</label>
+    <input type="radio" name="size" id="medium"><label for="medium">Medium</label>
+  </fieldset>
+  <p><span role="checkbox" aria-checked="false" tabindex="0" id="notify">Notify me</span></p>
+  <p><label for="city">City</label> <input type="text" id="city" value="Izmir"></p>
+  <p><label for="color">Color</label>
+    <select id="color"><option>Red</option><option>Green</option></select></p>
+  <p><a href="#status" id="show">Show status</a></p>
+  <p id="status">Nothing activated yet.</p>
+  <h2>Event log</h2>
+  <p id="log">No events.</p>
+  <script>
+    // Each control reports what reached it: key events (the Space key passed to the page)
+    // or a click alone (a default action). The status is plain text, not a live region, so
+    // only the screen reader's own speech is heard; the log is read at the end.
+    const log = [];
+    const ids = ['count', 'custom', 'subscribe', 'small', 'medium', 'notify', 'city', 'color', 'show'];
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      for (const type of ['keydown', 'keyup', 'click']) {
+        el.addEventListener(type, (event) => {
+          const key = type === 'click' ? '' : ' ' + (event.key === ' ' ? 'Space' : event.key);
+          log.push(id + ' ' + type + key);
+          document.getElementById('log').textContent = log.join(', ') + '.';
+        });
+      }
+    }
+    // A key that reaches the page itself, not a control (Space on plain text).
+    document.addEventListener('keydown', (event) => {
+      if (event.target === document.body) {
+        log.push('page keydown ' + (event.key === ' ' ? 'Space' : event.key));
+        document.getElementById('log').textContent = log.join(', ') + '.';
+      }
+    });
+    document.getElementById('count').addEventListener('click', () => {
+      document.getElementById('status').textContent = 'Count pressed.';
+    });
+    const custom = document.getElementById('custom');
+    custom.addEventListener('click', () => {
+      document.getElementById('status').textContent = 'Custom button pressed.';
+    });
+    custom.addEventListener('keydown', (event) => {
+      if (event.key === ' ' || event.key === 'Enter') {
+        event.preventDefault();
+        custom.click();
+      }
+    });
+    const notify = document.getElementById('notify');
+    const toggle = () => {
+      const on = notify.getAttribute('aria-checked') !== 'true';
+      notify.setAttribute('aria-checked', on ? 'true' : 'false');
+    };
+    notify.addEventListener('click', toggle);
+    notify.addEventListener('keydown', (event) => {
+      if (event.key === ' ') {
+        event.preventDefault();
+        toggle();
+      }
+    });
+    document.getElementById('show').addEventListener('click', (event) => {
+      event.preventDefault();
+      document.getElementById('status').textContent = 'Status shown.';
+    });
+  </script>
+</body>
+</html>

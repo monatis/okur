@@ -2,6 +2,8 @@
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- invariants --write-baseline",
   "total_violations": 0,
   "violations": {
+    "activation.chrome.ia2.json": [],
+    "activation.chrome.uia.json": [],
     "boundaries-dynamic.chrome.ia2.json": [],
     "boundaries-dynamic.chrome.uia.json": [],
     "characters.chrome.ia2.json": [],
