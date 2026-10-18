@@ -72,6 +72,13 @@ pub enum ControlKind {
         items: Vec<String>,
         selected: usize,
     },
+    /// A tree of items, one selected, every item open. Its label names it and is not shown:
+    /// JAWS's "Regions Tree view". The items are in order, each at its level (0 at the top),
+    /// an item's children right after it; `selected` counts in that order.
+    Tree {
+        items: Vec<TreeItem>,
+        selected: usize,
+    },
     /// Radio buttons in a group box that the label names; each option's label has its own
     /// access key.
     Radios {
@@ -82,6 +89,13 @@ pub enum ControlKind {
     Text {
         text: String,
     },
+}
+
+/// An item of a [`ControlKind::Tree`]: its text and its level, 0 at the top.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct TreeItem {
+    pub text: String,
+    pub level: usize,
 }
 
 /// A control's value, as the user set it or Okur sets it.

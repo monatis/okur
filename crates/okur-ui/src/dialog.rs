@@ -5,17 +5,19 @@
 
 use std::cell::RefCell;
 
-use okur_ui_model::{ControlKind, DialogSpec, FromUi, Value};
+use okur_ui_model::{ControlKind, DialogSpec, FromUi, TreeItem, Value};
 use windows::core::PWSTR;
 use windows::Win32::Foundation::{HWND, LPARAM, WPARAM};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::System::Threading::{AttachThreadInput, GetCurrentThreadId};
 use windows::Win32::UI::Controls::{
-    BST_CHECKED, BST_UNCHECKED, LVCF_WIDTH, LVCOLUMNW, LVIF_STATE, LVIF_TEXT, LVIS_FOCUSED,
-    LVIS_SELECTED, LVITEMW, LVM_DELETEALLITEMS, LVM_ENSUREVISIBLE, LVM_INSERTCOLUMNW,
+    BST_CHECKED, BST_UNCHECKED, HTREEITEM, LVCF_WIDTH, LVCOLUMNW, LVIF_STATE, LVIF_TEXT,
+    LVIS_FOCUSED, LVIS_SELECTED, LVITEMW, LVM_DELETEALLITEMS, LVM_ENSUREVISIBLE, LVM_INSERTCOLUMNW,
     LVM_INSERTITEMW, LVM_SETEXTENDEDLISTVIEWSTYLE, LVM_SETITEMSTATE, LVN_ITEMCHANGED,
-    LVS_EX_FULLROWSELECT, NMHDR, NMLISTVIEW, NM_DBLCLK, TBM_SETPAGESIZE, TBM_SETPOS,
-    TBM_SETRANGEMAX, TBM_SETRANGEMIN, TBM_SETTICFREQ,
+    LVS_EX_FULLROWSELECT, NMHDR, NMLISTVIEW, NMTREEVIEWW, NM_DBLCLK, TBM_SETPAGESIZE, TBM_SETPOS,
+    TBM_SETRANGEMAX, TBM_SETRANGEMIN, TBM_SETTICFREQ, TVE_EXPAND, TVGN_CARET, TVGN_NEXTVISIBLE,
+    TVGN_ROOT, TVIF_TEXT, TVINSERTSTRUCTW, TVINSERTSTRUCTW_0, TVITEMW, TVI_LAST, TVI_ROOT,
+    TVM_EXPAND, TVM_GETNEXTITEM, TVM_INSERTITEMW, TVM_SELECTITEM, TVN_SELCHANGEDW,
 };
 use windows::Win32::UI::Input::KeyboardAndMouse::EnableWindow;
 use windows::Win32::UI::WindowsAndMessaging::{
@@ -66,6 +68,7 @@ fn initial(kind: &ControlKind) -> Option<Value> {
     match kind {
         ControlKind::Choice { selected, .. }
         | ControlKind::List { selected, .. }
+        | ControlKind::Tree { selected, .. }
         | ControlKind::Radios { selected, .. } => Some(Value::Selected(*selected)),
         ControlKind::CheckBox { checked } => Some(Value::Checked(*checked)),
         ControlKind::Slider { value, .. } => Some(Value::Number(*value)),
@@ -206,6 +209,7 @@ fn fill(window: HWND, index: usize, item: HWND, kind: &ControlKind) {
                 );
                 set_items(item, items, *selected);
             }
+            ControlKind::Tree { items, selected } => fill_tree(item, items, *selected),
             ControlKind::Radios { selected, .. } => {
                 set(window, index, item, kind, &Value::Selected(*selected));
             }
@@ -218,6 +222,101 @@ fn fill(window: HWND, index: usize, item: HWND, kind: &ControlKind) {
 }
 
 /// A list's items, `selected` selected, focused and in view.
+/// Fills a tree view with `items`, each under the last item one level up, every item open, and
+/// selects one.
+fn fill_tree(tree: HWND, items: &[TreeItem], selected: usize) {
+    let mut parents: Vec<HTREEITEM> = Vec::new();
+    let mut inserted = Vec::new();
+    for item in items {
+        let mut text = wide(&item.text);
+        parents.truncate(item.level);
+        let parent = item
+            .level
+            .checked_sub(1)
+            .and_then(|up| parents.get(up))
+            .copied()
+            .unwrap_or(TVI_ROOT);
+        let insert = TVINSERTSTRUCTW {
+            hParent: parent,
+            hInsertAfter: TVI_LAST,
+            Anonymous: TVINSERTSTRUCTW_0 {
+                item: TVITEMW {
+                    mask: TVIF_TEXT,
+                    pszText: PWSTR(text.as_mut_ptr()),
+                    ..Default::default()
+                },
+            },
+        };
+        // SAFETY: a message to our own tree view; the item and its text outlive the call.
+        let handle = HTREEITEM(unsafe {
+            SendMessageW(
+                tree,
+                TVM_INSERTITEMW,
+                None,
+                Some(LPARAM(&insert as *const TVINSERTSTRUCTW as isize)),
+            )
+            .0
+        });
+        parents.push(handle);
+        inserted.push(handle);
+    }
+    for handle in inserted {
+        // SAFETY: a message to our own tree view about its own item.
+        unsafe {
+            SendMessageW(
+                tree,
+                TVM_EXPAND,
+                Some(WPARAM(TVE_EXPAND.0 as usize)),
+                Some(LPARAM(handle.0)),
+            );
+        }
+    }
+    select_tree_item(tree, selected);
+}
+
+/// A tree view's items in order: every item is open, so the visible order is the tree's.
+fn tree_order(tree: HWND) -> Vec<HTREEITEM> {
+    let mut order = Vec::new();
+    // SAFETY: queries on our own tree view.
+    let mut item = unsafe {
+        SendMessageW(
+            tree,
+            TVM_GETNEXTITEM,
+            Some(WPARAM(TVGN_ROOT as usize)),
+            None,
+        )
+    }
+    .0;
+    while item != 0 {
+        order.push(HTREEITEM(item));
+        // SAFETY: as above, from an item it gave.
+        item = unsafe {
+            SendMessageW(
+                tree,
+                TVM_GETNEXTITEM,
+                Some(WPARAM(TVGN_NEXTVISIBLE as usize)),
+                Some(LPARAM(item)),
+            )
+        }
+        .0;
+    }
+    order
+}
+
+fn select_tree_item(tree: HWND, index: usize) {
+    if let Some(item) = tree_order(tree).get(index) {
+        // SAFETY: a message to our own tree view about its own item.
+        unsafe {
+            SendMessageW(
+                tree,
+                TVM_SELECTITEM,
+                Some(WPARAM(TVGN_CARET as usize)),
+                Some(LPARAM(item.0)),
+            );
+        }
+    }
+}
+
 fn set_items(list: HWND, items: &[String], selected: usize) {
     // SAFETY: messages to our own list view; each text outlives its call.
     unsafe {
@@ -291,6 +390,7 @@ fn set(window: HWND, index: usize, item: HWND, kind: &ControlKind, value: &Value
                 );
             }
             (ControlKind::List { .. }, Value::Selected(i)) => select_item(item, *i),
+            (ControlKind::Tree { .. }, Value::Selected(i)) => select_tree_item(item, *i),
             (ControlKind::Radios { options, .. }, Value::Selected(chosen)) => {
                 for option in 0..options.len() {
                     let id = template::radio_id(index, option);
@@ -554,6 +654,21 @@ unsafe extern "system" fn dialog_proc(
             let Some(hit) = lookup(window, control_id) else {
                 return 0;
             };
+            if matches!(hit.kind, ControlKind::Tree { .. }) {
+                match header.code {
+                    TVN_SELCHANGEDW => {
+                        // SAFETY: a tree view's selection change sends an NMTREEVIEWW.
+                        let change = unsafe { &*(lparam.0 as *const NMTREEVIEWW) };
+                        let order = tree_order(header.hwndFrom);
+                        if let Some(index) = order.iter().position(|i| *i == change.itemNew.hItem) {
+                            changed(window, &hit, Value::Selected(index));
+                        }
+                    }
+                    NM_DBLCLK => press_default(window),
+                    _ => return 0,
+                }
+                return 1;
+            }
             if !matches!(hit.kind, ControlKind::List { .. }) {
                 return 0;
             }

@@ -32,6 +32,10 @@ const WS_BORDER: u32 = 0x0080_0000;
 const ES_AUTOHSCROLL: u32 = 0x80;
 const ES_READONLY: u32 = 0x800;
 const LVS_REPORT: u32 = 0x1;
+const TVS_HASBUTTONS: u32 = 0x1;
+const TVS_HASLINES: u32 = 0x2;
+const TVS_LINESATROOT: u32 = 0x4;
+const TVS_SHOWSELALWAYS: u32 = 0x20;
 const LVS_SINGLESEL: u32 = 0x4;
 const LVS_SHOWSELALWAYS: u32 = 0x8;
 const LVS_NOCOLUMNHEADER: u32 = 0x4000;
@@ -129,7 +133,7 @@ pub fn layout(dialog: &DialogSpec) -> Layout {
     if dialog
         .controls
         .iter()
-        .any(|c| matches!(c.kind, ControlKind::List { .. }))
+        .any(|c| matches!(c.kind, ControlKind::List { .. } | ControlKind::Tree { .. }))
     {
         list_layout(dialog)
     } else {
@@ -249,6 +253,25 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
                 cy: LIST_HEIGHT,
                 id,
                 // Its name, which JAWS's list dialogs show nowhere ("links").
+                text: control.label.clone(),
+            }),
+            ControlKind::Tree { .. } => items.push(Item {
+                class: Class::Named("SysTreeView32"),
+                style: WS_CHILD
+                    | WS_VISIBLE
+                    | WS_BORDER
+                    | WS_TABSTOP
+                    | WS_GROUP
+                    | TVS_HASBUTTONS
+                    | TVS_HASLINES
+                    | TVS_LINESATROOT
+                    | TVS_SHOWSELALWAYS,
+                x: MARGIN,
+                y: MARGIN,
+                cx: list_width,
+                cy: LIST_HEIGHT,
+                id,
+                // Its name, which JAWS's tree dialogs show nowhere ("Regions").
                 text: control.label.clone(),
             }),
             ControlKind::Button { default } => {
@@ -431,7 +454,7 @@ fn form_layout(dialog: &DialogSpec) -> Layout {
                 ) + ROW_GAP
                     + 2;
             }
-            ControlKind::List { .. } => {}
+            ControlKind::List { .. } | ControlKind::Tree { .. } => {}
             ControlKind::Button { default } => {
                 buttons.push((id, control.label.clone(), *default));
             }

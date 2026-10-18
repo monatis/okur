@@ -178,6 +178,27 @@ mod tests {
         assert!(wrong.is_empty(), "{}", wrong.join("\n"));
     }
 
+    /// Document Regions holds the page's regions as JAWS's tree has them, at their depth
+    /// [obs, 274].
+    #[test]
+    fn document_regions_are_jaws_tree() {
+        let doc = snapshot_aom("news-article", snapshots::Api::Ia2);
+        let buffer = okur_core::buffer::VirtualBuffer::from_aom(&doc);
+        let regions: Vec<(String, usize)> = okur_core::element_lists::regions(&buffer)
+            .into_iter()
+            .map(|r| (r.text, r.level))
+            .collect();
+        let expected = [
+            ("Banner", 0),
+            ("Primary Navigation", 1),
+            ("Main", 0),
+            ("Related stories Complementary information", 0),
+            ("Content information", 0),
+        ]
+        .map(|(t, l)| (t.to_owned(), l));
+        assert_eq!(regions, expected);
+    }
+
     /// The written list of accepted divergences names every step the table covers.
     #[test]
     fn the_written_list_names_every_divergence() {

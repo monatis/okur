@@ -76,3 +76,23 @@ list-none-block-quotes = no block quotes were found
 list-none-tables = No tables found
 list-none-divisions = no divisions were found
 list-none-tabs = no tabs were found
+
+## Document Regions (Insert+Ctrl+R), as JAWS's [obs, 241, 256, 274].
+
+list-dialog-regions = Document Regions
+# The name of its tree of regions.
+list-dialog-regions-tree = Regions
+# JAWS's labels have no access key.
+regions-move = Move To region start
+regions-cancel = Cancel
+# A region in the tree: its label, then its kind's name ("Primary Navigation",
+# "Related stories Complementary information").
+region-tree-banner = Banner
+region-tree-navigation = Navigation
+region-tree-main = Main
+region-tree-complementary = Complementary information
+region-tree-contentinfo = Content information
+# Not observed yet.
+region-tree-search = Search
+region-tree-form = Form
+region-tree-region = Region

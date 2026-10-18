@@ -11,14 +11,16 @@
 //! - Virtual HTML Features (Insert+F3): list "List1" of JAWS's 22 element lists, OK (the
 //!   default) and Cancel; OK opens the chosen list [obs, 226, 230];
 //! - JAWS's element lists (Insert+Ctrl and a letter: "Select a Button", ...): list "List1",
-//!   OK (the default) and Cancel; their items are `crate::element_lists` [obs, 231-259].
+//!   OK (the default) and Cancel; their items are `crate::element_lists` [obs, 231-259];
+//! - Document Regions (Insert+Ctrl+R): tree "Regions" of the page's regions, Move To region
+//!   start (the default) and Cancel [obs, 241, 256, 274].
 //!
 //! See `docs/references/jaws-dialogs-and-visual-features.md` for the dialogs' layout.
 
-use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
+use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, TreeItem, Value};
 
 use crate::buffer::{FormFieldListItem, HeadingListItem, LinkListItem};
-use crate::element_lists::{ElementItem, ElementList};
+use crate::element_lists::{ElementItem, ElementList, RegionItem};
 use crate::messages::{msg, StaticMessage};
 
 const LINK_SORTS: [fn() -> StaticMessage; 2] = [
@@ -47,6 +49,8 @@ pub enum ListKind {
     Features,
     /// One of JAWS's element lists.
     Elements(ElementList),
+    /// Document Regions: a tree.
+    Regions,
 }
 
 /// The element lists Virtual HTML Features offers, in JAWS's order [obs, 230/s1-s22].
@@ -149,6 +153,7 @@ impl HtmlFeature {
             Self::Tables => Some(ListKind::Elements(ElementList::Tables)),
             Self::Divisions => Some(ListKind::Elements(ElementList::Divisions)),
             Self::Tabs => Some(ListKind::Elements(ElementList::Tabs)),
+            Self::Regions => Some(ListKind::Regions),
             _ => None,
         }
     }
@@ -229,6 +234,20 @@ impl Entry {
             sort_key: item.text.to_lowercase(),
             text: item.text.clone(),
             level: None,
+            address: None,
+            same_page: false,
+            node_id: item.node_id,
+            offset: item.offset,
+            feature: None,
+        }
+    }
+
+    /// A region of Document Regions, at its depth.
+    pub fn region(item: &RegionItem) -> Self {
+        Self {
+            sort_key: item.text.to_lowercase(),
+            text: item.text.clone(),
+            level: u32::try_from(item.level).ok(),
             address: None,
             same_page: false,
             node_id: item.node_id,
@@ -334,6 +353,15 @@ impl ListDialog {
         )
     }
 
+    /// Document Regions over the page's `regions`, the first selected.
+    pub fn regions(id: u32, regions: &[RegionItem]) -> Self {
+        Self::new(
+            id,
+            ListKind::Regions,
+            regions.iter().map(Entry::region).collect(),
+        )
+    }
+
     /// Virtual HTML Features: JAWS's element lists, the first selected.
     pub fn features(id: u32) -> Self {
         Self::new(
@@ -369,6 +397,7 @@ impl ListDialog {
             ListKind::FormFields => "fields",
             ListKind::Features => "lists",
             ListKind::Elements(_) => "elements",
+            ListKind::Regions => "regions",
         }
     }
 
@@ -382,7 +411,10 @@ impl ListDialog {
                         .map(|level| msg::heading_list_display_level(level).to_string()),
                 )
                 .collect(),
-            ListKind::FormFields | ListKind::Features | ListKind::Elements(_) => Vec::new(),
+            ListKind::FormFields
+            | ListKind::Features
+            | ListKind::Elements(_)
+            | ListKind::Regions => Vec::new(),
         }
     }
 
@@ -397,7 +429,13 @@ impl ListDialog {
             (ListKind::Links, _) => true,
             (ListKind::Headings, level) => entry.level == u32::try_from(level).ok(),
             // Select a Form Field has no Display options.
-            (ListKind::FormFields | ListKind::Features | ListKind::Elements(_), _) => true,
+            (
+                ListKind::FormFields
+                | ListKind::Features
+                | ListKind::Elements(_)
+                | ListKind::Regions,
+                _,
+            ) => true,
         };
         let mut shown: Vec<usize> = (0..self.entries.len())
             .filter(|&i| self.entries.get(i).is_some_and(keep))
@@ -528,6 +566,32 @@ impl ListDialog {
                     button("cancel", msg::features_cancel(), false),
                 ],
             ),
+            ListKind::Regions => (
+                msg::list_dialog_regions(),
+                vec![
+                    control(
+                        self.list_id(),
+                        msg::list_dialog_regions_tree().as_str(),
+                        ControlKind::Tree {
+                            items: self
+                                .shown
+                                .iter()
+                                .filter_map(|&i| self.entries.get(i))
+                                .map(|e| TreeItem {
+                                    text: e.text.clone(),
+                                    level: e
+                                        .level
+                                        .and_then(|l| usize::try_from(l).ok())
+                                        .unwrap_or(0),
+                                })
+                                .collect(),
+                            selected: self.selected,
+                        },
+                    ),
+                    button("move", msg::regions_move(), true),
+                    button("cancel", msg::regions_cancel(), false),
+                ],
+            ),
         };
         DialogSpec {
             id: self.id,
@@ -547,7 +611,8 @@ impl ListDialog {
             ListKind::Headings
             | ListKind::FormFields
             | ListKind::Features
-            | ListKind::Elements(_) => Vec::new(),
+            | ListKind::Elements(_)
+            | ListKind::Regions => Vec::new(),
         }
     }
 

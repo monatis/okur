@@ -220,6 +220,63 @@ impl ElementList {
     }
 }
 
+/// One of the page's regions as Document Regions lists it: its label and its kind's name, at
+/// its depth among the regions [obs, 274: "Banner", then "Primary Navigation" in it, "Main",
+/// "Related stories Complementary information", "Content information"].
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct RegionItem {
+    pub text: String,
+    /// How many regions it is inside.
+    pub level: usize,
+    pub node_id: usize,
+    pub offset: usize,
+}
+
+/// The page's regions, in page order.
+pub fn regions(buffer: &VirtualBuffer) -> Vec<RegionItem> {
+    buffer
+        .page_nodes()
+        .filter_map(|node| {
+            let Role::Landmark { landmark_type } = &node.role else {
+                return None;
+            };
+            let kind = region_kind(landmark_type)?;
+            let label = node.name.as_deref().map(str::trim).unwrap_or_default();
+            let text = if label.is_empty() {
+                kind.to_string()
+            } else {
+                format!("{label} {kind}")
+            };
+            let level = buffer
+                .ancestors(node.id)
+                .iter()
+                .filter(|a| matches!(a.role, Role::Landmark { .. }))
+                .count();
+            Some(RegionItem {
+                text,
+                level,
+                node_id: node.id,
+                offset: buffer.start_of_subtree(node)?,
+            })
+        })
+        .collect()
+}
+
+/// A region kind's name in Document Regions. Search, form and region are not observed yet.
+fn region_kind(landmark_type: &str) -> Option<StaticMessage> {
+    Some(match landmark_type {
+        "banner" => msg::region_tree_banner(),
+        "navigation" => msg::region_tree_navigation(),
+        "main" => msg::region_tree_main(),
+        "complementary" => msg::region_tree_complementary(),
+        "contentinfo" => msg::region_tree_contentinfo(),
+        "search" => msg::region_tree_search(),
+        "form" => msg::region_tree_form(),
+        "region" => msg::region_tree_region(),
+        _ => return None,
+    })
+}
+
 /// The element's HTML tag, as IA2 reports it.
 fn tag(node: &AomNode) -> Option<&str> {
     node.attributes.get("tag").map(String::as_str)

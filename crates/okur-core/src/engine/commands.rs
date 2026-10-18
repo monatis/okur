@@ -409,6 +409,9 @@ impl ScreenReaderEngine {
             }
             // With Okur's windows, a real Links List; without (replay, headless), the list
             // is spoken, as before.
+            Command::SelectARegion if self.ui.is_some() => {
+                return self.open_list(crate::ui::lists::ListKind::Regions)
+            }
             Command::SelectElement(list) if self.ui.is_some() => {
                 return self.open_list(crate::ui::lists::ListKind::Elements(*list))
             }

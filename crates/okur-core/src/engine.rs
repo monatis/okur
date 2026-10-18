@@ -838,6 +838,13 @@ impl ScreenReaderEngine {
                 )
             }
             ListKind::Features => (Some(ListDialog::features(id)), String::new()),
+            ListKind::Regions => {
+                let regions = crate::element_lists::regions(&self.cursor.buffer);
+                (
+                    (!regions.is_empty()).then(|| ListDialog::regions(id, &regions)),
+                    msg::regions_list_none().to_string(),
+                )
+            }
             ListKind::Elements(elements) => {
                 let items = elements.items(&self.cursor.buffer);
                 (
@@ -905,6 +912,12 @@ impl ScreenReaderEngine {
                         .cursor
                         .enter_table_at(entry.offset)
                         .unwrap_or_else(|| self.cursor.current_line()),
+                    // Move To region start is silent; Say Line then reads the region's start
+                    // [obs, 256/s3, s4].
+                    ListKind::Regions => {
+                        self.cursor.jump_to_element_offset(entry.offset);
+                        return None;
+                    }
                     ListKind::Headings
                     | ListKind::FormFields
                     | ListKind::Features
