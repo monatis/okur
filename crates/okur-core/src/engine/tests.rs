@@ -2841,3 +2841,56 @@ fn a_fields_shortcut_follows_the_access_key_output() {
     assert!(said(true).contains("Ctrl+L"), "{:?}", said(true));
     assert!(!said(false).contains("Ctrl+L"), "{:?}", said(false));
 }
+
+/// Without Auto Forms Mode, Tab onto a page's menu bar leaves the virtual cursor there: the
+/// item is said as its line, after "menu" and the page's name, and Down reads the next item
+/// [obs, 218/s1-s2].
+#[test]
+fn a_page_menu_in_browse_mode_is_read_by_the_virtual_cursor() {
+    let item = |id: usize, name: &str| {
+        let mut item = AomNode::new(id, Role::MenuItem).with_name(name);
+        item.attributes
+            .insert("submenu".to_owned(), "true".to_owned());
+        item.states.expanded = Some(false);
+        item
+    };
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Web Menus"),
+            AomNode::new(2, Role::MenuBar)
+                .with_name("Main menu")
+                .with_children(vec![item(3, "File"), item(4, "Edit")]),
+        ]);
+    let speech = SharedSpeech::default();
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.settings.auto_forms_mode = false;
+    let mut file = FocusEvent::new(Role::MenuItem)
+        .with_node_id(3)
+        .with_name("File");
+    file.in_document = true;
+    file.in_menu_bar = true;
+    file.states.expanded = Some(false);
+    let said = engine
+        .handle_accessibility_event(&AccessibilityEvent::Focus(file))
+        .unwrap_or_default();
+    let lines: Vec<&str> = said.lines().map(str::trim).collect();
+    assert_eq!(lines.first().copied(), Some("\u{1d} menu \u{1e}"));
+    assert_eq!(lines.get(1).copied(), Some("Web Menus"));
+    assert!(
+        lines.get(2).is_some_and(|l| l.starts_with("File")),
+        "{said:?}"
+    );
+    assert_eq!(
+        lines.last().copied(),
+        Some("To move through items press left or right arrow.")
+    );
+    speech.take();
+    engine.handle_key_event(&KeyEvent::new(Key::DownArrow, Modifiers::none(), true));
+    let next = speech.take();
+    assert!(
+        next.first().is_some_and(|l| l.starts_with("Edit")),
+        "{next:?}"
+    );
+}

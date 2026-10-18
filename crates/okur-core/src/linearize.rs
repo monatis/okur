@@ -155,6 +155,8 @@ enum Class {
     Table,
     List,
     ListItem,
+    /// A page's menu bar: its items' lines, then "MenuBar end".
+    MenuBar,
     /// Line break before and after, no lines of its own.
     Block,
     /// Flows into the current line.
@@ -417,6 +419,8 @@ impl<'a> Builder<'a> {
                 }
             }
             Role::Text | Role::Generic => Class::Inline,
+            Role::MenuBar => Class::MenuBar,
+            Role::MenuItem => Class::Control,
             _ => Class::Block,
         }
     }
@@ -483,6 +487,17 @@ impl<'a> Builder<'a> {
                 }
                 self.flush();
                 self.end_paragraph_since(first_line);
+            }
+            // JAWS's virtual cursor reads a menu bar's items as lines, "File menu sub menu
+            // collapsed", and ends it with "MenuBar end" [obs, 218/s1-s4, Auto Forms Mode off].
+            Class::MenuBar => {
+                self.flush();
+                let start = self.buffer.lines.len();
+                self.visit_children(node);
+                self.flush();
+                if self.buffer.lines.len() > start {
+                    self.emit_boundary(node.id, node.role.clone(), "MenuBar end");
+                }
             }
             Class::Container { start, end } => {
                 self.flush();
@@ -830,6 +845,19 @@ impl<'a> Builder<'a> {
                 }
                 s
             }
+            // A menu bar's item: "File menu sub menu collapsed", "Help menu" [obs, 218/s1-s3].
+            Role::MenuItem => {
+                let mut s = format!("{name}{}", role_marker("menu"));
+                if attr(node, "submenu") == Some("true") {
+                    s.push_str(&state_marker("sub menu"));
+                }
+                match node.states.expanded {
+                    Some(true) => s.push_str(&state_marker("expanded")),
+                    Some(false) => s.push_str(&state_marker("collapsed")),
+                    None => {}
+                }
+                s
+            }
             Role::Tab => format!("{name}{}", role_marker("Tab")),
             Role::Slider => format!("{name}{}", role_marker("slider")),
             Role::ProgressBar => format!("{name}{}", role_marker("progress bar")),
@@ -898,7 +926,9 @@ impl<'a> Builder<'a> {
             }
             _ => {}
         }
-        if !node.states.disabled && node.role != Role::ProgressBar {
+        // A menu's items are reached by the page's own Tab and arrows: the buffer cannot tell
+        // the one item in the Tab order (tabindex 0) from the others.
+        if !node.states.disabled && !matches!(node.role, Role::ProgressBar | Role::MenuItem) {
             self.buffer.tab_stops.push(off);
         }
     }
@@ -1522,6 +1552,41 @@ mod tests {
         let heading_line = buffer.lines.get(2).map(|l| (l.node_id, l.start_offset));
         assert_eq!(heading_line.map(|(node, _)| node), Some(4));
         assert!(heading_line.is_some_and(|(_, off)| buffer.tab_stops.contains(&off)));
+    }
+
+    /// A page's menu bar in the virtual cursor: its items' lines, then "MenuBar end"
+    /// [obs, 218/s1-s4].
+    #[test]
+    fn a_menu_bar_reads_its_items_as_lines() {
+        let item = |id: usize, name: &str, submenu: bool| {
+            let mut item = AomNode::new(id, Role::MenuItem).with_name(name);
+            if submenu {
+                item.attributes
+                    .insert("submenu".to_owned(), "true".to_owned());
+                item.states.expanded = Some(false);
+            }
+            item
+        };
+        let bar = AomNode::new(1, Role::MenuBar)
+            .with_name("Main menu")
+            .with_children(vec![item(2, "File", true), item(3, "Help", false)]);
+        let root = AomNode::new(0, Role::Document).with_children(vec![bar]);
+        let buffer = crate::buffer::VirtualBuffer::from_aom(&root);
+        let speech: Vec<&str> = buffer.lines.iter().map(|l| l.speech.as_str()).collect();
+        assert_eq!(
+            speech,
+            vec![
+                format!(
+                    "File{}{}{}",
+                    role_marker("menu"),
+                    state_marker("sub menu"),
+                    state_marker("collapsed")
+                ),
+                format!("Help{}", role_marker("menu")),
+                "MenuBar end".to_owned(),
+            ]
+        );
+        assert!(buffer.tab_stops.is_empty());
     }
 
     /// GitHub's code view is a read-only text area; JAWS reads its lines with the virtual

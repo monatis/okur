@@ -43,6 +43,9 @@ pub enum Role {
     Image,
     /// A quotation block (HTML `blockquote`), read with start and end lines.
     BlockQuote,
+    /// A page's menu bar (ARIA `menubar`): its items are lines of the virtual cursor, then
+    /// "MenuBar end".
+    MenuBar,
     /// An item of a menu bar or a popup menu.
     MenuItem,
     /// A button that opens a menu (MSAA `ROLE_SYSTEM_BUTTONMENU`).

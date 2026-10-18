@@ -680,17 +680,17 @@ impl VirtualCursor {
         self.focus_node_from(node_id, FocusFrom::Cursor)
     }
 
-    /// The first focus in a page landing on a link, said as the virtual cursor's line there
-    /// with the link's usage hint: "• same page link Current Page README", its list item's
-    /// bullet first [obs, 214/s8]; no table position or region [obs, 216/s10, 217/s11]. A
-    /// link sharing its line with other text is left to the focus phrasing.
+    /// A focus said as the virtual cursor's line it lands on, with its usage hint: the first
+    /// focus in a page on a link, "• same page link Current Page README", its list item's
+    /// bullet first [obs, 214/s8], with no table position or region [obs, 216/s10, 217/s11].
+    /// A node sharing its line with other text is left to the focus phrasing (`None`).
     pub fn focus_line(&mut self, node_id: usize) -> Option<String> {
         self.move_to_node_id(node_id);
         let node = self.buffer.node(node_id)?;
         let line = self
             .buffer
             .line_at_offset(self.offset)
-            .filter(|l| l.node_id == node_id && matches!(node.role, Role::Link { .. }))?;
+            .filter(|l| l.node_id == node_id)?;
         let mut speech = self.format_line_announcement(line);
         if let Some(hint) = SpeechFormatter::web_focus_hint(node) {
             speech.push('\n');

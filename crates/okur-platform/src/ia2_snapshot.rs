@@ -71,6 +71,8 @@ pub fn capture_foreground_document(
 
 /// MSAA roles (`ROLE_SYSTEM_*` in `oleacc.h`) that Chromium reports for web content.
 mod msaa_role {
+    pub const MENUBAR: i32 = 0x02;
+    pub const MENUITEM: i32 = 0x0C;
     pub const DOCUMENT: i32 = 0x0F;
     pub const DIALOG: i32 = 0x12;
     pub const GROUPING: i32 = 0x14;
@@ -222,6 +224,8 @@ fn map_role(node: &Ia2Node) -> okur_core::Role {
         msaa_role::DOCUMENT if attr("tag") == Some("article") => Role::Group,
         msaa_role::DOCUMENT => Role::Document,
         msaa_role::DIALOG => Role::Dialog,
+        msaa_role::MENUBAR => Role::MenuBar,
+        msaa_role::MENUITEM => Role::MenuItem,
         msaa_role::LINK => Role::Link {
             href: node.value.clone(),
         },
@@ -400,6 +404,10 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     // aria-current: "page", "step", "location", "date", "time" or "true".
     if let Some(current) = attr("current").filter(|c| c != "false") {
         set_attr("current", current);
+    }
+    // A menu item that opens a menu of its own: "File menu sub menu collapsed" [obs, 218/s1].
+    if role == Role::MenuItem && attr("haspopup").is_some_and(|p| p != "false") {
+        set_attr("submenu", "true".to_owned());
     }
     // A button's popup other than a menu ("listbox", "dialog"); a menu makes a menu button.
     if let Some(popup) =

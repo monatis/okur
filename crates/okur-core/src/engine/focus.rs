@@ -83,6 +83,16 @@ impl ScreenReaderEngine {
                 self.pending_edit = None;
             }
             let name = focus.name.as_deref().unwrap_or_default();
+            // Without Auto Forms Mode a page's menu stays the virtual cursor's: it goes to the
+            // item and says its line, after "menu" the first time and the page's name on the
+            // page's first focus, then the hint: "menu | Web Menus | File menu sub menu
+            // collapsed | To move through items press left or right arrow." [obs, 218/s1].
+            if focus.in_document && self.app_mode == AppMode::VirtualBuffer && !self.forms_mode {
+                if let Some(speech) = self.page_menu_line(focus) {
+                    self.speech.speak(&speech, true);
+                    return Some(speech);
+                }
+            }
             let speech = if focus.in_document {
                 use crate::native_focus::PageMenuPlace;
                 let position = focus.item_index.zip(focus.item_count);
@@ -394,9 +404,13 @@ impl ScreenReaderEngine {
             } else {
                 FocusFrom::Offset(cursor_offset)
             };
-            let line = target_id
-                .filter(|_| entering_page)
-                .and_then(|id| self.cursor.focus_line(id));
+            let first_link = target_id.filter(|_| entering_page).filter(|&id| {
+                self.cursor
+                    .buffer
+                    .node(id)
+                    .is_some_and(|n| matches!(n.role, Role::Link { .. }))
+            });
+            let line = first_link.and_then(|id| self.cursor.focus_line(id));
             self.focus_table_unsaid = line.is_some();
             let mut speech = line
                 .or_else(|| target_id.and_then(|id| self.cursor.focus_node_from(id, from)))
@@ -566,6 +580,53 @@ impl ScreenReaderEngine {
             focus.window_title = Some(title.to_owned());
             self.last_window_title = Some(title.to_owned());
         }
+    }
+
+    /// A page's menu item in browse mode, said as its line (see the caller), or `None` when
+    /// the buffer has no line of its own for it.
+    fn page_menu_line(&mut self, focus: &FocusEvent) -> Option<String> {
+        use crate::native_focus::PageMenuPlace;
+        let id = self.page_node_for(focus)?;
+        let line = self.cursor.focus_line(id)?;
+        let first = !self.menus.in_menu_mode();
+        let place = if focus.in_menu_bar {
+            PageMenuPlace::Bar
+        } else if focus.under_menu_bar {
+            PageMenuPlace::BarMenu
+        } else {
+            PageMenuPlace::Popup
+        };
+        let name = focus.name.as_deref().unwrap_or_default();
+        let position = focus.item_index.zip(focus.item_count);
+        // The menus know where the focus is, for Escape's "Leaving menus".
+        let _ = self
+            .menus
+            .page_focus(name, place, position, focus.states.expanded.is_some());
+        let entering_page = self.last_page_focus.is_none();
+        self.last_page_focus = Some(id);
+        self.tab_start = Some(id);
+        let mut lines = Vec::new();
+        if first && place != PageMenuPlace::Popup {
+            lines.push(crate::linearize::role_marker("menu"));
+        }
+        if entering_page {
+            lines.extend(self.cursor.buffer.document_title().map(str::to_owned));
+        }
+        lines.push(line);
+        if first {
+            lines.push(
+                if place == PageMenuPlace::Bar {
+                    "To move through items press left or right arrow."
+                } else {
+                    "To move through items press up or down arrow."
+                }
+                .to_owned(),
+            );
+        }
+        Some(lines.join(
+            "
+",
+        ))
     }
 
     /// A new active window: its title, or what its application calls it, then the control.
