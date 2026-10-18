@@ -382,9 +382,43 @@ mod reader {
             {
                 return None;
             }
-            let dc = GetDC(None);
-            let dpi = GetDeviceCaps(Some(dc), LOGPIXELSY).max(1);
-            ReleaseDC(None, dc);
+            // The window's own DPI: this process is not DPI-aware, and the screen's reads 96
+            // at old-pc's 125% scaling.
+            let dpi = match windows::Win32::UI::HiDpi::GetDpiForWindow(hwnd) {
+                0 => {
+                    let dc = GetDC(None);
+                    let screen = GetDeviceCaps(Some(dc), LOGPIXELSY);
+                    ReleaseDC(None, dc);
+                    screen
+                }
+                window => i32::try_from(window).unwrap_or(96),
+            }
+            .max(1);
+            // JAWS gives a plain edit's font the height of its letters above the baseline (its
+            // ascent), not its em: Notepad's Consolas set to 12, 24 and 36 point is "Font is
+            // Consolas 11 point", 22 and 33 (old-pc, 2026-10-18; Consolas's ascent is 0.92 of its
+            // em) [obs, 314/s1]. The application's font cannot be selected into this process's
+            // device context: a copy made from its description is measured.
+            let ascent = {
+                use windows::Win32::Graphics::Gdi::{
+                    CreateCompatibleDC, CreateFontIndirectW, DeleteDC, DeleteObject,
+                    GetTextMetricsW, SelectObject, TEXTMETRICW,
+                };
+                let copy = CreateFontIndirectW(&logfont);
+                if copy.is_invalid() {
+                    None
+                } else {
+                    let dc = CreateCompatibleDC(None);
+                    let previous = SelectObject(dc, copy.into());
+                    let mut metrics = TEXTMETRICW::default();
+                    let measured = GetTextMetricsW(dc, &mut metrics).as_bool();
+                    SelectObject(dc, previous);
+                    let _ = DeleteDC(dc);
+                    let _ = DeleteObject(copy.into());
+                    measured.then_some(metrics.tmAscent)
+                }
+            };
+            let pixels = ascent.unwrap_or(logfont.lfHeight).unsigned_abs();
             let family_len = logfont
                 .lfFaceName
                 .iter()
@@ -392,7 +426,7 @@ mod reader {
                 .unwrap_or(logfont.lfFaceName.len());
             let family =
                 String::from_utf16_lossy(logfont.lfFaceName.get(..family_len).unwrap_or_default());
-            let points_tenths = logfont.lfHeight.unsigned_abs() * 720 / dpi.unsigned_abs();
+            let points_tenths = pixels * 720 / dpi.unsigned_abs();
             Some(okur_core::FontInfo {
                 family,
                 // Whole points, as a font dialog sets them.

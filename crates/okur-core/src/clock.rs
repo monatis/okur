@@ -97,7 +97,8 @@ pub struct LocaleFormats {
     pub days: [String; 7],
     pub am: String,
     pub pm: String,
-    /// 0 for Sunday to 6 for Saturday.
+    /// 0 for Sunday to 6 for Saturday. JAWS's week numbers do not follow it
+    /// ([`Self::week_number`]).
     pub first_day_of_week: u32,
     pub first_week: FirstWeek,
 }
@@ -205,15 +206,19 @@ impl LocaleFormats {
         out.trim().to_owned()
     }
 
-    /// The week of the year containing `at`, under this locale's rules.
+    /// The week of the year containing `at`, as JAWS numbers it: its weeks start on Monday
+    /// whatever the locale's first day, and the locale says which week is the first. Sunday
+    /// 2026-10-18 was "Week 42" on old-pc, whose en-US weeks start on Sunday
+    /// (`iFirstDayOfWeek` 6) [obs, 308/s4]; the weekdays before agreed with either start.
     pub fn week_number(&self, at: &LocalDateTime) -> u32 {
+        const MONDAY: u32 = 1;
         let jan1 = LocalDateTime {
             month: 1,
             day: 1,
             ..*at
         };
         // Days of week 0 that fall before January 1st.
-        let lead = (jan1.weekday() + 7 - self.first_day_of_week) % 7;
+        let lead = (jan1.weekday() + 7 - MONDAY) % 7;
         let week = (at.day_of_year() - 1 + lead) / 7 + 1;
         match self.first_week {
             FirstWeek::ContainsJanuaryFirst => week,
@@ -357,5 +362,15 @@ mod tests {
         // ISO 8601: 2027-01-01 is in week 53 of 2026.
         assert_eq!(iso.week_number(&friday), 53);
         assert_eq!(iso.week_number(&recorded()), 42);
+    }
+
+    /// A Sunday is in the week of the Monday before it, on an en-US locale whose weeks start on
+    /// Sunday too [obs, 308/s4].
+    #[test]
+    fn a_sunday_closes_its_week() {
+        // Sunday 2026-10-18 12:18 (UTC+3).
+        let sunday = LocalDateTime::from_unix_ms(1_792_315_080_000, 180);
+        assert_eq!(sunday.weekday(), 0);
+        assert_eq!(LocaleFormats::en_us().week_number(&sunday), 42);
     }
 }
