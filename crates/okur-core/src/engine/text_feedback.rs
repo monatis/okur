@@ -58,7 +58,8 @@ impl ScreenReaderEngine {
             return;
         }
         let echo = if c == ' ' {
-            "space".to_owned()
+            // Its name, as a space read alone has it.
+            crate::pronounce::character(" ")
         } else {
             SpeechFormatter::format_char(c)
         };
@@ -121,8 +122,9 @@ impl ScreenReaderEngine {
             self.last_native_focus.as_ref().and_then(|f| f.name.clone())
         };
         format!(
-            "{}  \u{1d} Edit \u{1e} ",
-            name.as_deref().unwrap_or_default().trim()
+            "{}  \u{1d} {} \u{1e} ",
+            name.as_deref().unwrap_or_default().trim(),
+            crate::messages::msg::role_edit()
         )
     }
 }

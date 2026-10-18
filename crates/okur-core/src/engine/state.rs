@@ -1,7 +1,7 @@
 //! Navigation state the engine keeps: the list dialogs, the desktop, the taskbar and File
 //! Explorer.
 
-use crate::aom::Role;
+use crate::messages::msg;
 
 /// Active element list dialog state.
 #[derive(Debug, Clone)]
@@ -35,10 +35,10 @@ impl ActiveElementList {
                     None => return String::new(),
                 };
                 format!(
-                    "{}\n{} of {}\nTo move to items use the Arrow keys.",
+                    "{}\n{}\n{}",
                     item.text,
-                    *selected_index + 1,
-                    items.len()
+                    msg::position(*selected_index + 1, items.len()),
+                    msg::hint_move_to_items_arrows()
                 )
             }
             ActiveElementList::Headings {
@@ -53,11 +53,11 @@ impl ActiveElementList {
                     None => return String::new(),
                 };
                 format!(
-                    "{} : {}\n{} of {}\nTo move to items use the Arrow keys.",
+                    "{} : {}\n{}\n{}",
                     item.text,
                     item.level,
-                    *selected_index + 1,
-                    items.len()
+                    msg::position(*selected_index + 1, items.len()),
+                    msg::hint_move_to_items_arrows()
                 )
             }
             ActiveElementList::FormFields {
@@ -71,20 +71,13 @@ impl ActiveElementList {
                     Some(it) => it,
                     None => return String::new(),
                 };
-                let role_label = match item.role {
-                    Role::Button => "Button",
-                    Role::Edit => "Edit",
-                    Role::CheckBox => "check box",
-                    Role::ComboBox => "combo box",
-                    Role::Slider => "slider",
-                    _ => "Field",
-                };
+                let role_label = crate::speech::SpeechFormatter::form_field_list_role(&item.role);
                 format!(
-                    "{} {}\n{} of {}\nTo move to items use the Arrow keys.",
+                    "{} {}\n{}\n{}",
                     item.name,
                     role_label,
-                    *selected_index + 1,
-                    items.len()
+                    msg::position(*selected_index + 1, items.len()),
+                    msg::hint_move_to_items_arrows()
                 )
             }
         }
@@ -104,10 +97,10 @@ impl ActiveElementList {
                     None => return String::new(),
                 };
                 format!(
-                    "{}\n{} of {}\nTo move to items use the Arrow keys.",
+                    "{}\n{}\n{}",
                     item.text,
-                    *selected_index + 1,
-                    items.len()
+                    msg::position(*selected_index + 1, items.len()),
+                    msg::hint_move_to_items_arrows()
                 )
             }
             ActiveElementList::Headings {
@@ -122,11 +115,11 @@ impl ActiveElementList {
                     None => return String::new(),
                 };
                 format!(
-                    "{} : {}\n{} of {}\nTo move to items use the Arrow keys.",
+                    "{} : {}\n{}\n{}",
                     item.text,
                     item.level,
-                    *selected_index + 1,
-                    items.len()
+                    msg::position(*selected_index + 1, items.len()),
+                    msg::hint_move_to_items_arrows()
                 )
             }
             ActiveElementList::FormFields {
@@ -140,20 +133,13 @@ impl ActiveElementList {
                     Some(it) => it,
                     None => return String::new(),
                 };
-                let role_label = match item.role {
-                    Role::Button => "Button",
-                    Role::Edit => "Edit",
-                    Role::CheckBox => "check box",
-                    Role::ComboBox => "combo box",
-                    Role::Slider => "slider",
-                    _ => "Field",
-                };
+                let role_label = crate::speech::SpeechFormatter::form_field_list_role(&item.role);
                 format!(
-                    "{} {}\n{} of {}\nTo move to items use the Arrow keys.",
+                    "{} {}\n{}\n{}",
                     item.name,
                     role_label,
-                    *selected_index + 1,
-                    items.len()
+                    msg::position(*selected_index + 1, items.len()),
+                    msg::hint_move_to_items_arrows()
                 )
             }
         }
