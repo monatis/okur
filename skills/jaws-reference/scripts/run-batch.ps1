@@ -20,7 +20,12 @@ param(
     [Parameter(Mandatory = $true)][string]$OutputDir,
     [int]$Repetitions = 5,
     # Record an accessibility event trace per trial into OutputDir/traces.
-    [switch]$Trace
+    [switch]$Trace,
+    # Restart JAWS before the first scenario (jaws-process.ps1, elevated; the lab only): JAWS
+    # keeps state between scenarios that keys left wrong can spoil. After a day of stuck keys
+    # JAWS stopped toggling Caps Lock on CapsLock pressed twice until it was restarted (309,
+    # old-pc, 2026-10-18).
+    [switch]$FreshJaws
 )
 $ErrorActionPreference = 'Continue'
 New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
@@ -28,6 +33,21 @@ $log = Join-Path $OutputDir 'batch.log'
 $done = Join-Path $OutputDir 'batch.done'
 Remove-Item $done -ErrorAction SilentlyContinue
 $runner = Join-Path $PSScriptRoot 'run-scenario.ps1'
+
+if ($FreshJaws) {
+    $helper = Join-Path $PSScriptRoot 'jaws-process.ps1'
+    foreach ($action in '-Stop', '-Start') {
+        $p = Start-Process powershell -Verb RunAs -WindowStyle Hidden -PassThru -ArgumentList @(
+            '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$helper`"", $action)
+        if ($p) { [void]$p.WaitForExit(60000) }
+        Start-Sleep -Seconds 3
+    }
+    # JAWS takes a while to load its settings and start speaking.
+    for ($i = 0; $i -lt 30 -and -not (Get-Process jfw -ErrorAction SilentlyContinue); $i++) {
+        Start-Sleep -Seconds 1
+    }
+    Start-Sleep -Seconds 15
+}
 
 $files = @(Get-ChildItem ($ScenarioGlob -split ',') | Sort-Object Name -Unique)
 "=== batch started $(Get-Date -Format o): $($files.Count) scenario(s), $Repetitions trial(s) each" | Out-File $log -Encoding utf8

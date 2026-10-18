@@ -165,11 +165,11 @@ function Send-Chord([string]$chord) {
     # is released elevated too.
     $stuck = @($keys | Where-Object { [SrKeyInput]::GetAsyncKeyState([int]$_[0]) -band 0x8000 })
     $jawsKey = @($keys | Where-Object { $_[0] -eq 0x2D -or $_[0] -eq 0x14 }).Count -gt 0
-    $jawsInFront = $false
-    if ($jawsKey -or -not $ok) {
-        $jawsProcess = Get-Process jfw -ErrorAction SilentlyContinue | Select-Object -First 1
-        $jawsInFront = $jawsProcess -and [SrKeyInput]::ForegroundProcess() -eq [uint32]$jawsProcess.Id
-    }
+    # Kept cheap (JAWS's process id is looked up once per run): a process lookup here, between
+    # the presses of a double press, made them two single presses, and JAWS's CapsLock pressed
+    # twice said nothing (309, old-pc, 2026-10-18).
+    $jawsInFront = ($jawsKey -or -not $ok) -and $script:JawsPid -ne 0 -and
+        [SrKeyInput]::ForegroundProcess() -eq $script:JawsPid
     if ($stuck.Count -gt 0 -or $jawsInFront) { Invoke-ClearLabState -KeysOnly }
     return $ok
 }
@@ -220,6 +220,10 @@ if ($Reader -eq 'okur') {
     $jaws = New-Object -ComObject "FreedomSci.JawsApi"
 }
 $script:OkurLogOffset = [long]0
+# JAWS's process, for Send-Chord's check of a JAWS window in front (0 while JAWS is stopped).
+$script:JawsPid = [uint32]0
+$jfwProcess = Get-Process jfw -ErrorAction SilentlyContinue | Select-Object -First 1
+if ($jfwProcess) { $script:JawsPid = [uint32]$jfwProcess.Id }
 
 # What the reader said since the last clear: JAWS's speech history, or the utterances Okur
 # logged.
