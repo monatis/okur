@@ -48,7 +48,9 @@ Settling: after each action the default audio endpoint is metered (okur wait-sil
 the only audio source on the reference machine) until it has been silent for quiet_ms (default
 500) after speech, or no speech started within 800 ms, or settle_max_ms (default 10000) elapses.
 The speech history is then copied exactly once; polling it is impossible because JAWS speaks and
-records a "Copy speech history to clipboard" confirmation on every copy. Every trial reloads the
+records a "Copy speech history to clipboard" confirmation on every copy. JAWS queues that
+confirmation behind the speech it still holds, so the step's recorder records end where it
+begins (observation.spoken_end, Read-SpeechHistoryOnce). Every trial reloads the
 page, waits for the page-load speech to finish, applies the reset keys, waits again, then stops
 speech and clears the history, so no trial inherits speech from setup.
 #>
@@ -231,10 +233,13 @@ $jfwProcess = Get-Process jfw -ErrorAction SilentlyContinue | Select-Object -Fir
 if ($jfwProcess) { $script:JawsPid = [uint32]$jfwProcess.Id }
 
 # What the reader said since the last clear: JAWS's speech history, or the utterances Okur
-# logged.
-function Read-ReaderHistory {
-    if ($Reader -ne 'okur') { return Read-SpeechHistoryOnce }
-    if (-not (Test-Path $OkurSpeechLog)) { return '' }
+# logged; and the recorder's records since $SpokenStart. Returns text, records and spoken_end
+# (how the records were cut: see Read-SpeechHistoryOnce; "silence" for Okur, whose records are
+# read once its audio is quiet).
+function Read-ReaderHistory([long]$SpokenStart) {
+    if ($Reader -ne 'okur') { return Read-SpeechHistoryOnce $SpokenStart }
+    $records = Read-SpokenSince $SpokenStart
+    if (-not (Test-Path $OkurSpeechLog)) { return [pscustomobject]@{ text = ''; records = $records; spoken_end = 'silence' } }
     $fs = [System.IO.File]::Open($OkurSpeechLog, 'Open', 'Read', 'ReadWrite')
     try {
         [void]$fs.Seek($script:OkurLogOffset, 'Begin')
@@ -243,7 +248,7 @@ function Read-ReaderHistory {
     } finally { $fs.Dispose() }
     $said = @($text -split "`n" | Where-Object { $_.Trim() } | ForEach-Object { $_ | ConvertFrom-Json } |
         Where-Object { $_.kind -eq 'speak' } | ForEach-Object { $_.text })
-    return ($said -join "`n")
+    return [pscustomobject]@{ text = ($said -join "`n"); records = $records; spoken_end = 'silence' }
 }
 
 function Clear-ReaderHistory {
@@ -263,9 +268,20 @@ function Wait-Silence([int]$OnsetMs = 800, [int]$QuietMs = 500, [int]$MaxMs = 40
     return ($out | Select-Object -Last 1 | ConvertFrom-Json)
 }
 
-# Copies the speech history exactly once, then silences and clears JAWS's spoken copy
-# confirmation (it is queued as soon as the clipboard changes) so it cannot reach the next step.
-function Read-SpeechHistoryOnce {
+# How long a step waits for JAWS to reach its copy confirmation, speaking what it still had
+# queued when its history was copied.
+$ConfirmationWaitMs = 15000
+
+# Copies the speech history exactly once, and cuts the recorder's records where JAWS's copy
+# confirmation begins. JAWS queues that confirmation behind whatever it has not spoken yet
+# (old-pc, 2026-10-19: three utterances queued with SayString, the copy sent 400 ms in; the
+# confirmation was the fourth record, at 2.9 s). So the records before it are what JAWS had
+# queued when its history was copied, however long JAWS paused between its utterances: a step
+# that settled in such a pause is no longer cut short (parity gap audit §3.3). Then speech is
+# stopped and the history cleared, so the confirmation cannot reach the next step.
+# spoken_end: "confirmation", "timeout" (JAWS did not reach it in time; the step fails) or
+# "no-recorder" (no log to cut).
+function Read-SpeechHistoryOnce([long]$SpokenStart) {
     $sentinel = "__SR_SENTINEL_$([guid]::NewGuid().ToString('N').Substring(0,8))__"
     Set-Clipboard -Value $sentinel
     [void]$jaws.RunScript("CopySpeechHistoryToClipboard")
@@ -275,11 +291,31 @@ function Read-SpeechHistoryOnce {
         $clip = Get-Clipboard -Raw -ErrorAction SilentlyContinue
         if ($null -ne $clip -and $clip -ne $sentinel) { $text = $clip; break }
     }
-    Start-Sleep -Milliseconds 150
+    $records = @()
+    $spokenEnd = 'no-recorder'
+    if (Test-Path $SpokenLog) {
+        $spokenEnd = 'timeout'
+        $deadline = [DateTime]::UtcNow.AddMilliseconds($ConfirmationWaitMs)
+        do {
+            $records = Read-SpokenSince $SpokenStart
+            $at = -1
+            for ($i = 0; $i -lt $records.Count; $i++) {
+                if ((Get-SpokenText $records[$i]).Trim() -eq $CopyConfirmation) { $at = $i; break }
+            }
+            if ($at -ge 0) {
+                $records = if ($at -gt 0) { @($records[0..($at - 1)]) } else { @() }
+                $spokenEnd = 'confirmation'
+                break
+            }
+            Start-Sleep -Milliseconds 25
+        } while ([DateTime]::UtcNow -lt $deadline)
+    } else {
+        Start-Sleep -Milliseconds 150
+    }
     $jaws.StopSpeech()
     [void]$jaws.RunScript("ClearSpeechHistory")
     Start-Sleep -Milliseconds 80
-    return $text
+    return [pscustomobject]@{ text = $text; records = $records; spoken_end = $spokenEnd }
 }
 
 # The spoken log grows by one JSON line per synthesizer call; a step reads what was appended
@@ -585,12 +621,12 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         $tStart = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
         $dispatchOk = Invoke-Step $step.type $step.command ([int]$step.repeat)
         $observed = Wait-Silence -OnsetMs 800 -QuietMs $quietMs -MaxMs $maxMs
-        # Read before the history copy, whose confirmation JAWS also speaks.
-        $spokenRecords = Read-SpokenSince $spokenStart
         # "capture_clipboard": what the step copied (e.g. Ctrl+C in the Virtual Viewer), read
         # before the speech history copy replaces it.
         $clipboard = if ($step.capture_clipboard) { Get-Clipboard -Raw -ErrorAction SilentlyContinue } else { $null }
-        $transcript = Read-ReaderHistory
+        $history = Read-ReaderHistory $spokenStart
+        $transcript = $history.text
+        $spokenRecords = @($history.records)
         $tEnd = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
         if ($transcript -match "unknown script call" -or $transcript -match "unhandled script call") { $dispatchOk = $false }
         # A leaked copy confirmation, or a Windows notification JAWS announced mid-step (seen
@@ -601,7 +637,8 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         # silent baseline above is what prevents the copy from racing ahead of speech.
         $audioWithoutText = $observed.heard_audio -and [string]::IsNullOrEmpty($transcript)
 
-        $stepSuccess = $dispatchOk -and $baseline.settled -and $observed.settled -and -not $contaminated
+        $stepSuccess = $dispatchOk -and $baseline.settled -and $observed.settled -and -not $contaminated -and
+            $history.spoken_end -ne 'timeout'
         if (-not $stepSuccess) { $trialResult.trial_success = $false }
 
         $trialResult.step_results += [ordered]@{
@@ -613,6 +650,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
                 speech_raw = $transcript
                 spoken = @($spokenRecords | ForEach-Object { Get-SpokenText $_ })
                 spoken_records = $spokenRecords
+                spoken_end = $history.spoken_end
                 clipboard = $clipboard
                 dispatch_ok = $dispatchOk
                 settled = $observed.settled
