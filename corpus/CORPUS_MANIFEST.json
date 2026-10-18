@@ -623,12 +623,12 @@
       "scenario_id": "205-form-state-changes",
       "fixture": "signup-form.html",
       "evidence": {
-        "sha256": "d259dae404622cae1a6a0eff6f02b388fc7e2764e01b33bf41934cb1ec10244b",
-        "capture_script_sha256": "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
+        "sha256": "6952f35582fe6db05a25c5d06159c7c9b7e6072cfe800599b7e690b128d7cf27",
+        "capture_script_sha256": "4446448e4f562ed63a1b717397a70eaac607b63b38db98937b75078ee4d47f23",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 5,
-        "successful_trials": 4,
+        "successful_trials": 5,
         "deterministic": false,
         "summary_consistent": true
       }
@@ -1436,7 +1436,7 @@
     "scenarios": 96,
     "scenarios_with_evidence": 96,
     "total_trials": 398,
-    "successful_trials": 393,
+    "successful_trials": 394,
     "deterministic_scenarios": 73
   }
 }

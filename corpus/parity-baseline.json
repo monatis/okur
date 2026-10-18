@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 1147,
+  "matched_steps": 1146,
   "total_steps": 1283,
   "accepted_divergences": 8,
   "errors": [],
@@ -455,7 +455,7 @@
     "205-form-state-changes/s3": "match",
     "205-form-state-changes/s4": "match",
     "205-form-state-changes/s5": "match",
-    "205-form-state-changes/s6": "match",
+    "205-form-state-changes/s6": "mismatch",
     "205-form-state-changes/s7": "match",
     "205-form-state-changes/s8": "match",
     "205-form-state-changes/s9": "match",
