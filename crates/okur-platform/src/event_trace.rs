@@ -62,6 +62,22 @@ pub fn is_focus(event: &TraceEvent) -> bool {
     matches!(event.event.as_str(), "focus" | "uia_focus")
 }
 
+/// Whether a value change is a choice's, not text's: its object has a value (a select's new
+/// option, "Eastgate") while the focused element has no text. A text field's value is its
+/// text.
+fn is_choice_without_text(event: &TraceEvent) -> bool {
+    let value = event
+        .object
+        .as_ref()
+        .and_then(|o| o.value.as_deref())
+        .is_some_and(|v| !v.trim().is_empty());
+    value
+        && event
+            .text_context
+            .as_ref()
+            .is_none_or(|t| t.text.trim().is_empty())
+}
+
 /// The MSAA view of an event's object (`AccessibleObjectFromEvent`).
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct TraceObject {
@@ -980,6 +996,9 @@ impl EventConverter {
                 self.last_focus = Some(focus.clone());
                 return Some(AccessibilityEvent::Focus(focus));
             }
+            // A select's value changed: it has no text, only the new choice as its value. It is
+            // said as a value change [obs, 205/s9, s10].
+            "value_change" if is_choice_without_text(event) => ChangeKind::Value,
             // The focused text field's caret moved or its text changed.
             "caret" | "text_selection_change" | "value_change" if event.text_context.is_some() => {
                 return event
@@ -3425,6 +3444,54 @@ mod tests {
             "the focused button's change"
         );
         assert!(converter.convert(&change("Pricing")).is_empty());
+    }
+
+    /// Down in a select: the value change carries the focus's text, which a select has none
+    /// of, and its new choice as its value. It is a value change, not a text change
+    /// [obs, 205/s9]; a text field's value change stays a text change.
+    #[test]
+    fn a_selects_value_change_is_a_change_not_text() {
+        const COMBO_BOX: i32 = 50003;
+        let select = node(COMBO_BOX, "Home branch", true);
+        let object = |value: &str| {
+            Some(TraceObject {
+                role: Some(46),
+                name: Some("Home branch".to_owned()),
+                value: Some(value.to_owned()),
+                states: 0,
+            })
+        };
+        let focus = TraceEvent {
+            object: object("Northside"),
+            focus_chain: vec![select.clone()],
+            ..focus_event(Vec::new())
+        };
+        let value_change = |text: &str| TraceEvent {
+            event: "value_change".to_owned(),
+            object: object("Eastgate"),
+            focus_chain: vec![select.clone()],
+            text_context: Some(okur_core::TextContext {
+                text: text.to_owned(),
+                caret: 0,
+                selection: None,
+                font: None,
+                word: None,
+            }),
+            ..focus_event(Vec::new())
+        };
+        let mut converter = EventConverter::default();
+        assert_eq!(converter.convert(&focus).len(), 1);
+        assert!(
+            matches!(
+                converter.convert(&value_change("")).as_slice(),
+                [okur_core::AccessibilityEvent::Change { .. }]
+            ),
+            "the select's new choice"
+        );
+        assert!(matches!(
+            converter.convert(&value_change("Eastgate")).as_slice(),
+            [okur_core::AccessibilityEvent::TextContext(_)]
+        ));
     }
 
     /// Chrome's caption names the profile; its UIA window name does not.

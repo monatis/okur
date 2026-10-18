@@ -396,7 +396,12 @@ impl ScreenReaderEngine {
             }
             // In forms mode, pass all typing and navigation through to the active control;
             // caret movement keys then read the text they moved over, typed keys are echoed.
-            self.edit_key_feedback(event);
+            // A select (a combo box one does not type in) answers the arrows itself, and its
+            // value change says the new choice; reading its text would answer first, with
+            // nothing [obs, 205/s9, s10].
+            if !self.page_focus_is_select() {
+                self.edit_key_feedback(event);
+            }
             return KeyAction::PassThrough;
         }
 
@@ -756,6 +761,16 @@ impl ScreenReaderEngine {
                 None
             }
         }
+    }
+
+    /// Whether the page's focus is a select: a combo box one does not type in.
+    fn page_focus_is_select(&self) -> bool {
+        self.last_page_focus
+            .and_then(|id| self.cursor.buffer.node(id))
+            .is_some_and(|n| {
+                n.role == crate::aom::Role::ComboBox
+                    && n.attributes.get("editable").is_none_or(|e| e != "true")
+            })
     }
 
     /// Whether the focus is still returning from one of Okur's dialogs.
