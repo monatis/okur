@@ -36,41 +36,39 @@ opendesk exec --peer old-pc --timeout 120 "powershell -NoProfile -ExecutionPolic
 
 `opendesk exec` stops waiting after `--timeout` seconds (default **30**). A scenario run is
 cut off mid-trial, which leaves its fixture app and `okur trace` running on `old-pc`. Pass
-`--timeout 900` for single runs. For anything longer, launch `run-batch.ps1` detached
-(`Start-Process`) and poll `batch.log` in the shared Dropbox.
+`--timeout 900` for single runs. For anything longer, use an OpenDesk background job (MCP
+`opendesk_exec` with `background: true`, then `opendesk_job` with `poll` and `wait_ms`), which
+holds no connection while it runs.
 
 ## Preconditions (every session)
 
 1. **Probe**: run `probe.ps1` remotely; JAWS (`jfw`) must be running and speech history enabled.
-2. **Skill copy in sync**: compare hashes before trusting remote scripts:
-   ```bash
-   opendesk exec --peer old-pc "Get-ChildItem C:\Users\ailabs\skills\jaws-reference\scripts\*.ps1 | % { (Get-FileHash $_.FullName).Hash.ToLower() + ' ' + $_.Name }"
-   ```
-   and `certutil -hashfile <file> SHA256` locally. If they differ, push the repo version (below).
+2. **Skill copy in sync**: `lab-deploy.sh` (below) compares every script's hash on both sides
+   and sends the ones that differ; "0 file(s) sent" means old-pc runs the repo's scripts.
 3. **Serial only**: JAWS, focus, and clipboard on old-pc are global state. Never run two
    captures concurrently, and never touch old-pc's keyboard/clipboard while a capture runs.
 
 ## Deploying our tools to old-pc
 
-Build locally, then push and pull with the hash-verified pair:
+Build locally, then install straight into place (OpenDesk 0.3 `opendesk push`, SHA-256
+verified, the destination replaced only once the whole file arrived):
 
 ```bash
-cargo build -p okur
-powershell -NoProfile -ExecutionPolicy Bypass -File skills/jaws-reference/scripts/lab-push.ps1   # prints PushId
+CARGO_TARGET_DIR=target/agent cargo build --release --bin okur
+bash skills/jaws-reference/scripts/lab-deploy.sh            # --okur, --recorder, --recorder32
 ```
-then on old-pc (via `opendesk_exec`):
-`powershell -NoProfile -ExecutionPolicy Bypass -File C:\Users\ailabs\skills\jaws-reference\scripts\lab-pull.ps1 -PushId <id>`
 
-`-PushId` is mandatory. Without it, a stale manifest that still matches stale files would
-"verify" and silently install an old version; this happened once on 2026-10-14 and was caught by
-the evidence `provenance.capture_script_sha256`. After recording, always check that hash against
-your local `run-scenario.ps1` before importing evidence.
+It sends `bin/okur.exe`, the skill's scripts, `corpus/fixtures` and `corpus/scenarios`, skipping
+files already installed with the same hash. The Dropbox pair (`lab-push.ps1`, then `lab-pull.ps1
+-PushId <id>` on old-pc) stays as a fallback; its `-PushId` is mandatory. After recording, check
+the evidence's `provenance.capture_script_sha256` against your local `run-scenario.ps1` before
+importing it.
 
 ## Recording evidence
 
-Run long recordings detached with `run-batch.ps1` (writes `batch.log` and a final `batch.done` to
-its `-OutputDir`, ideally under `C:\Users\ailabs\Dropbox\sr-harness\`), then poll for `batch.done`
-from the dev box. Runs must be serial: never start a batch while another one, or a snapshot
+Run long recordings with `run-batch.ps1` as a background job, writing to
+`C:/Users/ailabs/sr-harness/evidence-out` (outside Dropbox); its `batch.log` lists each
+scenario's exit code. Runs must be serial: never start a batch while another one, or a snapshot
 capture, is running. New scenarios use `key` steps ("Down", "Shift+H", "Insert+Down"); see the
 header of `run-scenario.ps1`.
 
@@ -79,10 +77,10 @@ In Git Bash, pass Windows paths to `opendesk exec` with forward slashes
 
 ## Moving files (fixtures in, evidence out)
 
-Use the shared Dropbox: write to `C:\Users\Gigabyte\Dropbox\sr-harness\...` locally, then poll
-on old-pc until `C:\Users\ailabs\Dropbox\sr-harness\...` exists **and its SHA-256 matches**
-(Dropbox sync is asynchronous; never assume it has landed). Evidence flows back the same way.
-For small text payloads, `opendesk exec` with a here-string is acceptable.
+`opendesk push --peer old-pc <local> <remote>` and `opendesk pull --peer old-pc <remote> <local>`
+copy one file, verified by SHA-256 (MCP: `opendesk_file`). `lab-fetch.sh <remote dir> <local
+dir>` pulls a whole folder (evidence, traces, snapshots), skipping files already there. Copy
+what it fetched into `corpus/` unmodified.
 
-After copying evidence into `corpus/evidence/`, register it in `corpus/CORPUS_MANIFEST.json`
+After copying evidence into `corpus/evidence/`, register it with `okur corpus-manifest --write`
 (the pre-commit gate rejects unregistered scenarios or mismatched counts).

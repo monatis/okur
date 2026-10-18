@@ -114,23 +114,26 @@ Write down what JAWS should say before writing code.
    CARGO_TARGET_DIR=target/agent cargo build --release --bin okur
    ```
 2. **Stage pending scenarios.** Move them into `corpus/scenarios/` and their fixtures into
-   `corpus/fixtures/` in the working tree. `lab-push.ps1` stages only those folders.
-3. **Push:** `powershell -NoProfile -ExecutionPolicy Bypass -File
-   skills/jaws-reference/scripts/lab-push.ps1 -Okur target/agent/release/okur.exe` (add
-   `-Recorder`/`-Recorder32` for a new recorder build). It prints a PushId.
-4. **Pull on old-pc:** `lab-pull.ps1 -PushId <id>`. The PushId is mandatory: without it a stale
-   manifest once "verified" stale files. Dropbox syncs asynchronously; the pair checks hashes.
-5. **Check the skill copy.** Compare script hashes on both sides (adapter skill
-   `.claude/skills/jaws-reference/SKILL.md`, "Preconditions").
+   `corpus/fixtures/` in the working tree. The deploy sends only those folders.
+3. **Deploy:** `bash skills/jaws-reference/scripts/lab-deploy.sh` (`--okur <exe>` for another
+   build, `--recorder`/`--recorder32` for a new recorder build). It installs `okur.exe`, the
+   skill's scripts, fixtures and scenarios straight into place with `opendesk push` (OpenDesk
+   0.3, 2026-10-18), which checks each file's SHA-256 and replaces the destination only once the
+   whole file arrived. Files already installed with the same hash are not sent; a second run
+   prints "0 file(s) sent". Since it compares every file, it also keeps the skill copy in sync.
+4. **Fallback through Dropbox:** `lab-push.ps1 -Okur ...`, then `lab-pull.ps1 -PushId <id>` on
+   old-pc. The PushId is mandatory: without it a stale manifest once "verified" stale files.
 
 ### 4.4 Record
 - **One scenario:**
   ```bash
   opendesk exec --peer old-pc --timeout 900 "powershell -NoProfile -ExecutionPolicy Bypass -File C:/Users/ailabs/skills/jaws-reference/scripts/run-scenario.ps1 -ScenarioFile C:/Users/ailabs/corpus/scenarios/NNN.json -Repetitions 3 -OutputPath C:/Users/ailabs/Dropbox/sr-harness/evidence-out/NNN-evidence.json -TraceDir C:/Users/ailabs/Dropbox/sr-harness/evidence-out/traces"
   ```
-- **Many scenarios:** start `run-batch.ps1 -ScenarioGlob ... -OutputDir ... -Trace` detached.
-  Then wait for a **new** "batch finished" line in `batch.log`. A deleted `batch.done` can sync
-  late and look finished.
+- **Many scenarios:** run `run-batch.ps1 -ScenarioGlob ... -OutputDir
+  C:/Users/ailabs/sr-harness/evidence-out -Trace` as an OpenDesk background job (MCP
+  `opendesk_exec` with `background: true`, then `opendesk_job` `poll`): no connection is held and
+  nothing waits on Dropbox. Its `batch.log` still lists each scenario's exit code and time. Keep
+  the output out of Dropbox; `lab-fetch.sh` brings it home.
 - **What a run records:**
   - each step's JAWS speech history (`speech_raw`);
   - the synthesizer text (`spoken`, `spoken_records` with pitch);
@@ -140,8 +143,10 @@ Write down what JAWS should say before writing code.
   `capture-snapshot.ps1` (skill Workflow F).
 
 ### 4.5 Bring evidence home
-1. **Copy** from `C:\Users\Gigabyte\Dropbox\sr-harness\evidence-out\` unmodified into
-   `corpus/evidence/` and `corpus/traces/` (snapshots into `corpus/snapshots/`).
+1. **Fetch and copy:** `bash skills/jaws-reference/scripts/lab-fetch.sh
+   C:/Users/ailabs/sr-harness/evidence-out <scratch dir>` pulls every file (hash-verified, only
+   the ones not already there). Copy them unmodified into `corpus/evidence/` and
+   `corpus/traces/` (snapshots into `corpus/snapshots/`).
 2. **Check the capture-script hash.** `provenance.capture_script_sha256` must match the local
    `run-scenario.ps1`.
 3. **Read it** with `okur evidence NNN --trace`, which lists each step's JAWS speech, its
@@ -199,7 +204,8 @@ Write down what JAWS should say before writing code.
 | `okur jaws-history [--clear]` | JAWS's speech history through FSAPI; the clipboard's text is put back |
 | `okur wait-silence`, `okur speak`, `okur voices` | Audio settling, speech checks |
 | `run-scenario.ps1`, `run-batch.ps1` | Recording on old-pc (skill workflows D, G) |
-| `lab-push.ps1`, `lab-pull.ps1` | Hash-verified deployment via Dropbox |
+| `lab-deploy.sh`, `lab-fetch.sh` | Hash-verified deployment to old-pc and fetching from it, through `opendesk push`/`pull` |
+| `lab-push.ps1`, `lab-pull.ps1` | The same through Dropbox (fallback) |
 | `capture-snapshot.ps1`, `install-speech-recorder.ps1`, `probe.ps1` | Snapshots, the recorder voice, a health check |
 
 ## 6. Reading JAWS correctly
