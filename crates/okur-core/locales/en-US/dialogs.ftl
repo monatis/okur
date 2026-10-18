@@ -1,0 +1,51 @@
+## Okur's own dialogs, drawn by okur-ui. In a label, "&" marks the next letter as the
+## control's access key (Alt and the letter): keep one in each label, on a letter of the
+## label, and no two alike in one dialog.
+
+## Okur Settings (Insert+6, Insert+V)
+
+settings-dialog-title = Okur Settings
+settings-group-speech = Speech
+settings-synthesizer = S&ynthesizer:
+# Okur picks OneCore, else SAPI 5, else none.
+settings-synthesizer-automatic = Automatic
+settings-synthesizer-onecore = OneCore
+settings-synthesizer-sapi5 = SAPI 5
+settings-synthesizer-none = No speech
+settings-voice = &Voice:
+# The voice list's first entry: the synthesizer's own default voice.
+settings-voice-default = Default
+settings-rate = &Rate:
+settings-volume = V&olume:
+settings-group-keyboard = Keyboard
+settings-layout = Keyboard &Layout:
+settings-layout-desktop = Desktop
+settings-layout-laptop = Laptop
+# The key that acts as the JAWS key (Okur's modifier).
+settings-jaws-key = &JAWS Key:
+settings-jaws-key-insert = Insert
+settings-jaws-key-caps-lock = Caps Lock
+settings-jaws-key-scroll-lock = Scroll Lock
+settings-group-reading = Reading
+settings-typing-echo = Typing &Echo:
+settings-typing-echo-off = Off
+settings-typing-echo-characters = Characters
+settings-live-region-whole-text = Read the &Whole Text of a Growing Live Region
+settings-viewer-on-screen = &Show Virtual Viewer on Screen
+settings-ok = OK
+settings-cancel = Cancel
+settings-apply = &Apply
+
+## The Links List (Insert+F7), as JAWS's. Its title and its list's name are list-dialog-links
+## and list-dialog-links-list.
+
+links-list-move = &Move To Link
+links-list-activate = &Activate Link
+links-list-cancel = &Cancel
+links-list-sort = Sort Links
+links-list-sort-tab-order = In &Tab Order
+links-list-sort-alphabetical = Al&phabetically
+links-list-display = Display
+links-list-display-all = A&ll Links
+links-list-display-visited = &Visited Links Only
+links-list-display-unvisited = &Unvisited Links

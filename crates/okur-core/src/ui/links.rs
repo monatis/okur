@@ -7,11 +7,17 @@
 use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
 
 use crate::buffer::LinkListItem;
+use crate::messages::{msg, StaticMessage};
 
-pub const TITLE: &str = "Links List";
-
-const SORTS: [&str; 2] = ["In &Tab Order", "Al&phabetically"];
-const DISPLAYS: [&str; 3] = ["A&ll Links", "&Visited Links Only", "&Unvisited Links"];
+const SORTS: [fn() -> StaticMessage; 2] = [
+    msg::links_list_sort_tab_order,
+    msg::links_list_sort_alphabetical,
+];
+const DISPLAYS: [fn() -> StaticMessage; 3] = [
+    msg::links_list_display_all,
+    msg::links_list_display_visited,
+    msg::links_list_display_unvisited,
+];
 
 /// What the engine does after the dialog handled an event.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -110,14 +116,15 @@ impl LinksListDialog {
     }
 
     pub fn spec(&self) -> DialogSpec {
-        let options = |names: &[&str]| names.iter().map(|n| (*n).to_owned()).collect();
+        let options =
+            |names: &[fn() -> StaticMessage]| names.iter().map(|n| n().to_string()).collect();
         DialogSpec {
             id: self.id,
-            title: TITLE.to_owned(),
+            title: msg::list_dialog_links().to_string(),
             controls: vec![
                 control(
                     "links",
-                    "links",
+                    msg::list_dialog_links_list().as_str(),
                     ControlKind::List {
                         items: self.texts(),
                         selected: self.selected,
@@ -125,18 +132,22 @@ impl LinksListDialog {
                 ),
                 control(
                     "move",
-                    "&Move To Link",
+                    msg::links_list_move().as_str(),
                     ControlKind::Button { default: false },
                 ),
                 control(
                     "activate",
-                    "&Activate Link",
+                    msg::links_list_activate().as_str(),
                     ControlKind::Button { default: true },
                 ),
-                control("cancel", "&Cancel", ControlKind::Button { default: false }),
+                control(
+                    "cancel",
+                    msg::links_list_cancel().as_str(),
+                    ControlKind::Button { default: false },
+                ),
                 control(
                     "sort",
-                    "Sort Links",
+                    msg::links_list_sort().as_str(),
                     ControlKind::Radios {
                         options: options(&SORTS),
                         selected: self.sort,
@@ -144,7 +155,7 @@ impl LinksListDialog {
                 ),
                 control(
                     "display",
-                    "Display",
+                    msg::links_list_display().as_str(),
                     ControlKind::Radios {
                         options: options(&DISPLAYS),
                         selected: self.display,

@@ -5,36 +5,35 @@
 
 use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
 
+use crate::messages::{msg, StaticMessage};
 use crate::settings::{
     JawsKey, KeyboardLayout, KeyboardSettings, LiveRegionAppend, Settings, Synthesizer, TypingEcho,
     ViewerDisplay,
 };
 
-/// The dialog's title.
-pub const TITLE: &str = "Okur Settings";
+/// A choice's label in the catalog.
+type Label = fn() -> StaticMessage;
 
-const SYNTHESIZERS: [(Synthesizer, &str); 4] = [
-    (Synthesizer::Auto, "Automatic"),
-    (Synthesizer::OneCore, "OneCore"),
-    (Synthesizer::Sapi5, "SAPI 5"),
-    (Synthesizer::NoSpeech, "No speech"),
+const SYNTHESIZERS: [(Synthesizer, Label); 4] = [
+    (Synthesizer::Auto, msg::settings_synthesizer_automatic),
+    (Synthesizer::OneCore, msg::settings_synthesizer_onecore),
+    (Synthesizer::Sapi5, msg::settings_synthesizer_sapi5),
+    (Synthesizer::NoSpeech, msg::settings_synthesizer_none),
 ];
-const LAYOUTS: [(KeyboardLayout, &str); 2] = [
-    (KeyboardLayout::Desktop, "Desktop"),
-    (KeyboardLayout::Laptop, "Laptop"),
+const LAYOUTS: [(KeyboardLayout, Label); 2] = [
+    (KeyboardLayout::Desktop, msg::settings_layout_desktop),
+    (KeyboardLayout::Laptop, msg::settings_layout_laptop),
 ];
-const JAWS_KEYS: [(JawsKey, &str); 3] = [
-    (JawsKey::Insert, "Insert"),
-    (JawsKey::CapsLock, "Caps Lock"),
-    (JawsKey::ScrollLock, "Scroll Lock"),
+const JAWS_KEYS: [(JawsKey, Label); 3] = [
+    (JawsKey::Insert, msg::settings_jaws_key_insert),
+    (JawsKey::CapsLock, msg::settings_jaws_key_caps_lock),
+    (JawsKey::ScrollLock, msg::settings_jaws_key_scroll_lock),
 ];
 /// JAWS's names for its typing echo choices (Settings Center, User).
-const ECHOES: [(TypingEcho, &str); 2] = [
-    (TypingEcho::None, "Off"),
-    (TypingEcho::Characters, "Characters"),
+const ECHOES: [(TypingEcho, Label); 2] = [
+    (TypingEcho::None, msg::settings_typing_echo_off),
+    (TypingEcho::Characters, msg::settings_typing_echo_characters),
 ];
-/// The voice list's first entry: the synthesizer's own default voice.
-const DEFAULT_VOICE: &str = "Default";
 
 /// What the engine does after the dialog handled an event.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -59,22 +58,22 @@ pub struct SettingsDialog {
     voices: Vec<String>,
 }
 
-fn position<T: PartialEq + Copy, const N: usize>(table: &[(T, &str); N], value: T) -> usize {
+fn position<T: PartialEq + Copy, const N: usize>(table: &[(T, Label); N], value: T) -> usize {
     table.iter().position(|(v, _)| *v == value).unwrap_or(0)
 }
 
-fn names<T, const N: usize>(table: &[(T, &str); N]) -> Vec<String> {
-    table.iter().map(|(_, name)| (*name).to_owned()).collect()
+fn names<T, const N: usize>(table: &[(T, Label); N]) -> Vec<String> {
+    table.iter().map(|(_, name)| name().to_string()).collect()
 }
 
-fn pick<T: Copy, const N: usize>(table: &[(T, &str); N], index: usize) -> Option<T> {
+fn pick<T: Copy, const N: usize>(table: &[(T, Label); N], index: usize) -> Option<T> {
     table.get(index).map(|(v, _)| *v)
 }
 
-fn control(id: &str, label: &str, kind: ControlKind) -> Control {
+fn control(id: &str, label: StaticMessage, kind: ControlKind) -> Control {
     Control {
         id: id.to_owned(),
-        label: label.to_owned(),
+        label: label.to_string(),
         kind,
         enabled: true,
     }
@@ -96,7 +95,7 @@ impl SettingsDialog {
     }
 
     fn voice_options(&self) -> Vec<String> {
-        std::iter::once(DEFAULT_VOICE.to_owned())
+        std::iter::once(msg::settings_voice_default().to_string())
             .chain(self.voices.iter().cloned())
             .collect()
     }
@@ -114,21 +113,25 @@ impl SettingsDialog {
             |options: Vec<String>, selected: usize| ControlKind::Choice { options, selected };
         DialogSpec {
             id: self.id,
-            title: TITLE.to_owned(),
+            title: msg::settings_dialog_title().to_string(),
             controls: vec![
-                control("speech", "Speech", ControlKind::Group),
+                control("speech", msg::settings_group_speech(), ControlKind::Group),
                 control(
                     "synthesizer",
-                    "S&ynthesizer:",
+                    msg::settings_synthesizer(),
                     choice(
                         names(&SYNTHESIZERS),
                         position(&SYNTHESIZERS, s.voice.synthesizer),
                     ),
                 ),
-                control("voice", "&Voice:", choice(self.voice_options(), voice)),
+                control(
+                    "voice",
+                    msg::settings_voice(),
+                    choice(self.voice_options(), voice),
+                ),
                 control(
                     "rate",
-                    "&Rate:",
+                    msg::settings_rate(),
                     ControlKind::Slider {
                         min: -10,
                         max: 10,
@@ -137,47 +140,63 @@ impl SettingsDialog {
                 ),
                 control(
                     "volume",
-                    "V&olume:",
+                    msg::settings_volume(),
                     ControlKind::Slider {
                         min: 0,
                         max: 100,
                         value: i32::from(s.voice.volume),
                     },
                 ),
-                control("keyboard", "Keyboard", ControlKind::Group),
+                control(
+                    "keyboard",
+                    msg::settings_group_keyboard(),
+                    ControlKind::Group,
+                ),
                 control(
                     "layout",
-                    "Keyboard &Layout:",
+                    msg::settings_layout(),
                     choice(names(&LAYOUTS), position(&LAYOUTS, s.keyboard.layout)),
                 ),
                 control(
                     "jaws_key",
-                    "&JAWS Key:",
+                    msg::settings_jaws_key(),
                     choice(names(&JAWS_KEYS), position(&JAWS_KEYS, s.keyboard.jaws_key)),
                 ),
-                control("reading", "Reading", ControlKind::Group),
+                control("reading", msg::settings_group_reading(), ControlKind::Group),
                 control(
                     "typing_echo",
-                    "Typing &Echo:",
+                    msg::settings_typing_echo(),
                     choice(names(&ECHOES), position(&ECHOES, s.typing_echo)),
                 ),
                 control(
                     "live_region_whole_text",
-                    "Read the &Whole Text of a Growing Live Region",
+                    msg::settings_live_region_whole_text(),
                     ControlKind::CheckBox {
                         checked: s.live_region_append == LiveRegionAppend::WholeText,
                     },
                 ),
                 control(
                     "viewer_on_screen",
-                    "&Show Virtual Viewer on Screen",
+                    msg::settings_viewer_on_screen(),
                     ControlKind::CheckBox {
                         checked: s.viewer_display == ViewerDisplay::OnScreen,
                     },
                 ),
-                control("ok", "OK", ControlKind::Button { default: true }),
-                control("cancel", "Cancel", ControlKind::Button { default: false }),
-                control("apply", "&Apply", ControlKind::Button { default: false }),
+                control(
+                    "ok",
+                    msg::settings_ok(),
+                    ControlKind::Button { default: true },
+                ),
+                control(
+                    "cancel",
+                    msg::settings_cancel(),
+                    ControlKind::Button { default: false },
+                ),
+                control(
+                    "apply",
+                    msg::settings_apply(),
+                    ControlKind::Button { default: false },
+                ),
             ],
         }
     }
