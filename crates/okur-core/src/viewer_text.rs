@@ -234,7 +234,7 @@ pub fn elements(items: &[ScreenItem]) -> Vec<String> {
             }
             if item.unavailable {
                 line.push_str("  ");
-                line.push_str(msg::state_unavailable().as_str());
+                line.push_str(msg::state_unavailable_viewer().as_str());
             }
             Some(line)
         })

@@ -15,6 +15,7 @@ use crate::buffer::{
     BufferLine, BufferParagraph, BufferSpan, BufferWord, DialogInfo, TabInfo, TableCellInfo,
     TableGrid, VirtualBuffer,
 };
+use crate::messages::msg;
 
 /// Role marker brackets used by JAWS speech history (`\u{1d} role \u{1e}`).
 const RS: char = '\u{1d}';
@@ -51,13 +52,16 @@ fn sole_button<'a>(heading: &'a AomNode, text: &str) -> Option<&'a AomNode> {
 /// What a heading that is a button says after its name: "Collapse file tree heading level 2
 /// ‹ Button › ‹expanded›" (JAWS on the dev box, GitHub's code view).
 pub(crate) fn button_suffix(button: &AomNode) -> String {
-    let role = button.role_description().unwrap_or(match button.role {
-        Role::MenuButton => "button menu",
-        _ => "Button",
-    });
+    let role = button.role_description().unwrap_or(
+        match button.role {
+            Role::MenuButton => msg::role_button_menu(),
+            _ => msg::role_button(),
+        }
+        .as_str(),
+    );
     let state = match button.states.expanded {
-        Some(true) => state_marker("expanded"),
-        Some(false) => state_marker("collapsed"),
+        Some(true) => state_marker(msg::state_expanded().as_str()),
+        Some(false) => state_marker(msg::state_collapsed().as_str()),
         None => String::new(),
     };
     format!("{}{state}", role_marker(role))
@@ -365,38 +369,38 @@ impl<'a> Builder<'a> {
                     if name.is_empty() {
                         kind.to_owned()
                     } else {
-                        format!("{name} {kind}")
+                        msg::region_named(name.as_str(), kind).render()
                     }
                 };
                 let start = match landmark_type.as_str() {
-                    "banner" => "banner".to_owned(),
-                    "contentinfo" => "content information".to_owned(),
-                    "main" => "main region".to_owned(),
-                    "navigation" => label("navigation region"),
-                    "complementary" => label("complementary information"),
-                    "search" => label("search region"),
-                    "region" => label("region"),
+                    "banner" => msg::region_banner().to_string(),
+                    "contentinfo" => msg::region_content_info().to_string(),
+                    "main" => msg::region_main().to_string(),
+                    "navigation" => label(msg::region_navigation().as_str()),
+                    "complementary" => label(msg::region_complementary().as_str()),
+                    "search" => label(msg::region_search().as_str()),
+                    "region" => label(msg::region_region().as_str()),
                     other => label(other),
                 };
                 Class::Container {
-                    end: format!("{start} end"),
+                    end: msg::container_end(start.as_str()).render(),
                     start,
                 }
             }
             Role::Dialog | Role::AlertDialog => {
                 let name = node.name.as_deref().map(squash).unwrap_or_default();
                 Class::Container {
-                    start: format!("{name} dialog").trim().to_owned(),
-                    end: "dialog end".to_owned(),
+                    start: msg::dialog_start(name).render().trim().to_owned(),
+                    end: msg::dialog_end().to_string(),
                 }
             }
             Role::BlockQuote => Class::Container {
-                start: "block quote".to_owned(),
-                end: "block quote end".to_owned(),
+                start: msg::block_quote().to_string(),
+                end: msg::block_quote_end().to_string(),
             },
             Role::Group if aria == "article" => Class::Container {
-                start: "article".to_owned(),
-                end: "article end".to_owned(),
+                start: msg::article().to_string(),
+                end: msg::article_end().to_string(),
             },
             // A named group is a fieldset/radio group: its name is the legend (§3).
             Role::Group
@@ -405,8 +409,8 @@ impl<'a> Builder<'a> {
             {
                 let name = node.name.as_deref().map(squash).unwrap_or_default();
                 Class::Container {
-                    start: format!("group start {name}"),
-                    end: format!("group end {name}"),
+                    start: msg::group_start(name.as_str()).render(),
+                    end: msg::group_end(name).render(),
                 }
             }
             Role::Text if node.text.is_none() && !node.children.is_empty() => {
@@ -496,7 +500,7 @@ impl<'a> Builder<'a> {
                 self.visit_children(node);
                 self.flush();
                 if self.buffer.lines.len() > start {
-                    self.emit_boundary(node.id, node.role.clone(), "MenuBar end");
+                    self.emit_boundary(node.id, node.role.clone(), msg::menu_bar_end().as_str());
                 }
             }
             Class::Container { start, end } => {
@@ -548,7 +552,7 @@ impl<'a> Builder<'a> {
                 let suffix = button.map(button_suffix).unwrap_or_default();
                 let speech = format!(
                     "{}{text}{suffix}",
-                    role_marker(&format!("heading level {level}"))
+                    role_marker(&msg::role_heading_level(level).render())
                 );
                 let line_node = button.map_or(node.id, |b| b.id);
                 let off = self.emit(line_node, node.role.clone(), &text, speech);
@@ -578,7 +582,7 @@ impl<'a> Builder<'a> {
                     Some(keys) => format!("{alt} {keys}"),
                     None => alt.clone(),
                 };
-                let speech = format!("{named}\n{}", role_marker("Graphic"));
+                let speech = format!("{named}\n{}", role_marker(msg::role_graphic().as_str()));
                 let off = self.emit(node.id, node.role.clone(), &alt, speech);
                 self.buffer.graphics.push(off);
             }
@@ -667,8 +671,8 @@ impl<'a> Builder<'a> {
         // aria-roledescription takes the role's place in reading ("‹ chip › Rust").
         let kind = match node.role_description() {
             Some(description) => description,
-            None if same_page => "same page link",
-            None => "Link",
+            None if same_page => msg::role_link_same_page().as_str(),
+            None => msg::role_link().as_str(),
         };
         if same_page {
             if let Some(n) = self.buffer.node_mut(node.id) {
@@ -704,7 +708,10 @@ impl<'a> Builder<'a> {
         let mut first = None;
         for (i, line) in lines.iter().enumerate() {
             let speech = if i == 0 {
-                format!("{name}{}{line}", role_marker("read only edit"))
+                format!(
+                    "{name}{}{line}",
+                    role_marker(msg::role_edit_read_only().as_str())
+                )
             } else {
                 line.clone()
             };
@@ -747,27 +754,27 @@ impl<'a> Builder<'a> {
         let required = attr(node, "required") == Some("true");
         let checked = |c: Option<bool>| {
             if c == Some(true) {
-                "checked"
+                msg::state_checked().as_str()
             } else {
-                "not checked"
+                msg::state_not_checked().as_str()
             }
         };
 
         let speech = match &node.role {
             Role::Edit => {
                 let kind = if attr(node, "password") == Some("true") {
-                    "password edit"
+                    msg::role_edit_password().as_str()
                 } else if attr(node, "readonly") == Some("true") {
-                    "read only edit"
+                    msg::role_edit_read_only().as_str()
                 } else {
-                    node.role_description().unwrap_or("Edit")
+                    node.role_description().unwrap_or(msg::role_edit().as_str())
                 };
                 let mut s = String::new();
                 if !labelled {
                     s.push_str(&name);
                 }
                 if required {
-                    s.push_str(&state_marker("Required"));
+                    s.push_str(&state_marker(msg::state_required().as_str()));
                 }
                 s.push_str(&role_marker(kind));
                 if let Some(v) = node.value.as_deref().filter(|v| !v.trim().is_empty()) {
@@ -777,20 +784,22 @@ impl<'a> Builder<'a> {
             }
             Role::ComboBox => {
                 let state = if node.states.expanded == Some(true) {
-                    "expanded"
+                    msg::state_expanded()
                 } else {
-                    "collapsed"
-                };
+                    msg::state_collapsed()
+                }
+                .as_str();
                 let mut s = String::new();
                 if !labelled {
                     s.push_str(&name);
                 }
                 // One typed in is an "edit combo" (JAWS on the dev box).
                 let kind = if attr(node, "editable") == Some("true") {
-                    "edit combo"
+                    msg::role_edit_combo()
                 } else {
-                    "Combo box"
-                };
+                    msg::role_combo_box_focus()
+                }
+                .as_str();
                 s.push_str(&role_marker(kind));
                 s.push_str(&state_marker(state));
                 s.push_str(node.value.as_deref().unwrap_or_default());
@@ -798,69 +807,78 @@ impl<'a> Builder<'a> {
             }
             Role::CheckBox => format!(
                 "{name}{}{}",
-                role_marker(node.role_description().unwrap_or("check box")),
+                role_marker(
+                    node.role_description()
+                        .unwrap_or(msg::role_check_box().as_str())
+                ),
                 state_marker(checked(node.states.checked))
             ),
             Role::RadioButton => {
                 let mut s = format!(
                     "{name}{}{}",
-                    role_marker("radio button"),
+                    role_marker(msg::role_radio_button().as_str()),
                     state_marker(checked(node.states.checked))
                 );
                 if let (Some(pos), Some(size)) = (attr(node, "posinset"), attr(node, "setsize")) {
-                    s.push_str(&format!("\n{pos} of {size}"));
+                    s.push_str(&format!("\n{}", msg::position(pos, size)));
                 }
                 s
             }
             // "Platform ‹ Button › ‹collapsed›", "Overview ‹ Button › ‹Current Page›".
             Role::Button => {
-                let role = node.role_description().unwrap_or("Button");
+                let role = node
+                    .role_description()
+                    .unwrap_or(msg::role_button().as_str());
                 let mut s = format!("{name}{}", role_marker(role));
                 match node.states.expanded {
-                    Some(true) => s.push_str(&state_marker("expanded")),
-                    Some(false) => s.push_str(&state_marker("collapsed")),
+                    Some(true) => s.push_str(&state_marker(msg::state_expanded().as_str())),
+                    Some(false) => s.push_str(&state_marker(msg::state_collapsed().as_str())),
                     None => {}
                 }
                 // Any other popup: "Pick one ‹ Button › ‹Has Popup› listbox" [obs, 210/s15].
                 if let Some(popup) = attr(node, "haspopup") {
-                    s.push_str(&state_marker("Has Popup"));
+                    s.push_str(&state_marker(msg::state_has_popup().as_str()));
                     s.push_str(&format!(" {popup}"));
                 }
                 if let Some(current) = node.current_phrase() {
                     s.push_str(&state_marker(current));
                 }
                 if node.states.disabled {
-                    s.push_str(&state_marker("Unavailable"));
+                    s.push_str(&state_marker(msg::state_unavailable().as_str()));
                 }
                 s
             }
             // A button opening a menu: "Actions ‹ button menu › ‹collapsed›" (JAWS on the dev box).
             Role::MenuButton => {
-                let role = node.role_description().unwrap_or("button menu");
+                let role = node
+                    .role_description()
+                    .unwrap_or(msg::role_button_menu().as_str());
                 let mut s = format!("{name}{}", role_marker(role));
                 match node.states.expanded {
-                    Some(true) => s.push_str(&state_marker("expanded")),
-                    Some(false) => s.push_str(&state_marker("collapsed")),
+                    Some(true) => s.push_str(&state_marker(msg::state_expanded().as_str())),
+                    Some(false) => s.push_str(&state_marker(msg::state_collapsed().as_str())),
                     None => {}
                 }
                 s
             }
             // A menu bar's item: "File menu sub menu collapsed", "Help menu" [obs, 218/s1-s3].
             Role::MenuItem => {
-                let mut s = format!("{name}{}", role_marker("menu"));
+                let mut s = format!("{name}{}", role_marker(msg::role_menu().as_str()));
                 if attr(node, "submenu") == Some("true") {
-                    s.push_str(&state_marker("sub menu"));
+                    s.push_str(&state_marker(msg::state_sub_menu().as_str()));
                 }
                 match node.states.expanded {
-                    Some(true) => s.push_str(&state_marker("expanded")),
-                    Some(false) => s.push_str(&state_marker("collapsed")),
+                    Some(true) => s.push_str(&state_marker(msg::state_expanded().as_str())),
+                    Some(false) => s.push_str(&state_marker(msg::state_collapsed().as_str())),
                     None => {}
                 }
                 s
             }
-            Role::Tab => format!("{name}{}", role_marker("Tab")),
-            Role::Slider => format!("{name}{}", role_marker("slider")),
-            Role::ProgressBar => format!("{name}{}", role_marker("progress bar")),
+            Role::Tab => format!("{name}{}", role_marker(msg::role_tab().as_str())),
+            Role::Slider => format!("{name}{}", role_marker(msg::role_slider().as_str())),
+            Role::ProgressBar => {
+                format!("{name}{}", role_marker(msg::role_progress_bar().as_str()))
+            }
             _ => name.clone(),
         };
         // A field's line reads as its label and its text: the role and states between markers
@@ -941,19 +959,23 @@ impl<'a> Builder<'a> {
             .iter()
             .filter(|c| c.role == Role::ListItem)
             .count();
-        let nesting = if self.list_depth > 0 {
-            format!(" nesting level {}", self.list_depth)
+        let nesting = self.list_depth;
+        let start = if nesting > 0 {
+            msg::list_start_nested(items, nesting).render()
         } else {
-            String::new()
+            msg::list_start(items).render()
         };
-        let start = format!("list of {items} items{nesting}");
         let start_offset = self.emit_boundary(node.id, node.role.clone(), &start);
         self.buffer.lists.push(start_offset);
         self.list_depth += 1;
         self.visit_children(node);
         self.list_depth -= 1;
         self.flush();
-        let end = format!("list end{nesting}");
+        let end = if nesting > 0 {
+            msg::list_end_nested(nesting).render()
+        } else {
+            msg::list_end().to_string()
+        };
         self.emit_boundary(node.id, node.role.clone(), &end);
         self.record_container(node, start_offset);
     }
@@ -976,7 +998,7 @@ impl<'a> Builder<'a> {
             })
             .max()
             .unwrap_or(0);
-        let start = format!("table with {cols} columns and {} rows", rows.len());
+        let start = msg::table_entry(cols, rows.len()).render();
         let start_offset = self.emit_boundary(node.id, node.role.clone(), &start);
 
         let mut caption = None;
@@ -1085,7 +1107,7 @@ impl<'a> Builder<'a> {
         }
 
         self.flush();
-        self.emit_boundary(node.id, node.role.clone(), "table end");
+        self.emit_boundary(node.id, node.role.clone(), msg::table_end().as_str());
         let end_offset = self.offset();
         self.buffer.table_offsets.push(start_offset);
         self.buffer.tables.push(TableGrid {

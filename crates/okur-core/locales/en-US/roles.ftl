@@ -32,6 +32,8 @@ role-edit-combo = edit combo
 role-document = document
 # The fallback type of an item in the Form Fields list.
 role-field = Field
+# An image in a page.
+role-graphic = Graphic
 role-group = group
 role-heading-level = heading level { $level }
 role-link = Link

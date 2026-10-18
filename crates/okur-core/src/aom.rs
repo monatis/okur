@@ -301,13 +301,14 @@ impl AomNode {
     /// What JAWS says for the node's aria-current (the `current` attribute): "Current Page"
     /// for `page`, "Current" for `true`, nothing for `false` or no attribute.
     pub fn current_phrase(&self) -> Option<&'static str> {
+        use crate::messages::msg;
         match self.attributes.get("current")?.as_str() {
-            "page" => Some("Current Page"),
-            "step" => Some("Current Step"),
-            "location" => Some("Current Location"),
-            "date" => Some("Current Date"),
-            "time" => Some("Current Time"),
-            "true" => Some("Current"),
+            "page" => Some(msg::state_current_page().as_str()),
+            "step" => Some(msg::state_current_step().as_str()),
+            "location" => Some(msg::state_current_location().as_str()),
+            "date" => Some(msg::state_current_date().as_str()),
+            "time" => Some(msg::state_current_time().as_str()),
+            "true" => Some(msg::state_current().as_str()),
             _ => None,
         }
     }
