@@ -194,11 +194,9 @@ JAWS says "highlighted" restores screen echo [W7]. **Open** for all three.
     shared settings folder, for example `Eloq.sbl`, with one section per language. Entries have
     the form `U+XXXX=` followed by the spoken text, and JAWS must be restarted after a change
     (Doc [H7]).
-  - I did not read any `.sbl` file. AGENTS.md §1.4 lists `.jcf` and `.vpf` as readable settings
-    files, not `.sbl`.
-  - **Decision for the owner:** whether the shipped `.sbl` may be read. The help itself tells
-    users to edit it. Until then, symbol names come from recordings, as `pronounce.rs` does
-    today.
+  - I did not read any `.sbl` file for this research. The owner has since decided (2026-10-19)
+    that the shipped `.sbl` may be looked at, since the help tells users to edit it. Symbol
+    names still come from recordings, as `pronounce.rs` does today.
 - **Filter Repeated Characters** (Settings Center, Text Processing, General) (Doc [S1]):
   - Values: Three (the default), Four, Five, Six, All, Count.
   - It sets how many characters of an unbroken run are spoken.
@@ -1130,13 +1128,12 @@ Harness first:
      only from per-site settings.
    - `run-scenario.ps1` hashes only `file:///` fixtures (lines 354-395). Map a served URL to its
      file for `fixture_sha256`.
-2. **Record the contextual files in the provenance.**
-   - This means the target application's JCF (the name Insert+Q gives, for example the
-     Notepad file) and the `PersonalizedSettings\*.jsi` files, beside `DEFAULT.JCF`,
-     `Chrome.JCF` and the VPFs (`run-scenario.ps1:359-404`).
-   - **Decision for the owner:** AGENTS.md §1.4 names `.jcf` and `.vpf` as readable user
-     settings files. A `.jsi` is the same kind of file: written by JAWS, in the user's settings
-     folder, from the user's own choices. Confirm that it may be read.
+2. **Record the settings in the provenance, in Okur's own terms.**
+   - The scenario names the settings it asks for: the site or application, each setting and its
+     value. The provenance records them, and the target application's JCF (the name Insert+Q
+     gives, for example the Notepad file) beside `DEFAULT.JCF`, `Chrome.JCF` and the VPFs
+     (`run-scenario.ps1:359-404`).
+   - JAWS's per-site files are not copied into the corpus (the owner's decision, 2026-10-19).
 3. **Make the changes in JAWS's own dialogs, once per run.**
    - The changes are made in Quick Settings or Settings Center: elevated JAWS windows, so keys
      go through `elev.ps1` or `TypeKey`.
@@ -1276,9 +1273,9 @@ no character-value message. Each needs a catalog entry, with JAWS's words as rec
    scenario.
 6. **Contextual settings** (item 9, §9.5):
    - Serve fixtures over HTTP under two host names, because a `file:///` page has no host.
-   - Record the target application's JCF and the `PersonalizedSettings\*.jsi` files in each
-     evidence file's provenance. The owner must first confirm that `.jsi` may be read.
-   - Parity replay must then apply the recorded application and site files, not only
+   - Record the settings the scenario asks for, and the target application's JCF, in each
+     evidence file's provenance (item 2 above).
+   - Parity replay must then apply those application and site settings, not only
      `DEFAULT.JCF` (`parity.rs:613-656`). Otherwise per-application and per-site evidence would
      replay with the wrong settings.
 

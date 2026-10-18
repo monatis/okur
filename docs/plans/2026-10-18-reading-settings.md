@@ -30,12 +30,13 @@ The owner's decisions (2026-10-18):
 - [`accepted-divergences.md`](../references/accepted-divergences.md): JAWS's accidents are
   written there, not copied.
 
-## Owner decisions needed first
+## Owner decisions (2026-10-19)
 
-- May the shipped `.sbl` symbol files be read? JAWS's help tells users to edit them, but
-  AGENTS.md §1.4 lists only `.jcf` and `.vpf` among readable settings files.
-- May the `PersonalizedSettings\*.jsi` files be read, as user settings files?
-- Review the two accepted divergences proposed by the audit (312's emoji, 313's Say Font).
+- JAWS's `.sbl` symbol files may be looked at: JAWS's help tells users to edit them.
+- The two divergences the audit proposed (312's emoji, 313's Say Font) are accepted.
+- Okur's per-application and per-site settings get a design and a file format of their own.
+  What they do is learned from JAWS's documentation and from recordings of what JAWS says,
+  never by copying JAWS's settings files.
 
 ## Steps
 
@@ -57,8 +58,8 @@ The owner's decisions (2026-10-18):
 - Record JAWS's per-site override on two host names. A `file:///` page has no host, so serve the
   fixture over HTTP. Also record the site, application, default fallback and the lifetime of
   Quick Settings changes (research §9.5).
-- Parity replay must apply the recorded application and site settings, not only
-  `DEFAULT.JCF`.
+- Parity replay must apply the settings a scenario was recorded with, named in the scenario in
+  Okur's own terms, not only `DEFAULT.JCF`.
 
 ### 3. Punctuation
 

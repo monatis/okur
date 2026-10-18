@@ -39,8 +39,8 @@ Guards (`cargo test -p okur-corpus`):
 - `the_written_list_names_every_divergence` fails when this page does not name a step the table
   covers.
 
-A divergence is proposed with its evidence and decided by the project's owner. Entries the
-parity gap audit proposed say so until the owner has reviewed them.
+A divergence is proposed with its evidence and decided by the project's owner. An entry decided
+under one of the owner's rulings says which.
 
 ## The list
 
@@ -111,7 +111,7 @@ A step can be in more than one entry; all of its entries apply.
   non-breaking space and the emoji that end its last line. JAWS reads the emoji when it reads
   the field itself [obs, 313/s4]. Text copied from Okur's viewer keeps it; from JAWS's, it is
   lost.
-- Proposed by the parity gap audit, 2026-10-18; for the owner's review.
+- Proposed by the parity gap audit; accepted by the owner, 2026-10-19.
 
 ### JAWS finds no font in a WinForms text box
 
@@ -123,7 +123,7 @@ A step can be in more than one entry; all of its entries apply.
   Notepad's font [obs, 314/s1]. Okur says "Font is Consolas 11 point". Pressed twice, Okur then
   shows the font in the Virtual Viewer, as JAWS does when it finds one. So the scenario's later
   keys (Down, Ctrl+A, Escape) act in that viewer, not in the field, and those steps differ too.
-- Proposed by the parity gap audit, 2026-10-18; for the owner's review.
+- Proposed by the parity gap audit; accepted by the owner, 2026-10-19.
 
 ## Considered and not accepted
 

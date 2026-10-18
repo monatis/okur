@@ -118,7 +118,9 @@ whole step).
   to Chrome's menu button (a JAWS quirk, not copied).
 - **Lists not built:** Smart Glance Highlights, Anchors, Frames, List Items, PlaceMarkers.
 - **205/s6:** JAWS varied on the radio button's position after Space.
-- **For the owner:**
+- **For the owner** (decided 2026-10-19; see the next plan's "Owner decisions"):
   - review the two proposed divergences;
   - decide whether `.sbl` symbol files and `.jsi` personalized-settings files may be read (they
     are needed for the next round).
+- Everything left, from this round and earlier ones, is listed in
+  [`docs/backlog/open-items.md`](../backlog/open-items.md).

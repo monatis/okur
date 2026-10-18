@@ -153,7 +153,7 @@ divergences! {
     "JAWS's Virtualize Current Control drops the emoji at the end of a line (and the \
      non-breaking space before it), though JAWS reads it in the field itself [obs, 313/s4]; \
      text copied from Okur's viewer keeps it.",
-    "proposed by the parity gap audit, 2026-10-18; for the owner's review";
+    "proposed by the parity gap audit, accepted by the owner, 2026-10-19";
 
     Difference::Step => [
         "313-desktop-say-font/s1",
@@ -169,7 +169,7 @@ divergences! {
      [obs, 314/s1]; Okur names it (\"Font is Consolas 11 point\"). Pressed twice, Okur then \
      shows it in the Virtual Viewer as JAWS does when it finds a font, so the scenario's later \
      keys act in the viewer, not the field.",
-    "proposed by the parity gap audit, 2026-10-18; for the owner's review";
+    "proposed by the parity gap audit, accepted by the owner, 2026-10-19";
 }
 
 /// The divergence covering `step`, if any.
