@@ -73,6 +73,15 @@ opendesk exec --peer old-pc --timeout 20 "Get-Date -Format HH:mm:ss"
   rate 11, Upper Case Pitch Change 20. `DEFAULT.JCF` has `[Voice Profiles]
   ActiveVoiceProfileName=SAPI 5X 64`. The original profile was Eloquence with punctuation off;
   to revert, choose it again with Insert+Ctrl+S on old-pc.
+  - **Rate raised on 2026-10-18 at the user's suggestion** (14:14 old-pc time): `Rate=90` in
+    every `[ENU-...]` context of `voiceprofiles\SAPI 5X 64.VPF`, which JAWS sends as SAPI rate
+    10, the fastest (it sent 1 before). The speech history and the recorder's text do not
+    depend on the rate; only the waiting shrinks (221: 95 s to 74 s). The profile before the
+    change is kept as `C:\Users\ailabs\sr-harness\explore\SAPI 5X 64.VPF.before-rate`.
+- **Week numbers and regional settings.** Format en-US (weeks from Sunday), system locale en-US,
+  home location Türkiye, languages Turkish then English. JAWS's week numbers start on Monday
+  whatever these say: with the home location set to the United States and English first, JAWS
+  still said "Week 42" on Sunday 2026-10-18 (both restored the same day).
 - **Speech recorder.** The SR Speech Recorder voice (`crates/okur-speech-recorder`) logs every
   fragment JAWS sends its synthesizer to `C:\Users\ailabs\sr-harness\recorder\spoken.jsonl`,
   then hands it to a real voice, so speech stays audible and its timing realistic.

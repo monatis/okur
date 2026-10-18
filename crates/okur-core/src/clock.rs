@@ -209,7 +209,9 @@ impl LocaleFormats {
     /// The week of the year containing `at`, as JAWS numbers it: its weeks start on Monday
     /// whatever the locale's first day, and the locale says which week is the first. Sunday
     /// 2026-10-18 was "Week 42" on old-pc, whose en-US weeks start on Sunday
-    /// (`iFirstDayOfWeek` 6) [obs, 308/s4]; the weekdays before agreed with either start.
+    /// (`iFirstDayOfWeek` 6) [obs, 308/s4]; the weekdays before agreed with either start. It
+    /// stayed 42 with the home location set to the United States and English first in the
+    /// language list, JAWS restarted each time (old-pc, 2026-10-18): no regional setting moves it.
     pub fn week_number(&self, at: &LocalDateTime) -> u32 {
         const MONDAY: u32 = 1;
         let jan1 = LocalDateTime {
