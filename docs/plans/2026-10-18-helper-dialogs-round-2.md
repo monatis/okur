@@ -32,8 +32,9 @@ our tracer sees thinly (JAWS runs elevated). Build a live comparison:
 
 Done on 2026-10-18 (`4d144e3`, `00cc733`): the first run measured Okur's Links List at 5/11 steps;
 fixed to 10/11 (radio groups by `WS_GROUP`, a link's current state in the list, the hint after
-Activate Link). Left: JAWS names its own window first ("JAWS Version 2025.2505.43"); the owner
-decides what Okur says there. Run every new dialog this way.
+Activate Link). JAWS names its own window first ("JAWS Version 2025.2505.43"): the owner
+judged it a side effect, now an accepted divergence, and 222 and 224 match 11/11 live. Run
+every new dialog this way; `run-scenario.ps1 -OkurDebugLog` keeps Okur's debug log of a run.
 
 ### 2. The rest of M0 (the catalog and verbosity are merged)
 
@@ -78,8 +79,36 @@ anything is committed. Then compare Okur with `okur parity` and fix what differs
 - Live check of the partial page reads on WhatsApp (dev box, with permission): `okur latency`
   before and after a page change.
 
-### 6. Then
+### 6. Then: punctuation and JAWS's reading settings (the owner's decision, 2026-10-18)
 
-The rest of [`2026-10-17-helper-dialogs.md`](2026-10-17-helper-dialogs.md) (JAWS Find, the
-reading highlight, routing, PlaceMarkers, Settings), and the web-application items left in
-[`2026-10-17-web-apps-round-3.md`](2026-10-17-web-apps-round-3.md) step 2.
+Once the list dialogs are done, the next round is document reading and review: the settings
+users change most to fit JAWS to their tasks and habits. For each feature, in this order (the
+owner: "do not be satisfied with my description, find them in user manual / tutorials for
+jaws, test it in old-pc, and only then can you implement it"):
+1. Find it in JAWS's documentation: help, keystroke lists, Freedom Scientific training.
+2. Read the setting on old-pc (Settings Center, Quick Settings, `DEFAULT.JCF`, the voice
+   profile `.VPF`), change it to each value, and record a scenario per value. Put the old value
+   back after recording.
+3. Implement it as a configurable Okur setting, with its JAWS name, and compare with
+   `okur parity` and a live run.
+
+Features to start with:
+- Punctuation levels (None, Some, Most, All), symbol names in running text, and
+  per-context punctuation. The parity gap audit puts 59 spoken steps here.
+- Typing echo (characters, words, both, none) and key repeat.
+- Character reading: Say Character (numpad 5) pressed once, twice (phonetic spelling, "alpha",
+  "romeo"), and how 4 and 6 read after it. The owner uses this by habit; record what JAWS
+  really does before building anything.
+- Word splitting (mixed case, numbers), capitals (pitch, "cap"), and the other reading and
+  review options the documentation lists.
+
+Also from this round:
+- Accepted divergences are written down and applied by every parity check
+  ([`accepted-divergences.md`](../references/accepted-divergences.md)). Two entries are proposals
+  waiting for the owner's review: 312's emoji and 313's Say Font.
+- Re-record 205: its first trial was recorded with File Explorer in front, and it put old-pc's
+  file names into the public corpus. Replace the evidence file; history is not rewritten.
+
+After that, the rest of [`2026-10-17-helper-dialogs.md`](2026-10-17-helper-dialogs.md) (JAWS
+Find, the reading highlight, routing, PlaceMarkers, Settings), and the web-application items
+left in [`2026-10-17-web-apps-round-3.md`](2026-10-17-web-apps-round-3.md) step 2.
