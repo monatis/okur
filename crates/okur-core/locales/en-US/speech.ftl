@@ -38,6 +38,8 @@ paragraph-right-justified = right justified
 
 selection-selected = selected { $text }
 selection-unselected = unselected { $text }
+# Say Selected Text with nothing selected.
+selection-none = No selection
 
 ## A modal dialog in a page
 

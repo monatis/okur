@@ -14,3 +14,8 @@ table-row-start = beginning of row
 table-row-end = end of row
 table-column-top = top of column
 table-column-bottom = bottom of column
+table-not-in-table = Not in a table.
+# A table move found no cell further that way.
+table-edge = edge of table
+# A focus entering a table cell, or moving to another row and column at once.
+table-focus-cell = column { $column } row { $row }

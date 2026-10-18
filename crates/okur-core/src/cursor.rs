@@ -1,5 +1,6 @@
 use crate::aom::{AomNode, Role};
 use crate::buffer::{BufferLine, VirtualBuffer};
+use crate::messages::msg;
 use crate::speech::SpeechFormatter;
 
 /// Active text selection range within the virtual buffer.
@@ -304,7 +305,7 @@ impl VirtualCursor {
                 }
             }
         }
-        "No selection".to_string()
+        msg::selection_none().to_string()
     }
 
     /// Resets the cursor to the top of document (`^{HOME}`).
@@ -379,7 +380,7 @@ impl VirtualCursor {
                     return SpeechFormatter::format_progressbar(name, value);
                 }
                 Role::IFrame => {
-                    if line.text.ends_with("frame end") || line.text.ends_with("frame") {
+                    if SpeechFormatter::is_frame_line(&line.text) {
                         return line.text.clone();
                     }
                     let name = node.name.as_deref().unwrap_or(&line.text);
@@ -645,12 +646,12 @@ impl VirtualCursor {
         let (target, wrapped) = if forward {
             match in_range.iter().copied().find(|&o| o > self.offset) {
                 Some(o) => (o, None),
-                None => (in_range.first().copied()?, Some("wrapping to top")),
+                None => (in_range.first().copied()?, Some(msg::quicknav_wrap_top())),
             }
         } else {
             match in_range.iter().copied().rfind(|&o| o < current_line_start) {
                 Some(o) => (o, None),
-                None => (in_range.last().copied()?, Some("wrapping to bottom")),
+                None => (in_range.last().copied()?, Some(msg::quicknav_wrap_bottom())),
             }
         };
         let previous = self.offset;
@@ -713,9 +714,12 @@ impl VirtualCursor {
         if !self.buffer.shows(node_id) {
             let name = node.name.as_deref().unwrap_or_default().trim();
             return Some(match node.role {
-                Role::Group => format!("{name}{}", crate::linearize::role_marker("group"))
-                    .trim()
-                    .to_owned(),
+                Role::Group => format!(
+                    "{name}{}",
+                    crate::linearize::role_marker(msg::role_group().as_str())
+                )
+                .trim()
+                .to_owned(),
                 _ => name.to_owned(),
             });
         }
@@ -729,7 +733,8 @@ impl VirtualCursor {
                 SpeechFormatter::format_edit_combo(name, node)
             }
             Role::ComboBox => format!(
-                "{name}  \u{1d} Combo box \u{1e}  \n{}",
+                "{name}  \u{1d} {} \u{1e}  \n{}",
+                msg::role_combo_box_focus(),
                 node.value.as_deref().unwrap_or_default()
             ),
             Role::Link { .. } => SpeechFormatter::format_link_focus(name, node),
@@ -749,14 +754,14 @@ impl VirtualCursor {
                     .and_then(|i| i.group_name.as_deref())
                     .filter(|_| entering)
                 {
-                    lines.push(format!("{group} \u{1d} group \u{1e} \n"));
+                    lines.push(format!("{group} \u{1d} {} \u{1e} \n", msg::role_group()));
                 }
-                lines.push(format!("{name}  \u{1d} Tab \u{1e} "));
+                lines.push(format!("{name}  \u{1d} {} \u{1e} ", msg::role_tab()));
                 if let Some(i) = info {
-                    lines.push(format!("{} of {}", i.index, i.total));
+                    lines.push(msg::position(i.index, i.total).render());
                 }
                 if node.states.selected == Some(true) {
-                    lines.push(" \u{1d}selected\u{1e}".to_owned());
+                    lines.push(format!(" \u{1d}{}\u{1e}", msg::state_selected()));
                 }
                 lines.join("\n")
             }
@@ -775,13 +780,13 @@ impl VirtualCursor {
         }
         // Such a cell says its position only entering the grid: JAWS said no row moving on.
         let focused_cell = node.role == Role::TableCell && !name.is_empty();
-        if let Some((header, position)) =
+        if let Some((header, position, whole)) =
             self.table_focus_context(self.offset, from.offset(previous))
         {
             if let Some(header) = header {
                 speech = format!("{header}\n{speech}");
             }
-            if !focused_cell || position.starts_with("column") {
+            if !focused_cell || whole {
                 speech.push('\n');
                 speech.push_str(&position);
             }
@@ -796,12 +801,13 @@ impl VirtualCursor {
     /// A focus in a table cell, as JAWS says it on Tab (dev box, 2026-10-16): the column
     /// header when the column changed, and the position that changed after the control:
     /// "Name | alpha.rs same page link | column 1 row 2", then "Message | first commit ... |
-    /// Column 2", or "gamma.rs ... | Row 4" further down the same column.
+    /// Column 2", or "gamma.rs ... | Row 4" further down the same column. The flag says the
+    /// position names both the column and the row.
     fn table_focus_context(
         &self,
         offset: usize,
         previous: Option<usize>,
-    ) -> Option<(Option<String>, String)> {
+    ) -> Option<(Option<String>, String, bool)> {
         let cell_at = |at: usize| {
             let table = self.buffer.table_at_offset(at)?;
             let cell = table
@@ -821,12 +827,12 @@ impl VirtualCursor {
             Some((_, c)) if c == col => None,
             _ => header.filter(|h| !h.trim().is_empty()),
         };
-        let position = match before {
-            Some((r, _)) if r == row => format!("Column {col}"),
-            Some((_, c)) if c == col => format!("Row {row}"),
-            _ => format!("column {col} row {row}"),
+        let (position, whole) = match before {
+            Some((r, _)) if r == row => (msg::table_column(col).render(), false),
+            Some((_, c)) if c == col => (msg::table_row(row).render(), false),
+            _ => (msg::table_focus_cell(col, row).render(), true),
         };
-        Some((header, position))
+        Some((header, position, whole))
     }
 
     fn control_focus_speech(&self, offset: usize, previous: usize) -> String {
@@ -874,7 +880,7 @@ impl VirtualCursor {
         self.quick_nav(
             &targets,
             true,
-            "There are no headings on this page.",
+            msg::quicknav_none_headings().as_str(),
             |c, o, _| c.heading_speech_at(o),
         )
     }
@@ -885,7 +891,7 @@ impl VirtualCursor {
         self.quick_nav(
             &targets,
             false,
-            "There are no headings on this page.",
+            msg::quicknav_none_headings().as_str(),
             |c, o, _| c.heading_speech_at(o),
         )
     }
@@ -893,9 +899,9 @@ impl VirtualCursor {
     /// Heading level keys do not wrap (§12).
     fn no_more_headings(level: u32) -> String {
         if level == 1 {
-            "No more headings at level1.".to_owned()
+            msg::quicknav_heading_level_none_top().to_string()
         } else {
-            format!("No more headings at level{level} in this section.")
+            msg::quicknav_heading_level_none(level).render()
         }
     }
 
@@ -948,7 +954,7 @@ impl VirtualCursor {
         self.quick_nav(
             &targets,
             true,
-            "There are no links on this page.",
+            msg::quicknav_none_links().as_str(),
             |c, o, _| c.line_speech_at(o),
         )
     }
@@ -959,7 +965,7 @@ impl VirtualCursor {
         self.quick_nav(
             &targets,
             false,
-            "There are no links on this page.",
+            msg::quicknav_none_links().as_str(),
             |c, o, _| c.line_speech_at(o),
         )
     }
@@ -1009,7 +1015,7 @@ impl VirtualCursor {
     pub fn move_next_frame(&mut self) -> Option<String> {
         self.selection = None;
         if self.buffer.frames.is_empty() {
-            return Some("There are no frames on this page".to_string());
+            return Some(msg::quicknav_none_frames().to_string());
         }
 
         if let Some(frame) = self.buffer.next_frame_from(self.offset) {
@@ -1020,7 +1026,8 @@ impl VirtualCursor {
             self.offset = frame.start_offset;
             self.current_node_id = Some(frame.node_id);
             Some(format!(
-                "wrapping to top\n{}",
+                "{}\n{}",
+                msg::quicknav_wrap_top(),
                 SpeechFormatter::format_frame(&frame.name)
             ))
         } else {
@@ -1032,7 +1039,7 @@ impl VirtualCursor {
     pub fn move_prior_frame(&mut self) -> Option<String> {
         self.selection = None;
         if self.buffer.frames.is_empty() {
-            return Some("There are no frames on this page".to_string());
+            return Some(msg::quicknav_none_frames().to_string());
         }
 
         if let Some(frame) = self.buffer.prior_frame_from(self.offset) {
@@ -1043,7 +1050,8 @@ impl VirtualCursor {
             self.offset = frame.start_offset;
             self.current_node_id = Some(frame.node_id);
             Some(format!(
-                "wrapping to bottom\n{}",
+                "{}\n{}",
+                msg::quicknav_wrap_bottom(),
                 SpeechFormatter::format_frame(&frame.name)
             ))
         } else {
@@ -1064,61 +1072,61 @@ impl VirtualCursor {
     /// Moves cursor to next list container (`L` / `MoveToNextList`).
     pub fn move_next_list(&mut self) -> Option<String> {
         let t = self.buffer.lists.clone();
-        self.line_nav(t, true, "There are no lists on this page.")
+        self.line_nav(t, true, msg::quicknav_none_lists().as_str())
     }
 
     /// Moves cursor to prior list container (`Shift+L`).
     pub fn move_prior_list(&mut self) -> Option<String> {
         let t = self.buffer.lists.clone();
-        self.line_nav(t, false, "There are no lists on this page.")
+        self.line_nav(t, false, msg::quicknav_none_lists().as_str())
     }
 
     /// Moves cursor to next list item (`I`).
     pub fn move_next_list_item(&mut self) -> Option<String> {
         let t = self.buffer.list_items.clone();
-        self.line_nav(t, true, "There are no list items on this page.")
+        self.line_nav(t, true, msg::quicknav_none_list_items().as_str())
     }
 
     /// Moves cursor to prior list item (`Shift+I`).
     pub fn move_prior_list_item(&mut self) -> Option<String> {
         let t = self.buffer.list_items.clone();
-        self.line_nav(t, false, "There are no list items on this page.")
+        self.line_nav(t, false, msg::quicknav_none_list_items().as_str())
     }
 
     /// Moves cursor to next region (`R`, §15).
     pub fn move_next_landmark(&mut self) -> Option<String> {
         let t = self.buffer.landmarks.clone();
-        self.line_nav(t, true, "There are no regions on this page.")
+        self.line_nav(t, true, msg::quicknav_none_regions().as_str())
     }
 
     /// Moves cursor to prior region (`Shift+R`).
     pub fn move_prior_landmark(&mut self) -> Option<String> {
         let t = self.buffer.landmarks.clone();
-        self.line_nav(t, false, "There are no regions on this page.")
+        self.line_nav(t, false, msg::quicknav_none_regions().as_str())
     }
 
     /// Moves cursor to next graphic (`G`, §16).
     pub fn move_next_graphic(&mut self) -> Option<String> {
         let t = self.buffer.graphics.clone();
-        self.line_nav(t, true, "There are no graphics on this page.")
+        self.line_nav(t, true, msg::quicknav_none_graphics().as_str())
     }
 
     /// Moves cursor to prior graphic (`Shift+G`).
     pub fn move_prior_graphic(&mut self) -> Option<String> {
         let t = self.buffer.graphics.clone();
-        self.line_nav(t, false, "There are no graphics on this page.")
+        self.line_nav(t, false, msg::quicknav_none_graphics().as_str())
     }
 
     /// Moves cursor to next article (`O`).
     pub fn move_next_article(&mut self) -> Option<String> {
         let t = self.buffer.articles.clone();
-        self.line_nav(t, true, "There are no articles on this page.")
+        self.line_nav(t, true, msg::quicknav_none_articles().as_str())
     }
 
     /// Moves cursor to prior article (`Shift+O`).
     pub fn move_prior_article(&mut self) -> Option<String> {
         let t = self.buffer.articles.clone();
-        self.line_nav(t, false, "There are no articles on this page.")
+        self.line_nav(t, false, msg::quicknav_none_articles().as_str())
     }
 
     /// Moves cursor to the main region (`Q`). JAWS's message for a page without a main
@@ -1135,13 +1143,13 @@ impl VirtualCursor {
     /// event handlers, so the index stays empty until a source (IAccessible2) provides it.
     pub fn move_next_on_mouse_over(&mut self) -> Option<String> {
         let t = self.buffer.on_mouse_over.clone();
-        self.line_nav(t, true, "There are no onMouseOver elements on this page.")
+        self.line_nav(t, true, msg::quicknav_none_on_mouse_over().as_str())
     }
 
     /// Moves cursor to prior onMouseOver element (`Shift+;`).
     pub fn move_prior_on_mouse_over(&mut self) -> Option<String> {
         let t = self.buffer.on_mouse_over.clone();
-        self.line_nav(t, false, "There are no onMouseOver elements on this page.")
+        self.line_nav(t, false, msg::quicknav_none_on_mouse_over().as_str())
     }
 
     /// Moves cursor to next tab (`'`). The no-tabs message is unrecorded, so it is silent.
@@ -1165,73 +1173,73 @@ impl VirtualCursor {
     /// Moves cursor to next form field (`F`).
     pub fn move_next_form_control(&mut self) -> Option<String> {
         let t = self.buffer.form_controls.clone();
-        self.control_nav(t, true, "There are no form fields on this page.")
+        self.control_nav(t, true, msg::quicknav_none_form_fields().as_str())
     }
 
     /// Moves cursor to prior form field (`Shift+F`).
     pub fn move_prior_form_control(&mut self) -> Option<String> {
         let t = self.buffer.form_controls.clone();
-        self.control_nav(t, false, "There are no form fields on this page.")
+        self.control_nav(t, false, msg::quicknav_none_form_fields().as_str())
     }
 
     /// Moves cursor to next button (`B`).
     pub fn move_next_button(&mut self) -> Option<String> {
         let t = self.buffer.buttons.clone();
-        self.control_nav(t, true, "There are no buttons on this page.")
+        self.control_nav(t, true, msg::quicknav_none_buttons().as_str())
     }
 
     /// Moves cursor to prior button (`Shift+B`).
     pub fn move_prior_button(&mut self) -> Option<String> {
         let t = self.buffer.buttons.clone();
-        self.control_nav(t, false, "There are no buttons on this page.")
+        self.control_nav(t, false, msg::quicknav_none_buttons().as_str())
     }
 
     /// Moves cursor to next edit field (`E`).
     pub fn move_next_edit(&mut self) -> Option<String> {
         let t = self.buffer.edits.clone();
-        self.control_nav(t, true, "There are no edit fields on this page.")
+        self.control_nav(t, true, msg::quicknav_none_edit_fields().as_str())
     }
 
     /// Moves cursor to prior edit field (`Shift+E`).
     pub fn move_prior_edit(&mut self) -> Option<String> {
         let t = self.buffer.edits.clone();
-        self.control_nav(t, false, "There are no edit fields on this page.")
+        self.control_nav(t, false, msg::quicknav_none_edit_fields().as_str())
     }
 
     /// Moves cursor to next check box (`X`).
     pub fn move_next_checkbox(&mut self) -> Option<String> {
         let t = self.buffer.checkboxes.clone();
-        self.control_nav(t, true, "There are no check boxes on this page.")
+        self.control_nav(t, true, msg::quicknav_none_check_boxes().as_str())
     }
 
     /// Moves cursor to prior check box (`Shift+X`).
     pub fn move_prior_checkbox(&mut self) -> Option<String> {
         let t = self.buffer.checkboxes.clone();
-        self.control_nav(t, false, "There are no check boxes on this page.")
+        self.control_nav(t, false, msg::quicknav_none_check_boxes().as_str())
     }
 
     /// Moves cursor to next radio button (`A`).
     pub fn move_next_radio_button(&mut self) -> Option<String> {
         let t = self.buffer.radio_buttons.clone();
-        self.control_nav(t, true, "There are no radio buttons on this page.")
+        self.control_nav(t, true, msg::quicknav_none_radio_buttons().as_str())
     }
 
     /// Moves cursor to prior radio button (`Shift+A`).
     pub fn move_prior_radio_button(&mut self) -> Option<String> {
         let t = self.buffer.radio_buttons.clone();
-        self.control_nav(t, false, "There are no radio buttons on this page.")
+        self.control_nav(t, false, msg::quicknav_none_radio_buttons().as_str())
     }
 
     /// Moves cursor to next combo box (`C`).
     pub fn move_next_combobox(&mut self) -> Option<String> {
         let t = self.buffer.comboboxes.clone();
-        self.control_nav(t, true, "There are no combo boxes on this page.")
+        self.control_nav(t, true, msg::quicknav_none_combo_boxes().as_str())
     }
 
     /// Moves cursor to prior combo box (`Shift+C`).
     pub fn move_prior_combobox(&mut self) -> Option<String> {
         let t = self.buffer.comboboxes.clone();
-        self.control_nav(t, false, "There are no combo boxes on this page.")
+        self.control_nav(t, false, msg::quicknav_none_combo_boxes().as_str())
     }
 
     /// Enters Forms Mode (`{ENTER}` on an Edit field or `EnterFormsMode`).
@@ -1308,16 +1316,16 @@ impl VirtualCursor {
                         node.states.selected = Some(node.id == node_id);
                     }
                 });
-                Some(" \u{001d}selected\u{001e}".to_string())
+                Some(format!(" \u{001d}{}\u{001e}", msg::state_selected()))
             }
             Role::ComboBox => {
                 if let Some(node) = self.buffer.node_mut(node_id) {
                     let is_exp = node.states.expanded.unwrap_or(false);
                     node.states.expanded = Some(!is_exp);
                     if !is_exp {
-                        Some("expanded".to_string())
+                        Some(msg::state_expanded().to_string())
                     } else {
-                        Some("collapsed".to_string())
+                        Some(msg::state_collapsed().to_string())
                     }
                 } else {
                     None
@@ -1334,7 +1342,7 @@ impl VirtualCursor {
         let node = self.buffer.node_mut(node_id)?;
         if node.role == Role::ComboBox {
             node.states.expanded = Some(true);
-            Some("expanded".to_string())
+            Some(msg::state_expanded().to_string())
         } else {
             None
         }
@@ -1346,7 +1354,7 @@ impl VirtualCursor {
         let node = self.buffer.node_mut(node_id)?;
         if node.role == Role::ComboBox {
             node.states.expanded = Some(false);
-            Some("collapsed".to_string())
+            Some(msg::state_collapsed().to_string())
         } else {
             None
         }
@@ -1439,7 +1447,7 @@ impl VirtualCursor {
                 if let Some(mut_node) = self.buffer.node_mut(node.id) {
                     mut_node.states.expanded = Some(true);
                 }
-                Some("expanded".to_string())
+                Some(msg::state_expanded().to_string())
             }
             Some(true) => {
                 // Move to first child tree item
@@ -1476,7 +1484,7 @@ impl VirtualCursor {
             if let Some(mut_node) = self.buffer.node_mut(node.id) {
                 mut_node.states.expanded = Some(false);
             }
-            Some("collapsed".to_string())
+            Some(msg::state_collapsed().to_string())
         } else {
             // Jump to parent tree item
             let parent_id = self.buffer.tree_parents.get(&node.id).copied()?;
@@ -1748,7 +1756,7 @@ impl VirtualCursor {
     /// Moves to the next data table (`T`).
     pub fn move_next_table(&mut self) -> Option<String> {
         if self.buffer.tables.is_empty() {
-            return Some("There are no tables on this page.".to_string());
+            return Some(msg::quicknav_none_tables().to_string());
         }
         let maybe_idx = self
             .buffer
@@ -1782,7 +1790,7 @@ impl VirtualCursor {
     /// Moves to the prior data table (`Shift+T`).
     pub fn move_prior_table(&mut self) -> Option<String> {
         if self.buffer.tables.is_empty() {
-            return Some("There are no tables on this page.".to_string());
+            return Some(msg::quicknav_none_tables().to_string());
         }
         let current_start = self
             .buffer
@@ -1824,11 +1832,11 @@ impl VirtualCursor {
     pub fn move_table_cell_right(&mut self) -> Option<String> {
         let (t_idx, r_idx, c_idx) = match self.resolve_table_pos() {
             Some(pos) => pos,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         let table = match self.buffer.tables.get(t_idx) {
             Some(t) => t,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         let cur_cell = table.cells.get(r_idx).and_then(|r| r.get(c_idx));
         let step = cur_cell.map(|c| c.col_span).unwrap_or(1);
@@ -1847,18 +1855,18 @@ impl VirtualCursor {
                 ));
             }
         }
-        Some("end of row".to_string())
+        Some(msg::table_row_end().to_string())
     }
 
     /// Moves to cell to the left within the active row (`Ctrl+Alt+LeftArrow`).
     pub fn move_table_cell_left(&mut self) -> Option<String> {
         let (t_idx, r_idx, c_idx) = match self.resolve_table_pos() {
             Some(pos) => pos,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         let table = match self.buffer.tables.get(t_idx) {
             Some(t) => t,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         if c_idx > 0 {
             let prev_c = c_idx - 1;
@@ -1880,18 +1888,18 @@ impl VirtualCursor {
                 ));
             }
         }
-        Some("edge of table".to_string())
+        Some(msg::table_edge().to_string())
     }
 
     /// Moves to cell directly below in the active column (`Ctrl+Alt+DownArrow`).
     pub fn move_table_cell_down(&mut self) -> Option<String> {
         let (t_idx, r_idx, c_idx) = match self.resolve_table_pos() {
             Some(pos) => pos,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         let table = match self.buffer.tables.get(t_idx) {
             Some(t) => t,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         let cur_cell = table.cells.get(r_idx).and_then(|r| r.get(c_idx));
         let step = cur_cell.map(|c| c.row_span).unwrap_or(1);
@@ -1911,18 +1919,18 @@ impl VirtualCursor {
                 ));
             }
         }
-        Some("bottom of column".to_string())
+        Some(msg::table_column_bottom().to_string())
     }
 
     /// Moves to cell directly above in the active column (`Ctrl+Alt+UpArrow`).
     pub fn move_table_cell_up(&mut self) -> Option<String> {
         let (t_idx, r_idx, c_idx) = match self.resolve_table_pos() {
             Some(pos) => pos,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         let table = match self.buffer.tables.get(t_idx) {
             Some(t) => t,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         if r_idx > 0 {
             let prev_r = r_idx - 1;
@@ -1945,18 +1953,18 @@ impl VirtualCursor {
                 ));
             }
         }
-        Some("edge of table".to_string())
+        Some(msg::table_edge().to_string())
     }
 
     /// Moves to the first cell of the current table (`Ctrl+Alt+Home`).
     pub fn move_table_first_cell(&mut self) -> Option<String> {
         let (t_idx, _, _) = match self.resolve_table_pos() {
             Some(pos) => pos,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         let table = match self.buffer.tables.get(t_idx) {
             Some(t) => t,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         if let Some(cell) = table.first_cell() {
             self.current_table_pos = Some((t_idx, 0, 0));
@@ -1972,18 +1980,18 @@ impl VirtualCursor {
                 cell.row_span,
             ));
         }
-        Some("Not in a table.".to_string())
+        Some(msg::table_not_in_table().to_string())
     }
 
     /// Moves to the last cell of the current table (`Ctrl+Alt+End`).
     pub fn move_table_last_cell(&mut self) -> Option<String> {
         let (t_idx, _, _) = match self.resolve_table_pos() {
             Some(pos) => pos,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         let table = match self.buffer.tables.get(t_idx) {
             Some(t) => t,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         if let Some(cell) = table.last_cell() {
             self.current_table_pos = Some((
@@ -2003,18 +2011,18 @@ impl VirtualCursor {
                 cell.row_span,
             ));
         }
-        Some("Not in a table.".to_string())
+        Some(msg::table_not_in_table().to_string())
     }
 
     /// Moves to the first cell in the active row (`Ctrl+Alt+Shift+LeftArrow`).
     pub fn move_table_row_start(&mut self) -> Option<String> {
         let (t_idx, r_idx, _) = match self.resolve_table_pos() {
             Some(pos) => pos,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         let table = match self.buffer.tables.get(t_idx) {
             Some(t) => t,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         if let Some(cell) = table.row_start(r_idx + 1) {
             self.current_table_pos = Some((t_idx, r_idx, 0));
@@ -2022,18 +2030,18 @@ impl VirtualCursor {
             self.current_node_id = Some(cell.node_id);
             return Some(SpeechFormatter::format_table_row_start(&cell.text));
         }
-        Some("Not in a table.".to_string())
+        Some(msg::table_not_in_table().to_string())
     }
 
     /// Moves to the last cell in the active row (`Ctrl+Alt+Shift+RightArrow`).
     pub fn move_table_row_end(&mut self) -> Option<String> {
         let (t_idx, r_idx, _) = match self.resolve_table_pos() {
             Some(pos) => pos,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         let table = match self.buffer.tables.get(t_idx) {
             Some(t) => t,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         if let Some(cell) = table.row_end(r_idx + 1) {
             self.current_table_pos = Some((t_idx, r_idx, table.cols.saturating_sub(1)));
@@ -2041,18 +2049,18 @@ impl VirtualCursor {
             self.current_node_id = Some(cell.node_id);
             return Some(SpeechFormatter::format_table_row_end(&cell.text));
         }
-        Some("Not in a table.".to_string())
+        Some(msg::table_not_in_table().to_string())
     }
 
     /// Moves to the top cell in the active column (`Ctrl+Alt+Shift+UpArrow`).
     pub fn move_table_col_top(&mut self) -> Option<String> {
         let (t_idx, _, c_idx) = match self.resolve_table_pos() {
             Some(pos) => pos,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         let table = match self.buffer.tables.get(t_idx) {
             Some(t) => t,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         if let Some(cell) = table.col_top(c_idx + 1) {
             self.current_table_pos = Some((t_idx, 0, c_idx));
@@ -2060,18 +2068,18 @@ impl VirtualCursor {
             self.current_node_id = Some(cell.node_id);
             return Some(SpeechFormatter::format_table_col_top(&cell.text));
         }
-        Some("Not in a table.".to_string())
+        Some(msg::table_not_in_table().to_string())
     }
 
     /// Moves to the bottom cell in the active column (`Ctrl+Alt+Shift+DownArrow`).
     pub fn move_table_col_bottom(&mut self) -> Option<String> {
         let (t_idx, _, c_idx) = match self.resolve_table_pos() {
             Some(pos) => pos,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         let table = match self.buffer.tables.get(t_idx) {
             Some(t) => t,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         if let Some(cell) = table.col_bottom(c_idx + 1) {
             self.current_table_pos = Some((t_idx, table.rows.saturating_sub(1), c_idx));
@@ -2079,18 +2087,18 @@ impl VirtualCursor {
             self.current_node_id = Some(cell.node_id);
             return Some(SpeechFormatter::format_table_col_bottom(&cell.text));
         }
-        Some("Not in a table.".to_string())
+        Some(msg::table_not_in_table().to_string())
     }
 
     /// Reads the current cell with coordinates and headers (`Ctrl+Alt+NumPad5` / `SayCurrentCell`).
     pub fn read_current_cell(&mut self) -> Option<String> {
         let (t_idx, r_idx, c_idx) = match self.resolve_table_pos() {
             Some(pos) => pos,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         let table = match self.buffer.tables.get(t_idx) {
             Some(t) => t,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         if let Some(cell) = table.cells.get(r_idx).and_then(|r| r.get(c_idx)) {
             return Some(SpeechFormatter::format_table_cell_coordinates(
@@ -2103,18 +2111,18 @@ impl VirtualCursor {
                 cell.row_span,
             ));
         }
-        Some("Not in a table.".to_string())
+        Some(msg::table_not_in_table().to_string())
     }
 
     /// Reads the column header of the current cell (`Ctrl+Alt+Shift+H`).
     pub fn read_current_col_header(&mut self) -> Option<String> {
         let (t_idx, r_idx, c_idx) = match self.resolve_table_pos() {
             Some(pos) => pos,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         let table = match self.buffer.tables.get(t_idx) {
             Some(t) => t,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         if let Some(cell) = table.cells.get(r_idx).and_then(|r| r.get(c_idx)) {
             return Some(SpeechFormatter::format_column_header(
@@ -2122,18 +2130,18 @@ impl VirtualCursor {
                 cell.col,
             ));
         }
-        Some("Not in a table.".to_string())
+        Some(msg::table_not_in_table().to_string())
     }
 
     /// Reads the row header of the current cell (`Ctrl+Alt+Shift+R`).
     pub fn read_current_row_header(&mut self) -> Option<String> {
         let (t_idx, r_idx, c_idx) = match self.resolve_table_pos() {
             Some(pos) => pos,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         let table = match self.buffer.tables.get(t_idx) {
             Some(t) => t,
-            None => return Some("Not in a table.".to_string()),
+            None => return Some(msg::table_not_in_table().to_string()),
         };
         if let Some(cell) = table.cells.get(r_idx).and_then(|r| r.get(c_idx)) {
             return Some(SpeechFormatter::format_row_header(
@@ -2141,13 +2149,13 @@ impl VirtualCursor {
                 cell.row,
             ));
         }
-        Some("Not in a table.".to_string())
+        Some(msg::table_not_in_table().to_string())
     }
 
     /// Moves to the next math element (`O`).
     pub fn move_next_math(&mut self) -> Option<String> {
         if self.buffer.math_blocks.is_empty() {
-            return Some("There are no math equations on this page.".to_string());
+            return Some(msg::quicknav_none_math().to_string());
         }
         let maybe_target = self.buffer.next_math_from(self.offset);
         let fallback = self.buffer.math_blocks.first().copied().unwrap_or(0);
@@ -2157,7 +2165,7 @@ impl VirtualCursor {
         if let Some(line) = self.buffer.line_at_offset(target) {
             self.current_node_id = Some(line.node_id);
             if wrapped {
-                Some(format!("wrapping to top\n{}", line.text))
+                Some(format!("{}\n{}", msg::quicknav_wrap_top(), line.text))
             } else {
                 Some(line.text.clone())
             }
@@ -2169,7 +2177,7 @@ impl VirtualCursor {
     /// Moves to the prior math element (`Shift+O`).
     pub fn move_prior_math(&mut self) -> Option<String> {
         if self.buffer.math_blocks.is_empty() {
-            return Some("There are no math equations on this page.".to_string());
+            return Some(msg::quicknav_none_math().to_string());
         }
         let maybe_target = self.buffer.prior_math_from(self.offset);
         let fallback = self.buffer.math_blocks.last().copied().unwrap_or(0);
@@ -2179,7 +2187,7 @@ impl VirtualCursor {
         if let Some(line) = self.buffer.line_at_offset(target) {
             self.current_node_id = Some(line.node_id);
             if wrapped {
-                Some(format!("wrapping to bottom\n{}", line.text))
+                Some(format!("{}\n{}", msg::quicknav_wrap_bottom(), line.text))
             } else {
                 Some(line.text.clone())
             }
@@ -2192,7 +2200,7 @@ impl VirtualCursor {
     pub fn enter_math_viewer(&mut self) -> Option<String> {
         if let Some(node) = self.buffer.node_at_offset(self.offset) {
             if node.role == Role::Math {
-                return Some("Math Viewer. Press Escape to exit.".to_string());
+                return Some(msg::math_viewer_entered().to_string());
             }
         }
         None
@@ -2296,7 +2304,7 @@ impl VirtualCursor {
             // Wrap to top
             let first_offset = matches.first().copied().unwrap_or(0);
             let speech = self.jump_to_element_offset(first_offset);
-            Some(format!("wrapping to top\n{}", speech))
+            Some(format!("{}\n{}", msg::quicknav_wrap_top(), speech))
         }
     }
 
@@ -2318,7 +2326,7 @@ impl VirtualCursor {
             // Wrap to bottom
             let last_offset = matches.last().copied().unwrap_or(0);
             let speech = self.jump_to_element_offset(last_offset);
-            Some(format!("wrapping to bottom\n{}", speech))
+            Some(format!("{}\n{}", msg::quicknav_wrap_bottom(), speech))
         }
     }
 }
