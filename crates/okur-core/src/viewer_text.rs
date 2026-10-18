@@ -180,25 +180,29 @@ pub fn rows(items: &[ScreenItem]) -> Vec<String> {
 
 /// The word an element list gives an element's role ("Button", "group"); text has none.
 fn role_word(role: &Role) -> Option<&'static str> {
-    Some(match role {
-        Role::Button => "Button",
-        Role::MenuButton => "button menu",
-        Role::CheckBox => "check box",
-        Role::RadioButton => "radio button",
-        Role::ComboBox => "Combo box",
-        Role::Edit => "Edit",
-        Role::Tab => "Tab",
-        Role::Group => "group",
-        Role::Link { .. } => "link",
-        Role::MenuItem => "menu item",
-        Role::Slider => "slider",
-        Role::ProgressBar => "progress bar",
-        Role::List => "list",
-        Role::ListItem => "list item",
-        Role::Tree => "tree view",
-        Role::TreeItem => "tree item",
-        _ => return None,
-    })
+    use crate::messages::msg;
+    Some(
+        match role {
+            Role::Button => msg::role_button(),
+            Role::MenuButton => msg::role_button_menu(),
+            Role::CheckBox => msg::role_check_box(),
+            Role::RadioButton => msg::role_radio_button(),
+            Role::ComboBox => msg::role_combo_box_focus(),
+            Role::Edit => msg::role_edit(),
+            Role::Tab => msg::role_tab(),
+            Role::Group => msg::role_group(),
+            Role::Link { .. } => msg::role_link_viewer(),
+            Role::MenuItem => msg::role_menu_item(),
+            Role::Slider => msg::role_slider(),
+            Role::ProgressBar => msg::role_progress_bar(),
+            Role::List => msg::role_list(),
+            Role::ListItem => msg::role_list_item(),
+            Role::Tree => msg::role_tree_view_viewer(),
+            Role::TreeItem => msg::role_tree_item(),
+            _ => return None,
+        }
+        .as_str(),
+    )
 }
 
 /// The window's elements one per line in tree order, as JAWS lists a modern app's: its name,
@@ -216,15 +220,21 @@ pub fn elements(items: &[ScreenItem]) -> Vec<String> {
                 line.push(' ');
                 line.push_str(word);
             }
-            match item.checked {
-                Some(true) => line.push_str("  checked"),
+            use crate::messages::msg;
+            let state = match item.checked {
+                Some(true) => Some(msg::state_checked()),
                 Some(false) if matches!(item.role, Role::CheckBox) => {
-                    line.push_str("  not checked")
+                    Some(msg::state_not_checked())
                 }
-                _ => {}
+                _ => None,
+            };
+            if let Some(state) = state {
+                line.push_str("  ");
+                line.push_str(state.as_str());
             }
             if item.unavailable {
-                line.push_str("  unavailable");
+                line.push_str("  ");
+                line.push_str(msg::state_unavailable().as_str());
             }
             Some(line)
         })

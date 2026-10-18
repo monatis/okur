@@ -39,3 +39,12 @@ viewer-font-information = Font information:
 # A link at the bottom of the Virtual Viewer's messages.
 viewer-hot-keys-link = List JAWS Hot Keys
 viewer-close-hint = Press ESCAPE to close this message.
+
+## Editing text
+
+# Text just selected with Shift and a move: said after a character, before more text.
+selection-added = selected
+# Control+Home in a document.
+text-top-of-file = top of file
+# Control+End in a document. JAWS's capital.
+text-bottom-of-file = Bottom of file

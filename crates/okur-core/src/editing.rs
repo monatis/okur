@@ -7,6 +7,7 @@
 
 use crate::event::TextContext;
 use crate::input::{Key, KeyEvent};
+use crate::messages::msg;
 
 /// A key whose effect on a text field JAWS speaks.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -314,7 +315,7 @@ pub fn speech(
     Some(match key {
         EditKey::Silent => return None,
         EditKey::Character | EditKey::DeleteForward => {
-            char_at(after).map_or_else(|| "blank".to_owned(), |c| c.to_string())
+            char_at(after).map_or_else(|| msg::blank().to_string(), |c| c.to_string())
         }
         // A word move that stops at a line's end reads the line break, as a character move onto
         // it does [obs, 320/s7, s11].
@@ -325,7 +326,7 @@ pub fn speech(
             if added.is_empty() {
                 return None;
             }
-            format!("{added}\nselected")
+            format!("{added}\n{}", msg::selection_added())
         }
         EditKey::SelectMore => {
             let added = newly_selected(before, after);
@@ -339,25 +340,25 @@ pub fn speech(
                 .filter(|l| !l.trim().is_empty())
                 .collect();
             if lines.is_empty() {
-                format!("selected\n{added}")
+                format!("{}\n{added}", msg::selection_added())
             } else {
-                format!("selected\n{}", lines.join("\n"))
+                format!("{}\n{}", msg::selection_added(), lines.join("\n"))
             }
         }
         EditKey::TopOfFile => {
             let line = line_at(after);
             if line.trim().is_empty() {
-                "top of file".to_owned()
+                msg::text_top_of_file().to_string()
             } else {
-                format!("top of file\n{}", line.trim())
+                format!("{}\n{}", msg::text_top_of_file(), line.trim())
             }
         }
         EditKey::BottomOfFile => {
             let line = line_at(after);
             if line.trim().is_empty() {
-                "Bottom of file".to_owned()
+                msg::text_bottom_of_file().to_string()
             } else {
-                format!("Bottom of file\n{}", line.trim())
+                format!("{}\n{}", msg::text_bottom_of_file(), line.trim())
             }
         }
         EditKey::DeleteBackward => {
@@ -382,13 +383,13 @@ pub fn speech(
             if lines.is_empty() {
                 return None;
             }
-            format!("selected\n{}", lines.join("\n"))
+            format!("{}\n{}", msg::selection_added(), lines.join("\n"))
         }
         EditKey::Copy => {
             if selected_text(after).is_empty() {
                 return None;
             }
-            "Copied selection to clipboard".to_owned()
+            msg::clipboard_copied_selection().to_string()
         }
         EditKey::SayLine => {
             let line = line_at(after);

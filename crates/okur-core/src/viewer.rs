@@ -284,7 +284,10 @@ impl VirtualViewer {
                     .map(|l| l.iter().collect::<String>())
                     .collect::<Vec<_>>()
                     .join("\n");
-                speak(format!("selected\n{all}"))
+                speak(format!(
+                    "{}\n{all}",
+                    crate::messages::msg::selection_added()
+                ))
             }
             Key::Alpha(c) if ctrl_only && c.eq_ignore_ascii_case(&'C') => {
                 if self.all_selected {

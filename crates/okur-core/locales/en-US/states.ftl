@@ -17,3 +17,5 @@ state-required = Required
 state-selected = selected
 # A menu item that opens another menu.
 state-sub-menu = sub menu
+# An element that cannot be used now, in the Virtual Viewer's list of elements.
+state-unavailable = unavailable

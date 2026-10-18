@@ -37,11 +37,15 @@ role-heading-level = heading level { $level }
 role-link = Link
 role-link-say-window = link
 role-link-same-page = same page link
+# The Virtual Viewer's list of a modern application's elements uses lowercase type words.
+role-link-viewer = link
 role-list = list
 role-list-box = List box
+role-list-item = list item
 role-list-view = List view
 role-menu = menu
 role-menu-bar = Menu bar
+role-menu-item = menu item
 # A page of a dialog's tabs (a property sheet's page).
 role-page = page
 role-progress-bar = progress bar
@@ -64,6 +68,7 @@ role-tab = Tab
 role-toggle-button = Toggle button
 role-tree-item = tree item
 role-tree-view = Tree view
+role-tree-view-viewer = tree view
 # A tree item's depth, said where its role would be.
 role-tree-level = level { $level }
 # Said after a page's title as it loads: the cursor that reads it.
