@@ -1,10 +1,12 @@
 pub mod no_speech;
 pub mod onecore;
 pub mod sapi5;
+pub mod thread;
 
 pub use no_speech::NoSpeechEngine;
 pub use onecore::OneCoreEngine;
 pub use sapi5::Sapi5Engine;
+pub use thread::SpeechThread;
 
 use serde::{Deserialize, Serialize};
 

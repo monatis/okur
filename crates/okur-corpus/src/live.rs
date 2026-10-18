@@ -23,6 +23,9 @@ pub struct LiveStep {
     /// Distinct transcripts JAWS produced for this step across successful trials.
     pub jaws_variants: Vec<String>,
     pub matched: bool,
+    /// Whether the runner heard Okur fall silent before the step's time ran out. An
+    /// unsettled step may have been cut short.
+    pub settled: bool,
 }
 
 /// What a live run is, by its provenance.
@@ -32,7 +35,8 @@ fn reader(file: &Value) -> Option<&str> {
 
 /// Compares the first successful trial of Okur's live `run` with JAWS's `evidence` of the same
 /// scenario, step by step, as `okur parity` compares (whitespace normalized, any recorded
-/// variant).
+/// variant). A run without one is compared by its first trial: a step that did not settle (a
+/// long reading at Okur's slower rate) fails the trial but still says what Okur said.
 pub fn compare(run: &Value, evidence: &Value) -> Result<Vec<LiveStep>, String> {
     if reader(run) != Some("okur") {
         return Err("the run is not Okur's (provenance.reader is not \"okur\")".to_owned());
@@ -53,7 +57,8 @@ pub fn compare(run: &Value, evidence: &Value) -> Result<Vec<LiveStep>, String> {
         .into_iter()
         .flatten()
         .find(|t| t.get("trial_success").and_then(Value::as_bool) == Some(true))
-        .ok_or("the run has no successful trial")?;
+        .or_else(|| run.pointer("/trials/0"))
+        .ok_or("the run has no trial")?;
     let variants = jaws_variants(evidence);
     let steps = trial
         .get("step_results")
@@ -84,6 +89,10 @@ pub fn compare(run: &Value, evidence: &Value) -> Result<Vec<LiveStep>, String> {
                     .unwrap_or_default()
                     .to_owned(),
                 matched: jaws.iter().any(|v| normalize(v) == ours),
+                settled: step
+                    .pointer("/observation/settled")
+                    .and_then(Value::as_bool)
+                    .unwrap_or(true),
                 okur,
                 jaws_variants: jaws,
             })
@@ -132,6 +141,23 @@ mod tests {
             steps.first().map(|s| s.key.as_str()),
             Some("222-web-links-list/s1")
         );
+    }
+
+    /// A run whose only trial failed (a step ran out of time) is still compared, with the
+    /// unsettled step marked.
+    #[test]
+    fn a_failed_trial_is_compared_with_its_unsettled_steps_marked() {
+        let evidence = file(None, &[("s1", "Count Button"), ("s2", "a long log")]);
+        let mut run = file(Some("okur"), &[("s1", "Count Button"), ("s2", "a long")]);
+        if let Some(success) = run.pointer_mut("/trials/0/trial_success") {
+            *success = json!(false);
+        }
+        if let Some(observation) = run.pointer_mut("/trials/0/step_results/1/observation") {
+            *observation = json!({ "speech_raw": "a long", "settled": false });
+        }
+        let steps = compare(&run, &evidence).unwrap_or_default();
+        let found: Vec<(bool, bool)> = steps.iter().map(|s| (s.matched, s.settled)).collect();
+        assert_eq!(found, vec![(true, true), (false, false)]);
     }
 
     /// Evidence is never taken for a run, nor a run for evidence.

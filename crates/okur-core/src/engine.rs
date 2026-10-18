@@ -272,7 +272,12 @@ impl ScreenReaderEngine {
                     | Key::PageUp
                     | Key::PageDown
             );
+        // The hook waits for this: a slow key leaks to the application (Space on an edit held
+        // 758 ms and toggled the focused check box, old-pc 2026-10-18), so its stages are
+        // timed.
+        let started = std::time::Instant::now();
         self.apply_pending_page();
+        let page_applied = started.elapsed();
 
         // A key ends the quiet return from Okur's dialogs: what it does is said.
         self.quiet_focus_until = None;
@@ -280,6 +285,15 @@ impl ScreenReaderEngine {
 
         // 1. Any key press interrupts speech immediately (NVDA & JAWS standard behavior)
         self.speech.stop();
+        let stopped = started.elapsed();
+        if stopped > std::time::Duration::from_millis(50) {
+            tracing::warn!(
+                key = ?event.key,
+                page_ms = page_applied.as_millis(),
+                stop_ms = (stopped - page_applied).as_millis(),
+                "slow start of a key"
+            );
+        }
 
         // 2. Standalone Control tap is speech silence key
         if event.key == Key::Control && event.modifiers.is_empty() {
@@ -468,7 +482,11 @@ impl ScreenReaderEngine {
 
         // 7. In Virtual PC Cursor mode, check if keystroke translates to a command
         if let Some(command) = crate::command::command_for(event) {
-            let res = self.execute(command);
+            let started = std::time::Instant::now();
+            let res = self.execute(command.clone());
+            if started.elapsed() > std::time::Duration::from_millis(50) {
+                tracing::warn!(?command, ms = started.elapsed().as_millis(), "slow command");
+            }
             if res.is_some() {
                 return KeyAction::Consume;
             }

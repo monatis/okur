@@ -838,7 +838,9 @@ async fn main() {
 
             // OS accessibility events and caret text both reach the engine through this channel.
             let (event_tx, mut event_rx) = tokio::sync::mpsc::unbounded_channel();
-            let mut engine = ScreenReaderEngine::new(cursor, Box::new(tts));
+            // Speech on its own thread: the keyboard hook never waits for a synthesizer.
+            let speech = okur_platform::tts::SpeechThread::start(tts);
+            let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech));
             // Enter on an edit focuses it in the page, Enter/Space on a control activates it.
             #[cfg(windows)]
             engine.set_actions(Box::new(okur_platform::actions::WindowsActions::start(
@@ -1266,7 +1268,8 @@ async fn main() {
                 Ok(steps) => {
                     for step in steps.iter().filter(|s| all || !s.matched) {
                         let tag = if step.matched { "MATCH" } else { "DIFF " };
-                        println!("[{tag}] {}  ({})", step.key, step.command);
+                        let unsettled = if step.settled { "" } else { "  unsettled" };
+                        println!("[{tag}] {}  ({}){unsettled}", step.key, step.command);
                         println!("    okur: {:?}", okur_corpus::parity::normalize(&step.okur));
                         if !step.matched {
                             for v in &step.jaws_variants {
