@@ -183,11 +183,34 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
             } else {
                 name
             };
-            lines.push(Line::new(vec![
-                name_part(name),
-                role(msg::role_edit().as_str()),
-            ]));
-            lines.extend(value);
+            if focus.multi_line {
+                // An edit of several lines is read as a document: its caret's line, and
+                // "Contains text" as it is reached [obs, 316/s3].
+                lines.push(Line::new(vec![
+                    name_part(name),
+                    role(msg::role_edit_multiline().as_str()),
+                ]));
+                // The caret's line; without the field's text, its first.
+                let (line, text) = match &focus.text {
+                    Some(context) => (crate::editing::line_at(context), context.text.clone()),
+                    None => {
+                        let text = focus.value.clone().unwrap_or_default();
+                        (text.lines().next().unwrap_or_default().to_owned(), text)
+                    }
+                };
+                if !line.trim().is_empty() {
+                    lines.push(Line::of(PartKind::Value, line.trim()));
+                }
+                if !text.trim().is_empty() {
+                    lines.push(Line::of(PartKind::Value, msg::field_contains_text()).on_arrival());
+                }
+            } else {
+                lines.push(Line::new(vec![
+                    name_part(name),
+                    role(msg::role_edit().as_str()),
+                ]));
+                lines.extend(value);
+            }
             lines.push(Line::of(PartKind::Hint, msg::hint_type_in_text()));
             // Its shortcut (UIA AcceleratorKey): Chrome's address bar, "… Type in text. |
             // Ctrl+L" (JAWS on the dev box, 2026-10-17). Buttons' shortcuts are not said (File
@@ -1601,6 +1624,21 @@ To activate press Enter."
         assert_eq!(
             norm(&say_focus(&notepad)),
             norm("Text editor  \u{1d} edit \u{1e} ")
+        );
+        // A native edit of several lines: its caret's line, "Contains text" as it is reached,
+        // and the edit's hint [obs, 316/s3].
+        let mut code = event(Role::Edit, "Code");
+        code.multi_line = true;
+        code.text = Some(crate::event::TextContext {
+            text: "a b\r\nx = 1.5;".to_owned(),
+            caret: 0,
+            selection: None,
+            font: None,
+            word: None,
+        });
+        assert_eq!(
+            norm(&focus_speech(&code, None).render()),
+            norm("Code  \u{1d} edit \u{1e} \na b\nContains text\nType in text.")
         );
     }
 

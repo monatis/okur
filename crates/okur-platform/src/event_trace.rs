@@ -105,6 +105,10 @@ pub struct TraceEvent {
     pub id_child: i32,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub window_class: Option<String>,
+    /// For a focus: its window's style (`GWL_STYLE`), raw. An edit's ES_MULTILINE says it has
+    /// several lines.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub window_style: Option<u32>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub window_title: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -204,6 +208,18 @@ fn window_items(tree: &UiaNode) -> Vec<okur_core::WindowItem> {
     let mut items = Vec::new();
     walk(tree, &mut items);
     items
+}
+
+/// Whether a window is an edit of several lines: an edit window class (Win32's Edit, WinForms'
+/// `WindowsForms10.EDIT…`, RichEdit) with ES_MULTILINE in its style. The bit means something
+/// else for other classes.
+fn multi_line_edit(class: Option<&str>, style: Option<u32>) -> bool {
+    const ES_MULTILINE: u32 = 0x0004;
+    let edit = class.is_some_and(|c| {
+        let c = c.to_ascii_uppercase();
+        c == "EDIT" || c.contains(".EDIT.") || c.starts_with("RICHEDIT")
+    });
+    edit && style.is_some_and(|s| s & ES_MULTILINE != 0)
 }
 
 /// The first line of a trace file.
@@ -687,6 +703,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             .or_else(|| active_window.and_then(|w| w.class_name.clone()))
     };
     focus.in_dialog_box = focus.platform.top_window_class.as_deref() == Some(WIN32_DIALOG_CLASS);
+    focus.multi_line = multi_line_edit(event.window_class.as_deref(), event.window_style);
     // A dialog box (Win32 #32770, as a message box is) is announced with its static text,
     // which sits beside its buttons [obs, 306/s1]. Other windows are announced by title only
     // (306/s10).
@@ -1714,6 +1731,7 @@ mod capture {
                     id_object,
                     id_child,
                     window_class: Some(CHROME_PAGE_WINDOW.to_owned()),
+                    window_style: None,
                     window_title: None,
                     process: None,
                     object: None,
@@ -2063,6 +2081,7 @@ mod capture {
                     id_object: 0,
                     id_child: 0,
                     window_class: None,
+                    window_style: None,
                     window_title: None,
                     process: None,
                     object: None,
@@ -2171,6 +2190,7 @@ mod capture {
                     id_object: 0,
                     id_child: 0,
                     window_class: None,
+                    window_style: None,
                     window_title: None,
                     process: None,
                     object: None,
@@ -2475,6 +2495,11 @@ mod capture {
                 ?stages,
                 "event read"
             );
+            let window_style = focused.then(|| {
+                use windows::Win32::UI::WindowsAndMessaging::{GetWindowLongW, GWL_STYLE};
+                // SAFETY: plain Win32 call; a window that is gone gives 0.
+                unsafe { GetWindowLongW(hwnd, GWL_STYLE) as u32 }
+            });
             let event = TraceEvent {
                 t_ms,
                 event: name.to_owned(),
@@ -2483,6 +2508,7 @@ mod capture {
                 id_object,
                 id_child,
                 window_class: Some(class).filter(|s| !s.is_empty()),
+                window_style,
                 window_title: Some(title).filter(|s| !s.is_empty()),
                 process: process_name(hwnd),
                 object,
@@ -3204,6 +3230,7 @@ mod tests {
             id_object: -4,
             id_child: 0,
             window_class: None,
+            window_style: None,
             window_title: None,
             process: None,
             object: None,

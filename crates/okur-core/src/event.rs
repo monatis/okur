@@ -184,6 +184,10 @@ pub struct FocusEvent {
     /// Whether the control's value is read-only (UIA), where it reports one: an editable
     /// document is a text field.
     pub read_only: Option<bool>,
+    /// A native edit of several lines (Win32's ES_MULTILINE): JAWS reads it as a document,
+    /// its caret's line and "Contains text" on arrival [obs, 316/s3], the line alone on Say
+    /// Line and "top of file" on Ctrl+Home [obs, 400/s1, s5].
+    pub multi_line: bool,
     /// The application, as the platform names it: its executable on Windows
     /// ("SearchHost.exe"), its bundle identifier on macOS. For application modules (`apps/`).
     pub app: Option<String>,
@@ -291,6 +295,7 @@ impl FocusEvent {
             accelerator_key: None,
             access_key: None,
             read_only: None,
+            multi_line: false,
             app: None,
             platform: PlatformIds::default(),
         }

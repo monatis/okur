@@ -485,14 +485,15 @@ impl ScreenReaderEngine {
     }
 
     /// Whether the text field typed in is a document, which reads some keys as a document
-    /// does: a native one (Windows 11 Notepad), or a page's multi-line field (Google Docs'
-    /// document with braille support; JAWS on the dev box, 2026-10-16).
+    /// does: a native one (Windows 11 Notepad), a native edit of several lines (a WinForms text
+    /// box: Say Line gives the line alone, Ctrl+Home "top of file" [obs, 400/s1, s5]), or a
+    /// page's multi-line field (Google Docs' document with braille support; JAWS on the dev
+    /// box, 2026-10-16).
     pub(super) fn editing_document(&self) -> bool {
         let native = self.app_mode != AppMode::VirtualBuffer
-            && self
-                .last_native_focus
-                .as_ref()
-                .is_some_and(|f| f.role == Role::Document);
+            && self.last_native_focus.as_ref().is_some_and(|f| {
+                f.role == Role::Document || (f.role == Role::Edit && f.multi_line)
+            });
         let page = self.forms_mode
             && self.app_mode == AppMode::VirtualBuffer
             && self
