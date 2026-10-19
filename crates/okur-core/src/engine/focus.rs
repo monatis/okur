@@ -589,6 +589,18 @@ impl ScreenReaderEngine {
                     _ => msg::menus_left().to_string(),
                 });
             }
+            // A field an arrow put the focus on was said with the arrow (Auto Forms Mode); its
+            // text is read now, for the arrow that leaves it at its caret's edge.
+            if self
+                .arrow_focus
+                .take()
+                .is_some_and(|id| Some(id) == target_id)
+            {
+                if let Some(actions) = &self.actions {
+                    actions.read_at_caret(None, true);
+                }
+                return None;
+            }
             if let Some(ref text) = speech {
                 if !text.is_empty() {
                     self.speech.speak(text, true);

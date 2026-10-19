@@ -3090,6 +3090,119 @@ fn key(key: Key) -> KeyEvent {
     KeyEvent::new(key, Modifiers::none(), true)
 }
 
+/// Whitespace-insensitive speech, as parity compares it.
+fn norm(s: &str) -> String {
+    s.split_whitespace().collect::<Vec<_>>().join(" ")
+}
+
+/// Auto Forms Mode with the arrows: Down onto a field focuses it, turns forms mode on and
+/// says it as its focus, without "blank" or its description; the focus event that follows is
+/// not said; Down that cannot move the field's caret leaves forms mode for the next line, and
+/// Down that can is the field's [obs, 280/s4-s9].
+#[test]
+fn auto_forms_mode_arrows_into_and_out_of_fields() {
+    let mut name = AomNode::new(2, Role::Edit).with_name("Full name");
+    name.attributes.insert("required".into(), "true".into());
+    let mut email = AomNode::new(4, Role::Edit).with_name("Email address");
+    email.value = Some("sam@example.com".into());
+    email
+        .attributes
+        .insert("description".into(), "We never share your email.".into());
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Full name"),
+            name,
+            AomNode::new(3, Role::Paragraph).with_text("Email address"),
+            email,
+            AomNode::new(5, Role::Paragraph).with_text("We never share your email."),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    engine.handle_focus_event(&page_document());
+    engine.cursor.move_to_start();
+    speech.take();
+    let field = |id: usize, name: &str, text: &str| {
+        let mut focus = FocusEvent::new(Role::Edit).with_node_id(id).with_name(name);
+        focus.in_document = true;
+        focus.text = Some(crate::event::TextContext {
+            text: text.into(),
+            caret: 0,
+            selection: None,
+            font: None,
+            word: None,
+        });
+        focus
+    };
+    let down = |engine: &mut ScreenReaderEngine| {
+        let action = engine.handle_key_event(&key(Key::DownArrow));
+        (action, norm(&speech.take().join(" ")))
+    };
+
+    assert_eq!(down(&mut engine).1, "Full name");
+    let (_, said) = down(&mut engine);
+    assert_eq!(said, "Full name \u{1d} Edit \u{1e} \u{1d}Required\u{1e}");
+    assert!(engine.forms_mode);
+    assert!(actions.requests().contains(&("focus".to_owned(), 2)));
+    assert_eq!(engine.handle_focus_event(&field(2, "Full name", "")), None);
+    assert!(engine.forms_mode);
+
+    // The empty field's caret cannot move: Down leaves it.
+    assert_eq!(
+        down(&mut engine),
+        (KeyAction::Consume, "Email address".to_owned())
+    );
+    assert!(!engine.forms_mode);
+    let (_, said) = down(&mut engine);
+    assert_eq!(said, "Email address \u{1d} Edit \u{1e} sam@example.com");
+    assert_eq!(
+        engine.handle_focus_event(&field(4, "Email address", "sam@example.com")),
+        None
+    );
+
+    // Its caret at the start: Down is the field's, then leaves it.
+    assert_eq!(down(&mut engine).0, KeyAction::PassThrough);
+    assert!(engine.forms_mode);
+    let mut moved = field(4, "Email address", "sam@example.com");
+    if let Some(text) = moved.text.as_mut() {
+        text.caret = 15;
+    }
+    if let Some(context) = moved.text {
+        engine.handle_accessibility_event(&AccessibilityEvent::TextContext(context));
+    }
+    assert_eq!(norm(&speech.take().join(" ")), "sam@example.com");
+    assert_eq!(
+        down(&mut engine),
+        (KeyAction::Consume, "We never share your email.".to_owned())
+    );
+}
+
+/// Without Auto Forms Mode, the arrows read a field's line and stay in browse mode [obs, 201].
+#[test]
+fn without_auto_forms_mode_the_arrows_read_a_fields_line() {
+    let mut name = AomNode::new(2, Role::Edit).with_name("Full name");
+    name.attributes.insert("required".into(), "true".into());
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Full name"),
+            name,
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let mut changed = engine.settings.clone();
+    changed.auto_forms_mode = false;
+    engine.set_settings(changed);
+    engine.handle_focus_event(&page_document());
+    engine.cursor.move_to_start();
+    engine.handle_key_event(&key(Key::DownArrow));
+    engine.handle_key_event(&key(Key::DownArrow));
+    assert!(!engine.forms_mode);
+}
+
 /// Chrome's app menu over a page (Alt+F; dev box, 2026-10-17): the system says menu mode
 /// started and a popup opened, and no item has the focus until the next Down. That Down is the
 /// menu's, not the virtual cursor's; after the menu, the virtual cursor has the keys again.

@@ -125,6 +125,12 @@ impl ScreenReaderEngine {
         if let Some(spoken) = self.open_console_viewer(context) {
             return spoken;
         }
+        // A read that caught the page's document, not the field the focus is moving to: its
+        // text is the document's embedded objects alone ("￼"), right after a field took the
+        // focus (280/s5, s11, s20 traces). The field's own text is kept.
+        if !context.text.is_empty() && context.text.chars().all(|c| c == '\u{fffc}') {
+            return None;
+        }
         let before = self.last_text.replace(context.clone());
         let key = self.pending_edit.take()?;
         let field = self.text_field_line();

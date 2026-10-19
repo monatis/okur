@@ -478,6 +478,11 @@ impl ScreenReaderEngine {
 
             _ => None,
         };
+        let speech = if matches!(command, Command::SayNextLine | Command::SayPriorLine) {
+            self.arrow_onto_field().or(speech)
+        } else {
+            speech
+        };
 
         if let Some(ref text) = speech {
             // Left/Right read a character, which the synthesizer names ("space").
@@ -531,6 +536,88 @@ impl ScreenReaderEngine {
                     .last_native_focus
                     .as_ref()
                     .is_some_and(|f| matches!(f.role, Role::Edit | Role::Document)))
+    }
+
+    /// Auto Forms Mode: an arrow that lands on a field one types in puts the focus there and
+    /// turns forms mode on, and the field is said as its focus is, without the page's title or
+    /// "blank": "Full name Edit Required", "Email address Edit Required | sam@example.com"
+    /// [obs, 280/s5, s7, s11, s20]. JAWS's documentation: "When you use the ARROW keys ...
+    /// and land in an edit field ..., forms mode is automatically on" (Surf's Up, "Using Forms
+    /// with JAWS"); other controls stay in browse mode (280/s13, s18). The focus event that
+    /// follows is not said again.
+    pub(super) fn arrow_onto_field(&mut self) -> Option<String> {
+        if !self.settings.auto_forms_mode
+            || self.forms_mode
+            || self.app_mode != AppMode::VirtualBuffer
+        {
+            return None;
+        }
+        let node = self.node_under_cursor().filter(|n| {
+            n.role == Role::Edit && n.attributes.get("readonly").is_none_or(|r| r != "true")
+        })?;
+        // The field as its focus is said, but for its description, which the next arrow reads
+        // as a line of its own (280/s9), and an empty field's "blank" (280/s5).
+        let mut field = SpeechFormatter::control_focus(&node, |_| false);
+        field.retain(|kind| kind != crate::announcement::PartKind::Description);
+        let said = field.render();
+        let blank = msg::blank();
+        let said = said
+            .strip_suffix(blank.as_str())
+            .map_or(said.as_str(), |s| s.trim_end_matches(['\n', ' ']))
+            .to_owned();
+        if let Some(actions) = &self.actions {
+            actions.focus(&node);
+        }
+        self.arrow_focus = Some(node.id);
+        self.forms_mode = true;
+        self.cursor.forms_mode_active = true;
+        Some(said)
+    }
+
+    /// Auto Forms Mode: Up or Down in a page's field whose caret cannot move further that way
+    /// leaves forms mode, and the virtual cursor reads the line after or before the field:
+    /// Down in an empty "Full name" says "Email address"; in "sam@example.com", Down first
+    /// moves its caret and reads it, then leaves [obs, 280/s6, s8, s9, s12]. "If the caret
+    /// reaches the field's boundary and you press an arrow key again, JAWS exits Forms Mode"
+    /// (Surf's Up). After a text area JAWS jumped to the page's end instead (280/s21), an
+    /// accepted divergence.
+    pub(super) fn arrow_out_of_field(&mut self, event: &KeyEvent) -> Option<KeyAction> {
+        let down = match event.key {
+            Key::DownArrow => true,
+            Key::UpArrow => false,
+            _ => return None,
+        };
+        if !self.settings.auto_forms_mode || !event.modifiers.is_empty() {
+            return None;
+        }
+        let field = self
+            .last_page_focus
+            .and_then(|id| self.cursor.buffer.node(id))
+            .filter(|n| n.role == Role::Edit)
+            .map(|n| n.id)?;
+        let context = self.last_text.as_ref()?;
+        let at_edge = if down {
+            context.caret >= context.text.chars().count()
+        } else {
+            context.caret == 0
+        };
+        if !at_edge {
+            return None;
+        }
+        self.forms_mode = false;
+        let _ = self.cursor.exit_forms_mode();
+        self.cursor.move_to_node_id(field);
+        let speech = if down {
+            self.cursor.move_next_line()
+        } else {
+            self.cursor.move_prior_line()
+        };
+        // The line reached may be a field itself.
+        let speech = self.arrow_onto_field().or(speech);
+        if let Some(text) = speech.as_deref().filter(|t| !t.is_empty()) {
+            self.speech.speak(text, true);
+        }
+        Some(KeyAction::Consume)
     }
 
     /// The character Say Character reads: the caret's in a text field, the virtual cursor's

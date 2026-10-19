@@ -37,11 +37,14 @@ and per-application and per-site settings. Those are not repeated here.
 
 ## Forms and browse mode
 
-- **Forms with Up and Down in browse mode** (the owner's request, 2026-10-18; not started).
-  Okur may say form fields differently from JAWS when arrowing through them. Record JAWS on the
-  form fixtures (`forms-interaction.html`, `signup-form.html`, `web-app-patterns.html`), every
-  field, group and form boundary. Then real pages with forms that need no sign-in. GitHub's new
-  issue form needs one: never sign in or submit. Capture snapshots, check privacy, then compare.
+- **Forms with Up and Down in browse mode** (the owner's request, 2026-10-18).
+  - Recorded: 201, 278 and 279 with Auto Forms Mode off; 280 with it on.
+  - Done: with Auto Forms Mode on, an arrow onto an edit field focuses it and turns forms mode
+    on; Up or Down at the caret's edge leaves the field for the next line.
+  - Recording now: 282-285 (Up into fields, fields with text, Tab then arrows, a text area's
+    lines).
+  - Open: real pages with forms that need no sign-in. GitHub's new issue form needs one: never
+    sign in or submit.
 - **204/s1:** "blank" after a required field on the first Tab; JAWS says it in some trials only.
   Re-record with the speech recorder voice.
 - **205/s6:** after Space on a radio button, JAWS repeated its position ("2 of 3") in the old

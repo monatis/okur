@@ -125,6 +125,30 @@ A step can be in more than one entry; all of its entries apply.
   keys (Down, Ctrl+A, Escape) act in that viewer, not in the field, and those steps differ too.
 - Proposed by the parity gap audit; accepted by the owner, 2026-10-19.
 
+### "Required" for a field that is not required (Auto Forms Mode)
+
+- Step: `280-web-forms-arrows-auto-forms/s7`.
+- Difference: the whole step. JAWS says "Email address Edit Required | sam@example.com"; Okur
+  says it without "Required".
+- Why: with Auto Forms Mode on, Down onto the sign-up form's email field said "Required" in
+  all three trials. Nothing makes that field required: it has no `required` attribute, and the
+  trace's focus says UIA's IsRequiredForForm and ARIA's required are both false. JAWS's Tab
+  onto the same field (204/s2) does not say it. It is a wrong fact.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-18.
+
+### Down out of a text area jumps to the page's end (Auto Forms Mode)
+
+- Steps: `280-web-forms-arrows-auto-forms/s21`, `280-web-forms-arrows-auto-forms/s22`,
+  `280-web-forms-arrows-auto-forms/s23`, `280-web-forms-arrows-auto-forms/s24`,
+  `280-web-forms-arrows-auto-forms/s25`, `280-web-forms-arrows-auto-forms/s26`.
+- Difference: the whole step. JAWS says "main region end" six times; Okur reads the check
+  boxes, the link and the buttons that follow the text area.
+- Why: Down out of the empty text area took JAWS to the page's last line, skipping six lines,
+  and Up from there read them (s29–s33). JAWS's documentation has the arrow leave a field for
+  the page's next line ("Using Forms with JAWS", Surf's Up), which JAWS did for the other
+  fields (s6, s9, s12) and Okur does here too.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-18.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row

@@ -170,6 +170,27 @@ divergences! {
      shows it in the Virtual Viewer as JAWS does when it finds a font, so the scenario's later \
      keys act in the viewer, not the field.",
     "proposed by the parity gap audit, accepted by the owner, 2026-10-19";
+
+    Difference::Step => ["280-web-forms-arrows-auto-forms/s7"],
+    "With Auto Forms Mode, Down onto the email field said it \"Required\" in every trial, \
+     though nothing makes it required (no required attribute; UIA's IsRequiredForForm and \
+     ARIA's required are false in the trace), and JAWS's Tab onto it (204/s2) does not: a \
+     wrong fact. Okur says the field without it.",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
+
+    Difference::Step => [
+        "280-web-forms-arrows-auto-forms/s21",
+        "280-web-forms-arrows-auto-forms/s22",
+        "280-web-forms-arrows-auto-forms/s23",
+        "280-web-forms-arrows-auto-forms/s24",
+        "280-web-forms-arrows-auto-forms/s25",
+        "280-web-forms-arrows-auto-forms/s26",
+    ],
+    "With Auto Forms Mode, Down out of the empty text area went to the page's last line, \
+     \"main region end\", skipping the check boxes, the link and the buttons after it; Up from \
+     there read them (s29-s33). JAWS's documentation has the arrow leave the field for the \
+     page's next line (Surf's Up, \"Using Forms with JAWS\"), which Okur does.",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
 }
 
 /// The divergence covering `step`, if any.

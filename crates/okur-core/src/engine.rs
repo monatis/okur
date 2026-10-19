@@ -80,6 +80,9 @@ pub struct ScreenReaderEngine {
     option_list: Option<String>,
     /// The option of that list said last, which a repeated focus does not say again.
     option_said: Option<String>,
+    /// The field an arrow put the focus on (Auto Forms Mode), already said: its focus event
+    /// is not said again.
+    arrow_focus: Option<usize>,
     /// The page's application region (ARIA role "application") the focus is in, by name:
     /// every key goes to the page there, Escape too.
     web_application: Option<String>,
@@ -187,6 +190,7 @@ impl ScreenReaderEngine {
             page_stale: false,
             option_list: None,
             option_said: None,
+            arrow_focus: None,
             web_application: None,
             page_focus_is_field: false,
             last_native_focus: None,
@@ -418,6 +422,9 @@ impl ScreenReaderEngine {
                     self.edit_key_feedback(event);
                 }
                 return KeyAction::PassThrough;
+            }
+            if let Some(action) = self.arrow_out_of_field(event) {
+                return action;
             }
             if event.key == Key::Escape {
                 self.forms_mode = false;
