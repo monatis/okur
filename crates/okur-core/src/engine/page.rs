@@ -74,7 +74,9 @@ impl ScreenReaderEngine {
         // A page is known by its address, by its title when it has none: a title can change
         // on the page (WhatsApp's counts unread chats, "(8) WhatsApp"), and JAWS keeps its
         // place then (dev box, 2026-10-17).
-        if self.is_page_in_front(title, buffer.document_url()) {
+        // After Ctrl+R or F5 the same page is loaded anew, and announced [obs, 507/s1].
+        let reloaded = std::mem::take(&mut self.reload_asked);
+        if self.is_page_in_front(title, buffer.document_url()) && !reloaded {
             // Applied once the events of this change are handled: several live regions can
             // change at once, and each is compared with the page before the change
             // [obs, 206/s2].
@@ -98,13 +100,57 @@ impl ScreenReaderEngine {
         self.load_buffer(buffer);
         self.app_mode = AppMode::VirtualBuffer;
         self.last_window_title = Some(title.to_owned());
-        let welcome = format!(
-            "{}  \u{001d} {} \u{001e}",
-            title,
-            msg::role_virtual_pc_cursor()
-        );
-        self.speech.speak(&welcome, true);
-        Some(welcome)
+        // JAWS on a page load: the page's title, its summary, then Say All from the top, its
+        // "Automatically read pages when loaded" being on by default [obs, 507/s1, 538/s1,
+        // 539/s1]. JAWS's Smart Glance sentence after the summary is not Okur's.
+        let said = [
+            format!("{title}  \u{1d} {} \u{1e}", msg::role_document()),
+            self.page_summary(),
+        ];
+        for (i, part) in said.iter().enumerate() {
+            self.speech.speak(part, i == 0);
+        }
+        let reading = self.start_page_say_all().unwrap_or_default();
+        Some(
+            said.into_iter()
+                .chain(std::iter::once(reading))
+                .filter(|s| !s.is_empty())
+                .collect::<Vec<_>>()
+                .join("\n"),
+        )
+    }
+
+    /// The page's summary as JAWS says it when the page loads: "Page has 5Regions, 5headings and
+    /// 12links", "Page has 1heading and no links" with no regions [obs, 538/s1, 539/s1].
+    fn page_summary(&self) -> String {
+        fn count(node: &AomNode, counts: &mut (usize, usize, usize)) {
+            match node.role {
+                Role::Landmark { .. } => counts.0 += 1,
+                Role::Heading { .. } => counts.1 += 1,
+                Role::Link { .. } => counts.2 += 1,
+                _ => {}
+            }
+            for child in &node.children {
+                count(child, counts);
+            }
+        }
+        let mut counts = (0, 0, 0);
+        if let Some(page) = self.cursor.buffer.page() {
+            count(page, &mut counts);
+        }
+        let (regions, headings, links) = counts;
+        let headings = msg::page_load_headings(headings).to_string();
+        let links = msg::page_load_links(links).to_string();
+        if regions == 0 {
+            msg::page_load_summary_two(headings, links).to_string()
+        } else {
+            msg::page_load_summary_three(
+                msg::page_load_regions(regions).to_string(),
+                headings,
+                links,
+            )
+            .to_string()
+        }
     }
 
     /// The node of the line under the virtual cursor. Borrowed: a list's line is the whole

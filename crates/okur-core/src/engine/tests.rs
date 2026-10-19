@@ -908,7 +908,8 @@ fn test_engine_dynamic_document_loaded_and_virtual_pc_cursor_navigation() {
         .handle_accessibility_event(&load_event)
         .unwrap_or_default();
     assert!(announcement.contains("ALTAI - Model and Agent Platform"));
-    assert!(announcement.contains("Virtual PC Cursor"));
+    // JAWS's summary of the page follows its title [obs, 539/s1].
+    assert!(announcement.contains("Page has 1heading and 1link"));
     assert_eq!(engine.app_mode, AppMode::VirtualBuffer);
 
     // Now in VirtualBuffer mode: Down Arrow navigates virtual lines and consumes

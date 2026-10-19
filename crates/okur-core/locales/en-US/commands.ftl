@@ -115,3 +115,23 @@ default-button-is = default button is { $name }
 no-hot-key = no hot key
 # Shift+Numpad5 in a dialog box, after the control's name: its letter as the label writes it.
 hot-key-in-dialog = alt+{ $letter }
+
+## When a page loads: its summary, before Say All reads it [obs, 507/s1, 538/s1, 539/s1]
+
+# A page's regions, headings and links, the number run into the word as JAWS says it.
+page-load-regions = { $count ->
+    [one] { $count }Region
+   *[other] { $count }Regions
+}
+page-load-headings = { $count ->
+    [0] no headings
+    [one] { $count }heading
+   *[other] { $count }headings
+}
+page-load-links = { $count ->
+    [0] no links
+    [one] { $count }link
+   *[other] { $count }links
+}
+page-load-summary-two = Page has { $first } and { $second }
+page-load-summary-three = Page has { $first }, { $second } and { $third }

@@ -71,5 +71,3 @@ role-tree-view = Tree view
 role-tree-view-viewer = tree view
 # A tree item's depth, said where its role would be.
 role-tree-level = level { $level }
-# Said after a page's title as it loads: the cursor that reads it.
-role-virtual-pc-cursor = Virtual PC Cursor

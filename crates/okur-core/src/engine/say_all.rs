@@ -34,19 +34,33 @@ impl ScreenReaderEngine {
     /// Starts reading from the virtual cursor's line to the end of the page.
     pub(super) fn start_say_all(&mut self) -> Option<String> {
         let line = self.cursor.current_line_index();
-        self.begin_say_all(line, None)
+        self.begin_say_all(line, None, true)
     }
 
     /// Starts reading a text field from the caret's line to its end, the caret following.
     pub(super) fn start_field_say_all(&mut self) -> Option<String> {
         let lines = crate::editing::lines_from_caret(self.last_text.as_ref()?);
-        self.begin_say_all(0, Some(lines))
+        self.begin_say_all(0, Some(lines), true)
+    }
+
+    /// A page just loaded is read from its top, behind what was said of it (its title and
+    /// summary): JAWS's "Automatically read pages when loaded", on by default [obs, 507/s1].
+    /// Without the synthesizer's progress the cursor stays at the top: nobody has heard the
+    /// page's end.
+    pub(super) fn start_page_say_all(&mut self) -> Option<String> {
+        self.cursor.move_to_start();
+        let said = self.begin_say_all(0, None, false);
+        if self.say_all.is_none() {
+            self.cursor.move_to_start();
+        }
+        said
     }
 
     fn begin_say_all(
         &mut self,
         line: usize,
         field: Option<Vec<(usize, String)>>,
+        interrupt: bool,
     ) -> Option<String> {
         let mut reading = SayAll {
             queued: VecDeque::new(),
@@ -56,7 +70,7 @@ impl ScreenReaderEngine {
         };
         let progress = self.speech.reports_marks();
         let ahead = if progress { AHEAD + 1 } else { usize::MAX };
-        let said = self.hand_over(&mut reading, ahead, true);
+        let said = self.hand_over(&mut reading, ahead, interrupt);
         if progress {
             self.say_all = Some(reading);
         } else if let (Some(&(_, last)), None) = (reading.queued.back(), &reading.field) {

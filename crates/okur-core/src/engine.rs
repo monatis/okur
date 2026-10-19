@@ -159,6 +159,9 @@ pub struct ScreenReaderEngine {
     /// The Window List while it is open, and whether its windows were asked for and not come.
     window_list: Option<crate::ui::windows::WindowListDialog>,
     window_list_asked: bool,
+    /// Ctrl+R or F5 was pressed in a page: its next load is a new one, announced, not a
+    /// capture of the page again [obs, 507/s1].
+    reload_asked: bool,
     /// JAWS Find's check boxes and direction, kept between openings.
     find_options: crate::ui::find::FindOptions,
     /// JAWS Find's searches, the latest first, by site ("" for every site).
@@ -257,6 +260,7 @@ impl ScreenReaderEngine {
             find_dialog: None,
             window_list: None,
             window_list_asked: false,
+            reload_asked: false,
             find_options: crate::ui::find::FindOptions::default(),
             find_histories: std::collections::HashMap::new(),
             quiet_focus_until: None,
@@ -339,6 +343,15 @@ impl ScreenReaderEngine {
         }
         let resolved = self.settings.keyboard.resolve(event);
         let event = &resolved;
+        if self.app_mode == AppMode::VirtualBuffer {
+            let m = &event.modifiers;
+            let plain = !m.alt && !m.shift && !m.insert && !m.win;
+            if plain
+                && ((m.ctrl && event.key == Key::Alpha('R')) || (!m.ctrl && event.key == Key::F(5)))
+            {
+                self.reload_asked = true;
+            }
+        }
         self.last_typed = event.text;
         self.edit_read_in_console = false;
         self.last_key_tabs = event.key == Key::Tab && !event.modifiers.ctrl && !event.modifiers.alt;
