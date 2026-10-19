@@ -321,7 +321,9 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
             // The position the application reports: File Explorer's tab, "docs Tab | selected |
             // 1 of 1" (dev box, 2026-10-17); a WinForms tab reports none (303/s12).
             lines.extend(position(focus));
-            lines.push(Line::of(PartKind::Hint, msg::hint_switch_pages()));
+            if !focus.in_ribbon {
+                lines.push(Line::of(PartKind::Hint, msg::hint_switch_pages()));
+            }
         }
         // File Explorer (JAWS on the dev box, 2026-10-17): a column header, "Name split button";
         // the address bar's breadcrumb, "This PC split button | 1 of 6", the position it

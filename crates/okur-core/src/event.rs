@@ -138,6 +138,10 @@ pub struct FocusEvent {
     /// A list-view item's column headers, in order ("Name", "Size") [obs, 514/s5].
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub column_headers: Vec<String>,
+    /// The focus is on a ribbon (a NetUI ribbon: WordPad's, Paint's), whose tabs JAWS reads
+    /// without a property sheet's page hint [obs, 523/s2, s3].
+    #[serde(default)]
+    pub in_ribbon: bool,
     /// The focused element is inside a browser document (its focus chain has a document).
     pub in_document: bool,
     /// The element's DOM id, when it is in a document and has one.
@@ -289,6 +293,7 @@ impl FocusEvent {
             groups: Vec::new(),
             columns: Vec::new(),
             column_headers: Vec::new(),
+            in_ribbon: false,
             in_document: false,
             dom_id: None,
             unique_id: None,

@@ -684,6 +684,9 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
                 .with_name(object.name.clone().unwrap_or_default()),
         );
     }
+    if let Some(focus) = netui_focus(event) {
+        return Some(focus);
+    }
     // The recorded window text belongs to the focused HWND (an edit's text is its content);
     // the window the user is in is the outermost element of the focus chain.
     // The active window is the innermost window in the chain (the focus itself, when a window
@@ -1276,6 +1279,56 @@ fn live_region_events(event: &TraceEvent) -> Vec<okur_core::AccessibilityEvent> 
         });
     }
     events
+}
+
+/// The focus in a NetUI window (WordPad's and Paint's ribbon, `NetUIHWND`), read from the
+/// event's MSAA object: UI Automation stops at the ribbon's host pane, so every tab and button
+/// came as the same "Ribbon" pane and was said once (523/s2, s3), where the MSAA object names
+/// the tab ("View", a page tab, selected). `None` where UI Automation has the element itself.
+fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
+    use okur_core::Role;
+    const PAGETAB: i32 = 0x25;
+    const PUSHBUTTON: i32 = 0x2B;
+    const CHECKBUTTON: i32 = 0x2C;
+    const RADIOBUTTON: i32 = 0x2D;
+    const COMBOBOX: i32 = 0x2E;
+    const BUTTONDROPDOWN: i32 = 0x38;
+    const SPLITBUTTON: i32 = 0x3E;
+    const SELECTED: u32 = 0x2;
+    if event.window_class.as_deref() != Some("NetUIHWND") {
+        return None;
+    }
+    let object = event.object.as_ref()?;
+    let name = object
+        .name
+        .as_deref()
+        .map(str::trim)
+        .filter(|n| !n.is_empty())?;
+    let uia_has_it = event
+        .focus_chain
+        .last()
+        .is_some_and(|f| f.name.as_deref() == Some(name));
+    if uia_has_it {
+        return None;
+    }
+    let role = match object.role? {
+        PAGETAB => Role::Tab,
+        PUSHBUTTON => Role::Button,
+        CHECKBUTTON => Role::CheckBox,
+        RADIOBUTTON => Role::RadioButton,
+        COMBOBOX => Role::ComboBox,
+        BUTTONDROPDOWN | SPLITBUTTON => Role::SplitButton,
+        _ => return None,
+    };
+    let tab = role == Role::Tab;
+    let mut focus = okur_core::FocusEvent::new(role).with_name(name.to_owned());
+    if tab {
+        focus.states.selected = Some(object.states & SELECTED != 0);
+    }
+    apply_msaa_states(&mut focus, object.states);
+    focus.app = event.process.clone();
+    focus.in_ribbon = true;
+    Some(focus)
 }
 
 /// Updates the states a change can carry from MSAA state bits (`STATE_SYSTEM_*`).
