@@ -436,6 +436,62 @@ impl VirtualCursor {
         }
     }
 
+    /// N and Shift+N (Insert+Enter, Insert+Shift+Enter): to text that follows a link, past the
+    /// links. Text before a link in the same paragraph belongs to the links, and the page's
+    /// structure (region and list lines) is passed over: JAWS stops on the heading after a
+    /// navigation list, on " and more text after it." past "Some text with" and its link, and
+    /// on " or call." past "Write to" and its link [obs, 289/s1-s3]. With no further text, N
+    /// reads the line it is on again [obs, 289/s4-s6]; Shift+N before the first goes to the top
+    /// [obs, 289/s9].
+    pub fn move_to_non_link_text(&mut self, forward: bool) -> String {
+        self.selection = None;
+        let here = self.current_line_index();
+        let targets = self.non_link_text_lines();
+        let target = if forward {
+            targets.iter().find(|&&i| i > here)
+        } else {
+            targets.iter().rfind(|&&i| i < here)
+        };
+        match (target, forward) {
+            (Some(&line), _) => self.move_to_line(line),
+            (None, false) => self.move_to_line(0),
+            (None, true) => {}
+        }
+        self.current_line()
+    }
+
+    /// The lines N stops on, in order.
+    fn non_link_text_lines(&self) -> Vec<usize> {
+        let lines = &self.buffer.lines;
+        let parent = |line: &BufferLine| {
+            self.buffer
+                .ancestors(line.node_id)
+                .first()
+                .map(|parent| parent.id)
+        };
+        let mut targets = Vec::new();
+        let mut after_link = false;
+        for (index, line) in lines.iter().enumerate() {
+            match line.role {
+                Role::Link { .. } => after_link = true,
+                // The page's own line and the lines that open and close regions, lists and
+                // tables are not text.
+                Role::Document | Role::Landmark { .. } | Role::List | Role::Table => {}
+                _ if after_link => {
+                    let before_a_link = lines.get(index + 1).is_some_and(|next| {
+                        matches!(next.role, Role::Link { .. }) && parent(next) == parent(line)
+                    });
+                    if !before_a_link {
+                        targets.push(index);
+                        after_link = false;
+                    }
+                }
+                _ => {}
+            }
+        }
+        targets
+    }
+
     /// Speaks current line without moving cursor (`SayLine`).
     pub fn current_line(&self) -> String {
         if let Some(line) = self.buffer.line_at_offset(self.offset) {

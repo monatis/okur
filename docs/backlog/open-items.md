@@ -59,7 +59,7 @@ for it, and Okur's status. Scenarios 289-299 record the gaps on old-pc; `virtual
 is their new fixture.
 
 Order of work, most used first:
-1. N and Shift+N, Insert+Enter: non-link text (289).
+1. N and Shift+N, Insert+Enter: non-link text (289). Done 2026-10-19.
 2. P and Shift+P, the sentence keys, Ctrl+Numpad5, Say from and to Cursor (291).
 3. S and D, Ctrl+Insert+arrows: same and different element (290).
 4. Alt+Insert+Home and End, Ctrl+Alt+Insert+1..6: first and last heading (295). Ctrl+Insert+Home

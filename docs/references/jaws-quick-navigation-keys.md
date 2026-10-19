@@ -47,7 +47,7 @@ the Say All command".
 | K | MoveToNextPlaceMarker | PlaceMarker | bound; PlaceMarkers not built | helper dialogs plan |
 | L | MoveToNextList | List | built | |
 | M | MoveToNextFrame | Frame | bound | |
-| N | MoveToNextNonLinkText | Non-link Text | gap | 289 |
+| N | MoveToNextNonLinkText | Non-link Text | built | 289 |
 | O | MoveToNextArticle | Article Region | built | |
 | P | SayNextParagraph | Paragraph | gap | 291 |
 | Q | MoveToMainRegion (Shift+Q too) | Main Region | built | |
@@ -73,7 +73,7 @@ the Say All command".
 
 | Keys | JAWS command | Okur | Scenario |
 |---|---|---|---|
-| Insert+Enter, Insert+Shift+Enter | MoveToNext/PriorNonLinkText | gap | 289 |
+| Insert+Enter, Insert+Shift+Enter | MoveToNext/PriorNonLinkText | built | 289 |
 | Ctrl+Insert+Right / Left | MoveToNext/PriorDifferentElement | gap | 290 |
 | Ctrl+Insert+Up | MoveToPriorSameElement | gap | 290 |
 | Alt+Insert+Home / End | MoveToFirstHeading / moveToLastHeading | gap | 295 |

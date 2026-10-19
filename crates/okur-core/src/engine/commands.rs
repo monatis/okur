@@ -229,6 +229,8 @@ impl ScreenReaderEngine {
             Command::MoveToNext(element) => self.move_to_element(*element, true),
             Command::MoveToPrior(element) => self.move_to_element(*element, false),
             Command::MoveToMainRegion => self.cursor.move_to_main_region(),
+            Command::NextNonLinkText => Some(self.cursor.move_to_non_link_text(true)),
+            Command::PriorNonLinkText => Some(self.cursor.move_to_non_link_text(false)),
 
             // Tables
             Command::TableCellRight => self.cursor.move_table_cell_right(),

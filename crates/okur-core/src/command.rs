@@ -69,6 +69,10 @@ pub enum Command {
     MoveToNext(Element),
     MoveToPrior(Element),
     MoveToMainRegion,
+    /// N and Insert+Enter: the next text after a link (JAWS's MoveToNextNonLinkText).
+    NextNonLinkText,
+    /// Shift+N and Insert+Shift+Enter: the prior one.
+    PriorNonLinkText,
 
     // Tables.
     TableCellRight,
@@ -198,6 +202,8 @@ impl Command {
             "^{END}" | "BottomOfFile" => BottomOfFile,
 
             "H" | "h" | "MoveToNextHeading" => MoveToNext(Heading),
+            "N" | "n" | "MoveToNextNonLinkText" | "Insert+Enter" => NextNonLinkText,
+            "Shift+N" | "MoveToPriorNonLinkText" | "Insert+Shift+Enter" => PriorNonLinkText,
             "+H" | "+h" | "MoveToPriorHeading" => MoveToPrior(Heading),
             "1" | "MoveToNextHeadingLevelOne" => MoveToNext(HeadingLevel(1)),
             "2" | "MoveToNextHeadingLevelTwo" => MoveToNext(HeadingLevel(2)),
@@ -614,6 +620,14 @@ static BINDINGS: &[Binding] = &{
         // Quick navigation: the key moves to the next, Shift with it to the prior.
         bind(Alpha('H'), SHIFT, MoveToPrior(Heading)),
         bind(Alpha('H'), ALONE, MoveToNext(Heading)),
+        bind(Alpha('N'), SHIFT, PriorNonLinkText),
+        bind(Alpha('N'), ALONE, NextNonLinkText),
+        bind(
+            Key::Enter,
+            ANY.insert(Yes).shift(Yes).ctrl(No).alt(No),
+            PriorNonLinkText,
+        ),
+        bind(Key::Enter, JAWS, NextNonLinkText),
         bind(Alpha('T'), SHIFT, MoveToPrior(Table)),
         bind(Alpha('T'), ALONE, MoveToNext(Table)),
         bind(Alpha('K'), SHIFT, MoveToPrior(PlaceMarker)),
