@@ -16,6 +16,7 @@ pub mod live_text;
 pub mod messages;
 pub mod native_focus;
 pub mod pronounce;
+pub mod retire;
 pub mod settings;
 pub mod settings_layers;
 pub mod speech;

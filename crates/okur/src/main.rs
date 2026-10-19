@@ -971,17 +971,23 @@ async fn main() {
                             Err(_) => None,
                         };
                         // A page's buffer is built before the engine is taken: on a big page
-                        // that takes long, and the keyboard hook waits on the engine.
-                        let page = match &event {
+                        // that takes long, and the keyboard hook waits on the engine. The
+                        // buffer keeps the page the event brought, without a copy.
+                        let mut event = event;
+                        let page = match &mut event {
                             Some(AccessibilityEvent::DocumentLoaded { title, root }) => {
                                 let started = std::time::Instant::now();
-                                let buffer = VirtualBuffer::from_aom(root);
+                                let root = std::mem::replace(
+                                    root,
+                                    okur_core::AomNode::new(0, okur_core::Role::Document),
+                                );
+                                let buffer = VirtualBuffer::from_aom_owned(root);
                                 tracing::debug!(
                                     lines = buffer.lines.len(),
                                     ms = started.elapsed().as_millis(),
                                     "page buffer built"
                                 );
-                                Some((title.as_str(), buffer))
+                                Some((std::mem::take(title), buffer))
                             }
                             _ => None,
                         };
@@ -992,7 +998,7 @@ async fn main() {
                             let started = std::time::Instant::now();
                             let spoken = match (&event, page) {
                                 (_, Some((title, buffer))) => {
-                                    eng.handle_document_loaded(title, buffer)
+                                    eng.handle_document_loaded(&title, buffer)
                                 }
                                 (Some(event), None) => eng.handle_accessibility_event(event),
                                 (None, None) => eng.on_idle(),

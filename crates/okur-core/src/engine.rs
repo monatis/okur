@@ -234,7 +234,10 @@ impl ScreenReaderEngine {
 
     /// Replaces the active document buffer and resets the cursor.
     pub fn load_buffer(&mut self, buffer: VirtualBuffer) {
-        self.cursor = VirtualCursor::new(buffer);
+        crate::retire::retire(std::mem::replace(
+            &mut self.cursor,
+            VirtualCursor::new(buffer),
+        ));
         self.cursor.move_to_start();
         self.forms_mode = false;
         self.active_element_list = None;

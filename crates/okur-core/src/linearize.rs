@@ -196,6 +196,10 @@ struct Builder<'a> {
     document_url: Option<&'a str>,
     /// Per line: whether a paragraph ends after it (§25).
     paragraph_ends: Vec<bool>,
+    /// Attributes the buffer adds to page nodes (a link to the same page, a radio button's
+    /// group), as (node id, name, value): set on the page once the visit is over, since the
+    /// page is only the buffer's then.
+    annotations: Vec<(usize, &'static str, String)>,
 }
 
 impl<'a> Builder<'a> {
@@ -211,6 +215,7 @@ impl<'a> Builder<'a> {
             tablists: Vec::new(),
             document_url,
             paragraph_ends: Vec::new(),
+            annotations: Vec::new(),
         }
     }
 
@@ -674,11 +679,9 @@ impl<'a> Builder<'a> {
             None if same_page => msg::role_link_same_page().as_str(),
             None => msg::role_link().as_str(),
         };
-        if same_page {
-            if let Some(n) = self.buffer.node_mut(node.id) {
-                n.attributes
-                    .insert("same_page".to_owned(), "true".to_owned());
-            }
+        if same_page && self.buffer.contains_node(node.id) {
+            self.annotations
+                .push((node.id, "same_page", "true".to_owned()));
         }
         // aria-current follows the role: "‹ Link › ‹Current Page› README".
         let current = node.current_phrase().map(state_marker).unwrap_or_default();
@@ -734,12 +737,8 @@ impl<'a> Builder<'a> {
             if let Some((group_id, group_name)) = self.groups.last() {
                 let (group_id, group_name) = (group_id.to_string(), group_name.clone());
                 self.buffer.mark_readable(node.id);
-                if let Some(annotated) = self.buffer.node_mut(node.id) {
-                    annotated.attributes.insert("group_id".to_owned(), group_id);
-                    annotated
-                        .attributes
-                        .insert("group_name".to_owned(), group_name);
-                }
+                self.annotations.push((node.id, "group_id", group_id));
+                self.annotations.push((node.id, "group_name", group_name));
             }
         }
         // Flush first: an inline label in the same block is still pending in the run.
@@ -1221,9 +1220,28 @@ fn paragraphs(lines: &[BufferLine], ends: &[bool]) -> Vec<BufferParagraph> {
 
 /// Builds the virtual buffer for `root` (a document, or any subtree).
 pub fn build(root: &AomNode) -> VirtualBuffer {
+    build_owned(root.clone())
+}
+
+/// Builds the virtual buffer for `root`, which the buffer keeps as its page: no copy of it is
+/// made. A page spliced after a change was copied twice per part (responsiveness review,
+/// 2026-10-19).
+pub fn build_owned(root: AomNode) -> VirtualBuffer {
+    let (mut buffer, annotations) = visit_page(&root);
+    buffer.set_page(root);
+    for (id, name, value) in annotations {
+        if let Some(node) = buffer.node_mut(id) {
+            node.attributes.insert(name.to_owned(), value);
+        }
+    }
+    buffer
+}
+
+/// The buffer's lines and indexes for `root`, and the attributes to add to its nodes.
+fn visit_page(root: &AomNode) -> (VirtualBuffer, Vec<(usize, &'static str, String)>) {
     let document_url = attr(root, "url");
     let mut builder = Builder::new(document_url);
-    builder.buffer.set_page(root.clone());
+    builder.buffer.root_id = Some(root.id);
     builder.buffer.mark_readable(root.id);
 
     // §1: line 0 is the page title.
@@ -1257,7 +1275,7 @@ pub fn build(root: &AomNode) -> VirtualBuffer {
         }
     }
     buffer.words = words;
-    buffer
+    (buffer, builder.annotations)
 }
 
 #[cfg(test)]

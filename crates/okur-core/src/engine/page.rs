@@ -59,10 +59,14 @@ impl ScreenReaderEngine {
             // Applied once the events of this change are handled: several live regions can
             // change at once, and each is compared with the page before the change
             // [obs, 206/s2].
-            self.pending_page = Some(buffer);
+            if let Some(old) = self.pending_page.replace(buffer) {
+                crate::retire::retire(old);
+            }
             return None;
         }
-        self.pending_page = None;
+        if let Some(old) = self.pending_page.take() {
+            crate::retire::retire(old);
+        }
         self.page_stale = false;
         self.last_page_focus = None;
         self.focus_table_unsaid = false;
@@ -163,7 +167,7 @@ impl ScreenReaderEngine {
                 node.value = control.value.clone();
             }
         })?;
-        self.cursor.buffer = rebuilt;
+        crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, rebuilt));
         self.cursor.move_to_node_id(id);
         self.speech.speak(&speech, true);
         Some(speech)
@@ -269,26 +273,26 @@ impl ScreenReaderEngine {
         if let Some(id) = focus.node_id.filter(|id| buffer.contains_node(*id)) {
             return Some(id);
         }
+        // The live object, then the DOM id, from the buffer's indexes (each the smallest id
+        // with it); then a node of the focus's role and name.
+        if let Some(id) = focus
+            .unique_id
+            .as_deref()
+            .and_then(|object| buffer.node_with_object(object))
+        {
+            return Some(id);
+        }
+        if let Some(id) = focus
+            .dom_id
+            .as_deref()
+            .and_then(|dom_id| buffer.node_with_dom_id_indexed(dom_id))
+        {
+            return Some(id);
+        }
+        let name = focus.name.as_deref()?;
         let mut ids: Vec<usize> = buffer.node_ids().collect();
         ids.sort_unstable();
         let node = |id: &usize| buffer.node(*id);
-        if let Some(object) = focus.unique_id.as_deref() {
-            if let Some(id) = ids.iter().find(|id| {
-                node(id).is_some_and(|n| {
-                    n.attributes.get(UNIQUE_ID_ATTR).map(String::as_str) == Some(object)
-                })
-            }) {
-                return Some(*id);
-            }
-        }
-        if let Some(dom_id) = focus.dom_id.as_deref() {
-            if let Some(id) = ids.iter().find(|id| {
-                node(id).is_some_and(|n| n.attributes.get("id").map(String::as_str) == Some(dom_id))
-            }) {
-                return Some(*id);
-            }
-        }
-        let name = focus.name.as_deref()?;
         ids.into_iter().find(|id| {
             node(id).is_some_and(|n| {
                 same_role(&n.role, &focus.role)
@@ -379,7 +383,11 @@ impl ScreenReaderEngine {
         }
         let base = self.pending_page.as_ref().unwrap_or(&self.cursor.buffer);
         match base.with_subtree_replaced(part) {
-            Some(buffer) => self.pending_page = Some(buffer),
+            Some(buffer) => {
+                if let Some(old) = self.pending_page.replace(buffer) {
+                    crate::retire::retire(old);
+                }
+            }
             None => {
                 if let Some(actions) = &self.actions {
                     actions.page_changed(true);
@@ -437,7 +445,7 @@ impl ScreenReaderEngine {
                         n.name.clone(),
                     )
                 });
-            self.cursor.buffer = buffer;
+            crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, buffer));
             // Node ids are the capture's own: the focus is found again as the same object (IA2
             // captures), else by its DOM id, else as the focused node with its role and name,
             // else by its state alone. A page can
@@ -448,16 +456,7 @@ impl ScreenReaderEngine {
             self.last_page_focus = old_focus
                 .as_ref()
                 .and_then(|(object, ..)| object.as_deref())
-                .and_then(|object| {
-                    buffer
-                        .nodes()
-                        .find(|n| {
-                            n.attributes
-                                .get(UNIQUE_ID_ATTR)
-                                .is_some_and(|o| o == object)
-                        })
-                        .map(|n| n.id)
-                })
+                .and_then(|object| buffer.node_with_object(object))
                 .or_else(|| {
                     let dom_id = old_focus.as_ref()?.1.as_deref()?;
                     buffer.node_with_dom_id(dom_id)
@@ -810,12 +809,8 @@ fn same_line(buffer: &VirtualBuffer, text: &str, near: usize) -> Option<usize> {
 /// The line of the object with IA2 uniqueID `object`, preferring one with `text` (an object
 /// can have several lines), as its start offset and length.
 fn same_object_line(buffer: &VirtualBuffer, object: &str, text: &str) -> Option<(usize, usize)> {
-    let mut lines = buffer.lines.iter().filter(|line| {
-        buffer
-            .node(line.node_id)
-            .and_then(|n| n.attributes.get(UNIQUE_ID_ATTR))
-            .is_some_and(|id| id == object)
-    });
+    let id = buffer.node_with_object(object)?;
+    let mut lines = buffer.lines.iter().filter(|line| line.node_id == id);
     let first = lines.next()?;
     let line = std::iter::once(first)
         .chain(lines)

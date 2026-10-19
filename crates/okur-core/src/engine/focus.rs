@@ -460,7 +460,7 @@ impl ScreenReaderEngine {
                             }
                         }
                     }) {
-                        self.cursor.buffer = rebuilt;
+                        crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, rebuilt));
                     }
                 }
             }

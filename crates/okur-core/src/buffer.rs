@@ -233,6 +233,12 @@ pub struct VirtualBuffer {
     slot_of: HashMap<usize, usize>,
     /// The page nodes the buffer reads; hidden ones are not.
     readable: HashSet<usize>,
+    /// Each IA2 uniqueID's page node (the smallest id, where a page repeats one), so a node
+    /// is found again in a page captured again without walking it: that walk ran in the
+    /// keyboard hook (responsiveness review, 2026-10-19).
+    objects: HashMap<String, usize>,
+    /// Each DOM id's page node, likewise.
+    dom_ids: HashMap<String, usize>,
 }
 
 /// A page node's place: its parent's slot (none for the page itself) and its index among
@@ -247,6 +253,11 @@ impl VirtualBuffer {
     /// Creates a VirtualBuffer from an AOM root node.
     pub fn from_aom(root: &AomNode) -> Self {
         crate::linearize::build(root)
+    }
+
+    /// Creates a VirtualBuffer from an AOM root node it keeps, without copying it.
+    pub fn from_aom_owned(root: AomNode) -> Self {
+        crate::linearize::build_owned(root)
     }
 
     /// The buffer rebuilt from its page with one node changed, as when the page reports a
@@ -264,7 +275,7 @@ impl VirtualBuffer {
         }
         let mut root = self.page.clone()?;
         change(find(&mut root, node_id)?);
-        Some(VirtualBuffer::from_aom(&root))
+        Some(VirtualBuffer::from_aom_owned(root))
     }
 
     /// The buffer rebuilt from its page with one part read again: `subtree` replaces the node
@@ -295,15 +306,15 @@ impl VirtualBuffer {
         let mut replacement = subtree.clone();
         renumber(&mut replacement, &mut next);
         *find(&mut root, object)? = replacement;
-        Some(VirtualBuffer::from_aom(&root))
+        Some(VirtualBuffer::from_aom_owned(root))
     }
 
-    /// Makes `page` the page the buffer reads its nodes from, and indexes where its nodes
-    /// sit (the linearizer then marks the ones it reads).
+    /// Makes `page` the page the buffer reads its nodes from, and indexes where its nodes sit.
+    /// The linearizer has marked the ones it reads already; the object and DOM id indexes are
+    /// built here, from them.
     pub(crate) fn set_page(&mut self, page: AomNode) {
         self.slots.clear();
         self.slot_of.clear();
-        self.readable.clear();
         self.root_id = Some(page.id);
         self.slots.push(NodeSlot {
             parent: None,
@@ -322,7 +333,50 @@ impl VirtualBuffer {
                 stack.push((child, self.slots.len() - 1));
             }
         }
+        self.index_nodes(&page);
         self.page = Some(page);
+    }
+
+    /// Fills the object and DOM id indexes: of the nodes the buffer reads, the one [`Self::node`]
+    /// gives for each id (the last, where a page repeats an id), the smallest id per value.
+    fn index_nodes(&mut self, page: &AomNode) {
+        use crate::aom::UNIQUE_ID_ATTR;
+        self.objects.clear();
+        self.dom_ids.clear();
+        // Document order: an id the page repeats keeps its last node.
+        let mut last: HashMap<usize, &AomNode> = HashMap::new();
+        let mut stack = vec![page];
+        while let Some(node) = stack.pop() {
+            last.insert(node.id, node);
+            stack.extend(node.children.iter().rev());
+        }
+        for (&id, node) in &last {
+            if !self.readable.contains(&id) {
+                continue;
+            }
+            for (map, value) in [
+                (&mut self.objects, node.attributes.get(UNIQUE_ID_ATTR)),
+                (&mut self.dom_ids, node.attributes.get("id")),
+            ] {
+                if let Some(value) = value {
+                    map.entry(value.clone())
+                        .and_modify(|known| *known = (*known).min(id))
+                        .or_insert(id);
+                }
+            }
+        }
+    }
+
+    /// The page node that is the live object with IA2 uniqueID `object` (the smallest id, where
+    /// a page repeats it), if the buffer reads it.
+    pub fn node_with_object(&self, object: &str) -> Option<usize> {
+        self.objects.get(object).copied()
+    }
+
+    /// The page node with DOM id `dom_id` that the buffer reads (the smallest id, where a page
+    /// repeats it).
+    pub fn node_with_dom_id_indexed(&self, dom_id: &str) -> Option<usize> {
+        self.dom_ids.get(dom_id).copied()
     }
 
     /// Marks page node `id` as one the buffer reads.
