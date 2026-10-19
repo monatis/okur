@@ -369,7 +369,12 @@ impl ScreenReaderEngine {
             }
             // The first control focused after the page itself is preceded by the page title
             // [obs, 205/s2; 204/s1 second variant].
-            let entering_page = self.last_page_focus.is_none();
+            // Select a Form Field said the page as it closed [obs, 225/s10, 228/s9].
+            let page_said = target_id.is_some() && self.page_said_for == target_id;
+            if page_said {
+                self.page_said_for = None;
+            }
+            let entering_page = self.last_page_focus.is_none() && !page_said;
             // Group entry is judged from where focus was, not the virtual cursor [obs, 205/s6].
             let previous_focus_offset = self
                 .last_page_focus
@@ -485,6 +490,9 @@ impl ScreenReaderEngine {
             if by_enter {
                 speech = speech.map(|s| format!("{s}\n{}", msg::hint_type_in_text()));
             }
+            // Forms mode turned on by an element list: the regions as with Enter, no hint, and
+            // the field's line after it [obs, 249/s3].
+            let by_list = std::mem::take(&mut self.forms_mode_by_list) && is_edit;
             // Back in an autocomplete from its list: "Fruit edit combo collapsed | Apricot |
             // To set the value use the Arrow keys or type the value." (JAWS on the dev box),
             // and into a combo box one types in: Google Sheets' cell editor, "D1 edit combo |
@@ -510,7 +518,7 @@ impl ScreenReaderEngine {
                 }
             }
             if entering_page {
-                let regions = if by_enter {
+                let regions = if by_enter || by_list {
                     target_id
                         .map(|id| self.region_markers(id))
                         .unwrap_or_default()
@@ -519,6 +527,11 @@ impl ScreenReaderEngine {
                 };
                 if let Some(title) = self.cursor.buffer.document_title() {
                     speech = speech.map(|s| format!("{title}\n{regions}{s}"));
+                }
+            }
+            if by_list {
+                if let Some(line) = target_id.and_then(|id| self.field_forms_line(id)) {
+                    speech = speech.map(|s| format!("{s}\n{line}"));
                 }
             }
             if leaving_menus {

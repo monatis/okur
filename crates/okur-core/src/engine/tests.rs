@@ -2784,6 +2784,62 @@ fn an_element_list_focuses_its_control_or_says_there_is_none() {
     assert!(speech.take().iter().any(|s| s == "No tables found"));
 }
 
+/// Select an Edit Box (Insert+Ctrl+E) leaves the speech to the edit's focus, which enters the
+/// page and forms mode: the title, the field, then its line as Say Line reads it in forms
+/// mode, and no "Type in text." [obs, 249/s3].
+#[test]
+fn an_edit_from_its_list_is_said_with_its_line_in_forms_mode() {
+    use crate::ui::{FromUi, ToUi};
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Sign up")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Fill in the form."),
+            AomNode::new(2, Role::Edit)
+                .with_name("Email address")
+                .with_value("sam@example.com"),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.handle_focus_event(&page_document());
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut chord = KeyEvent::new(Key::Alpha('e'), Modifiers::none(), true);
+    chord.modifiers.insert = true;
+    chord.modifiers.ctrl = true;
+    assert_eq!(engine.handle_key_event(&chord), KeyAction::Consume);
+    let id = match ui.take().first() {
+        Some(ToUi::DialogShow { dialog }) => dialog.id,
+        other => {
+            panic_free_fail(&format!("no dialog shown: {other:?}"));
+            return;
+        }
+    };
+    let said = engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "ok".into(),
+    }));
+    assert_eq!(said, None);
+    assert_eq!(actions.requests(), [("focus".to_owned(), 2)]);
+    let mut email = FocusEvent::new(Role::Edit)
+        .with_name("Email address")
+        .with_value("sam@example.com")
+        .with_node_id(2)
+        .with_window_title("Sign up - Google Chrome");
+    email.in_document = true;
+    let focused = engine.handle_accessibility_event(&AccessibilityEvent::Focus(email));
+    assert!(
+        focused
+            .as_deref()
+            .is_some_and(|s| s.starts_with("Sign up\n")
+                && s.ends_with("\nEmail address  \u{1d} Edit \u{1e} \nsam@example.com")
+                && !s.contains("Type in text.")),
+        "{focused:?}"
+    );
+}
+
 /// Insert+F3 opens Virtual HTML Features; OK on Headings List opens the Heading List before
 /// the first dialog goes, as JAWS opens it in its place [obs, 226/s3]. A list Okur has not
 /// built yet is said so, and the dialog goes.
@@ -2846,9 +2902,9 @@ fn virtual_html_features_opens_the_chosen_list() {
 }
 
 /// Insert+F5 opens a real Select a Form Field. OK moves to the chosen field and focuses it,
-/// naming the page and reading the field's line; the field's own focus is then said
-/// although the focus is coming back from the dialog [obs, 225/s10, 228/s9]. Escape names
-/// the page [obs, 227/s11].
+/// naming the page and reading the cursor's line and an edit's line in forms mode; the
+/// field's own focus is then said although the focus is coming back from the dialog, within
+/// the page [obs, 225/s10, 228/s9]. Escape names the page [obs, 227/s11].
 #[test]
 fn select_a_form_field_focuses_the_chosen_field() {
     use crate::ui::{ControlKind, FromUi, ToUi, Value};
@@ -2914,13 +2970,16 @@ fn select_a_form_field_focuses_the_chosen_field() {
         }));
     assert_eq!(ui.take(), [ToUi::DialogClose { id }]);
     assert_eq!(actions.requests(), [("focus".to_owned(), 4)]);
+    // The page, the cursor's line, then the field's line in forms mode [obs, 228/s9].
     assert!(
         chosen
             .as_deref()
-            .is_some_and(|s| s.starts_with("Web Menus\n") && s.contains("the lazy dog")),
+            .is_some_and(|s| s.starts_with("Web Menus\n")
+                && s.ends_with("the lazy dog\nNotes  \u{1d} Edit \u{1e} \nthe lazy dog")),
         "{chosen:?}"
     );
-    // The page takes the focus back quietly; the field's focus is said.
+    // The page takes the focus back quietly; the field's focus is said, within the page:
+    // without the title, and without Enter's "Type in text." [obs, 228/s9].
     assert_eq!(
         engine.handle_accessibility_event(&AccessibilityEvent::Focus(page_document())),
         None
@@ -2933,7 +2992,9 @@ fn select_a_form_field_focuses_the_chosen_field() {
     notes.in_document = true;
     let focused = engine.handle_accessibility_event(&AccessibilityEvent::Focus(notes));
     assert!(
-        focused.as_deref().is_some_and(|s| s.contains("Notes")),
+        focused.as_deref().is_some_and(|s| s.starts_with("Notes")
+            && !s.contains("Web Menus")
+            && !s.contains("Type in text.")),
         "{focused:?}"
     );
 

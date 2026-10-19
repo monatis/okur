@@ -106,6 +106,13 @@ pub struct ScreenReaderEngine {
     pending_page: Option<VirtualBuffer>,
     /// Forms mode was just turned on by Enter (not by focus moving into a field).
     forms_mode_by_enter: bool,
+    /// Forms mode was just turned on by one of JAWS's element lists giving a field the focus:
+    /// the field's focus is followed by its line, as Say Line reads it [obs, 249/s3].
+    forms_mode_by_list: bool,
+    /// The control Select a Form Field gave the focus to, after saying the page itself as it
+    /// closed: the control's focus comes within the page, without the title [obs, 225/s10,
+    /// 228/s9].
+    page_said_for: Option<usize>,
     /// The edit key whose effect is spoken when the field next reports its text.
     pending_edit: Option<crate::editing::EditKey>,
     /// The focused text field's last known text, caret and selection.
@@ -180,6 +187,8 @@ impl ScreenReaderEngine {
             menus: crate::native_focus::Menus::default(),
             pending_edit: None,
             forms_mode_by_enter: false,
+            forms_mode_by_list: false,
+            page_said_for: None,
             pending_page: None,
             last_text: None,
             actions: None,
@@ -282,6 +291,7 @@ impl ScreenReaderEngine {
         // A key ends the quiet return from Okur's dialogs: what it does is said.
         self.quiet_focus_until = None;
         self.dialog_focus_target = None;
+        self.page_said_for = None;
 
         // 1. Any key press interrupts speech immediately (NVDA & JAWS standard behavior)
         self.speech.stop();
@@ -952,18 +962,11 @@ impl ScreenReaderEngine {
                 // JAWS's element lists leave the speech to the focus: the page and its regions
                 // as the focus enters them, then the control [obs, 247/s3, 250/s3].
                 let element_list = matches!(kind, ListKind::Elements(_));
-                let speech = [
-                    self.cursor.buffer.document_title().map(str::to_owned),
-                    Some(self.cursor.current_line()),
-                ]
-                .into_iter()
-                .flatten()
-                .collect::<Vec<_>>()
-                .join("\n");
                 let node = self.cursor.buffer.node(field.node_id);
                 let typed_in = node.is_some_and(|n| {
                     matches!(n.role, crate::aom::Role::Edit | crate::aom::Role::ComboBox)
                 });
+                let edit = node.is_some_and(|n| n.role == crate::aom::Role::Edit);
                 let focused = match (node, &self.actions) {
                     (Some(node), Some(actions)) => actions.focus(node),
                     _ => false,
@@ -973,11 +976,15 @@ impl ScreenReaderEngine {
                     self.dialog_focus_target = Some(field.node_id);
                     // A field one types in is then in forms mode, as after Enter on it, whatever
                     // Auto Forms Mode says [obs, 228/s10]; JAWS's documentation: "Forms mode is
-                    // automatically enabled" (Surf's Up, Using Forms with JAWS).
+                    // automatically enabled" (Surf's Up, Using Forms with JAWS). Without Enter's
+                    // "Type in text." [obs, 249/s3, 228/s9].
                     if typed_in {
                         self.forms_mode = true;
                         self.cursor.forms_mode_active = true;
-                        self.forms_mode_by_enter = true;
+                        self.forms_mode_by_list = element_list;
+                    }
+                    if !element_list {
+                        self.page_said_for = Some(field.node_id);
                     }
                 }
                 if element_list {
@@ -986,6 +993,19 @@ impl ScreenReaderEngine {
                     self.last_page_focus = None;
                     return None;
                 }
+                // Select a Form Field says the page and the line it left the virtual cursor on,
+                // then an edit's line in forms mode, before the field's own focus [obs, 228/s9].
+                let speech = [
+                    self.cursor.buffer.document_title().map(str::to_owned),
+                    Some(self.cursor.current_line()),
+                    (focused && edit)
+                        .then(|| self.field_forms_line(field.node_id))
+                        .flatten(),
+                ]
+                .into_iter()
+                .flatten()
+                .collect::<Vec<_>>()
+                .join("\n");
                 self.speech.speak(&speech, true);
                 Some(speech)
             }

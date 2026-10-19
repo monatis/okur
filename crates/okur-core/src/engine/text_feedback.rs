@@ -127,4 +127,36 @@ impl ScreenReaderEngine {
             crate::messages::msg::role_edit()
         )
     }
+
+    /// A page's edit field as JAWS says it when one of its lists puts it in forms mode: its
+    /// name and role, then its line, as Say Line reads it in forms mode ("Email address Edit
+    /// | sam@example.com" [obs, 249/s3, s4]; a text area's role is "edit" [obs, 228/s9]).
+    pub(super) fn field_forms_line(&self, node_id: usize) -> Option<String> {
+        use crate::messages::msg;
+        let node = self.cursor.buffer.node(node_id)?;
+        let role = if node
+            .attributes
+            .get("multiline")
+            .is_some_and(|v| v == "true")
+        {
+            msg::role_edit_multiline()
+        } else {
+            msg::role_edit()
+        };
+        let field = format!(
+            "{}  \u{1d} {role} \u{1e} ",
+            node.name.as_deref().unwrap_or_default().trim()
+        );
+        let line = node
+            .value
+            .as_deref()
+            .and_then(|v| v.lines().next())
+            .unwrap_or_default()
+            .trim();
+        Some(if line.is_empty() {
+            field
+        } else {
+            format!("{field}\n{line}")
+        })
+    }
 }
