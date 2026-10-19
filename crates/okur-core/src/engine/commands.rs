@@ -495,7 +495,7 @@ impl ScreenReaderEngine {
     pub(super) fn editing_document(&self) -> bool {
         let native = self.app_mode != AppMode::VirtualBuffer
             && self.last_native_focus.as_ref().is_some_and(|f| {
-                f.role == Role::Document || (f.role == Role::Edit && f.multi_line)
+                f.role == Role::Document || (f.role == Role::Edit && f.reads_as_document())
             });
         let page = self.forms_mode
             && self.app_mode == AppMode::VirtualBuffer

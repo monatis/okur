@@ -53,6 +53,34 @@ impl ScreenReaderEngine {
     /// Handles an OS-level focus changed event.
     /// Synchronizes cursor position, activates/deactivates forms mode,
     /// and emits canonical JAWS speech announcements.
+    /// `focus` with only the keys the Access Key output says: with it off (old-pc's
+    /// `ACCESS_KEY=0|0|0`, 306 recorded 2026-10-18), no access key and no field shortcut
+    /// (Chrome's address bar without "Ctrl+L"); a menu item's shortcut stays, as part of the
+    /// item ("Yeni sekme Ctrl+T | 2 of 24", without "e") [obs, 220]. A focus and a change of
+    /// the focused control alike (a combo box's list closing, 304/s13).
+    pub(super) fn keys_as_output(&self, focus: &FocusEvent) -> FocusEvent {
+        let menu_shortcut =
+            |k: &String| focus.role == Role::MenuItem && k.trim().chars().count() > 1;
+        let has_key = focus.access_key.is_some()
+            || focus
+                .accelerator_key
+                .as_ref()
+                .is_some_and(|k| !menu_shortcut(k));
+        let access_keys = self
+            .settings
+            .verbosity
+            .is_on(crate::settings::OutputType::AccessKey);
+        if has_key && !access_keys {
+            FocusEvent {
+                access_key: None,
+                accelerator_key: focus.accelerator_key.clone().filter(menu_shortcut),
+                ..focus.clone()
+            }
+        } else {
+            focus.clone()
+        }
+    }
+
     pub fn handle_focus_event(&mut self, focus: &FocusEvent) -> Option<String> {
         // The settings of the application in front, and of the site whose page has the focus.
         let site = focus
@@ -65,37 +93,11 @@ impl ScreenReaderEngine {
             })
             .flatten();
         self.settings_place(focus.app.as_deref(), site);
-        // Access keys are said only with JAWS's Access Key output on (the `access_key` output
-        // type of the verbosity settings); old-pc's JAWS has it off (`ACCESS_KEY=0|0|0`, 306
-        // recorded 2026-10-18). That takes a menu item's letter ("Yeni sekme Ctrl+T | 2 of 24",
-        // without "e") and a field's shortcut (Chrome's address bar without "Ctrl+L") with it;
-        // a menu item's shortcut is part of the item [obs, 220]. The keys leave the event,
-        // since menus speak strings, not parts.
-        let without_key;
-        let menu_shortcut =
-            |k: &String| focus.role == Role::MenuItem && k.trim().chars().count() > 1;
-        let has_key = focus.access_key.is_some()
-            || focus
-                .accelerator_key
-                .as_ref()
-                .is_some_and(|k| !menu_shortcut(k));
-        let access_keys = self
-            .settings
-            .verbosity
-            .is_on(crate::settings::OutputType::AccessKey);
         // Say Focus says a control's access key whatever the Access Key output: old-pc's
         // JAWS, with it off, said "alt+R" [obs, 323/s1].
         self.focus_access_key = focus.access_key.clone();
-        let focus = if has_key && !access_keys {
-            without_key = FocusEvent {
-                access_key: None,
-                accelerator_key: focus.accelerator_key.clone().filter(menu_shortcut),
-                ..focus.clone()
-            };
-            &without_key
-        } else {
-            focus
-        };
+        let keyed = self.keys_as_output(focus);
+        let focus = &keyed;
         self.last_selected = None;
         if focus.role != Role::MenuItem {
             self.last_text = focus.text.clone();

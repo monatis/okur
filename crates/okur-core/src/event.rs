@@ -311,6 +311,16 @@ impl FocusEvent {
         }
     }
 
+    /// A native edit of several lines that holds text, which JAWS reads as a document (316/s3,
+    /// 400). An empty one is read as a one-line edit: "Notes: Edit | Type in text.", and Say
+    /// Line "Notes: Edit" [obs, 301/s1, 305/s15].
+    pub fn reads_as_document(&self) -> bool {
+        let has_text = |t: Option<&str>| t.is_some_and(|t| !t.trim().is_empty());
+        self.multi_line
+            && (has_text(self.text.as_ref().map(|c| c.text.as_str()))
+                || has_text(self.value.as_deref()))
+    }
+
     pub fn with_node_id(mut self, id: usize) -> Self {
         self.node_id = Some(id);
         self

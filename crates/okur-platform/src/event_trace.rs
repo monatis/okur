@@ -105,10 +105,12 @@ pub struct TraceEvent {
     pub id_child: i32,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub window_class: Option<String>,
-    /// For a focus: its window's style (`GWL_STYLE`), raw. An edit's ES_MULTILINE says it has
-    /// several lines.
+    /// For a focus: the style (`GWL_STYLE`, raw) and class of the window with the keyboard
+    /// focus. An edit's ES_MULTILINE says it has several lines.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub window_style: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub focus_window_class: Option<String>,
     /// For a focus: its top-level window's menu bar items, as written ("&File"), and its
     /// status bar's parts.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -714,7 +716,13 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             .or_else(|| active_window.and_then(|w| w.class_name.clone()))
     };
     focus.in_dialog_box = focus.platform.top_window_class.as_deref() == Some(WIN32_DIALOG_CLASS);
-    focus.multi_line = multi_line_edit(event.window_class.as_deref(), event.window_style);
+    focus.multi_line = multi_line_edit(
+        event
+            .focus_window_class
+            .as_deref()
+            .or(event.window_class.as_deref()),
+        event.window_style,
+    );
     focus.menu_bar = event
         .menu_bar
         .iter()
@@ -1770,6 +1778,7 @@ mod capture {
                     id_child,
                     window_class: Some(CHROME_PAGE_WINDOW.to_owned()),
                     window_style: None,
+                    focus_window_class: None,
                     menu_bar: Vec::new(),
                     status_bar: Vec::new(),
                     window_title: None,
@@ -2122,6 +2131,7 @@ mod capture {
                     id_child: 0,
                     window_class: None,
                     window_style: None,
+                    focus_window_class: None,
                     menu_bar: Vec::new(),
                     status_bar: Vec::new(),
                     window_title: None,
@@ -2233,6 +2243,7 @@ mod capture {
                     id_child: 0,
                     window_class: None,
                     window_style: None,
+                    focus_window_class: None,
                     menu_bar: Vec::new(),
                     status_bar: Vec::new(),
                     window_title: None,
@@ -2541,11 +2552,17 @@ mod capture {
                 ?stages,
                 "event read"
             );
-            let window_style = focused.then(|| {
+            // The window with the keyboard focus, which a UIA focus event does not name (it
+            // reports the top-level window: 316/s3 after Alt+Tab).
+            let focus_window = focused.then(keyboard_focus_window);
+            let window_style = focus_window.map(|w| {
                 use windows::Win32::UI::WindowsAndMessaging::{GetWindowLongW, GWL_STYLE};
                 // SAFETY: plain Win32 call; a window that is gone gives 0.
-                unsafe { GetWindowLongW(hwnd, GWL_STYLE) as u32 }
+                unsafe { GetWindowLongW(w, GWL_STYLE) as u32 }
             });
+            let focus_window_class = focus_window
+                .map(|w| window_text(w).1)
+                .filter(|c| !c.is_empty());
             let (menu_bar, status_bar) = if focused {
                 crate::screen_lines::window_bars(hwnd)
             } else {
@@ -2560,6 +2577,7 @@ mod capture {
                 id_child,
                 window_class: Some(class).filter(|s| !s.is_empty()),
                 window_style,
+                focus_window_class,
                 menu_bar,
                 status_bar,
                 window_title: Some(title).filter(|s| !s.is_empty()),
@@ -3284,6 +3302,7 @@ mod tests {
             id_child: 0,
             window_class: None,
             window_style: None,
+            focus_window_class: None,
             menu_bar: Vec::new(),
             status_bar: Vec::new(),
             window_title: None,

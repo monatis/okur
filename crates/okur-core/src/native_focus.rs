@@ -187,7 +187,7 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
             } else {
                 name
             };
-            if focus.multi_line {
+            if focus.reads_as_document() {
                 // An edit of several lines is read as a document: its caret's line, and
                 // "Contains text" as it is reached [obs, 316/s3].
                 lines.push(Line::new(vec![

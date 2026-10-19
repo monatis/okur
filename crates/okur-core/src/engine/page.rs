@@ -309,8 +309,9 @@ impl ScreenReaderEngine {
         if control.in_document {
             return self.page_change(control);
         }
+        let control = self.keys_as_output(control);
         let before = self.last_native_focus.replace(control.clone())?;
-        let speech = crate::native_focus::change_speech(&before, control)?;
+        let speech = crate::native_focus::change_speech(&before, &control)?;
         self.speech.speak(&speech, true);
         Some(speech)
     }
