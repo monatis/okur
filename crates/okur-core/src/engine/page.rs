@@ -88,6 +88,7 @@ impl ScreenReaderEngine {
         }
         self.page_stale = false;
         self.last_page_focus = None;
+        self.field_texts.clear();
         self.focus_table_unsaid = false;
         self.tab_start = None;
         self.option_list = None;

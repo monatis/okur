@@ -130,6 +130,7 @@ impl ScreenReaderEngine {
         let focus = &keyed;
         self.last_selected = None;
         if focus.role != Role::MenuItem {
+            self.remember_field_text();
             self.last_text = focus.text.clone();
             self.pending_edit = None;
             self.typed_word.clear();
@@ -532,9 +533,11 @@ impl ScreenReaderEngine {
                 speech = speech.map(|s| format!("{s}\n{}", msg::hint_change_selection_arrows()));
             }
             // Forms mode turned on by Enter adds the regions the field is in and the edit's
-            // hint [obs, 19/s2]; Tab's automatic forms mode does not (204/s1).
+            // hint [obs, 19/s2]; so does Auto Forms Mode's, Tab onto the page's first field
+            // [obs, 284/s1]. Without Auto Forms Mode Tab leaves forms mode off (204/s1, 212).
             let by_enter = std::mem::take(&mut self.forms_mode_by_enter) && is_edit;
-            if by_enter {
+            let by_auto_tab = entering_page && auto_forms && self.last_key_tabs && is_edit;
+            if by_enter || by_auto_tab {
                 speech = speech.map(|s| format!("{s}\n{}", msg::hint_type_in_text()));
             }
             // Forms mode turned on by an element list: the regions as with Enter, no hint, and
@@ -567,7 +570,7 @@ impl ScreenReaderEngine {
                 }
             }
             if entering_page {
-                let regions = if by_enter || by_list {
+                let regions = if by_enter || by_list || by_auto_tab {
                     target_id
                         .map(|id| self.region_markers(id))
                         .unwrap_or_default()

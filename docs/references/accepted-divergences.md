@@ -149,6 +149,25 @@ A step can be in more than one entry; all of its entries apply.
   fields (s6, s9, s12) and Okur does here too.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### Up out of a text area jumps to the page's top (Auto Forms Mode)
+
+- Steps: `282-web-forms-arrows-auto-forms-up/s8` to `282-web-forms-arrows-auto-forms-up/s25`
+  (18 steps: `282-web-forms-arrows-auto-forms-up/s8`, `282-web-forms-arrows-auto-forms-up/s9`,
+  `282-web-forms-arrows-auto-forms-up/s10`, `282-web-forms-arrows-auto-forms-up/s11`,
+  `282-web-forms-arrows-auto-forms-up/s12`, `282-web-forms-arrows-auto-forms-up/s13`,
+  `282-web-forms-arrows-auto-forms-up/s14`, `282-web-forms-arrows-auto-forms-up/s15`,
+  `282-web-forms-arrows-auto-forms-up/s16`, `282-web-forms-arrows-auto-forms-up/s17`,
+  `282-web-forms-arrows-auto-forms-up/s18`, `282-web-forms-arrows-auto-forms-up/s19`,
+  `282-web-forms-arrows-auto-forms-up/s20`, `282-web-forms-arrows-auto-forms-up/s21`,
+  `282-web-forms-arrows-auto-forms-up/s22`, `282-web-forms-arrows-auto-forms-up/s23`,
+  `282-web-forms-arrows-auto-forms-up/s24`, `282-web-forms-arrows-auto-forms-up/s25`).
+- Difference: the whole step. JAWS said "main region", then the page's title for every Up
+  after it; Okur reads the form's lines above the text area, its fields entered and left as
+  in 280, and reaches the page's title at s26.
+- Why: the same accident as Down out of the text area (280/s21): Up out of the empty text
+  area went to the page's first lines and stayed there, skipping the whole form above it.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-18.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row

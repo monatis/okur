@@ -191,6 +191,31 @@ divergences! {
      there read them (s29-s33). JAWS's documentation has the arrow leave the field for the \
      page's next line (Surf's Up, \"Using Forms with JAWS\"), which Okur does.",
     "the owner's rule on JAWS's accidents, 2026-10-18";
+
+    Difference::Step => [
+        "282-web-forms-arrows-auto-forms-up/s8",
+        "282-web-forms-arrows-auto-forms-up/s9",
+        "282-web-forms-arrows-auto-forms-up/s10",
+        "282-web-forms-arrows-auto-forms-up/s11",
+        "282-web-forms-arrows-auto-forms-up/s12",
+        "282-web-forms-arrows-auto-forms-up/s13",
+        "282-web-forms-arrows-auto-forms-up/s14",
+        "282-web-forms-arrows-auto-forms-up/s15",
+        "282-web-forms-arrows-auto-forms-up/s16",
+        "282-web-forms-arrows-auto-forms-up/s17",
+        "282-web-forms-arrows-auto-forms-up/s18",
+        "282-web-forms-arrows-auto-forms-up/s19",
+        "282-web-forms-arrows-auto-forms-up/s20",
+        "282-web-forms-arrows-auto-forms-up/s21",
+        "282-web-forms-arrows-auto-forms-up/s22",
+        "282-web-forms-arrows-auto-forms-up/s23",
+        "282-web-forms-arrows-auto-forms-up/s24",
+        "282-web-forms-arrows-auto-forms-up/s25",
+    ],
+    "The same accident going up: with Auto Forms Mode, Up out of the empty text area went to \
+     the page's first lines (\"main region\", then the page's title), skipping the form above \
+     it, and every Up after stayed there. Okur goes on to the line before the field.",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
 }
 
 /// The divergence covering `step`, if any.

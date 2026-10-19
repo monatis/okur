@@ -3180,6 +3180,52 @@ fn auto_forms_mode_arrows_into_and_out_of_fields() {
     );
 }
 
+/// Text typed in a field is said when an arrow comes back onto it, though the captured page
+/// does not have it; Up enters with the caret at the start, and leaves at once
+/// [obs, 284/s6, s7].
+#[test]
+fn an_arrow_back_onto_a_field_says_what_was_typed() {
+    let mut name = AomNode::new(2, Role::Edit).with_name("Full name");
+    name.attributes.insert("required".into(), "true".into());
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Full name"),
+            name,
+            AomNode::new(3, Role::Paragraph).with_text("Email address"),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.set_actions(Box::new(crate::actions::RecordingActions::default()));
+    engine.handle_focus_event(&page_document());
+    let mut field = FocusEvent::new(Role::Edit)
+        .with_node_id(2)
+        .with_name("Full name");
+    field.in_document = true;
+    engine.handle_focus_event(&field);
+    engine.handle_accessibility_event(&AccessibilityEvent::TextContext(
+        crate::event::TextContext {
+            text: "ada".into(),
+            caret: 3,
+            selection: None,
+            font: None,
+            word: None,
+        },
+    ));
+    speech.take();
+    // Down at the end of the text leaves the field; Up comes back onto it.
+    engine.handle_key_event(&key(Key::DownArrow));
+    assert_eq!(norm(&speech.take().join(" ")), "Email address");
+    engine.handle_key_event(&key(Key::UpArrow));
+    assert_eq!(
+        norm(&speech.take().join(" ")),
+        "Full name \u{1d} Edit \u{1e} \u{1d}Required\u{1e} ada"
+    );
+    engine.handle_key_event(&key(Key::UpArrow));
+    assert_eq!(norm(&speech.take().join(" ")), "Full name");
+}
+
 /// Without Auto Forms Mode, the arrows read a field's line and stay in browse mode [obs, 201].
 #[test]
 fn without_auto_forms_mode_the_arrows_read_a_fields_line() {

@@ -552,12 +552,19 @@ impl ScreenReaderEngine {
         {
             return None;
         }
-        let node = self.node_under_cursor().filter(|n| {
-            n.role == Role::Edit && n.attributes.get("readonly").is_none_or(|r| r != "true")
-        })?;
+        let mut node = self
+            .node_under_cursor()
+            .filter(|n| {
+                n.role == Role::Edit && n.attributes.get("readonly").is_none_or(|r| r != "true")
+            })?
+            .clone();
+        // What was typed in it, which the captured page does not have.
+        if let Some(text) = self.field_texts.get(&node.id) {
+            node.value = Some(text.clone());
+        }
         // The field as its focus is said, but for its description, which the next arrow reads
         // as a line of its own (280/s9), and an empty field's "blank" (280/s5).
-        let mut field = SpeechFormatter::control_focus(node, |_| false);
+        let mut field = SpeechFormatter::control_focus(&node, |_| false);
         field.retain(|kind| kind != crate::announcement::PartKind::Description);
         let said = field.render();
         let blank = msg::blank();
@@ -566,12 +573,39 @@ impl ScreenReaderEngine {
             .map_or(said.as_str(), |s| s.trim_end_matches(['\n', ' ']))
             .to_owned();
         if let Some(actions) = &self.actions {
-            actions.focus(node);
+            actions.focus(&node);
         }
+        // The field is the page's focus now, with its caret at the start where focusing puts
+        // it [obs, 280/s7, 284/s6], until the focus event and a read of the field say more.
+        self.remember_field_text();
         self.arrow_focus = Some(node.id);
+        self.last_page_focus = Some(node.id);
+        self.page_focus_is_field = true;
+        self.last_text = Some(crate::event::TextContext {
+            text: node.value.clone().unwrap_or_default(),
+            caret: 0,
+            selection: None,
+            font: None,
+            word: None,
+        });
         self.forms_mode = true;
         self.cursor.forms_mode_active = true;
         Some(said)
+    }
+
+    /// Keeps the text known in the page's focused field, as the focus or an arrow leaves it.
+    pub(super) fn remember_field_text(&mut self) {
+        let Some(id) = self.last_page_focus else {
+            return;
+        };
+        let is_field = self
+            .cursor
+            .buffer
+            .node(id)
+            .is_some_and(|n| n.role == Role::Edit);
+        if let (true, Some(context)) = (is_field, self.last_text.as_ref()) {
+            self.field_texts.insert(id, context.text.clone());
+        }
     }
 
     /// Auto Forms Mode: Up or Down in a page's field whose caret cannot move further that way
@@ -604,6 +638,7 @@ impl ScreenReaderEngine {
         if !at_edge {
             return None;
         }
+        self.remember_field_text();
         self.forms_mode = false;
         let _ = self.cursor.exit_forms_mode();
         self.cursor.move_to_node_id(field);

@@ -83,6 +83,10 @@ pub struct ScreenReaderEngine {
     /// The field an arrow put the focus on (Auto Forms Mode), already said: its focus event
     /// is not said again.
     arrow_focus: Option<usize>,
+    /// The text last known in a page's fields, by node, kept as the focus leaves them: the
+    /// buffer keeps the values the page had when it was captured, and an arrow back onto a
+    /// field says what was typed in it [obs, 284/s6].
+    field_texts: std::collections::HashMap<usize, String>,
     /// The page's application region (ARIA role "application") the focus is in, by name:
     /// every key goes to the page there, Escape too.
     web_application: Option<String>,
@@ -191,6 +195,7 @@ impl ScreenReaderEngine {
             option_list: None,
             option_said: None,
             arrow_focus: None,
+            field_texts: std::collections::HashMap::new(),
             web_application: None,
             page_focus_is_field: false,
             last_native_focus: None,
@@ -653,6 +658,31 @@ impl ScreenReaderEngine {
             if is_edit {
                 self.forms_mode = true;
                 self.cursor.forms_mode_active = true;
+                if self.settings.auto_forms_mode {
+                    self.cursor.move_to_node_id(id);
+                    // A field an arrow had left, with Auto Forms Mode: Shift+Tab back onto it
+                    // turned forms mode on and JAWS said nothing [obs, 284/s11]; Tab onto it
+                    // said it as a focus, with the text typed in it, "Full name Edit Required
+                    // | ada" [obs, 284/s8]. One observation each.
+                    if backwards {
+                        return true;
+                    }
+                    let mut field = self.cursor.buffer.node(id).cloned();
+                    let typed = self
+                        .last_text
+                        .as_ref()
+                        .map(|c| c.text.clone())
+                        .or_else(|| self.field_texts.get(&id).cloned());
+                    if let (Some(field), Some(typed)) = (field.as_mut(), typed) {
+                        field.value = Some(typed);
+                    }
+                    if let Some(field) = field {
+                        let said = crate::speech::SpeechFormatter::control_focus(&field, |_| false)
+                            .render();
+                        self.speech.speak(&said, true);
+                    }
+                    return true;
+                }
             }
             let from = self
                 .cursor
