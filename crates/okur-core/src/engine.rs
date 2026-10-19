@@ -21,6 +21,7 @@ const DOUBLE_PRESS_MS: u64 = 500;
 mod commands;
 mod find;
 mod focus;
+mod layer;
 mod page;
 mod reading;
 mod say_all;
@@ -177,6 +178,10 @@ pub struct ScreenReaderEngine {
     virtual_cursor_off: bool,
     /// The voice rate's change for now (Ctrl+Alt+PageUp and PageDown), until Insert+Escape.
     rate_change: i32,
+    /// Insert+Space was pressed: the next key is the layer's.
+    layer_open: bool,
+    /// Speech turned off with Insert+Space, S.
+    speech_muted: bool,
     /// User settings (JAWS defaults unless configured).
     pub settings: crate::settings::Settings,
     /// Caps Lock's state as toggled through the JAWS key, when the platform does not report it.
@@ -256,6 +261,8 @@ impl ScreenReaderEngine {
             quick_keys_suspended: false,
             virtual_cursor_off: false,
             rate_change: 0,
+            layer_open: false,
+            speech_muted: false,
             settings: crate::settings::Settings::default(),
             caps_lock_on: false,
             viewer: None,
@@ -364,6 +371,11 @@ impl ScreenReaderEngine {
                 stop_ms = (stopped - page_applied).as_millis(),
                 "slow start of a key"
             );
+        }
+
+        // The key after Insert+Space is the layer's.
+        if let Some(action) = self.layer_key(event) {
+            return action;
         }
 
         // 2. Standalone Control tap is speech silence key

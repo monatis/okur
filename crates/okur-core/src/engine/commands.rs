@@ -23,6 +23,7 @@ impl ScreenReaderEngine {
             return said;
         }
         match command {
+            Command::LayerStart => return self.start_layer(),
             Command::NavigationModeToggle => return self.next_quick_keys_mode(),
             Command::QuickKeysSuspendResume => return self.suspend_or_resume_quick_keys(),
             Command::VirtualCursorToggle => return self.toggle_virtual_cursor(),

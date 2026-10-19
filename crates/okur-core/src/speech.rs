@@ -987,6 +987,17 @@ pub trait SpeechOutput: Send + Sync {
     fn configure(&mut self, voice: &crate::settings::VoiceSettings) {
         let _ = voice;
     }
+
+    /// Speech muted (Insert+Space, S): nothing is spoken, nor kept in the history, until it is
+    /// unmuted [obs, 517/s7].
+    fn set_muted(&mut self, muted: bool) {
+        let _ = muted;
+    }
+
+    /// What was said lately, the oldest first: the Speech History viewer's lines.
+    fn history(&self) -> Vec<String> {
+        Vec::new()
+    }
 }
 
 /// Mock speech synthesizer output for testing and headless execution.

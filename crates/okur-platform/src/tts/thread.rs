@@ -29,6 +29,9 @@ enum Request {
     Configure(okur_core::settings::VoiceSettings),
 }
 
+/// How many utterances the Speech History keeps (JAWS's help gives 50 and 500 [S3, H14]).
+const HISTORY: usize = 50;
+
 /// How often the synthesizer is asked how far a Say All has got.
 const MARK_POLL: Duration = Duration::from_millis(20);
 /// Polls without progress, and without speech, after which a Say All is taken to be over.
@@ -73,6 +76,11 @@ const STOP_GRACE: std::time::Duration = std::time::Duration::from_millis(3);
 
 impl Request {
     /// Whether the request cuts off all speech before it.
+    /// Whether the request says something (muted speech leaves it out).
+    fn speaks(&self) -> bool {
+        !matches!(self, Request::Stop | Request::Configure(_))
+    }
+
     fn interrupts(&self) -> bool {
         match self {
             Request::Stop => true,
@@ -127,6 +135,10 @@ pub struct SpeechThread {
     voices: Arc<Mutex<Vec<String>>>,
     /// Where a Say All part's mark goes as the synthesizer starts it.
     report_to: Arc<Mutex<Option<MarkReport>>>,
+    /// Speech muted (Insert+Space, S): nothing is sent or logged.
+    muted: bool,
+    /// What was said lately, for the Speech History viewer.
+    recent: std::collections::VecDeque<String>,
 }
 
 impl SpeechThread {
@@ -208,6 +220,8 @@ impl SpeechThread {
             log,
             voices,
             report_to,
+            muted: false,
+            recent: std::collections::VecDeque::new(),
         }
     }
 
@@ -311,6 +325,9 @@ fn report(to: &Mutex<Option<MarkReport>>, mark: u64) {
 
 impl SpeechThread {
     fn send(&self, request: Request) {
+        if self.muted && request.speaks() {
+            return;
+        }
         self.pending.fetch_add(1, Ordering::SeqCst);
         if self.requests.send(request).is_err() {
             self.pending.fetch_sub(1, Ordering::SeqCst);
@@ -318,6 +335,15 @@ impl SpeechThread {
     }
 
     fn record(&mut self, kind: SpeechLogKind, text: &str, interrupt: bool) {
+        if self.muted {
+            return;
+        }
+        if kind == SpeechLogKind::Speak && !text.trim().is_empty() {
+            if self.recent.len() == HISTORY {
+                self.recent.pop_front();
+            }
+            self.recent.push_back(text.to_owned());
+        }
         if let Some(log) = self.log.as_mut() {
             log.record(kind, text, interrupt);
         }
@@ -343,6 +369,17 @@ impl SpeechOutput for SpeechThread {
 
     fn reports_marks(&self) -> bool {
         self.report_to.lock().is_ok_and(|to| to.is_some())
+    }
+
+    fn set_muted(&mut self, muted: bool) {
+        if muted {
+            self.send(Request::Stop);
+        }
+        self.muted = muted;
+    }
+
+    fn history(&self) -> Vec<String> {
+        self.recent.iter().cloned().collect()
     }
 
     fn speak_symbols(&mut self, text: &str, interrupt: bool) {

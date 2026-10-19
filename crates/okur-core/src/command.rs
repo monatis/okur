@@ -141,6 +141,8 @@ pub enum Command {
     /// Ctrl+C with a selection made with the virtual cursor (CopySelectedTextToClipboard).
     CopySelection,
     SaySelectedText,
+    /// Insert+Space: the layer's next key (H, the Speech History; S, speech off and on).
+    LayerStart,
     /// Insert+N: the quick keys on, off, or for Say All only (NavigationModeToggle).
     NavigationModeToggle,
     /// Insert+Shift+Z, Ctrl+Insert+N: the quick keys suspended or resumed.
@@ -356,6 +358,7 @@ impl Command {
             "CopySelectedTextToClipboard" => CopySelection,
             "+!{DOWN}" | "SaySelection" | "SaySelectedText" => SaySelectedText,
             "SayTopLineOfWindow" | "Insert+End" => SayTopLineOfWindow,
+            "Insert+Space" | "JAWSKey+Space" => LayerStart,
             "NavigationModeToggle" | "Insert+N" => NavigationModeToggle,
             "QuickNavigationKeysSuspendOrResume" | "Insert+Shift+Z" => QuickKeysSuspendResume,
             "VirtualPCCursorToggle" | "Insert+Z" => VirtualCursorToggle,
@@ -566,6 +569,7 @@ static BINDINGS: &[Binding] = &{
         ),
         // The quick keys and the virtual cursor off and on, the screen refreshed, the rate for
         // now [obs, 298, 512].
+        bind(Space, JAWS, LayerStart),
         bind(Alpha('N'), JAWS, NavigationModeToggle),
         bind(Alpha('Z'), JAWS_SHIFT, QuickKeysSuspendResume),
         bind(Alpha('N'), CTRL_INSERT, QuickKeysSuspendResume),

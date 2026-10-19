@@ -69,3 +69,8 @@ screen-updated = Screen updated
 
 rate-faster = Faster
 rate-slower = Slower
+
+## The Insert+Space layer [obs, 517]
+
+# The Speech History viewer (Insert+Space, H), as JAWS names it on opening.
+speech-history-title = Speech History
