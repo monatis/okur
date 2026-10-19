@@ -118,7 +118,7 @@ pub(crate) use windows_lines::text_of as control_text;
 #[cfg(windows)]
 pub(crate) use windows_lines::{class_of, owner_drawn, static_lines, symbol_font};
 #[cfg(windows)]
-pub use windows_lines::{dialog_layout, group_box_of, page_of};
+pub use windows_lines::{dialog_layout, group_box_of, page_of, window_bars};
 
 #[cfg(windows)]
 mod windows_lines {
@@ -179,25 +179,47 @@ mod windows_lines {
     /// Security Details Previous Versions", which JAWS's view of the window shows under the
     /// title [obs, 323/s4, s7]. The tabs are not windows: MSAA gives them, with their places.
     fn tab_row(tabs: HWND) -> Option<Run> {
+        let children = msaa_children(tabs);
+        let (mut left, mut top, mut bottom) = (i32::MAX, i32::MAX, i32::MIN);
+        let mut names = Vec::new();
+        for (name, place) in children {
+            if let Some((x, y, _, height)) = place {
+                left = left.min(x);
+                top = top.min(y);
+                bottom = bottom.max(y + height);
+            }
+            names.push(without_accelerators(&name));
+        }
+        (!names.is_empty() && top <= bottom).then(|| Run {
+            left,
+            top,
+            bottom,
+            text: names.join(" "),
+        })
+    }
+
+    /// Where an MSAA object is: left, top, width, height, in screen pixels.
+    type Place = (i32, i32, i32, i32);
+
+    /// The named children of a window's MSAA client object, with their places: a tab control's tabs, a status bar's parts. They are not windows.
+    fn msaa_children(window: HWND) -> Vec<(String, Option<Place>)> {
         use windows::core::Interface;
         use windows::Win32::System::Variant::VARIANT;
         use windows::Win32::UI::Accessibility::{AccessibleObjectFromWindow, IAccessible};
         const OBJID_CLIENT: i32 = -4;
         let mut object: *mut core::ffi::c_void = std::ptr::null_mut();
         // SAFETY: MSAA's client object of a window handle, with a valid out-pointer.
-        unsafe {
-            AccessibleObjectFromWindow(tabs, OBJID_CLIENT as u32, &IAccessible::IID, &mut object)
-                .ok()?;
-        }
-        if object.is_null() {
-            return None;
+        let found = unsafe {
+            AccessibleObjectFromWindow(window, OBJID_CLIENT as u32, &IAccessible::IID, &mut object)
+        };
+        if found.is_err() || object.is_null() {
+            return Vec::new();
         }
         // SAFETY: AccessibleObjectFromWindow returned an IAccessible for this IID.
         let accessible = unsafe { IAccessible::from_raw(object) };
-        // SAFETY: plain MSAA queries on the object just obtained.
-        let count = unsafe { accessible.accChildCount() }.ok()?;
-        let mut names = Vec::new();
-        let (mut left, mut top, mut bottom) = (i32::MAX, i32::MAX, i32::MIN);
+        // SAFETY: plain MSAA query on the object just obtained.
+        let count = unsafe { accessible.accChildCount() }.unwrap_or(0);
+        let mut children = Vec::new();
         for id in 1..=count {
             let child = VARIANT::from(id);
             // SAFETY: plain MSAA queries with valid arguments and out-pointers.
@@ -210,23 +232,57 @@ mod windows_lines {
                     continue;
                 }
                 let (mut x, mut y, mut width, mut height) = (0, 0, 0, 0);
-                if accessible
+                let place = accessible
                     .accLocation(&mut x, &mut y, &mut width, &mut height, &child)
                     .is_ok()
-                {
-                    left = left.min(x);
-                    top = top.min(y);
-                    bottom = bottom.max(y + height);
-                }
-                names.push(without_accelerators(&name));
+                    .then_some((x, y, width, height));
+                children.push((name, place));
             }
         }
-        (!names.is_empty() && top <= bottom).then(|| Run {
-            left,
-            top,
-            bottom,
-            text: names.join(" "),
-        })
+        children
+    }
+
+    /// A focus's top-level window's menu bar items as written ("&File") and its status bar's
+    /// parts: JAWS's view of the window shows them above and below its text [obs, 314/s10,
+    /// s11]. Menus are read across processes by Win32; a status bar's parts through MSAA.
+    pub fn window_bars(focus: HWND) -> (Vec<String>, Vec<String>) {
+        use windows::core::w;
+        use windows::Win32::UI::WindowsAndMessaging::{
+            FindWindowExW, GetAncestor, GetMenu, GetMenuItemCount, GetMenuStringW, GA_ROOT,
+            MF_BYPOSITION,
+        };
+        // SAFETY: plain Win32 queries on window and menu handles; buffers outlive the calls.
+        unsafe {
+            let root = GetAncestor(focus, GA_ROOT);
+            if root.is_invalid() {
+                return (Vec::new(), Vec::new());
+            }
+            let mut menu_bar = Vec::new();
+            let menu = GetMenu(root);
+            if !menu.is_invalid() {
+                for i in 0..GetMenuItemCount(Some(menu)).max(0) {
+                    let mut buf = [0u16; 128];
+                    let n = GetMenuStringW(menu, i as u32, Some(&mut buf), MF_BYPOSITION);
+                    let text = String::from_utf16_lossy(
+                        buf.get(..usize::try_from(n).unwrap_or(0)).unwrap_or(&[]),
+                    );
+                    if !text.trim().is_empty() {
+                        menu_bar.push(text);
+                    }
+                }
+            }
+            let status_bar = FindWindowExW(Some(root), None, w!("msctls_statusbar32"), None)
+                .ok()
+                .filter(|bar| IsWindowVisible(*bar).as_bool())
+                .map(|bar| {
+                    msaa_children(bar)
+                        .into_iter()
+                        .map(|(name, _)| name)
+                        .collect()
+                })
+                .unwrap_or_default();
+            (menu_bar, status_bar)
+        }
     }
 
     /// A static control's lines as it draws them: its text wrapped at its width, less

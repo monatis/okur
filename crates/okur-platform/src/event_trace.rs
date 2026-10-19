@@ -109,6 +109,12 @@ pub struct TraceEvent {
     /// several lines.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub window_style: Option<u32>,
+    /// For a focus: its top-level window's menu bar items, as written ("&File"), and its
+    /// status bar's parts.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub menu_bar: Vec<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub status_bar: Vec<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub window_title: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -708,6 +714,22 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     };
     focus.in_dialog_box = focus.platform.top_window_class.as_deref() == Some(WIN32_DIALOG_CLASS);
     focus.multi_line = multi_line_edit(event.window_class.as_deref(), event.window_style);
+    focus.menu_bar = event
+        .menu_bar
+        .iter()
+        .map(|item| crate::screen_lines::without_accelerators(item))
+        .filter(|item| !item.trim().is_empty())
+        .collect();
+    focus.status_bar = event
+        .status_bar
+        .iter()
+        .map(|part| {
+            okur_core::viewer_text::without_marks(part)
+                .trim()
+                .to_owned()
+        })
+        .filter(|part| !part.is_empty())
+        .collect();
     // A dialog box (Win32 #32770, as a message box is) is announced with its static text,
     // which sits beside its buttons [obs, 306/s1]. Other windows are announced by title only
     // (306/s10).
@@ -1747,6 +1769,8 @@ mod capture {
                     id_child,
                     window_class: Some(CHROME_PAGE_WINDOW.to_owned()),
                     window_style: None,
+                    menu_bar: Vec::new(),
+                    status_bar: Vec::new(),
                     window_title: None,
                     process: None,
                     object: None,
@@ -2097,6 +2121,8 @@ mod capture {
                     id_child: 0,
                     window_class: None,
                     window_style: None,
+                    menu_bar: Vec::new(),
+                    status_bar: Vec::new(),
                     window_title: None,
                     process: None,
                     object: None,
@@ -2206,6 +2232,8 @@ mod capture {
                     id_child: 0,
                     window_class: None,
                     window_style: None,
+                    menu_bar: Vec::new(),
+                    status_bar: Vec::new(),
                     window_title: None,
                     process: None,
                     object: None,
@@ -2515,6 +2543,11 @@ mod capture {
                 // SAFETY: plain Win32 call; a window that is gone gives 0.
                 unsafe { GetWindowLongW(hwnd, GWL_STYLE) as u32 }
             });
+            let (menu_bar, status_bar) = if focused {
+                crate::screen_lines::window_bars(hwnd)
+            } else {
+                (Vec::new(), Vec::new())
+            };
             let event = TraceEvent {
                 t_ms,
                 event: name.to_owned(),
@@ -2524,6 +2557,8 @@ mod capture {
                 id_child,
                 window_class: Some(class).filter(|s| !s.is_empty()),
                 window_style,
+                menu_bar,
+                status_bar,
                 window_title: Some(title).filter(|s| !s.is_empty()),
                 process: process_name(hwnd),
                 object,
@@ -3246,6 +3281,8 @@ mod tests {
             id_child: 0,
             window_class: None,
             window_style: None,
+            menu_bar: Vec::new(),
+            status_bar: Vec::new(),
             window_title: None,
             process: None,
             object: None,

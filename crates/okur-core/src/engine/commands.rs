@@ -956,10 +956,19 @@ impl ScreenReaderEngine {
         if self.editing_text() {
             if let Some(text) = &self.last_text {
                 let mut lines: Vec<String> = Vec::new();
+                // The window: its title, its menu bar, the text, its status bar, as on screen
+                // ("File Edit Format View Help" ... "Ln 1, Col 1 100% Windows (CRLF) UTF-8"
+                // [obs, 314/s10, s11]).
                 if window {
                     lines.push(title);
+                    if !focus.menu_bar.is_empty() {
+                        lines.push(focus.menu_bar.join(" "));
+                    }
                 }
                 lines.extend(crate::editing::text_lines(&text.text));
+                if window && !focus.status_bar.is_empty() {
+                    lines.push(focus.status_bar.join(" "));
+                }
                 return Some(lines);
             }
         }

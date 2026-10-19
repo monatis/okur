@@ -188,6 +188,11 @@ pub struct FocusEvent {
     /// its caret's line and "Contains text" on arrival [obs, 316/s3], the line alone on Say
     /// Line and "top of file" on Ctrl+Home [obs, 400/s1, s5].
     pub multi_line: bool,
+    /// The window's menu bar items ("File", "Edit", ...) and its status bar's parts ("Ln 1,
+    /// Col 1", "100%", ...): JAWS's view of the window shows them above and below its text
+    /// [obs, 314/s10, s11].
+    pub menu_bar: Vec<String>,
+    pub status_bar: Vec<String>,
     /// The application, as the platform names it: its executable on Windows
     /// ("SearchHost.exe"), its bundle identifier on macOS. For application modules (`apps/`).
     pub app: Option<String>,
@@ -296,6 +301,8 @@ impl FocusEvent {
             access_key: None,
             read_only: None,
             multi_line: false,
+            menu_bar: Vec::new(),
+            status_bar: Vec::new(),
             app: None,
             platform: PlatformIds::default(),
         }
