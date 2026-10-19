@@ -73,15 +73,20 @@ and per-application and per-site settings. Those are not repeated here.
   Ctrl+Home says "top of file" first (400/s1, s5), as in a document. Okur knows a native field
   has several lines only from its role; the tracer would need the window's multi-line style.
 - **Dialogs** (323, 322; audit §2.3):
-  - the page's name and text on Ctrl+Tab;
-  - Say Window's format (323/s2);
-  - the access key on Insert+Tab (323/s1);
-  - a list item with its columns and position after the viewer closes (322/s18).
+  - the page's name and text on Ctrl+Tab ("Security Page | For special permissions or advanced
+    settings, click Advanced." 323/s10): the tracer has the page's name but not its own text.
+    Which statics JAWS counts as a page's text needs experiments on old-pc: the tab control
+    spans the page, and labels such as "Group or user names:" are not read;
+  - Say Window (323/s2): done but for JAWS's "Opens with: Opens with:", which the tree does
+    not explain;
+  - a list item with its columns and position after the viewer closes (322/s18);
+  - the viewer shows a path clipped as on screen ("sr-property-fixtur", 323/s7): a side effect
+    of JAWS's screen model, a candidate for accepted-divergences.md.
 - **A list view's control view** (322/s15, s16): JAWS shows its last row with its columns, Okur
   another row without them.
-- **Notepad's window view:** its menu bar and status bar lines (314/s10, s11), and JAWS's
-  "ESCAPE" on the first Down in its font message (314/s3).
-- **Small differences:** the desktop list's role marks (316/s1, 319/s9); 315/s16.
+- **Notepad's window view:** its menu bar and status bar lines (314/s10, s11) are built and
+  wait for 314's re-recording; JAWS's "ESCAPE" on the first Down in its font message (314/s3).
+- **Small differences:** 315/s16.
 - **File Explorer** (dev box, handoff 2026-10-17):
   - the Details view button's help text;
   - Ctrl+A reading every selected item with its columns;
@@ -115,9 +120,11 @@ Block quotes cannot be seen through UIA. Measure first how long users stay on th
   `crates/okur-core/src/lib.rs`'s `heading_level_keys_say_the_section_heading_entered`, which
   replaced the scenario 12 assertion JAWS contradicted. Add one for each gap whose behavior is
   recorded; `cargo test -- --ignored` runs them.
-- **Dev-box rules:** seven rules in the code come from the owner's JAWS on the dev box, and
-  old-pc's evidence contradicts them (audit §5). Record the settings and Windows version each
-  was seen with, and settle each conflict with a recording.
+- **Dev-box rules** (audit §5): rules 4 (Say Window), 5 (Say Focus's access key) and 7 (the
+  desktop's list) now follow old-pc; 6 (Notepad's window view) waits for 314's re-recording.
+  Rules 1 to 3 (a plain focusable element, a page's popup menu items, the page after Chrome's
+  menu) came from the owner's real WhatsApp; 219's fixture only imitates it, so they wait for
+  a recording that settles them (WhatsApp-like markup, or the owner's live check).
 - **Live runs:** the run files behind `okur live-parity` numbers are kept on old-pc and in
   `target/live/`, not in the repository. Decide where to keep them so a number can be
   checked again.
