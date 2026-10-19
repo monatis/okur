@@ -597,23 +597,42 @@ impl VirtualCursor {
         }
     }
 
-    /// Speaks entire document from current cursor position (`SayAll`).
+    /// The text from the cursor's line to the end, as Say All reads it.
     pub fn say_all(&self) -> String {
-        let current_line_idx = self
-            .buffer
-            .line_at_offset(self.offset)
-            .map(|l| l.line_index)
-            .unwrap_or(0);
-
         let lines: Vec<String> = self
             .buffer
             .lines
             .iter()
-            .skip(current_line_idx)
+            .skip(self.current_line_index())
             .map(|l| self.format_line_announcement(l))
             .collect();
 
         lines.join("\n")
+    }
+
+    /// The index of the line the cursor is on.
+    pub fn current_line_index(&self) -> usize {
+        self.buffer
+            .line_at_offset(self.offset)
+            .map(|l| l.line_index)
+            .unwrap_or(0)
+    }
+
+    /// Line `index` as the virtual cursor reads it, or `None` past the last line.
+    pub fn line_text(&self, index: usize) -> Option<String> {
+        self.buffer
+            .lines
+            .get(index)
+            .map(|line| self.format_line_announcement(line))
+    }
+
+    /// Moves to the start of line `index`, as Say All reaches it.
+    pub fn move_to_line(&mut self, index: usize) {
+        if let Some(line) = self.buffer.lines.get(index) {
+            self.offset = line.start_offset;
+            self.current_node_id = Some(line.node_id);
+            self.selection = None;
+        }
     }
 
     /// Shared quick-navigation movement (JAWS spec §11–§17).

@@ -17,6 +17,9 @@ use windows::{
 pub struct Sapi5Engine {
     #[cfg(windows)]
     voice: ISpVoice,
+    /// The Say All parts queued: each one's SAPI stream number and mark, oldest first.
+    #[cfg(windows)]
+    marks: std::collections::VecDeque<(u32, u64)>,
     rate: i32,
     volume: u16,
     is_paused: bool,
@@ -50,6 +53,7 @@ impl Sapi5Engine {
 
                 Ok(Self {
                     voice,
+                    marks: std::collections::VecDeque::new(),
                     rate,
                     volume,
                     is_paused: false,
@@ -74,6 +78,9 @@ impl TtsEngine for Sapi5Engine {
     fn speak(&mut self, text: &str, interrupt: bool) -> Result<(), TtsError> {
         #[cfg(windows)]
         {
+            if interrupt {
+                self.marks.clear();
+            }
             let clean = text.replace(['\u{001d}', '\u{001e}'], "");
             let mut flags = SPF_ASYNC.0 | SPF_IS_NOT_XML.0;
             if interrupt {
@@ -126,6 +133,7 @@ impl TtsEngine for Sapi5Engine {
             let mut flags = SPF_ASYNC.0 | SPF_IS_XML.0;
             if interrupt {
                 flags |= SPF_PURGEBEFORESPEAK.0;
+                self.marks.clear();
             }
             let wide: Vec<u16> = xml.encode_utf16().chain(std::iter::once(0)).collect();
             // SAFETY: a null-terminated string that outlives the asynchronous call (SAPI
@@ -145,9 +153,75 @@ impl TtsEngine for Sapi5Engine {
         }
     }
 
+    /// SAPI numbers every asynchronous Speak call's stream; the part's stream number is kept
+    /// with its mark.
+    fn speak_marked(&mut self, text: &str, mark: u64, interrupt: bool) -> Result<(), TtsError> {
+        #[cfg(windows)]
+        {
+            if interrupt {
+                self.marks.clear();
+            }
+            let clean = text.replace(['\u{001d}', '\u{001e}'], "");
+            let mut flags = SPF_ASYNC.0 | SPF_IS_NOT_XML.0;
+            if interrupt {
+                flags |= SPF_PURGEBEFORESPEAK.0;
+            }
+            let wide: Vec<u16> = clean.encode_utf16().chain(std::iter::once(0)).collect();
+            let mut stream = 0u32;
+            // SAFETY: a null-terminated string SAPI copies before returning, and a stream
+            // number written before it returns.
+            unsafe {
+                self.voice
+                    .Speak(PCWSTR(wide.as_ptr()), flags as u32, Some(&mut stream))
+                    .map_err(|e| TtsError::SynthesisFailed(format!("SAPI 5 Speak failed: {e}")))?;
+            }
+            self.marks.push_back((stream, mark));
+            Ok(())
+        }
+
+        #[cfg(not(windows))]
+        {
+            let _ = mark;
+            self.speak(text, interrupt)
+        }
+    }
+
+    /// The latest part whose stream SAPI has started (`SPVOICESTATUS::ulCurrentStream`).
+    fn reached(&mut self) -> Option<u64> {
+        #[cfg(windows)]
+        {
+            let front = self.marks.front()?.0;
+            let mut status = SPVOICESTATUS::default();
+            // SAFETY: plain COM call writing into a local status.
+            unsafe { self.voice.GetStatus(&mut status, std::ptr::null_mut()) }.ok()?;
+            if status.ulCurrentStream < front {
+                return None;
+            }
+            let mut latest = None;
+            while let Some(&(stream, mark)) = self.marks.front() {
+                if stream > status.ulCurrentStream {
+                    break;
+                }
+                latest = Some(mark);
+                self.marks.pop_front();
+            }
+            latest
+        }
+
+        #[cfg(not(windows))]
+        {
+            None
+        }
+    }
+
+    fn follows_marks(&self) -> bool {
+        cfg!(windows)
+    }
+
     fn stop(&mut self) -> Result<(), TtsError> {
         #[cfg(windows)]
         {
+            self.marks.clear();
             let empty: [u16; 1] = [0];
             let flags = (SPF_PURGEBEFORESPEAK.0 | SPF_ASYNC.0) as u32;
             unsafe {

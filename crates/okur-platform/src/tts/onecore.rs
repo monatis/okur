@@ -161,6 +161,8 @@ mod engine {
             generation: u64,
             /// When the engine was asked to speak it, for the debug log's latency.
             asked: Instant,
+            /// A Say All part's mark, recorded as the worker starts it.
+            mark: Option<u64>,
         },
         Voice(String),
         Rate(f64),
@@ -173,6 +175,8 @@ mod engine {
         generation: AtomicU64,
         /// Utterances sent and not yet played or dropped.
         pending: AtomicUsize,
+        /// The latest Say All part started, plus one (0: none since it was last read).
+        reached: AtomicU64,
     }
 
     /// The OneCore speech driver: a worker thread synthesizes and plays utterances in order.
@@ -205,6 +209,38 @@ mod engine {
                 rate: 0,
                 volume: 100,
             })
+        }
+
+        /// Sends an utterance to the worker, after an interruption's raised generation.
+        fn queue(
+            &mut self,
+            text: &str,
+            pitch: i32,
+            interrupt: bool,
+            mark: Option<u64>,
+        ) -> Result<(), TtsError> {
+            let generation = if interrupt {
+                self.shared.generation.fetch_add(1, Ordering::SeqCst) + 1
+            } else {
+                self.shared.generation.load(Ordering::SeqCst)
+            };
+            let clean = text.replace(['\u{001d}', '\u{001e}'], "");
+            // An empty Say All part is still started, so reading goes on past it.
+            if clean.trim().is_empty() && mark.is_none() {
+                return Ok(());
+            }
+            self.shared.pending.fetch_add(1, Ordering::SeqCst);
+            let sent = self.send(Command::Speak {
+                text: clean,
+                pitch,
+                generation,
+                asked: Instant::now(),
+                mark,
+            });
+            if sent.is_err() {
+                self.shared.pending.fetch_sub(1, Ordering::SeqCst);
+            }
+            sent
         }
 
         fn send(&self, command: Command) -> Result<(), TtsError> {
@@ -483,11 +519,15 @@ mod engine {
                     pitch,
                     generation,
                     asked,
+                    mark,
                 } => {
                     let cancelled = || shared.generation.load(Ordering::SeqCst) != generation;
                     if cancelled() {
                         shared.pending.fetch_sub(1, Ordering::SeqCst);
                         continue;
+                    }
+                    if let Some(mark) = mark {
+                        shared.reached.store(mark + 1, Ordering::SeqCst);
                     }
                     // A changed pitch (a capital letter) holds for this utterance only.
                     let set_pitch = |value: f64| {
@@ -554,30 +594,23 @@ mod engine {
             pitch: i32,
             interrupt: bool,
         ) -> Result<(), TtsError> {
-            let generation = if interrupt {
-                self.shared.generation.fetch_add(1, Ordering::SeqCst) + 1
-            } else {
-                self.shared.generation.load(Ordering::SeqCst)
-            };
-            let clean = text.replace(['\u{001d}', '\u{001e}'], "");
-            if clean.trim().is_empty() {
-                return Ok(());
-            }
-            self.shared.pending.fetch_add(1, Ordering::SeqCst);
-            let sent = self.send(Command::Speak {
-                text: clean,
-                pitch,
-                generation,
-                asked: Instant::now(),
-            });
-            if sent.is_err() {
-                self.shared.pending.fetch_sub(1, Ordering::SeqCst);
-            }
-            sent
+            self.queue(text, pitch, interrupt, None)
         }
 
+        fn speak_marked(&mut self, text: &str, mark: u64, interrupt: bool) -> Result<(), TtsError> {
+            self.queue(text, 0, interrupt, Some(mark))
+        }
+
+        fn reached(&mut self) -> Option<u64> {
+            self.shared.reached.swap(0, Ordering::SeqCst).checked_sub(1)
+        }
+
+        fn follows_marks(&self) -> bool {
+            true
+        }
         fn stop(&mut self) -> Result<(), TtsError> {
             self.shared.generation.fetch_add(1, Ordering::SeqCst);
+            self.shared.reached.store(0, Ordering::SeqCst);
             Ok(())
         }
 

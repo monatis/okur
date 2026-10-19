@@ -46,6 +46,25 @@ pub trait TtsEngine: Send + Sync {
         self.speak(text, interrupt)
     }
 
+    /// Speaks one part of a continuous reading (Say All) behind what is speaking;
+    /// [`TtsEngine::reached`] gives `mark` back once the synthesizer starts it.
+    fn speak_marked(&mut self, text: &str, mark: u64, interrupt: bool) -> Result<(), TtsError> {
+        let _ = mark;
+        self.speak(text, interrupt)
+    }
+
+    /// The mark of the latest part the synthesizer has started since the last call, for a
+    /// synthesizer that [`TtsEngine::follows_marks`].
+    fn reached(&mut self) -> Option<u64> {
+        None
+    }
+
+    /// Whether [`TtsEngine::reached`] follows the parts as they are spoken. Otherwise a part
+    /// counts as reached once it is handed over.
+    fn follows_marks(&self) -> bool {
+        false
+    }
+
     /// Cancels/stops any ongoing speech immediately.
     fn stop(&mut self) -> Result<(), TtsError>;
 

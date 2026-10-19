@@ -895,6 +895,12 @@ async fn main() {
             let (event_tx, mut event_rx) = tokio::sync::mpsc::unbounded_channel();
             // Speech on its own thread: the keyboard hook never waits for a synthesizer.
             let speech = okur_platform::tts::SpeechThread::start(tts);
+            // Say All's progress: the mark of each part the synthesizer starts comes back to
+            // the event loop, which moves the virtual cursor to its line.
+            let (marks_tx, mut marks_rx) = tokio::sync::mpsc::unbounded_channel::<u64>();
+            speech.report_marks(Box::new(move |mark| {
+                let _ = marks_tx.send(mark);
+            }));
             let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech));
             // Enter on an edit focuses it in the page, Enter/Space on a control activates it.
             #[cfg(windows)]
@@ -1009,6 +1015,13 @@ async fn main() {
                     loop {
                         let received = tokio::select! {
                             biased;
+                            Some(mark) = marks_rx.recv() => {
+                                give_way_to_keys();
+                                if let Ok(mut eng) = engine_events.lock() {
+                                    eng.speech_reached(mark);
+                                }
+                                continue;
+                            }
                             Some((number, title, buffer)) = built_rx.recv() => {
                                 if number > refresh_applied {
                                     refresh_applied = number;

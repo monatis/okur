@@ -191,6 +191,8 @@ impl ScreenReaderEngine {
             }
         })?;
         crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, rebuilt));
+        // Line numbers changed: a Say All stops following.
+        self.say_all = None;
         self.cursor.move_to_node_id(id);
         Some(speech)
     }
@@ -503,6 +505,8 @@ impl ScreenReaderEngine {
                     )
                 });
             crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, buffer));
+            // Line numbers changed: a Say All stops following.
+            self.say_all = None;
             // Node ids are the capture's own: the focus is found again as the same object (IA2
             // captures), else by its DOM id, else as the focused node with its role and name,
             // else by its state alone. A page can

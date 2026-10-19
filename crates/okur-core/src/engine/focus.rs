@@ -468,6 +468,8 @@ impl ScreenReaderEngine {
                         }
                     }) {
                         crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, rebuilt));
+                        // Line numbers changed: a Say All stops following.
+                        self.say_all = None;
                     }
                 }
             }

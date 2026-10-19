@@ -6,8 +6,9 @@
 //! speech log is still written when a call is made, so key-to-speech timings keep their meaning.
 
 use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::mpsc::{channel, Sender};
+use std::sync::mpsc::{channel, RecvTimeoutError, Sender};
 use std::sync::{Arc, Mutex};
+use std::time::Duration;
 
 use okur_core::speech::SpeechOutput;
 
@@ -22,9 +23,19 @@ enum Request {
     Phonetic(String, bool),
     /// A text spelled (Say Word or Say Line twice).
     Spelled(String, bool),
+    /// A part of a Say All, whose mark goes back to the engine as the synthesizer starts it.
+    Marked(String, u64, bool),
     Stop,
     Configure(okur_core::settings::VoiceSettings),
 }
+
+/// How often the synthesizer is asked how far a Say All has got.
+const MARK_POLL: Duration = Duration::from_millis(20);
+/// Polls without progress, and without speech, after which a Say All is taken to be over.
+const IDLE_POLLS: u32 = 25;
+
+/// Where a Say All part's mark goes once the synthesizer has started it.
+pub type MarkReport = Box<dyn Fn(u64) + Send>;
 
 /// The longest part of a text given to the synthesizer at once, in bytes.
 const PART: usize = 2000;
@@ -69,7 +80,8 @@ impl Request {
             | Request::Symbols(_, interrupt)
             | Request::Character(_, interrupt)
             | Request::Phonetic(_, interrupt)
-            | Request::Spelled(_, interrupt) => *interrupt,
+            | Request::Spelled(_, interrupt)
+            | Request::Marked(_, _, interrupt) => *interrupt,
             Request::Configure(_) => false,
         }
     }
@@ -113,6 +125,8 @@ pub struct SpeechThread {
     /// the keyboard hook, and reading them there waited behind the synthesizer (a SAPI purge)
     /// and then enumerated SAPI's voices (responsiveness review, 2026-10-19).
     voices: Arc<Mutex<Vec<String>>>,
+    /// Where a Say All part's mark goes as the synthesizer starts it.
+    report_to: Arc<Mutex<Option<MarkReport>>>,
 }
 
 impl SpeechThread {
@@ -125,6 +139,8 @@ impl SpeechThread {
         let (requests, received) = channel::<Request>();
         let (worker_tts, worker_pending) = (Arc::clone(&tts), Arc::clone(&pending));
         let worker_voices = Arc::clone(&voices);
+        let report_to: Arc<Mutex<Option<MarkReport>>> = Arc::new(Mutex::new(None));
+        let worker_report = Arc::clone(&report_to);
         let started = std::thread::Builder::new()
             .name("okur-speech".to_owned())
             .spawn(move || {
@@ -136,64 +152,50 @@ impl SpeechThread {
                         windows::Win32::System::Com::COINIT_MULTITHREADED,
                     )
                 };
-                while let Ok(first) = received.recv() {
-                    let batch = Request::batch(first, &received);
-                    let count = batch.len();
-                    for request in Request::superseding(batch) {
+                // Say All parts whose start the synthesizer reports are out, and the polls
+                // since it last made progress.
+                let mut following = false;
+                let mut idle = 0;
+                loop {
+                    let next = if following {
+                        match received.recv_timeout(MARK_POLL) {
+                            Ok(request) => Some(request),
+                            Err(RecvTimeoutError::Timeout) => None,
+                            Err(RecvTimeoutError::Disconnected) => break,
+                        }
+                    } else {
+                        match received.recv() {
+                            Ok(request) => Some(request),
+                            Err(_) => break,
+                        }
+                    };
+                    if let Some(first) = next {
+                        carry_out(
+                            Request::batch(first, &received),
+                            &worker_tts,
+                            &worker_pending,
+                            &worker_voices,
+                            &worker_report,
+                            &mut following,
+                        );
+                        idle = 0;
+                    }
+                    if following {
                         let Ok(mut tts) = worker_tts.lock() else {
                             continue;
                         };
-                        match request {
-                            Request::Speak(text, interrupt) => {
-                                // Long text (Say All) in parts, so that speech starts after the
-                                // first part's pronunciation, not the whole text's.
-                                for (i, part) in parts(&text).enumerate() {
-                                    let spoken =
-                                        okur_core::pronounce::spoken(part, tts.punctuation);
-                                    let _ = tts.engine.speak(&spoken, interrupt && i == 0);
-                                }
+                        match tts.engine.reached() {
+                            Some(mark) => {
+                                idle = 0;
+                                report(&worker_report, mark);
                             }
-                            Request::Symbols(text, interrupt) => {
-                                let spoken = okur_core::pronounce::spoken_symbols(&text);
-                                let _ = tts.engine.speak(&spoken, interrupt);
-                            }
-                            Request::Character(text, interrupt) => {
-                                let _ = tts.engine.speak_pitched(
-                                    &okur_core::pronounce::character(&text),
-                                    okur_core::pronounce::character_pitch(&text),
-                                    interrupt,
-                                );
-                            }
-                            Request::Phonetic(text, interrupt) => {
-                                let _ = tts.engine.speak_pitched(
-                                    &okur_core::pronounce::phonetic(&text),
-                                    okur_core::pronounce::character_pitch(&text),
-                                    interrupt,
-                                );
-                            }
-                            Request::Spelled(text, interrupt) => {
-                                let parts = okur_core::pronounce::spelled_parts(&text);
-                                for (i, (part, pitch)) in parts.into_iter().enumerate() {
-                                    let first = interrupt && i == 0;
-                                    let _ = tts.engine.speak_pitched(&part, pitch, first);
-                                }
-                            }
-                            Request::Stop => {
-                                let _ = tts.engine.stop();
-                            }
-                            Request::Configure(voice) => {
-                                let kind = tts.kind;
-                                tts.configure(&voice);
-                                // Another synthesizer has other voices.
-                                if tts.kind != kind {
-                                    if let Ok(mut known) = worker_voices.lock() {
-                                        *known = SpeechOutput::voices(&*tts);
-                                    }
-                                }
+                            None if tts.engine.is_speaking() => idle = 0,
+                            None => {
+                                idle += 1;
+                                following = idle < IDLE_POLLS;
                             }
                         }
                     }
-                    worker_pending.fetch_sub(count, Ordering::SeqCst);
                 }
             });
         if let Err(e) = started {
@@ -205,9 +207,109 @@ impl SpeechThread {
             pending,
             log,
             voices,
+            report_to,
         }
     }
 
+    /// Sends each Say All part's mark to `report` once the synthesizer has started the part.
+    /// Until this is called the engine hands a Say All over whole.
+    pub fn report_marks(&self, report: MarkReport) {
+        if let Ok(mut to) = self.report_to.lock() {
+            *to = Some(report);
+        }
+    }
+}
+
+/// Carries out `batch` on the synthesizer, but for what an interruption in it supersedes.
+/// `following`: Say All parts whose start the synthesizer reports are out.
+fn carry_out(
+    batch: Vec<Request>,
+    worker_tts: &Mutex<TtsManager>,
+    worker_pending: &AtomicUsize,
+    worker_voices: &Mutex<Vec<String>>,
+    worker_report: &Mutex<Option<MarkReport>>,
+    following: &mut bool,
+) {
+    let count = batch.len();
+    for request in Request::superseding(batch) {
+        let Ok(mut tts) = worker_tts.lock() else {
+            continue;
+        };
+        // Speech that interrupts ends the Say All before it.
+        if request.interrupts() {
+            *following = false;
+        }
+        match request {
+            Request::Marked(text, mark, interrupt) => {
+                let spoken = okur_core::pronounce::spoken(&text, tts.punctuation);
+                let _ = tts.engine.speak_marked(&spoken, mark, interrupt);
+                if tts.engine.follows_marks() {
+                    *following = true;
+                } else {
+                    report(worker_report, mark);
+                }
+            }
+            Request::Speak(text, interrupt) => {
+                // Long text (Say All) in parts, so that speech starts after the
+                // first part's pronunciation, not the whole text's.
+                for (i, part) in parts(&text).enumerate() {
+                    let spoken = okur_core::pronounce::spoken(part, tts.punctuation);
+                    let _ = tts.engine.speak(&spoken, interrupt && i == 0);
+                }
+            }
+            Request::Symbols(text, interrupt) => {
+                let spoken = okur_core::pronounce::spoken_symbols(&text);
+                let _ = tts.engine.speak(&spoken, interrupt);
+            }
+            Request::Character(text, interrupt) => {
+                let _ = tts.engine.speak_pitched(
+                    &okur_core::pronounce::character(&text),
+                    okur_core::pronounce::character_pitch(&text),
+                    interrupt,
+                );
+            }
+            Request::Phonetic(text, interrupt) => {
+                let _ = tts.engine.speak_pitched(
+                    &okur_core::pronounce::phonetic(&text),
+                    okur_core::pronounce::character_pitch(&text),
+                    interrupt,
+                );
+            }
+            Request::Spelled(text, interrupt) => {
+                let parts = okur_core::pronounce::spelled_parts(&text);
+                for (i, (part, pitch)) in parts.into_iter().enumerate() {
+                    let first = interrupt && i == 0;
+                    let _ = tts.engine.speak_pitched(&part, pitch, first);
+                }
+            }
+            Request::Stop => {
+                let _ = tts.engine.stop();
+            }
+            Request::Configure(voice) => {
+                let kind = tts.kind;
+                tts.configure(&voice);
+                // Another synthesizer has other voices.
+                if tts.kind != kind {
+                    if let Ok(mut known) = worker_voices.lock() {
+                        *known = SpeechOutput::voices(&*tts);
+                    }
+                }
+            }
+        }
+    }
+    worker_pending.fetch_sub(count, Ordering::SeqCst);
+}
+
+/// Hands `mark` to the engine's side.
+fn report(to: &Mutex<Option<MarkReport>>, mark: u64) {
+    if let Ok(report) = to.lock() {
+        if let Some(report) = report.as_ref() {
+            report(mark);
+        }
+    }
+}
+
+impl SpeechThread {
     fn send(&self, request: Request) {
         self.pending.fetch_add(1, Ordering::SeqCst);
         if self.requests.send(request).is_err() {
@@ -232,6 +334,15 @@ impl SpeechOutput for SpeechThread {
     fn speak(&mut self, text: &str, interrupt: bool) {
         self.record(SpeechLogKind::Speak, text, interrupt);
         self.send(Request::Speak(text.to_owned(), interrupt));
+    }
+
+    fn speak_marked(&mut self, text: &str, mark: u64, interrupt: bool) {
+        self.record(SpeechLogKind::Speak, text, interrupt);
+        self.send(Request::Marked(text.to_owned(), mark, interrupt));
+    }
+
+    fn reports_marks(&self) -> bool {
+        self.report_to.lock().is_ok_and(|to| to.is_some())
     }
 
     fn speak_symbols(&mut self, text: &str, interrupt: bool) {
@@ -367,5 +478,139 @@ mod tests {
             parts("Hello, world.").collect::<Vec<_>>(),
             ["Hello, world."]
         );
+    }
+}
+
+#[cfg(test)]
+mod mark_tests {
+    use super::*;
+    use crate::tts::{TtsEngine, TtsEngineType, TtsError, VoiceInfo};
+    use std::collections::VecDeque;
+    use std::time::Duration;
+
+    /// A synthesizer that starts one queued part each time it is asked how far it got.
+    #[derive(Default)]
+    struct Following {
+        queued: VecDeque<u64>,
+    }
+
+    impl TtsEngine for Following {
+        fn name(&self) -> &str {
+            "following"
+        }
+        fn speak(&mut self, _text: &str, interrupt: bool) -> Result<(), TtsError> {
+            if interrupt {
+                self.queued.clear();
+            }
+            Ok(())
+        }
+        fn speak_marked(
+            &mut self,
+            _text: &str,
+            mark: u64,
+            interrupt: bool,
+        ) -> Result<(), TtsError> {
+            if interrupt {
+                self.queued.clear();
+            }
+            self.queued.push_back(mark);
+            Ok(())
+        }
+        fn reached(&mut self) -> Option<u64> {
+            self.queued.pop_front()
+        }
+        fn follows_marks(&self) -> bool {
+            true
+        }
+        fn stop(&mut self) -> Result<(), TtsError> {
+            self.queued.clear();
+            Ok(())
+        }
+        fn pause(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn resume(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn set_rate(&mut self, _rate: i32) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn get_rate(&self) -> i32 {
+            0
+        }
+        fn set_volume(&mut self, _volume: u16) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn get_volume(&self) -> u16 {
+            100
+        }
+        fn is_speaking(&self) -> bool {
+            !self.queued.is_empty()
+        }
+        fn get_voices(&self) -> Vec<VoiceInfo> {
+            Vec::new()
+        }
+        fn set_voice(&mut self, _voice_id: &str) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn wait_until_done(&mut self, _timeout_ms: u32) -> Result<(), TtsError> {
+            Ok(())
+        }
+    }
+
+    fn thread(
+        engine: Option<Box<dyn TtsEngine>>,
+    ) -> Option<(SpeechThread, std::sync::mpsc::Receiver<u64>)> {
+        let mut manager = TtsManager::new(TtsEngineType::NoSpeech).ok()?;
+        if let Some(engine) = engine {
+            manager.engine = engine;
+        }
+        let speech = SpeechThread::start(manager);
+        let (tx, rx) = channel();
+        speech.report_marks(Box::new(move |mark| {
+            let _ = tx.send(mark);
+        }));
+        Some((speech, rx))
+    }
+
+    fn received(rx: &std::sync::mpsc::Receiver<u64>, count: usize) -> Vec<u64> {
+        (0..count)
+            .map_while(|_| rx.recv_timeout(Duration::from_secs(5)).ok())
+            .collect()
+    }
+
+    /// A synthesizer that follows its parts gives each mark back as it starts the part.
+    #[test]
+    fn marks_come_back_as_parts_are_started() {
+        let Some((mut speech, rx)) = thread(Some(Box::<Following>::default())) else {
+            return;
+        };
+        assert!(speech.reports_marks());
+        speech.speak_marked("Line 1", 7, true);
+        speech.speak_marked("Line 2", 8, false);
+        speech.speak_marked("Line 3", 9, false);
+        assert_eq!(received(&rx, 3), [7, 8, 9]);
+    }
+
+    /// Without a synthesizer that follows its parts, a part counts as reached when it is
+    /// handed over, so a Say All still reads on.
+    #[test]
+    fn marks_come_back_at_once_without_progress() {
+        let Some((mut speech, rx)) = thread(None) else {
+            return;
+        };
+        speech.speak_marked("Line 1", 1, true);
+        speech.speak_marked("Line 2", 2, false);
+        assert_eq!(received(&rx, 2), [1, 2]);
+    }
+
+    /// No mark comes back before a synthesizer reports progress at all.
+    #[test]
+    fn marks_are_not_reported_without_a_listener() {
+        let Ok(manager) = TtsManager::new(TtsEngineType::NoSpeech) else {
+            return;
+        };
+        let speech = SpeechThread::start(manager);
+        assert!(!speech.reports_marks());
     }
 }

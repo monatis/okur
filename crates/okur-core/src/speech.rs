@@ -968,6 +968,20 @@ pub trait SpeechOutput: Send + Sync {
         self.speak(&crate::pronounce::spelled(text), interrupt);
     }
 
+    /// Speaks one part of a continuous reading (Say All) behind the parts before it. When
+    /// [`SpeechOutput::reports_marks`], `mark` comes back to the engine as the synthesizer
+    /// starts the part (`ScreenReaderEngine::speech_reached`).
+    fn speak_marked(&mut self, text: &str, mark: u64, interrupt: bool) {
+        let _ = mark;
+        self.speak(text, interrupt);
+    }
+
+    /// Whether the marks of [`SpeechOutput::speak_marked`] come back as their parts are
+    /// spoken. Without them a Say All hands over every line at once.
+    fn reports_marks(&self) -> bool {
+        false
+    }
+
     /// Returns whether speech output is currently active.
     fn is_speaking(&self) -> bool {
         false

@@ -21,6 +21,7 @@ const DOUBLE_PRESS_MS: u64 = 500;
 mod commands;
 mod focus;
 mod page;
+mod say_all;
 mod state;
 #[cfg(test)]
 mod tests;
@@ -156,6 +157,10 @@ pub struct ScreenReaderEngine {
     /// The last JAWS-key command, when it was pressed and how many times quickly in a row, to
     /// tell a double or triple press.
     last_press: Option<(Press, u64, u32)>,
+    /// A Say All in progress, whose cursor follows the synthesizer.
+    say_all: Option<say_all::SayAll>,
+    /// The mark the next part of a Say All is given.
+    next_mark: u64,
     /// User settings (JAWS defaults unless configured).
     pub settings: crate::settings::Settings,
     /// Caps Lock's state as toggled through the JAWS key, when the platform does not report it.
@@ -226,6 +231,8 @@ impl ScreenReaderEngine {
             dialog_focus_target: None,
             dialog_count: 0,
             last_press: None,
+            say_all: None,
+            next_mark: 0,
             settings: crate::settings::Settings::default(),
             caps_lock_on: false,
             viewer: None,
@@ -247,6 +254,7 @@ impl ScreenReaderEngine {
         self.forms_mode = false;
         self.active_element_list = None;
         self.app_mode = AppMode::VirtualBuffer;
+        self.say_all = None;
     }
 
     /// The application module that owns `focus`, whose hooks apply to it.
@@ -323,6 +331,8 @@ impl ScreenReaderEngine {
 
         // 1. Any key press interrupts speech immediately (NVDA & JAWS standard behavior)
         self.speech.stop();
+        // It ends a Say All, whose cursor stays on the line last heard.
+        self.end_say_all();
         let stopped = started.elapsed();
         if stopped > std::time::Duration::from_millis(50) {
             tracing::warn!(
