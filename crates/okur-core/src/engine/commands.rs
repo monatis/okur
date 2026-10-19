@@ -107,6 +107,8 @@ impl ScreenReaderEngine {
             Command::QuickSettings | Command::SettingsCenter => return self.open_settings(),
             Command::SetPunctuationLevel => return self.next_punctuation_level(),
             Command::NextTypingEcho => return self.next_typing_echo(),
+            Command::SpellWord => return self.spell(false),
+            Command::SpellLine => return self.spell(true),
             Command::SayFont => return self.say_font(false),
             Command::SayFontInViewer => return self.say_font(true),
             _ => {}
@@ -655,6 +657,36 @@ impl ScreenReaderEngine {
         Some(KeyAction::Consume)
     }
 
+    /// Spell Word and Spell Line (Say Word or Say Line pressed twice quickly): the word or line
+    /// at the caret in a text field, at the virtual cursor elsewhere, spelled
+    /// [obs, 406/s2, s5, s7; 408/s3, s6, s8].
+    pub(super) fn spell(&mut self, line: bool) -> Option<String> {
+        let text = if self.editing_text() {
+            let context = self.last_text.as_ref()?;
+            if line {
+                crate::editing::line_at(context)
+            } else {
+                crate::editing::word_around(context)
+            }
+        } else if line {
+            self.cursor
+                .buffer
+                .line_at_offset(self.cursor.offset)
+                .map(|l| l.text.clone())?
+        } else {
+            self.cursor
+                .buffer
+                .word_at_offset(self.cursor.offset)
+                .map(|w| w.text.clone())?
+        };
+        let text = text.trim();
+        if text.is_empty() {
+            return None;
+        }
+        self.speech.speak_spelled(text, true);
+        Some(crate::pronounce::spelled(text))
+    }
+
     /// The character Say Character reads: the caret's in a text field, the virtual cursor's
     /// elsewhere.
     fn character_here(&self) -> String {
@@ -676,6 +708,11 @@ impl ScreenReaderEngine {
         let say_line = layout_command == Some(Command::SayLine)
             || crate::editing::EditKey::of(event).is_some();
         if self.editing_text() && say_line {
+            // Pressed twice quickly, the line is spelled [obs, 406/s7].
+            if self.presses(Press::Command(Command::SayLine), event.time_ms, 2) == 2 {
+                let _ = self.spell(true);
+                return;
+            }
             // Say Line does not change the field, so no report follows: speak the field's
             // last known text now, or read it when none is known [obs, 305/s9, s15]. A
             // document (Notepad, Google Docs) gives the line alone (JAWS, dev box).
@@ -747,6 +784,11 @@ impl ScreenReaderEngine {
             return;
         }
         if self.editing_text() && layout_command == Some(Command::SayWord) {
+            // Pressed twice quickly, the word is spelled [obs, 406/s2, s5].
+            if self.presses(Press::Command(Command::SayWord), event.time_ms, 2) == 2 {
+                let _ = self.spell(false);
+                return;
+            }
             let word = self
                 .last_text
                 .as_ref()

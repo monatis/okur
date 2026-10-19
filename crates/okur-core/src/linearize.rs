@@ -1169,8 +1169,11 @@ pub fn segment_words(text: &str) -> Vec<(usize, usize)> {
             && !(prev.is_some_and(|p| p.is_ascii_digit())
                 && next.is_some_and(|n| n.is_ascii_digit()));
         // Colons stay with the word before them, and a letter after them begins a word:
-        // "std::" then "io" (213, old-pc, 2026-10-18).
-        let after_colons = prev == Some(':') && c.is_alphanumeric();
+        // "std::" then "io" (213, old-pc, 2026-10-18). A time's colon, between digits, is
+        // inside its word: "10:30" [obs, 407/s22].
+        let before_colon = i.checked_sub(2).and_then(|p| chars.get(p)).map(|&(_, c)| c);
+        let in_time = c.is_ascii_digit() && before_colon.is_some_and(|b| b.is_ascii_digit());
+        let after_colons = prev == Some(':') && c.is_alphanumeric() && !in_time;
         if separator {
             if let Some(s) = start.take() {
                 words.push((s, offset));

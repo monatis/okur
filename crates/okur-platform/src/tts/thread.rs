@@ -20,6 +20,8 @@ enum Request {
     Character(String, bool),
     /// A character spelled phonetically (Say Character twice).
     Phonetic(String, bool),
+    /// A text spelled (Say Word or Say Line twice).
+    Spelled(String, bool),
     Stop,
     Configure(okur_core::settings::VoiceSettings),
 }
@@ -66,7 +68,8 @@ impl Request {
             Request::Speak(_, interrupt)
             | Request::Symbols(_, interrupt)
             | Request::Character(_, interrupt)
-            | Request::Phonetic(_, interrupt) => *interrupt,
+            | Request::Phonetic(_, interrupt)
+            | Request::Spelled(_, interrupt) => *interrupt,
             Request::Configure(_) => false,
         }
     }
@@ -168,6 +171,13 @@ impl SpeechThread {
                                     interrupt,
                                 );
                             }
+                            Request::Spelled(text, interrupt) => {
+                                let parts = okur_core::pronounce::spelled_parts(&text);
+                                for (i, (part, pitch)) in parts.into_iter().enumerate() {
+                                    let first = interrupt && i == 0;
+                                    let _ = tts.engine.speak_pitched(&part, pitch, first);
+                                }
+                            }
                             Request::Stop => {
                                 let _ = tts.engine.stop();
                             }
@@ -213,6 +223,12 @@ impl SpeechThread {
 }
 
 impl SpeechOutput for SpeechThread {
+    /// Typing echo: kept out of the speech log, as JAWS keeps it out of its history; a capital
+    /// at a raised pitch [obs, 406/s13].
+    fn speak_echo(&mut self, text: &str) {
+        self.send(Request::Character(text.to_owned(), true));
+    }
+
     fn speak(&mut self, text: &str, interrupt: bool) {
         self.record(SpeechLogKind::Speak, text, interrupt);
         self.send(Request::Speak(text.to_owned(), interrupt));
@@ -234,6 +250,13 @@ impl SpeechOutput for SpeechThread {
     fn speak_phonetic(&mut self, text: &str, interrupt: bool) {
         self.record(SpeechLogKind::Speak, text, interrupt);
         self.send(Request::Phonetic(text.to_owned(), interrupt));
+    }
+
+    /// The speech log keeps the spelled characters; the synthesizer says them in parts.
+    fn speak_spelled(&mut self, text: &str, interrupt: bool) {
+        let spelled = okur_core::pronounce::spelled(text);
+        self.record(SpeechLogKind::Speak, &spelled, interrupt);
+        self.send(Request::Spelled(text.to_owned(), interrupt));
     }
 
     fn stop(&mut self) {

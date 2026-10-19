@@ -594,7 +594,11 @@ impl RecordingSpeech {
 impl okur_core::speech::SpeechOutput for RecordingSpeech {
     /// JAWS's speech history has no typing echo, but its synthesizer speaks it.
     fn speak_echo(&mut self, text: &str) {
-        append(&self.spoken, text.to_owned());
+        let pitch = okur_core::pronounce::character_pitch(text);
+        append(
+            &self.spoken,
+            okur_core::pronounce::pitched(&okur_core::pronounce::character(text), pitch),
+        );
     }
 
     fn speak(&mut self, text: &str, _interrupt: bool) {
@@ -618,6 +622,13 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
             &self.spoken,
             okur_core::pronounce::pitched(&okur_core::pronounce::character(text), pitch),
         );
+    }
+
+    fn speak_spelled(&mut self, text: &str, _interrupt: bool) {
+        append(&self.history, okur_core::pronounce::spelled(text));
+        for (part, pitch) in okur_core::pronounce::spelled_parts(text) {
+            append(&self.spoken, okur_core::pronounce::pitched(&part, pitch));
+        }
     }
 
     fn speak_phonetic(&mut self, text: &str, _interrupt: bool) {

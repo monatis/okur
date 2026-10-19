@@ -52,6 +52,43 @@ pub fn phonetic(text: &str) -> String {
     }
 }
 
+/// A text spelled (Say Word or Say Line pressed twice quickly), as JAWS's history has it: its
+/// characters one by one, a space as "space": "A d a space R E A D" [obs, 406/s2, s7].
+pub fn spelled(text: &str) -> String {
+    text.chars()
+        .map(|c| match c {
+            ' ' => character(" "),
+            c => c.to_string(),
+        })
+        .collect::<Vec<_>>()
+        .join(" ")
+}
+
+/// What the synthesizer is given for a spelled text, in parts with their pitch change: each
+/// capital alone, raised; the characters between capitals together, by name ("space")
+/// [obs, 406/s5, s7: "[pitch +4] A d a space [pitch +4] R [pitch +4] E ...].
+pub fn spelled_parts(text: &str) -> Vec<(String, i32)> {
+    let mut parts = Vec::new();
+    let mut run: Vec<String> = Vec::new();
+    for c in text.chars() {
+        let one = c.to_string();
+        let pitch = character_pitch(&one);
+        if pitch == 0 {
+            run.push(character(&one));
+            continue;
+        }
+        if !run.is_empty() {
+            parts.push((run.join(" "), 0));
+            run.clear();
+        }
+        parts.push((character(&one), pitch));
+    }
+    if !run.is_empty() {
+        parts.push((run.join(" "), 0));
+    }
+    parts
+}
+
 /// The words of the letters a to z, as JAWS gives them to its synthesizer: NATO's, but "Fox Trot"
 /// and "X ray" [obs, 404].
 const PHONETIC: [&str; 26] = [
@@ -166,6 +203,9 @@ fn render(text: &str, level: Punctuation, point_digits: bool) -> String {
             '.' if next.is_some_and(char::is_alphabetic) => dot(&mut out),
             '%' if is_digit(prev) => out.push(c),
             ':' if is_digit(prev) && is_digit(next) => out.push(c),
+            // A thousands separator is part of the number, never named: "1,000,000", "dollar
+            // 1,250.50" [obs, 405/s14, s15; 407/s21].
+            ',' if is_digit(prev) && is_digit(next) => out.push(c),
             '\'' | '\u{2019}'
                 if !named
                     && prev.is_some_and(char::is_alphabetic)
@@ -240,23 +280,43 @@ fn respelled(text: &str) -> String {
     out
 }
 
-/// A word starts where a capital follows a small letter, and where letters and digits meet.
+/// A word starts where a capital follows a small letter, at the last capital of a run of them
+/// followed by a small letter ("XMLHttpRequest" as "XML Http Request" [obs, 405/s1]), and where
+/// letters and digits meet, but for an ordinal's ending ("1st", "2nd", "3rd" [obs, 405/s7]).
 fn split_words(text: &str) -> String {
+    let chars: Vec<char> = text.chars().collect();
     let mut out = String::with_capacity(text.len() + 8);
-    let mut prev: Option<char> = None;
-    for c in text.chars() {
+    for (i, &c) in chars.iter().enumerate() {
+        let at = |k: usize| chars.get(k).copied();
+        let prev = i.checked_sub(1).and_then(at);
+        let next = at(i + 1);
         if let Some(p) = prev {
+            let run_ends =
+                p.is_uppercase() && c.is_uppercase() && next.is_some_and(char::is_lowercase);
+            let ordinal = p.is_ascii_digit() && is_ordinal_ending(&chars, i);
             if (p.is_lowercase() && c.is_uppercase())
+                || run_ends
                 || (p.is_alphabetic() && c.is_ascii_digit())
-                || (p.is_ascii_digit() && c.is_alphabetic())
+                || (p.is_ascii_digit() && c.is_alphabetic() && !ordinal)
             {
                 out.push(' ');
             }
         }
         out.push(c);
-        prev = Some(c);
     }
     out
+}
+
+/// Whether the letters from `start` are an ordinal's ending after a number: "st", "nd", "rd"
+/// or "th", then no other letter.
+fn is_ordinal_ending(chars: &[char], start: usize) -> bool {
+    let ending: String = chars
+        .get(start..)
+        .unwrap_or_default()
+        .iter()
+        .take_while(|c| c.is_alphabetic())
+        .collect();
+    matches!(ending.as_str(), "st" | "nd" | "rd" | "th")
 }
 
 /// Numbers of five or more digits, and numbers with dashes, digit by digit.
@@ -451,6 +511,35 @@ mod tests {
 
     /// What JAWS sent its synthesizer for the reading fixture's line 4 at each level
     /// [obs, 400/s4, s10, s16, s22].
+    #[test]
+    fn words_numbers_and_ordinals_as_jaws_splits_them() {
+        // [obs, 405/s1, s7, s14, s15]
+        let most = |t: &str| spoken(t, Punctuation::Most);
+        assert_eq!(most("XMLHttpRequest"), "XML Http Request");
+        assert_eq!(
+            most("System32 1st 2nd 3rd 4th"),
+            "System 32 1st 2nd 3rd 4th"
+        );
+        assert_eq!(most("1,000,000 $1,250.50"), "1,000,000 dollar 1,250.50");
+        assert_eq!(spoken_symbols("$1,250.50"), "dollar 1,250.50");
+    }
+
+    #[test]
+    fn a_text_spelled_is_its_characters_capitals_raised() {
+        // [obs, 406/s5, s7]
+        assert_eq!(spelled("Ada READ"), "A d a space R E A D");
+        let parts = spelled_parts("Ada RE");
+        assert_eq!(
+            parts,
+            [
+                ("A".to_owned(), CAPITAL_PITCH),
+                ("d a space".to_owned(), 0),
+                ("R".to_owned(), CAPITAL_PITCH),
+                ("E".to_owned(), CAPITAL_PITCH),
+            ]
+        );
+    }
+
     #[test]
     fn a_letter_spelled_phonetically_is_its_word() {
         // [obs, 401/s2, s9, s13, s17, s20, s22]

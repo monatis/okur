@@ -48,6 +48,10 @@ pub enum Command {
     SayCharacterPhonetic,
     /// Say Character pressed three times quickly: the character's value.
     SayCharacterValue,
+    /// Say Word pressed twice quickly: the word spelled.
+    SpellWord,
+    /// Say Line pressed twice quickly: the line spelled.
+    SpellLine,
 
     // Moving, then reading.
     SayNextLine,
@@ -333,6 +337,8 @@ impl Command {
             Command::SaySystemTimeWithSeconds => Command::SayWeekNumber,
             Command::SayFont => Command::SayFontInViewer,
             Command::SayCharacter => Command::SayCharacterPhonetic,
+            Command::SayWord => Command::SpellWord,
+            Command::SayLine => Command::SpellLine,
             _ => return None,
         })
     }

@@ -961,6 +961,13 @@ pub trait SpeechOutput: Send + Sync {
         self.speak(&crate::pronounce::phonetic(text), interrupt);
     }
 
+    /// Speaks a text spelled (Say Word or Say Line twice): the history keeps its characters one
+    /// by one ([`crate::pronounce::spelled`]); the synthesizer is given them in parts, each
+    /// capital alone at a raised pitch ([`crate::pronounce::spelled_parts`]).
+    fn speak_spelled(&mut self, text: &str, interrupt: bool) {
+        self.speak(&crate::pronounce::spelled(text), interrupt);
+    }
+
     /// Returns whether speech output is currently active.
     fn is_speaking(&self) -> bool {
         false
