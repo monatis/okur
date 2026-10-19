@@ -66,6 +66,7 @@ speech and clears the history, so no trial inherits speech from setup.
 
 $ErrorActionPreference = "Stop"
 $sw = [System.Diagnostics.Stopwatch]::StartNew()
+. (Join-Path $PSScriptRoot 'lab-chrome.ps1')
 
 if (-not (Test-Path $ScenarioFile)) {
     Write-Error "Scenario file not found: $ScenarioFile"
@@ -266,7 +267,9 @@ function Get-ForegroundTitle {
 }
 
 function Focus-Target([string]$procName) {
-    $proc = Get-Process $procName -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero } | Select-Object -First 1
+    $proc = if ($procName -eq 'chrome') { Get-LabChromeWindow } else {
+        Get-Process $procName -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero } | Select-Object -First 1
+    }
     if (-not $proc) { throw "No '$procName' window found." }
     [void][SrKeyInput]::ShowWindow($proc.MainWindowHandle, 9)
     [void][SrKeyInput]::SetForegroundWindow($proc.MainWindowHandle)
@@ -557,6 +560,8 @@ $evidence = [ordered]@{
         culture = (Get-Culture).Name
         utc_offset_minutes = [int][TimeZoneInfo]::Local.GetUtcOffset((Get-Date)).TotalMinutes
         chrome_version = if ($chromeExe) { (Get-Item $chromeExe).VersionInfo.FileVersion } else { $null }
+        # Web fixtures open in the lab's own signed-out Chrome profile (lab-chrome.ps1).
+        chrome_profile = if ($targetProc -eq 'chrome') { 'sr-harness' } else { $null }
         jaws_version = if (Test-Path $jfwExe) { (Get-Item $jfwExe).VersionInfo.ProductVersion } else { $null }
         jaws_settings = $jawsSettings
         reader = $Reader
@@ -655,6 +660,8 @@ function Start-DesktopFixture {
     # Browser windows left by web scenarios are minimized: one that came forward in the middle
     # of a desktop trial took its keys, and Insert+Shift+Down twice spelled a whole web page
     # for minutes, so every step after it timed out (504 and 505 on old-pc, 2026-10-19).
+    # A browser of another profile is closed: its titles carry the profile's name.
+    [void](Stop-OtherChrome)
     [void][SrKeyInput]::MinimizeClass('Chrome_WidgetWin_1')
     Start-Process powershell -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $fixturePath) | Out-Null
     for ($i = 0; $i -lt 100; $i++) {
@@ -680,11 +687,15 @@ function Start-DesktopFixture {
 }
 
 if ($scenario.fixture -and -not $launch) {
-    [System.Diagnostics.Process]::Start($targetProc, $scenario.fixture) | Out-Null
+    if ($targetProc -eq 'chrome') {
+        $evidence.provenance.other_browsers_closed = Start-LabChrome $scenario.fixture
+    } else {
+        [System.Diagnostics.Process]::Start($targetProc, $scenario.fixture) | Out-Null
+    }
     # A cold browser start takes longer than a new tab: wait for the fixture's window.
     for ($i = 0; $i -lt 100; $i++) {
-        $w = Get-Process $targetProc -ErrorAction SilentlyContinue |
-            Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero -and (-not $expectedTitle -or $_.MainWindowTitle.StartsWith($expectedTitle)) }
+        $w = if ($targetProc -eq 'chrome') { Get-LabChromeWindow } else { Get-Process $targetProc -ErrorAction SilentlyContinue }
+        $w = $w | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero -and (-not $expectedTitle -or $_.MainWindowTitle.StartsWith($expectedTitle)) }
         if ($w) { break }
         Start-Sleep -Milliseconds 200
     }

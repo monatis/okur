@@ -48,11 +48,11 @@ $chromeExe = @(
 $chromeVersion = if ($chromeExe) { (Get-Item $chromeExe).VersionInfo.FileVersion } else { $null }
 
 $url = "file:///" + ($fixturePath -replace '\\', '/')
-[System.Diagnostics.Process]::Start("chrome", $url) | Out-Null
+. (Join-Path $PSScriptRoot 'lab-chrome.ps1')
+[void](Start-LabChrome $url)
 Start-Sleep -Milliseconds $LoadWaitMs
 
-$proc = Get-Process chrome -ErrorAction SilentlyContinue |
-    Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero } | Select-Object -First 1
+$proc = Get-LabChromeWindow
 if (-not $proc) { throw "No Chrome window found." }
 [void][SnapshotWin32]::ShowWindow($proc.MainWindowHandle, 9)
 [void][SnapshotWin32]::SetForegroundWindow($proc.MainWindowHandle)
