@@ -1737,6 +1737,24 @@ mod capture {
         event_pid != 0 && event_pid == foreground_pid
     }
 
+    /// Whether `hwnd` is inside a file dialog's navigation pane (Windows'
+    /// `NamespaceTreeControl`), a few windows up.
+    fn in_namespace_tree(hwnd: HWND) -> bool {
+        use windows::Win32::UI::WindowsAndMessaging::GetParent;
+        let mut window = hwnd;
+        for _ in 0..6 {
+            // SAFETY: plain Win32 query on a window handle, which may be gone.
+            let Ok(parent) = (unsafe { GetParent(window) }) else {
+                return false;
+            };
+            if window_text(parent).1 == "NamespaceTreeControl" {
+                return true;
+            }
+            window = parent;
+        }
+        false
+    }
+
     /// Whether `hwnd` belongs to an application other than the one in front, both known (a
     /// window in front is briefly none while windows switch).
     fn in_background_process(hwnd: HWND) -> bool {
@@ -2450,6 +2468,15 @@ mod capture {
             // in front: it put the weather where the reference machine is into a trace (its
             // title "13°C ...", 504, old-pc, 2026-10-19).
             if class == super::NEWS_AND_WEATHER_CLASS {
+                return;
+            }
+            // A file dialog's navigation pane names the account's pinned and recent folders as
+            // it fills its tree (Quick access: 524, round 38); only the focus moving into it is
+            // recorded.
+            if name != "focus"
+                && class.eq_ignore_ascii_case("SysTreeView32")
+                && in_namespace_tree(hwnd)
+            {
                 return;
             }
             if state.live

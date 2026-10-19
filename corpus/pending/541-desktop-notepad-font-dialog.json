@@ -1,6 +1,6 @@
 {
   "id": "541-desktop-notepad-font-dialog",
-  "name": "Notepad's Font dialog (Alt+O, F): the font list, Down and Up in it, Tab to the style and size lists, Insert+Tab, Insert+E, Say Window (Insert+B), and Escape",
+  "name": "Notepad's Font dialog (Alt+O, F): the font list, Down and Up in it, Tab to the style and size lists, Insert+Tab, Insert+E, and Escape (Say Window reads its 187 fonts for longer than a step waits)",
   "category": "desktop",
   "version": "1.0.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
@@ -17,8 +17,7 @@
     { "id": "s7", "type": "key", "command": "Tab" },
     { "id": "s8", "type": "key", "command": "Insert+Tab" },
     { "id": "s9", "type": "key", "command": "Insert+E" },
-    { "id": "s10", "type": "key", "command": "Insert+B", "settle_max_ms": 30000 },
-    { "id": "s11", "type": "key", "command": "Escape" },
-    { "id": "s12", "type": "key", "command": "Insert+Up" }
+    { "id": "s10", "type": "key", "command": "Escape" },
+    { "id": "s11", "type": "key", "command": "Insert+Up" }
   ]
 }
