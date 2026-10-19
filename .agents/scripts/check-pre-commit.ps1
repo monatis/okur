@@ -42,6 +42,21 @@ if (-not $workspaceRoot) {
 $failureReasons = @()
 
 # -----------------------------------------------------------------------------
+# Check 0: Formatting, as CI checks it. The stop hook formats the tree only when a turn ends,
+# after commits already made: a75140b reached CI unformatted (2026-10-19).
+# -----------------------------------------------------------------------------
+Push-Location $workspaceRoot
+try {
+    $fmtOutput = & cargo fmt --all -- --check 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        $tail = ($fmtOutput | Select-Object -First 40) -join "`n"
+        $failureReasons += "[Format Gate] cargo fmt --all -- --check failed; run cargo fmt --all and stage the result:`n$tail"
+    }
+} finally {
+    Pop-Location
+}
+
+# -----------------------------------------------------------------------------
 # Checks 1, 1b and 2: no panicking calls (check-sources.ps1, which CI runs too)
 # -----------------------------------------------------------------------------
 $sourceReport = & (Join-Path $PSScriptRoot 'check-sources.ps1') -WorkspaceRoot $workspaceRoot

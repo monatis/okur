@@ -193,8 +193,8 @@ Write down what JAWS should say before writing code.
 4. Claims in commits and handoffs quote the tool output.
 
 ### 4.8 Commit and merge
-- **The gate.** `git commit` runs it: no `unwrap`/`expect`/`panic!`/`todo!`/`dbg!`, clippy,
-  `cargo test --workspace`, and reference-data separation.
+- **The gate.** `git commit` runs it: `cargo fmt --check`, no `unwrap`/`expect`/`panic!`/
+  `todo!`/`dbg!`, clippy, `cargo test --workspace`, and reference-data separation.
   - **It judges the whole command and runs none of it if it refuses.** So run generators,
     `git add` and moving files in separate commands, and keep the commit message in a file
     (`git commit -F`).
