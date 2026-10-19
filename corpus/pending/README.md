@@ -12,9 +12,9 @@ To record one:
 
 | Scenario | What it records | Fixture |
 |---|---|---|
-| 282 | Up from the bottom of the sign-up form with Auto Forms Mode on: each field entered from below | `signup-form.html` |
-| 283 | Down and Up through the forms page with Auto Forms Mode on: fields that hold text | `forms-interaction.html` |
-| 284 | Auto Forms Mode on: Tab into a field, type, then arrows out of it and back | `signup-form.html` |
+| 286 | 278 with Auto Forms Mode on | `web-app-patterns.html` |
+| 287 | 204 (Tab through the sign-up form) with Auto Forms Mode on | `signup-form.html` |
+| 288 | 205 (the form's controls) with Auto Forms Mode on | `signup-form.html` |
 | 285 | Auto Forms Mode on: Up into an 18-line text area, through its lines, out at its top | `reading-settings.html` |
 
 Scenarios from 400 record JAWS's reading settings (plan
