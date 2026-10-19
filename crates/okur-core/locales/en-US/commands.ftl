@@ -106,3 +106,12 @@ route-pc-to-virtual = Route PC to Virtual Cursor
 no-frames-in-page = No frames found in page
 # Numpad Slash, before the click on the element at the virtual cursor [obs, 534/s2].
 left-mouse-button = left mouse button
+
+## Say Default Button in a dialog box, and Say Current Control Hot Key (Shift+Numpad5) [obs, 537]
+
+# Insert+E in a dialog box: its default button, the focused one when a button has the focus.
+default-button-is = default button is { $name }
+# Shift+Numpad5 on a control without one.
+no-hot-key = no hot key
+# Shift+Numpad5 in a dialog box, after the control's name: its letter as the label writes it.
+hot-key-in-dialog = alt+{ $letter }

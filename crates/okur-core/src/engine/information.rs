@@ -7,18 +7,62 @@ use super::{AppMode, ScreenReaderEngine};
 use crate::messages::msg;
 
 impl ScreenReaderEngine {
-    /// Insert+E: with no dialog box in front, "Not in a dialog box" [obs, 513/s1, s7]. A dialog
-    /// box's default button is not read yet: it waits for its recording (532).
+    /// Insert+E: with no dialog box in front, "Not in a dialog box" [obs, 513/s1, s7]. In one,
+    /// its default button, which is the focused button when a button has the focus: "default
+    /// button is No", "default button is Cancel" after Tab [obs, 537/s3, s6]. A dialog box
+    /// whose focus is elsewhere waits for its recording (532).
     pub(super) fn say_default_button(&mut self) -> Option<String> {
-        let in_dialog = self.app_mode != AppMode::VirtualBuffer
-            && self
-                .last_native_focus
-                .as_ref()
-                .is_some_and(|f| f.in_dialog_box);
-        if in_dialog {
+        let focus = self
+            .last_native_focus
+            .as_ref()
+            .filter(|f| self.app_mode != AppMode::VirtualBuffer && f.in_dialog_box);
+        let Some(focus) = focus else {
+            return self.say(msg::not_in_dialog_box().to_string());
+        };
+        if focus.role != crate::aom::Role::Button {
             return None;
         }
-        self.say(msg::not_in_dialog_box().to_string())
+        let name = focus.name.clone().unwrap_or_default();
+        self.say(msg::default_button_is(name.trim()).to_string())
+    }
+
+    /// Shift+Numpad5: the focused control's hot key, as the application gives it, "Alt+r";
+    /// in a dialog box the control's name, then "alt+" and the letter as its label writes it,
+    /// "No", "alt+N"; "no hot key" without one [obs, 537/s1, s4, s7].
+    pub(super) fn say_hot_key(&mut self) -> Option<String> {
+        if self.app_mode == AppMode::VirtualBuffer {
+            return None;
+        }
+        let focus = self.last_native_focus.as_ref()?;
+        // Whatever the Access Key output, which the stored focus follows.
+        let access_key = self.focus_access_key.clone();
+        let Some(key) = access_key
+            .as_deref()
+            .map(str::trim)
+            .filter(|k| !k.is_empty())
+        else {
+            return self.say(msg::no_hot_key().to_string());
+        };
+        let name = focus.name.as_deref().unwrap_or_default().trim();
+        let letter = key.rsplit('+').next().and_then(|k| {
+            let mut chars = k.chars();
+            chars.next().filter(|_| chars.next().is_none())
+        });
+        let in_label = letter.and_then(|letter| {
+            name.chars()
+                .find(|c| c.to_lowercase().eq(letter.to_lowercase()))
+        });
+        let said = match in_label {
+            Some(c) if focus.in_dialog_box => vec![
+                name.to_owned(),
+                msg::hot_key_in_dialog(c.to_string()).to_string(),
+            ],
+            _ => vec![key.to_owned()],
+        };
+        for (i, part) in said.iter().enumerate() {
+            self.speech.speak(part, i == 0);
+        }
+        Some(said.join("\n"))
     }
 
     /// Insert+Q: "Default settings are loaded" when the application has no settings of its

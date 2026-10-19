@@ -389,15 +389,16 @@ impl ScreenReaderEngine {
         if event.key == Key::Control && event.modifiers.is_empty() {
             return KeyAction::PassThrough;
         }
-        // The sentence and paragraph keys in an application or a page's field, where the keys
-        // would otherwise go to it [obs, 504/s14, s15].
+        // The sentence and paragraph keys and the hot key in an application or a page's field,
+        // where the keys would otherwise go to it [obs, 504/s14, s15; 537/s1].
         if self.app_mode != AppMode::VirtualBuffer || self.forms_mode {
             use crate::command::Command;
             if let Some(
                 command @ (Command::SaySentence
                 | Command::SayNextSentence
                 | Command::SayPriorSentence
-                | Command::SayParagraph),
+                | Command::SayParagraph
+                | Command::SayHotKey),
             ) = crate::command::command_for(event)
             {
                 let _ = self.execute(command);

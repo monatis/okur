@@ -170,6 +170,8 @@ pub enum Command {
     SayDefaultButton,
     /// Insert+Q: which settings are loaded, and the application in use.
     SayConfiguration,
+    /// Shift+Numpad5: the focused control's hot key.
+    SayHotKey,
     /// Ctrl+Insert+1 to 0: a list view item's column (1 to 10), with its header.
     SayListColumn(u8),
     /// Ctrl+Insert+F7: the address of the link at the virtual cursor.
@@ -383,6 +385,7 @@ impl Command {
             "SayBottomLineOfWindow" | "Insert+PageDown" => SayBottomLineOfWindow,
             "SayDefaultButton" | "Insert+E" => SayDefaultButton,
             "SayConfiguration" | "Insert+Q" => SayConfiguration,
+            "SayHotKey" | "Shift+Numpad5" => SayHotKey,
             "IndicateLinkSourceURL" | "Ctrl+Insert+F7" => SayLinkAddress,
             "RouteVirtualToPc" | "Insert+Delete" => RouteVirtualToPc,
             "RoutePCToVirtual" | "Ctrl+Insert+Delete" => RoutePcToVirtual,
@@ -670,6 +673,7 @@ static BINDINGS: &[Binding] = &{
             SaySentence,
         ),
         bind(Numpad5, CTRL, SayParagraph),
+        bind(Numpad5, SHIFT, SayHotKey),
         bind(Numpad5, JAWS, SayWord),
         bind(Numpad5, ALONE, SayCharacter),
         // Selecting with the virtual cursor (Default.JKM's Select scripts), before the plain

@@ -30,6 +30,7 @@ impl ScreenReaderEngine {
             Command::RefreshScreen => return self.refresh_screen(),
             Command::SayDefaultButton => return self.say_default_button(),
             Command::SayConfiguration => return self.say_configuration(),
+            Command::SayHotKey => return self.say_hot_key(),
             Command::SayListColumn(column) => return self.say_list_column(column),
             Command::SayLinkAddress => return self.say_link_address(),
             Command::RouteVirtualToPc => return self.route_virtual_to_pc(),
