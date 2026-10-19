@@ -103,6 +103,16 @@ pub enum Command {
     SayCurrentCell,
     SayColumnHeader,
     SayRowHeader,
+    /// Windows+Alt+Numpad5 or Comma: the current row, whole.
+    SayCurrentRow,
+    /// Windows+Alt+Period: the current column, whole.
+    SayCurrentColumn,
+    /// Windows+Alt+Down and Up: the next or prior row, whole.
+    ReadNextRow,
+    ReadPriorRow,
+    /// Windows+Alt+Right and Left: the next or prior column, whole.
+    ReadNextColumn,
+    ReadPriorColumn,
 
     // A page's controls.
     NextTabStop,
@@ -553,6 +563,9 @@ impl Chord {
     const fn insert(self, insert: Held) -> Self {
         Self { insert, ..self }
     }
+    const fn win(self, win: Held) -> Self {
+        Self { win, ..self }
+    }
 
     fn matches(&self, event: &KeyEvent) -> bool {
         let m = &event.modifiers;
@@ -598,6 +611,8 @@ const JAWS_SHIFT: Chord = ANY.insert(Yes).shift(Yes).ctrl(No).alt(No);
 const CTRL_ALT: Chord = ANY.ctrl(Yes).alt(Yes);
 /// Ctrl and the JAWS key: the element lists.
 const CTRL_INSERT: Chord = ANY.ctrl(Yes).insert(Yes).alt(No).shift(No);
+/// Windows and Alt.
+const WIN_ALT: Chord = ANY.win(Yes).alt(Yes).ctrl(No).shift(No).insert(No);
 
 /// The key map, JAWS's desktop layout: the first binding that matches a key wins.
 static BINDINGS: &[Binding] = &{
@@ -654,6 +669,16 @@ static BINDINGS: &[Binding] = &{
         bind(UpArrow, CTRL_ALT, TableCellUp),
         bind(RightArrow, CTRL_ALT, TableCellRight),
         bind(LeftArrow, CTRL_ALT, TableCellLeft),
+        // A table's rows and columns read whole: Windows+Alt and an arrow, Numpad5 or Comma
+        // the row, Period the column (JAWS 2025 help, Keystrokes for Working in Tables)
+        // [obs, 297]. Before Alt+Down, which they would otherwise be.
+        bind(DownArrow, WIN_ALT, ReadNextRow),
+        bind(UpArrow, WIN_ALT, ReadPriorRow),
+        bind(RightArrow, WIN_ALT, ReadNextColumn),
+        bind(LeftArrow, WIN_ALT, ReadPriorColumn),
+        bind(Numpad5, WIN_ALT, SayCurrentRow),
+        bind(Comma, WIN_ALT, SayCurrentRow),
+        bind(Period, WIN_ALT, SayCurrentColumn),
         // Combo boxes.
         bind(DownArrow, ANY.alt(Yes).ctrl(No).shift(No), ExpandComboBox),
         bind(UpArrow, ANY.alt(Yes).ctrl(No).shift(No), CollapseComboBox),

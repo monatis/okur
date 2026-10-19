@@ -1,5 +1,5 @@
 use crate::aom::{AomNode, Role};
-use crate::buffer::{BufferLine, VirtualBuffer};
+use crate::buffer::{BufferLine, TableCellInfo, VirtualBuffer};
 use crate::messages::msg;
 use crate::speech::SpeechFormatter;
 
@@ -2045,8 +2045,21 @@ impl VirtualCursor {
 
     /// Resolves the current table and cell coordinates based on `current_table_pos` or `offset`.
     fn resolve_table_pos(&mut self) -> Option<(usize, usize, usize)> {
-        if let Some(pos) = self.current_table_pos {
-            return Some(pos);
+        // The cell the last table move reached, while the cursor is still there: the line
+        // keys move it from cell to cell too (Down along a header row before the table
+        // layer's Right [obs, 535/s2, s3, s6]).
+        if let Some(pos @ (t, r, c)) = self.current_table_pos {
+            let at = self
+                .buffer
+                .tables
+                .get(t)
+                .and_then(|table| table.cells.get(r))
+                .and_then(|row| row.get(c))
+                .is_some_and(|cell| cell.offset == self.offset);
+            if at {
+                return Some(pos);
+            }
+            self.current_table_pos = None;
         }
         for (t_idx, table) in self.buffer.tables.iter().enumerate() {
             if self.offset >= table.start_offset && self.offset <= table.end_offset {
@@ -2425,7 +2438,7 @@ impl VirtualCursor {
             None => return Some(msg::table_not_in_table().to_string()),
         };
         if let Some(cell) = table.cells.get(r_idx).and_then(|r| r.get(c_idx)) {
-            return Some(SpeechFormatter::format_table_cell_coordinates(
+            return Some(SpeechFormatter::format_current_cell(
                 &cell.text,
                 cell.col,
                 cell.row,
@@ -2474,6 +2487,81 @@ impl VirtualCursor {
             ));
         }
         Some(msg::table_not_in_table().to_string())
+    }
+
+    /// The current row's cells one after another, as JAWS's speech history keeps them, with
+    /// nothing between: "Central9 a.m. to 9 p.m.Directions" (its synthesizer is given the
+    /// words apart) [obs, 297/s10, 535/s14].
+    pub fn read_current_row(&mut self) -> Option<String> {
+        self.read_table_line(TableLine::Row, 0)
+    }
+
+    /// The current column's cells, as [`Self::read_current_row`] reads a row: "QuarterQ1Q2Q3"
+    /// [obs, 297/s11, 535/s15].
+    pub fn read_current_column(&mut self) -> Option<String> {
+        self.read_table_line(TableLine::Column, 0)
+    }
+
+    /// Moves to the next (`step` 1) or prior (-1) row and reads it whole (Windows+Alt+Down and
+    /// Up); with none, "You are on the last row in the table." [obs, 297/s5-s7].
+    pub fn read_adjacent_row(&mut self, step: isize) -> Option<String> {
+        self.read_table_line(TableLine::Row, step)
+    }
+
+    /// Moves to the next or prior column and reads it whole (Windows+Alt+Right and Left)
+    /// [obs, 297/s8, s9].
+    pub fn read_adjacent_column(&mut self, step: isize) -> Option<String> {
+        self.read_table_line(TableLine::Column, step)
+    }
+
+    /// Reads a row or a column whole, `step` rows or columns from the current cell's.
+    fn read_table_line(&mut self, line: TableLine, step: isize) -> Option<String> {
+        let Some((t_idx, r_idx, c_idx)) = self.resolve_table_pos() else {
+            return Some(msg::table_not_in_table().to_string());
+        };
+        let table = self.buffer.tables.get(t_idx)?;
+        let (index, count) = match line {
+            TableLine::Row => (r_idx, table.rows),
+            TableLine::Column => (c_idx, table.cols),
+        };
+        let Some(target) = index.checked_add_signed(step).filter(|&i| i < count) else {
+            return Some(
+                match (line, step > 0) {
+                    (TableLine::Row, true) => msg::table_on_last_row(),
+                    (TableLine::Row, false) => msg::table_on_first_row(),
+                    (TableLine::Column, true) => msg::table_on_last_column(),
+                    (TableLine::Column, false) => msg::table_on_first_column(),
+                }
+                .to_string(),
+            );
+        };
+        let cells: Vec<&TableCellInfo> = match line {
+            TableLine::Row => table.cells.get(target)?.iter().collect(),
+            TableLine::Column => table
+                .cells
+                .iter()
+                .filter_map(|row| row.get(target))
+                .collect(),
+        };
+        // A cell spanning several rows or columns is in the grid at each of them: read once.
+        let mut read = Vec::new();
+        let mut text = String::new();
+        for cell in &cells {
+            if !read.contains(&cell.node_id) {
+                read.push(cell.node_id);
+                text.push_str(cell.text.trim());
+            }
+        }
+        let (row, col) = match line {
+            TableLine::Row => (target, c_idx),
+            TableLine::Column => (r_idx, target),
+        };
+        if let Some(cell) = table.cells.get(row).and_then(|r| r.get(col)) {
+            self.current_table_pos = Some((t_idx, row, col));
+            self.offset = cell.offset;
+            self.current_node_id = Some(cell.node_id);
+        }
+        Some(text)
     }
 
     /// Moves to the next math element (`O`).
@@ -2663,6 +2751,13 @@ impl VirtualCursor {
             Some(format!("{}\n{}", msg::quicknav_wrap_bottom(), speech))
         }
     }
+}
+
+/// A table's row or column, read whole.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum TableLine {
+    Row,
+    Column,
 }
 
 /// How a selection key reads what it changed [obs, 501].

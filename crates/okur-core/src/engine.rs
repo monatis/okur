@@ -193,6 +193,8 @@ pub struct ScreenReaderEngine {
     rate_change: i32,
     /// Insert+Space was pressed: the next key is the layer's.
     layer_open: bool,
+    /// The table layer (Insert+Space, T): the arrows move by cell until Escape.
+    table_layer: bool,
     /// Speech turned off with Insert+Space, S.
     speech_muted: bool,
     /// User settings (JAWS defaults unless configured).
@@ -279,6 +281,7 @@ impl ScreenReaderEngine {
             virtual_cursor_off: false,
             rate_change: 0,
             layer_open: false,
+            table_layer: false,
             speech_muted: false,
             settings: crate::settings::Settings::default(),
             caps_lock_on: false,
@@ -406,6 +409,9 @@ impl ScreenReaderEngine {
 
         // The key after Insert+Space is the layer's.
         if let Some(action) = self.layer_key(event) {
+            return action;
+        }
+        if let Some(action) = self.table_layer_key(event) {
             return action;
         }
 

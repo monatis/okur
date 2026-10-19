@@ -19,3 +19,10 @@ table-not-in-table = Not in a table.
 table-edge = edge of table
 # A focus entering a table cell, or moving to another row and column at once.
 table-focus-cell = column { $column } row { $row }
+# The table layer (Insert+Space, T) turned on: the arrows move by cell until Escape.
+table-layer = Table layer
+# Reading the next or prior row or column whole (Windows+Alt and an arrow) found none further.
+table-on-last-row = You are on the last row in the table.
+table-on-first-row = You are on the first row in the table.
+table-on-last-column = You are on the last column in the table.
+table-on-first-column = You are on the first column in the table.

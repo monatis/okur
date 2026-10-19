@@ -2,7 +2,7 @@
 //! Keystrokes). H opens the Speech History; S turns speech off and on. Escape, Space, Tab and
 //! Enter leave the layer, as any other key does [obs, 517].
 
-use super::ScreenReaderEngine;
+use super::{AppMode, ScreenReaderEngine};
 use crate::input::{Key, KeyAction, KeyEvent};
 use crate::messages::msg;
 
@@ -33,8 +33,72 @@ impl ScreenReaderEngine {
                 self.speech_muted = !self.speech_muted;
                 self.speech.set_muted(self.speech_muted);
             }
+            Key::Alpha('T') if plain => self.start_table_layer(),
             _ => {}
         }
+        Some(KeyAction::Consume)
+    }
+
+    /// Insert+Space, T in a page's table: "Table layer", and the arrows move by cell until
+    /// Escape [obs, 535/s5].
+    fn start_table_layer(&mut self) {
+        let in_table = self.app_mode == AppMode::VirtualBuffer
+            && self
+                .cursor
+                .read_current_cell()
+                .is_some_and(|said| said != msg::table_not_in_table().as_str());
+        let speech = if in_table {
+            self.table_layer = true;
+            msg::table_layer()
+        } else {
+            msg::table_not_in_table()
+        };
+        self.speech.speak(speech.as_str(), true);
+    }
+
+    /// A key while the table layer is on: the arrows move by cell, Numpad5 says the cell,
+    /// Ctrl+Home and Ctrl+End go to the first and last cell, Ctrl and an arrow to the row's or
+    /// column's end, Shift+Up reads the row and Shift+Numpad5 the column; Escape leaves the
+    /// layer silently [obs, 535/s6-s16]. Another key leaves it and acts as usual.
+    pub(super) fn table_layer_key(&mut self, event: &KeyEvent) -> Option<KeyAction> {
+        use crate::command::Command;
+        if !self.table_layer
+            || !event.is_down
+            || matches!(
+                event.key,
+                Key::Shift | Key::Control | Key::Alt | Key::Insert | Key::CapsLock | Key::Windows
+            )
+        {
+            return None;
+        }
+        let m = event.modifiers;
+        let plain = m.is_empty();
+        let ctrl = m.ctrl && !m.alt && !m.shift && !m.insert && !m.win;
+        let shift = m.shift && !m.ctrl && !m.alt && !m.insert && !m.win;
+        let command = match event.key {
+            Key::Escape if plain => {
+                self.table_layer = false;
+                return Some(KeyAction::Consume);
+            }
+            Key::RightArrow if plain => Command::TableCellRight,
+            Key::LeftArrow if plain => Command::TableCellLeft,
+            Key::DownArrow if plain => Command::TableCellDown,
+            Key::UpArrow if plain => Command::TableCellUp,
+            Key::Numpad5 if plain => Command::SayCurrentCell,
+            Key::Home if ctrl => Command::TableFirstCell,
+            Key::End if ctrl => Command::TableLastCell,
+            Key::DownArrow if ctrl => Command::MoveToBottomOfColumn,
+            Key::UpArrow if ctrl => Command::MoveToTopOfColumn,
+            Key::RightArrow if ctrl => Command::MoveToEndOfRow,
+            Key::LeftArrow if ctrl => Command::MoveToStartOfRow,
+            Key::UpArrow if shift => Command::SayCurrentRow,
+            Key::Numpad5 if shift => Command::SayCurrentColumn,
+            _ => {
+                self.table_layer = false;
+                return None;
+            }
+        };
+        let _ = self.execute(command);
         Some(KeyAction::Consume)
     }
 

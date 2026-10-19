@@ -288,6 +288,12 @@ impl ScreenReaderEngine {
             Command::MoveToTopOfColumn => self.cursor.move_table_col_top(),
             Command::MoveToBottomOfColumn => self.cursor.move_table_col_bottom(),
             Command::SayCurrentCell => self.cursor.read_current_cell(),
+            Command::SayCurrentRow => self.cursor.read_current_row(),
+            Command::SayCurrentColumn => self.cursor.read_current_column(),
+            Command::ReadNextRow => self.cursor.read_adjacent_row(1),
+            Command::ReadPriorRow => self.cursor.read_adjacent_row(-1),
+            Command::ReadNextColumn => self.cursor.read_adjacent_column(1),
+            Command::ReadPriorColumn => self.cursor.read_adjacent_column(-1),
             Command::SayColumnHeader => self.cursor.read_current_col_header(),
             Command::SayRowHeader => self.cursor.read_current_row_header(),
 

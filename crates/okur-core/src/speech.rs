@@ -688,6 +688,27 @@ impl SpeechFormatter {
 
     /// Formats full cell coordinates and headers when jumping to a cell or querying it (`Ctrl+Alt+Home`, `Ctrl+Alt+End`, `Ctrl+Alt+NumPad5`).
     /// Matches JAWS format: "{ColHdr}  {RowHdr}\n{CellText}\nColumn {col}, Row {row}".
+    /// Say Current Cell: the cell's place first, then its headers and its text, "Column 4, Row
+    /// 2 | Profit  Q1 | $3,000.00" [obs, 535/s8]; a move to the first or last cell says the
+    /// place last ([`Self::format_table_cell_coordinates`]).
+    pub fn format_current_cell(
+        text: &str,
+        col: usize,
+        row: usize,
+        col_header: Option<&str>,
+        row_header: Option<&str>,
+        col_span: usize,
+        row_span: usize,
+    ) -> String {
+        let said = Self::format_table_cell_coordinates(
+            text, col, row, col_header, row_header, col_span, row_span,
+        );
+        match said.rsplit_once('\n') {
+            Some((rest, place)) => format!("{place}\n{rest}"),
+            None => said,
+        }
+    }
+
     pub fn format_table_cell_coordinates(
         text: &str,
         col: usize,

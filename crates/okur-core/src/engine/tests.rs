@@ -3882,3 +3882,57 @@ fn notepads_edit_and_its_menu_bar() {
         Some(Role::Document)
     );
 }
+
+/// The table layer [obs, 535]: Insert+Space, T says "Table layer"; the arrows move by cell,
+/// Shift+Up reads the row whole and Shift+Numpad5 the column; Escape leaves the layer
+/// silently and Down is the virtual cursor's again. Windows+Alt+Down reads the next row
+/// [obs, 297/s5, s6].
+#[test]
+fn the_table_layer_and_whole_rows() {
+    let mut engine = files_table_engine();
+    let _ = engine.execute(crate::command::Command::MoveToNext(
+        crate::command::Element::Table,
+    ));
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    engine.handle_key_event(&KeyEvent::new(Key::Space, insert, true));
+    engine.handle_key_event(&key(Key::Alpha('T')));
+    assert!(engine.table_layer);
+    assert_eq!(
+        engine.handle_key_event(&key(Key::DownArrow)),
+        KeyAction::Consume
+    );
+    assert_eq!(engine.cursor.current_table_row(), Some(2));
+    let shift = Modifiers {
+        shift: true,
+        ..Modifiers::none()
+    };
+    engine.handle_key_event(&KeyEvent::new(Key::UpArrow, shift, true));
+    assert_eq!(engine.cursor.current_table_row(), Some(2));
+    assert_eq!(
+        engine
+            .execute(crate::command::Command::SayCurrentRow)
+            .as_deref(),
+        Some("alpha.rsfirst commit")
+    );
+    assert_eq!(
+        engine
+            .execute(crate::command::Command::SayCurrentColumn)
+            .as_deref(),
+        Some("Namealpha.rsbeta.rs")
+    );
+    engine.handle_key_event(&key(Key::Escape));
+    assert!(!engine.table_layer);
+    assert_eq!(
+        engine
+            .execute(crate::command::Command::ReadNextRow)
+            .as_deref(),
+        Some("beta.rssecond commit")
+    );
+    assert_eq!(
+        engine.execute(crate::command::Command::ReadNextRow),
+        Some(msg::table_on_last_row().to_string())
+    );
+}
