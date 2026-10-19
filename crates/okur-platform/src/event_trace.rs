@@ -1152,6 +1152,17 @@ impl EventConverter {
             Some(control) => control,
             None => self.last_focus.clone()?,
         };
+        // A change event reads no dialog: the dialog's controls are the last focus's, in the
+        // same window, so Say Window still has them after a button's state changes (537/s8).
+        if control.window_items.is_empty() {
+            if let Some(last) = self
+                .last_focus
+                .as_ref()
+                .filter(|l| l.window_title == control.window_title)
+            {
+                control.window_items = last.window_items.clone();
+            }
+        }
         // The event object is the focused control: its MSAA states are current, and they
         // carry what UIA may not report (a WinForms combo box's expanded state, 304/s11).
         if same_object {
