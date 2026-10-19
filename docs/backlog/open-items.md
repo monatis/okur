@@ -84,8 +84,11 @@ Order of work, most used first:
   - Recorded: 201, 278 and 279 with Auto Forms Mode off; 280 with it on.
   - Done: with Auto Forms Mode on, an arrow onto an edit field focuses it and turns forms mode
     on; Up or Down at the caret's edge leaves the field for the next line.
-  - Recording now: 282-285 (Up into fields, fields with text, Tab then arrows, a text area's
-    lines).
+  - Recorded: 282-285 (Up into fields, fields with text, Tab then arrows, a text area's lines).
+  - **For the owner to decide** (285/s19-s24): leaving a text area upward at its top line, JAWS
+    goes to "main region" and then the page's title, past the 16 paragraphs above the field,
+    in every trial. It looks like a JAWS accident; Okur reads the line above the field.
+    Proposed as an accepted divergence.
   - Open: real pages with forms that need no sign-in. GitHub's new issue form needs one: never
     sign in or submit.
 - **204/s1:** "blank" after a required field on the first Tab; JAWS says it in some trials only.
