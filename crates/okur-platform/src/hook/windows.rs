@@ -9,9 +9,9 @@ use windows::Win32::Foundation::{LPARAM, LRESULT, WPARAM};
 use windows::Win32::System::Com::{CoInitializeEx, CoUninitialize, COINIT_MULTITHREADED};
 use windows::Win32::System::Threading::GetCurrentThreadId;
 use windows::Win32::UI::Input::KeyboardAndMouse::{
-    GetAsyncKeyState, GetKeyState, VIRTUAL_KEY, VK_BACK, VK_CAPITAL, VK_CONTROL, VK_DELETE,
-    VK_DOWN, VK_END, VK_ESCAPE, VK_HOME, VK_INSERT, VK_LEFT, VK_MENU, VK_NEXT, VK_OEM_1, VK_OEM_7,
-    VK_PRIOR, VK_RETURN, VK_RIGHT, VK_SCROLL, VK_SHIFT, VK_SPACE, VK_TAB, VK_UP,
+    GetAsyncKeyState, GetKeyState, VIRTUAL_KEY, VK_BACK, VK_CAPITAL, VK_CLEAR, VK_CONTROL,
+    VK_DELETE, VK_DOWN, VK_END, VK_ESCAPE, VK_HOME, VK_INSERT, VK_LEFT, VK_MENU, VK_NEXT, VK_OEM_1,
+    VK_OEM_7, VK_PRIOR, VK_RETURN, VK_RIGHT, VK_SCROLL, VK_SHIFT, VK_SPACE, VK_TAB, VK_UP,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
     CallNextHookEx, DispatchMessageW, GetMessageW, PostThreadMessageW, SetWindowsHookExW,
@@ -48,6 +48,8 @@ const MARKED_COPY_WINDOW_MS: u32 = 1000;
 static JAWS_MARK: AtomicUsize = AtomicUsize::new(0);
 /// `KBDLLHOOKSTRUCT::flags`: the event was injected.
 const LLKHF_INJECTED: u32 = 0x10;
+/// `KBDLLHOOKSTRUCT::flags`: an extended key (the gray arrows, not the keypad's).
+const LLKHF_EXTENDED: u32 = 0x01;
 const SHIFT_BIT: u32 = 1;
 const CTRL_BIT: u32 = 2;
 const ALT_BIT: u32 = 4;
@@ -333,7 +335,7 @@ unsafe extern "system" fn low_level_keyboard_proc(
     };
     let insert = modifiers.insert || modifiers.caps_lock || modifiers.scroll_lock;
 
-    let key = translate_vk_code(vk_code);
+    let key = translate_vk_code(vk_code, kbd.scanCode, kbd.flags.0 & LLKHF_EXTENDED != 0);
     let mut event = KeyEvent::new(key, modifiers, is_down);
     event.time_ms = u64::from(kbd.time);
     event.is_repeat = is_repeat;
@@ -388,8 +390,17 @@ fn typed_char(vk: u32, scan: u32, shift: bool) -> Option<char> {
     }
 }
 
-fn translate_vk_code(vk: u32) -> Key {
+fn translate_vk_code(vk: u32, scan: u32, extended: bool) -> Key {
+    // The keys at the US comma and period places, by scan code as JAWS takes them: on
+    // old-pc's Turkish Q layout they carry other virtual keys (ö, ç).
+    match (scan, extended) {
+        (0x33, false) => return Key::Comma,
+        (0x34, false) => return Key::Period,
+        _ => {}
+    }
     match VIRTUAL_KEY(vk as u16) {
+        // The keypad's 5 with Num Lock off.
+        VK_CLEAR => Key::Numpad5,
         VK_UP => Key::UpArrow,
         VK_DOWN => Key::DownArrow,
         VK_LEFT => Key::LeftArrow,

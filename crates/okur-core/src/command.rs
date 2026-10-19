@@ -470,6 +470,10 @@ static BINDINGS: &[Binding] = &{
         bind(UpArrow, ALONE, SayPriorLine),
         bind(RightArrow, ALONE, SayNextCharacter),
         bind(LeftArrow, ALONE, SayPriorCharacter),
+        // The keypad's 5: Say Character, and with the JAWS key Say Word (JAWS's keystroke
+        // list; research Item 4).
+        bind(Numpad5, JAWS, SayWord),
+        bind(Numpad5, ALONE, SayCharacter),
         // Top and bottom, of a table or the page.
         bind(Home, CTRL_ALT, TableFirstCell),
         bind(End, CTRL_ALT, TableLastCell),
@@ -650,8 +654,12 @@ static BINDINGS: &[Binding] = &{
 /// "First"). Checked before [`BINDINGS`].
 static LAPTOP_BINDINGS: &[Binding] = &{
     use Command::*;
-    use Key::Alpha;
+    use Key::{Alpha, Comma, Period};
     [
+        // CapsLock+Comma, Say Character; CapsLock+Period, Say Next Character (research
+        // Item 4).
+        bind(Comma, JAWS, SayCharacter),
+        bind(Period, JAWS, SayNextCharacter),
         bind(Alpha('I'), JAWS, SayLine),
         bind(Alpha('K'), JAWS, SayWord),
         bind(Alpha('O'), JAWS, SayNextLine),
@@ -785,6 +793,23 @@ mod tests {
         assert_eq!(
             layout_command_for(&laptop, &key(Key::Alpha('o'), jaws_shift)),
             None
+        );
+        // CapsLock+Comma and CapsLock+Period; the keypad's 5 in the desktop layout.
+        assert_eq!(
+            layout_command_for(&laptop, &key(Key::Comma, jaws)),
+            Some(Command::SayCharacter)
+        );
+        assert_eq!(
+            layout_command_for(&laptop, &key(Key::Period, jaws)),
+            Some(Command::SayNextCharacter)
+        );
+        assert_eq!(
+            command_for(&key(Key::Numpad5, Modifiers::none())),
+            Some(Command::SayCharacter)
+        );
+        assert_eq!(
+            command_for(&key(Key::Numpad5, jaws)),
+            Some(Command::SayWord)
         );
     }
 

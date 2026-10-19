@@ -33,6 +33,20 @@ fn key_from_name(name: &str) -> Option<Key> {
         "ctrl" | "control" => Key::Control,
         "semicolon" => Key::Semicolon,
         "apostrophe" => Key::Apostrophe,
+        "comma" => Key::Comma,
+        "period" => Key::Period,
+        "numpad5" => Key::Numpad5,
+        // The keypad with Num Lock off sends the keys it shares with the gray ones.
+        "numpad4" => Key::LeftArrow,
+        "numpad6" => Key::RightArrow,
+        "numpad8" => Key::UpArrow,
+        "numpad2" => Key::DownArrow,
+        "numpad7" => Key::Home,
+        "numpad1" => Key::End,
+        "numpad9" => Key::PageUp,
+        "numpad3" => Key::PageDown,
+        "numpad0" => Key::Insert,
+        "numpaddelete" => Key::Delete,
         _ => {
             let mut chars = lower.chars();
             match (chars.next(), chars.next()) {

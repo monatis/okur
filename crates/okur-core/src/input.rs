@@ -26,6 +26,13 @@ pub enum Key {
     F(u8),
     Semicolon,
     Apostrophe,
+    /// The keys at the US comma and period places, whatever the layout prints on them: JAWS
+    /// takes keys by their place (the laptop layout's CapsLock+Comma, Say Character).
+    Comma,
+    Period,
+    /// The numeric keypad's 5 with Num Lock off (VK_CLEAR): JAWS's desktop Say Character.
+    /// The keypad's other keys arrive as the arrows and Home, End, Page Up and Page Down.
+    Numpad5,
 
     Control,
     Alt,
