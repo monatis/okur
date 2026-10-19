@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 1186,
-  "total_steps": 1512,
+  "matched_steps": 1198,
+  "total_steps": 1537,
   "accepted_divergences": 8,
   "errors": [],
   "steps": {
@@ -1524,6 +1524,31 @@
     "323-desktop-property-sheet/s6": "mismatch",
     "323-desktop-property-sheet/s7": "mismatch",
     "323-desktop-property-sheet/s8": "match",
-    "323-desktop-property-sheet/s9": "match"
+    "323-desktop-property-sheet/s9": "match",
+    "400-desktop-punctuation-cycle/s1": "mismatch",
+    "400-desktop-punctuation-cycle/s10": "match",
+    "400-desktop-punctuation-cycle/s11": "mismatch",
+    "400-desktop-punctuation-cycle/s12": "mismatch",
+    "400-desktop-punctuation-cycle/s13": "mismatch",
+    "400-desktop-punctuation-cycle/s14": "match",
+    "400-desktop-punctuation-cycle/s15": "match",
+    "400-desktop-punctuation-cycle/s16": "match",
+    "400-desktop-punctuation-cycle/s17": "mismatch",
+    "400-desktop-punctuation-cycle/s18": "mismatch",
+    "400-desktop-punctuation-cycle/s19": "mismatch",
+    "400-desktop-punctuation-cycle/s2": "match",
+    "400-desktop-punctuation-cycle/s20": "match",
+    "400-desktop-punctuation-cycle/s21": "match",
+    "400-desktop-punctuation-cycle/s22": "match",
+    "400-desktop-punctuation-cycle/s23": "mismatch",
+    "400-desktop-punctuation-cycle/s24": "mismatch",
+    "400-desktop-punctuation-cycle/s25": "mismatch",
+    "400-desktop-punctuation-cycle/s3": "match",
+    "400-desktop-punctuation-cycle/s4": "match",
+    "400-desktop-punctuation-cycle/s5": "mismatch",
+    "400-desktop-punctuation-cycle/s6": "mismatch",
+    "400-desktop-punctuation-cycle/s7": "mismatch",
+    "400-desktop-punctuation-cycle/s8": "match",
+    "400-desktop-punctuation-cycle/s9": "match"
   }
 }

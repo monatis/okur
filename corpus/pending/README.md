@@ -12,12 +12,13 @@ To record one:
 
 | Scenario | What it records | Fixture |
 |---|---|---|
-| 400 | Punctuation level: Insert+Shift+2 four times, lines 1 to 4 read at each level | `desktop-reading.ps1` (here) |
+| (none) | | |
 
-400 and up record JAWS's reading settings (plan `docs/plans/2026-10-18-reading-settings.md`).
-Their fixtures, `reading-settings.html` and its desktop twin `desktop-reading.ps1`, hold the 18
-lines of `docs/references/jaws-reading-settings-research.md` §12, the same text in both. A
-scenario that needs a setting other than old-pc's names it in `jaws_settings`
+Scenarios from 400 record JAWS's reading settings (plan
+`docs/plans/2026-10-18-reading-settings.md`). Their fixtures, `reading-settings.html` (here)
+and its desktop twin `desktop-reading.ps1` (recorded with 400), hold the 18 lines of
+`docs/references/jaws-reading-settings-research.md` §12, the same text in both. A scenario
+that needs a setting other than old-pc's names it in `jaws_settings`
 (`skills/jaws-reference/scripts/jaws-settings.ps1`), and `run-batch.ps1` sets it.
 
 Every scenario written here before (208, 210–219, 315–323) has been recorded; git history keeps
