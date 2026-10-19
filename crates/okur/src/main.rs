@@ -1026,18 +1026,51 @@ async fn main() {
                             }
                             _ => None,
                         };
+                        // Page parts read again are spliced into the page and built likewise,
+                        // the engine taken only a moment to share its page.
+                        let parts = match &event {
+                            Some(AccessibilityEvent::PagePartsLoaded(parts)) => {
+                                give_way_to_keys();
+                                let base = engine_events
+                                    .lock()
+                                    .ok()
+                                    .and_then(|eng| eng.page_for_parts());
+                                base.and_then(|base| {
+                                    let started = std::time::Instant::now();
+                                    let page = VirtualBuffer::spliced(&base, parts)?;
+                                    let buffer = VirtualBuffer::from_aom_owned(page);
+                                    tracing::debug!(
+                                        parts = parts.len(),
+                                        lines = buffer.lines.len(),
+                                        ms = started.elapsed().as_millis(),
+                                        "page parts spliced"
+                                    );
+                                    Some((base, buffer))
+                                })
+                            }
+                            _ => None,
+                        };
                         let spoken = {
                             give_way_to_keys();
                             let Ok(mut eng) = engine_events.lock() else {
                                 continue;
                             };
                             let started = std::time::Instant::now();
-                            let spoken = match (&event, page) {
-                                (_, Some((title, buffer))) => {
+                            let spoken = match (&event, page, parts) {
+                                (_, Some((title, buffer)), _) => {
                                     eng.handle_document_loaded(&title, buffer)
                                 }
-                                (Some(event), None) => eng.handle_accessibility_event(event),
-                                (None, None) => eng.on_idle(),
+                                // The page changed meanwhile: the parts are spliced into it
+                                // here.
+                                (Some(event), None, Some((base, buffer))) => {
+                                    if eng.install_page_parts(&base, buffer) {
+                                        None
+                                    } else {
+                                        eng.handle_accessibility_event(event)
+                                    }
+                                }
+                                (Some(event), None, None) => eng.handle_accessibility_event(event),
+                                (None, None, _) => eng.on_idle(),
                             };
                             let held = started.elapsed();
                             if held > SLOW_ENGINE {

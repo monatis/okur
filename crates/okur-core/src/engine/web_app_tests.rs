@@ -478,6 +478,45 @@ fn the_cursor_goes_to_a_focus_whose_lines_are_its_childrens() {
     assert_eq!(engine.cursor.current_line(), "First line of the document");
 }
 
+/// Parts spliced and built outside the engine (the live screen reader does, so as not to hold
+/// it) give the page that splicing them inside gives; once the page is another, the buffer
+/// built from the old one is refused.
+#[test]
+fn a_page_built_outside_the_engine_is_taken_while_the_page_is_the_same() {
+    let actions = RecordingActions::refreshing_pages();
+    let mut inside = engine_on(&chat("(7) WhatsApp", messages()), &actions);
+    let mut outside = engine_on(&chat("(7) WhatsApp", messages()), &actions);
+    let mut list = messages();
+    list.push(message(70, "a new one", "15:00", false));
+    let part = object(AomNode::new(1, Role::Group).with_children(list), -1);
+
+    inside.handle_accessibility_event(&AccessibilityEvent::PagePartsLoaded(vec![part.clone()]));
+    let base = outside.page_for_parts();
+    assert!(base.is_some());
+    let Some(base) = base else { return };
+    let built = VirtualBuffer::spliced(&base, std::slice::from_ref(&part))
+        .map(VirtualBuffer::from_aom_owned);
+    assert!(built.is_some());
+    let Some(built) = built else { return };
+    assert!(outside.install_page_parts(&base, built.clone()));
+    for engine in [&mut inside, &mut outside] {
+        engine.handle_key_event(&key(Key::Control, false));
+    }
+    let lines = |engine: &ScreenReaderEngine| {
+        engine
+            .cursor
+            .buffer
+            .lines
+            .iter()
+            .map(|l| l.text.clone())
+            .collect::<Vec<_>>()
+    };
+    assert_eq!(lines(&outside), lines(&inside));
+
+    // The page is another now: a buffer built from the old one is not taken.
+    assert!(!outside.install_page_parts(&base, built));
+}
+
 /// A part of the page read again (the message list, after a message arrived) is spliced in
 /// where the same object is: the new message is there, and the cursor stays on its line.
 /// A part the page does not hold makes the whole page read again.

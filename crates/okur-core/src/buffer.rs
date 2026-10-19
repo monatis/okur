@@ -225,7 +225,7 @@ pub struct VirtualBuffer {
     /// The page the buffer was built from (`root_id`), with what the buffer adds to it:
     /// radio buttons' groups, same-page links, and state changes made through the buffer.
     /// Nodes are read through [`VirtualBuffer::node`].
-    page: Option<AomNode>,
+    page: Option<std::sync::Arc<AomNode>>,
     /// Where each page node sits, so a node is found without copying it: one slot per node,
     /// pointing at its parent's slot.
     slots: Vec<NodeSlot>,
@@ -273,7 +273,7 @@ impl VirtualBuffer {
             }
             node.children.iter_mut().find_map(|c| find(c, id))
         }
-        let mut root = self.page.clone()?;
+        let mut root = AomNode::clone(self.page.as_deref()?);
         change(find(&mut root, node_id)?);
         Some(VirtualBuffer::from_aom_owned(root))
     }
@@ -284,6 +284,14 @@ impl VirtualBuffer {
     /// of them (it is new: the caller reads the whole page again). One rebuild for all the parts:
     /// one per part took 1.8-2.7 s for eight on a big page (responsiveness review, 2026-10-19).
     pub fn with_subtrees_replaced(&self, subtrees: &[AomNode]) -> Option<VirtualBuffer> {
+        let page = Self::spliced(self.page.as_deref()?, subtrees)?;
+        Some(VirtualBuffer::from_aom_owned(page))
+    }
+
+    /// The page `page` with `subtrees` spliced in, as [`Self::with_subtrees_replaced`]
+    /// does, for a caller that builds the buffer itself (the live screen reader, without
+    /// holding the engine: [`Self::page`]).
+    pub fn spliced(page: &AomNode, subtrees: &[AomNode]) -> Option<AomNode> {
         use crate::aom::UNIQUE_ID_ATTR;
         fn max_id(node: &AomNode) -> usize {
             node.children.iter().map(max_id).fold(node.id, usize::max)
@@ -301,7 +309,7 @@ impl VirtualBuffer {
             }
             node.children.iter_mut().find_map(|c| find(c, object))
         }
-        let mut root = self.page.clone()?;
+        let mut root = page.clone();
         let mut next = max_id(&root) + 1;
         for subtree in subtrees {
             let object = subtree.attributes.get(UNIQUE_ID_ATTR)?;
@@ -309,7 +317,14 @@ impl VirtualBuffer {
             renumber(&mut replacement, &mut next);
             *find(&mut root, object)? = replacement;
         }
-        Some(VirtualBuffer::from_aom_owned(root))
+        Some(root)
+    }
+
+    /// The page the buffer was built from, shared: taken in a moment, it is copied and
+    /// rebuilt without the engine (page parts read again, on a page of 25,000 nodes, held the
+    /// engine 70 ms; responsiveness review, 2026-10-19).
+    pub fn page(&self) -> Option<&std::sync::Arc<AomNode>> {
+        self.page.as_ref()
     }
 
     /// Makes `page` the page the buffer reads its nodes from, and indexes where its nodes sit.
@@ -337,7 +352,7 @@ impl VirtualBuffer {
             }
         }
         self.index_nodes(&page);
-        self.page = Some(page);
+        self.page = Some(std::sync::Arc::new(page));
     }
 
     /// Fills the object and DOM id indexes: of the nodes the buffer reads, the one [`Self::node`]
@@ -408,7 +423,7 @@ impl VirtualBuffer {
                 .find_map(find)
                 .or((node.states.focused && node.role != Role::Document).then_some(node.id))
         }
-        self.page.as_ref().and_then(find)
+        self.page.as_deref().and_then(find)
     }
 
     /// Where the node `id` starts in the buffer: its own span, else the first span of a node
@@ -458,7 +473,7 @@ impl VirtualBuffer {
     /// Every page node in document order, read or not: a paragraph or a division has no line
     /// of its own, only its children's.
     pub fn page_nodes(&self) -> impl Iterator<Item = &AomNode> + '_ {
-        let mut stack: Vec<&AomNode> = self.page.iter().collect();
+        let mut stack: Vec<&AomNode> = self.page.as_deref().into_iter().collect();
         std::iter::from_fn(move || {
             let node = stack.pop()?;
             stack.extend(node.children.iter().rev());
@@ -486,7 +501,7 @@ impl VirtualBuffer {
     /// the page.
     pub fn ancestors(&self, id: usize) -> Vec<&AomNode> {
         let (Some(page), Some(path)) = (
-            self.page.as_ref(),
+            self.page.as_deref(),
             self.slot_of.get(&id).and_then(|&slot| self.path_to(slot)),
         ) else {
             return Vec::new();
@@ -509,7 +524,7 @@ impl VirtualBuffer {
         if !self.readable.contains(&id) {
             return None;
         }
-        let mut node = self.page.as_ref()?;
+        let mut node = self.page.as_deref()?;
         for index in self.path_to(*self.slot_of.get(&id)?)? {
             node = node.children.get(index)?;
         }
@@ -523,7 +538,7 @@ impl VirtualBuffer {
             return None;
         }
         let path = self.path_to(*self.slot_of.get(&id)?)?;
-        let mut node = self.page.as_mut()?;
+        let mut node = std::sync::Arc::make_mut(self.page.as_mut()?);
         for index in path {
             node = node.children.get_mut(index)?;
         }
@@ -542,7 +557,7 @@ impl VirtualBuffer {
 
     /// The page nodes the buffer reads, in document order.
     pub fn nodes(&self) -> impl Iterator<Item = &AomNode> + '_ {
-        let mut stack: Vec<&AomNode> = self.page.iter().collect();
+        let mut stack: Vec<&AomNode> = self.page.as_deref().into_iter().collect();
         std::iter::from_fn(move || {
             while let Some(node) = stack.pop() {
                 stack.extend(node.children.iter().rev());
@@ -557,7 +572,12 @@ impl VirtualBuffer {
     /// Applies `change` to every page node the buffer reads.
     pub fn for_each_node_mut(&mut self, mut change: impl FnMut(&mut AomNode)) {
         let readable = &self.readable;
-        let mut stack: Vec<&mut AomNode> = self.page.iter_mut().collect();
+        let mut stack: Vec<&mut AomNode> = self
+            .page
+            .as_mut()
+            .map(std::sync::Arc::make_mut)
+            .into_iter()
+            .collect();
         while let Some(node) = stack.pop() {
             if readable.contains(&node.id) {
                 change(node);
@@ -879,7 +899,7 @@ impl VirtualBuffer {
     /// The page's address, when it has one.
     pub fn document_url(&self) -> Option<&str> {
         self.page
-            .as_ref()?
+            .as_deref()?
             .attributes
             .get("url")
             .map(String::as_str)

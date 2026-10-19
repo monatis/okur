@@ -375,6 +375,41 @@ impl ScreenReaderEngine {
         }
     }
 
+    /// The page that parts read again are spliced into (the one waiting to be applied, if
+    /// any), for the live screen reader to splice and build without holding the engine. `None`
+    /// outside a page.
+    pub fn page_for_parts(&self) -> Option<std::sync::Arc<AomNode>> {
+        if self.app_mode != AppMode::VirtualBuffer {
+            return None;
+        }
+        self.pending_page
+            .as_ref()
+            .unwrap_or(&self.cursor.buffer)
+            .page()
+            .cloned()
+    }
+
+    /// Takes `buffer`, built from `base` with page parts spliced in, as the page waiting to be
+    /// applied: as [`Self::page_parts_loaded`] would have made it. False, and `buffer` is
+    /// dropped, when the page is another by now: the parts are then handled here.
+    pub fn install_page_parts(
+        &mut self,
+        base: &std::sync::Arc<AomNode>,
+        buffer: VirtualBuffer,
+    ) -> bool {
+        let same = self
+            .page_for_parts()
+            .is_some_and(|page| std::sync::Arc::ptr_eq(&page, base));
+        if !same {
+            crate::retire::retire(buffer);
+            return false;
+        }
+        if let Some(old) = self.pending_page.replace(buffer) {
+            crate::retire::retire(old);
+        }
+        true
+    }
+
     /// The parts of the page read again after they changed
     /// ([`AccessibilityEvent::PagePartsLoaded`]): spliced into the page (the one waiting to be
     /// applied, if any), which is rebuilt once and applied as a page captured again, keeping the
