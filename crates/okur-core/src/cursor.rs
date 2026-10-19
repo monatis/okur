@@ -910,8 +910,10 @@ impl VirtualCursor {
     /// says the ones still open where the walk ends: a heading closes the ones of its level and
     /// below walked before it. So 3 from "Voices" to "Reading" says "Reference" and "Commands",
     /// and Shift+3 back from "Reading" to "Voices" says "Reference" alone [obs, 275/s10, s11].
-    /// Walking forward starts on the cursor's own line: 2 from the top of the page says the
-    /// level 1 heading there (275/s1). Walking back starts on the line before it.
+    /// Walking forward starts after the cursor's line: 2 from "User guide" says "Install" alone
+    /// [obs, 277/s2, s8]; from the top of the page, above the first heading, it says "User guide"
+    /// too (275/s1). Walking back starts on the cursor's line: Shift+2 from "Reference" says
+    /// "Reference", then "Configure" (277/s4, s11).
     fn passed_headings(&self, from: usize, target: usize, level: u32) -> String {
         let forward = target > from;
         let mut passed: Vec<(usize, u32)> = self
@@ -921,9 +923,9 @@ impl VirtualCursor {
             .copied()
             .filter(|&(off, _)| {
                 if forward {
-                    off >= from && off < target
+                    off > from && off < target
                 } else {
-                    off > target && off < from
+                    off > target && off <= from
                 }
             })
             .collect();

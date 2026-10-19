@@ -52,12 +52,12 @@ pub fn phonetic(text: &str) -> String {
     }
 }
 
-/// The words of the letters a to z. JAWS said "alpha", "bravo" and "juliett" (401); the others
-/// are NATO's, until scenario 404 records JAWS's.
+/// The words of the letters a to z, as JAWS gives them to its synthesizer: NATO's, but "Fox Trot"
+/// and "X ray" [obs, 404].
 const PHONETIC: [&str; 26] = [
-    "alpha", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel", "india", "juliett",
+    "alpha", "bravo", "charlie", "delta", "echo", "Fox Trot", "golf", "hotel", "india", "juliett",
     "kilo", "lima", "mike", "november", "oscar", "papa", "quebec", "romeo", "sierra", "tango",
-    "uniform", "victor", "whiskey", "x-ray", "yankee", "zulu",
+    "uniform", "victor", "whiskey", "X ray", "yankee", "zulu",
 ];
 
 /// The pitch change of a capital letter read alone, on SAPI's scale (-10 to 10). JAWS sent

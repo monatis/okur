@@ -418,6 +418,14 @@ mod tests {
         assert_eq!(key(2, false), "Install/2");
         assert_eq!(key(1, true), "Reference/1");
         assert_eq!(key(1, false), "User guide/1");
+        // From a heading, the walk forward leaves it out and the walk back counts it [obs,
+        // 277/s2, s4, s11].
+        assert_eq!(key(2, true), "Install/2");
+        assert_eq!(key(1, true), "Reference/1");
+        assert_eq!(key(2, false), "Reference/1 | Configure/2");
+        assert_eq!(key(2, true), "Reference/1 | Commands/2");
+        assert_eq!(key(2, true), "Settings/2");
+        assert_eq!(key(3, false), "Settings/2 | Reading/3");
     }
 
     #[test]
