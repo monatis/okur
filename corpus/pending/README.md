@@ -19,6 +19,7 @@ To record one:
 | 518 | Reading a Word document | `desktop-word.ps1` (here) |
 | 519 | Word's headings list, spelling errors, revisions | `desktop-word.ps1` (here) |
 | 520 | Say the clipboard (Insert+Win+X) | `desktop-editor.ps1` |
+| 521 | Excel: cells, coordinates, a column's cells, sheets, the worksheets list | `desktop-excel.ps1` (here) |
 
 Scenarios from 400 record JAWS's reading settings (plan
 `docs/plans/2026-10-18-reading-settings.md`). Their fixtures, `reading-settings.html`
