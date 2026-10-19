@@ -408,7 +408,7 @@ fn test_engine_desktop_entry_vs_subsequent_item_navigation() {
         .with_item_index(7)
         .with_item_count(11);
     let s1 = engine.handle_focus_event(&focus_entry).unwrap_or_default();
-    assert!(s1.starts_with("desktop\nFolderView    List view"));
+    assert!(s1.starts_with("desktop  \u{1d}  \u{1e} \nFolderView  \u{1d} List view \u{1e} "));
     assert!(s1.contains("Dropbox"));
     assert!(s1.contains("7 of 11"));
     assert!(s1.contains("To move to items use the Arrow keys."));
@@ -468,7 +468,7 @@ fn window_title_on_the_desktop_is_the_virtual_desktop() {
         .with_item_index(1)
         .with_item_count(3);
     let entry = engine.handle_focus_event(&desktop).unwrap_or_default();
-    assert!(entry.starts_with("desktop\n"), "{entry:?}");
+    assert!(entry.starts_with("desktop  \u{1d}  \u{1e} \n"), "{entry:?}");
     assert_eq!(
         engine.execute_command("SayWindowTitle").as_deref(),
         Some("Title is\nDesktop 1")
@@ -531,7 +531,7 @@ fn the_desktop_is_announced_once() {
         .handle_focus_event(&item(None, "Desktop"))
         .unwrap_or_default();
     assert!(
-        first.starts_with("desktop\nFolderView    List view"),
+        first.starts_with("desktop  \u{1d}  \u{1e} \nFolderView  \u{1d} List view \u{1e} "),
         "{first:?}"
     );
     assert_eq!(
@@ -631,7 +631,7 @@ fn test_engine_file_explorer_entry_and_item_navigation() {
     let s3 = engine
         .handle_focus_event(&back_to_desktop)
         .unwrap_or_default();
-    assert!(s3.contains("FolderView    List view"));
+    assert!(s3.contains("FolderView   List view  "));
     assert!(s3.contains("7 of 11"));
 }
 

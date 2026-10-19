@@ -111,13 +111,13 @@ impl AppModule for Desktop {
         }
 
         FocusResponse::Speak(Announcement::from_text(&if first_entry {
-            // JAWS heads it with "desktop", not the list's role. JAWS 2025 on Windows 11,
-            // observed on the dev box (2026-10-15; research, scenario 316 records it on
-            // old-pc): "desktop | FolderView List view | Dropbox | 7 of 11 | To move to items
-            // use the Arrow keys. | To edit the selected item press f2."
+            // JAWS heads it with "desktop", with an empty role mark, then the list by its name
+            // and role: "desktop ‹ › | FolderView ‹ List view › | Recycle Bin | 1 of 41 | To
+            // move to items use the Arrow keys. | To edit the selected item press f2." [obs,
+            // 316/s1].
             use crate::messages::msg;
             format!(
-                "{}\n{}    {}   \n{name}\n{}\n{}\n{}",
+                "{}  \u{1d}  \u{1e} \n{}  \u{1d} {} \u{1e} \n{name}\n{}\n{}\n{}",
                 msg::desktop(),
                 // The list's name, as Windows gives it.
                 "FolderView",
