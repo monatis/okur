@@ -580,20 +580,47 @@ impl ScreenReaderEngine {
         // The controls that can take the focus (a capture can say one cannot: WhatsApp's
         // message times are buttons nothing focuses), and the other elements that can
         // (WhatsApp's messages), as JAWS goes to them.
-        let controls = buffer.tab_stops.iter().filter_map(|&start| {
+        // Both are in document order (a buffer invariant the corpus checks), so the nearest
+        // one each way is found from the cursor's line on, not by walking every stop: that
+        // took 35-48 ms on a page with 5,000 of them, in the keyboard hook (responsiveness
+        // review, 2026-10-19). A control and another element at one place: the other element
+        // going back, the control going forward, as before.
+        let focusable = |start: usize| {
             let node = buffer.node(buffer.line_at_offset(start)?.node_id)?;
             (node.states.focusable != Some(false)).then_some((start, node.id))
-        });
-        let others = buffer.focus_stops.iter().copied();
+        };
+        let from = line.start_offset;
+        let (controls, others) = (&buffer.tab_stops, &buffer.focus_stops);
         let stop = if backwards {
-            controls
-                .filter(|&(s, _)| s < line.start_offset)
-                .chain(others.filter(|&(s, _)| s < line.start_offset))
+            let before = controls.partition_point(|&s| s < from);
+            let control = controls
+                .get(..before)
+                .unwrap_or_default()
+                .iter()
+                .rev()
+                .find_map(|&s| focusable(s));
+            let other = others
+                .get(..others.partition_point(|&(s, _)| s < from))
+                .and_then(<[_]>::last)
+                .copied();
+            [control, other]
+                .into_iter()
+                .flatten()
                 .max_by_key(|&(s, _)| s)
         } else {
-            controls
-                .filter(|&(s, _)| s > line.start_offset)
-                .chain(others.filter(|&(s, _)| s > line.start_offset))
+            let after = controls.partition_point(|&s| s <= from);
+            let control = controls
+                .get(after..)
+                .unwrap_or_default()
+                .iter()
+                .find_map(|&s| focusable(s));
+            let other = others
+                .get(others.partition_point(|&(s, _)| s <= from)..)
+                .and_then(<[_]>::first)
+                .copied();
+            [control, other]
+                .into_iter()
+                .flatten()
                 .min_by_key(|&(s, _)| s)
         };
         let Some(node) = stop.and_then(|(_, id)| buffer.node(id)) else {

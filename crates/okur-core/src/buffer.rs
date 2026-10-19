@@ -524,17 +524,22 @@ impl VirtualBuffer {
         self.text.is_empty()
     }
 
-    /// Returns the line containing the given offset.
+    /// Returns the line containing the given offset (the first, where two share it), or the
+    /// last line. Lines are in document order, their starts and ends never decreasing, so this
+    /// is a binary search: it ran in the keyboard hook once per tab stop (responsiveness review,
+    /// 2026-10-19).
     pub fn line_at_offset(&self, offset: usize) -> Option<&BufferLine> {
+        let first = self.lines.partition_point(|line| line.end_offset < offset);
         self.lines
-            .iter()
-            .find(|line| offset >= line.start_offset && offset <= line.end_offset)
+            .get(first)
+            .filter(|line| line.start_offset <= offset)
             .or_else(|| self.lines.last())
     }
 
     /// Returns the next line starting after the given offset.
     pub fn next_line_from(&self, offset: usize) -> Option<&BufferLine> {
-        self.lines.iter().find(|l| l.start_offset > offset)
+        let next = self.lines.partition_point(|l| l.start_offset <= offset);
+        self.lines.get(next)
     }
 
     /// Returns the prior line starting before the current line of the given offset.
@@ -543,40 +548,54 @@ impl VirtualBuffer {
             .line_at_offset(offset)
             .map(|l| l.start_offset)
             .unwrap_or(offset);
-        self.lines
-            .iter()
-            .rfind(|l| l.start_offset < current_line_start)
+        let before = self
+            .lines
+            .partition_point(|l| l.start_offset < current_line_start);
+        before.checked_sub(1).and_then(|i| self.lines.get(i))
     }
 
     /// Returns the word containing or starting at the given offset.
     pub fn word_at_offset(&self, offset: usize) -> Option<&BufferWord> {
+        let first = self.words.partition_point(|w| w.end_offset <= offset);
         self.words
-            .iter()
-            .find(|w| offset >= w.start_offset && offset < w.end_offset)
-            .or_else(|| self.words.iter().find(|w| w.start_offset >= offset))
+            .get(first)
+            .filter(|w| w.start_offset <= offset)
+            .or_else(|| self.next_word_starting_at(offset))
+    }
+
+    /// The first word starting at `offset` or after it.
+    fn next_word_starting_at(&self, offset: usize) -> Option<&BufferWord> {
+        let first = self.words.partition_point(|w| w.start_offset < offset);
+        self.words.get(first)
     }
 
     /// Returns the next word starting after the given offset.
     pub fn next_word_from(&self, offset: usize) -> Option<&BufferWord> {
-        self.words.iter().find(|w| w.start_offset > offset)
+        let next = self.words.partition_point(|w| w.start_offset <= offset);
+        self.words.get(next)
     }
 
     /// Returns the prior word starting before the given offset.
     pub fn prior_word_from(&self, offset: usize) -> Option<&BufferWord> {
-        self.words.iter().rfind(|w| w.start_offset < offset)
+        let before = self.words.partition_point(|w| w.start_offset < offset);
+        before.checked_sub(1).and_then(|i| self.words.get(i))
     }
 
     /// Returns the paragraph containing the given offset.
     pub fn paragraph_at_offset(&self, offset: usize) -> Option<&BufferParagraph> {
+        let first = self.paragraphs.partition_point(|p| p.end_offset < offset);
         self.paragraphs
-            .iter()
-            .find(|p| offset >= p.start_offset && offset <= p.end_offset)
+            .get(first)
+            .filter(|p| p.start_offset <= offset)
             .or_else(|| self.paragraphs.last())
     }
 
     /// Returns the next paragraph starting after the given offset.
     pub fn next_paragraph_from(&self, offset: usize) -> Option<&BufferParagraph> {
-        self.paragraphs.iter().find(|p| p.start_offset > offset)
+        let next = self
+            .paragraphs
+            .partition_point(|p| p.start_offset <= offset);
+        self.paragraphs.get(next)
     }
 
     /// Returns the prior paragraph starting before the current paragraph.
@@ -585,9 +604,10 @@ impl VirtualBuffer {
             .paragraph_at_offset(offset)
             .map(|p| p.start_offset)
             .unwrap_or(offset);
-        self.paragraphs
-            .iter()
-            .rfind(|p| p.start_offset < current_p_start)
+        let before = self
+            .paragraphs
+            .partition_point(|p| p.start_offset < current_p_start);
+        before.checked_sub(1).and_then(|i| self.paragraphs.get(i))
     }
 
     /// Returns the next heading offset and level after the given offset.

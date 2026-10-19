@@ -166,7 +166,7 @@ impl ScreenReaderEngine {
     /// The focused text field's name and role, as Say Line speaks them.
     pub(super) fn text_field_line(&self) -> String {
         let name = if self.forms_mode {
-            self.node_under_cursor().and_then(|n| n.name)
+            self.node_under_cursor().and_then(|n| n.name.clone())
         } else {
             self.last_native_focus.as_ref().and_then(|f| f.name.clone())
         };

@@ -265,16 +265,16 @@ impl ScreenReaderEngine {
                 if let (Some(actions), Some(node)) = (&self.actions, self.node_under_cursor()) {
                     let editable = node.attributes.get("editable").is_some_and(|e| e == "true");
                     let (handled, forms_mode) = match node.role {
-                        Role::Edit => (actions.focus(&node), true),
-                        Role::ComboBox if editable => (actions.focus(&node), true),
-                        Role::ComboBox => (actions.focus(&node) && actions.activate(&node), true),
+                        Role::Edit => (actions.focus(node), true),
+                        Role::ComboBox if editable => (actions.focus(node), true),
+                        Role::ComboBox => (actions.focus(node) && actions.activate(node), true),
                         Role::Link { .. }
                         | Role::Button
                         | Role::MenuButton
                         | Role::SplitButton
                         | Role::CheckBox
                         | Role::RadioButton
-                        | Role::Tab => (actions.focus(&node) && actions.activate(&node), false),
+                        | Role::Tab => (actions.focus(node) && actions.activate(node), false),
                         _ => (false, false),
                     };
                     if handled && forms_mode {
@@ -295,7 +295,7 @@ impl ScreenReaderEngine {
                         // Forms mode on (JAWS plays a sound) and real focus in the field; the
                         // browser's focus event then speaks it.
                         Role::Edit | Role::ComboBox => {
-                            let focused = actions.focus(&node);
+                            let focused = actions.focus(node);
                             if focused {
                                 self.forms_mode = true;
                                 self.cursor.forms_mode_active = true;
@@ -303,12 +303,12 @@ impl ScreenReaderEngine {
                             }
                             focused
                         }
-                        Role::Link { .. } => !same_page_link && actions.activate(&node),
+                        Role::Link { .. } => !same_page_link && actions.activate(node),
                         Role::Button
                         | Role::MenuButton
                         | Role::CheckBox
                         | Role::RadioButton
-                        | Role::Tab => actions.activate(&node),
+                        | Role::Tab => actions.activate(node),
                         _ => false,
                     };
                     if handled {
@@ -557,7 +557,7 @@ impl ScreenReaderEngine {
         })?;
         // The field as its focus is said, but for its description, which the next arrow reads
         // as a line of its own (280/s9), and an empty field's "blank" (280/s5).
-        let mut field = SpeechFormatter::control_focus(&node, |_| false);
+        let mut field = SpeechFormatter::control_focus(node, |_| false);
         field.retain(|kind| kind != crate::announcement::PartKind::Description);
         let said = field.render();
         let blank = msg::blank();
@@ -566,7 +566,7 @@ impl ScreenReaderEngine {
             .map_or(said.as_str(), |s| s.trim_end_matches(['\n', ' ']))
             .to_owned();
         if let Some(actions) = &self.actions {
-            actions.focus(&node);
+            actions.focus(node);
         }
         self.arrow_focus = Some(node.id);
         self.forms_mode = true;

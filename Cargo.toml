@@ -43,3 +43,13 @@ xa11y-macos = { path = "crates/xa11y/xa11y-macos" }
 xa11y-linux = { path = "crates/xa11y/xa11y-linux" }
 
 
+
+# Okur runs live from `target/debug` on the dev box (`docs/references/live-daemon-guide.md`).
+# Unoptimized, its page reads, buffer builds and key paths ran 3 to 10 times slower than in
+# release (responsiveness review, 2026-10-19). Debug builds keep their debug information and
+# overflow checks; Okur's crates are optimized lightly, the dependencies fully.
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3

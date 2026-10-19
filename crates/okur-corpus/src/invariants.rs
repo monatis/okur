@@ -29,6 +29,12 @@ fn walk<'a>(node: &'a AomNode, out: &mut Vec<&'a AomNode>) {
 pub const TEXT_REACHABLE: &str = "all text is reachable with Down Arrow";
 /// Buffer lines must be in document order and must not overlap.
 pub const LINES_ORDERED: &str = "lines are in document order and do not overlap";
+/// Words and paragraphs likewise: the buffer finds them by binary search.
+pub const WORDS_ORDERED: &str = "words are in document order and do not overlap";
+pub const PARAGRAPHS_ORDERED: &str = "paragraphs are in document order and do not overlap";
+/// Tab stops and the other focusable elements, in document order: Tab searches them from the
+/// cursor on.
+pub const STOPS_ORDERED: &str = "tab stops are in document order";
 /// Each Down Arrow press lands on a line strictly after the previous one. (Identical text
 /// may legitimately repeat, e.g. two "Directions" links; position must not.)
 pub const DOWN_ADVANCES: &str = "Down Arrow always moves forward";
@@ -53,6 +59,44 @@ pub fn check(aom: &AomNode) -> Vec<Violation> {
     let mut nodes = Vec::new();
     walk(aom, &mut nodes);
     let buffer = VirtualBuffer::from_aom(aom);
+
+    let ranges = |invariant: &'static str, ranges: Vec<(usize, usize)>| {
+        ranges
+            .windows(2)
+            .filter_map(|pair| match pair {
+                [a, b] if b.0 < a.1 || a.1 < a.0 => Some(Violation {
+                    invariant,
+                    detail: format!("[{}..{}) precedes [{}..{})", a.0, a.1, b.0, b.1),
+                }),
+                _ => None,
+            })
+            .collect::<Vec<_>>()
+    };
+    violations.extend(ranges(
+        WORDS_ORDERED,
+        buffer
+            .words
+            .iter()
+            .map(|w| (w.start_offset, w.end_offset))
+            .collect(),
+    ));
+    let ordered = |offsets: Vec<usize>| offsets.windows(2).all(|p| matches!(p, [a, b] if a <= b));
+    if !ordered(buffer.tab_stops.clone())
+        || !ordered(buffer.focus_stops.iter().map(|s| s.0).collect())
+    {
+        violations.push(Violation {
+            invariant: STOPS_ORDERED,
+            detail: format!("{:?} {:?}", buffer.tab_stops, buffer.focus_stops),
+        });
+    }
+    violations.extend(ranges(
+        PARAGRAPHS_ORDERED,
+        buffer
+            .paragraphs
+            .iter()
+            .map(|p| (p.start_offset, p.end_offset))
+            .collect(),
+    ));
 
     for pair in buffer.lines.windows(2) {
         if let [a, b] = pair {

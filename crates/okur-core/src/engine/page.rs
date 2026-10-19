@@ -83,10 +83,12 @@ impl ScreenReaderEngine {
         Some(welcome)
     }
 
-    /// The node of the line under the virtual cursor.
-    pub(super) fn node_under_cursor(&self) -> Option<AomNode> {
+    /// The node of the line under the virtual cursor. Borrowed: a list's line is the whole
+    /// list, and Enter on one cloned 5,000 items in the keyboard hook (51 ms; responsiveness
+    /// review, 2026-10-19).
+    pub(super) fn node_under_cursor(&self) -> Option<&AomNode> {
         let line = self.cursor.buffer.line_at_offset(self.cursor.offset)?;
-        self.cursor.buffer.node(line.node_id).cloned()
+        self.cursor.buffer.node(line.node_id)
     }
 
     /// A page control changed (Space toggled a check box, a combo box took a new value): the
