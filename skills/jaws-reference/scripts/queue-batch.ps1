@@ -55,7 +55,7 @@ if ($Snapshots.Count -gt 0) {
             $said = & powershell -NoProfile -ExecutionPolicy Bypass -File $capture `
                 -Fixture (Join-Path 'C:\Users\ailabs\corpus\fixtures' $fixture) `
                 -OutputPath $out -Okur $okur -Api $api 2>&1 | Select-Object -Last 1
-            "snapshot $stem $api: $said" | Out-File $log -Append -Encoding utf8
+            "snapshot ${stem} ${api}: ${said}" | Out-File $log -Append -Encoding utf8
         }
     }
 }
