@@ -11,6 +11,9 @@
 # processes, control ids of Okur's dialogs, fonts, test doubles' logs, names matched against
 # what an application reports.
 # Command names: JAWS's script names and key notation, as a key map file would hold them.
+okur-core/src/cursor.rs: "mailto:"
+okur-core/src/linearize.rs: "mailto:"
+okur-core/src/speech.rs: "mailto:"
 okur-core/src/command.rs: *
 okur-core/src/actions.rs: "activate"
 okur-core/src/actions.rs: "caret"

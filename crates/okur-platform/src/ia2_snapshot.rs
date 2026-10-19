@@ -97,6 +97,7 @@ mod msaa_role {
     pub const COMBOBOX: i32 = 0x2E;
     pub const PROGRESSBAR: i32 = 0x30;
     pub const BUTTONMENU: i32 = 0x39;
+    pub const SEPARATOR: i32 = 0x15;
     pub const SLIDER: i32 = 0x33;
     pub const EQUATION: i32 = 0x37;
     pub const PAGETABLIST: i32 = 0x3C;
@@ -230,6 +231,7 @@ fn map_role(node: &Ia2Node) -> okur_core::Role {
             href: node.value.clone(),
         },
         msaa_role::GRAPHIC => Role::Image,
+        msaa_role::SEPARATOR => Role::Separator,
         msaa_role::STATICTEXT => Role::Text,
         msaa_role::TEXT if editable => Role::Edit,
         msaa_role::PUSHBUTTON => Role::Button,

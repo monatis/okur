@@ -31,6 +31,12 @@ impl ScreenReaderEngine {
             Command::SayDefaultButton => return self.say_default_button(),
             Command::SayConfiguration => return self.say_configuration(),
             Command::SayHotKey => return self.say_hot_key(),
+            Command::MoveToNext(crate::command::Element::MailLink) => {
+                return self.move_to_mail_link(true)
+            }
+            Command::MoveToPrior(crate::command::Element::MailLink) => {
+                return self.move_to_mail_link(false)
+            }
             Command::SayListColumn(column) => return self.say_list_column(column),
             Command::SayLinkAddress => return self.say_link_address(),
             Command::RouteVirtualToPc => return self.route_virtual_to_pc(),
@@ -991,6 +997,9 @@ impl ScreenReaderEngine {
             (Element::RadioButton, false) => c.move_prior_radio_button(),
             (Element::Math, true) => c.move_next_math(),
             (Element::Math, false) => c.move_prior_math(),
+            (Element::Division, forward) => c.move_division(forward),
+            (Element::Separator, forward) => c.move_separator(forward),
+            (Element::MailLink, forward) => c.move_mail_link(forward),
             (Element::FormField, true) => c.move_next_form_control(),
             (Element::FormField, false) => c.move_prior_form_control(),
             (Element::Button, true) => c.move_next_button(),

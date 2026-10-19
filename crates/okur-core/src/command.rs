@@ -34,6 +34,12 @@ pub enum Element {
     ListItem,
     Landmark,
     Frame,
+    /// A `div` with text (Z).
+    Division,
+    /// A horizontal rule (Minus).
+    Separator,
+    /// A link that writes an e-mail (Backslash).
+    MailLink,
 }
 
 /// A screen reader command.
@@ -945,6 +951,12 @@ static BINDINGS: &[Binding] = &{
         bind(Alpha('E'), ALONE, MoveToNext(Edit)),
         bind(Alpha('X'), SHIFT, MoveToPrior(CheckBox)),
         bind(Alpha('X'), ALONE, MoveToNext(CheckBox)),
+        bind(Alpha('Z'), SHIFT, MoveToPrior(Division)),
+        bind(Alpha('Z'), ALONE, MoveToNext(Division)),
+        bind(Minus, SHIFT, MoveToPrior(Separator)),
+        bind(Minus, ALONE, MoveToNext(Separator)),
+        bind(Backslash, SHIFT, MoveToPrior(MailLink)),
+        bind(Backslash, ALONE, MoveToNext(MailLink)),
         bind(Alpha('L'), SHIFT, MoveToPrior(List)),
         bind(Alpha('L'), ALONE, MoveToNext(List)),
         bind(Alpha('I'), SHIFT, MoveToPrior(ListItem)),

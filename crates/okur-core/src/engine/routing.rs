@@ -22,6 +22,26 @@ impl ScreenReaderEngine {
         self.say(address)
     }
 
+    /// Backslash and Shift+Backslash: the next or prior link that writes an e-mail. JAWS gives
+    /// it the focus, and the focus is all it says ("... | help@example.org Send Mail Link | To
+    /// activate press Enter."); on the link that has the focus already it says the link
+    /// ("help@example.org Send Mail Link") [obs, 293/s1-s3].
+    pub(super) fn move_to_mail_link(&mut self, forward: bool) -> Option<String> {
+        if self.app_mode != AppMode::VirtualBuffer {
+            return None;
+        }
+        let said = self.cursor.move_mail_link(forward)?;
+        let to_focus = self
+            .node_under_cursor()
+            .filter(|node| matches!(node.role, Role::Link { .. }))
+            .filter(|node| Some(node.id) != self.last_page_focus);
+        if let (Some(node), Some(actions)) = (to_focus, &self.actions) {
+            actions.focus(node);
+            return Some(String::new());
+        }
+        self.say(said)
+    }
+
     /// The virtual cursor goes to the focused element and reads its line: "Route Virtual to
     /// PC", "same page link Riverside Gazette" [obs, 536/s6].
     pub(super) fn route_virtual_to_pc(&mut self) -> Option<String> {

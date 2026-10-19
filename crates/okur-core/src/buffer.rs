@@ -198,6 +198,8 @@ pub struct VirtualBuffer {
     pub checkboxes: Vec<usize>,
     pub radio_buttons: Vec<usize>,
     pub graphics: Vec<usize>,
+    /// Horizontal rules, by their line's offset.
+    pub separators: Vec<usize>,
     pub articles: Vec<usize>,
     /// Start of the first main landmark, if any (`Q`).
     pub main_region: Option<usize>,

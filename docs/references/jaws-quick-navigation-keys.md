@@ -59,13 +59,13 @@ the Say All command".
 | W | MoveToNextWordFromList | Word from List | gap | 299 |
 | X | MoveToNextCheckbox | Check Box | built | |
 | Y | MoveToNextGlanceHighlight | Span (2013); Glance Highlight in the 2025 key map | gap | 292 |
-| Z | MoveToNextDivision | Division | gap (its list, Ctrl+Insert+Z, is built) | 292 |
+| Z | MoveToNextDivision | Division | built | 292 |
 | `'` Apostrophe | MoveToNextTab | Tab Control | built | |
 | `;` SemiColon | MoveToNextOnMouseOverElement | Move to OnMouseOver | bound; mouse-over detection missing | |
 | `/` Slash | MoveToNextOnClickElement | Clickable Element | gap | 293 |
-| `-` Dash | MoveToNextSeparator | Separator | gap | 292 |
+| `-` Dash | MoveToNextSeparator | Separator | built | 292 |
 | `=` Equals | MoveToFlowTo (Shift: MoveToFlowFrom) | | gap | 293 |
-| `\` Backslash | MoveToNextMailToLink | | gap | 293 |
+| `\` Backslash | MoveToNextMailToLink | | built (the link takes the focus, as in JAWS) | 293 |
 | Shift+`,` / Shift+`.` | StepToStartOfElement / StepToEndOfElement | Step Before / Past Element | gap | 294 |
 | F3 / Shift+F3 | JAWSFindNext / JAWSFindPrior | JAWS Find Next / Previous | built | |
 

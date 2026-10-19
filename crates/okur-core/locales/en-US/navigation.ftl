@@ -35,3 +35,7 @@ quicknav-heading-level-none = No more headings at level{ $level } in this sectio
 
 # Entering a math equation's viewer.
 math-viewer-entered = Math Viewer. Press Escape to exit.
+# Quick keys with nothing to go to. JAWS's wording for these was not recorded.
+quicknav-none-mail-links = There are no mail links on this page.
+quicknav-none-separators = There are no separators on this page.
+quicknav-none-divisions = There are no divisions on this page.

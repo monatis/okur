@@ -1439,6 +1439,58 @@ impl VirtualCursor {
         })
     }
 
+    /// Moves to the next or prior division (`Z`, `Shift+Z`): the page's `div` elements the
+    /// Divisions list holds, read as their line [obs, 292/s6-s10].
+    pub fn move_division(&mut self, forward: bool) -> Option<String> {
+        let targets: Vec<usize> = crate::element_lists::ElementList::Divisions
+            .items(&self.buffer)
+            .iter()
+            .map(|item| item.offset)
+            .collect();
+        self.line_nav(targets, forward, msg::quicknav_none_divisions().as_str())
+    }
+
+    /// Moves to the next or prior horizontal rule (`Minus`, `Shift+Minus`): "----- |
+    /// separator" [obs, 292/s1-s4].
+    pub fn move_separator(&mut self, forward: bool) -> Option<String> {
+        let targets = self.buffer.separators.clone();
+        self.line_nav(targets, forward, msg::quicknav_none_separators().as_str())
+    }
+
+    /// Moves to the next or prior link that writes an e-mail (`Backslash`, `Shift+Backslash`),
+    /// said by its text and then "Send Mail Link" [obs, 293/s2, s3].
+    pub fn move_mail_link(&mut self, forward: bool) -> Option<String> {
+        let mail_link = |c: &Self, offset: usize| {
+            c.buffer
+                .line_at_offset(offset)
+                .and_then(|line| c.buffer.node(line.node_id))
+                .is_some_and(|node| matches!(&node.role, Role::Link { href: Some(h) } if h.starts_with("mailto:")))
+        };
+        let targets: Vec<usize> = self
+            .buffer
+            .links
+            .iter()
+            .copied()
+            .filter(|&offset| mail_link(self, offset))
+            .collect();
+        self.quick_nav(
+            &targets,
+            forward,
+            msg::quicknav_none_mail_links().as_str(),
+            |c, offset, _| {
+                let text = c
+                    .buffer
+                    .line_at_offset(offset)
+                    .map(|line| line.text.trim().to_owned())
+                    .unwrap_or_default();
+                format!(
+                    "{text}{}",
+                    crate::linearize::role_marker(msg::role_link_mailto().as_str())
+                )
+            },
+        )
+    }
+
     /// Moves cursor to next list container (`L` / `MoveToNextList`).
     pub fn move_next_list(&mut self) -> Option<String> {
         let t = self.buffer.lists.clone();

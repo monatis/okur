@@ -71,3 +71,7 @@ role-tree-view = Tree view
 role-tree-view-viewer = tree view
 # A tree item's depth, said where its role would be.
 role-tree-level = level { $level }
+# A link that writes an e-mail (mailto:), as JAWS calls it.
+role-link-mailto = Send Mail Link
+# A horizontal rule in a page.
+role-separator = separator

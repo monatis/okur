@@ -3936,3 +3936,59 @@ fn the_table_layer_and_whole_rows() {
         Some(msg::table_on_last_row().to_string())
     );
 }
+
+/// Separators, divisions and mail links by quick key [obs, 292, 293]: Minus says "----- |
+/// separator", Z a division's line, Backslash a mail link by its text and "Send Mail Link"
+/// once the link has the focus, and gives it the focus otherwise.
+#[test]
+fn separators_divisions_and_mail_links() {
+    let mut div = AomNode::new(3, Role::Generic).with_text("A division holds this text.");
+    div.attributes.insert("tag".to_owned(), "div".to_owned());
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Keys")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Start"),
+            AomNode::new(2, Role::Separator),
+            div,
+            AomNode::new(4, Role::Paragraph).with_children(vec![AomNode::new(
+                5,
+                Role::Link {
+                    href: Some("mailto:help@example.org".to_owned()),
+                },
+            )
+            .with_name("help@example.org")]),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    engine.cursor.move_to_start();
+    use crate::command::{Command, Element};
+    assert_eq!(
+        engine
+            .execute(Command::MoveToNext(Element::Separator))
+            .map(|s| norm(&s)),
+        Some(norm(&format!(
+            "----- \u{1d} {} \u{1e}",
+            msg::role_separator()
+        )))
+    );
+    assert_eq!(
+        engine
+            .execute(Command::MoveToNext(Element::Division))
+            .as_deref(),
+        Some("A division holds this text.")
+    );
+    // Not focused yet: the link is given the focus, which speaks.
+    assert_eq!(
+        engine
+            .execute(Command::MoveToNext(Element::MailLink))
+            .as_deref(),
+        Some("")
+    );
+    assert!(
+        actions.requests().iter().any(|(a, _)| a == "focus"),
+        "{:?}",
+        actions.requests()
+    );
+}

@@ -20,6 +20,8 @@ use crate::messages::msg;
 /// Role marker brackets used by JAWS speech history (`\u{1d} role \u{1e}`).
 const RS: char = '\u{1d}';
 const RE: char = '\u{1e}';
+/// A horizontal rule's line, as JAWS shows it [obs, 292/s1].
+const SEPARATOR_LINE: &str = "-----";
 
 pub(crate) fn role_marker(name: &str) -> String {
     format!(" {RS} {name} {RE} ")
@@ -154,6 +156,8 @@ enum Class {
     Heading(u32),
     Link,
     Graphic,
+    /// A horizontal rule: its own line, "-----" said with its role [obs, 292/s1].
+    Separator,
     /// A form control rendered as a single line; children are not rendered.
     Control,
     Table,
@@ -356,6 +360,7 @@ impl<'a> Builder<'a> {
             Role::Heading { level } => Class::Heading(*level),
             Role::Link { .. } => Class::Link,
             Role::Image => Class::Graphic,
+            Role::Separator => Class::Separator,
             Role::Edit
             | Role::CheckBox
             | Role::RadioButton
@@ -591,6 +596,15 @@ impl<'a> Builder<'a> {
                 let off = self.emit(node.id, node.role.clone(), &alt, speech);
                 self.buffer.graphics.push(off);
             }
+            Class::Separator => {
+                self.flush();
+                let speech = format!(
+                    "{SEPARATOR_LINE}{}",
+                    role_marker(msg::role_separator().as_str())
+                );
+                let off = self.emit(node.id, node.role.clone(), SEPARATOR_LINE, speech);
+                self.buffer.separators.push(off);
+            }
             Class::Control => self.visit_control(node),
             Class::Table => self.visit_table(node),
             Class::List => self.visit_list(node),
@@ -677,6 +691,10 @@ impl<'a> Builder<'a> {
         let kind = match node.role_description() {
             Some(description) => description,
             None if same_page => msg::role_link_same_page().as_str(),
+            // A mailto: link is a "Send Mail Link" [obs, 293/s1].
+            None if href.is_some_and(|h| h.starts_with("mailto:")) => {
+                msg::role_link_mailto().as_str()
+            }
             None => msg::role_link().as_str(),
         };
         if same_page && self.buffer.contains_node(node.id) {

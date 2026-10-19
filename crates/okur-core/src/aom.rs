@@ -52,6 +52,8 @@ pub enum Role {
     MenuButton,
     /// A button with a drop-down part (UIA SplitButton): File Explorer's column headers.
     SplitButton,
+    /// A horizontal rule (`hr`, MSAA `ROLE_SYSTEM_SEPARATOR`): a line of its own, "----- | separator".
+    Separator,
     Generic,
 }
 

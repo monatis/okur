@@ -590,7 +590,13 @@ impl SpeechFormatter {
             let mut parts = vec![Part::new(PartKind::Name, name)];
             parts.extend(current);
             parts.push(Part::text(" "));
-            parts.push(Part::role(msg::role_link()));
+            parts.push(Part::role(
+                if matches!(&node.role, Role::Link { href: Some(h) } if h.starts_with("mailto:")) {
+                    msg::role_link_mailto()
+                } else {
+                    msg::role_link()
+                },
+            ));
             parts
         };
         let mut lines = vec![Line::new(parts)];
