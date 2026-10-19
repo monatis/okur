@@ -198,6 +198,24 @@ pub struct TraceNotification {
     pub processing: i32,
 }
 
+/// A dialog's tree without the items inside its tree views' items: a file dialog's navigation
+/// pane lists the account's pinned and recent folders under Quick access (525, round 35), which
+/// Say Window does not read (JAWS names the tree's item and its count) and a public corpus must
+/// not hold. The tree's own items stay ("Quick access", "This PC").
+pub(crate) fn without_nested_tree_items(mut tree: UiaNode) -> UiaNode {
+    fn prune(node: &mut UiaNode) {
+        if node.control_type == UIA_TREEITEM {
+            node.children.clear();
+            return;
+        }
+        for child in &mut node.children {
+            prune(child);
+        }
+    }
+    prune(&mut tree);
+    tree
+}
+
 /// A dialog's controls in reading order (depth first), below the dialog itself: what Say
 /// Window reads. Nameless containers (panes, groups) are passed through.
 fn window_items(tree: &UiaNode) -> Vec<okur_core::WindowItem> {
@@ -2574,6 +2592,7 @@ mod capture {
                             let page =
                                 crate::screen_lines::page_window(keyboard_focus_window(), window);
                             window_subtree(uia, page.unwrap_or(window))
+                                .map(super::without_nested_tree_items)
                         }),
                         crate::screen_lines::page_of(keyboard_focus_window(), window),
                         crate::screen_lines::group_box_of(keyboard_focus_window(), window),
@@ -2975,6 +2994,34 @@ mod tests {
             is_enabled: true,
             ..UiaNode::default()
         }
+    }
+
+    /// A dialog's tree keeps its tree views' own items and drops what is inside them: a file
+    /// dialog's Quick access holds the account's recent folders (525, round 35).
+    #[test]
+    fn a_dialog_tree_keeps_no_nested_tree_items() {
+        let mut quick_access = node(UIA_TREEITEM, "Quick access", false);
+        quick_access.children = vec![node(UIA_TREEITEM, "recent folder", false)];
+        let mut tree = node(50023, "Tree View", false);
+        tree.children = vec![quick_access, node(UIA_TREEITEM, "This PC", false)];
+        let mut dialog = node(50032, "Open", false);
+        dialog.children = vec![tree, node(50000, "Open", false)];
+        let pruned = without_nested_tree_items(dialog);
+        let names = |n: &UiaNode| -> Vec<String> {
+            fn walk(n: &UiaNode, out: &mut Vec<String>) {
+                out.extend(n.name.clone());
+                for c in &n.children {
+                    walk(c, out);
+                }
+            }
+            let mut out = Vec::new();
+            walk(n, &mut out);
+            out
+        };
+        assert_eq!(
+            names(&pruned),
+            ["Open", "Tree View", "Quick access", "This PC", "Open"]
+        );
     }
 
     /// A window's scroll bars are not traced: a scrolling list's state changes held the Run

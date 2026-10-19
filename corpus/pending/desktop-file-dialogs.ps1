@@ -7,10 +7,11 @@
     Launched by run-scenario.ps1 for desktop scenarios (scenario "launch" block, window title
     "SR File Dialog Fixture"). Makes %TEMP%\sr-dialogs anew on every run with two text files in
     it, then shows two buttons: "Open..." opens Windows' Open dialog and "Save As..." its Save As
-    dialog, both set to that folder (the dialog's folder is set, not remembered), so a dialog
-    shows these files and nothing of the machine's own folders. The file chosen is shown in the
-    label below. ASCII only. Do not change it without re-recording every scenario that uses it
-    (the manifest pins its SHA-256).
+    dialog, both set to that folder (the dialog's folder is set, not remembered) with a file name
+    filled in (sr-dialog-notes.txt to open, sr-dialog-copy.txt to save), so a dialog shows these
+    files and nothing of the machine's own folders. The file chosen is shown in the label below.
+    ASCII only. Do not change it without re-recording every scenario that uses it (the manifest
+    pins its SHA-256).
 #>
 param([int]$ExitAfterSeconds = 900)
 
@@ -44,7 +45,7 @@ $chosen.Location = New-Object System.Drawing.Point(20, 70)
 $filter = 'Text Documents (*.txt)|*.txt|All Files (*.*)|*.*'
 $open.Add_Click({
     $dialog = New-Object System.Windows.Forms.OpenFileDialog -Property @{
-        InitialDirectory = $folder; Filter = $filter; RestoreDirectory = $true
+        InitialDirectory = $folder; Filter = $filter; FileName = 'sr-dialog-notes.txt'; RestoreDirectory = $true
     }
     if ($dialog.ShowDialog($form) -eq 'OK') { $chosen.Text = "Opened $([IO.Path]::GetFileName($dialog.FileName))" }
 })
