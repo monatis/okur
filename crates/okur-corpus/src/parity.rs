@@ -720,6 +720,12 @@ fn hand_back(
     }
 }
 
+/// How early the tracer may stamp an event: it dates each from Windows's event time, a tick
+/// count that advances every 10 to 16 ms, so an event that follows a key within that time
+/// can be stamped before the key. 306/s2 (2026-10-19): the No button's focus 7 ms before the
+/// Tab that moved it.
+pub const TICK_MS: u128 = 16;
+
 /// Events the engine consumes: focus changes (with a UIA chain or an MSAA object) and menu
 /// mode transitions.
 fn replayable(event: &TraceEvent) -> bool {
@@ -780,7 +786,8 @@ impl StepEvents {
             .and_then(|s| s.get("t_start_ms"))
             .and_then(Value::as_u64)
             .map(u128::from)
-            .unwrap_or(0);
+            .unwrap_or(0)
+            .saturating_sub(TICK_MS);
         let setup = events
             .iter()
             .filter(|e| {
@@ -790,6 +797,7 @@ impl StepEvents {
             })
             .cloned()
             .collect();
+        let mut previous_end: Option<u128> = None;
         for step in steps {
             let (Some(id), Some(start), Some(end)) = (
                 step.get("step_id").and_then(Value::as_str),
@@ -800,13 +808,16 @@ impl StepEvents {
                     "{scenario_id}: traced trial steps lack t_start_ms/t_end_ms"
                 ));
             };
+            // A step's events may be stamped up to one tick before its key, never before the
+            // step before it ended.
+            let from = u128::from(start).saturating_sub(TICK_MS);
+            let from = previous_end.map_or(from, |end| from.max(end + 1));
             let window: Vec<_> = events
                 .iter()
-                .filter(|e| {
-                    replayable(e) && e.t_ms >= u128::from(start) && e.t_ms <= u128::from(end)
-                })
+                .filter(|e| replayable(e) && e.t_ms >= from && e.t_ms <= u128::from(end))
                 .cloned()
                 .collect();
+            previous_end = Some(u128::from(end));
             by_step.insert(id.to_owned(), window);
             starts.insert(id.to_owned(), start);
         }

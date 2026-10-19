@@ -499,6 +499,8 @@ fn print_evidence(evidence: &str, trial: usize, trace: bool) -> Result<(), Strin
     } else {
         Vec::new()
     };
+    // As replay places them: from a tick before the step's key, after the step before it.
+    let mut previous_end: Option<u128> = None;
     for step in chosen
         .get("step_results")
         .and_then(|s| s.as_array())
@@ -532,9 +534,12 @@ fn print_evidence(evidence: &str, trial: usize, trace: bool) -> Result<(), Strin
                 .map(u128::from)
         };
         if let (Some(start), Some(end)) = (time("t_start_ms"), time("t_end_ms")) {
-            for event in events.iter().filter(|e| (start..=end).contains(&e.t_ms)) {
+            let from = start.saturating_sub(okur_corpus::parity::TICK_MS);
+            let from = previous_end.map_or(from, |e| from.max(e + 1));
+            for event in events.iter().filter(|e| (from..=end).contains(&e.t_ms)) {
                 println!("{:>21} {}", "", trace_line(event, start));
             }
+            previous_end = Some(end);
         }
     }
     Ok(())
