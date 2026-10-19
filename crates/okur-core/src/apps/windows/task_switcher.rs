@@ -18,6 +18,17 @@ const SWITCHER_WINDOWS: [&str; 2] = ["XamlExplorerHostIslandWindow", "Multitaski
 /// The invisible window Windows 10 keeps in front while its switcher is up.
 const STAGING_WINDOW: &str = "ForegroundStaging";
 
+/// The window that raised the focus is the switcher's. The window in front, read after the
+/// event, can already be the one chosen: a quick Alt+Tab closes the switcher within 20 ms of
+/// its focus [obs, 316/s3].
+fn raised_by_switcher(focus: &FocusEvent) -> bool {
+    focus
+        .platform
+        .window_class
+        .as_deref()
+        .is_some_and(|w| SWITCHER_WINDOWS.contains(&w))
+}
+
 /// Reading state for the task switcher.
 #[derive(Debug, Default)]
 pub struct TaskSwitcher {
@@ -40,6 +51,7 @@ impl TaskSwitcher {
             .or(focus.platform.window_class.as_deref());
         let item = focus.role == Role::ListItem;
         let ours = window.is_some_and(|w| SWITCHER_WINDOWS.contains(&w))
+            || raised_by_switcher(focus)
             || (item && window == Some(STAGING_WINDOW));
         if !ours {
             self.entered = false;
@@ -70,8 +82,12 @@ impl AppModule for TaskSwitcher {
             return FocusResponse::Pass;
         };
         // Its window is remembered, so going back to an application announces that
-        // application's window.
+        // application's window, even when the window in front was read as that application's
+        // already.
         cx.note_window(focus);
+        if raised_by_switcher(focus) {
+            *cx.window_kind = focus.platform.window_class.clone();
+        }
         if speech.is_empty() {
             FocusResponse::Silent
         } else {
@@ -83,6 +99,7 @@ impl AppModule for TaskSwitcher {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::engine::AppMode;
 
     fn in_switcher(role: Role, name: &str) -> FocusEvent {
         let mut focus = FocusEvent::new(role).with_name(name);
@@ -164,5 +181,32 @@ mod tests {
         let mut edit = FocusEvent::new(Role::Edit).with_name("Notes");
         edit.platform.top_window_class = Some(STAGING_WINDOW.to_owned());
         assert_eq!(switcher.speech_for(&edit), None);
+    }
+
+    /// A quick Alt+Tab: the switcher's focus is read after the window in front is already the
+    /// application chosen. The focus is still the switcher's, and its window is remembered as
+    /// the switcher, so the application's focus that follows names its window [obs, 316/s3].
+    #[test]
+    fn a_quick_alt_tab_is_the_switchers_focus() {
+        let mut switcher = TaskSwitcher::default();
+        let mut item = FocusEvent::new(Role::ListItem)
+            .with_name("SR Editor Fixture")
+            .with_window_class("MultitaskingViewFrame")
+            .with_window_title("SR Editor Fixture");
+        item.platform.top_window_class = Some("WindowsForms10.Window.8.app".to_owned());
+        let mut mode = AppMode::NativeControl;
+        let mut title = None;
+        let mut kind = None;
+        let mut cx = AppContext {
+            app_mode: &mut mode,
+            window_title: &mut title,
+            window_kind: &mut kind,
+            selecting: false,
+        };
+        assert!(matches!(
+            switcher.focus(&item, &mut cx),
+            FocusResponse::Speak(_)
+        ));
+        assert_eq!(kind.as_deref(), Some("MultitaskingViewFrame"));
     }
 }

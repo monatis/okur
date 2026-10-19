@@ -599,7 +599,6 @@ mod tests {
     /// A native edit of several lines: the caret's line and "Contains text" on focus; Say Line
     /// without the field's name; Ctrl+Home with "top of file".
     #[test]
-    #[ignore = "known gap: a native multi-line edit is read as a document (316/s3, 400/s1, s5)"]
     fn a_multi_line_edit_is_read_as_a_document() {
         assert_eq!(
             replay_matches("316-desktop-show-desktop", "s3", true),

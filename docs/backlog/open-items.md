@@ -113,11 +113,6 @@ Order of work, most used first:
 
 ## Native desktop
 
-- **A multi-line field read whole on focus** (316/s3; audit §2.1): JAWS reads the caret's line
-  and says "Contains text". Daily use, hours of work; the evidence exists. In the same kind of
-  field (a WinForms text box) JAWS's Say Line gives the line without the field's name, and
-  Ctrl+Home says "top of file" first (400/s1, s5), as in a document. Okur knows a native field
-  has several lines only from its role; the tracer would need the window's multi-line style.
 - **Dialogs** (323, 322; audit §2.3):
   - the page's name and text on Ctrl+Tab ("Security Page | For special permissions or advanced
     settings, click Advanced." 323/s10): the tracer has the page's name but not its own text.
@@ -172,7 +167,7 @@ Block quotes cannot be seen through UIA. Measure first how long users stay on th
   appeared in one; move it to `example.org` the next time `signup-form.html` is re-recorded.
 - **Known-gap tests** (AGENTS.md rule 6): `crates/okur-corpus/src/lib.rs` replays the step and
   asserts JAWS's speech (`parity::run_one`): Space on a select box (229/s21), level keys into a
-  section (104/s1, 12/s1), the native multi-line edit (316/s3, 400/s1, s5); and
+  section (104/s1, 12/s1); and
   `crates/okur-core/src/lib.rs`'s `heading_level_keys_say_the_section_heading_entered`, which
   replaced the scenario 12 assertion JAWS contradicted. Add one for each gap whose behavior is
   recorded; `cargo test -- --ignored` runs them.
@@ -205,6 +200,9 @@ Block quotes cannot be seen through UIA. Measure first how long users stay on th
 - A field a list focuses, said as JAWS says it: its line in forms mode, no "Type in text."
   (`91f413d`; live on old-pc 2026-10-19: 225 11/11, 228 12/12, 249 5/5).
 - Space with the virtual cursor (the owner's report, 2026-10-18): `410654f`, scenario 229.
+- A multi-line native field read as a document (316/s3, 400/s1, s5; audit §2.1): `6c4b81d`,
+  passing since 316 and 400 were re-recorded with the window style, together with a quick
+  Alt+Tab's switcher focus and the apostrophe passed through below its level (2026-10-19).
 - Down and Up in a select box in forms mode: `062666c`.
 - See also the status notes in
   [`complex-web-apps-google-docs-sheets.md`](complex-web-apps-google-docs-sheets.md) and

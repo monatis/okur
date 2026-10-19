@@ -78,7 +78,7 @@ P0 blocks daily use, P1 is expected by a JAWS user within days, P2 is later.
 | 6 | Reading | Home, End, PageUp and PageDown in the virtual cursor | Bound to the virtual cursor; a page is 24 lines by default [K, S4] | **Missing (B10).** The browser gets them: the page scrolls, the cursor stays | P0 | 502 |
 | 7 | Applications | Word: arrows, Say All, misspellings, Insert+F7, Alt+Shift+L, Insert+Shift+R, Insert+F6, Ctrl+Insert+T | [P2] | **Not covered.** No Word module; not checked in Word | P0 | Office on old-pc is not known. Start with WordPad |
 | 8 | Applications | Outlook: message list, opening a message, reading it, attachments (Insert+A), header keys (Alt+1-9) | [P3] | **Not covered** | P0 | Needs Outlook on old-pc |
-| 9 | Reading | A multi-line native field on focus | The caret's line, then "Contains text" (316/s3, 400/s1, s5) | **Partial.** A known-gap test exists | P0 | recorded |
+| 9 | Reading | A multi-line native field on focus | The caret's line, then "Contains text" (316/s3, 400/s1, s5) | **Done** on 2026-10-19 (`6c4b81d`, with the task switcher and apostrophe fixes after it) | P0 | recorded |
 | 10 | Reading | Prior and next word with the desktop layout: Insert+Left and Insert+Right | [H1, W1] | **Missing.** The keys are swallowed silently; the laptop keys work | P1 | 503, 504 |
 | 11 | Reading | The laptop layout's other keys: CapsLock+A, Shift+A, Y, N, H, Ctrl+U, O, I, Shift+J, L, Y, N, 5, Semicolon, P | [H17, W1] | **Partial.** 9 laptop keys are built | P1 | after 320 |
 | 12 | Reading | Sentences and paragraphs: Alt+Numpad 5, Alt+Numpad Minus and Plus, Ctrl+Numpad 5; P and Shift+P | [H1, W1] | **Missing.** Numpad Plus and Minus reach Okur as unknown keys | P1 | 291, 504 |

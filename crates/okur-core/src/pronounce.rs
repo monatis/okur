@@ -206,7 +206,10 @@ fn render(text: &str, level: Punctuation, point_digits: bool) -> String {
             // A thousands separator is part of the number, never named: "1,000,000", "dollar
             // 1,250.50" [obs, 405/s14, s15; 407/s21].
             ',' if is_digit(prev) && is_digit(next) => out.push(c),
-            '\'' | '\u{2019}'
+            // An apostrophe below its level is passed on as it is, inside a word or among
+            // symbols ("and ' left paren" [obs, 316/s3, 312/s1]).
+            '\'' if !named => out.push(c),
+            '\u{2019}'
                 if !named
                     && prev.is_some_and(char::is_alphabetic)
                     && next.is_some_and(char::is_alphabetic) =>
@@ -613,6 +616,7 @@ mod tests {
         // An apostrophe inside a word stays; an em dash above the level is a pause only
         // [obs, 229/s22, 239/s3].
         assert_eq!(most("Chrome'u"), "Chrome'u");
+        assert_eq!(most("&'("), "and ' left paren");
         assert_eq!(most("help — or call"), "help or call");
         // Symbols named at every level [obs, 313/s4].
         assert_eq!(

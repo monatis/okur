@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 1714,
+  "matched_steps": 1715,
   "total_steps": 2045,
   "accepted_divergences": 33,
   "errors": [],
@@ -1781,7 +1781,7 @@
     "315-desktop-richedit-lines-and-font/s9": "match",
     "316-desktop-show-desktop/s1": "match",
     "316-desktop-show-desktop/s2": "match",
-    "316-desktop-show-desktop/s3": "mismatch",
+    "316-desktop-show-desktop/s3": "match",
     "317-desktop-alt-tab-hold/s1": "match",
     "317-desktop-alt-tab-hold/s2": "match",
     "317-desktop-alt-tab-hold/s3": "match",
