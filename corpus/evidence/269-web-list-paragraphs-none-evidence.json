@@ -2,14 +2,15 @@
     "format_version":  2,
     "scenario_id":  "269-web-list-paragraphs-none",
     "scenario_version":  "1.0.0",
-    "timestamp":  "2026-10-18T22:28:58.6521231+03:00",
+    "timestamp":  "2026-10-19T14:58:04.1439633+03:00",
     "provenance":  {
-                       "capture_script_sha256":  "4446448e4f562ed63a1b717397a70eaac607b63b38db98937b75078ee4d47f23",
+                       "capture_script_sha256":  "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
                        "scenario_sha256":  "59570ddc7347f4c13f94d8f98a1248a6eea3216956816d55ae92d399f940111c",
                        "fixture_sha256":  "685ca0b777b5b0184d58c505d3161eb348ec6356d7f5b27ad25eddaccdc03c86",
                        "host":  "DESKTOP-DCNAKQQ",
                        "os_build":  "Microsoft Windows [Version 10.0.19045.6456]",
                        "keyboard_layout":  "Turkish Q",
+                       "num_lock":  false,
                        "culture":  "en-US",
                        "utc_offset_minutes":  180,
                        "chrome_version":  "155.0.8059.84",
@@ -418,14 +419,14 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-18T22:29:01.1420118+03:00",
+                       "timestamp":  "2026-10-19T14:58:06.6263761+03:00",
                        "foreground_window_start":  "Tables Navigation Reference Fixture - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792351748717,
-                                                "t_end_ms":  1792351750452,
+                                                "t_start_ms":  1792411094204,
+                                                "t_end_ms":  1792411095822,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Ctrl+Insert+P",
@@ -439,7 +440,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792351748735,
+                                                                                               "t":  1792411094221,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -474,7 +475,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792351748957,
+                                                                                               "t":  1792411094441,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -521,11 +522,12 @@
                                                                                                          ]
                                                                                            }
                                                                                        ],
+                                                                    "spoken_end":  "confirmation",
                                                                     "clipboard":  null,
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1147,
+                                                                    "settle_ms":  1144,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -534,8 +536,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792351751996,
-                                                "t_end_ms":  1792351754433,
+                                                "t_start_ms":  1792411097476,
+                                                "t_end_ms":  1792411099763,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Escape",
@@ -546,14 +548,15 @@
                                                                     "spoken":  [
 
                                                                                ],
-                                                                    "spoken_records":  {
+                                                                    "spoken_records":  [
 
-                                                                                       },
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
                                                                     "clipboard":  null,
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  false,
-                                                                    "settle_ms":  812,
+                                                                    "settle_ms":  809,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -564,18 +567,18 @@
                        "trial_success":  true,
                        "trace_file":  "269-web-list-paragraphs-none-trial1.jsonl",
                        "page_load_settled":  false,
-                       "trace_sha256":  "2f7db1de17f4e31e6ac26f065c0a12f95fcc1eda6e88dc97a5a64b69134944a7"
+                       "trace_sha256":  "ffc16efc866959954e162af7560f00aa407b4b1bf049fa58a767bb047ff41f81"
                    },
                    {
                        "trial_index":  2,
-                       "timestamp":  "2026-10-18T22:29:14.4772984+03:00",
+                       "timestamp":  "2026-10-19T14:58:19.8521964+03:00",
                        "foreground_window_start":  "Tables Navigation Reference Fixture - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792351761959,
-                                                "t_end_ms":  1792351763513,
+                                                "t_start_ms":  1792411107321,
+                                                "t_end_ms":  1792411108728,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Ctrl+Insert+P",
@@ -586,58 +589,61 @@
                                                                     "spoken":  [
                                                                                    "no paragraphs were found"
                                                                                ],
-                                                                    "spoken_records":  {
-                                                                                           "t":  1792351762058,
-                                                                                           "frags":  [
-                                                                                                         {
-                                                                                                             "action":  "speak",
-                                                                                                             "text":  "no",
-                                                                                                             "rate":  10,
-                                                                                                             "volume":  100
-                                                                                                         },
-                                                                                                         {
-                                                                                                             "action":  "bookmark",
-                                                                                                             "text":  "1",
-                                                                                                             "rate":  10,
-                                                                                                             "volume":  100
-                                                                                                         },
-                                                                                                         {
-                                                                                                             "action":  "speak",
-                                                                                                             "text":  "paragraphs",
-                                                                                                             "rate":  10,
-                                                                                                             "volume":  100
-                                                                                                         },
-                                                                                                         {
-                                                                                                             "action":  "bookmark",
-                                                                                                             "text":  "2",
-                                                                                                             "rate":  10,
-                                                                                                             "volume":  100
-                                                                                                         },
-                                                                                                         {
-                                                                                                             "action":  "speak",
-                                                                                                             "text":  "were",
-                                                                                                             "rate":  10,
-                                                                                                             "volume":  100
-                                                                                                         },
-                                                                                                         {
-                                                                                                             "action":  "bookmark",
-                                                                                                             "text":  "3",
-                                                                                                             "rate":  10,
-                                                                                                             "volume":  100
-                                                                                                         },
-                                                                                                         {
-                                                                                                             "action":  "speak",
-                                                                                                             "text":  "found",
-                                                                                                             "rate":  10,
-                                                                                                             "volume":  100
-                                                                                                         }
-                                                                                                     ]
-                                                                                       },
+                                                                    "spoken_records":  [
+                                                                                           {
+                                                                                               "t":  1792411107422,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "no",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "1",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "paragraphs",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "2",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "were",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "3",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "found",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
                                                                     "clipboard":  null,
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1043,
+                                                                    "settle_ms":  1038,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -646,8 +652,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792351765067,
-                                                "t_end_ms":  1792351767517,
+                                                "t_start_ms":  1792411110445,
+                                                "t_end_ms":  1792411112731,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Escape",
@@ -658,14 +664,15 @@
                                                                     "spoken":  [
 
                                                                                ],
-                                                                    "spoken_records":  {
+                                                                    "spoken_records":  [
 
-                                                                                       },
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
                                                                     "clipboard":  null,
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  false,
-                                                                    "settle_ms":  812,
+                                                                    "settle_ms":  809,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -676,18 +683,18 @@
                        "trial_success":  true,
                        "trace_file":  "269-web-list-paragraphs-none-trial2.jsonl",
                        "page_load_settled":  false,
-                       "trace_sha256":  "ad0d0c4c7e5615bf74a51957543c51582b495ef982f6ee626bf620893efd327e"
+                       "trace_sha256":  "4b474b702a0dc0af7b720467c21d2314f3e0b4955b274518ecf41d94f14820d0"
                    },
                    {
                        "trial_index":  3,
-                       "timestamp":  "2026-10-18T22:29:27.5688748+03:00",
+                       "timestamp":  "2026-10-19T14:58:32.8165339+03:00",
                        "foreground_window_start":  "Tables Navigation Reference Fixture - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792351774909,
-                                                "t_end_ms":  1792351776460,
+                                                "t_start_ms":  1792411120257,
+                                                "t_end_ms":  1792411121665,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Ctrl+Insert+P",
@@ -698,58 +705,61 @@
                                                                     "spoken":  [
                                                                                    "no paragraphs were found"
                                                                                ],
-                                                                    "spoken_records":  {
-                                                                                           "t":  1792351775007,
-                                                                                           "frags":  [
-                                                                                                         {
-                                                                                                             "action":  "speak",
-                                                                                                             "text":  "no",
-                                                                                                             "rate":  10,
-                                                                                                             "volume":  100
-                                                                                                         },
-                                                                                                         {
-                                                                                                             "action":  "bookmark",
-                                                                                                             "text":  "1",
-                                                                                                             "rate":  10,
-                                                                                                             "volume":  100
-                                                                                                         },
-                                                                                                         {
-                                                                                                             "action":  "speak",
-                                                                                                             "text":  "paragraphs",
-                                                                                                             "rate":  10,
-                                                                                                             "volume":  100
-                                                                                                         },
-                                                                                                         {
-                                                                                                             "action":  "bookmark",
-                                                                                                             "text":  "2",
-                                                                                                             "rate":  10,
-                                                                                                             "volume":  100
-                                                                                                         },
-                                                                                                         {
-                                                                                                             "action":  "speak",
-                                                                                                             "text":  "were",
-                                                                                                             "rate":  10,
-                                                                                                             "volume":  100
-                                                                                                         },
-                                                                                                         {
-                                                                                                             "action":  "bookmark",
-                                                                                                             "text":  "3",
-                                                                                                             "rate":  10,
-                                                                                                             "volume":  100
-                                                                                                         },
-                                                                                                         {
-                                                                                                             "action":  "speak",
-                                                                                                             "text":  "found",
-                                                                                                             "rate":  10,
-                                                                                                             "volume":  100
-                                                                                                         }
-                                                                                                     ]
-                                                                                       },
+                                                                    "spoken_records":  [
+                                                                                           {
+                                                                                               "t":  1792411120351,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "no",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "1",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "paragraphs",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "2",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "were",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "3",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "found",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
                                                                     "clipboard":  null,
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1043,
+                                                                    "settle_ms":  1039,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -758,8 +768,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792351778010,
-                                                "t_end_ms":  1792351780451,
+                                                "t_start_ms":  1792411123379,
+                                                "t_end_ms":  1792411125669,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Escape",
@@ -770,14 +780,15 @@
                                                                     "spoken":  [
 
                                                                                ],
-                                                                    "spoken_records":  {
+                                                                    "spoken_records":  [
 
-                                                                                       },
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
                                                                     "clipboard":  null,
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  false,
-                                                                    "settle_ms":  813,
+                                                                    "settle_ms":  810,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -788,8 +799,8 @@
                        "trial_success":  true,
                        "trace_file":  "269-web-list-paragraphs-none-trial3.jsonl",
                        "page_load_settled":  false,
-                       "trace_sha256":  "a768f9cad25541cb237edc2ebc12311a2a3509b59708553d67dd8cfc0be2e4c5"
+                       "trace_sha256":  "077ac89d5df866061ad09c19c3ab4233de040a8fd0d4d6d1692b1cc359fcb31d"
                    }
                ],
-    "total_elapsed_ms":  42618
+    "total_elapsed_ms":  42381
 }
