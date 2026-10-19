@@ -24,6 +24,52 @@ enum Request {
     Configure(okur_core::settings::VoiceSettings),
 }
 
+/// How long a stop waits for the speech that follows it: a key stops speech, then its command
+/// speaks with an interruption, which stops speech too. Taken together, the synthesizer
+/// purges once (SAPI's purge took 750 ms on old-pc).
+const STOP_GRACE: std::time::Duration = std::time::Duration::from_millis(3);
+
+impl Request {
+    /// Whether the request cuts off all speech before it.
+    fn interrupts(&self) -> bool {
+        match self {
+            Request::Stop => true,
+            Request::Speak(_, interrupt)
+            | Request::Symbols(_, interrupt)
+            | Request::Character(_, interrupt)
+            | Request::Phonetic(_, interrupt) => *interrupt,
+            Request::Configure(_) => false,
+        }
+    }
+
+    /// `first` and every request queued behind it; a stop alone waits briefly for the speech
+    /// that usually follows it.
+    fn batch(first: Request, queue: &std::sync::mpsc::Receiver<Request>) -> Vec<Request> {
+        let mut batch = vec![first];
+        batch.extend(queue.try_iter());
+        if matches!(batch.last(), Some(Request::Stop)) {
+            if let Ok(next) = queue.recv_timeout(STOP_GRACE) {
+                batch.push(next);
+                batch.extend(queue.try_iter());
+            }
+        }
+        batch
+    }
+
+    /// The requests of `batch` worth carrying out: from the last one that cuts off speech on
+    /// (what came before it would be cut off at once), with the voice changes before it, in
+    /// order. A held arrow key queued speech faster than SAPI could stop it, and the speech
+    /// lagged further and further behind the keys (responsiveness review, 2026-10-19).
+    fn superseding(batch: Vec<Request>) -> impl Iterator<Item = Request> {
+        let cut = batch.iter().rposition(Request::interrupts).unwrap_or(0);
+        batch
+            .into_iter()
+            .enumerate()
+            .filter(move |(i, request)| *i >= cut || matches!(request, Request::Configure(_)))
+            .map(|(_, request)| request)
+    }
+}
+
 /// A [`TtsManager`] driven from its own thread.
 pub struct SpeechThread {
     requests: Sender<Request>,
@@ -52,8 +98,13 @@ impl SpeechThread {
                         windows::Win32::System::Com::COINIT_MULTITHREADED,
                     )
                 };
-                while let Ok(request) = received.recv() {
-                    if let Ok(mut tts) = worker_tts.lock() {
+                while let Ok(first) = received.recv() {
+                    let batch = Request::batch(first, &received);
+                    let count = batch.len();
+                    for request in Request::superseding(batch) {
+                        let Ok(mut tts) = worker_tts.lock() else {
+                            continue;
+                        };
                         match request {
                             Request::Speak(text, interrupt) => {
                                 let spoken = okur_core::pronounce::spoken(&text, tts.punctuation);
@@ -83,7 +134,7 @@ impl SpeechThread {
                             Request::Configure(voice) => tts.configure(&voice),
                         }
                     }
-                    worker_pending.fetch_sub(1, Ordering::SeqCst);
+                    worker_pending.fetch_sub(count, Ordering::SeqCst);
                 }
             });
         if let Err(e) = started {
@@ -194,5 +245,33 @@ mod tests {
             std::thread::sleep(std::time::Duration::from_millis(5));
         }
         assert_eq!(speech.pending.load(Ordering::SeqCst), 0);
+    }
+
+    /// Of the requests queued together, those a later interruption would cut off at once are
+    /// left out; voice changes are kept, in order.
+    #[test]
+    fn requests_an_interruption_supersedes_are_left_out() {
+        let name = |request: Request| match request {
+            Request::Speak(text, _) => text,
+            Request::Configure(_) => "configure".to_owned(),
+            Request::Stop => "stop".to_owned(),
+            _ => "other".to_owned(),
+        };
+        let batch = vec![
+            Request::Speak("Line one".into(), true),
+            Request::Configure(okur_core::settings::VoiceSettings::default()),
+            Request::Speak("queued".into(), false),
+            Request::Stop,
+            Request::Speak("Line two".into(), true),
+            Request::Speak("its hint".into(), false),
+        ];
+        let kept: Vec<String> = Request::superseding(batch).map(name).collect();
+        assert_eq!(kept, ["configure", "Line two", "its hint"]);
+        let calm = vec![
+            Request::Speak("one".into(), false),
+            Request::Speak("two".into(), false),
+        ];
+        let kept: Vec<String> = Request::superseding(calm).map(name).collect();
+        assert_eq!(kept, ["one", "two"]);
     }
 }

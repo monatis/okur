@@ -266,23 +266,50 @@ const REFRESH_MAX_DELAY: std::time::Duration = std::time::Duration::from_secs(3)
 /// Waits until no refresh request has come for `quiet`, or `max` has passed since the first:
 /// a streamed chat reply changes its live region many times a second, and each change used
 /// to start a capture of the whole page. Announcements do not wait for it; they compare
-/// with the region's last text. Returns false when the requests' sender is gone.
-fn settle<T>(
-    requests: &std::sync::mpsc::Receiver<T>,
+/// with the region's last text.
+///
+/// A request of another kind ends the wait, and the strongest of those queued is returned, to
+/// be served in the refresh's place: a focus the buffer lacks, or the full capture after a
+/// quick one, waited out a stream (up to 3 s) and was then dropped (responsiveness review,
+/// 2026-10-19). Any of them reads the page as a refresh would. `Err` when the requests'
+/// sender is gone.
+fn settle(
+    requests: &std::sync::mpsc::Receiver<PageRequest>,
     quiet: std::time::Duration,
     max: std::time::Duration,
-) -> bool {
+) -> Result<Option<PageRequest>, ()> {
     use std::sync::mpsc::RecvTimeoutError;
     let first = std::time::Instant::now();
     loop {
         let left = max.saturating_sub(first.elapsed());
         if left.is_zero() {
-            return true;
+            return Ok(None);
         }
         match requests.recv_timeout(quiet.min(left)) {
-            Ok(_) => {}
-            Err(RecvTimeoutError::Timeout) => return true,
-            Err(RecvTimeoutError::Disconnected) => return false,
+            Ok(PageRequest::Refresh(_)) => {}
+            Ok(other) => {
+                let strongest = requests
+                    .try_iter()
+                    .chain(std::iter::once(other))
+                    .max_by_key(PageRequest::strength);
+                return Ok(strongest);
+            }
+            Err(RecvTimeoutError::Timeout) => return Ok(None),
+            Err(RecvTimeoutError::Disconnected) => return Err(()),
+        }
+    }
+}
+
+impl PageRequest {
+    /// Which of two requests serves the other: a focus's capture (quick, then full) serves
+    /// every other, the changes at once a refresh and a refinement, a refinement (a full
+    /// capture) a refresh.
+    fn strength(&self) -> u8 {
+        match self {
+            PageRequest::Refresh(_) => 0,
+            PageRequest::Refine(_) => 1,
+            PageRequest::Changes(_) => 2,
+            PageRequest::Focus(_) => 3,
         }
     }
 }
@@ -297,16 +324,18 @@ fn start_page_worker(
             use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
             // SAFETY: COM initialization for this worker thread.
             let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
-            while let Ok(request) = rx.recv() {
+            while let Ok(mut request) = rx.recv() {
+                if matches!(request, PageRequest::Refresh(_)) {
+                    match settle(&rx, REFRESH_QUIET, REFRESH_MAX_DELAY) {
+                        Ok(Some(other)) => request = other,
+                        Ok(None) => {}
+                        Err(()) => break,
+                    }
+                }
                 let (PageRequest::Refresh(window)
                 | PageRequest::Refine(window)
                 | PageRequest::Focus(window)
                 | PageRequest::Changes(window)) = request;
-                if matches!(request, PageRequest::Refresh(_))
-                    && !settle(&rx, REFRESH_QUIET, REFRESH_MAX_DELAY)
-                {
-                    break;
-                }
                 if ForegroundWindow::now() != window {
                     tracing::debug!(?request, "page request skipped: its window left the front");
                     continue;
@@ -438,34 +467,53 @@ fn load_page_if_new(
 
 #[cfg(test)]
 mod tests {
-    use super::settle;
+    use super::{settle, ForegroundWindow, PageRequest};
     use std::time::{Duration, Instant};
+
+    const WINDOW: ForegroundWindow = ForegroundWindow(1);
 
     #[test]
     fn a_burst_of_refresh_requests_settles_into_one() {
-        let (tx, rx) = std::sync::mpsc::channel::<()>();
+        let (tx, rx) = std::sync::mpsc::channel();
         for _ in 0..5 {
-            let _ = tx.send(());
+            let _ = tx.send(PageRequest::Refresh(WINDOW));
         }
         let started = Instant::now();
-        assert!(settle(
-            &rx,
-            Duration::from_millis(20),
-            Duration::from_secs(2)
-        ));
+        assert_eq!(
+            settle(&rx, Duration::from_millis(20), Duration::from_secs(2)),
+            Ok(None)
+        );
         // The burst was taken, and the wait ended on quiet, long before the limit.
         assert!(rx.try_recv().is_err());
         assert!(started.elapsed() < Duration::from_secs(1));
     }
 
+    /// A focus or a refinement asked for while refreshes settle ends the wait and is served
+    /// in their place, the strongest first; none is lost.
+    #[test]
+    fn another_request_ends_the_wait_and_is_served() {
+        let (tx, rx) = std::sync::mpsc::channel();
+        let _ = tx.send(PageRequest::Refresh(WINDOW));
+        let _ = tx.send(PageRequest::Refine(WINDOW));
+        let _ = tx.send(PageRequest::Focus(WINDOW));
+        let _ = tx.send(PageRequest::Refresh(WINDOW));
+        let started = Instant::now();
+        let served = settle(&rx, Duration::from_secs(1), Duration::from_secs(3));
+        assert!(
+            matches!(served, Ok(Some(PageRequest::Focus(_)))),
+            "{served:?}"
+        );
+        assert!(started.elapsed() < Duration::from_millis(500));
+        assert!(rx.try_recv().is_err());
+    }
+
     #[test]
     fn a_closed_request_channel_ends_the_wait() {
-        let (tx, rx) = std::sync::mpsc::channel::<()>();
+        let (tx, rx) = std::sync::mpsc::channel::<PageRequest>();
         drop(tx);
-        assert!(!settle(
-            &rx,
-            Duration::from_millis(20),
-            Duration::from_secs(2)
-        ));
+        assert_eq!(
+            settle(&rx, Duration::from_millis(20), Duration::from_secs(2)),
+            Err(())
+        );
     }
 }

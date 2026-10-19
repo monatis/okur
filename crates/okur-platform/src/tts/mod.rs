@@ -128,6 +128,8 @@ pub struct TtsManager {
     speech_log: Option<SpeechLog>,
     /// Which symbols the synthesizer is given by name (the voice settings' punctuation).
     punctuation: okur_core::settings::Punctuation,
+    /// The voice settings last applied, so that a change applies only what differs.
+    applied: Option<okur_core::settings::VoiceSettings>,
 }
 
 impl TtsManager {
@@ -139,6 +141,7 @@ impl TtsManager {
             voice: None,
             speech_log: None,
             punctuation: okur_core::settings::Punctuation::default(),
+            applied: None,
         })
     }
 
@@ -278,9 +281,10 @@ impl TtsManager {
         self.engine.wait_until_done(timeout_ms)
     }
 
-    /// Replaces the active engine.
+    /// Replaces the active engine; the next voice settings are applied to it in full.
     pub fn set_engine(&mut self, engine: Box<dyn TtsEngine>) {
         self.engine = engine;
+        self.applied = None;
     }
 }
 
@@ -332,7 +336,24 @@ impl okur_core::speech::SpeechOutput for TtsManager {
 
     /// A new synthesizer, or a voice back to the synthesizer's default, starts the
     /// synthesizer anew; then the voice, rate and volume are set.
+    /// Applies what differs from the voice settings last applied. A level of punctuation
+    /// (Insert+Shift+2, or a site's own) is the manager's alone; a new rate or volume is set on
+    /// the voice; only another synthesizer or voice starts or chooses it, which on SAPI
+    /// enumerates its voices and can reload one (responsiveness review, 2026-10-19).
     fn configure(&mut self, voice: &okur_core::settings::VoiceSettings) {
+        self.punctuation = voice.punctuation;
+        let applied = self.applied.replace(voice.clone());
+        if let Some(applied) =
+            applied.filter(|a| a.synthesizer == voice.synthesizer && a.voice == voice.voice)
+        {
+            if applied.rate != voice.rate {
+                let _ = self.set_rate(voice.rate);
+            }
+            if applied.volume != voice.volume {
+                let _ = self.set_volume(voice.volume);
+            }
+            return;
+        }
         let kind = TtsEngineType::from(voice.synthesizer);
         if kind != self.kind || (voice.voice.is_none() && self.voice.is_some()) {
             match Self::create_engine(kind) {

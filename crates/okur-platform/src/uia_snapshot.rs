@@ -1142,13 +1142,20 @@ pub(crate) mod capture {
         found().unwrap_or_default()
     }
 
+    /// `ver`'s output, e.g. "Microsoft Windows [Version 10.0.19045.5737]", asked once per
+    /// process: each live page capture started `cmd` for it, 21-28 ms (224 ms cold) on the
+    /// page's way to speech (responsiveness review, 2026-10-19).
     pub(crate) fn os_version() -> String {
-        // `ver` output, e.g. "Microsoft Windows [Version 10.0.19045.5737]".
-        std::process::Command::new("cmd")
-            .args(["/C", "ver"])
-            .output()
-            .ok()
-            .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
-            .unwrap_or_default()
+        static VERSION: std::sync::OnceLock<String> = std::sync::OnceLock::new();
+        VERSION
+            .get_or_init(|| {
+                std::process::Command::new("cmd")
+                    .args(["/C", "ver"])
+                    .output()
+                    .ok()
+                    .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
+                    .unwrap_or_default()
+            })
+            .clone()
     }
 }

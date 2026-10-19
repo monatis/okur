@@ -100,7 +100,7 @@ impl ScreenReaderEngine {
     /// change is spoken.
     fn page_change(&mut self, control: &FocusEvent) -> Option<String> {
         let id = self.page_node_for(control)?;
-        let before = self.cursor.buffer.node(id)?.clone();
+        let before = self.cursor.buffer.node(id)?;
         let speech = match control.role {
             Role::CheckBox | Role::RadioButton
                 if before.states.checked != control.states.checked =>
@@ -159,6 +159,9 @@ impl ScreenReaderEngine {
             }
             _ => return None,
         };
+        // Said first: the rebuild below takes long on a big page (116 ms with 25,000 nodes;
+        // responsiveness review, 2026-10-19), and the change is known already.
+        self.speech.speak(&speech, true);
         let rebuilt = self.cursor.buffer.with_node_changed(id, |node| {
             node.states.expanded = control.states.expanded.or(node.states.expanded);
             node.states.checked = control.states.checked;
@@ -169,7 +172,6 @@ impl ScreenReaderEngine {
         })?;
         crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, rebuilt));
         self.cursor.move_to_node_id(id);
-        self.speech.speak(&speech, true);
         Some(speech)
     }
 
