@@ -34,8 +34,8 @@ pub fn css_alignment(align: &str) -> Option<&'static str> {
 
 #[cfg(windows)]
 pub use reader::{
-    focus_is_in_page, from_ia2, ia2_position, read_focused, read_focused_outside_page,
-    with_paragraph_alignment,
+    focus_is_in_page, from_ia2, ia2_position, move_caret_in_edit, read_focused,
+    read_focused_outside_page, with_paragraph_alignment,
 };
 
 #[cfg(windows)]
@@ -112,6 +112,46 @@ mod reader {
             context.font = Some(font);
         }
         context
+    }
+
+    /// Puts the caret of the focused Win32 edit (Notepad's, a WinForms text box, a rich edit) at
+    /// character `offset` of `text`, its text as last read, with EM_SETSEL: JAWS's next and prior
+    /// sentence move the caret [obs, 510/s2, s3, s7]. False for any other focus.
+    pub fn move_caret_in_edit(text: &str, offset: usize) -> bool {
+        use windows::Win32::Foundation::{LPARAM, WPARAM};
+        use windows::Win32::UI::WindowsAndMessaging::{SendMessageTimeoutW, SMTO_ABORTIFHUNG};
+        const EM_SETSEL: u32 = 0x00B1;
+        const EM_SCROLLCARET: u32 = 0x00B7;
+        let Some((hwnd, class)) = focused_window() else {
+            return false;
+        };
+        if !(class.contains("EDIT") || class.contains("RICHEDIT")) {
+            return false;
+        }
+        let units: usize = text.chars().take(offset).map(char::len_utf16).sum();
+        // SAFETY: standard edit messages to the focused window, which may be another
+        // process's; a hung window is given up on.
+        unsafe {
+            let set = SendMessageTimeoutW(
+                hwnd,
+                EM_SETSEL,
+                WPARAM(units),
+                LPARAM(units as isize),
+                SMTO_ABORTIFHUNG,
+                500,
+                None,
+            );
+            let _ = SendMessageTimeoutW(
+                hwnd,
+                EM_SCROLLCARET,
+                WPARAM(0),
+                LPARAM(0),
+                SMTO_ABORTIFHUNG,
+                500,
+                None,
+            );
+            set.0 != 0
+        }
     }
 
     /// The focused window of the application in front, with its class in capitals.

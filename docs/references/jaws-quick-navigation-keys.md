@@ -49,7 +49,7 @@ the Say All command".
 | M | MoveToNextFrame | Frame | bound | |
 | N | MoveToNextNonLinkText | Non-link Text | built | 289 |
 | O | MoveToNextArticle | Article Region | built | |
-| P | SayNextParagraph | Paragraph | gap | 291 |
+| P | SayNextParagraph | Paragraph | built | 291 |
 | Q | MoveToMainRegion (Shift+Q too) | Main Region | built | |
 | R | MoveToNextRegion | Region | built | |
 | S | MoveToNextSameElement | Same Type Element | gap | 290 |
@@ -111,10 +111,10 @@ the Say All command".
 
 | Keys | JAWS command | Okur | Scenario |
 |---|---|---|---|
-| Alt+NumpadPlus / Alt+NumpadMinus | SayNextSentence / SayPriorSentence | gap | 291 |
-| Alt+Numpad5 | SaySentence | gap | 291 |
-| Ctrl+Numpad5 | SayParagraph | gap | 291 |
-| Insert+PageUp / Insert+Home | SayFromCursor / SayToCursor | gap | 291 |
+| Alt+NumpadPlus / Alt+NumpadMinus | SayNextSentence / SayPriorSentence | built | 291 |
+| Alt+Numpad5 | SaySentence | built | 291 |
+| Ctrl+Numpad5 | SayParagraph | built | 291 |
+| Insert+PageUp / Insert+Home | SayFromCursor / SayToCursor | built | 291 |
 | Insert+Z | VirtualPCCursorToggle | gap | 298 |
 | Insert+Escape | RefreshScreen | gap | 298 |
 | Insert+Delete, Ctrl+Insert+Delete | RouteVirtualToPc, RoutePCToVirtual | gap | |

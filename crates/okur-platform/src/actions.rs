@@ -103,6 +103,8 @@ mod windows_actions {
         /// its last owner at once, and a hung owner would hold the hook (responsiveness
         /// review, 2026-10-19).
         Copy(String),
+        /// The focused edit's caret to a character offset of its text as last read.
+        Caret(String, usize),
     }
 
     /// The virtual key of a key the screen reader sends for a reading command.
@@ -272,6 +274,11 @@ mod windows_actions {
                             Request::Copy(text) => {
                                 if let Err(e) = super::set_clipboard_text(&text) {
                                     tracing::warn!("copy to the clipboard failed: {e}");
+                                }
+                            }
+                            Request::Caret(text, offset) => {
+                                if !crate::text_context::move_caret_in_edit(&text, offset) {
+                                    tracing::debug!(offset, "caret not moved: not a Win32 edit");
                                 }
                             }
                         }
@@ -444,6 +451,10 @@ mod windows_actions {
 
         fn read_text(&self) -> bool {
             self.send(Request::TextNow)
+        }
+
+        fn move_caret(&self, context: &TextContext, offset: usize) -> bool {
+            self.send(Request::Caret(context.text.clone(), offset))
         }
 
         fn read_window(&self, window: bool) -> bool {

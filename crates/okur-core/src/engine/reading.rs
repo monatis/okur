@@ -66,6 +66,47 @@ impl ScreenReaderEngine {
                     after
                 }
             }
+            // In a text field the sentence keys read the caret's sentence, and the next and
+            // prior one, which they move the caret to: "Hello, world.", "Is it done?"
+            // [obs, 510/s1-s3, s7].
+            Command::SaySentence | Command::SayNextSentence | Command::SayPriorSentence
+                if self.editing_text() =>
+            {
+                let context = self.last_text.clone()?;
+                let sentences = char_sentences(&context.text);
+                let current = sentences
+                    .iter()
+                    .rposition(|&(start, _)| start <= context.caret)
+                    .unwrap_or(0);
+                let index = match command {
+                    Command::SayNextSentence => {
+                        (current + 1).min(sentences.len().saturating_sub(1))
+                    }
+                    Command::SayPriorSentence => current.saturating_sub(1),
+                    _ => current,
+                };
+                let &(start, end) = sentences.get(index)?;
+                if *command != Command::SaySentence && start != context.caret {
+                    if let Some(actions) = &self.actions {
+                        actions.move_caret(&context, start);
+                    }
+                    if let Some(known) = self.last_text.as_mut() {
+                        known.caret = start;
+                        known.selection = None;
+                    }
+                }
+                context.text.chars().skip(start).take(end - start).collect()
+            }
+            // A text field's paragraph keys read the caret's line, where JAWS's paragraph is a
+            // line and stays put [obs, 510/s4-s6].
+            Command::SayParagraph
+            | Command::SayNextParagraph
+            | Command::SayPriorParagraph
+            | Command::NextParagraphOrArticles
+                if native && self.editing_text() =>
+            {
+                crate::editing::line_at(self.last_text.as_ref()?)
+            }
             _ => return None,
         };
         if !speech.trim().is_empty() {
@@ -73,6 +114,15 @@ impl ScreenReaderEngine {
         }
         Some(Some(speech))
     }
+}
+
+/// `text`'s sentences as character ranges.
+fn char_sentences(text: &str) -> Vec<(usize, usize)> {
+    let char_at = |byte: usize| text.get(..byte).map_or(0, |before| before.chars().count());
+    crate::editing::sentences(text)
+        .into_iter()
+        .map(|(start, end)| (char_at(start), char_at(end)))
+        .collect()
 }
 
 impl ScreenReaderEngine {

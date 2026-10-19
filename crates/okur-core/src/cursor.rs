@@ -357,20 +357,21 @@ impl VirtualCursor {
             .to_owned()
     }
 
-    /// The cursor's line before the cursor, and from it to the line's end.
+    /// The cursor's line before the cursor, and from it to the line's end, each with the
+    /// line's marks: "• same page link P" and " same page link aragraphs" with the cursor on
+    /// the link's "a" [obs, 291/s14, s15].
     pub fn line_around_cursor(&self) -> (String, String) {
         let Some(line) = self.buffer.line_at_offset(self.offset) else {
             return (String::new(), String::new());
         };
-        let at = self.offset.clamp(line.start_offset, line.end_offset);
-        let part = |from: usize, to: usize| {
-            self.buffer
-                .text
-                .get(from..to)
-                .unwrap_or_default()
-                .to_owned()
-        };
-        (part(line.start_offset, at), part(at, line.end_offset))
+        let (mark, text, speech) = split_list_mark(line);
+        let marks = speech.strip_suffix(text).unwrap_or_default();
+        let text_start = line.start_offset + line.text.len().saturating_sub(text.len());
+        let at = self.offset.clamp(text_start, line.end_offset) - text_start;
+        let before = text.get(..at).unwrap_or_default();
+        let after = text.get(at..).unwrap_or_default();
+        let mark = mark.map(|m| format!("{m} ")).unwrap_or_default();
+        (format!("{mark}{marks}{before}"), format!("{marks}{after}"))
     }
 
     pub fn say_selection(&self) -> String {
@@ -1141,6 +1142,75 @@ impl VirtualCursor {
         };
         self.move_to_line(target);
         self.current_line()
+    }
+
+    /// The virtual cursor's sentences, as offsets and what is said: a list item's mark alone,
+    /// then each sentence of its line, the line's marks with the first ("•", then " same page
+    /// link Paragraphs" [obs, 291/s6-s9]). A line without a sentence is one.
+    fn sentence_units(&self) -> Vec<(usize, String)> {
+        let mut units = Vec::new();
+        for line in &self.buffer.lines {
+            let (mark, text, speech) = split_list_mark(line);
+            if let Some(mark) = mark {
+                units.push((line.start_offset, mark.to_owned()));
+            }
+            let base = line.start_offset + line.text.len().saturating_sub(text.len());
+            let marks = speech.strip_suffix(text).unwrap_or_default();
+            let ranges = crate::editing::sentences(text);
+            if ranges.is_empty() && mark.is_none() {
+                units.push((line.start_offset, line.speech.clone()));
+            }
+            for (i, (start, end)) in ranges.into_iter().enumerate() {
+                let part = text.get(start..end).unwrap_or_default();
+                let said = if i == 0 {
+                    format!("{marks}{part}")
+                } else {
+                    part.to_owned()
+                };
+                units.push((base + start, said));
+            }
+        }
+        units
+    }
+
+    /// Alt+NumpadPlus and Alt+NumpadMinus: the next or prior sentence, read; at the page's end
+    /// or top, the sentence the cursor is in [obs, 291/s6-s8].
+    pub fn move_sentence(&mut self, forward: bool) -> String {
+        self.selection = None;
+        let units = self.sentence_units();
+        let here = self.offset;
+        let current = units.iter().rposition(|(offset, _)| *offset <= here);
+        let target = if forward {
+            units.iter().position(|(offset, _)| *offset > here)
+        } else {
+            current.and_then(|i| i.checked_sub(1))
+        };
+        let Some((offset, said)) = target.or(current).and_then(|i| units.get(i)).cloned() else {
+            return String::new();
+        };
+        self.offset = offset;
+        self.current_node_id = self.buffer.line_at_offset(offset).map(|l| l.node_id);
+        said
+    }
+
+    /// Alt+Numpad5: the sentence the cursor is in [obs, 291/s9].
+    pub fn current_sentence(&self) -> String {
+        let units = self.sentence_units();
+        units
+            .iter()
+            .rev()
+            .find(|(offset, _)| *offset <= self.offset)
+            .or(units.first())
+            .map(|(_, said)| said.clone())
+            .unwrap_or_default()
+    }
+
+    /// Ctrl+Numpad5: the paragraph the cursor is in [obs, 291/s10].
+    pub fn current_paragraph(&self) -> String {
+        self.buffer
+            .paragraph_at_offset(self.offset)
+            .filter(|p| p.start_offset <= self.offset)
+            .map_or_else(|| self.current_line(), |p| p.speech.clone())
     }
 
     /// The start of the cursor's line.
@@ -2626,4 +2696,27 @@ fn line_marks(line: &BufferLine) -> &str {
         .strip_suffix(line.text.as_str())
         .filter(|marks| marks.contains('\u{1d}'))
         .unwrap_or_default()
+}
+
+/// A list item's line split at its mark ("• ", "◦ ", "1. "): the mark, and the line's text and
+/// speech after it. Lines without one come back whole.
+fn split_list_mark(line: &BufferLine) -> (Option<&str>, &str, &str) {
+    let mark_len = ["• ", "◦ ", "▪ "]
+        .iter()
+        .find(|m| line.text.starts_with(**m))
+        .map(|m| m.len())
+        .or_else(|| {
+            let digits = line.text.chars().take_while(char::is_ascii_digit).count();
+            (digits > 0 && line.text.get(digits..).is_some_and(|r| r.starts_with(". ")))
+                .then_some(digits + 2)
+        });
+    let split = mark_len.and_then(|len| {
+        let mark = line.text.get(..len)?;
+        let speech = line.speech.strip_prefix(mark.trim_end())?;
+        Some((mark.trim_end(), line.text.get(len..)?, speech))
+    });
+    match split {
+        Some((mark, text, speech)) => (Some(mark), text, speech),
+        None => (None, line.text.as_str(), line.speech.as_str()),
+    }
 }

@@ -62,6 +62,15 @@ pub enum Command {
     SayPriorCharacter,
     SayNextParagraph,
     SayPriorParagraph,
+    /// Ctrl+Numpad5: the paragraph the cursor is in.
+    SayParagraph,
+    /// Alt+Numpad5, Alt+NumpadPlus, Alt+NumpadMinus: the sentence, the next, the prior.
+    SaySentence,
+    SayNextSentence,
+    SayPriorSentence,
+    /// The laptop layout's CapsLock+Ctrl+O: the next paragraph, or in a page the articles
+    /// list (JAWS 2025 help, Laptop Keystrokes for Reading Text).
+    NextParagraphOrArticles,
     /// Home, End, Page Up and Page Down with the virtual cursor (Default.JKM: JAWSHome,
     /// JAWSEnd, JAWSPageUp, JAWSPageDown).
     LineStart,
@@ -234,6 +243,12 @@ impl Command {
             "^{END}" | "BottomOfFile" => BottomOfFile,
 
             "H" | "h" | "MoveToNextHeading" => MoveToNext(Heading),
+            "P" | "p" => SayNextParagraph,
+            "Shift+P" => SayPriorParagraph,
+            "SayParagraph" => SayParagraph,
+            "SaySentence" => SaySentence,
+            "SayNextSentence" => SayNextSentence,
+            "SayPriorSentence" => SayPriorSentence,
             "N" | "n" | "MoveToNextNonLinkText" | "Insert+Enter" => NextNonLinkText,
             "Shift+N" | "MoveToPriorNonLinkText" | "Insert+Shift+Enter" => PriorNonLinkText,
             "+H" | "+h" | "MoveToPriorHeading" => MoveToPrior(Heading),
@@ -502,6 +517,8 @@ const JAWS: Chord = ANY.insert(Yes).ctrl(No).alt(No).shift(No);
 const CTRL: Chord = ANY.ctrl(Yes).shift(No).alt(No).insert(No);
 /// Ctrl and Shift.
 const CTRL_SHIFT: Chord = ANY.ctrl(Yes).shift(Yes).alt(No).insert(No);
+/// The JAWS key with Ctrl.
+const JAWS_CTRL: Chord = ANY.insert(Yes).ctrl(Yes).shift(No).alt(No);
 /// The JAWS key with Shift.
 const JAWS_SHIFT: Chord = ANY.insert(Yes).shift(Yes).ctrl(No).alt(No);
 /// Ctrl and Alt, with or without Shift.
@@ -563,6 +580,23 @@ static BINDINGS: &[Binding] = &{
         bind(LeftArrow, ALONE, SayPriorCharacter),
         // The keypad's 5: Say Character, and with the JAWS key Say Word (JAWS's keystroke
         // list; research Item 4).
+        // Sentences and the paragraph (JAWS 2025 help, Keystrokes for Reading Text).
+        bind(
+            NumpadPlus,
+            ANY.alt(Yes).ctrl(No).shift(No).insert(No),
+            SayNextSentence,
+        ),
+        bind(
+            NumpadMinus,
+            ANY.alt(Yes).ctrl(No).shift(No).insert(No),
+            SayPriorSentence,
+        ),
+        bind(
+            Numpad5,
+            ANY.alt(Yes).ctrl(No).shift(No).insert(No),
+            SaySentence,
+        ),
+        bind(Numpad5, CTRL, SayParagraph),
         bind(Numpad5, JAWS, SayWord),
         bind(Numpad5, ALONE, SayCharacter),
         // Selecting with the virtual cursor (Default.JKM's Select scripts), before the plain
@@ -694,6 +728,8 @@ static BINDINGS: &[Binding] = &{
         // Quick navigation: the key moves to the next, Shift with it to the prior.
         bind(Alpha('H'), SHIFT, MoveToPrior(Heading)),
         bind(Alpha('H'), ALONE, MoveToNext(Heading)),
+        bind(Alpha('P'), SHIFT, SayPriorParagraph),
+        bind(Alpha('P'), ALONE, SayNextParagraph),
         bind(Alpha('N'), SHIFT, PriorNonLinkText),
         bind(Alpha('N'), ALONE, NextNonLinkText),
         bind(
@@ -774,6 +810,12 @@ static LAPTOP_BINDINGS: &[Binding] = &{
         bind(Alpha('M'), JAWS, SayPriorCharacter),
         // Laptop Keystrokes for Reading Text (JAWS 2025 help).
         bind(Alpha('A'), JAWS, SayAll),
+        bind(Alpha('H'), JAWS, SaySentence),
+        bind(Alpha('N'), JAWS, SayNextSentence),
+        bind(Alpha('Y'), JAWS, SayPriorSentence),
+        bind(Alpha('I'), JAWS_CTRL, SayParagraph),
+        bind(Alpha('O'), JAWS_CTRL, NextParagraphOrArticles),
+        bind(Alpha('U'), JAWS_CTRL, SayPriorParagraph),
         bind(Alpha('A'), JAWS_SHIFT, SaySelectedText),
         bind(Alpha('Y'), JAWS_SHIFT, SayTopLineOfWindow),
         bind(Alpha('J'), JAWS_SHIFT, SayToCursor),

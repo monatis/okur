@@ -666,3 +666,50 @@ mod tests {
         );
     }
 }
+
+/// `text`'s sentences, as byte ranges without the spaces between them: a sentence ends at
+/// ".", "!" or "?" before a space or the text's end ("Hello, world." | "Is it done?" | "Yes!"
+/// | "Wait; maybe: no." [obs, 510/s1-s3]).
+pub fn sentences(text: &str) -> Vec<(usize, usize)> {
+    let mut ranges = Vec::new();
+    let mut start: Option<usize> = None;
+    let mut chars = text.char_indices().peekable();
+    while let Some((i, c)) = chars.next() {
+        if start.is_none() && !c.is_whitespace() {
+            start = Some(i);
+        }
+        let next_is_space = chars.peek().is_none_or(|(_, n)| n.is_whitespace());
+        if matches!(c, '.' | '!' | '?') && next_is_space {
+            if let Some(s) = start.take() {
+                ranges.push((s, i + c.len_utf8()));
+            }
+        }
+    }
+    if let Some(s) = start {
+        let end = s + text.get(s..).unwrap_or_default().trim_end().len();
+        if end > s {
+            ranges.push((s, end));
+        }
+    }
+    ranges
+}
+
+#[cfg(test)]
+mod sentence_tests {
+    use super::sentences;
+
+    #[test]
+    fn sentences_end_at_their_marks() {
+        let text = "Hello, world. Is it done? Yes! Wait; maybe: no.";
+        let found: Vec<&str> = sentences(text)
+            .into_iter()
+            .filter_map(|(s, e)| text.get(s..e))
+            .collect();
+        assert_eq!(
+            found,
+            ["Hello, world.", "Is it done?", "Yes!", "Wait; maybe: no."]
+        );
+        assert_eq!(sentences("  no mark at the end  "), [(2, 20)]);
+        assert!(sentences("   ").is_empty());
+    }
+}

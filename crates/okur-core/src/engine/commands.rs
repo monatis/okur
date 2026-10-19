@@ -223,6 +223,16 @@ impl ScreenReaderEngine {
                 }
             }
             Command::SayNextParagraph => self.cursor.move_next_paragraph(),
+            Command::SayParagraph => Some(self.cursor.current_paragraph()),
+            Command::SaySentence => Some(self.cursor.current_sentence()),
+            Command::SayNextSentence => Some(self.cursor.move_sentence(true)),
+            Command::SayPriorSentence => Some(self.cursor.move_sentence(false)),
+            // In a page, the laptop layout's CapsLock+Ctrl+O is the articles list.
+            Command::NextParagraphOrArticles => {
+                return self.execute(Command::SelectElement(
+                    crate::element_lists::ElementList::Articles,
+                ))
+            }
             Command::SayPriorParagraph => self.cursor.move_prior_paragraph(),
             // Home and End move silently [obs, 502/s5, s6].
             Command::LineStart => {
