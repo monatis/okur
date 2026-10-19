@@ -191,6 +191,10 @@ pub struct FocusEvent {
     /// its caret's line and "Contains text" on arrival [obs, 316/s3], the line alone on Say
     /// Line and "top of file" on Ctrl+Home [obs, 400/s1, s5].
     pub multi_line: bool,
+    /// A plain Win32 edit (Edit, WinForms' EDIT), not RichEdit: JAWS reads only the first line
+    /// of a selection over several lines in it [obs, 313/s7, 529/s6, s9, s10].
+    #[serde(default)]
+    pub plain_edit: bool,
     /// The window's menu bar items ("File", "Edit", ...) and its status bar's parts ("Ln 1,
     /// Col 1", "100%", ...): JAWS's view of the window shows them above and below its text
     /// [obs, 314/s10, s11].
@@ -304,6 +308,7 @@ impl FocusEvent {
             access_key: None,
             read_only: None,
             multi_line: false,
+            plain_edit: false,
             menu_bar: Vec::new(),
             status_bar: Vec::new(),
             app: None,

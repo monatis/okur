@@ -228,6 +228,15 @@ fn window_items(tree: &UiaNode) -> Vec<okur_core::WindowItem> {
 /// Whether a window is an edit of several lines: an edit window class (Win32's Edit, WinForms'
 /// `WindowsForms10.EDIT…`, RichEdit) with ES_MULTILINE in its style. The bit means something
 /// else for other classes.
+/// Whether a window is a plain Win32 edit (Win32's Edit, WinForms' `WindowsForms10.EDIT…`), not
+/// RichEdit.
+fn plain_edit(class: Option<&str>) -> bool {
+    class.is_some_and(|c| {
+        let c = c.to_ascii_uppercase();
+        c == "EDIT" || c.contains(".EDIT.")
+    })
+}
+
 fn multi_line_edit(class: Option<&str>, style: Option<u32>) -> bool {
     const ES_MULTILINE: u32 = 0x0004;
     let edit = class.is_some_and(|c| {
@@ -724,6 +733,12 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             .as_deref()
             .or(event.window_class.as_deref()),
         event.window_style,
+    );
+    focus.plain_edit = plain_edit(
+        event
+            .focus_window_class
+            .as_deref()
+            .or(event.window_class.as_deref()),
     );
     focus.menu_bar = event
         .menu_bar

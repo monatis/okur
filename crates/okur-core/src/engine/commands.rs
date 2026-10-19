@@ -781,7 +781,13 @@ impl ScreenReaderEngine {
                                 .to_owned(),
                         )
                     } else {
-                        crate::editing::speech(key, None, &context, &self.text_field_line())
+                        crate::editing::speech_in(
+                            key,
+                            None,
+                            &context,
+                            &self.text_field_line(),
+                            self.in_plain_edit(),
+                        )
                     };
                     match speech {
                         // An empty line is read as its line break: "blank", kept out of

@@ -22,7 +22,11 @@ pub enum EditKey {
     Silent,
     /// Shift+Left/Right: the character added to the selection, then "selected" (305/s3).
     SelectCharacter,
-    /// Other Shift+ moves: "selected", then the text added (305/s4).
+    /// Ctrl+Shift+Left/Right: the word added to the selection, then "selected"; the word taken
+    /// out, then "Unselected" [obs, 529/s12-s14].
+    SelectWord,
+    /// Other Shift+ moves: "selected", then the text added (305/s4); "Unselected", then the
+    /// text taken out [obs, 529/s3, s7].
     SelectMore,
     /// Backspace: the character it deleted (305/s6).
     DeleteBackward,
@@ -85,6 +89,7 @@ impl EditKey {
         let ends = matches!(event.key, Key::Home | Key::End);
         Some(match (m.shift, m.ctrl) {
             (true, false) if horizontal => Self::SelectCharacter,
+            (true, true) if horizontal => Self::SelectWord,
             (true, _) if horizontal || vertical || ends => Self::SelectMore,
             (false, false) if horizontal => Self::Character,
             (false, true) if horizontal => Self::Word,
@@ -322,17 +327,48 @@ pub(crate) fn selected_text(context: &TextContext) -> String {
     }
 }
 
-/// The text `after` has selected beyond `before` (one end of the selection moved).
-fn newly_selected(before: Option<&TextContext>, after: &TextContext) -> String {
-    let now = selected_text(after);
-    let was = before.map(selected_text).unwrap_or_default();
-    if let Some(added) = now.strip_prefix(was.as_str()) {
-        return added.to_owned();
+/// What a selection key added to the selection and what it took out of it, from the field
+/// before and after (one end moves). A selection that turned over is all added.
+fn selection_change(before: Option<&TextContext>, after: &TextContext) -> (String, String) {
+    let range = |c: &TextContext| c.selection.filter(|(start, end)| start < end);
+    let part = |c: &TextContext, start: usize, end: usize| -> String {
+        chars(&c.text)
+            .get(start..end)
+            .unwrap_or_default()
+            .iter()
+            .collect()
+    };
+    let none = String::new;
+    match (before.and_then(range), range(after)) {
+        (_, Some((start, end))) if before.is_none() => (part(after, start, end), none()),
+        (None, Some((start, end))) => (part(after, start, end), none()),
+        (Some(was), Some(now)) if was == now => (none(), none()),
+        (Some((start, end)), None) => (none(), before.map_or_else(none, |b| part(b, start, end))),
+        (Some((ws, we)), Some((ns, ne))) if ns == ws && ne > we => (part(after, we, ne), none()),
+        (Some((ws, we)), Some((ns, ne))) if ns == ws && ne < we => {
+            (none(), before.map_or_else(none, |b| part(b, ne, we)))
+        }
+        (Some((ws, we)), Some((ns, ne))) if ne == we && ns < ws => (part(after, ns, ws), none()),
+        (Some((ws, we)), Some((ns, ne))) if ne == we && ns > ws => {
+            (none(), before.map_or_else(none, |b| part(b, ws, ns)))
+        }
+        (Some(_), Some((start, end))) => (part(after, start, end), none()),
+        (_, None) => (none(), none()),
     }
-    if let Some(added) = now.strip_suffix(was.as_str()) {
-        return added.to_owned();
+}
+
+/// `text`'s lines that are not blank, or only the first in a plain Win32 edit, where JAWS
+/// reads no further [obs, 313/s7, 529/s6, s9, s10]; elsewhere it reads them all (Windows 11
+/// Notepad, the owner's report and the dev box).
+pub(crate) fn selection_lines(text: &str, plain_edit: bool) -> Vec<String> {
+    let mut lines: Vec<String> = text_lines(text)
+        .into_iter()
+        .filter(|l| !l.trim().is_empty())
+        .collect();
+    if plain_edit {
+        lines.truncate(1);
     }
-    now
+    lines
 }
 
 /// The text Backspace removed: what `before` has and `after` lacks, ending at the caret.
@@ -369,12 +405,24 @@ fn or_line_break(text: String) -> String {
 }
 
 /// What JAWS speaks after `key`, given the field before and after it. `field` is the
-/// field's name-and-role line, for Say Line.
+/// field's name-and-role line, for Say Line. In a field that is not a plain Win32 edit.
 pub fn speech(
     key: EditKey,
     before: Option<&TextContext>,
     after: &TextContext,
     field: &str,
+) -> Option<String> {
+    speech_in(key, before, after, field, false)
+}
+
+/// [`speech`] in a field that may be a plain Win32 edit (`plain_edit`), where JAWS reads a
+/// selection's first line only.
+pub fn speech_in(
+    key: EditKey,
+    before: Option<&TextContext>,
+    after: &TextContext,
+    field: &str,
+    plain_edit: bool,
 ) -> Option<String> {
     Some(match key {
         EditKey::Silent => return None,
@@ -385,28 +433,31 @@ pub fn speech(
         // it does [obs, 320/s7, s11].
         EditKey::Word => or_line_break(word_at(after)),
         EditKey::Line => or_line_break(line_at(after)),
-        EditKey::SelectCharacter => {
-            let added = newly_selected(before, after);
-            if added.is_empty() {
-                return None;
+        EditKey::SelectCharacter | EditKey::SelectWord => {
+            // The text, then the word: "Hello, selected", "world. Unselected" [obs, 529/s12,
+            // s14]; a character taken out is read as a word is.
+            match selection_change(before, after) {
+                (added, _) if !added.is_empty() => format!("{added}\n{}", msg::selection_added()),
+                (_, removed) if !removed.is_empty() => {
+                    format!("{removed}\n{}", msg::selection_removed_lines())
+                }
+                _ => return None,
             }
-            format!("{added}\n{}", msg::selection_added())
         }
         EditKey::SelectMore => {
-            let added = newly_selected(before, after);
-            if added.is_empty() {
-                return None;
-            }
             // Text over several lines is read line by line (Ctrl+Shift+Home in Windows 11
-            // Notepad, JAWS on the dev box: "selected | First line … | Second line …").
-            let lines: Vec<String> = text_lines(&added)
-                .into_iter()
-                .filter(|l| !l.trim().is_empty())
-                .collect();
+            // Notepad, JAWS on the dev box: "selected | First line … | Second line …"), but for
+            // a plain edit's first line.
+            let (word, text) = match selection_change(before, after) {
+                (added, _) if !added.is_empty() => (msg::selection_added(), added),
+                (_, removed) if !removed.is_empty() => (msg::selection_removed_lines(), removed),
+                _ => return None,
+            };
+            let lines = selection_lines(&text, plain_edit);
             if lines.is_empty() {
-                format!("{}\n{added}", msg::selection_added())
+                format!("{word}\n{text}")
             } else {
-                format!("{}\n{}", msg::selection_added(), lines.join("\n"))
+                format!("{word}\n{}", lines.join("\n"))
             }
         }
         EditKey::TopOfFile => {
@@ -440,10 +491,7 @@ pub fn speech(
             deleted.trim().to_owned()
         }
         EditKey::SelectAll => {
-            let lines: Vec<String> = text_lines(&selected_text(after))
-                .into_iter()
-                .filter(|l| !l.trim().is_empty())
-                .collect();
+            let lines = selection_lines(&selected_text(after), plain_edit);
             if lines.is_empty() {
                 return None;
             }
@@ -486,6 +534,38 @@ mod tests {
             font: None,
             word: None,
         }
+    }
+
+    /// A selection that shrinks says what left it: "Unselected" and the line, the word and
+    /// "Unselected"; a plain Win32 edit reads a selection's first line only [obs, 529/s3,
+    /// s9, s14].
+    #[test]
+    fn a_shrinking_selection_says_what_was_unselected() {
+        let text = "one two\nthree";
+        let lines = speech(
+            EditKey::SelectMore,
+            Some(&ctx(text, 13, Some((0, 13)))),
+            &ctx(text, 8, Some((0, 8))),
+            "",
+        );
+        assert_eq!(lines.as_deref(), Some("Unselected\nthree"));
+        let word = speech(
+            EditKey::SelectWord,
+            Some(&ctx(text, 7, Some((0, 7)))),
+            &ctx(text, 4, Some((0, 4))),
+            "",
+        );
+        assert_eq!(word.as_deref(), Some("two\nUnselected"));
+        let unchanged = ctx(text, 4, Some((0, 4)));
+        assert_eq!(
+            speech(EditKey::SelectMore, Some(&unchanged), &unchanged, ""),
+            None
+        );
+        let all = ctx(text, 13, Some((0, 13)));
+        assert_eq!(
+            speech_in(EditKey::SelectAll, None, &all, "", true).as_deref(),
+            Some("selected\none two")
+        );
     }
 
     /// A paragraph is read from its first line, wherever in it the caret is; a blank line

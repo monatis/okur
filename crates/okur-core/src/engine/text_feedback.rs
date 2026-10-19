@@ -134,7 +134,8 @@ impl ScreenReaderEngine {
         let before = self.last_text.replace(context.clone());
         let key = self.pending_edit.take()?;
         let field = self.text_field_line();
-        let speech = crate::editing::speech(key, before.as_ref(), context, &field)?;
+        let speech =
+            crate::editing::speech_in(key, before.as_ref(), context, &field, self.in_plain_edit())?;
         tracing::debug!(?key, %speech, "edit speech");
         self.edit_read_in_console = self
             .last_native_focus
@@ -161,6 +162,15 @@ impl ScreenReaderEngine {
             self.speech.speak(&speech, true);
         }
         Some(speech)
+    }
+
+    /// The focused text field is a plain Win32 edit ([`crate::event::FocusEvent::plain_edit`]).
+    pub(super) fn in_plain_edit(&self) -> bool {
+        self.app_mode != super::AppMode::VirtualBuffer
+            && self
+                .last_native_focus
+                .as_ref()
+                .is_some_and(|f| f.plain_edit)
     }
 
     /// The focused text field's name and role, as Say Line speaks them.

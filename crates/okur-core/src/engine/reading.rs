@@ -26,13 +26,20 @@ impl ScreenReaderEngine {
                     .unwrap_or_default()
             }
             // "Selection is" and the selected text, of a text field or the virtual cursor;
-            // "Nothing selected" without one [obs, 501/s8, 503/s8, 504/s2].
+            // "Nothing selected" without one [obs, 501/s8, 503/s8, 504/s2]. In a plain Win32
+            // edit only its first line [obs, 529/s10].
             Command::SaySelectedText => {
                 let selected = if self.editing_text() {
-                    self.last_text
+                    let text = self
+                        .last_text
                         .as_ref()
                         .map(crate::editing::selected_text)
-                        .unwrap_or_default()
+                        .unwrap_or_default();
+                    if self.in_plain_edit() {
+                        crate::editing::selection_lines(&text, true).join("\n")
+                    } else {
+                        text
+                    }
                 } else if native {
                     String::new()
                 } else {
