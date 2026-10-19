@@ -89,3 +89,9 @@ not-in-dialog-box = Not in a dialog box
 default-settings-loaded = Default settings are loaded
 # Insert+Q: the application's executable, then spelled.
 application-in-use = The application currently being used is { $app }
+
+## A list view's columns, Ctrl+Insert+1 to 0 [obs, 514/s5-s7]
+
+# A column past the last, then how many there are.
+list-column-out-of-range = { $column } out of range
+list-view-columns = this listview only contains { $count } columns.

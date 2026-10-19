@@ -135,6 +135,9 @@ pub struct FocusEvent {
     pub groups: Vec<GroupEntry>,
     /// Further columns of a list-view item, after its name.
     pub columns: Vec<String>,
+    /// A list-view item's column headers, in order ("Name", "Size") [obs, 514/s5].
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub column_headers: Vec<String>,
     /// The focused element is inside a browser document (its focus chain has a document).
     pub in_document: bool,
     /// The element's DOM id, when it is in a document and has one.
@@ -285,6 +288,7 @@ impl FocusEvent {
             in_menu: false,
             groups: Vec::new(),
             columns: Vec::new(),
+            column_headers: Vec::new(),
             in_document: false,
             dom_id: None,
             unique_id: None,

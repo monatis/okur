@@ -136,6 +136,10 @@ pub struct TraceEvent {
     /// For focus events: the focused element with its control-view subtree to depth 2.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub focus_subtree: Option<UiaNode>,
+    /// For focus on a list view's item: its column headers in order ("Name", "Size"), which
+    /// JAWS says with a column (Ctrl+Insert+1) [obs, 514/s5].
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub column_headers: Vec<String>,
     /// For focus on a Win32 combo box or list box: the selection as `[index, count]`,
     /// with a 0-based index, asked of the control itself.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -879,6 +883,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
                 .filter_map(|c| c.name.clone())
                 .filter(|n| !n.trim().is_empty() && Some(n) != focused.name.as_ref())
                 .collect();
+            focus.column_headers = event.column_headers.clone();
         }
         // A combo box's position is its selected item's, among its list items. A closed WinUI
         // combo box holds only its selected item, which is its value, and no position:
@@ -1298,8 +1303,8 @@ mod capture {
         TRACE_FORMAT_VERSION, UIA_FOCUS_WINDOWS, UIA_SELECTION_PROCESSES,
     };
     use crate::uia_snapshot::capture::{
-        automation, focus_chain_from, focus_context_of, focus_subtree_of, focused_element,
-        window_subtree, window_text, with_properties,
+        automation, column_headers_of, focus_chain_from, focus_context_of, focus_subtree_of,
+        focused_element, window_subtree, window_text, with_properties,
     };
     use crate::PlatformError;
     use std::cell::RefCell;
@@ -1805,6 +1810,7 @@ mod capture {
                     focus_siblings: Vec::new(),
                     focus_subtree: None,
                     list_position: None,
+                    column_headers: Vec::new(),
                     text_context: None,
                     region: None,
                     page: None,
@@ -2158,6 +2164,7 @@ mod capture {
                     focus_siblings: Vec::new(),
                     focus_subtree: None,
                     list_position: None,
+                    column_headers: Vec::new(),
                     text_context: None,
                     region: None,
                     page: None,
@@ -2270,6 +2277,7 @@ mod capture {
                     focus_siblings: Vec::new(),
                     focus_subtree: Some(region),
                     list_position: None,
+                    column_headers: Vec::new(),
                     text_context: None,
                     region: None,
                     page: None,
@@ -2483,6 +2491,12 @@ mod capture {
                 (_, Some(uia)) if changes_focus_context => (Vec::new(), focus_subtree_of(uia)),
                 _ => (Vec::new(), None),
             };
+            let column_headers = match (state.uia.as_ref(), element) {
+                (Some(uia), Some(element)) if focused && !uia_named => {
+                    column_headers_of(uia, element)
+                }
+                _ => Vec::new(),
+            };
             stages.push(("context", clock.elapsed().as_millis()));
             // The window is the one in front now, when the focus chain was read: an event's
             // own window can have lost the foreground meanwhile (the task switcher's last
@@ -2610,6 +2624,7 @@ mod capture {
                 focus_siblings,
                 focus_subtree,
                 list_position,
+                column_headers,
                 text_context,
                 region,
                 page,
@@ -3335,6 +3350,7 @@ mod tests {
             focus_siblings: siblings,
             focus_subtree: None,
             list_position: None,
+            column_headers: Vec::new(),
             text_context: None,
             region: None,
             page: None,

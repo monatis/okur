@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 1970,
+  "matched_steps": 1971,
   "total_steps": 2448,
   "accepted_divergences": 49,
   "errors": [],
@@ -2388,7 +2388,7 @@
     "514-desktop-list-view-columns/s4": "match",
     "514-desktop-list-view-columns/s5": "mismatch",
     "514-desktop-list-view-columns/s6": "mismatch",
-    "514-desktop-list-view-columns/s7": "mismatch",
+    "514-desktop-list-view-columns/s7": "match",
     "514-desktop-list-view-columns/s8": "match",
     "514-desktop-list-view-columns/s9": "mismatch",
     "515-web-select-all-skim-and-element-info/s1": "mismatch",

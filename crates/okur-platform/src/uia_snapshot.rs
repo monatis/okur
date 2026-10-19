@@ -884,6 +884,37 @@ pub(crate) mod capture {
         }
     }
 
+    /// A focused list view item's column headers, in order ("Name", "Size"): the header items
+    /// of the Header beside it in its list. Empty for anything else.
+    pub(crate) fn column_headers_of(
+        uia: &IUIAutomation,
+        focused: &IUIAutomationElement,
+    ) -> Vec<String> {
+        // SAFETY: UIA client queries on valid automation objects.
+        unsafe {
+            let control_type = focused.CachedControlType().map(|t| t.0).unwrap_or_default();
+            if control_type != super::CT_LISTITEM && control_type != super::CT_DATAITEM {
+                return Vec::new();
+            }
+            let by_type = |id: UIA_CONTROLTYPE_ID| {
+                uia.CreatePropertyCondition(UIA_ControlTypePropertyId, &VARIANT::from(id.0))
+            };
+            let headers = || -> windows::core::Result<Vec<String>> {
+                let parent = uia.ControlViewWalker()?.GetParentElement(focused)?;
+                let header =
+                    parent.FindFirst(TreeScope_Children, &by_type(UIA_HeaderControlTypeId)?)?;
+                let items =
+                    header.FindAll(TreeScope_Children, &by_type(UIA_HeaderItemControlTypeId)?)?;
+                let mut names = Vec::new();
+                for index in 0..items.Length()? {
+                    names.push(items.GetElement(index)?.CurrentName()?.to_string());
+                }
+                Ok(names)
+            };
+            headers().unwrap_or_default()
+        }
+    }
+
     /// The focused element with its control-view subtree, as deep as announcements use.
     pub(crate) fn focus_subtree_of(uia: &IUIAutomation) -> Option<UiaNode> {
         // SAFETY: UIA client queries on a valid automation object.

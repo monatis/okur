@@ -170,6 +170,8 @@ pub enum Command {
     SayDefaultButton,
     /// Insert+Q: which settings are loaded, and the application in use.
     SayConfiguration,
+    /// Ctrl+Insert+1 to 0: a list view item's column (1 to 10), with its header.
+    SayListColumn(u8),
 
     // Finding.
     VirtualFind,
@@ -371,6 +373,9 @@ impl Command {
             "SayBottomLineOfWindow" | "Insert+PageDown" => SayBottomLineOfWindow,
             "SayDefaultButton" | "Insert+E" => SayDefaultButton,
             "SayConfiguration" | "Insert+Q" => SayConfiguration,
+            "Ctrl+Insert+1" => SayListColumn(1),
+            "Ctrl+Insert+2" => SayListColumn(2),
+            "Ctrl+Insert+3" => SayListColumn(3),
             "Insert+Space" | "JAWSKey+Space" => LayerStart,
             "NavigationModeToggle" | "Insert+N" => NavigationModeToggle,
             "QuickNavigationKeysSuspendOrResume" | "Insert+Shift+Z" => QuickKeysSuspendResume,
@@ -710,6 +715,17 @@ static BINDINGS: &[Binding] = &{
         // The dialog box's default button, and the settings in use (JAWS 2025 help) [obs, 513].
         bind(Alpha('E'), JAWS, SayDefaultButton),
         bind(Alpha('Q'), JAWS, SayConfiguration),
+        // A list view's columns (JAWS 2025 help, Keystrokes for Dialog Boxes) [obs, 514].
+        bind(Digit(1), CTRL_INSERT, SayListColumn(1)),
+        bind(Digit(2), CTRL_INSERT, SayListColumn(2)),
+        bind(Digit(3), CTRL_INSERT, SayListColumn(3)),
+        bind(Digit(4), CTRL_INSERT, SayListColumn(4)),
+        bind(Digit(5), CTRL_INSERT, SayListColumn(5)),
+        bind(Digit(6), CTRL_INSERT, SayListColumn(6)),
+        bind(Digit(7), CTRL_INSERT, SayListColumn(7)),
+        bind(Digit(8), CTRL_INSERT, SayListColumn(8)),
+        bind(Digit(9), CTRL_INSERT, SayListColumn(9)),
+        bind(Digit(0), CTRL_INSERT, SayListColumn(10)),
         // Before Shift+2 (the prior heading of level 2), which also matches with the JAWS key.
         bind(
             Digit(2),

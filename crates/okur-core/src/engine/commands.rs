@@ -30,6 +30,7 @@ impl ScreenReaderEngine {
             Command::RefreshScreen => return self.refresh_screen(),
             Command::SayDefaultButton => return self.say_default_button(),
             Command::SayConfiguration => return self.say_configuration(),
+            Command::SayListColumn(column) => return self.say_list_column(column),
             Command::RateFaster => return self.change_rate(true),
             Command::RateSlower => return self.change_rate(false),
             Command::SayWindow => {
