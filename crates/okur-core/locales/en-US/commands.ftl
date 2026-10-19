@@ -5,6 +5,12 @@ caps-lock-off = Caps lock off
 # Pass Key Through (Insert+3): the next key goes to the application as it is.
 pass-key-through = Enter key to pass through
 clipboard-copied-selection = Copied selection to clipboard
+# Ctrl+X with text selected, in JAWS's lower case [obs, 504/s19].
+clipboard-cut-selection = cut selection to clipboard
+# Ctrl+V [obs, 504/s6].
+clipboard-pasted = Pasted from clipboard
+# Ctrl+Z [obs, 504/s7].
+edit-undo = Undo
 # Okur's own settings dialog could not open (there is no window to show it in).
 settings-dialog-unavailable = The settings dialog is not available
 # Said before a window's title (Insert+T), on a line of its own.

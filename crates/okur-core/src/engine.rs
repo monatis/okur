@@ -382,6 +382,21 @@ impl ScreenReaderEngine {
         if event.key == Key::Control && event.modifiers.is_empty() {
             return KeyAction::PassThrough;
         }
+        // The sentence and paragraph keys in an application or a page's field, where the keys
+        // would otherwise go to it [obs, 504/s14, s15].
+        if self.app_mode != AppMode::VirtualBuffer || self.forms_mode {
+            use crate::command::Command;
+            if let Some(
+                command @ (Command::SaySentence
+                | Command::SayNextSentence
+                | Command::SayPriorSentence
+                | Command::SayParagraph),
+            ) = crate::command::command_for(event)
+            {
+                let _ = self.execute(command);
+                return KeyAction::Consume;
+            }
+        }
         // The voice rate for now, in any application [obs, 512].
         if let Some(
             command @ (crate::command::Command::RateFaster | crate::command::Command::RateSlower),

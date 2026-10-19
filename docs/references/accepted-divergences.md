@@ -101,6 +101,16 @@ A step can be in more than one entry; all of its entries apply.
   lost.
 - Proposed by the parity gap audit; accepted by the owner, 2026-10-19.
 
+### JAWS's bottom line drops an emoji
+
+- Step: `504-desktop-edit-selection-and-clipboard/s22`.
+- Difference: Okur also says the grinning face emoji at the end of the line.
+- Why: Say Bottom Line of Window (Insert+PageDown) in the editor fixture drops the
+  non-breaking space and the emoji that end the last line, as its control view does (312).
+  JAWS reads the emoji when it reads the field itself [obs, 313/s4]; Okur reads the line
+  whole.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-18.
+
 ### JAWS finds no font in a WinForms text box
 
 - Steps: `313-desktop-say-font/s1`, `313-desktop-say-font/s2`, `313-desktop-say-font/s3`,

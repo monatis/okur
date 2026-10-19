@@ -667,6 +667,16 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
         }
     }
 
+    fn speak_spelled_selection(&mut self, text: &str, _interrupt: bool) {
+        if self.silent() {
+            return;
+        }
+        append(&self.history, text.to_owned());
+        for (part, pitch) in okur_core::pronounce::spelled_parts(text) {
+            append(&self.spoken, okur_core::pronounce::pitched(&part, pitch));
+        }
+    }
+
     fn speak_phonetic(&mut self, text: &str, _interrupt: bool) {
         if self.silent() {
             return;

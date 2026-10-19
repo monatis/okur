@@ -959,6 +959,13 @@ pub trait SpeechOutput: Send + Sync {
         self.speak(&crate::pronounce::spelled(text), interrupt);
     }
 
+    /// Spells a selection (Say Selected Text twice quickly): spoken as
+    /// [`SpeechOutput::speak_spelled`] is, but JAWS's history keeps the text as it is, "Th"
+    /// [obs, 501/s4].
+    fn speak_spelled_selection(&mut self, text: &str, interrupt: bool) {
+        self.speak_spelled(text, interrupt);
+    }
+
     /// Speaks one part of a continuous reading (Say All) behind the parts before it. When
     /// [`SpeechOutput::reports_marks`], `mark` comes back to the engine as the synthesizer
     /// starts the part (`ScreenReaderEngine::speech_reached`).

@@ -797,8 +797,13 @@ impl ScreenReaderEngine {
         }
         // A reading command that moves first is the matching arrow key: the application's
         // own in a native control (sent, then read as any arrow key is), the virtual
-        // cursor's in a page.
-        let moving = match layout_command {
+        // cursor's in a page. Insert+Right and Insert+Left move by word in both layouts
+        // [obs, 504/s12, s13].
+        let moving_command = layout_command.clone().or_else(|| {
+            crate::command::command_for(event)
+                .filter(|c| matches!(c, Command::SayNextWord | Command::SayPriorWord))
+        });
+        let moving = match &moving_command {
             Some(Command::SayNextLine) => Some(vec![Key::DownArrow]),
             Some(Command::SayPriorLine) => Some(vec![Key::UpArrow]),
             Some(Command::SayNextWord) => Some(vec![Key::Control, Key::RightArrow]),
@@ -806,7 +811,7 @@ impl ScreenReaderEngine {
             Some(Command::SayPriorCharacter) => Some(vec![Key::LeftArrow]),
             _ => None,
         };
-        if let (Some(chord), Some(command)) = (moving, &layout_command) {
+        if let (Some(chord), Some(command)) = (moving, &moving_command) {
             // A word on a native control that is not a text field is the control itself
             // [obs, 503/s6, s7].
             let native_control_word = self.app_mode != AppMode::VirtualBuffer

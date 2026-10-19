@@ -413,6 +413,12 @@ impl SpeechOutput for SpeechThread {
         self.send(Request::Spelled(text.to_owned(), interrupt));
     }
 
+    /// The speech log keeps the selection as it is; the synthesizer spells it.
+    fn speak_spelled_selection(&mut self, text: &str, interrupt: bool) {
+        self.record(SpeechLogKind::Speak, text, interrupt);
+        self.send(Request::Spelled(text.to_owned(), interrupt));
+    }
+
     fn stop(&mut self) {
         self.record(SpeechLogKind::Stop, "", true);
         self.send(Request::Stop);

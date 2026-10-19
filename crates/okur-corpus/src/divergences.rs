@@ -124,6 +124,12 @@ divergences! {
      text copied from Okur's viewer keeps it.",
     "proposed by the parity gap audit, accepted by the owner, 2026-10-19";
 
+    Difference::OkurAlsoSays("\u{1f600}") => ["504-desktop-edit-selection-and-clipboard/s22"],
+    "JAWS's Say Bottom Line of Window (Insert+PageDown) in the editor fixture drops the emoji \
+     and the non-breaking space that end the last line, as its control view does (312), though \
+     JAWS reads the emoji in the field itself [obs, 313/s4].",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
+
     Difference::Step => [
         "313-desktop-say-font/s1",
         "313-desktop-say-font/s2",

@@ -357,6 +357,19 @@ impl okur_core::speech::SpeechOutput for TtsManager {
         }
     }
 
+    /// The speech log keeps the selection as it is; the synthesizer spells it.
+    fn speak_spelled_selection(&mut self, text: &str, interrupt: bool) {
+        if let Some(log) = self.speech_log.as_mut() {
+            log.record(SpeechLogKind::Speak, text, interrupt);
+        }
+        for (i, (part, pitch)) in okur_core::pronounce::spelled_parts(text)
+            .into_iter()
+            .enumerate()
+        {
+            let _ = self.engine.speak_pitched(&part, pitch, interrupt && i == 0);
+        }
+    }
+
     /// The speech log keeps the character; the synthesizer says its phonetic word.
     fn speak_phonetic(&mut self, text: &str, interrupt: bool) {
         if let Some(log) = self.speech_log.as_mut() {

@@ -160,6 +160,12 @@ pub enum Command {
     SayToCursor,
     /// Insert+PageUp: the line from the cursor.
     SayFromCursor,
+    /// The same three pressed twice quickly: spelled [obs, 504/s11, s18].
+    SpellSelectedText,
+    SpellToCursor,
+    SpellFromCursor,
+    /// Insert+PageDown: the window's bottom line.
+    SayBottomLineOfWindow,
 
     // Finding.
     VirtualFind,
@@ -358,6 +364,7 @@ impl Command {
             "CopySelectedTextToClipboard" => CopySelection,
             "+!{DOWN}" | "SaySelection" | "SaySelectedText" => SaySelectedText,
             "SayTopLineOfWindow" | "Insert+End" => SayTopLineOfWindow,
+            "SayBottomLineOfWindow" | "Insert+PageDown" => SayBottomLineOfWindow,
             "Insert+Space" | "JAWSKey+Space" => LayerStart,
             "NavigationModeToggle" | "Insert+N" => NavigationModeToggle,
             "QuickNavigationKeysSuspendOrResume" | "Insert+Shift+Z" => QuickKeysSuspendResume,
@@ -425,6 +432,9 @@ impl Command {
             Command::SayCharacter => Command::SayCharacterPhonetic,
             Command::SayWord => Command::SpellWord,
             Command::SayLine => Command::SpellLine,
+            Command::SaySelectedText => Command::SpellSelectedText,
+            Command::SayToCursor => Command::SpellToCursor,
+            Command::SayFromCursor => Command::SpellFromCursor,
             _ => return None,
         })
     }
@@ -587,6 +597,7 @@ static BINDINGS: &[Binding] = &{
         ),
         // The window's top line, and the line to and from the cursor.
         bind(End, JAWS, SayTopLineOfWindow),
+        bind(Key::PageDown, JAWS, SayBottomLineOfWindow),
         bind(Home, JAWS, SayToCursor),
         bind(Key::PageUp, JAWS, SayFromCursor),
         // Table rows and columns.
@@ -854,6 +865,7 @@ static LAPTOP_BINDINGS: &[Binding] = &{
         bind(Alpha('U'), JAWS_CTRL, SayPriorParagraph),
         bind(Alpha('A'), JAWS_SHIFT, SaySelectedText),
         bind(Alpha('Y'), JAWS_SHIFT, SayTopLineOfWindow),
+        bind(Alpha('N'), JAWS_SHIFT, SayBottomLineOfWindow),
         bind(Alpha('J'), JAWS_SHIFT, SayToCursor),
         bind(Alpha('L'), JAWS_SHIFT, SayFromCursor),
     ]

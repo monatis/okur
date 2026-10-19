@@ -38,6 +38,13 @@ pub enum EditKey {
     SelectAll,
     /// Ctrl+C: "Copied selection to clipboard" when text is selected (313/s8).
     Copy,
+    /// Ctrl+X: "cut selection to clipboard", in JAWS's lower case, when text was selected
+    /// [obs, 504/s19].
+    Cut,
+    /// Ctrl+V: "Pasted from clipboard" [obs, 504/s6].
+    Paste,
+    /// Ctrl+Z: "Undo" [obs, 504/s7, s20].
+    Undo,
     /// Ctrl+Home in a multi-line document: "top of file", then the line (JAWS 2025, Windows
     /// 11 Notepad, dev box: "top of file | First line of the viewer test").
     TopOfFile,
@@ -89,6 +96,9 @@ impl EditKey {
             (false, false) if event.key == Key::Delete => Self::DeleteForward,
             (false, true) if event.key == Key::Alpha('A') => Self::SelectAll,
             (false, true) if event.key == Key::Alpha('C') => Self::Copy,
+            (false, true) if event.key == Key::Alpha('X') => Self::Cut,
+            (false, true) if event.key == Key::Alpha('V') => Self::Paste,
+            (false, true) if event.key == Key::Alpha('Z') => Self::Undo,
             _ => return None,
         })
     }
@@ -142,6 +152,29 @@ pub fn line_at(context: &TextContext) -> String {
         .and_then(|after| after.iter().position(|c| is_line_break(*c)))
         .map_or(text.len(), |i| caret + i);
     text.get(start..end).unwrap_or_default().iter().collect()
+}
+
+/// The first line of the caret's paragraph, the lines between blank lines: JAWS's paragraph
+/// keys in a text field read it [obs, 510/s4-s6, 504/s15].
+pub fn paragraph_first_line(context: &TextContext) -> String {
+    let lines = text_lines(&context.text);
+    let before = chars(&context.text);
+    let before = before
+        .get(..context.caret.min(before.len()))
+        .unwrap_or_default();
+    let mut index = 0;
+    let mut previous = None;
+    for &c in before {
+        if is_line_break(c) && !(c == '\n' && previous == Some('\r')) {
+            index += 1;
+        }
+        previous = Some(c);
+    }
+    let blank = |i: usize| lines.get(i).is_none_or(|line| line.trim().is_empty());
+    while index > 0 && !blank(index - 1) && !blank(index) {
+        index -= 1;
+    }
+    lines.get(index).cloned().unwrap_or_default()
 }
 
 /// The caret's line before the caret, and from the caret to its end: Say To Cursor and Say From
@@ -408,6 +441,14 @@ pub fn speech(
             }
             msg::clipboard_copied_selection().to_string()
         }
+        EditKey::Cut => {
+            if before.is_none_or(|b| selected_text(b).is_empty()) {
+                return None;
+            }
+            msg::clipboard_cut_selection().to_string()
+        }
+        EditKey::Paste => msg::clipboard_pasted().to_string(),
+        EditKey::Undo => msg::edit_undo().to_string(),
         EditKey::SayLine => {
             let line = line_at(after);
             if line.trim().is_empty() {
@@ -431,6 +472,17 @@ mod tests {
             font: None,
             word: None,
         }
+    }
+
+    /// A paragraph is read from its first line, wherever in it the caret is; a blank line
+    /// starts the next [obs, 504/s15].
+    #[test]
+    fn paragraphs_read_their_first_line() {
+        let text = "one\r\ntwo\r\n\r\nthree\r\nfour";
+        assert_eq!(paragraph_first_line(&ctx(text, 6, None)), "one");
+        assert_eq!(paragraph_first_line(&ctx(text, 0, None)), "one");
+        assert_eq!(paragraph_first_line(&ctx(text, 18, None)), "three");
+        assert_eq!(paragraph_first_line(&ctx("a\rb", 2, None)), "a");
     }
 
     /// Ctrl+Backspace reads the word it deleted, without its space (JAWS on the dev box).

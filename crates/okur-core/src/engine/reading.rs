@@ -45,8 +45,65 @@ impl ScreenReaderEngine {
                     format!("{}\n{selected}", msg::selection_is())
                 }
             }
+            // Pressed twice quickly, the selection and the line to or from the cursor are
+            // spelled, a tab as a space: "=", " space x space" [obs, 504/s11, s18].
+            Command::SpellSelectedText | Command::SpellToCursor | Command::SpellFromCursor => {
+                let text = match command {
+                    Command::SpellSelectedText if self.editing_text() => self
+                        .last_text
+                        .as_ref()
+                        .map(crate::editing::selected_text)
+                        .unwrap_or_default(),
+                    Command::SpellSelectedText if !native => self.cursor.selected_text(),
+                    Command::SpellToCursor | Command::SpellFromCursor if self.editing_text() => {
+                        let (before, after) =
+                            crate::editing::line_around_caret(self.last_text.as_ref()?);
+                        if *command == Command::SpellToCursor {
+                            before
+                        } else {
+                            after
+                        }
+                    }
+                    _ => return Some(None),
+                };
+                // Each run of white space is one space, kept at the ends but for a selection.
+                let mut collapsed = String::new();
+                for c in text.chars() {
+                    let c = if c.is_whitespace() { ' ' } else { c };
+                    if !(c == ' ' && collapsed.ends_with(' ')) {
+                        collapsed.push(c);
+                    }
+                }
+                let text = if *command == Command::SpellSelectedText {
+                    collapsed.trim()
+                } else {
+                    collapsed.as_str()
+                };
+                // JAWS's history keeps a spelled selection as it is, "Th", though it is spoken
+                // letter by letter [obs, 501/s4].
+                if *command == Command::SpellSelectedText {
+                    if !text.is_empty() {
+                        self.speech.speak_spelled_selection(text, true);
+                    }
+                    return Some(Some(text.to_owned()));
+                }
+                if !text.trim().is_empty() {
+                    self.speech.speak_spelled(text, true);
+                }
+                return Some(Some(crate::pronounce::spelled(text)));
+            }
             // The window's top line is its title bar [obs, 503/s10, 504/s23].
             Command::SayTopLineOfWindow if native => self.last_window_title.clone()?,
+            // The window's bottom line: in an editor's page, its text's last line, "teh quick
+            // brown fxo" [obs, 510/s13, 504/s22]. Other windows wait for their screen lines.
+            Command::SayBottomLineOfWindow if native && self.editing_document() => self
+                .last_text
+                .as_ref()?
+                .text
+                .lines()
+                .rev()
+                .find(|line| !line.trim().is_empty())?
+                .to_owned(),
             // The caret's line before the caret, and from it: "\tx", "= 1.5; a.b end." with
             // the caret on "=" [obs, 504/s9, s10].
             Command::SayToCursor | Command::SayFromCursor if self.editing_text() => {
@@ -95,17 +152,25 @@ impl ScreenReaderEngine {
                         known.selection = None;
                     }
                 }
-                context.text.chars().skip(start).take(end - start).collect()
+                // Read to the end of the line it starts on: "a !\"#…~ B" for a sentence that
+                // goes on to the next line [obs, 504/s14].
+                context
+                    .text
+                    .chars()
+                    .skip(start)
+                    .take(end - start)
+                    .take_while(|&c| !crate::editing::is_line_break(c))
+                    .collect()
             }
-            // A text field's paragraph keys read the caret's line, where JAWS's paragraph is a
-            // line and stays put [obs, 510/s4-s6].
+            // A text field's paragraph keys read the first line of the caret's paragraph and
+            // stay put [obs, 510/s4-s6, 504/s15].
             Command::SayParagraph
             | Command::SayNextParagraph
             | Command::SayPriorParagraph
             | Command::NextParagraphOrArticles
                 if native && self.editing_text() =>
             {
-                crate::editing::line_at(self.last_text.as_ref()?)
+                crate::editing::paragraph_first_line(self.last_text.as_ref()?)
             }
             _ => return None,
         };
