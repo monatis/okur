@@ -595,9 +595,19 @@ function Start-DesktopFixture {
     for ($i = 0; $i -lt 100; $i++) {
         $p = Find-WindowByTitle $launch.window_title
         if ($p) {
-            [void][SrKeyInput]::ShowWindow($p.MainWindowHandle, 9)
-            [void][SrKeyInput]::SetForegroundWindow($p.MainWindowHandle)
-            return $true
+            # Windows can refuse to bring a window forward: then a browser window or JAWS's viewer
+            # left by an earlier scenario keeps the keys, and the trial reads it (504 and 505 on
+            # old-pc, 2026-10-19). The fixture is asked until it is in front, minimized and
+            # restored if asking is not enough.
+            $handle = $p.MainWindowHandle
+            for ($k = 0; $k -lt 30; $k++) {
+                if ($k -eq 10 -or $k -eq 20) { [void][SrKeyInput]::ShowWindow($handle, 6) }
+                [void][SrKeyInput]::ShowWindow($handle, 9)
+                [void][SrKeyInput]::SetForegroundWindow($handle)
+                Start-Sleep -Milliseconds 100
+                if ([SrKeyInput]::GetForegroundWindow() -eq $handle) { return $true }
+            }
+            return $false
         }
         Start-Sleep -Milliseconds 100
     }
