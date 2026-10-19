@@ -95,6 +95,13 @@ public static class SrKeyInput {
     [DllImport("user32.dll")] static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint pid);
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] static extern int GetClassName(IntPtr hWnd, StringBuilder s, int n);
 
+    /// The class of the window in front.
+    public static string ForegroundClass() {
+        var name = new StringBuilder(64);
+        GetClassName(GetForegroundWindow(), name, name.Capacity);
+        return name.ToString();
+    }
+
     /// The process of the window in front.
     public static uint ForegroundProcess() {
         uint pid;
@@ -585,15 +592,29 @@ function Invoke-ClearLabState([switch]$KeysOnly) {
 # Before a trial: what had to be cleared, for the trial's record (null when nothing).
 function Clear-LabState {
     Release-JawsKeys
+    # Windows' own menus left open by an earlier step (the Start menu after a Windows key
+    # chord, the Win+X menu; 2026-10-19 round 25) take every key of the trials after them:
+    # Escape closes them.
+    $shellClosed = @()
+    for ($i = 0; $i -lt 3; $i++) {
+        $cls = [SrKeyInput]::ForegroundClass()
+        if ($cls -notin @('Windows.UI.Core.CoreWindow', '#32768')) { break }
+        $shellClosed += $cls
+        [void](Send-Chord "Escape"); Start-Sleep -Milliseconds 300
+    }
     $held = Get-HeldModifiers
     $window = [SrKeyInput]::FindWindow('JFWUI2', [NullString]::Value)
     $jawsInWay = $window -ne [IntPtr]::Zero -and (
         [SrKeyInput]::GetForegroundWindow() -eq $window -or [SrKeyInput]::IsWindowVisible($window))
     $jawsProcess = Get-Process jfw -ErrorAction SilentlyContinue | Select-Object -First 1
     $dialogs = if ($jawsProcess) { [SrKeyInput]::JawsDialogs([uint32]$jawsProcess.Id).Count } else { 0 }
-    if ($held.Count -eq 0 -and -not $jawsInWay -and $dialogs -eq 0) { return $null }
+    if ($held.Count -eq 0 -and -not $jawsInWay -and $dialogs -eq 0) {
+        if ($shellClosed.Count -eq 0) { return $null }
+        return [ordered]@{ shell_windows_closed = $shellClosed }
+    }
     Invoke-ClearLabState
     [ordered]@{
+        shell_windows_closed = $shellClosed
         modifiers_held = @($held | ForEach-Object { '0x{0:X2}' -f $_ })
         jaws_window_in_front = $jawsInWay
         jaws_dialogs_closed = $dialogs

@@ -1,10 +1,11 @@
-//! Say All (Insert+Down) as a reading position. The page's lines go to the synthesizer a few
-//! at a time, and the virtual cursor moves to each line as the synthesizer starts it: JAWS's
-//! reading commands "move the active cursor to the beginning of the text being read", so
-//! reading stops on the line last heard (JAWS 2025 help, Keystrokes for Reading Text).
+//! Say All (Insert+Down) as a reading position. The lines go to the synthesizer a few at a
+//! time, and the cursor moves to each line as the synthesizer starts it: JAWS's reading
+//! commands "move the active cursor to the beginning of the text being read", so reading
+//! stops on the line last heard (JAWS 2025 help, Keystrokes for Reading Text). In a page the
+//! virtual cursor moves; in a text field the caret does [obs, 505/s2].
 //!
 //! A synthesizer that does not report its progress (replay, tests) is given every line at
-//! once, and the cursor ends on the last line, where reading to the end leaves it.
+//! once; in a page the cursor ends on the last line, where reading to the end leaves it.
 
 use std::collections::VecDeque;
 
@@ -24,30 +25,48 @@ pub(super) struct SayAll {
     next_line: usize,
     /// The line reading started on, which rewinding goes no further back than.
     start_line: usize,
+    /// In a text field, its lines from the caret's on, each with the character offset it
+    /// starts at; the line indexes above are into them. `None` in a page.
+    field: Option<Vec<(usize, String)>>,
 }
 
 impl ScreenReaderEngine {
     /// Starts reading from the virtual cursor's line to the end of the page.
     pub(super) fn start_say_all(&mut self) -> Option<String> {
         let line = self.cursor.current_line_index();
+        self.begin_say_all(line, None)
+    }
+
+    /// Starts reading a text field from the caret's line to its end, the caret following.
+    pub(super) fn start_field_say_all(&mut self) -> Option<String> {
+        let lines = crate::editing::lines_from_caret(self.last_text.as_ref()?);
+        self.begin_say_all(0, Some(lines))
+    }
+
+    fn begin_say_all(
+        &mut self,
+        line: usize,
+        field: Option<Vec<(usize, String)>>,
+    ) -> Option<String> {
         let mut reading = SayAll {
             queued: VecDeque::new(),
             next_line: line,
             start_line: line,
+            field,
         };
         let progress = self.speech.reports_marks();
         let ahead = if progress { AHEAD + 1 } else { usize::MAX };
         let said = self.hand_over(&mut reading, ahead, true);
         if progress {
             self.say_all = Some(reading);
-        } else if let Some(&(_, last)) = reading.queued.back() {
+        } else if let (Some(&(_, last)), None) = (reading.queued.back(), &reading.field) {
             self.cursor.move_to_line(last);
         }
         Some(said.join("\n"))
     }
 
-    /// The synthesizer started the part marked `mark`: during a Say All, the virtual cursor
-    /// moves to its line and the next lines are handed over.
+    /// The synthesizer started the part marked `mark`: during a Say All, the cursor moves to
+    /// its line and the next lines are handed over.
     pub fn speech_reached(&mut self, mark: u64) {
         tracing::debug!(
             mark,
@@ -63,7 +82,7 @@ impl ScreenReaderEngine {
         };
         reading.queued.drain(..at);
         if let Some(&(_, line)) = reading.queued.front() {
-            self.cursor.move_to_line(line);
+            self.follow_reading(&reading, line);
         }
         let _ = self.hand_over(&mut reading, AHEAD + 1, false);
         self.say_all = Some(reading);
@@ -72,12 +91,13 @@ impl ScreenReaderEngine {
     /// A key pressed during a Say All that steers it instead of ending it (JAWS 2025 help,
     /// Keystrokes for Reading Text): Right fast-forwards to the next line and Left rewinds to
     /// the one before, no further back than where reading started; PageUp and PageDown make
-    /// the voice faster and slower; a quick key moves, and reading goes on from there
-    /// [obs, 500/s10, s11]. `None` for any other key, which ends the Say All.
+    /// the voice faster and slower; in a page a quick key moves, and reading goes on from
+    /// there [obs, 500/s10, s11]. `None` for any other key, which ends the Say All.
     pub(super) fn say_all_key(&mut self, event: &KeyEvent) -> Option<KeyAction> {
         let reading = self.say_all.as_ref()?;
+        let in_page = reading.field.is_none();
         let m = &event.modifiers;
-        if m.ctrl || m.alt || m.insert || m.win || m.caps_lock || self.forms_mode {
+        if m.ctrl || m.alt || m.insert || m.win || m.caps_lock || (in_page && self.forms_mode) {
             return None;
         }
         let current = reading
@@ -92,10 +112,12 @@ impl ScreenReaderEngine {
                 let base = self.settings.voice.rate;
                 let step = if event.key == Key::PageUp { 1 } else { -1 };
                 self.rate_change = (base + self.rate_change + step).clamp(-10, 10) - base;
+                // The synthesizer takes the new rate in the line it is speaking; reading goes
+                // on without starting the line again.
                 self.configure_voice();
-                current
+                return Some(KeyAction::Consume);
             }
-            Key::Alpha(_) | Key::Digit(_) if !self.quick_key_passes(event) => {
+            Key::Alpha(_) | Key::Digit(_) if in_page && !self.quick_key_passes(event) => {
                 let command = crate::command::command_for(event)?;
                 self.speech.stop();
                 self.say_all = None;
@@ -105,35 +127,72 @@ impl ScreenReaderEngine {
                     // Nothing more to move to: JAWS's message is said and reading ends.
                     return Some(KeyAction::Consume);
                 }
+                self.say_all = Some(SayAll {
+                    start_line: start_line.min(moved),
+                    ..SayAll::default()
+                });
                 moved
             }
             _ => return None,
         };
-        self.read_on_from(from, start_line.min(from));
+        self.read_on_from(from);
         Some(KeyAction::Consume)
     }
 
     /// Reading starts again on line `from`, the earlier part of the Say All kept for rewinding.
-    fn read_on_from(&mut self, from: usize, start_line: usize) {
+    fn read_on_from(&mut self, from: usize) {
         self.speech.stop();
+        let Some(old) = self.say_all.take() else {
+            return;
+        };
         let mut reading = SayAll {
             queued: VecDeque::new(),
             next_line: from,
-            start_line,
+            start_line: old.start_line.min(from),
+            field: old.field,
         };
-        if self.cursor.line_text(from).is_none() {
+        if self.say_all_line(&reading, from).is_none() {
             // Past the last line: reading ends where it was.
-            self.say_all = None;
             return;
         }
-        self.cursor.move_to_line(from);
+        self.follow_reading(&reading, from);
         let _ = self.hand_over(&mut reading, AHEAD + 1, true);
         self.say_all = Some(reading);
     }
 
-    /// Ends a Say All: the virtual cursor stays on the line last started.
+    /// Ends a Say All: the cursor stays on the line last started.
     pub(super) fn end_say_all(&mut self) {
         self.say_all = None;
+    }
+
+    /// Line `index` of the Say All: the page's, or the field's.
+    fn say_all_line(&self, reading: &SayAll, index: usize) -> Option<String> {
+        match &reading.field {
+            Some(lines) => lines.get(index).map(|(_, text)| text.clone()),
+            None => self.cursor.line_text(index),
+        }
+    }
+
+    /// The cursor goes to line `index` as it is read: the virtual cursor, or the field's
+    /// caret, to the line's start.
+    fn follow_reading(&mut self, reading: &SayAll, index: usize) {
+        let Some(lines) = &reading.field else {
+            self.cursor.move_to_line(index);
+            return;
+        };
+        let (Some(&(offset, _)), Some(context)) = (lines.get(index), self.last_text.clone()) else {
+            return;
+        };
+        if context.caret == offset {
+            return;
+        }
+        if let Some(actions) = &self.actions {
+            actions.move_caret(&context, offset);
+        }
+        if let Some(known) = self.last_text.as_mut() {
+            known.caret = offset;
+            known.selection = None;
+        }
     }
 
     /// Hands lines to the synthesizer until `keep` are with it, the first interrupting what
@@ -141,7 +200,7 @@ impl ScreenReaderEngine {
     fn hand_over(&mut self, reading: &mut SayAll, keep: usize, interrupt: bool) -> Vec<String> {
         let mut said = Vec::new();
         while reading.queued.len() < keep {
-            let Some(text) = self.cursor.line_text(reading.next_line) else {
+            let Some(text) = self.say_all_line(reading, reading.next_line) else {
                 break;
             };
             let mark = self.next_mark;
@@ -275,6 +334,42 @@ mod tests {
         press(&mut engine, Key::Control);
         assert!(engine.say_all.is_none());
         assert_eq!(engine.cursor.current_line(), "Line 2");
+    }
+
+    /// In a text field the caret goes to the start of each line as it is spoken, and Left
+    /// takes it back a line [obs, 505/s2].
+    #[test]
+    fn in_a_text_field_the_caret_follows_the_line_being_spoken() {
+        let speech = Progress::default();
+        let mut engine = engine(1, speech.clone());
+        let actions = crate::actions::RecordingActions::default();
+        engine.set_actions(Box::new(actions.clone()));
+        engine.last_text = Some(crate::event::TextContext {
+            text: "one\r\ntwo\r\n\r\nthree".to_owned(),
+            caret: 1,
+            selection: None,
+            font: None,
+            word: None,
+        });
+        let _ = engine.start_field_say_all();
+        assert_eq!(
+            marks(&speech)
+                .iter()
+                .map(|(t, _)| t.as_str())
+                .collect::<Vec<_>>(),
+            ["one", "two", "three"]
+        );
+        engine.speech_reached(mark_of(&speech, "two"));
+        engine.speech_reached(mark_of(&speech, "three"));
+        press(&mut engine, Key::LeftArrow);
+        let carets: Vec<usize> = actions
+            .requests()
+            .into_iter()
+            .filter(|(action, _)| action == "caret to")
+            .map(|(_, offset)| offset)
+            .collect();
+        assert_eq!(carets, [5, 12, 5]);
+        assert_eq!(engine.last_text.as_ref().map(|t| t.caret), Some(5));
     }
 
     #[test]

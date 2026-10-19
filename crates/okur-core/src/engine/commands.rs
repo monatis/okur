@@ -832,14 +832,7 @@ impl ScreenReaderEngine {
             .or_else(|| crate::command::command_for(event))
             == Some(Command::SayAll);
         if self.editing_document() && say_all {
-            let lines = self
-                .last_text
-                .as_ref()
-                .map(crate::editing::lines_from_caret)
-                .unwrap_or_default();
-            for (i, line) in lines.iter().enumerate() {
-                self.speech.speak(line, i == 0);
-            }
+            let _ = self.start_field_say_all();
             return;
         }
         if self.editing_text() && layout_command == Some(Command::SayWord) {

@@ -194,22 +194,36 @@ pub fn line_around_caret(context: &TextContext) -> (String, String) {
     (part(start, caret), part(caret, end))
 }
 
-/// The lines from the caret's line to the end of the text, without empty ones: what Say All
-/// reads in a document (JAWS in Google Docs' document, dev box 2026-10-16: each line from the
-/// caret's, to the last).
-pub fn lines_from_caret(context: &TextContext) -> Vec<String> {
+/// The lines from the caret's line to the end of the text, without empty ones, each with the
+/// character offset it starts at: what Say All reads in a document (JAWS in Google Docs'
+/// document, dev box 2026-10-16: each line from the caret's, to the last), the caret going
+/// to each line's start as it is read.
+pub fn lines_from_caret(context: &TextContext) -> Vec<(usize, String)> {
     let text = chars(&context.text);
     let caret = context.caret.min(text.len());
-    let start = text
+    let mut start = text
         .get(..caret)
         .and_then(|before| before.iter().rposition(|c| is_line_break(*c)))
         .map_or(0, |i| i + 1);
-    let rest: String = text.get(start..).unwrap_or_default().iter().collect();
-    rest.split(is_line_break)
-        .map(str::trim)
-        .filter(|line| !line.is_empty())
-        .map(str::to_owned)
-        .collect()
+    let mut lines = Vec::new();
+    loop {
+        let end = text
+            .get(start..)
+            .and_then(|rest| rest.iter().position(|c| is_line_break(*c)))
+            .map_or(text.len(), |i| start + i);
+        let line: String = text.get(start..end).unwrap_or_default().iter().collect();
+        if !line.trim().is_empty() {
+            lines.push((start, line.trim().to_owned()));
+        }
+        if end >= text.len() {
+            return lines;
+        }
+        // Past the line break, `\r\n` counting once.
+        start = end + 1;
+        if text.get(end) == Some(&'\r') && text.get(start) == Some(&'\n') {
+            start += 1;
+        }
+    }
 }
 
 /// A page field's word around `caret` (in characters), as Chrome moves by words and JAWS
@@ -517,7 +531,12 @@ mod tests {
         let text = "First line\nSecond line\n\nLast line\n";
         assert_eq!(
             lines_from_caret(&ctx(text, 14, None)),
-            vec!["Second line", "Last line"]
+            vec![(11, "Second line".to_owned()), (24, "Last line".to_owned())]
+        );
+        // A Windows line break is one break.
+        assert_eq!(
+            lines_from_caret(&ctx("one\r\n\r\n  two", 0, None)),
+            vec![(0, "one".to_owned()), (7, "two".to_owned())]
         );
         assert_eq!(lines_from_caret(&ctx(text, 0, None)).len(), 3);
         assert!(lines_from_caret(&ctx("", 0, None)).is_empty());
