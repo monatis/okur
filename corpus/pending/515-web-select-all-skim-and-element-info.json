@@ -17,7 +17,7 @@
     { "id": "s8", "type": "key", "command": "Ctrl+Insert+Down", "during": [{ "after_ms": 5000, "command": "Ctrl" }] },
     { "id": "s9", "type": "key", "command": "Insert+Up" },
     { "id": "s10", "type": "key", "command": "H" },
-    { "id": "s11", "type": "key", "command": "Insert+Shift+F1", "settle_max_ms": 20000 },
+    { "id": "s11", "type": "key", "command": "Insert+Shift+F1", "settle_max_ms": 60000 },
     { "id": "s12", "type": "key", "command": "Escape" }
   ]
 }
