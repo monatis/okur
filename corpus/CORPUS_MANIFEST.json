@@ -17,6 +17,10 @@
       "sha256": "688e9318254f6e71daf7bc1bc4ee787c4d050a3e248b80412b6c3cab1a14aad4",
       "size_bytes": 707
     },
+    "desktop-data-grid.ps1": {
+      "sha256": "124de6167670e39519c06f3980261b6b4718b3576706fe49483d0abbf3e43073",
+      "size_bytes": 2079
+    },
     "desktop-dialogs.ps1": {
       "sha256": "8f1a7824d4171b14b66b3a97d4469f8ff25d4f9ef4dcf5618757296570829c66",
       "size_bytes": 3305
@@ -2990,6 +2994,34 @@
       }
     },
     {
+      "scenario_id": "544-desktop-notepad-page-setup",
+      "fixture": "desktop-notepad.ps1",
+      "evidence": {
+        "sha256": "55eb26f4130ee12da9654bf6f69f3a5399edcdcaf7d5c94393c3464af54bb903",
+        "capture_script_sha256": "0891a01e0114a5b5e40440b4fd6a28afb9a22a7612d83beb59e2c37028551361",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "545-desktop-data-grid",
+      "fixture": "desktop-data-grid.ps1",
+      "evidence": {
+        "sha256": "27e3cad8c07eadaa23ef44fa3bc0da4e939dfd194aa223870293a9271af3aea6",
+        "capture_script_sha256": "0891a01e0114a5b5e40440b4fd6a28afb9a22a7612d83beb59e2c37028551361",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "546-desktop-notepad-print-dialog",
       "fixture": "desktop-notepad.ps1",
       "evidence": {
@@ -3005,10 +3037,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 206,
-    "scenarios_with_evidence": 206,
-    "total_trials": 672,
-    "successful_trials": 671,
-    "deterministic_scenarios": 134
+    "scenarios": 208,
+    "scenarios_with_evidence": 208,
+    "total_trials": 678,
+    "successful_trials": 677,
+    "deterministic_scenarios": 136
   }
 }
