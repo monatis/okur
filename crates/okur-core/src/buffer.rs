@@ -278,11 +278,12 @@ impl VirtualBuffer {
         Some(VirtualBuffer::from_aom_owned(root))
     }
 
-    /// The buffer rebuilt from its page with one part read again: `subtree` replaces the node
-    /// that is the same live object (its [`crate::aom::UNIQUE_ID_ATTR`]), and its nodes get ids
-    /// the page does not use. `None` when the page has no such object (it is new: the caller
-    /// reads the whole page again).
-    pub fn with_subtree_replaced(&self, subtree: &AomNode) -> Option<VirtualBuffer> {
+    /// The buffer rebuilt once from its page with the parts read again: each of `subtrees`
+    /// replaces the node that is the same live object (its [`crate::aom::UNIQUE_ID_ATTR`]), and
+    /// its nodes get ids the page does not use. `None` when the page has no such object for one
+    /// of them (it is new: the caller reads the whole page again). One rebuild for all the parts:
+    /// one per part took 1.8-2.7 s for eight on a big page (responsiveness review, 2026-10-19).
+    pub fn with_subtrees_replaced(&self, subtrees: &[AomNode]) -> Option<VirtualBuffer> {
         use crate::aom::UNIQUE_ID_ATTR;
         fn max_id(node: &AomNode) -> usize {
             node.children.iter().map(max_id).fold(node.id, usize::max)
@@ -300,12 +301,14 @@ impl VirtualBuffer {
             }
             node.children.iter_mut().find_map(|c| find(c, object))
         }
-        let object = subtree.attributes.get(UNIQUE_ID_ATTR)?;
         let mut root = self.page.clone()?;
         let mut next = max_id(&root) + 1;
-        let mut replacement = subtree.clone();
-        renumber(&mut replacement, &mut next);
-        *find(&mut root, object)? = replacement;
+        for subtree in subtrees {
+            let object = subtree.attributes.get(UNIQUE_ID_ATTR)?;
+            let mut replacement = subtree.clone();
+            renumber(&mut replacement, &mut next);
+            *find(&mut root, object)? = replacement;
+        }
         Some(VirtualBuffer::from_aom_owned(root))
     }
 

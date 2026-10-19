@@ -676,7 +676,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::LiveRegion(_)
                 | AccessibilityEvent::DocumentLoaded { .. }
                 | AccessibilityEvent::PageChanged
-                | AccessibilityEvent::PagePartLoaded(_)
+                | AccessibilityEvent::PagePartsLoaded(_)
         ) {
             self.apply_pending_page();
         }
@@ -707,8 +707,8 @@ impl ScreenReaderEngine {
                 self.page_changed();
                 None
             }
-            AccessibilityEvent::PagePartLoaded(part) => {
-                self.page_part_loaded(part);
+            AccessibilityEvent::PagePartsLoaded(parts) => {
+                self.page_parts_loaded(parts);
                 None
             }
             AccessibilityEvent::WindowRenamed(title) => {

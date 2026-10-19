@@ -373,16 +373,16 @@ impl ScreenReaderEngine {
         }
     }
 
-    /// A part of the page read again after it changed ([`AccessibilityEvent::PagePartLoaded`]):
-    /// spliced into the page (the one waiting to be applied, if any) and applied as a page
-    /// captured again, keeping the cursor's place. A part the page does not hold is new: the
-    /// whole page is read again.
-    pub(super) fn page_part_loaded(&mut self, part: &AomNode) {
+    /// The parts of the page read again after they changed
+    /// ([`AccessibilityEvent::PagePartsLoaded`]): spliced into the page (the one waiting to be
+    /// applied, if any), which is rebuilt once and applied as a page captured again, keeping the
+    /// cursor's place. A part the page does not hold is new: the whole page is read again.
+    pub(super) fn page_parts_loaded(&mut self, parts: &[AomNode]) {
         if self.app_mode != AppMode::VirtualBuffer {
             return;
         }
         let base = self.pending_page.as_ref().unwrap_or(&self.cursor.buffer);
-        match base.with_subtree_replaced(part) {
+        match base.with_subtrees_replaced(parts) {
             Some(buffer) => {
                 if let Some(old) = self.pending_page.replace(buffer) {
                     crate::retire::retire(old);

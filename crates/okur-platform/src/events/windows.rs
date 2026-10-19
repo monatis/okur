@@ -84,8 +84,8 @@ fn take_changed_parts() -> Option<Vec<i32>> {
     (!parts.whole_page && !parts.objects.is_empty()).then_some(parts.objects)
 }
 
-/// Reads the changed parts of the page in `window` again, through IA2, and sends each as
-/// [`AccessibilityEvent::PagePartLoaded`]. False when one cannot be read: the caller reads the
+/// Reads the changed parts of the page in `window` again, through IA2, and sends them together
+/// as [`AccessibilityEvent::PagePartsLoaded`], spliced with one rebuild. False when one cannot be read: the caller reads the
 /// whole page.
 fn read_changed_parts(
     window: ForegroundWindow,
@@ -110,9 +110,7 @@ fn read_changed_parts(
         ms = started.elapsed().as_millis(),
         "page parts read again"
     );
-    for part in parts {
-        let _ = sender.send(AccessibilityEvent::PagePartLoaded(part));
-    }
+    let _ = sender.send(AccessibilityEvent::PagePartsLoaded(parts));
     true
 }
 

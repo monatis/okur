@@ -656,7 +656,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::DocumentLoaded { .. }) => "document loaded",
         Some(AccessibilityEvent::Ui(_)) => "okur window",
         Some(AccessibilityEvent::PageChanged) => "page changed",
-        Some(AccessibilityEvent::PagePartLoaded(_)) => "page part loaded",
+        Some(AccessibilityEvent::PagePartsLoaded(_)) => "page parts loaded",
         Some(AccessibilityEvent::WindowRenamed(_)) => "window renamed",
     }
 }

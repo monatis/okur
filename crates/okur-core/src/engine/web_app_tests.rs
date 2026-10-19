@@ -490,7 +490,7 @@ fn a_part_read_again_is_spliced_into_the_page() {
     let mut list = messages();
     list.push(message(70, "a new one", "15:00", false));
     let part = object(AomNode::new(1, Role::Group).with_children(list), -1);
-    engine.handle_accessibility_event(&AccessibilityEvent::PagePartLoaded(part));
+    engine.handle_accessibility_event(&AccessibilityEvent::PagePartsLoaded(vec![part]));
     engine.handle_key_event(&key(Key::Control, false));
     assert_eq!(engine.cursor.current_line(), "test");
     assert!(
@@ -505,6 +505,6 @@ fn a_part_read_again_is_spliced_into_the_page() {
     assert!(page_requests(&actions).is_empty());
 
     let unknown = object(AomNode::new(1, Role::Group), -12345);
-    engine.handle_accessibility_event(&AccessibilityEvent::PagePartLoaded(unknown));
+    engine.handle_accessibility_event(&AccessibilityEvent::PagePartsLoaded(vec![unknown]));
     assert_eq!(page_requests(&actions), ["page changed, now"]);
 }
