@@ -8,8 +8,6 @@
 role-button = Button
 # Said before the text of a virtual cursor line that holds a button, without the role's own voice.
 role-button-line = button
-# Say Window (Insert+B) reads a dialog's controls with lowercase type words.
-role-button-say-window = button
 role-button-menu = button menu
 role-check-box = check box
 # Said before the text of a virtual cursor line that holds a check box. JAWS writes it as one word here.
@@ -23,7 +21,6 @@ role-dialog = dialog
 role-edit = Edit
 # A text field of several lines, a text document, or a field said before its text.
 role-edit-multiline = edit
-role-edit-say-window = edit
 role-edit-password = password edit
 role-edit-read-only = read only edit
 # A combo box one types into (an autocomplete).
@@ -37,7 +34,6 @@ role-graphic = Graphic
 role-group = group
 role-heading-level = heading level { $level }
 role-link = Link
-role-link-say-window = link
 role-link-same-page = same page link
 # The Virtual Viewer's list of a modern application's elements uses lowercase type words.
 role-link-viewer = link

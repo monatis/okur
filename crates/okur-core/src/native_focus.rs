@@ -577,44 +577,67 @@ fn focus_speech_within(
 /// program, … | Open: | Open: | combo box | collapsed | C: | Open: | edit | C: | Open |
 /// button | OK | button | Cancel | button | Browse... | button".
 pub fn say_window(title: &str, items: &[crate::event::WindowItem]) -> String {
-    let mut lines = vec![title.to_owned(), msg::role_dialog().to_string()];
+    let mut lines = vec![format!("{title} {}", msg::role_dialog())];
     let checked = |c: Option<bool>| {
-        if c == Some(true) {
+        state(if c == Some(true) {
             msg::state_checked().as_str()
         } else {
             msg::state_not_checked().as_str()
-        }
+        })
     };
-    for item in items {
-        let name = item.name.trim().to_owned();
-        let mut parts = vec![name];
+    // Images are not read; a label is said once, not again as the name of the control it
+    // labels ("Type of file: | read only edit | Text Document (.txt)" [obs, 323/s2]).
+    let items: Vec<_> = items.iter().filter(|i| i.role != Role::Image).collect();
+    let mut labelled = false;
+    for (i, item) in items.iter().enumerate() {
+        let name = if std::mem::take(&mut labelled) {
+            String::new()
+        } else {
+            named(&item.name)
+        };
+        let mut parts = vec![name_part(name)];
         match item.role {
+            Role::Text => {
+                labelled = items.get(i + 1).is_some_and(|next| {
+                    next.role != Role::Text && named(&next.name) == named(&item.name)
+                });
+            }
             Role::ComboBox => {
-                parts.push(msg::role_combo_box().to_string());
-                parts.push(
+                parts.push(role(msg::role_combo_box().as_str()));
+                parts.push(state(
                     if item.expanded == Some(true) {
                         msg::state_expanded()
                     } else {
                         msg::state_collapsed()
                     }
-                    .to_string(),
-                );
+                    .as_str(),
+                ));
             }
-            Role::Edit => parts.push(msg::role_edit_say_window().to_string()),
-            Role::Button => parts.push(msg::role_button_say_window().to_string()),
+            Role::Edit => parts.push(role(
+                if item.read_only {
+                    msg::role_edit_read_only()
+                } else {
+                    msg::role_edit()
+                }
+                .as_str(),
+            )),
+            Role::Button => parts.push(role(msg::role_button().as_str())),
             Role::CheckBox => {
-                parts.push(msg::role_check_box().to_string());
-                parts.push(checked(item.checked).to_owned());
+                parts.push(role(msg::role_check_box().as_str()));
+                parts.push(checked(item.checked));
             }
             Role::RadioButton => {
-                parts.push(msg::role_radio_button().to_string());
-                parts.push(checked(item.checked).to_owned());
+                parts.push(role(msg::role_radio_button().as_str()));
+                parts.push(checked(item.checked));
             }
-            Role::Link { .. } => parts.push(msg::role_link_say_window().to_string()),
+            Role::Link { .. } => parts.push(role(msg::role_link().as_str())),
             _ => {}
         }
-        parts.extend(item.value.clone());
-        lines.extend(parts.into_iter().filter(|p| !p.is_empty()));
+        parts.extend(item.value.clone().map(|v| Part::new(PartKind::Value, v)));
+        let line = Line::new(parts).render();
+        if !line.trim().is_empty() {
+            lines.push(line);
+        }
     }
     lines.join("\n")
 }
@@ -1648,7 +1671,8 @@ To activate press Enter."
         );
     }
 
-    /// The Run dialog's controls, as JAWS's Say Window read them on the dev box.
+    /// A file's Properties page, as old-pc's JAWS read it with Say Window: role marks, a label
+    /// said once, images left out [obs, 323/s2].
     #[test]
     fn say_window_reads_a_dialog_in_order() {
         use crate::event::WindowItem;
@@ -1658,22 +1682,33 @@ To activate press Enter."
             value: value.map(str::to_owned),
             expanded: None,
             checked: None,
+            read_only: false,
+        };
+        let read_only = |name: &str, value: &str| WindowItem {
+            read_only: true,
+            ..item(Role::Edit, name, Some(value))
         };
         let items = [
-            item(Role::Text, "Type the name of a program.", None),
-            item(Role::Text, "Open:", None),
+            item(Role::Image, "", None),
+            item(Role::Edit, "File name:", Some("notes.txt")),
+            item(Role::Text, "Type of file:", None),
+            read_only("Type of file:", "Text Document (.txt)"),
+            item(Role::Image, "Type of file:", None),
+            item(Role::Button, "Change...", None),
+            item(Role::Text, "Attributes:", None),
             WindowItem {
-                expanded: Some(false),
-                ..item(Role::ComboBox, "Open:", Some("C:"))
+                checked: Some(false),
+                ..item(Role::CheckBox, "Read-only", None)
             },
-            item(Role::Edit, "Open:", Some("C:")),
-            item(Role::Button, "Open", None),
-            item(Role::Button, "OK", None),
         ];
         assert_eq!(
-            say_window("Run", &items),
-            "Run\ndialog\nType the name of a program.\nOpen:\nOpen:\ncombo box\ncollapsed\nC:\n\
-             Open:\nedit\nC:\nOpen\nbutton\nOK\nbutton"
+            norm(&say_window("notes.txt Properties", &items)),
+            norm(
+                "notes.txt Properties dialog\nFile name:  \u{1d} Edit \u{1e} \nnotes.txt\n\
+                 Type of file: \n \u{1d} read only edit \u{1e} \nText Document (.txt)\n\
+                 Change...  \u{1d} Button \u{1e}\nAttributes:\n\
+                 Read-only  \u{1d} check box \u{1e}  \u{1d}not checked\u{1e}"
+            )
         );
     }
 

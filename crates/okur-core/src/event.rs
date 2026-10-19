@@ -96,6 +96,9 @@ pub struct WindowItem {
     pub value: Option<String>,
     pub expanded: Option<bool>,
     pub checked: Option<bool>,
+    /// An edit whose value cannot be changed: "read only edit" [obs, 323/s2].
+    #[serde(default)]
+    pub read_only: bool,
 }
 
 /// Event representing OS-level keyboard focus changes across applications and controls.

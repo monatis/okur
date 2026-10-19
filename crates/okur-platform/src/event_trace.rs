@@ -210,6 +210,7 @@ fn window_items(tree: &UiaNode) -> Vec<okur_core::WindowItem> {
                         .filter(|v| !v.is_empty()),
                     expanded: aom.states.expanded,
                     checked: aom.states.checked,
+                    read_only: child.value_is_read_only == Some(true),
                 });
             }
             walk(child, items);
@@ -2467,10 +2468,12 @@ mod capture {
                     let window = unsafe { GetForegroundWindow() };
                     (
                         crate::screen_lines::dialog_layout(window),
-                        state
-                            .uia
-                            .as_ref()
-                            .and_then(|uia| window_subtree(uia, window)),
+                        // Say Window's controls: the page the focus is on, or the dialog.
+                        state.uia.as_ref().and_then(|uia| {
+                            let page =
+                                crate::screen_lines::page_window(keyboard_focus_window(), window);
+                            window_subtree(uia, page.unwrap_or(window))
+                        }),
                         crate::screen_lines::page_of(keyboard_focus_window(), window),
                         crate::screen_lines::group_box_of(keyboard_focus_window(), window),
                     )

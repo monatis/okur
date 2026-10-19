@@ -118,7 +118,7 @@ pub(crate) use windows_lines::text_of as control_text;
 #[cfg(windows)]
 pub(crate) use windows_lines::{class_of, owner_drawn, static_lines, symbol_font};
 #[cfg(windows)]
-pub use windows_lines::{dialog_layout, group_box_of, page_of, window_bars};
+pub use windows_lines::{dialog_layout, group_box_of, page_of, page_window, window_bars};
 
 #[cfg(windows)]
 mod windows_lines {
@@ -413,6 +413,15 @@ mod windows_lines {
     /// The property sheet page `focus` is on in `dialog`, by name ("General"): a dialog box
     /// inside the dialog box.
     pub fn page_of(focus: HWND, dialog: HWND) -> Option<String> {
+        let page = page_window(focus, dialog)?;
+        let name = text_of(page);
+        (!name.trim().is_empty()).then(|| without_accelerators(&name))
+    }
+
+    /// The property page (a `#32770` inside the dialog) the focused window is on, if any:
+    /// what Say Window reads under the dialog's title, without the sheet's OK, Cancel and
+    /// Apply and its tabs [obs, 323/s2].
+    pub fn page_window(focus: HWND, dialog: HWND) -> Option<HWND> {
         const LEVELS: usize = 16;
         let mut current = focus;
         for _ in 0..LEVELS {
@@ -422,8 +431,7 @@ mod windows_lines {
                 return None;
             }
             if class_of(parent) == "#32770" {
-                let name = text_of(parent);
-                return (!name.trim().is_empty()).then(|| without_accelerators(&name));
+                return Some(parent);
             }
             current = parent;
         }
