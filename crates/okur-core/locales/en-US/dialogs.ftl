@@ -97,3 +97,15 @@ find-cancel = Cancel
 
 # Ctrl+F in a page, said before JAWS Find opens [obs, 506/s1].
 virtual-find = Virtual Find
+
+## The Window List (Insert+F10): JAWS 2025 help, Window List Dialog Box [obs, 511/s1]
+
+window-list-title = Window List
+window-list-running = &Running Applications
+window-list-on-top = &Only Include On Top Windows
+window-list-switch = &Switch To
+window-list-cancel = Cancel
+# A window's state, after its title in the list.
+window-minimized = Minimized
+window-maximized = Maximized
+window-restored = Restored

@@ -105,6 +105,10 @@ mod windows_actions {
         Copy(String),
         /// The focused edit's caret to a character offset of its text as last read.
         Caret(String, usize),
+        /// The applications' top-level windows, answered even when there are none.
+        ListWindows,
+        /// A window to the front.
+        SwitchTo(u64),
     }
 
     /// The virtual key of a key the screen reader sends for a reading command.
@@ -281,6 +285,16 @@ mod windows_actions {
                                     tracing::debug!(offset, "caret not moved: not a Win32 edit");
                                 }
                             }
+                            Request::ListWindows => {
+                                let Some(events) = events.as_ref() else {
+                                    tracing::warn!("window list impossible: no event channel");
+                                    continue;
+                                };
+                                let windows = crate::top_windows::list();
+                                tracing::debug!(windows = windows.len(), "windows listed");
+                                let _ = events.send(AccessibilityEvent::TopWindows(windows));
+                            }
+                            Request::SwitchTo(id) => crate::top_windows::switch_to(id),
                         }
                     }
                 }
@@ -459,6 +473,14 @@ mod windows_actions {
 
         fn read_window(&self, window: bool) -> bool {
             self.send(Request::Window(window))
+        }
+
+        fn list_windows(&self) -> bool {
+            self.send(Request::ListWindows)
+        }
+
+        fn switch_to_window(&self, id: u64) -> bool {
+            self.send(Request::SwitchTo(id))
         }
 
         fn read_page_elements(&self, ids: &[&str]) -> bool {

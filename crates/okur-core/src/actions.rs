@@ -42,6 +42,18 @@ pub trait ApplicationActions: Send {
     /// [`crate::event::AccessibilityEvent::ViewerText`], always: empty when nothing could be
     /// read. Returns false when unsupported (recorded traces hold no window text, so replay
     /// keeps the viewer built from the focus).
+    /// Asks for the applications' top-level windows; they come back as
+    /// [`crate::event::AccessibilityEvent::TopWindows`]. False when unsupported.
+    fn list_windows(&self) -> bool {
+        false
+    }
+
+    /// Brings window `id` (a [`crate::event::TopWindow`]'s) to the front, restored if minimized.
+    fn switch_to_window(&self, id: u64) -> bool {
+        let _ = id;
+        false
+    }
+
     fn read_window(&self, window: bool) -> bool {
         let _ = window;
         false
@@ -193,6 +205,27 @@ impl ApplicationActions for RecordingActions {
             }
         }
         self.windows
+    }
+
+    /// Taken where windows are read ([`RecordingActions::reading_windows`]); replay's traces hold no
+    /// window list to answer with.
+    fn list_windows(&self) -> bool {
+        if self.windows {
+            if let Ok(mut log) = self.log.lock() {
+                log.push(("list windows".to_owned(), 0));
+            }
+        }
+        self.windows
+    }
+
+    fn switch_to_window(&self, id: u64) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((
+                "switch to window".to_owned(),
+                usize::try_from(id).unwrap_or(usize::MAX),
+            ));
+        }
+        true
     }
 
     fn read_page_elements(&self, ids: &[&str]) -> bool {

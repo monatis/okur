@@ -428,6 +428,25 @@ impl LiveRegionEvent {
     }
 }
 
+/// An application's top-level window, as the Window List shows it (Insert+F10).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct TopWindow {
+    /// The platform's handle for it, to switch to it.
+    pub id: u64,
+    pub title: String,
+    pub state: WindowState,
+    /// Kept above the other windows (Windows' topmost windows).
+    pub on_top: bool,
+}
+
+/// How a window is shown: JAWS's Window List says it after the title.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum WindowState {
+    Minimized,
+    Maximized,
+    Restored,
+}
+
 /// Primary accessibility event enum passed from platform bridges to the engine.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[allow(clippy::large_enum_variant)]
@@ -451,6 +470,9 @@ pub enum AccessibilityEvent {
     /// The Virtual Viewer's lines for the window or control in front, read for Virtualize
     /// Window or Virtualize Current Control; empty when nothing could be read.
     ViewerText(Vec<String>),
+    /// The applications' windows, front to back, asked for by the Window List (Insert+F10;
+    /// [`crate::actions::ApplicationActions::list_windows`]).
+    TopWindows(Vec<TopWindow>),
     /// Page elements asked for by DOM id, each with its subtree, as they are now; empty when
     /// none was found ([`crate::actions::ApplicationActions::read_page_elements`]).
     PageElements(Vec<crate::aom::AomNode>),

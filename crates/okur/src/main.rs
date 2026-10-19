@@ -694,6 +694,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::Selected(_)) => "selected",
         Some(AccessibilityEvent::LiveRegion(_)) => "live region",
         Some(AccessibilityEvent::ViewerText(_)) => "viewer text",
+        Some(AccessibilityEvent::TopWindows(_)) => "top windows",
         Some(AccessibilityEvent::PageElements(_)) => "page elements",
         Some(AccessibilityEvent::DocumentLoaded { .. }) => "document loaded",
         Some(AccessibilityEvent::Ui(_)) => "okur window",

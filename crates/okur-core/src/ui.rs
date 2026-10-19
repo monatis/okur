@@ -7,6 +7,7 @@ use std::sync::{Arc, Mutex};
 pub mod find;
 pub mod lists;
 pub mod settings;
+pub mod windows;
 
 pub use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, TextSpan, ToUi, Value};
 

@@ -3679,3 +3679,61 @@ fn numpad_plus_leaves_forms_mode() {
     assert_eq!(engine.handle_key_event(&plus), KeyAction::Consume);
     assert!(!engine.forms_mode);
 }
+
+/// Insert+F10 asks the platform for the windows and opens the Window List on them; Switch To
+/// closes it and brings the window chosen to the front (JAWS 2025 help, Window List Dialog Box).
+#[test]
+fn the_window_list_switches_to_the_window_chosen() {
+    use crate::event::{TopWindow, WindowState};
+    use crate::ui::{FromUi, ToUi, Value};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.app_mode = AppMode::NativeControl;
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let actions = crate::actions::RecordingActions::reading_windows();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut f10 = KeyEvent::new(Key::F(10), Modifiers::none(), true);
+    f10.modifiers.insert = true;
+    assert_eq!(engine.handle_key_event(&f10), KeyAction::Consume);
+    assert!(actions.requests().iter().any(|(a, _)| a == "list windows"));
+    let windows = vec![
+        TopWindow {
+            id: 11,
+            title: "Command Prompt".to_owned(),
+            state: WindowState::Minimized,
+            on_top: false,
+        },
+        TopWindow {
+            id: 12,
+            title: "Untitled - Notepad".to_owned(),
+            state: WindowState::Restored,
+            on_top: false,
+        },
+    ];
+    engine.handle_accessibility_event(&AccessibilityEvent::TopWindows(windows.clone()));
+    let sent = ui.take();
+    let Some(ToUi::DialogShow { dialog }) = sent.first() else {
+        panic_free_fail(&format!("no dialog shown: {sent:?}"));
+        return;
+    };
+    assert_eq!(dialog.title, "Window List");
+    let id = dialog.id;
+    // The windows coming again unasked open nothing.
+    engine.handle_accessibility_event(&AccessibilityEvent::TopWindows(windows));
+    assert!(ui.take().is_empty());
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "windows".into(),
+        value: Value::Selected(1),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "switch".into(),
+    }));
+    assert!(matches!(ui.take().first(), Some(ToUi::DialogClose { id: closed }) if *closed == id));
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(a, window)| a == "switch to window" && *window == 12));
+}

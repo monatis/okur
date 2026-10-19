@@ -12,6 +12,7 @@ pub mod privacy;
 pub mod screen_lines;
 pub mod settings_file;
 pub mod text_context;
+pub mod top_windows;
 pub mod tts;
 pub mod ui_host;
 pub mod uia_snapshot;

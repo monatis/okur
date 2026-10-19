@@ -184,6 +184,8 @@ pub enum Command {
     SelectAFrame,
     /// Numpad Slash: a left mouse click, on the element at the virtual cursor in a page.
     LeftMouseClick,
+    /// Insert+F10: the Window List, the running applications' windows to switch to.
+    WindowList,
 
     // Finding.
     /// Ctrl+F in a page: JAWS Find, announced as "Virtual Find" [obs, 506/s1].
@@ -394,6 +396,7 @@ impl Command {
             "RoutePCToVirtual" | "Ctrl+Insert+Delete" => RoutePcToVirtual,
             "SelectAFrame" | "Insert+F9" => SelectAFrame,
             "LeftMouseButton" | "NumpadSlash" => LeftMouseClick,
+            "WindowList" | "Insert+F10" => WindowList,
             "Ctrl+Insert+1" => SayListColumn(1),
             "Ctrl+Insert+2" => SayListColumn(2),
             "Ctrl+Insert+3" => SayListColumn(3),
@@ -743,6 +746,7 @@ static BINDINGS: &[Binding] = &{
         bind(Key::Delete, CTRL_INSERT, RoutePcToVirtual),
         bind(Key::F(9), JAWS, SelectAFrame),
         bind(Key::NumpadSlash, ALONE, LeftMouseClick),
+        bind(Key::F(10), JAWS, WindowList),
         bind(
             Key::Enter,
             ANY.ctrl(Yes).insert(Yes).shift(Yes).alt(No),
