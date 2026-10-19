@@ -842,6 +842,9 @@ pub struct Menus {
     started: bool,
     /// The page's menu session began on a menu bar or in one of its menus.
     from_bar: bool,
+    /// The session was opened by an access key (Alt+F): JAWS says the menu that opens, not
+    /// the bar item it opens from, and without "menu" [obs, 541/s1, 544/s1].
+    by_access_key: bool,
 }
 
 /// Where a page's menu item is ([`Menus::page_focus`]).
@@ -870,6 +873,14 @@ impl Menus {
     /// Whether the menus are a page's (ARIA menus).
     pub fn is_page(&self) -> bool {
         self.page
+    }
+
+    /// An access key was pressed (`pressed`), or another key, while no menu is open: Alt+F
+    /// opens its menu at once.
+    pub fn access_key(&mut self, pressed: bool) {
+        if !self.in_menu_mode() {
+            self.by_access_key = pressed;
+        }
     }
 
     /// The system reported menu mode starting.
@@ -906,11 +917,14 @@ impl Menus {
             ))
         } else if !self.active {
             self.active = true;
-            Some(format!(
-                "{}\n{name}\n{}",
-                role_marker(msg::role_menu_bar().as_str()),
-                msg::hint_menu_bar_left_right()
-            ))
+            // Opened by an access key, its popup follows at once and says the menu.
+            (!self.by_access_key).then(|| {
+                format!(
+                    "{}\n{name}\n{}",
+                    role_marker(msg::role_menu_bar().as_str()),
+                    msg::hint_menu_bar_left_right()
+                )
+            })
         } else if self.current.as_deref() == Some(name) {
             // The same item reported again (a browser reports a page's menu item twice).
             None
@@ -926,7 +940,9 @@ impl Menus {
             } else {
                 format!("{}\n", msg::menu_named(parent))
             };
-            Some(if first {
+            Some(if first && self.by_access_key {
+                format!("{menu}{name}\n{}", msg::hint_menu_items_up_down())
+            } else if first {
                 format!(
                     "{}\n\n{menu}{name}\n{}",
                     role_marker(msg::role_menu().as_str()),
@@ -1109,6 +1125,26 @@ impl Menus {
 mod tests {
     use super::*;
     use crate::aom::NodeStates;
+
+    /// Alt+F in Notepad: the bar item is not said; its menu is, without "menu" [obs, 544/s1].
+    /// Another key before Alt alone brings the bar back.
+    #[test]
+    fn a_menu_opened_by_its_access_key() {
+        let mut m = Menus::default();
+        m.access_key(true);
+        assert_eq!(m.focus("File"), None);
+        m.popup_start();
+        assert_eq!(
+            m.focus("New\tCtrl+N").as_deref().map(norm),
+            Some(norm(&format!(
+                "File menu\nNew\tCtrl+N\n{}",
+                msg::hint_menu_items_up_down()
+            )))
+        );
+        m.end();
+        m.access_key(false);
+        assert!(m.focus("File").is_some_and(|s| s.contains("File")));
+    }
 
     /// 302-desktop-menu-bar, as one session: Alt, Down ×3, Right, Down, Escape, Escape.
     #[test]

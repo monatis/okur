@@ -513,6 +513,13 @@ impl ScreenReaderEngine {
         // Without Auto Forms Mode a page's menu leaves the arrows to the virtual cursor, as
         // JAWS did on old-pc (218: Tab onto an ARIA menu bar, then Down read the bar's next
         // items as lines).
+        // Alt and a letter outside a page may open a menu at once [obs, 541/s1, 544/s1].
+        if self.app_mode != AppMode::VirtualBuffer {
+            let m = event.modifiers;
+            self.menus.access_key(
+                m.alt && !m.ctrl && !m.shift && !m.insert && matches!(event.key, Key::Alpha(_)),
+            );
+        }
         let page_menu_in_browse = self.menus.is_page() && !self.settings.auto_forms_mode;
         if self.menus.in_menu_mode() && !page_menu_in_browse {
             return KeyAction::PassThrough;
