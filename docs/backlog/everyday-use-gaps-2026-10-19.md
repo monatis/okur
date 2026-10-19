@@ -16,6 +16,9 @@ JAWS spoken parity: 1640/1993 steps match exactly (evidence recorded through the
 JAWS parity (Ia2): 1714/2045 steps match exactly; 33 accepted divergences not counted (0 scenarios could not run)
 ```
 
+The owner's decision (2026-10-19): these gaps are closed before the macOS port or any public
+announcement.
+
 Per the owner's rule, each gap is found in the documentation, then recorded on old-pc, then
 built. The "Recording" column names the scenario that records it. Scenarios 500-507 were
 queued on old-pc on 2026-10-19 as round 12, behind rounds 9-11; 508-512 followed as
@@ -74,7 +77,7 @@ P0 blocks daily use, P1 is expected by a JAWS user within days, P2 is later.
 | 1 | Reading | Reading keys on native controls: Insert+Up, Insert+Down, Numpad 5, Insert+Numpad 5 | They work in every cursor and read at the active cursor [H1] | **Wrong (B1).** On a button or list after a page was read, they read the old page: Insert+Up says "Web page". Text fields are fine | P0 | 503 |
 | 2 | Reading | Say All as a reading position: Insert+Down; Left and Right rewind and fast-forward; PageUp and PageDown set the rate; Ctrl stops | The cursor follows the reading and stays where it stopped [H1, H9, S1] | **Partial.** In pages the virtual cursor now follows the line being spoken and stays where reading stopped (2026-10-19, not yet checked live). Native documents, rewind, fast-forward, rate keys and quick keys during Say All wait for 500 and 505 | P0 | 500, 505 |
 | 3 | Selecting | Selecting in the virtual cursor: Shift+arrows, Ctrl+Shift+Left and Right, Shift+Home and End, Ctrl+Shift+Home and End, Shift+PageUp and PageDown, Ctrl+A, F8; then Ctrl+C | Selects and copies page text [H12, K] | **Partial (B3).** Only Shift+arrows select, and only inside Okur. Ctrl+Shift+Right moves without selecting. Ctrl+C never copies Okur's selection | P0 | 501 |
-| 4 | Web | JAWS Find: Ctrl+F, Insert+Ctrl+F, F3, Shift+F3 | A find dialog that searches from the virtual cursor [H4, P1, W1] | **Missing (B2, B4).** Ctrl+F is taken and speaks a line, which blocks Chrome's own find too. Insert+Ctrl+F opens the form fields list | P0 | 506 |
+| 4 | Web | JAWS Find: Ctrl+F, Insert+Ctrl+F, F3, Shift+F3 | A find dialog that searches from the virtual cursor [H4, P1, W1] | **Partial.** Ctrl+F and Insert+Ctrl+F open JAWS Find with its controls, history per site, and Find moving to the match (2026-10-19; B2 and B4 fixed). Its speech, and where the search starts, wait for 506 | P0 | 506 |
 | 5 | Selecting | Say Selected Text in native edits: Insert+Shift+Down; twice quickly spells it | Reads or spells the selection [H2, W1] | **Wrong (B5).** Reads the page's selection, so Notepad says "No selection". Spelling is missing | P0 | 504 |
 | 6 | Reading | Home, End, PageUp and PageDown in the virtual cursor | Bound to the virtual cursor; a page is 24 lines by default [K, S4] | **Missing (B10).** The browser gets them: the page scrolls, the cursor stays | P0 | 502 |
 | 7 | Applications | Word: arrows, Say All, misspellings, Insert+F7, Alt+Shift+L, Insert+Shift+R, Insert+F6, Ctrl+Insert+T | [P2] | **Not covered.** No Word module; not checked in Word | P0 | Office on old-pc is not known. Start with WordPad |

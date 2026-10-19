@@ -19,6 +19,7 @@ use crate::speech::SpeechOutput;
 const DOUBLE_PRESS_MS: u64 = 500;
 
 mod commands;
+mod find;
 mod focus;
 mod page;
 mod say_all;
@@ -147,6 +148,12 @@ pub struct ScreenReaderEngine {
     settings_dialog: Option<crate::ui::settings::SettingsDialog>,
     /// The list dialog open (the Links List, the Heading List).
     list_dialog: Option<crate::ui::lists::ListDialog>,
+    /// JAWS Find, while it is open.
+    find_dialog: Option<crate::ui::find::FindDialog>,
+    /// JAWS Find's check boxes and direction, kept between openings.
+    find_options: crate::ui::find::FindOptions,
+    /// JAWS Find's searches, the latest first, by site ("" for every site).
+    find_histories: std::collections::HashMap<String, Vec<String>>,
     /// Until when the focus returning from one of Okur's dialogs is not announced.
     quiet_focus_until: Option<std::time::Instant>,
     /// The field Select a Form Field gave the focus to: its focus is said even while the
@@ -227,6 +234,9 @@ impl ScreenReaderEngine {
             settings_place: (None, None),
             settings_dialog: None,
             list_dialog: None,
+            find_dialog: None,
+            find_options: crate::ui::find::FindOptions::default(),
+            find_histories: std::collections::HashMap::new(),
             quiet_focus_until: None,
             dialog_focus_target: None,
             dialog_count: 0,
@@ -919,6 +929,7 @@ impl ScreenReaderEngine {
             {
                 self.handle_list_event(message)
             }
+            _ if self.is_find_event(message) => self.handle_find_event(message),
             _ => {
                 let outcome = self.settings_dialog.as_mut()?.handle(message);
                 match outcome {

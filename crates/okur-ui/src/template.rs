@@ -27,6 +27,9 @@ const BS_DEFPUSHBUTTON: u32 = 1;
 const BS_AUTOCHECKBOX: u32 = 3;
 const BS_GROUPBOX: u32 = 7;
 const CBS_DROPDOWNLIST: u32 = 3;
+/// An editable combo box, its text scrolling as it is typed.
+const CBS_DROPDOWN: u32 = 2;
+const CBS_AUTOHSCROLL: u32 = 0x40;
 const BS_AUTORADIOBUTTON: u32 = 9;
 const WS_BORDER: u32 = 0x0080_0000;
 const ES_AUTOHSCROLL: u32 = 0x80;
@@ -333,7 +336,10 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
                 y += 10 + ROW_GAP;
             }
             // Not used in list dialogs yet.
-            ControlKind::Group | ControlKind::Choice { .. } | ControlKind::Slider { .. } => {}
+            ControlKind::Group
+            | ControlKind::Choice { .. }
+            | ControlKind::ComboEdit { .. }
+            | ControlKind::Slider { .. } => {}
         }
     }
     let height = y.max(button_y).max(MARGIN + LIST_HEIGHT) + MARGIN;
@@ -400,7 +406,10 @@ fn form_layout(dialog: &DialogSpec) -> Layout {
                 });
                 y += 10 + ROW_GAP;
             }
-            ControlKind::Choice { .. } | ControlKind::Slider { .. } | ControlKind::Text { .. } => {
+            ControlKind::Choice { .. }
+            | ControlKind::ComboEdit { .. }
+            | ControlKind::Slider { .. }
+            | ControlKind::Text { .. } => {
                 // The label first: in the tab order before its control, it names it and
                 // gives it its access key.
                 items.push(Item {
@@ -429,6 +438,25 @@ fn form_layout(dialog: &DialogSpec) -> Layout {
                             y,
                             cx,
                             // The list's height when it drops down.
+                            cy: 120,
+                            id,
+                            text: String::new(),
+                        });
+                        12
+                    }
+                    ControlKind::ComboEdit { .. } => {
+                        items.push(Item {
+                            class: Class::ComboBox,
+                            style: WS_CHILD
+                                | WS_VISIBLE
+                                | WS_TABSTOP
+                                | WS_GROUP
+                                | CBS_DROPDOWN
+                                | CBS_AUTOHSCROLL
+                                | WS_VSCROLL,
+                            x,
+                            y,
+                            cx,
                             cy: 120,
                             id,
                             text: String::new(),

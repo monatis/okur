@@ -26,7 +26,6 @@ regions-list-none = No regions were found on the page
 ## JAWS Find (Insert+Control+F)
 
 find-dialog = JAWS Find
-find-dialog-field = Find what:
 
 ## The Virtual Viewer
 

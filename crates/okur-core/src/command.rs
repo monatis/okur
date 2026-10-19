@@ -282,7 +282,9 @@ impl Command {
             "+{UP}" | "SelectPriorLine" => SelectPriorLine,
             "+!{DOWN}" | "SaySelection" | "SaySelectedText" => SaySelectedText,
 
-            "^f" | "Ctrl+F" | "VirtualFind" | "JAWSFind" => VirtualFind,
+            "^f" | "Ctrl+F" | "VirtualFind" | "JAWSFind" | "Insert+Ctrl+F" | "JAWSKey+Ctrl+F" => {
+                VirtualFind
+            }
             "{F3}" | "F3" | "JAWSFindNext" | "FindNext" => FindNext,
             "+{F3}" | "+F3" | "Shift+F3" | "JAWSFindPrior" | "FindPrior" => FindPrior,
 
@@ -305,7 +307,7 @@ impl Command {
             "SelectADivision" => SelectElement(ElementList::Divisions),
             "SelectATabFormField" => SelectElement(ElementList::Tabs),
             "SelectAFormField" | "FormFieldList" | "FormFieldsList" | "Insert+F5"
-            | "JAWSKey+F5" | "Insert+Ctrl+F" | "JAWSKey+Ctrl+F" => SelectAFormField,
+            | "JAWSKey+F5" => SelectAFormField,
             "SelectARegion" | "RegionsList" | "Insert+Ctrl+R" | "JAWSKey+Ctrl+R" => SelectARegion,
 
             "PassKeyThrough" | "Insert+3" | "JAWSKey+3" => PassKeyThrough,
@@ -545,17 +547,8 @@ static BINDINGS: &[Binding] = &{
             SetPunctuationLevel,
         ),
         bind(Digit(2), JAWS, NextTypingEcho),
-        // Finding, and the form fields list.
-        bind(
-            Alpha('F'),
-            ANY.ctrl(Yes).insert(No).alt(No).shift(No),
-            VirtualFind,
-        ),
-        bind(
-            Alpha('F'),
-            ANY.ctrl(Yes).insert(Yes).alt(No).shift(No),
-            SelectAFormField,
-        ),
+        // JAWS Find: Ctrl+F in a page, Insert+Ctrl+F anywhere (Default.JKM: JAWSFind).
+        bind(Alpha('F'), ANY.ctrl(Yes).alt(No).shift(No), VirtualFind),
         bind(
             Alpha('R'),
             ANY.ctrl(Yes).insert(Yes).alt(No).shift(No),

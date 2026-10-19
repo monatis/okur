@@ -79,3 +79,18 @@ form-field-list-cancel = Cancel
 # Enter chooses it, as in JAWS: JAWS's labels have no access key.
 features-ok = OK
 features-cancel = Cancel
+
+## JAWS Find (Ctrl+F in a page, Insert+Ctrl+F): JAWS 2025's labels and access keys. Its title
+## is find-dialog.
+
+find-what = Find &what:
+find-context-history = Conte&xt Specific History
+find-maintain-history = &Maintain History of Recent Finds
+find-direction = Direction
+find-forward = F&orward
+find-reverse = Re&verse
+find-ignore-case = &Ignore Case
+find-find = Find
+find-delete = Delete
+find-clear-history = Clear Find History
+find-cancel = Cancel

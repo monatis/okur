@@ -22,10 +22,11 @@ use windows::Win32::UI::Controls::{
 use windows::Win32::UI::Input::KeyboardAndMouse::EnableWindow;
 use windows::Win32::UI::WindowsAndMessaging::{
     BringWindowToTop, CreateDialogIndirectParamW, DestroyWindow, GetClientRect, GetDlgCtrlID,
-    GetDlgItem, GetForegroundWindow, GetWindowThreadProcessId, IsDialogMessageW, IsWindow,
-    SendMessageW, SetForegroundWindow, SetWindowTextW, ShowWindow, BM_GETCHECK, BM_SETCHECK,
-    BN_CLICKED, CBN_SELCHANGE, CB_ADDSTRING, CB_GETCURSEL, CB_RESETCONTENT, CB_SETCURSEL,
-    DLGTEMPLATE, MSG, SW_SHOW, WM_COMMAND, WM_HSCROLL, WM_INITDIALOG, WM_NOTIFY,
+    GetDlgItem, GetForegroundWindow, GetWindowTextLengthW, GetWindowTextW,
+    GetWindowThreadProcessId, IsDialogMessageW, IsWindow, SendMessageW, SetForegroundWindow,
+    SetWindowTextW, ShowWindow, BM_GETCHECK, BM_SETCHECK, BN_CLICKED, CBN_EDITCHANGE,
+    CBN_SELCHANGE, CB_ADDSTRING, CB_GETCURSEL, CB_GETLBTEXT, CB_GETLBTEXTLEN, CB_RESETCONTENT,
+    CB_SETCURSEL, DLGTEMPLATE, MSG, SW_SHOW, WM_COMMAND, WM_HSCROLL, WM_INITDIALOG, WM_NOTIFY,
 };
 
 use crate::template::{self, IDCANCEL};
@@ -72,7 +73,9 @@ fn initial(kind: &ControlKind) -> Option<Value> {
         | ControlKind::Radios { selected, .. } => Some(Value::Selected(*selected)),
         ControlKind::CheckBox { checked } => Some(Value::Checked(*checked)),
         ControlKind::Slider { value, .. } => Some(Value::Number(*value)),
-        ControlKind::Text { text } => Some(Value::Text(text.clone())),
+        ControlKind::Text { text } | ControlKind::ComboEdit { text, .. } => {
+            Some(Value::Text(text.clone()))
+        }
         ControlKind::Group | ControlKind::Button { .. } => None,
     }
 }
@@ -214,6 +217,19 @@ fn fill(window: HWND, index: usize, item: HWND, kind: &ControlKind) {
                 set(window, index, item, kind, &Value::Selected(*selected));
             }
             ControlKind::Text { text } => {
+                set(window, index, item, kind, &Value::Text(text.clone()));
+            }
+            ControlKind::ComboEdit { text, history } => {
+                SendMessageW(item, CB_RESETCONTENT, None, None);
+                for earlier in history {
+                    let earlier = wide(earlier);
+                    SendMessageW(
+                        item,
+                        CB_ADDSTRING,
+                        None,
+                        Some(LPARAM(earlier.as_ptr() as isize)),
+                    );
+                }
                 set(window, index, item, kind, &Value::Text(text.clone()));
             }
             ControlKind::Group | ControlKind::Button { .. } => {}
@@ -404,7 +420,7 @@ fn set(window: HWND, index: usize, item: HWND, kind: &ControlKind, value: &Value
                     }
                 }
             }
-            (ControlKind::Text { .. }, Value::Text(text)) => {
+            (ControlKind::Text { .. } | ControlKind::ComboEdit { .. }, Value::Text(text)) => {
                 let text = wide(text);
                 let _ = SetWindowTextW(item, windows::core::PCWSTR(text.as_ptr()));
             }
@@ -441,9 +457,21 @@ pub fn set_value(id: u32, control: &str, value: Value) {
 
 /// Replaces the items of the list `control` in dialog `id`.
 pub fn set_list(id: u32, control: &str, items: &[String], selected: usize) {
-    if let Some((window, window_id, _, _)) = find(id, control) {
+    if let Some((window, window_id, index, kind)) = find(id, control) {
         // SAFETY: a child of our own dialog.
         if let Ok(list) = unsafe { GetDlgItem(Some(window), i32::from(window_id)) } {
+            // An editable combo box's items are its history, and its text the item selected
+            // (none past the end).
+            if matches!(kind, ControlKind::ComboEdit { .. }) {
+                let text = items.get(selected).cloned().unwrap_or_default();
+                remember(window, window_id, Value::Text(text.clone()));
+                let refilled = ControlKind::ComboEdit {
+                    text,
+                    history: items.to_vec(),
+                };
+                fill(window, index, list, &refilled);
+                return;
+            }
             remember(window, window_id, Value::Selected(selected));
             set_items(list, items, selected);
         }
@@ -633,6 +661,13 @@ unsafe extern "system" fn dialog_proc(
                     let checked = state.0 == BST_CHECKED.0 as isize;
                     changed(window, &hit, Value::Checked(checked));
                 }
+                // An editable combo box tells its text as it is typed, or chosen from its list.
+                (ControlKind::ComboEdit { .. }, _) if code == CBN_EDITCHANGE => {
+                    changed(window, &hit, Value::Text(window_text(item)));
+                }
+                (ControlKind::ComboEdit { .. }, _) if code == CBN_SELCHANGE => {
+                    changed(window, &hit, Value::Text(chosen_text(item)));
+                }
                 (ControlKind::Choice { .. }, _) if code == CBN_SELCHANGE => {
                     // SAFETY: a state query on our own combo box.
                     let index = unsafe { SendMessageW(item, CB_GETCURSEL, None, None) };
@@ -706,5 +741,42 @@ unsafe extern "system" fn dialog_proc(
             1
         }
         _ => 0,
+    }
+}
+
+/// A window's text: an editable combo box's typed text.
+fn window_text(item: HWND) -> String {
+    // SAFETY: plain reads of our own control's text into a buffer of the length it reports.
+    unsafe {
+        let length = usize::try_from(GetWindowTextLengthW(item)).unwrap_or(0);
+        let mut buffer = vec![0u16; length + 1];
+        let copied = usize::try_from(GetWindowTextW(item, &mut buffer)).unwrap_or(0);
+        String::from_utf16_lossy(buffer.get(..copied).unwrap_or_default())
+    }
+}
+
+/// The text of the item chosen in a combo box's list.
+fn chosen_text(item: HWND) -> String {
+    // SAFETY: messages to our own combo box; the buffer has room for the length it reports
+    // and its terminating null.
+    unsafe {
+        let index = SendMessageW(item, CB_GETCURSEL, None, None).0;
+        let Ok(chosen) = usize::try_from(index) else {
+            return window_text(item);
+        };
+        let length = SendMessageW(item, CB_GETLBTEXTLEN, Some(WPARAM(chosen)), None).0;
+        let Ok(length) = usize::try_from(length) else {
+            return window_text(item);
+        };
+        let mut buffer = vec![0u16; length + 1];
+        let copied = SendMessageW(
+            item,
+            CB_GETLBTEXT,
+            Some(WPARAM(chosen)),
+            Some(LPARAM(buffer.as_mut_ptr() as isize)),
+        )
+        .0;
+        let copied = usize::try_from(copied).unwrap_or(0);
+        String::from_utf16_lossy(buffer.get(..copied).unwrap_or_default())
     }
 }

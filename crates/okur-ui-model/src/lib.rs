@@ -56,6 +56,12 @@ pub enum ControlKind {
         options: Vec<String>,
         selected: usize,
     },
+    /// An editable combo box: a text typed in, its earlier values in its list (JAWS Find's
+    /// "Find what"). Its value is the text.
+    ComboEdit {
+        text: String,
+        history: Vec<String>,
+    },
     /// A slider from `min` to `max`.
     Slider {
         min: i32,
@@ -121,7 +127,8 @@ pub enum ToUi {
         control: String,
         value: Value,
     },
-    /// Replace a list's items, and select one.
+    /// Replace a list's items, and select one; an editable combo box's history, its text the
+    /// item selected (none past the end).
     DialogItems {
         id: u32,
         control: String,

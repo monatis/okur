@@ -393,14 +393,7 @@ impl ScreenReaderEngine {
             }),
 
             // In-buffer find commands
-            Command::VirtualFind => Some(format!(
-                "{}  \u{001d} {} \u{001e} \n{}  \u{001d} {} \u{001e} \n{}",
-                msg::find_dialog(),
-                msg::role_dialog(),
-                msg::find_dialog_field(),
-                msg::role_edit_combo(),
-                msg::hint_set_value_arrows_or_type()
-            )),
+            Command::VirtualFind => return self.open_find(),
             Command::FindNext => self.cursor.find_next(),
             Command::FindPrior => self.cursor.find_prior(),
 

@@ -2368,6 +2368,16 @@ impl VirtualCursor {
         Some(self.jump_to_element_offset(target_offset))
     }
 
+    /// Searches backward from the cursor for `query` (JAWS Find with Reverse), which F3 and
+    /// Shift+F3 then repeat.
+    pub fn find_text_backward(&mut self, query: &str, case_sensitive: bool) -> Option<String> {
+        self.search = SearchState {
+            query: Some(query.to_string()),
+            case_sensitive,
+        };
+        self.find_prior()
+    }
+
     /// Advances forward to the next match of the active search query (`F3`).
     pub fn find_next(&mut self) -> Option<String> {
         self.selection = None;
