@@ -478,6 +478,44 @@ fn the_cursor_goes_to_a_focus_whose_lines_are_its_childrens() {
     assert_eq!(engine.cursor.current_line(), "First line of the document");
 }
 
+/// A capture of the page in front, built outside the engine, is applied as a capture of it is;
+/// one of another page (loaded while it was built) is dropped, never announced.
+#[test]
+fn a_refresh_built_outside_the_engine_is_taken_for_the_same_page_only() {
+    let actions = RecordingActions::refreshing_pages();
+    let mut engine = engine_on(&chat("(7) WhatsApp", messages()), &actions);
+    let mut list = messages();
+    list.push(message(70, "a new one", "15:00", false));
+    let refreshed = VirtualBuffer::from_aom(&chat("(8) WhatsApp", list.clone()));
+    let title = refreshed.document_title().unwrap_or_default().to_owned();
+    engine.handle_page_refreshed(&title, refreshed);
+    engine.handle_key_event(&key(Key::Control, false));
+    let has_new = |engine: &ScreenReaderEngine| {
+        engine
+            .cursor
+            .buffer
+            .lines
+            .iter()
+            .any(|l| l.text == "a newer one")
+    };
+    assert!(engine
+        .cursor
+        .buffer
+        .lines
+        .iter()
+        .any(|l| l.text == "a new one"));
+
+    let mut other = AomNode::new(0, Role::Document).with_name("Another page");
+    other
+        .attributes
+        .insert("url".into(), "https://example.org/another".into());
+    list.push(message(71, "a newer one", "15:01", false));
+    let other = other.with_children(list);
+    engine.handle_page_refreshed("Another page", VirtualBuffer::from_aom(&other));
+    engine.handle_key_event(&key(Key::Control, false));
+    assert!(!has_new(&engine));
+}
+
 /// Parts spliced and built outside the engine (the live screen reader does, so as not to hold
 /// it) give the page that splicing them inside gives; once the page is another, the buffer
 /// built from the old one is refused.

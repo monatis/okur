@@ -998,8 +998,30 @@ async fn main() {
                 let console = spawn_console();
                 tokio::spawn(async move {
                     let idle = std::time::Duration::from_millis(150);
+                    // Captures of the page already read are built on threads of their own
+                    // (an IA2 capture after the quick one, a refresh after changes: 69-275 ms
+                    // on a page of 25,000 nodes, during which typing echo and focus events
+                    // waited; responsiveness review, 2026-10-19). They come back numbered, and
+                    // one finished after a newer one is dropped.
+                    let (built_tx, mut built_rx) =
+                        tokio::sync::mpsc::unbounded_channel::<(u64, String, VirtualBuffer)>();
+                    let (mut refreshes_sent, mut refresh_applied) = (0_u64, 0_u64);
                     loop {
-                        let event = match tokio::time::timeout(idle, event_rx.recv()).await {
+                        let received = tokio::select! {
+                            biased;
+                            Some((number, title, buffer)) = built_rx.recv() => {
+                                if number > refresh_applied {
+                                    refresh_applied = number;
+                                    give_way_to_keys();
+                                    if let Ok(mut eng) = engine_events.lock() {
+                                        eng.handle_page_refreshed(&title, buffer);
+                                    }
+                                }
+                                continue;
+                            }
+                            received = tokio::time::timeout(idle, event_rx.recv()) => received,
+                        };
+                        let event = match received {
                             Ok(Some(event)) => Some(event),
                             Ok(None) => break,
                             // Quiet for a moment: speech JAWS defers until no event supersedes it.
@@ -1011,11 +1033,33 @@ async fn main() {
                         let mut event = event;
                         let page = match &mut event {
                             Some(AccessibilityEvent::DocumentLoaded { title, root }) => {
-                                let started = std::time::Instant::now();
+                                let url = root.attributes.get("url").cloned();
+                                give_way_to_keys();
+                                let refresh = engine_events
+                                    .lock()
+                                    .ok()
+                                    .is_some_and(|eng| eng.is_page_in_front(title, url.as_deref()));
                                 let root = std::mem::replace(
                                     root,
                                     okur_core::AomNode::new(0, okur_core::Role::Document),
                                 );
+                                if refresh {
+                                    refreshes_sent += 1;
+                                    let (number, title) = (refreshes_sent, std::mem::take(title));
+                                    let built = built_tx.clone();
+                                    tokio::task::spawn_blocking(move || {
+                                        let started = std::time::Instant::now();
+                                        let buffer = VirtualBuffer::from_aom_owned(root);
+                                        tracing::debug!(
+                                            lines = buffer.lines.len(),
+                                            ms = started.elapsed().as_millis(),
+                                            "page refresh built"
+                                        );
+                                        let _ = built.send((number, title, buffer));
+                                    });
+                                    continue;
+                                }
+                                let started = std::time::Instant::now();
                                 let buffer = VirtualBuffer::from_aom_owned(root);
                                 tracing::debug!(
                                     lines = buffer.lines.len(),

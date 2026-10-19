@@ -44,18 +44,37 @@ impl ScreenReaderEngine {
     /// Handles a page load ([`AccessibilityEvent::DocumentLoaded`]) whose buffer is already
     /// built. Building a big page's buffer takes long, so the live screen reader builds it
     /// before taking the engine, which the keyboard hook waits on.
+    /// Whether a page captured with `title` and address `url` is the one already read: by its
+    /// address, by its title when it has none.
+    pub fn is_page_in_front(&self, title: &str, url: Option<&str>) -> bool {
+        self.app_mode == AppMode::VirtualBuffer
+            && match (self.cursor.buffer.document_url(), url) {
+                (Some(old), Some(new)) => old == new,
+                _ => self.cursor.buffer.document_title() == Some(title),
+            }
+    }
+
+    /// A capture of the page already read, built without the engine (the live screen reader
+    /// builds such refreshes on a thread of its own, so that the events after it are not
+    /// held up): kept to be applied as [`Self::handle_document_loaded`] keeps it. Dropped
+    /// when another page has been loaded meanwhile.
+    pub fn handle_page_refreshed(&mut self, title: &str, buffer: VirtualBuffer) {
+        if self.is_page_in_front(title, buffer.document_url()) {
+            if let Some(old) = self.pending_page.replace(buffer) {
+                crate::retire::retire(old);
+            }
+        } else {
+            crate::retire::retire(buffer);
+        }
+    }
+
     pub fn handle_document_loaded(&mut self, title: &str, buffer: VirtualBuffer) -> Option<String> {
         // The page already in the buffer, captured again (the first focus in it after
         // start-up): refresh it without announcing it or leaving forms mode.
         // A page is known by its address, by its title when it has none: a title can change
         // on the page (WhatsApp's counts unread chats, "(8) WhatsApp"), and JAWS keeps its
         // place then (dev box, 2026-10-17).
-        let same_page = self.app_mode == AppMode::VirtualBuffer
-            && match (self.cursor.buffer.document_url(), buffer.document_url()) {
-                (Some(old), Some(new)) => old == new,
-                _ => self.cursor.buffer.document_title() == Some(title),
-            };
-        if same_page {
+        if self.is_page_in_front(title, buffer.document_url()) {
             // Applied once the events of this change are handled: several live regions can
             // change at once, and each is compared with the page before the change
             // [obs, 206/s2].
