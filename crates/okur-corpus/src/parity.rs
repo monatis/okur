@@ -303,8 +303,12 @@ fn run_scenario(
     if desktop {
         press_reset(&mut engine)?;
     }
+    // The focused text as the trace last showed it, and the fresh reads of it answered.
+    let mut last_text: Option<okur_core::TextContext> = None;
+    let mut text_reads = 0;
     for event in &replay.setup {
         for converted in converter.convert(event) {
+            note_text(&mut last_text, &converted);
             let _ = engine.handle_accessibility_event(&converted);
         }
     }
@@ -371,10 +375,18 @@ fn run_scenario(
                         }
                     }
                 }
+                answer_text_reads(
+                    &mut engine,
+                    &actions,
+                    &mut text_reads,
+                    last_text.as_ref(),
+                    &spoken,
+                );
                 // Replay the OS events recorded while JAWS handled this step (e.g. the focus
                 // change that follows Tab), exactly as the live listener would deliver them.
                 for event in replay.for_step(&step.id) {
                     for converted in converter.convert(&event) {
+                        note_text(&mut last_text, &converted);
                         if let Some(speech) = engine.handle_accessibility_event(&converted) {
                             if spoken.is_empty() {
                                 spoken.push(&speech, false);
@@ -647,6 +659,46 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
     }
 
     fn stop(&mut self) {}
+}
+
+/// Keeps the focused text a traced event showed.
+fn note_text(last: &mut Option<okur_core::TextContext>, event: &okur_core::AccessibilityEvent) {
+    match event {
+        okur_core::AccessibilityEvent::TextContext(context) => *last = Some(context.clone()),
+        okur_core::AccessibilityEvent::Focus(focus) if focus.text.is_some() => {
+            last.clone_from(&focus.text)
+        }
+        _ => {}
+    }
+}
+
+/// A fresh read of the focused text (a console's buffer for the Virtual Viewer) is answered
+/// at once live, with the text as it is then. Replay answers it with the text the trace last
+/// showed, not with whatever event the trace happens to hold next.
+fn answer_text_reads(
+    engine: &mut ScreenReaderEngine,
+    actions: &okur_core::actions::RecordingActions,
+    answered: &mut usize,
+    last: Option<&okur_core::TextContext>,
+    spoken: &RecordingSpeech,
+) {
+    let asked = actions
+        .requests()
+        .iter()
+        .filter(|(action, _)| action == "read text")
+        .count();
+    while *answered < asked {
+        *answered += 1;
+        let Some(context) = last else {
+            continue;
+        };
+        let event = okur_core::AccessibilityEvent::TextContext(context.clone());
+        if let Some(speech) = engine.handle_accessibility_event(&event) {
+            if spoken.is_empty() {
+                spoken.push(&speech, false);
+            }
+        }
+    }
 }
 
 /// Milliseconds between the presses of a repeated step: run-scenario.ps1 sends the chord

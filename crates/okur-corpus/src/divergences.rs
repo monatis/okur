@@ -63,33 +63,17 @@ macro_rules! divergences {
 }
 
 divergences! {
-    Difference::JawsAlsoSays("JAWS Version 2025.2505.43") => [
-        "222-web-links-list/s1",
-        "223-web-links-list-escape/s1",
-        "224-web-headings-list/s1",
-        "225-web-form-fields-list/s1",
-        "226-web-element-lists/s1",
-        "226-web-element-lists/s3",
-    ],
-    "JAWS's list dialogs belong to its own process (jfw.exe), and JAWS reads the version on its \
-     main window as one of them opens: a side effect, not a feature to copy.",
-    "the owner, 2026-10-18";
-
     Difference::JawsSaysBeforeItsDialog => [
-        "222-web-links-list/s1",
-        "223-web-links-list-escape/s1",
         "224-web-headings-list/s1",
         "225-web-form-fields-list/s1",
         "226-web-element-lists/s1",
         "227-web-form-fields-list-items/s1",
         "228-web-form-fields-list-edit/s1",
         "230-web-element-lists-items/s1",
-        "232-web-list-buttons/s1",
         "233-web-list-combo-boxes/s1",
         "234-web-list-edits/s1",
         "235-web-list-check-boxes/s1",
         "236-web-list-graphics/s1",
-        "237-web-list-lists/s1",
         "239-web-list-paragraphs/s1",
         "240-web-list-block-quotes/s1",
         "241-web-list-regions/s1",
@@ -104,10 +88,8 @@ divergences! {
         "250-web-list-check-boxes-enter/s1",
         "251-web-list-graphics-enter/s1",
         "252-web-list-lists-enter/s1",
-        "253-web-list-articles-enter/s1",
         "254-web-list-paragraphs-enter/s1",
         "255-web-list-block-quotes-enter/s1",
-        "256-web-list-regions-enter/s1",
         "257-web-list-tables-enter/s1",
         "258-web-list-glance-highlights-enter/s1",
         "259-web-list-divisions-enter/s1",
@@ -117,19 +99,6 @@ divergences! {
      names the dialog: its main window (its version, a list's tutor message) and the browser's \
      title, or the dialog's list read before the dialog itself. Okur's dialog opens without \
      them. Some trials of the same keys have none of it.",
-    "the owner's ruling on JAWS's version, 2026-10-18";
-
-    Difference::JawsAlsoSays("JAWS Professional") => ["226-web-element-lists/s3"],
-    "Going from Virtual HTML Features to the list chosen in it, JAWS's speech passes through \
-     its own main window: its title and the tutor message of a list in it. The same side \
-     effect as its version.",
-    "the owner's ruling on JAWS's version, 2026-10-18";
-
-    Difference::JawsAlsoSays("To move to an item press the Arrow keys.") => [
-        "226-web-element-lists/s3",
-    ],
-    "The tutor message of the list in JAWS's main window, heard as JAWS goes from Virtual \
-     HTML Features to the chosen list.",
     "the owner's ruling on JAWS's version, 2026-10-18";
 
     Difference::JawsAlsoSays("Web App Patterns - Google Chrome") => [
@@ -315,23 +284,16 @@ mod tests {
     /// A phrase JAWS also says is left out of JAWS's transcript; the rest must still match.
     #[test]
     fn only_the_accepted_phrase_is_left_out() {
-        let recorded = jaws(&["JAWS Version 2025.2505.43 \nLinks List dialog\nlinks List view"]);
-        let step = "222-web-links-list/s1";
+        let recorded = jaws(&["Web App Patterns - Google Chrome \nList1 List view"]);
+        let step = "226-web-element-lists/s1";
         assert_eq!(
-            compare(step, "Links List dialog links List view", &recorded),
+            compare(step, "List1 List view", &recorded),
             Comparison::Matched
         );
-        assert_eq!(
-            compare(step, "Links List dialog", &recorded),
-            Comparison::Differs
-        );
+        assert_eq!(compare(step, "List1", &recorded), Comparison::Differs);
         // Elsewhere the phrase counts.
         assert_eq!(
-            compare(
-                "999-elsewhere/s1",
-                "Links List dialog links List view",
-                &recorded
-            ),
+            compare("999-elsewhere/s1", "List1 List view", &recorded),
             Comparison::Differs
         );
     }
@@ -351,13 +313,12 @@ mod tests {
     #[test]
     fn a_stale_divergence_is_reported() {
         let empty: Vec<String> = Vec::new();
-        let steps: Vec<(&str, &str, &[String])> = vec![("222-web-links-list/s1", "", &empty)];
+        let steps: Vec<(&str, &str, &[String])> = vec![("226-web-element-lists/s1", "", &empty)];
         let result = check(&steps);
         assert!(
-            result
-                .as_ref()
-                .is_err_and(|e| e.contains("222-web-links-list/s1: JAWS no longer says")
-                    && e.contains("313-desktop-say-font/s1: no such step")),
+            result.as_ref().is_err_and(|e| e
+                .contains("226-web-element-lists/s1: JAWS no longer says")
+                && e.contains("313-desktop-say-font/s1: no such step")),
             "{result:?}"
         );
     }

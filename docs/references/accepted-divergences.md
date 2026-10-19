@@ -12,9 +12,8 @@ The table is `DIVERGENCES` in `crates/okur-corpus/src/divergences.rs`, written w
 
 ```rust
 divergences! {
-    Difference::JawsAlsoSays("JAWS Version 2025.2505.43") => [
-        "222-web-links-list/s1",
-        // ...
+    Difference::JawsAlsoSays("Web App Patterns - Google Chrome") => [
+        "226-web-element-lists/s1",
     ],
     "why",
     "who decided, when";
@@ -44,25 +43,12 @@ under one of the owner's rulings says which.
 
 ## The list
 
-### JAWS names its own version before its list dialogs
+### JAWS passes through the browser's window on the way to its dialog
 
-- Steps: `222-web-links-list/s1`, `223-web-links-list-escape/s1`, `224-web-headings-list/s1`,
-  `225-web-form-fields-list/s1`, `226-web-element-lists/s1`, `226-web-element-lists/s3`.
-- Difference: JAWS also says "JAWS Version 2025.2505.43".
-- Why: the Links List, the Heading List, Select a Form Field and Virtual HTML Features belong to
-  JAWS's own process (jfw.exe). As one opens, JAWS reads the version shown on its main window. It
-  is a side effect, not something a user needs.
-- Decided by the owner, 2026-10-18.
-
-### JAWS's own windows between its dialogs
-
-- Steps: `226-web-element-lists/s1` (also says "Web App Patterns - Google Chrome", the browser
-  window's title) and `226-web-element-lists/s3` (also says "JAWS Professional" and "To move to
-  an item press the Arrow keys.").
-- Why: opening Virtual HTML Features, and going from it to the list chosen in it, JAWS's speech
-  passes through windows the user never visits: the browser's, and JAWS's own main window
-  with the tutor message of a list in it. The same keys recorded again (230/s1) have none of it.
-  It is the side effect of the version above.
+- Step: `226-web-element-lists/s1` (also says "Web App Patterns - Google Chrome", the browser
+  window's title).
+- Why: opening Virtual HTML Features, JAWS's speech passes through a window the user never
+  visits. The same keys recorded again (230/s1) have none of it.
 - Decided under the owner's ruling on JAWS's version, 2026-10-18.
 
 A step can be in more than one entry; all of its entries apply.
@@ -76,21 +62,23 @@ A step can be in more than one entry; all of its entries apply.
   browser's title, or the dialog's list before the dialog itself. Okur's dialog opens without
   them, and some trials of the same keys have none of it either.
 - Steps (the step that opens the dialog, s1, of each):
-  `222-web-links-list/s1`, `223-web-links-list-escape/s1`, `224-web-headings-list/s1`,
-  `225-web-form-fields-list/s1`, `226-web-element-lists/s1`, `227-web-form-fields-list-items/s1`,
-  `228-web-form-fields-list-edit/s1`, `230-web-element-lists-items/s1`,
-  `232-web-list-buttons/s1`, `233-web-list-combo-boxes/s1`, `234-web-list-edits/s1`,
-  `235-web-list-check-boxes/s1`, `236-web-list-graphics/s1`, `237-web-list-lists/s1`,
-  `239-web-list-paragraphs/s1`, `240-web-list-block-quotes/s1`, `241-web-list-regions/s1`,
-  `242-web-list-tables/s1`, `243-web-list-glance-highlights/s1`, `244-web-list-divisions/s1`,
-  `245-web-list-tabs/s1`, `246-web-list-radio-buttons-enter/s1`,
-  `247-web-list-buttons-enter/s1`, `248-web-list-combo-boxes-enter/s1`,
-  `249-web-list-edits-enter/s1`, `250-web-list-check-boxes-enter/s1`,
-  `251-web-list-graphics-enter/s1`, `252-web-list-lists-enter/s1`,
-  `253-web-list-articles-enter/s1`, `254-web-list-paragraphs-enter/s1`,
-  `255-web-list-block-quotes-enter/s1`, `256-web-list-regions-enter/s1`,
-  `257-web-list-tables-enter/s1`, `258-web-list-glance-highlights-enter/s1`,
-  `259-web-list-divisions-enter/s1`, `260-web-list-tabs-enter/s1`.
+  `224-web-headings-list/s1`, `225-web-form-fields-list/s1`, `226-web-element-lists/s1`,
+  `227-web-form-fields-list-items/s1`, `228-web-form-fields-list-edit/s1`,
+  `230-web-element-lists-items/s1`, `233-web-list-combo-boxes/s1`, `234-web-list-edits/s1`,
+  `235-web-list-check-boxes/s1`, `236-web-list-graphics/s1`, `239-web-list-paragraphs/s1`,
+  `240-web-list-block-quotes/s1`, `241-web-list-regions/s1`, `242-web-list-tables/s1`,
+  `243-web-list-glance-highlights/s1`, `244-web-list-divisions/s1`, `245-web-list-tabs/s1`,
+  `246-web-list-radio-buttons-enter/s1`, `247-web-list-buttons-enter/s1`,
+  `248-web-list-combo-boxes-enter/s1`, `249-web-list-edits-enter/s1`,
+  `250-web-list-check-boxes-enter/s1`, `251-web-list-graphics-enter/s1`,
+  `252-web-list-lists-enter/s1`, `254-web-list-paragraphs-enter/s1`,
+  `255-web-list-block-quotes-enter/s1`, `257-web-list-tables-enter/s1`,
+  `258-web-list-glance-highlights-enter/s1`, `259-web-list-divisions-enter/s1`,
+  `260-web-list-tabs-enter/s1`.
+- In the recordings of 2026-10-19 (round 9, JAWS freshly started for the batch), JAWS no longer
+  said its version or the list's tutor message before the Links List, the Heading List and
+  Virtual HTML Features, and said nothing before some dialogs at all: those steps were taken
+  off this list and the entry for the version removed.
 - Decided under the owner's ruling on JAWS's version, 2026-10-18.
 
 ### A stray comma in Virtual HTML Features
