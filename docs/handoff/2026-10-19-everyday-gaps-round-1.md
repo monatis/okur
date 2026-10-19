@@ -56,10 +56,10 @@ The work list is [`docs/backlog/everyday-use-gaps-2026-10-19.md`](../backlog/eve
   it; `run-scenario.ps1` closes such a menu before a trial and records it.
 - **File dialogs in a folder of their own** (`e5ff7ac`, `7e55bd5`): Notepad's Open and Save As
   dialogs opened in the lab account's home folder, whose contents then went into the traces.
-  The dialog fixture keeps its file alone in `%TEMP%\sr-dialogs`, `set-dialog-folder.ps1` (run
-  by `queue-batch.ps1 -Before`) opens it once through the dialog, and the fixture now starts
-  Notepad in that folder. Round 27 showed the dialog still in the home folder; round 31 tries
-  the working folder.
+  They opened there whatever their last folder and Notepad's working folder were (rounds 27
+  and 31), so the dialog scenarios now use a fixture of their own, `desktop-file-dialogs.ps1`,
+  whose Open and Save As dialogs are set to `%TEMP%\sr-dialogs`. `queue-batch.ps1 -Before`
+  runs a setup script before a batch.
 - **`text` steps**: characters typed as Unicode input, whatever the keyboard layout (old-pc's is
   Turkish Q); replay reads only their events.
 - **Staged scenarios**: `queue-batch.ps1 -StagedScripts` installs scenarios as it does scripts,
@@ -105,7 +105,7 @@ voice reports no progress.
 
 - Round 30 (536, routing and the link's address) recording; round 31 (524, 525, 532 with the
   dialog fixture's working folder, 533 with JAWS typing Escape; its glob also records 522, 523,
-  534 and 535 again) queued behind it, with `set-dialog-folder.ps1` before it.
+  534 and 535 again) queued behind it; round 35 records 524, 525 and 532 with `desktop-file-dialogs.ps1`.
 - Fetch with `skills/jaws-reference/scripts/lab-fetch.sh`, wrapped in `timeout`: one fetch
   stalled for ten minutes and had to be stopped.
 

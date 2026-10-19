@@ -1,0 +1,20 @@
+{
+  "id": "525-desktop-open-dialog",
+  "name": "Windows' Open dialog in a folder of its own: opened, Shift+Tab to the file list and on to the folder tree, Down and Up there, Insert+Up, Tab back, and Escape",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-file-dialogs.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR File Dialog Fixture" },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Space", "settle_max_ms": 20000 },
+    { "id": "s2", "type": "key", "command": "Shift+Tab" },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Up" },
+    { "id": "s5", "type": "key", "command": "Insert+Up" },
+    { "id": "s6", "type": "key", "command": "Tab" },
+    { "id": "s7", "type": "key", "command": "Escape" },
+    { "id": "s8", "type": "key", "command": "Insert+Up" }
+  ]
+}

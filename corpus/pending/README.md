@@ -15,11 +15,11 @@ To record one:
 | 509 | Keyboard Help (Insert+1), Insert+F1, Insert+H, Insert+W. Recorded in round 13 and not imported: in Keyboard Help mode JAWS describes the harness's history copy instead of running it, so those steps time out (their synthesizer text is recorded) | `desktop-dialogs.ps1` |
 | 518 | Reading a Word document | `desktop-word.ps1` (here) |
 | 519 | Word's headings list, spelling errors, revisions | `desktop-word.ps1` (here) |
-| 524 | Notepad's Save As dialog. Recorded in round 23 and not imported: the dialog opened in the lab account's home folder, and the traces list its folders; to record again in a folder of the fixture's own | `desktop-notepad-dialogs.ps1` (here) |
-| 525 | Notepad's Open dialog; as 524 | `desktop-notepad-dialogs.ps1` (here) |
+| 524 | Windows' Save As dialog. Notepad's, recorded in rounds 23, 27 and 31 and not imported, opened in the lab account's home folder whatever its last folder and working folder were, and the traces listed its folders; now the fixture's own dialog, set to its folder | `desktop-file-dialogs.ps1` (here) |
+| 525 | Windows' Open dialog; as 524 | `desktop-file-dialogs.ps1` (here) |
 | 530 | Skim reading, its dialog, and Say Color in a page. Recorded in round 26 and held back with 531: the browser profile's name in its traces; the Skim Reading dialog, JAWS's own, refused the harness's Tab and Escape | `news-article.html` |
 | 531 | Screen-sensitive help in a page. Recorded in round 26 and not imported: JAWS's page summary outlasted the 20 s settle, now 60 s; its traces, as every web trace, carry the browser window's title with the profile's name | `news-article.html` |
-| 532 | Say Default Button and Say Current Control Hot Key in Notepad's Open dialog | `desktop-notepad-dialogs.ps1` (here) |
+| 532 | Say Default Button and Say Current Control Hot Key in Windows' Open dialog | `desktop-file-dialogs.ps1` (here) |
 | 533 | A Windows toast, Repeat Last Notification, Notification History, and a progress bar | `desktop-notifications.ps1` (here) |
 | 534 | Numpad Slash (left click) on a page's check box and radio button | `signup-form.html` |
 | 535 | The table layer (Insert+Space, T) | `tables-navigation.html` |

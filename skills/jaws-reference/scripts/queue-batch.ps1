@@ -33,7 +33,7 @@ param(
     # after it.
     [string]$StagedScripts,
     # A harness script run once the staged files are in place and before the batch, outside
-    # any trial: set-dialog-folder.ps1 for the file dialog scenarios.
+    # any trial (a setup the scenarios need that is not a fixture of its own).
     [string]$Before,
     # Give up waiting after this long.
     [int]$MaxWaitMinutes = 360
