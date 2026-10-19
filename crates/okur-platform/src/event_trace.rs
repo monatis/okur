@@ -19,6 +19,8 @@ const UIA_DOCUMENT: i32 = 50030;
 const WEB_CONTENT_WINDOW_CLASSES: [&str; 2] = ["Chrome_RenderWidgetHostHWND", "MozillaWindowClass"];
 /// The top-level window class of Chromium browsers and Electron apps.
 const CHROMIUM_TOP_WINDOW: &str = "Chrome_WidgetWin_1";
+/// The window of the Windows 10 taskbar's news and weather widget (its title is the weather).
+const NEWS_AND_WEATHER_CLASS: &str = "DynamicContent2";
 const UIA_TREEITEM: i32 = 50024;
 const UIA_TEXT: i32 = 50020;
 const UIA_BUTTON: i32 = 50000;
@@ -2348,6 +2350,12 @@ mod capture {
                     | "text_selection_change"
             );
             if change && in_background_process(hwnd) {
+                return;
+            }
+            // The taskbar's news and weather widget is never recorded, even when Explorer is
+            // in front: it put the weather where the reference machine is into a trace (its
+            // title "13°C ...", 504, old-pc, 2026-10-19).
+            if class == super::NEWS_AND_WEATHER_CLASS {
                 return;
             }
             if state.live

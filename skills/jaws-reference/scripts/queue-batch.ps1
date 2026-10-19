@@ -26,7 +26,7 @@ param(
     # Fixtures (file names under corpus\fixtures) whose IA2 and UIA snapshots are captured into
     # <OutputDir>\snapshots before the batch: a capture must not run during another batch.
     [string[]]$Snapshots = @(),
-    # Harness scripts copied over this skill's scripts once the batch before has finished, so a
+    # Harness scripts (and okur.exe) copied into place once the batch before has finished, so a
     # changed capture script reaches only the batches queued after the change (each batch's
     # evidence then names one capture script hash).
     [string]$StagedScripts,
@@ -51,6 +51,13 @@ if ($StagedScripts) {
     foreach ($script in Get-ChildItem -LiteralPath $StagedScripts -Filter *.ps1) {
         Copy-Item -LiteralPath $script.FullName -Destination (Join-Path $PSScriptRoot $script.Name) -Force
         "installed $($script.Name) $((Get-FileHash -LiteralPath $script.FullName).Hash.ToLower())" | Out-File $log -Append -Encoding utf8
+    }
+    # A staged harness binary (the tracer, okur.exe) is installed the same way: replacing it
+    # while a batch traces would fail, the file being in use.
+    $binary = Join-Path $StagedScripts 'okur.exe'
+    if (Test-Path -LiteralPath $binary) {
+        Copy-Item -LiteralPath $binary -Destination 'C:\Users\ailabs\sr-harness\bin\okur.exe' -Force
+        "installed okur.exe $((Get-FileHash -LiteralPath $binary).Hash.ToLower())" | Out-File $log -Append -Encoding utf8
     }
 }
 if ($Snapshots.Count -gt 0) {
