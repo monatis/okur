@@ -15,7 +15,36 @@ impl ScreenReaderEngine {
     /// item press the Arrow keys."
     fn speak_active_option(&mut self, focus: &FocusEvent) -> Option<String> {
         let list = focus.container_name.clone().unwrap_or_default();
+        let name = focus.name.clone().unwrap_or_default();
+        // A select box's own list, opened from it with the virtual cursor on it: its items
+        // have no position, an item focused again (Chrome reports the opened list's item
+        // twice) is not said again, and the page's first focus says the page and the regions
+        // around the select first, as Enter's forms mode does: "Create Your Account - Riverside
+        // Library | MainRegion | FormRegion | list | with 3 items | Northside | To move to an
+        // item press the Arrow keys." [obs, 276/s2, s3, s7; 229/s21].
+        let select = self
+            .node_under_cursor()
+            .filter(|n| {
+                n.role == Role::ComboBox && n.attributes.get("editable").is_none_or(|e| e != "true")
+            })
+            .map(|n| n.id);
+        if select.is_some()
+            && self.option_list.as_deref() == Some(list.as_str())
+            && self.option_said.as_deref() == Some(name.as_str())
+        {
+            return None;
+        }
         let mut lines = Vec::new();
+        if let Some(id) = select.filter(|_| self.last_page_focus.is_none()) {
+            if let Some(title) = self.cursor.buffer.document_title() {
+                lines.push(
+                    format!("{title}\n{}", self.region_markers(id))
+                        .trim_end()
+                        .to_owned(),
+                );
+            }
+            self.last_page_focus = Some(id);
+        }
         if self.option_list.as_deref() != Some(list.as_str()) {
             if let Some(count) = focus.item_count {
                 lines.push(format!(
@@ -26,8 +55,9 @@ impl ScreenReaderEngine {
             }
         }
         self.option_list = Some(list);
-        lines.push(focus.name.clone().unwrap_or_default());
-        if let (Some(index), Some(count)) = (focus.item_index, focus.item_count) {
+        self.option_said = Some(name.clone());
+        lines.push(name);
+        if let (Some(index), Some(count), None) = (focus.item_index, focus.item_count, select) {
             lines.push(msg::position(index, count).render());
         }
         lines.push(msg::hint_move_to_an_item_arrows().to_string());
@@ -514,7 +544,9 @@ impl ScreenReaderEngine {
             // To set the value use the Arrow keys or type the value." (JAWS on the dev box),
             // and into a combo box one types in: Google Sheets' cell editor, "D1 edit combo |
             // n | To set the value use the Arrow keys or type the value." (dev box, 2026-10-16).
-            if (from_options || editable_combo) && target_role == Some(Role::ComboBox) {
+            // A select box back from its own list has no such hint: "Home branch Combo box |
+            // Northside | To change the selection use the Arrow keys." [obs, 276/s6].
+            if editable_combo && target_role == Some(Role::ComboBox) {
                 speech = speech.map(|s| format!("{s}\n{}", msg::hint_set_value_arrows_or_type()));
             }
             if entering_application {

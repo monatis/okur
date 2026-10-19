@@ -78,6 +78,8 @@ pub struct ScreenReaderEngine {
     page_stale: bool,
     /// The list whose option the focused field points at (aria-activedescendant), by name.
     option_list: Option<String>,
+    /// The option of that list said last, which a repeated focus does not say again.
+    option_said: Option<String>,
     /// The page's application region (ARIA role "application") the focus is in, by name:
     /// every key goes to the page there, Escape too.
     web_application: Option<String>,
@@ -184,6 +186,7 @@ impl ScreenReaderEngine {
             cursor_to_focus: false,
             page_stale: false,
             option_list: None,
+            option_said: None,
             web_application: None,
             page_focus_is_field: false,
             last_native_focus: None,

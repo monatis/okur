@@ -573,12 +573,13 @@ mod tests {
     /// Space on a select box from the virtual cursor: JAWS says only its opened list, with no
     /// position ("list with 2 items | Red | To move to an item press the Arrow keys.").
     #[test]
-    #[ignore = "known gap: Space on a select box says its opened list only (229/s21)"]
     fn space_on_a_select_says_its_opened_list() {
         assert_eq!(
             replay_matches("229-web-space-activates", "s21", true),
             Ok(())
         );
+        // The first time, as the page's first focus: the page and its regions first (276).
+        assert_eq!(replay_matches("276-web-select-open", "s2", true), Ok(()));
     }
 
     /// From the top, a level key into a section says the section's heading first [obs,
