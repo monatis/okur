@@ -10,7 +10,7 @@
 //! run.
 
 use crate::divergences::{compare as compare_step, Comparison};
-use crate::parity::jaws_variants;
+use crate::parity::{jaws_spoken_variants, jaws_variants, step_spoken, SpokenParity};
 use serde_json::Value;
 
 /// One step of a live run against JAWS's transcripts for it.
@@ -29,6 +29,9 @@ pub struct LiveStep {
     /// Whether the runner heard Okur fall silent before the step's time ran out. An
     /// unsettled step may have been cut short.
     pub settled: bool,
+    /// What Okur sent its synthesizer against what JAWS sent its own, when both were recorded
+    /// through the speech recorder voice.
+    pub spoken: Option<SpokenParity>,
 }
 
 /// What a live run is, by its provenance.
@@ -63,6 +66,7 @@ pub fn compare(run: &Value, evidence: &Value) -> Result<Vec<LiveStep>, String> {
         .or_else(|| run.pointer("/trials/0"))
         .ok_or("the run has no trial")?;
     let variants = jaws_variants(evidence);
+    let spoken_variants = jaws_spoken_variants(evidence);
     let steps = trial
         .get("step_results")
         .and_then(Value::as_array)
@@ -85,6 +89,19 @@ pub fn compare(run: &Value, evidence: &Value) -> Result<Vec<LiveStep>, String> {
             }
             let key = format!("{scenario}/{id}");
             let comparison = compare_step(&key, &okur, &jaws);
+            let recorded = step
+                .pointer("/observation/spoken")
+                .and_then(Value::as_array)
+                .is_some_and(|a| !a.is_empty());
+            let spoken = spoken_variants.as_ref().filter(|_| recorded).map(|all| {
+                let jaws_variants = all.get(id).cloned().unwrap_or_default();
+                let okur = step_spoken(step);
+                SpokenParity {
+                    matched: compare_step(&key, &okur, &jaws_variants) == Comparison::Matched,
+                    engine: okur,
+                    jaws_variants,
+                }
+            });
             Ok(LiveStep {
                 key,
                 command: step
@@ -100,6 +117,7 @@ pub fn compare(run: &Value, evidence: &Value) -> Result<Vec<LiveStep>, String> {
                     .unwrap_or(true),
                 okur,
                 jaws_variants: jaws,
+                spoken,
             })
         })
         .collect()
@@ -163,6 +181,36 @@ mod tests {
         let steps = compare(&run, &evidence).unwrap_or_default();
         let found: Vec<(bool, bool)> = steps.iter().map(|s| (s.matched, s.settled)).collect();
         assert_eq!(found, vec![(true, true), (false, false)]);
+    }
+
+    /// What Okur sent its synthesizer is compared with what JAWS sent its own, when both were
+    /// recorded through the speech recorder voice.
+    #[test]
+    fn the_spoken_layer_is_compared_too() {
+        let mut evidence = file(None, &[("s1", "Save... Button")]);
+        if let Some(observation) = evidence.pointer_mut("/trials/0/step_results/0/observation") {
+            *observation = json!({
+                "speech_raw": "Save... Button",
+                "spoken": ["Save dot dot dot Button", "Copy speech history to clipboard"]
+            });
+        }
+        let mut run = file(Some("okur"), &[("s1", "Save... Button")]);
+        let steps = compare(&run, &evidence).unwrap_or_default();
+        assert_eq!(steps.first().map(|s| s.spoken.is_none()), Some(true));
+        if let Some(observation) = run.pointer_mut("/trials/0/step_results/0/observation") {
+            *observation = json!({
+                "speech_raw": "Save... Button",
+                "spoken": ["Save dot dot dot Button"]
+            });
+        }
+        let steps = compare(&run, &evidence).unwrap_or_default();
+        assert_eq!(
+            steps
+                .first()
+                .and_then(|s| s.spoken.as_ref())
+                .map(|s| s.matched),
+            Some(true)
+        );
     }
 
     /// Evidence is never taken for a run, nor a run for evidence.

@@ -1294,6 +1294,25 @@ async fn main() {
                             }
                         }
                     }
+                    // What each sent its synthesizer, when both went through the recorder.
+                    let spoken: Vec<_> = steps
+                        .iter()
+                        .filter(|s| !s.accepted)
+                        .filter_map(|s| s.spoken.as_ref().map(|spoken| (s, spoken)))
+                        .collect();
+                    for (step, said) in spoken.iter().filter(|(_, s)| all || !s.matched) {
+                        let tag = if said.matched { "MATCH" } else { "DIFF " };
+                        println!("[{tag}] spoken {}  ({})", step.key, step.command);
+                        println!(
+                            "    okur: {:?}",
+                            okur_corpus::parity::normalize(&said.engine)
+                        );
+                        if !said.matched {
+                            for v in &said.jaws_variants {
+                                println!("    jaws: {:?}", okur_corpus::parity::normalize(v));
+                            }
+                        }
+                    }
                     let matched = steps.iter().filter(|s| s.matched).count();
                     let accepted = steps.iter().filter(|s| s.accepted).count();
                     println!(
@@ -1301,6 +1320,14 @@ async fn main() {
                          divergences not counted",
                         steps.len() - accepted
                     );
+                    if !spoken.is_empty() {
+                        let said = spoken.iter().filter(|(_, s)| s.matched).count();
+                        println!(
+                            "Okur live, spoken: {said}/{} steps send the synthesizer what JAWS \
+                             sent its own",
+                            spoken.len()
+                        );
+                    }
                 }
                 Err(e) => {
                     eprintln!("Error: {e}");

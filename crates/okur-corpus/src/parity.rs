@@ -48,7 +48,7 @@ pub struct StepParity {
 }
 
 /// One step's spoken-layer comparison ([`okur_core::pronounce`]).
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct SpokenParity {
     pub engine: String,
     pub jaws_variants: Vec<String>,
@@ -99,7 +99,7 @@ const HARNESS_CONFIRMATIONS: [&str; 2] =
 
 /// What JAWS sent its synthesizer per step, across successful trials, when the evidence was
 /// recorded through the speech recorder voice (`observation.spoken`); `None` otherwise.
-fn jaws_spoken_variants(evidence: &Value) -> Option<BTreeMap<String, Vec<String>>> {
+pub(crate) fn jaws_spoken_variants(evidence: &Value) -> Option<BTreeMap<String, Vec<String>>> {
     let trials: Vec<&Value> = evidence
         .get("trials")
         .and_then(Value::as_array)?
@@ -127,6 +127,18 @@ fn jaws_spoken_variants(evidence: &Value) -> Option<BTreeMap<String, Vec<String>
         let Some(id) = step.get("step_id").and_then(Value::as_str) else {
             continue;
         };
+        let spoken = step_spoken(step);
+        let entry = variants.entry(id.to_owned()).or_default();
+        if !entry.contains(&spoken) {
+            entry.push(spoken);
+        }
+    }
+    Some(variants)
+}
+
+/// What a recorded step sent the synthesizer, the harness's own confirmations left out.
+pub(crate) fn step_spoken(step: &Value) -> String {
+    {
         // The records keep each fragment's pitch (a capital letter's); `spoken` is their text.
         let records: Vec<String> = match step.pointer("/observation/spoken_records") {
             Some(Value::Array(records)) => records.iter().map(record_text).collect(),
@@ -142,18 +154,13 @@ fn jaws_spoken_variants(evidence: &Value) -> Option<BTreeMap<String, Vec<String>
                 })
                 .unwrap_or_default(),
         };
-        let spoken = records
+        records
             .iter()
             .filter(|s| !HARNESS_CONFIRMATIONS.contains(&s.trim()))
             .map(String::as_str)
             .collect::<Vec<_>>()
-            .join(" ");
-        let entry = variants.entry(id.to_owned()).or_default();
-        if !entry.contains(&spoken) {
-            entry.push(spoken);
-        }
+            .join(" ")
     }
-    Some(variants)
 }
 
 /// One speech recorder record's text, as run-scenario.ps1 derives `spoken` from it (its
