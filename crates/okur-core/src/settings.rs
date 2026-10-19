@@ -472,13 +472,18 @@ impl SettingsStore for RecordingSettingsStore {
 impl Settings {
     /// The reference machine's JAWS configuration (`old-pc`'s `DEFAULT.JCF`, unchanged since
     /// 2025-08-19, before any evidence was recorded): `KeyboardType=Laptop`, `TypingEcho=0`,
-    /// `AutoFormsMode=0`, `ACCESS_KEY=0|0|0`; and JAWS's own reading of growing live regions,
-    /// so replay compares like with like.
+    /// `AutoFormsMode=0`, `ACCESS_KEY=0|0|0`; its voice profile's rate, 90 in every context,
+    /// which the voice receives as SAPI's fastest rate, 10 [obs, 500, the recorder's fragments];
+    /// and JAWS's own reading of growing live regions, so replay and live runs compare like
+    /// with like.
     pub fn reference_machine() -> Self {
         let mut verbosity = Verbosity::default();
         verbosity.set_modes(OutputType::AccessKey, [OutputMode::Off; 3]);
         Self {
-            voice: VoiceSettings::default(),
+            voice: VoiceSettings {
+                rate: 10,
+                ..VoiceSettings::default()
+            },
             keyboard: KeyboardSettings::for_layout(KeyboardLayout::Laptop),
             live_region_append: LiveRegionAppend::WholeText,
             typing_echo: TypingEcho::None,

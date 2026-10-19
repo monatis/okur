@@ -9,6 +9,7 @@
 use std::collections::VecDeque;
 
 use super::ScreenReaderEngine;
+use crate::input::{Key, KeyAction, KeyEvent};
 
 /// Lines with the synthesizer ahead of the one being spoken: enough that no pause falls
 /// between lines, few enough that a long page is not handed over whole.
@@ -21,14 +22,18 @@ pub(super) struct SayAll {
     queued: VecDeque<(u64, usize)>,
     /// The next line to hand over.
     next_line: usize,
+    /// The line reading started on, which rewinding goes no further back than.
+    start_line: usize,
 }
 
 impl ScreenReaderEngine {
     /// Starts reading from the virtual cursor's line to the end of the page.
     pub(super) fn start_say_all(&mut self) -> Option<String> {
+        let line = self.cursor.current_line_index();
         let mut reading = SayAll {
             queued: VecDeque::new(),
-            next_line: self.cursor.current_line_index(),
+            next_line: line,
+            start_line: line,
         };
         let progress = self.speech.reports_marks();
         let ahead = if progress { AHEAD + 1 } else { usize::MAX };
@@ -61,6 +66,68 @@ impl ScreenReaderEngine {
             self.cursor.move_to_line(line);
         }
         let _ = self.hand_over(&mut reading, AHEAD + 1, false);
+        self.say_all = Some(reading);
+    }
+
+    /// A key pressed during a Say All that steers it instead of ending it (JAWS 2025 help,
+    /// Keystrokes for Reading Text): Right fast-forwards to the next line and Left rewinds to
+    /// the one before, no further back than where reading started; PageUp and PageDown make
+    /// the voice faster and slower; a quick key moves, and reading goes on from there
+    /// [obs, 500/s10, s11]. `None` for any other key, which ends the Say All.
+    pub(super) fn say_all_key(&mut self, event: &KeyEvent) -> Option<KeyAction> {
+        let reading = self.say_all.as_ref()?;
+        let m = &event.modifiers;
+        if m.ctrl || m.alt || m.insert || m.win || m.caps_lock || self.forms_mode {
+            return None;
+        }
+        let current = reading
+            .queued
+            .front()
+            .map_or(reading.next_line, |&(_, line)| line);
+        let start_line = reading.start_line;
+        let from = match event.key {
+            Key::RightArrow if !m.shift => current + 1,
+            Key::LeftArrow if !m.shift => current.saturating_sub(1).max(start_line),
+            Key::PageUp | Key::PageDown if !m.shift => {
+                let base = self.settings.voice.rate;
+                let step = if event.key == Key::PageUp { 1 } else { -1 };
+                self.rate_change = (base + self.rate_change + step).clamp(-10, 10) - base;
+                self.configure_voice();
+                current
+            }
+            Key::Alpha(_) | Key::Digit(_) if !self.quick_key_passes(event) => {
+                let command = crate::command::command_for(event)?;
+                self.speech.stop();
+                self.say_all = None;
+                let _ = self.execute(command);
+                let moved = self.cursor.current_line_index();
+                if moved == current {
+                    // Nothing more to move to: JAWS's message is said and reading ends.
+                    return Some(KeyAction::Consume);
+                }
+                moved
+            }
+            _ => return None,
+        };
+        self.read_on_from(from, start_line.min(from));
+        Some(KeyAction::Consume)
+    }
+
+    /// Reading starts again on line `from`, the earlier part of the Say All kept for rewinding.
+    fn read_on_from(&mut self, from: usize, start_line: usize) {
+        self.speech.stop();
+        let mut reading = SayAll {
+            queued: VecDeque::new(),
+            next_line: from,
+            start_line,
+        };
+        if self.cursor.line_text(from).is_none() {
+            // Past the last line: reading ends where it was.
+            self.say_all = None;
+            return;
+        }
+        self.cursor.move_to_line(from);
+        let _ = self.hand_over(&mut reading, AHEAD + 1, true);
         self.say_all = Some(reading);
     }
 
@@ -168,6 +235,57 @@ mod tests {
         let _ = engine.handle_key_event(&KeyEvent::new(Key::Control, Modifiers::none(), true));
         engine.speech_reached(third + 1);
         assert_eq!(engine.cursor.current_line(), "Line 3");
+    }
+
+    fn press(engine: &mut ScreenReaderEngine, key: Key) {
+        let _ = engine.handle_key_event(&KeyEvent::new(key, Modifiers::none(), true));
+    }
+
+    /// The mark of the latest part handed over with `text`.
+    fn mark_of(speech: &Progress, text: &str) -> u64 {
+        marks(speech)
+            .iter()
+            .rev()
+            .find(|(t, _)| t == text)
+            .map(|(_, m)| *m)
+            .unwrap_or_default()
+    }
+
+    #[test]
+    fn right_and_left_skip_lines_and_rewinding_stops_where_reading_started() {
+        let speech = Progress::default();
+        let mut engine = engine(8, speech.clone());
+        engine.cursor.move_to_line(1);
+        let _ = engine.start_say_all();
+        press(&mut engine, Key::RightArrow);
+        assert_eq!(engine.cursor.current_line(), "Line 3");
+        assert_eq!(
+            marks(&speech).get(4).map(|(t, _)| t.as_str()),
+            Some("Line 3")
+        );
+        engine.speech_reached(mark_of(&speech, "Line 4"));
+        press(&mut engine, Key::LeftArrow);
+        assert_eq!(engine.cursor.current_line(), "Line 3");
+        press(&mut engine, Key::LeftArrow);
+        press(&mut engine, Key::LeftArrow);
+        // Reading started on line 2: no further back.
+        assert_eq!(engine.cursor.current_line(), "Line 2");
+        assert!(engine.say_all.is_some());
+        // Any other key ends it there.
+        press(&mut engine, Key::Control);
+        assert!(engine.say_all.is_none());
+        assert_eq!(engine.cursor.current_line(), "Line 2");
+    }
+
+    #[test]
+    fn the_rate_keys_change_the_voice_and_reading_goes_on() {
+        let speech = Progress::default();
+        let mut engine = engine(4, speech.clone());
+        let _ = engine.start_say_all();
+        press(&mut engine, Key::PageDown);
+        assert_eq!(engine.rate_change, -1);
+        assert!(engine.say_all.is_some());
+        assert_eq!(engine.cursor.current_line(), "Line 1");
     }
 
     #[test]

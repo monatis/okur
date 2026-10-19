@@ -359,6 +359,11 @@ impl ScreenReaderEngine {
         self.dialog_focus_target = None;
         self.page_said_for = None;
 
+        // A Say All key steers the reading instead of ending it.
+        if let Some(action) = self.say_all_key(event) {
+            return action;
+        }
+
         // 1. Any key press interrupts speech immediately (NVDA & JAWS standard behavior)
         self.speech.stop();
         // It ends a Say All, whose cursor stays on the line last heard.
