@@ -279,18 +279,43 @@ impl TtsEngine for Sapi5Engine {
         }
     }
 
+    /// The voices SAPI lists (its voice tokens): the token id, and the description as the
+    /// name. On the reference machine this is where the speech recorder voice is chosen, so
+    /// that a live run of Okur records what it sends its synthesizer, as JAWS's runs do.
     fn get_voices(&self) -> Vec<VoiceInfo> {
-        vec![VoiceInfo {
-            id: "sapi5-default".to_string(),
-            name: "SAPI 5 Default Voice".to_string(),
-            language: Some("en-US".to_string()),
-        }]
+        #[cfg(windows)]
+        {
+            voice_tokens()
+                .into_iter()
+                .map(|(id, name, _)| VoiceInfo {
+                    id,
+                    name,
+                    language: None,
+                })
+                .collect()
+        }
+        #[cfg(not(windows))]
+        {
+            Vec::new()
+        }
     }
 
+    /// The voice whose token id or name is `voice_id`.
     fn set_voice(&mut self, voice_id: &str) -> Result<(), TtsError> {
-        if voice_id == "sapi5-default" {
-            Ok(())
-        } else {
+        #[cfg(windows)]
+        {
+            let found = voice_tokens()
+                .into_iter()
+                .find(|(id, name, _)| id == voice_id || name == voice_id);
+            let Some((_, _, token)) = found else {
+                return Err(TtsError::VoiceNotFound(voice_id.to_string()));
+            };
+            // SAFETY: a voice token SAPI enumerated, handed to the voice that uses it.
+            unsafe { self.voice.SetVoice(&token) }
+                .map_err(|e| TtsError::SynthesisFailed(format!("SAPI 5 SetVoice failed: {}", e)))
+        }
+        #[cfg(not(windows))]
+        {
             Err(TtsError::VoiceNotFound(voice_id.to_string()))
         }
     }
@@ -312,4 +337,62 @@ impl TtsEngine for Sapi5Engine {
             Ok(())
         }
     }
+}
+
+/// SAPI's voice tokens: id, description and the token, in SAPI's order.
+#[cfg(windows)]
+fn voice_tokens() -> Vec<(
+    String,
+    String,
+    windows::Win32::Media::Speech::ISpObjectToken,
+)> {
+    use windows::Win32::Media::Speech::{
+        ISpObjectToken, ISpObjectTokenCategory, SpObjectTokenCategory, SPCAT_VOICES,
+    };
+    use windows::Win32::System::Com::CoTaskMemFree;
+    // A string SAPI allocated, copied and freed.
+    fn owned(value: windows::core::PWSTR) -> String {
+        // SAFETY: SAPI returns a CoTaskMemAlloc'd string, freed here after copying.
+        unsafe {
+            let text = value.to_string().unwrap_or_default();
+            CoTaskMemFree(Some(value.0 as *const std::ffi::c_void));
+            text
+        }
+    }
+    let mut voices = Vec::new();
+    // SAFETY: SAPI's token category and enumeration, used as documented.
+    unsafe {
+        let Ok(category) =
+            CoCreateInstance::<_, ISpObjectTokenCategory>(&SpObjectTokenCategory, None, CLSCTX_ALL)
+        else {
+            return voices;
+        };
+        if category.SetId(SPCAT_VOICES, false).is_err() {
+            return voices;
+        }
+        let Ok(tokens) = category.EnumTokens(PCWSTR::null(), PCWSTR::null()) else {
+            return voices;
+        };
+        loop {
+            let mut token: [Option<ISpObjectToken>; 1] = [None];
+            let mut fetched = 0u32;
+            if tokens
+                .Next(1, token.as_mut_ptr(), Some(&mut fetched))
+                .is_err()
+                || fetched == 0
+            {
+                break;
+            }
+            let Some(token) = token.into_iter().next().flatten() else {
+                break;
+            };
+            let id = token.GetId().map(owned).unwrap_or_default();
+            let name = token
+                .GetStringValue(PCWSTR::null())
+                .map(owned)
+                .unwrap_or_default();
+            voices.push((id, name, token));
+        }
+    }
+    voices
 }
