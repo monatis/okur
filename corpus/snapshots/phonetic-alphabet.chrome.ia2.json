@@ -1,0 +1,171 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Phonetic Alphabet - Reading Fixture - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "155.0.8059.84",
+    "fixture_sha256": "162059c1d28ae1fbcdf8c4205d08b1e579aac5b3579a4f9e1d7f34b3dde40039",
+    "captured_at_unix_ms": 1792387687340,
+    "node_count": 5,
+    "capture_ms": 73
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Phonetic Alphabet - Reading Fixture",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/phonetic-alphabet.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "unique_id": -88272,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼￼",
+    "lines": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 2,
+        "attributes": {
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -88276,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "abcdefghijklmnopqrstuvwxyz",
+        "lines": [
+          [
+            0,
+            26
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 26,
+            "attributes": {
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "abcdefghijklmnopqrstuvwxyz",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -88274,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "abcdefghijklmnopqrstuvwxyz",
+            "lines": [
+              [
+                0,
+                26
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 26,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -88270,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "ABC",
+        "lines": [
+          [
+            0,
+            3
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 3,
+            "attributes": {
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "ABC",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -88269,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "ABC",
+            "lines": [
+              [
+                0,
+                3
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 3,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
