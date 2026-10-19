@@ -113,7 +113,11 @@ fn access_key(focus: &FocusEvent, own_text: bool) -> Option<Line> {
         }
         None => key.to_owned(),
     };
-    Some(Line::of(PartKind::AccessKey, said).on_arrival())
+    // A control with its own text keeps its key when Say Focus repeats it ("Read-only check
+    // box | not checked | To check press Spacebar. | alt+R" [obs, 323/s1]); a field named by
+    // a label says it on arrival only ("Open: edit combo | C: | 1 of 6", dev box).
+    let line = Line::of(PartKind::AccessKey, said);
+    Some(if own_text { line } else { line.on_arrival() })
 }
 
 /// A key sequence as UI Automation gives it ("Alt, I"), as JAWS says it: "Alt followed by I".
@@ -617,8 +621,10 @@ pub fn say_window(title: &str, items: &[crate::event::WindowItem]) -> String {
 
 /// Say Current Focus (Insert+Tab): the focused control's lines again, without what JAWS
 /// says only as focus arrives (a text field's hint and access key, "Contains text"); a
-/// button keeps its hint. JAWS 2025 on the dev box (research): "Open: edit combo | C: |
-/// 1 of 6", "OK Button | To activate press spacebar.", "Text editor edit".
+/// button keeps its hint, and a control with its own text its access key. JAWS 2025 on the
+/// dev box (research): "Open: edit combo | C: | 1 of 6", "OK Button | To activate press
+/// spacebar.", "Text editor edit"; on old-pc "Read-only check box | not checked | To check
+/// press Spacebar. | alt+R" [obs, 323/s1].
 pub fn say_focus(focus: &FocusEvent) -> String {
     control_lines(focus, false)
         .iter()

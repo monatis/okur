@@ -57,9 +57,12 @@ impl ScreenReaderEngine {
                 // Native controls.
                 let speech = self
                     .last_native_focus
-                    .as_ref()
+                    .clone()
                     .filter(|_| self.app_mode == AppMode::NativeControl)
-                    .map(crate::native_focus::say_focus)
+                    .map(|mut focus| {
+                        focus.access_key = self.focus_access_key.clone();
+                        crate::native_focus::say_focus(&focus)
+                    })
                     .filter(|s| !s.is_empty())?;
                 self.speech.speak(&speech, true);
                 return Some(speech);

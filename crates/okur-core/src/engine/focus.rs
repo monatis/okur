@@ -83,6 +83,9 @@ impl ScreenReaderEngine {
             .settings
             .verbosity
             .is_on(crate::settings::OutputType::AccessKey);
+        // Say Focus says a control's access key whatever the Access Key output: old-pc's
+        // JAWS, with it off, said "alt+R" [obs, 323/s1].
+        self.focus_access_key = focus.access_key.clone();
         let focus = if has_key && !access_keys {
             without_key = FocusEvent {
                 access_key: None,

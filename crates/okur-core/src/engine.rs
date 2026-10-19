@@ -106,6 +106,8 @@ pub struct ScreenReaderEngine {
     pending_page: Option<VirtualBuffer>,
     /// Forms mode was just turned on by Enter (not by focus moving into a field).
     forms_mode_by_enter: bool,
+    /// The focused control's access key, whatever the Access Key output: Say Focus says it.
+    focus_access_key: Option<String>,
     /// Forms mode was just turned on by one of JAWS's element lists giving a field the focus:
     /// the field's focus is followed by its line, as Say Line reads it [obs, 249/s3].
     forms_mode_by_list: bool,
@@ -191,6 +193,7 @@ impl ScreenReaderEngine {
             menus: crate::native_focus::Menus::default(),
             pending_edit: None,
             forms_mode_by_enter: false,
+            focus_access_key: None,
             forms_mode_by_list: false,
             page_said_for: None,
             pending_page: None,

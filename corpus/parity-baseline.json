@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 1202,
+  "matched_steps": 1203,
   "total_steps": 1537,
   "accepted_divergences": 8,
   "errors": [],
@@ -1514,7 +1514,7 @@
     "322-desktop-forms-viewer/s7": "match",
     "322-desktop-forms-viewer/s8": "match",
     "322-desktop-forms-viewer/s9": "match",
-    "323-desktop-property-sheet/s1": "mismatch",
+    "323-desktop-property-sheet/s1": "match",
     "323-desktop-property-sheet/s10": "mismatch",
     "323-desktop-property-sheet/s11": "mismatch",
     "323-desktop-property-sheet/s2": "mismatch",
