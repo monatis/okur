@@ -29,6 +29,8 @@ const UIA_COMBOBOX: i32 = 50003;
 const UIA_MENUITEM: i32 = 50011;
 /// The window class of Win32 dialog boxes (message boxes, common dialogs).
 const WIN32_DIALOG_CLASS: &str = "#32770";
+/// A Win32 popup menu's window.
+const WIN32_MENU_CLASS: &str = "#32768";
 /// The window kind of focus on the desktop ([`okur_core::FocusEvent::window_kind`]).
 pub const DESKTOP_KIND: &str = "Progman";
 /// MSAA `ROLE_SYSTEM_MENUITEM`.
@@ -807,7 +809,18 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         // So is a text naming a control the focus is inside: "Regions" of Okur's Document
         // Regions tree, whose item has the focus (JAWS: "Document Regions dialog | Regions
         // Tree view | Banner Opened" [obs, 274/s1]).
-        let labels: Vec<&str> = event
+        // And so is a text naming any control of the dialog: the Font dialog's "Script:", on
+        // a row of its own above its combo box (JAWS: "Font dialog | Font: edit combo"
+        // [obs, 541/s2]).
+        fn control_names<'a>(node: &'a UiaNode, names: &mut Vec<&'a str>) {
+            for child in &node.children {
+                if child.control_type != UIA_TEXT {
+                    names.extend(child.name.as_deref());
+                }
+                control_names(child, names);
+            }
+        }
+        let mut labels: Vec<&str> = event
             .focus_siblings
             .iter()
             .filter(|s| s.control_type != UIA_TEXT)
@@ -819,6 +832,9 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             )
             .filter_map(|s| s.name.as_deref())
             .collect();
+        if let Some(tree) = &event.dialog_tree {
+            control_names(tree, &mut labels);
+        }
         let text: Vec<&str> = event
             .focus_siblings
             .iter()
@@ -1066,6 +1082,29 @@ impl EventConverter {
             }
             self.last_notification = Some((notification.text.clone(), event.t_ms));
             return vec![notification_event(notification)];
+        }
+        // A window's own menu bar reports the focus as its menus end (MSAA's menu bar object,
+        // OBJID_MENU): the focus is back in the window. When UI Automation already gives the
+        // focus elsewhere (the dialog a menu item opened), that came after: JAWS says both,
+        // "Leaving menus | edit | Type in text. | Page Setup dialog | Paper Size: ..."
+        // [obs, 541/s2, 544/s2].
+        // A menu item's focus that came after its menu closed (an item chosen): the popup
+        // window has no item left to read, and UI Automation's focus is the menu bar. It is
+        // the menus ending, said by the events after it [obs, 541/s2, 544/s2].
+        if event.event == "focus"
+            && event.window_class.as_deref() == Some(WIN32_MENU_CLASS)
+            && event.object.is_none()
+        {
+            return Vec::new();
+        }
+        if let Some(window) = menu_bar_return(event) {
+            let mut events = vec![okur_core::AccessibilityEvent::Focus(window.clone())];
+            if let Some(okur_core::AccessibilityEvent::Focus(next)) = self.convert_one(event) {
+                if next.window_title != window.window_title {
+                    events.push(okur_core::AccessibilityEvent::Focus(next));
+                }
+            }
+            return events;
         }
         self.convert_one(event).into_iter().collect()
     }
@@ -1321,6 +1360,29 @@ fn live_region_events(event: &TraceEvent) -> Vec<okur_core::AccessibilityEvent> 
         });
     }
     events
+}
+
+/// The window a menu bar's focus report gives the focus back to as its menus end (a focus
+/// event on OBJID_MENU, MSAA's menu bar object): the window itself, which the engine takes
+/// as the control focused before the menus.
+fn menu_bar_return(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
+    const OBJID_MENU: i32 = -3;
+    const ROLE_SYSTEM_MENUBAR: i32 = 0x02;
+    if event.event != "focus" || event.id_object != OBJID_MENU {
+        return None;
+    }
+    event
+        .object
+        .as_ref()
+        .filter(|o| o.role == Some(ROLE_SYSTEM_MENUBAR))?;
+    let title = event.window_title.clone()?;
+    let mut focus = okur_core::FocusEvent::new(okur_core::Role::Window).with_name(title.clone());
+    focus.window_title = Some(title);
+    focus.platform.window_class = event.window_class.clone();
+    focus.app = event.process.clone();
+    // The field the window gives the focus back to, as the trace read it.
+    focus.text = event.text_context.clone();
+    Some(focus)
 }
 
 /// The focus in a NetUI window (WordPad's and Paint's ribbon, `NetUIHWND`), read from the

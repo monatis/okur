@@ -862,6 +862,9 @@ pub struct Menus {
     /// The menu bar was introduced ("Menu bar | File | To navigate ..."): Escape back to it
     /// from a menu opened by its access key introduces it then [obs, 547/s10].
     bar_shown: bool,
+    /// A menu bar item has the focus, no menu open: leaving from there is "leaving menu bar";
+    /// a menu closed by choosing an item leaves no bar item focused [obs, 544/s2, 547/s8].
+    on_bar_item: bool,
 }
 
 /// Where a page's menu item is ([`Menus::page_focus`]).
@@ -911,7 +914,7 @@ impl Menus {
 
     /// Whether the focus is on the menu bar itself, no menu open.
     pub fn on_bar(&self) -> bool {
-        self.active && self.open.is_empty() && !self.page
+        self.active && self.open.is_empty() && self.on_bar_item && !self.page
     }
 
     /// The system reported menu mode starting.
@@ -987,6 +990,7 @@ impl Menus {
             Some(name.to_owned())
         };
         self.current = Some(name.to_owned());
+        self.on_bar_item = self.open.is_empty();
         speech
     }
 
@@ -1060,6 +1064,7 @@ impl Menus {
         }
         self.open.push(self.current.clone().unwrap_or_default());
         self.popup_pending = true;
+        self.on_bar_item = false;
         self.closed = None;
     }
 
