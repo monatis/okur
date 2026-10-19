@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 2126,
-  "total_steps": 2646,
+  "matched_steps": 2132,
+  "total_steps": 2658,
   "accepted_divergences": 57,
   "errors": [],
   "steps": {
@@ -641,7 +641,7 @@
     "208-web-textarea-character-review/s84": "match",
     "208-web-textarea-character-review/s85": "match",
     "208-web-textarea-character-review/s9": "match",
-    "209-web-title-and-font/s1": "mismatch",
+    "209-web-title-and-font/s1": "match",
     "209-web-title-and-font/s10": "match",
     "209-web-title-and-font/s11": "match",
     "209-web-title-and-font/s12": "match",
@@ -807,7 +807,7 @@
     "220-web-chrome-own-controls/s4": "match",
     "220-web-chrome-own-controls/s5": "mismatch",
     "220-web-chrome-own-controls/s6": "match",
-    "220-web-chrome-own-controls/s7": "match",
+    "220-web-chrome-own-controls/s7": "mismatch",
     "220-web-chrome-own-controls/s8": "match",
     "220-web-chrome-own-controls/s9": "mismatch",
     "221-web-empty-element-lists/s1": "match",
@@ -2673,7 +2673,7 @@
     "544-desktop-notepad-page-setup/s1": "match",
     "544-desktop-notepad-page-setup/s10": "match",
     "544-desktop-notepad-page-setup/s11": "match",
-    "544-desktop-notepad-page-setup/s12": "mismatch",
+    "544-desktop-notepad-page-setup/s12": "match",
     "544-desktop-notepad-page-setup/s13": "mismatch",
     "544-desktop-notepad-page-setup/s14": "mismatch",
     "544-desktop-notepad-page-setup/s15": "match",
@@ -2707,6 +2707,18 @@
     "546-desktop-notepad-print-dialog/s6": "match",
     "546-desktop-notepad-print-dialog/s7": "match",
     "546-desktop-notepad-print-dialog/s8": "mismatch",
-    "546-desktop-notepad-print-dialog/s9": "match"
+    "546-desktop-notepad-print-dialog/s9": "match",
+    "547-desktop-notepad-edit-focus/s1": "mismatch",
+    "547-desktop-notepad-edit-focus/s10": "mismatch",
+    "547-desktop-notepad-edit-focus/s11": "mismatch",
+    "547-desktop-notepad-edit-focus/s12": "mismatch",
+    "547-desktop-notepad-edit-focus/s2": "match",
+    "547-desktop-notepad-edit-focus/s3": "match",
+    "547-desktop-notepad-edit-focus/s4": "match",
+    "547-desktop-notepad-edit-focus/s5": "mismatch",
+    "547-desktop-notepad-edit-focus/s6": "mismatch",
+    "547-desktop-notepad-edit-focus/s7": "match",
+    "547-desktop-notepad-edit-focus/s8": "mismatch",
+    "547-desktop-notepad-edit-focus/s9": "match"
   }
 }
