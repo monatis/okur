@@ -3,9 +3,9 @@
   "name": "Notepad's Open dialog (Ctrl+O): the file name field, Shift+Tab to the file list, Down and Up in it, Insert+Up, Tab back, and Escape",
   "category": "desktop",
   "version": "1.0.0",
-  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad-dialogs.ps1",
   "target_app": "desktop",
-  "launch": { "window_title": "sr-notepad-fixture.txt - Notepad" },
+  "launch": { "window_title": "sr-dialog-fixture.txt - Notepad" },
   "reset": { "keys": ["Ctrl+Home"] },
   "steps": [
     { "id": "s1", "type": "key", "command": "Ctrl+O", "settle_max_ms": 20000 },

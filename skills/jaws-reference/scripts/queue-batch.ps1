@@ -28,8 +28,13 @@ param(
     [string[]]$Snapshots = @(),
     # Harness scripts (and okur.exe) copied into place once the batch before has finished, so a
     # changed capture script reaches only the batches queued after the change (each batch's
-    # evidence then names one capture script hash).
+    # evidence then names one capture script hash). Scenarios (*.json) in it go to
+    # corpus\scenarios the same way, so a scenario the batch before also runs changes only
+    # after it.
     [string]$StagedScripts,
+    # A harness script run once the staged files are in place and before the batch, outside
+    # any trial: set-dialog-folder.ps1 for the file dialog scenarios.
+    [string]$Before,
     # Give up waiting after this long.
     [int]$MaxWaitMinutes = 360
 )
@@ -59,6 +64,15 @@ if ($StagedScripts) {
         Copy-Item -LiteralPath $binary -Destination 'C:\Users\ailabs\sr-harness\bin\okur.exe' -Force
         "installed okur.exe $((Get-FileHash -LiteralPath $binary).Hash.ToLower())" | Out-File $log -Append -Encoding utf8
     }
+    foreach ($scenario in Get-ChildItem -LiteralPath $StagedScripts -Filter *.json) {
+        Copy-Item -LiteralPath $scenario.FullName -Destination (Join-Path 'C:\Users\ailabs\corpus\scenarios' $scenario.Name) -Force
+        "installed $($scenario.Name) $((Get-FileHash -LiteralPath $scenario.FullName).Hash.ToLower())" | Out-File $log -Append -Encoding utf8
+    }
+}
+if ($Before) {
+    $said = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot $Before) 2>&1 |
+        Select-Object -Last 1
+    "before the batch, ${Before}: $said" | Out-File $log -Append -Encoding utf8
 }
 if ($Snapshots.Count -gt 0) {
     $capture = Join-Path $PSScriptRoot 'capture-snapshot.ps1'

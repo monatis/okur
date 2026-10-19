@@ -40,6 +40,8 @@ Step types:
                "during": [{"after_ms": 3000, "command": "Ctrl"}] presses chords while the
                step's speech goes on, each after_ms after the one before (Say All stopped or
                moved by Left and Right); the step settles after the last one.
+  text         Characters typed as Unicode input, whatever the keyboard layout:
+               "%TEMP%\sr-dialogs" into a file dialog's name field.
   jaws_script  JAWS script name dispatched through FSAPI RunScript.
   jaws_function  JAWS function call through FSAPI RunFunction: TypeKey("Down") for keys inside
                JAWS's own dialogs (Links List, Find), which run elevated and refuse our keys.
@@ -152,6 +154,18 @@ public static class SrKeyInput {
         input[0].u.ki.wScan = scan != 0 ? scan : (ushort)MapVirtualKey(vk, 0);
         input[0].u.ki.dwFlags = (extended ? KEYEVENTF_EXTENDEDKEY : 0) | (up ? KEYEVENTF_KEYUP : 0);
         return SendInput(1, input, Marshal.SizeOf(typeof(INPUT))) == 1;
+    }
+
+    /// One character typed as itself (KEYEVENTF_UNICODE), whatever the keyboard layout.
+    public static bool Char(char c) {
+        INPUT[] input = new INPUT[2];
+        for (int i = 0; i < 2; i++) {
+            input[i].type = 1;
+            input[i].u.ki.wVk = 0;
+            input[i].u.ki.wScan = c;
+            input[i].u.ki.dwFlags = 0x4 | (i == 1 ? KEYEVENTF_KEYUP : 0);
+        }
+        return SendInput(2, input, Marshal.SizeOf(typeof(INPUT))) == 2;
     }
 
     /// The virtual key the active layout gives the key with this scan code.
@@ -447,6 +461,17 @@ function Invoke-Step($type, [string]$command, [int]$repeat = 1) {
             if ($command -match '^TypeKey\("(.+)"\)$') { return Send-Chord $Matches[1] }
             return $false
         }
+        # Text typed character by character as Unicode input, so old-pc's Turkish layout
+        # types it as written ("%TEMP%\sr-dialogs" into a file dialog). Environment variables
+        # are left for the application to expand.
+        'text' {
+            $ok = $true
+            foreach ($c in $command.ToCharArray()) {
+                $ok = [SrKeyInput]::Char($c) -and $ok
+                Start-Sleep -Milliseconds 40
+            }
+            return $ok
+        }
         'keyboard'    { [System.Windows.Forms.SendKeys]::SendWait($command); return $true }
         default       { throw "Unsupported step type '$type'" }
     }
@@ -676,6 +701,13 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         trial_success = $true
     }
 
+    # A desktop trial puts the browser's windows away before its trace starts: one left in front
+    # by a web scenario reached the trace with its title, which carries the browser profile's
+    # name (526, round 24).
+    if ($launch) {
+        [void][SrKeyInput]::MinimizeClass('Chrome_WidgetWin_1')
+        Start-Sleep -Milliseconds 300
+    }
     # The trace starts before setup, so replay knows the window and focus that launch and
     # reset produced, as JAWS does when step 1 begins.
     $traceProc = $null

@@ -15,13 +15,13 @@ To record one:
 | 509 | Keyboard Help (Insert+1), Insert+F1, Insert+H, Insert+W. Recorded in round 13 and not imported: in Keyboard Help mode JAWS describes the harness's history copy instead of running it, so those steps time out (their synthesizer text is recorded) | `desktop-dialogs.ps1` |
 | 518 | Reading a Word document | `desktop-word.ps1` (here) |
 | 519 | Word's headings list, spelling errors, revisions | `desktop-word.ps1` (here) |
-| 524 | Notepad's Save As dialog. Recorded in round 23 and not imported: the dialog opened in the lab account's home folder, and the traces list its folders; to record again in a folder of the fixture's own | `desktop-notepad.ps1` |
-| 525 | Notepad's Open dialog; as 524 | `desktop-notepad.ps1` |
+| 524 | Notepad's Save As dialog. Recorded in round 23 and not imported: the dialog opened in the lab account's home folder, and the traces list its folders; to record again in a folder of the fixture's own | `desktop-notepad-dialogs.ps1` (here) |
+| 525 | Notepad's Open dialog; as 524 | `desktop-notepad-dialogs.ps1` (here) |
 | 526 | Screen-sensitive help on the desktop fixture's controls. Recorded in round 24 and not imported: a trace caught a Chrome window whose title carries the browser profile's name | `desktop-forms.ps1` |
 | 529 | Selecting in a native edit by line, page and document | `desktop-reading.ps1` |
 | 530 | Skim reading, its dialog, and Say Color in a page | `news-article.html` |
 | 531 | Screen-sensitive help in a page | `news-article.html` |
-| 532 | Say Default Button and Say Current Control Hot Key in Notepad's Open dialog | `desktop-notepad.ps1` |
+| 532 | Say Default Button and Say Current Control Hot Key in Notepad's Open dialog | `desktop-notepad-dialogs.ps1` (here) |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.

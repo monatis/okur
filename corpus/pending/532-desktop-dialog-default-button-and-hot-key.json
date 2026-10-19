@@ -3,9 +3,9 @@
   "name": "In Notepad's Open dialog: Say Default Button of Dialog (Insert+E) and Say Current Control Hot Key (Shift+Numpad5) on the file name field, then on the file type list and a button after Tab, and Escape",
   "category": "desktop",
   "version": "1.0.0",
-  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad-dialogs.ps1",
   "target_app": "desktop",
-  "launch": { "window_title": "sr-notepad-fixture.txt - Notepad" },
+  "launch": { "window_title": "sr-dialog-fixture.txt - Notepad" },
   "reset": { "keys": ["Ctrl+Home"] },
   "steps": [
     { "id": "s1", "type": "key", "command": "Ctrl+O", "settle_max_ms": 20000 },
