@@ -20,6 +20,9 @@ pub struct Sapi5Engine {
     /// The Say All parts queued: each one's SAPI stream number and mark, oldest first.
     #[cfg(windows)]
     marks: std::collections::VecDeque<(u32, u64)>,
+    /// The current stream last logged, so the debug log shows its changes only.
+    #[cfg(windows)]
+    last_stream: u32,
     rate: i32,
     volume: u16,
     is_paused: bool,
@@ -54,6 +57,7 @@ impl Sapi5Engine {
                 Ok(Self {
                     voice,
                     marks: std::collections::VecDeque::new(),
+                    last_stream: 0,
                     rate,
                     volume,
                     is_paused: false,
@@ -175,6 +179,7 @@ impl TtsEngine for Sapi5Engine {
                     .Speak(PCWSTR(wide.as_ptr()), flags as u32, Some(&mut stream))
                     .map_err(|e| TtsError::SynthesisFailed(format!("SAPI 5 Speak failed: {e}")))?;
             }
+            tracing::debug!(stream, mark, "SAPI Say All part queued");
             self.marks.push_back((stream, mark));
             Ok(())
         }
@@ -194,6 +199,16 @@ impl TtsEngine for Sapi5Engine {
             let mut status = SPVOICESTATUS::default();
             // SAFETY: plain COM call writing into a local status.
             unsafe { self.voice.GetStatus(&mut status, std::ptr::null_mut()) }.ok()?;
+            if status.ulCurrentStream != self.last_stream {
+                self.last_stream = status.ulCurrentStream;
+                tracing::debug!(
+                    current = status.ulCurrentStream,
+                    last_queued = status.ulLastStreamQueued,
+                    running = status.dwRunningState,
+                    front,
+                    "SAPI stream"
+                );
+            }
             if status.ulCurrentStream < front {
                 return None;
             }

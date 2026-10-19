@@ -22,6 +22,8 @@ To record one:
 | 521 | Excel: cells, coordinates, a column's cells, sheets, the worksheets list | `desktop-excel.ps1` (here) |
 | 522 | Reading a rich-text document in WordPad | `desktop-wordpad.ps1` (here) |
 | 523 | WordPad's ribbon | `desktop-wordpad.ps1` (here) |
+| 524 | Notepad's Save As dialog | `desktop-notepad.ps1` |
+| 525 | Notepad's Open dialog | `desktop-notepad.ps1` |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.

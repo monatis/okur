@@ -44,6 +44,11 @@ impl ScreenReaderEngine {
     /// The synthesizer started the part marked `mark`: during a Say All, the virtual cursor
     /// moves to its line and the next lines are handed over.
     pub fn speech_reached(&mut self, mark: u64) {
+        tracing::debug!(
+            mark,
+            following = self.say_all.is_some(),
+            "Say All mark back"
+        );
         let Some(mut reading) = self.say_all.take() else {
             return;
         };

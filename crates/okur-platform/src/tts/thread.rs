@@ -257,6 +257,11 @@ fn carry_out(
             Request::Marked(text, mark, interrupt) => {
                 let spoken = okur_core::pronounce::spoken(&text, tts.punctuation);
                 let _ = tts.engine.speak_marked(&spoken, mark, interrupt);
+                tracing::debug!(
+                    mark,
+                    follows = tts.engine.follows_marks(),
+                    "Say All part handed over"
+                );
                 if tts.engine.follows_marks() {
                     *following = true;
                 } else {
@@ -316,6 +321,7 @@ fn carry_out(
 
 /// Hands `mark` to the engine's side.
 fn report(to: &Mutex<Option<MarkReport>>, mark: u64) {
+    tracing::debug!(mark, "Say All part started");
     if let Ok(report) = to.lock() {
         if let Some(report) = report.as_ref() {
             report(mark);

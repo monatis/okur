@@ -10,9 +10,10 @@ use windows::Win32::System::Com::{CoInitializeEx, CoUninitialize, COINIT_MULTITH
 use windows::Win32::System::Threading::GetCurrentThreadId;
 use windows::Win32::UI::Input::KeyboardAndMouse::{
     GetAsyncKeyState, GetKeyState, VIRTUAL_KEY, VK_ADD, VK_BACK, VK_CAPITAL, VK_CLEAR, VK_CONTROL,
-    VK_DELETE, VK_DIVIDE, VK_DOWN, VK_END, VK_ESCAPE, VK_HOME, VK_INSERT, VK_LEFT, VK_MENU,
-    VK_MULTIPLY, VK_NEXT, VK_OEM_1, VK_OEM_7, VK_PRIOR, VK_RETURN, VK_RIGHT, VK_SCROLL, VK_SHIFT,
-    VK_SPACE, VK_SUBTRACT, VK_TAB, VK_UP,
+    VK_DELETE, VK_DIVIDE, VK_DOWN, VK_END, VK_ESCAPE, VK_HOME, VK_INSERT, VK_LCONTROL, VK_LEFT,
+    VK_LMENU, VK_LSHIFT, VK_LWIN, VK_MENU, VK_MULTIPLY, VK_NEXT, VK_OEM_1, VK_OEM_7, VK_PRIOR,
+    VK_RCONTROL, VK_RETURN, VK_RIGHT, VK_RMENU, VK_RSHIFT, VK_RWIN, VK_SCROLL, VK_SHIFT, VK_SPACE,
+    VK_SUBTRACT, VK_TAB, VK_UP,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
     CallNextHookEx, DispatchMessageW, GetMessageW, PostThreadMessageW, SetWindowsHookExW,
@@ -436,9 +437,12 @@ fn translate_vk_code(vk: u32, scan: u32, extended: bool) -> Key {
         VK_OEM_1 => Key::Semicolon,
         VK_OEM_7 => Key::Apostrophe,
 
-        VK_CONTROL => Key::Control,
-        VK_MENU => Key::Alt,
-        VK_SHIFT => Key::Shift,
+        // A low-level hook reports the modifiers by side (VK_LCONTROL, VK_RSHIFT, ...): Ctrl
+        // alone, which stops speech and Say All, came as an unknown key (old-pc, 2026-10-19).
+        VK_CONTROL | VK_LCONTROL | VK_RCONTROL => Key::Control,
+        VK_MENU | VK_LMENU | VK_RMENU => Key::Alt,
+        VK_SHIFT | VK_LSHIFT | VK_RSHIFT => Key::Shift,
+        VK_LWIN | VK_RWIN => Key::Windows,
 
         _ => {
             // Check F1..F24 (0x70..=0x87)

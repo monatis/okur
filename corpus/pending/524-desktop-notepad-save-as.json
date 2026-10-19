@@ -1,0 +1,24 @@
+{
+  "id": "524-desktop-notepad-save-as",
+  "name": "Notepad's Save As dialog (Alt+F, A): its file name field, Tab and Shift+Tab through its controls, Insert+Tab, Insert+T, Insert+B, and Escape back to the document",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "sr-notepad-fixture.txt - Notepad" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Alt+F" },
+    { "id": "s2", "type": "key", "command": "A", "settle_max_ms": 20000 },
+    { "id": "s3", "type": "key", "command": "Insert+Tab" },
+    { "id": "s4", "type": "key", "command": "Insert+T" },
+    { "id": "s5", "type": "key", "command": "Tab" },
+    { "id": "s6", "type": "key", "command": "Tab" },
+    { "id": "s7", "type": "key", "command": "Tab" },
+    { "id": "s8", "type": "key", "command": "Tab" },
+    { "id": "s9", "type": "key", "command": "Shift+Tab" },
+    { "id": "s10", "type": "key", "command": "Insert+B", "settle_max_ms": 30000 },
+    { "id": "s11", "type": "key", "command": "Escape" },
+    { "id": "s12", "type": "key", "command": "Insert+Up" }
+  ]
+}
