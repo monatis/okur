@@ -566,6 +566,8 @@ $evidence = [ordered]@{
         jaws_settings = $jawsSettings
         reader = $Reader
         okur_sha256 = if ($Reader -eq 'okur') { Get-Sha256 $Okur } else { $null }
+        # The tracer runs elevated, so it sees JAWS's own windows whole.
+        trace_elevated = $true
     }
     environment = [ordered]@{
         os_version = [System.Environment]::OSVersion.VersionString
@@ -702,6 +704,13 @@ if ($scenario.fixture -and -not $launch) {
     Start-Sleep -Milliseconds 2000
 }
 
+# The tracer runs elevated: stopping it may need elevation too.
+function Stop-Tracer($process) {
+    try { $process.Kill() } catch {
+        Start-Process powershell -Verb RunAs -WindowStyle Hidden -Wait -ArgumentList @('-NoProfile', '-Command', "Stop-Process -Id $($process.Id) -Force")
+    }
+}
+
 $traceProc = $null
 try {
 for ($t = 1; $t -le $Repetitions; $t++) {
@@ -730,7 +739,10 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         New-Item -ItemType Directory -Force -Path $TraceDir | Out-Null
         $tracePath = Join-Path $TraceDir "$scenarioId-trial$t.jsonl"
         $traceStop = Join-Path $env:TEMP "sr-trace-stop-$([guid]::NewGuid().ToString('N'))"
-        $traceProc = Start-Process -FilePath $Okur -ArgumentList @('trace', '--out', $tracePath, '--stop-file', $traceStop) -WindowStyle Hidden -PassThru
+        # Elevated, as JAWS is: from normal integrity UI Automation sees JAWS's own dialogs
+        # thinly (a list view as a pane, buttons as panes named "&Move To Heading"; 224,
+        # round 23). old-pc elevates without asking.
+        $traceProc = Start-Process -FilePath $Okur -ArgumentList @('trace', '--out', $tracePath, '--stop-file', $traceStop) -WindowStyle Hidden -PassThru -Verb RunAs
         Start-Sleep -Milliseconds 400
         $trialResult.trace_file = Split-Path -Leaf $tracePath
     }
@@ -847,7 +859,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     }
     if ($traceProc) {
         New-Item -ItemType File -Force -Path $traceStop | Out-Null
-        if (-not $traceProc.WaitForExit(15000)) { $traceProc.Kill(); $trialResult.trial_success = $false }
+        if (-not $traceProc.WaitForExit(15000)) { Stop-Tracer $traceProc; $trialResult.trial_success = $false }
         Remove-Item $traceStop -ErrorAction SilentlyContinue
         if (Test-Path $tracePath) { $trialResult.trace_sha256 = Get-Sha256 $tracePath } else { $trialResult.trial_success = $false }
     }
@@ -858,7 +870,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     # An exception mid-trial (e.g. no browser window) must not leave the tracer running: it
     # holds the trace file and the harness binary.
     Release-HeldKeys
-    if ($traceProc -and -not $traceProc.HasExited) { $traceProc.Kill() }
+    if ($traceProc -and -not $traceProc.HasExited) { Stop-Tracer $traceProc }
     # A live run of Okur ends with Okur stopped and JAWS back.
     if ($okurRun -and -not $okurRun.HasExited) { $okurRun.Kill() }
     if ($Reader -eq 'okur') { Invoke-JawsProcess -Start }
