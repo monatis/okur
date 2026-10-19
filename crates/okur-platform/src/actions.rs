@@ -99,6 +99,10 @@ mod windows_actions {
         Window(bool),
         /// The page's elements with these DOM ids, answered even when none was found.
         PageElements(Vec<String>),
+        /// Text for the clipboard. Not set in the keyboard hook: emptying the clipboard tells
+        /// its last owner at once, and a hung owner would hold the hook (responsiveness
+        /// review, 2026-10-19).
+        Copy(String),
     }
 
     /// The virtual key of a key the screen reader sends for a reading command.
@@ -264,6 +268,11 @@ mod windows_actions {
                                 );
                                 // Answered even when none was found: the engine waits for it.
                                 let _ = events.send(AccessibilityEvent::PageElements(elements));
+                            }
+                            Request::Copy(text) => {
+                                if let Err(e) = super::set_clipboard_text(&text) {
+                                    tracing::warn!("copy to the clipboard failed: {e}");
+                                }
                             }
                         }
                     }
@@ -461,13 +470,7 @@ mod windows_actions {
         }
 
         fn copy_text(&self, text: &str) -> bool {
-            match super::set_clipboard_text(text) {
-                Ok(()) => true,
-                Err(e) => {
-                    tracing::warn!("copy to the clipboard failed: {e}");
-                    false
-                }
-            }
+            self.send(Request::Copy(text.to_owned()))
         }
     }
 }

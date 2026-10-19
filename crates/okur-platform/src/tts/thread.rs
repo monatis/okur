@@ -77,16 +77,22 @@ pub struct SpeechThread {
     /// Requests sent and not yet carried out: speech asked for is speech going on.
     pending: Arc<AtomicUsize>,
     log: Option<SpeechLog>,
+    /// The synthesizer's voices, read when it starts: the settings dialog asks for them in
+    /// the keyboard hook, and reading them there waited behind the synthesizer (a SAPI purge)
+    /// and then enumerated SAPI's voices (responsiveness review, 2026-10-19).
+    voices: Arc<Mutex<Vec<String>>>,
 }
 
 impl SpeechThread {
     /// Moves `tts` to a new thread; its speech log stays with the caller.
     pub fn start(mut tts: TtsManager) -> Self {
         let log = tts.speech_log.take();
+        let voices = Arc::new(Mutex::new(SpeechOutput::voices(&tts)));
         let tts = Arc::new(Mutex::new(tts));
         let pending = Arc::new(AtomicUsize::new(0));
         let (requests, received) = channel::<Request>();
         let (worker_tts, worker_pending) = (Arc::clone(&tts), Arc::clone(&pending));
+        let worker_voices = Arc::clone(&voices);
         let started = std::thread::Builder::new()
             .name("okur-speech".to_owned())
             .spawn(move || {
@@ -131,7 +137,16 @@ impl SpeechThread {
                             Request::Stop => {
                                 let _ = tts.engine.stop();
                             }
-                            Request::Configure(voice) => tts.configure(&voice),
+                            Request::Configure(voice) => {
+                                let kind = tts.kind;
+                                tts.configure(&voice);
+                                // Another synthesizer has other voices.
+                                if tts.kind != kind {
+                                    if let Ok(mut known) = worker_voices.lock() {
+                                        *known = SpeechOutput::voices(&*tts);
+                                    }
+                                }
+                            }
                         }
                     }
                     worker_pending.fetch_sub(count, Ordering::SeqCst);
@@ -145,6 +160,7 @@ impl SpeechThread {
             tts,
             pending,
             log,
+            voices,
         }
     }
 
@@ -198,9 +214,9 @@ impl SpeechOutput for SpeechThread {
     }
 
     fn voices(&self) -> Vec<String> {
-        self.tts
+        self.voices
             .lock()
-            .map(|tts| SpeechOutput::voices(&*tts))
+            .map(|known| known.clone())
             .unwrap_or_default()
     }
 

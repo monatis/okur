@@ -641,6 +641,48 @@ fn keyboard_settings(
 /// waits on the engine, and a key that waits 150 ms passes to the application unread.
 const SLOW_ENGINE: std::time::Duration = std::time::Duration::from_millis(20);
 
+/// Keys waiting for the engine, which the event loop lets go first. A plain mutex takes no
+/// turns: the loop took the engine again within microseconds for each queued event, and the
+/// keyboard hook, trying every millisecond, could miss every gap until its 150 ms were over
+/// and the key went to the application (responsiveness review, 2026-10-19).
+static KEYS_WAITING: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+
+/// Takes `engine` for a key that arrived at `arrived`: at once, or as soon as the event loop
+/// gives way, within 150 ms; `None` after that, and the key goes to the application.
+fn take_for_key<T>(
+    engine: &std::sync::Mutex<T>,
+    arrived: std::time::Instant,
+) -> Option<std::sync::MutexGuard<'_, T>> {
+    use std::sync::TryLockError;
+    let deadline = arrived + std::time::Duration::from_millis(150);
+    let mut guard = engine.try_lock();
+    if matches!(guard, Err(TryLockError::WouldBlock)) {
+        KEYS_WAITING.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+        while matches!(guard, Err(TryLockError::WouldBlock)) && std::time::Instant::now() < deadline
+        {
+            // A Windows sleep can last a timer tick (up to 15.6 ms): the first 2 ms only yield.
+            if arrived.elapsed() < std::time::Duration::from_millis(2) {
+                std::thread::yield_now();
+            } else {
+                std::thread::sleep(std::time::Duration::from_millis(1));
+            }
+            guard = engine.try_lock();
+        }
+        KEYS_WAITING.fetch_sub(1, std::sync::atomic::Ordering::SeqCst);
+    }
+    guard.ok()
+}
+
+/// Waits while a key waits for the engine: at most 200 ms, in case a key never takes it.
+fn give_way_to_keys() {
+    let until = std::time::Instant::now() + std::time::Duration::from_millis(200);
+    while KEYS_WAITING.load(std::sync::atomic::Ordering::SeqCst) > 0
+        && std::time::Instant::now() < until
+    {
+        std::thread::yield_now();
+    }
+}
+
 /// A short name for an event, for logs (a page's tree is too big to print).
 fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
     match event {
@@ -905,18 +947,11 @@ async fn main() {
                 // LowLevelHooksTimeout, so the hook never waits long for the engine: a key
                 // that finds it busy for 150 ms passes to the application.
                 let arrived = std::time::Instant::now();
-                let deadline = arrived + std::time::Duration::from_millis(150);
-                let mut guard = engine_cb.try_lock();
-                while matches!(guard, Err(std::sync::TryLockError::WouldBlock))
-                    && std::time::Instant::now() < deadline
-                {
-                    std::thread::sleep(std::time::Duration::from_millis(1));
-                    guard = engine_cb.try_lock();
-                }
-                if guard.is_err() {
+                let guard = take_for_key(&engine_cb, arrived);
+                if guard.is_none() {
                     tracing::warn!(key = ?event.key, "engine busy: key passed through");
                 }
-                if let Ok(mut eng) = guard {
+                if let Some(mut eng) = guard {
                     let waited = arrived.elapsed();
                     let started = std::time::Instant::now();
                     let action = eng.handle_key_event(&event);
@@ -992,6 +1027,7 @@ async fn main() {
                             _ => None,
                         };
                         let spoken = {
+                            give_way_to_keys();
                             let Ok(mut eng) = engine_events.lock() else {
                                 continue;
                             };
@@ -1716,5 +1752,44 @@ async fn main() {
         None => {
             println!("No command specified. Use `okur --help` for available options.");
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::{Arc, Mutex};
+    use std::time::{Duration, Instant};
+
+    /// A key takes the engine quickly while the event loop takes it again and again, as it does
+    /// for a stream of events, each held 1 ms: the loop gives way to a waiting key.
+    #[test]
+    fn a_key_gets_the_engine_between_a_stream_of_events() {
+        let engine = Arc::new(Mutex::new(0_u32));
+        let stop = Arc::new(std::sync::atomic::AtomicBool::new(false));
+        let events = {
+            let (engine, stop) = (Arc::clone(&engine), Arc::clone(&stop));
+            std::thread::spawn(move || {
+                while !stop.load(std::sync::atomic::Ordering::SeqCst) {
+                    give_way_to_keys();
+                    if let Ok(mut count) = engine.lock() {
+                        *count += 1;
+                        std::thread::sleep(Duration::from_millis(1));
+                    }
+                }
+            })
+        };
+        std::thread::sleep(Duration::from_millis(20));
+        let mut longest = Duration::ZERO;
+        for _ in 0..20 {
+            let arrived = Instant::now();
+            let taken = take_for_key(&engine, arrived).is_some();
+            assert!(taken, "the key went to the application");
+            longest = longest.max(arrived.elapsed());
+            std::thread::sleep(Duration::from_millis(5));
+        }
+        stop.store(true, std::sync::atomic::Ordering::SeqCst);
+        let _ = events.join();
+        assert!(longest < Duration::from_millis(100), "{longest:?}");
     }
 }
