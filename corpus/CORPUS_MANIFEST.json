@@ -25,6 +25,10 @@
       "sha256": "1714eada49baac05b6637982281b7fd0f226c29d4bae6e4868f1d8b9dd0802e8",
       "size_bytes": 2217
     },
+    "desktop-file-dialogs.ps1": {
+      "sha256": "b27f6c7cb7e69332280ea4b29c095a4329fa05474ac1d530c3b12fd50cab40d5",
+      "size_bytes": 3163
+    },
     "desktop-forms.ps1": {
       "sha256": "467dede4cfb8fc4fca76a13343cb3d3d8bba0feb038228ea37e745608bf01b0d",
       "size_bytes": 5485
@@ -2832,6 +2836,20 @@
       }
     },
     {
+      "scenario_id": "525-desktop-open-dialog",
+      "fixture": "desktop-file-dialogs.ps1",
+      "evidence": {
+        "sha256": "d167b159e229deda7f51f5eb704620679d424714c59daa795a4e507da1b1ef33",
+        "capture_script_sha256": "0891a01e0114a5b5e40440b4fd6a28afb9a22a7612d83beb59e2c37028551361",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "526-desktop-screen-sensitive-help",
       "fixture": "desktop-forms.ps1",
       "evidence": {
@@ -2874,6 +2892,20 @@
       }
     },
     {
+      "scenario_id": "532-desktop-dialog-default-button-and-hot-key",
+      "fixture": "desktop-file-dialogs.ps1",
+      "evidence": {
+        "sha256": "4ff40cb6526cb139be41b693750a959da8d72a525ef9a1e0d863cc23c600cb0e",
+        "capture_script_sha256": "0891a01e0114a5b5e40440b4fd6a28afb9a22a7612d83beb59e2c37028551361",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "533-desktop-toast-and-progress-bar",
       "fixture": "desktop-notifications.ps1",
       "evidence": {
@@ -2886,13 +2918,55 @@
         "deterministic": false,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "540-desktop-notepad-find-dialog",
+      "fixture": "desktop-notepad.ps1",
+      "evidence": {
+        "sha256": "5b873a79dc2a2a7b0247a5617e3b37a719eb2202f0975e02a8a011930f4d10cb",
+        "capture_script_sha256": "0891a01e0114a5b5e40440b4fd6a28afb9a22a7612d83beb59e2c37028551361",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "542-desktop-notepad-replace-dialog",
+      "fixture": "desktop-notepad.ps1",
+      "evidence": {
+        "sha256": "5b5decd9b25b8012335dc2222714f951aeb3de1d229ccb930492bad1bcb6b06e",
+        "capture_script_sha256": "0891a01e0114a5b5e40440b4fd6a28afb9a22a7612d83beb59e2c37028551361",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "543-desktop-notepad-go-to-dialog",
+      "fixture": "desktop-notepad.ps1",
+      "evidence": {
+        "sha256": "a76b5cdc5c4a28ebef4ff4aee95bba85be0da74492187533e70ca6e80383677e",
+        "capture_script_sha256": "0891a01e0114a5b5e40440b4fd6a28afb9a22a7612d83beb59e2c37028551361",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 198,
-    "scenarios_with_evidence": 198,
-    "total_trials": 648,
-    "successful_trials": 647,
-    "deterministic_scenarios": 128
+    "scenarios": 203,
+    "scenarios_with_evidence": 203,
+    "total_trials": 663,
+    "successful_trials": 662,
+    "deterministic_scenarios": 133
   }
 }

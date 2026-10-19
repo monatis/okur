@@ -1,0 +1,23 @@
+{
+  "id": "545-desktop-data-grid",
+  "name": "A WinForms data grid: the first cell as the window opens, Right, Down, Left and Up by cell, Ctrl+Home and Ctrl+End, Insert+Up on a cell, Tab out to the button and Shift+Tab back",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-data-grid.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Data Grid Fixture" },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+Tab" },
+    { "id": "s2", "type": "key", "command": "Right" },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Left" },
+    { "id": "s5", "type": "key", "command": "Up" },
+    { "id": "s6", "type": "key", "command": "Ctrl+End" },
+    { "id": "s7", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s8", "type": "key", "command": "Down" },
+    { "id": "s9", "type": "key", "command": "Insert+Up" },
+    { "id": "s10", "type": "key", "command": "Tab" },
+    { "id": "s11", "type": "key", "command": "Shift+Tab" }
+  ]
+}

@@ -15,17 +15,18 @@ To record one:
 | 509 | Keyboard Help (Insert+1), Insert+F1, Insert+H, Insert+W. Recorded in round 13 and not imported: in Keyboard Help mode JAWS describes the harness's history copy instead of running it, so those steps time out (their synthesizer text is recorded) | `desktop-dialogs.ps1` |
 | 518 | Reading a Word document | `desktop-word.ps1` (here) |
 | 519 | Word's headings list, spelling errors, revisions | `desktop-word.ps1` (here) |
-| 524 | Windows' Save As dialog. Notepad's, recorded in rounds 23, 27 and 31 and not imported, opened in the lab account's home folder whatever its last folder and working folder were, and the traces listed its folders; now the fixture's own dialog, set to its folder | `desktop-file-dialogs.ps1` (here) |
-| 525 | Windows' Open dialog; as 524 | `desktop-file-dialogs.ps1` (here) |
+| 524 | Windows' Save As dialog, set to the fixture's folder. Round 38's traces still caught recent folders from the navigation tree's events, now filtered; to record again | `desktop-file-dialogs.ps1` |
 | 530 | Skim reading, its dialog, and Say Color in a page. Recorded in round 26 and held back with 531: the browser profile's name in its traces; the Skim Reading dialog, JAWS's own, refused the harness's Tab and Escape | `news-article.html` |
 | 531 | Screen-sensitive help in a page. Recorded in round 26 and not imported: JAWS's page summary outlasted the 20 s settle, now 60 s; its traces, as every web trace, carry the browser window's title with the profile's name | `news-article.html` |
-| 532 | Say Default Button and Say Current Control Hot Key in Windows' Open dialog | `desktop-file-dialogs.ps1` (here) |
 | 534 | Numpad Slash (left click) on a page's check box and radio button | `signup-form.html` |
 | 535 | The table layer (Insert+Space, T) | `tables-navigation.html` |
 | 536 | Routing, the link's address, the frames list | `news-article.html` |
 | 537 | A Win32 message box: its default button and the hot keys | `desktop-message-box.ps1` (here) |
 | 538 | The page-load summary and reading on a page with several regions, headings and links | `news-article.html` |
 | 539 | The page-load summary on a page with tables and one heading | `tables-navigation.html` |
+| 541 | Notepad's Font dialog. Recorded in round 39 and not imported: Say Window read its 187 fonts past the step's wait, now left out | `desktop-notepad.ps1` |
+| 544 | Notepad's Page Setup dialog | `desktop-notepad.ps1` |
+| 545 | A WinForms data grid, by cell | `desktop-data-grid.ps1` (here) |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.
