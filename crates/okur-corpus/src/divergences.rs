@@ -139,6 +139,9 @@ divergences! {
         "527-desktop-notepad-help-keys/s1",
         "527-desktop-notepad-help-keys/s3",
         "527-desktop-notepad-help-keys/s5",
+        "531-web-screen-sensitive-help/s2",
+        "531-web-screen-sensitive-help/s5",
+        "531-web-screen-sensitive-help/s8",
     ],
     "JAWS's help texts (Insert+F1, Insert+H, Insert+W) are Freedom Scientific's writing. \
      Okur's help keys open the Virtual Viewer as JAWS's do, with JAWS's hot keys link and \

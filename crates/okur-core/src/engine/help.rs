@@ -54,15 +54,58 @@ const WINDOWS_KEYS: [fn() -> StaticMessage; 10] = [
 ];
 
 impl ScreenReaderEngine {
-    /// Insert+F1: what the focused control is for, then the link to the hot keys.
+    /// Insert+F1: what the focused control is for, then the link to the hot keys. A page's
+    /// link and heading have no link to the hot keys [obs, 531/s5, s8].
     pub(super) fn screen_sensitive_help(&mut self) -> Option<String> {
-        let lines = vec![
-            self.control_help().to_string(),
-            String::new(),
-            link(msg::viewer_hot_keys_link()),
-            msg::viewer_close_hint().to_string(),
-        ];
-        self.open_help(lines, vec![(2, Command::HotKeyHelp)])
+        let (mut lines, hot_keys_link) = match self.page_help() {
+            Some(help) => help,
+            None => (vec![self.control_help().to_string()], true),
+        };
+        lines.push(String::new());
+        let mut links = Vec::new();
+        if hot_keys_link {
+            links.push((lines.len(), Command::HotKeyHelp));
+            lines.push(link(msg::viewer_hot_keys_link()));
+        }
+        lines.push(msg::viewer_close_hint().to_string());
+        self.open_help(lines, links)
+    }
+
+    /// Help on the page under the virtual cursor, as JAWS's is about the element it is on
+    /// [obs, 531/s2, s5, s8]: a link's address, then how a link is used; a heading's level
+    /// and the heading keys; elsewhere the page's summary and how a page is read. `None` out
+    /// of a page's virtual cursor, and on a page's control, which its kind's help covers.
+    fn page_help(&self) -> Option<(Vec<String>, bool)> {
+        if self.app_mode != AppMode::VirtualBuffer || self.forms_mode {
+            return None;
+        }
+        let node = self.node_under_cursor();
+        Some(match node.map(|n| &n.role) {
+            Some(Role::Link { href }) => (
+                href.iter()
+                    .cloned()
+                    .chain(std::iter::once(msg::help_control_link().to_string()))
+                    .collect(),
+                false,
+            ),
+            Some(Role::Heading { level }) => (
+                vec![msg::help_heading(i64::from(*level)).to_string()],
+                false,
+            ),
+            Some(
+                Role::Edit
+                | Role::CheckBox
+                | Role::RadioButton
+                | Role::ComboBox
+                | Role::Button
+                | Role::Slider
+                | Role::Tab,
+            ) => return None,
+            _ => (
+                vec![self.page_summary(), msg::help_page().to_string()],
+                true,
+            ),
+        })
     }
 
     /// Insert+H: Okur's keys for the page or window in front, each a link.
@@ -112,14 +155,15 @@ impl ScreenReaderEngine {
 
     /// The help for where the focus is: the page, or the control's kind.
     fn control_help(&self) -> StaticMessage {
-        if self.app_mode == AppMode::VirtualBuffer && !self.forms_mode {
-            return msg::help_page();
-        }
-        let page_role = (self.app_mode == AppMode::VirtualBuffer)
-            .then_some(self.last_page_focus)
-            .flatten()
-            .and_then(|id| self.cursor.buffer.node(id))
-            .map(|node| node.role.clone());
+        // In a page: the field forms mode is in, or the control under the virtual cursor.
+        let page_role = match (self.app_mode == AppMode::VirtualBuffer, self.forms_mode) {
+            (true, true) => self
+                .last_page_focus
+                .and_then(|id| self.cursor.buffer.node(id))
+                .map(|node| node.role.clone()),
+            (true, false) => self.node_under_cursor().map(|node| node.role.clone()),
+            (false, _) => None,
+        };
         let native = self.last_native_focus.as_ref();
         let role = page_role.or_else(|| native.map(|f| f.role.clone()));
         let in_list_view = native.is_some_and(|f| f.container_is_list_view);

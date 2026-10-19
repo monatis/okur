@@ -128,14 +128,17 @@ A step can be in more than one entry; all of its entries apply.
 - Steps: `526-desktop-screen-sensitive-help/s1`, `526-desktop-screen-sensitive-help/s5`,
   `526-desktop-screen-sensitive-help/s10`, `526-desktop-screen-sensitive-help/s13`,
   `526-desktop-screen-sensitive-help/s21`, `527-desktop-notepad-help-keys/s1`,
-  `527-desktop-notepad-help-keys/s3`, `527-desktop-notepad-help-keys/s5`.
+  `527-desktop-notepad-help-keys/s3`, `527-desktop-notepad-help-keys/s5`,
+  `531-web-screen-sensitive-help/s2`, `531-web-screen-sensitive-help/s5`,
+  `531-web-screen-sensitive-help/s8`.
 - Difference: the whole step: the help's words.
 - Why: JAWS's help texts (screen-sensitive help, Insert+F1; hot key help, Insert+H; Windows
   keys help, Insert+W) are Freedom Scientific's writing. Okur's help keys open the Virtual
   Viewer as JAWS's do, with the "List JAWS Hot Keys" link and "Press ESCAPE to close this
   message.", and Escape reads the focus as JAWS does (526/s6, s11, s14; 527/s2, s4, s6). The
   help is in Okur's own words, and Insert+H lists Okur's own keys, each a link that Enter
-  uses.
+  uses. In a page the help is about where the virtual cursor is, as JAWS's is: the page's
+  summary, a link's address, a heading's level (531).
 - Decided under the clean-room rule (AGENTS.md §1.4), 2026-10-19.
 
 ### JAWS places a data grid's cell at column and row 65535

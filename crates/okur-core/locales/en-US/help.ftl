@@ -53,3 +53,6 @@ help-windows-properties = Alt+Enter shows the properties of the selected item.
 help-windows-desktop = Windows+D shows the desktop, and Windows+M minimizes every window.
 help-windows-tray = Windows+B goes to the notification area.
 help-windows-help = F1 opens the application's own help.
+
+# Screen-sensitive help on a page's heading, by its level.
+help-heading = A heading at level { $level }. H and Shift+H move between headings, and the numbers 1 to 6 by level; Insert+F6 lists them.

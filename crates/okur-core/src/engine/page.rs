@@ -128,7 +128,7 @@ impl ScreenReaderEngine {
 
     /// The page's summary as JAWS says it when the page loads: "Page has 5Regions, 5headings and
     /// 12links", "Page has 1heading and no links" with no regions [obs, 538/s1, 539/s1].
-    fn page_summary(&self) -> String {
+    pub(super) fn page_summary(&self) -> String {
         fn count(node: &AomNode, counts: &mut (usize, usize, usize)) {
             match node.role {
                 Role::Landmark { .. } => counts.0 += 1,
