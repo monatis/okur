@@ -1,0 +1,23 @@
+{
+  "id": "555-web-form-verbosity-beginner",
+  "name": "The sign-up form at JAWS's Beginner verbosity (its default, set as the other levels are): Tab through its fields, Say Focus, and Down in the virtual cursor",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "jaws_settings": { "DEFAULT.JCF": { "Options": { "Verbosity": "0" } } },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Down" },
+    { "id": "s2", "type": "key", "command": "Down" },
+    { "id": "s3", "type": "key", "command": "Tab" },
+    { "id": "s4", "type": "key", "command": "Tab" },
+    { "id": "s5", "type": "key", "command": "Tab" },
+    { "id": "s6", "type": "key", "command": "Tab" },
+    { "id": "s7", "type": "key", "command": "Tab" },
+    { "id": "s8", "type": "key", "command": "Tab" },
+    { "id": "s9", "type": "key", "command": "Insert+Tab" },
+    { "id": "s10", "type": "key", "command": "Escape" },
+    { "id": "s11", "type": "key", "command": "Down" }
+  ]
+}

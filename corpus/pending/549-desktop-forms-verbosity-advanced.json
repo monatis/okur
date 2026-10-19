@@ -1,0 +1,27 @@
+{
+  "id": "549-desktop-forms-verbosity-advanced",
+  "name": "The forms fixture at JAWS's Advanced verbosity: Tab through its edits, check boxes, radio buttons, combo box, list box and list view, Shift+Tab back, Say Focus and Say Window",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-forms.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Desktop Fixture" },
+  "jaws_settings": { "DEFAULT.JCF": { "Options": { "Verbosity": "2" } } },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+Tab" },
+    { "id": "s2", "type": "key", "command": "Tab" },
+    { "id": "s3", "type": "key", "command": "Tab" },
+    { "id": "s4", "type": "key", "command": "Tab" },
+    { "id": "s5", "type": "key", "command": "Tab" },
+    { "id": "s6", "type": "key", "command": "Down" },
+    { "id": "s7", "type": "key", "command": "Tab" },
+    { "id": "s8", "type": "key", "command": "Tab" },
+    { "id": "s9", "type": "key", "command": "Down" },
+    { "id": "s10", "type": "key", "command": "Tab" },
+    { "id": "s11", "type": "key", "command": "Tab" },
+    { "id": "s12", "type": "key", "command": "Shift+Tab" },
+    { "id": "s13", "type": "key", "command": "Insert+Tab" },
+    { "id": "s14", "type": "key", "command": "Insert+B", "settle_max_ms": 20000 }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "551-desktop-message-box-verbosity-advanced",
+  "name": "A Win32 message box at JAWS's Advanced verbosity: as it opens, Tab, Say Window, Escape",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-message-box.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Message Box Fixture" },
+  "jaws_settings": { "DEFAULT.JCF": { "Options": { "Verbosity": "2" } } },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Space", "settle_max_ms": 15000 },
+    { "id": "s2", "type": "key", "command": "Tab" },
+    { "id": "s3", "type": "key", "command": "Insert+B", "settle_max_ms": 15000 },
+    { "id": "s4", "type": "key", "command": "Escape" }
+  ]
+}
