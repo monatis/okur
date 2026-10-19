@@ -109,6 +109,16 @@ From the audit §4:
 Block quotes cannot be seen through UIA. Measure first how long users stay on the UIA buffer
 (`okur latency`).
 
+## Responsiveness
+
+- **The 2026-10-19 review** ([`responsiveness-review-2026-10-19.md`](responsiveness-review-2026-10-19.md)):
+  17 findings, measured where possible. First:
+  - a partial page read still rebuilds the whole page under the engine lock, once per part;
+  - the first key after a re-capture drops the old buffer and scans the page in the hook;
+  - Tab in browse mode is O(tab stops × lines);
+  - every page focus scans the whole buffer;
+  - live runs use a debug build, which multiplies all of these by 3 to 10.
+
 ## Measurement and harness
 
 - **The signup fixture's `help@riverside-library.org`** is not at a reserved example domain, so
