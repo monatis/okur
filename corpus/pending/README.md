@@ -12,14 +12,8 @@ To record one:
 
 | Scenario | What it records | Fixture |
 |---|---|---|
-| 500 | Say All stopped by Ctrl, moved by Right and Left, rate keys and H during it | `news-article.html` |
-| 501 | Selecting and copying with the virtual cursor, Say and Spell Selected Text | `doc-reading.html` |
-| 502 | Home, End, PageDown and PageUp with the virtual cursor | `news-article.html` |
-| 503 | Reading keys on a native check box and list box, top and bottom line, Say All in a dialog | `desktop-forms.ps1` |
 | 504 | A native edit: selected text, clipboard keys, Say To and From Cursor, sentence, paragraph | `desktop-editor.ps1` |
 | 505 | Say All in a native edit stopped by Ctrl and moved by Right and Left | `desktop-reading.ps1` |
-| 506 | JAWS Find (Ctrl+F, F3, Shift+F3, Insert+Ctrl+F) | `news-article.html` |
-| 507 | A page load stopped by Ctrl, then Numpad Plus in forms mode | `signup-form.html` |
 | 508 | A text area's lines with the virtual cursor (Say All reads each with "Edit", 408/s10) | `reading-settings.html` |
 | 509 | Keyboard Help (Insert+1), Insert+F1, Insert+H, Insert+W | `desktop-dialogs.ps1` |
 | 510 | Laptop layout: sentences, paragraphs, Say To and From Cursor, selected text, top and bottom line, color, character value, Say All | `desktop-reading.ps1` |
