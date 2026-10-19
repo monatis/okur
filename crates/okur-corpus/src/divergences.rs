@@ -191,6 +191,31 @@ divergences! {
      the page's first lines (\"main region\", then the page's title), skipping the form above \
      it, and every Up after stayed there. Okur goes on to the line before the field.",
     "the owner's rule on JAWS's accidents, 2026-10-18";
+
+    Difference::Step => [
+        "522-desktop-wordpad-reading/s1",
+        "522-desktop-wordpad-reading/s2",
+        "522-desktop-wordpad-reading/s3",
+        "522-desktop-wordpad-reading/s4",
+        "522-desktop-wordpad-reading/s5",
+        "522-desktop-wordpad-reading/s6",
+        "522-desktop-wordpad-reading/s8",
+        "522-desktop-wordpad-reading/s9",
+        "522-desktop-wordpad-reading/s10",
+        "522-desktop-wordpad-reading/s11",
+        "522-desktop-wordpad-reading/s12",
+        "522-desktop-wordpad-reading/s13",
+        "522-desktop-wordpad-reading/s14",
+        "522-desktop-wordpad-reading/s16",
+        "522-desktop-wordpad-reading/s17",
+        "522-desktop-wordpad-reading/s18",
+    ],
+    "JAWS reads nothing of WordPad's document text on old-pc: the arrows, the word keys, Say \
+     Line and Say All are silent or say a list item's bullet alone, Say Selected Text says \
+     \"Nothing selected\" with text selected, and Ctrl+Home and Ctrl+End say \"top of file\" \
+     and \"Bottom of file\" without the line, in every trial, though it reads the font there \
+     (s15). Okur reads the text.",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
 }
 
 /// The divergence covering `step`, if any.

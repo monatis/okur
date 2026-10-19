@@ -101,16 +101,31 @@ impl ScreenReaderEngine {
             }
             // The window's top line is its title bar [obs, 503/s10, 504/s23].
             Command::SayTopLineOfWindow if native => self.last_window_title.clone()?,
-            // The window's bottom line: in an editor's page, its text's last line, "teh quick
-            // brown fxo" [obs, 510/s13, 504/s22]. Other windows wait for their screen lines.
-            Command::SayBottomLineOfWindow if native && self.editing_document() => self
-                .last_text
-                .as_ref()?
-                .text
-                .lines()
-                .rev()
-                .find(|line| !line.trim().is_empty())?
-                .to_owned(),
+            // The window's bottom line: its status bar, where the platform reports one (WordPad's
+            // "100%" [obs, 522/s20]; "the bottom line is usually the status bar", JAWS 2025
+            // help); else in an editor's page its text's last line, "teh quick brown fxo"
+            // [obs, 510/s13, 504/s22]. Other windows wait for their screen lines.
+            Command::SayBottomLineOfWindow
+                if native
+                    && self
+                        .last_native_focus
+                        .as_ref()
+                        .is_some_and(|f| !f.status_bar.is_empty()) =>
+            {
+                let parts = &self.last_native_focus.as_ref()?.status_bar;
+                parts
+                    .iter()
+                    .map(|part| part.trim())
+                    .filter(|part| !part.is_empty())
+                    .collect::<Vec<_>>()
+                    .join("  ")
+            }
+            Command::SayBottomLineOfWindow if native && self.editing_document() => {
+                crate::editing::text_lines(&self.last_text.as_ref()?.text)
+                    .into_iter()
+                    .rev()
+                    .find(|line| !line.trim().is_empty())?
+            }
             // The caret's line before the caret, and from it: "\tx", "= 1.5; a.b end." with
             // the caret on "=" [obs, 504/s9, s10].
             Command::SayToCursor | Command::SayFromCursor if self.editing_text() => {

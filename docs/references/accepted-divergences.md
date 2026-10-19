@@ -166,6 +166,25 @@ A step can be in more than one entry; all of its entries apply.
   area went to the page's first lines and stayed there, skipping the whole form above it.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### JAWS reads nothing of WordPad's document
+
+- Steps: `522-desktop-wordpad-reading/s1` to `/s6`, `/s8` to `/s14`, `/s16` to `/s18` (the
+  full keys: `522-desktop-wordpad-reading/s1`, `522-desktop-wordpad-reading/s2`,
+  `522-desktop-wordpad-reading/s3`, `522-desktop-wordpad-reading/s4`,
+  `522-desktop-wordpad-reading/s5`, `522-desktop-wordpad-reading/s6`,
+  `522-desktop-wordpad-reading/s8`, `522-desktop-wordpad-reading/s9`,
+  `522-desktop-wordpad-reading/s10`, `522-desktop-wordpad-reading/s11`,
+  `522-desktop-wordpad-reading/s12`, `522-desktop-wordpad-reading/s13`,
+  `522-desktop-wordpad-reading/s14`, `522-desktop-wordpad-reading/s16`,
+  `522-desktop-wordpad-reading/s17`, `522-desktop-wordpad-reading/s18`).
+- Difference: JAWS says nothing, a list item's bullet alone, "Nothing selected", or "top of
+  file" and "Bottom of file" without the line; Okur reads the document's text.
+- Why: on old-pc JAWS reads none of WordPad's document text, in every trial: the arrows, the
+  word keys, Say Line and Say All are silent, and Say Selected Text finds nothing with text
+  selected, yet JAWS reads the font in the same field (522/s15). A screen reader that cannot
+  read the document is not a target.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-18.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row
