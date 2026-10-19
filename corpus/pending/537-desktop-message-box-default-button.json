@@ -1,0 +1,24 @@
+{
+  "id": "537-desktop-message-box-default-button",
+  "name": "A Win32 message box (Yes, No, Cancel; No the default): as it opens, Say Default Button (Insert+E), Say Current Control Hot Key (Shift+Numpad5), Tab to Cancel and both keys again, Say Window (Insert+B), the window's title (Insert+T), then Escape and Insert+E outside it",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-message-box.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Message Box Fixture" },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Shift+Numpad5" },
+    { "id": "s2", "type": "key", "command": "Space", "settle_max_ms": 15000 },
+    { "id": "s3", "type": "key", "command": "Insert+E" },
+    { "id": "s4", "type": "key", "command": "Shift+Numpad5" },
+    { "id": "s5", "type": "key", "command": "Tab" },
+    { "id": "s6", "type": "key", "command": "Insert+E" },
+    { "id": "s7", "type": "key", "command": "Shift+Numpad5" },
+    { "id": "s8", "type": "key", "command": "Insert+B", "settle_max_ms": 15000 },
+    { "id": "s9", "type": "key", "command": "Insert+T" },
+    { "id": "s10", "type": "key", "command": "Escape" },
+    { "id": "s11", "type": "key", "command": "Insert+E" },
+    { "id": "s12", "type": "key", "command": "Insert+Up" }
+  ]
+}

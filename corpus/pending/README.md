@@ -22,6 +22,9 @@ To record one:
 | 532 | Say Default Button and Say Current Control Hot Key in Notepad's Open dialog | `desktop-notepad-dialogs.ps1` (here) |
 | 533 | A Windows toast, Repeat Last Notification, Notification History, and a progress bar | `desktop-notifications.ps1` (here) |
 | 534 | Numpad Slash (left click) on a page's check box and radio button | `signup-form.html` |
+| 535 | The table layer (Insert+Space, T) | `tables-navigation.html` |
+| 536 | Routing, the link's address, the frames list | `news-article.html` |
+| 537 | A Win32 message box: its default button and the hot keys | `desktop-message-box.ps1` (here) |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.
