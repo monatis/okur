@@ -320,28 +320,18 @@ fn test_engine_text_selection_and_font_query() {
 
     // Select next character
     let sel1 = engine.execute_command("+{RIGHT}");
-    assert_eq!(sel1, Some("H
-selected".to_string()));
+    assert_eq!(sel1, Some("H\nselected".to_string()));
 
     let sel2 = engine.execute_command("+{RIGHT}");
-    assert_eq!(sel2, Some("e
-selected".to_string()));
+    assert_eq!(sel2, Some("e\nselected".to_string()));
 
     // Unselect prior character
     let unsel = engine.execute_command("+{LEFT}");
-    assert_eq!(unsel, Some("e
-unselected".to_string()));
+    assert_eq!(unsel, Some("e\nunselected".to_string()));
 
     // Query active selection [obs, 501/s8]
     let say_sel = engine.execute_command("SaySelection");
-    assert_eq!(
-        say_sel,
-        Some(
-            "Selection is
-H"
-            .to_string()
-        )
-    );
+    assert_eq!(say_sel, Some("Selection is\nH".to_string()));
 
     // Moving cursor clears selection
     engine.execute_command("{RIGHT}");
