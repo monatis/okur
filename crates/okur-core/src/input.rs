@@ -30,6 +30,13 @@ pub enum Key {
     /// takes keys by their place (the laptop layout's CapsLock+Comma, Say Character).
     Comma,
     Period,
+    /// The keys at the US minus, equals, slash and backslash places, by their place as JAWS takes
+    /// them (Default.JKM: Dash, Equals, Slash, Backslash): quick keys for separators, flow to,
+    /// clickable elements and mail links.
+    Minus,
+    Equals,
+    Slash,
+    Backslash,
     /// The numeric keypad's 5 with Num Lock off (VK_CLEAR): JAWS's desktop Say Character.
     /// The keypad's other keys arrive as the arrows and Home, End, Page Up and Page Down.
     Numpad5,

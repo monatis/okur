@@ -392,11 +392,16 @@ fn typed_char(vk: u32, scan: u32, shift: bool) -> Option<char> {
 }
 
 fn translate_vk_code(vk: u32, scan: u32, extended: bool) -> Key {
-    // The keys at the US comma and period places, by scan code as JAWS takes them: on
-    // old-pc's Turkish Q layout they carry other virtual keys (ö, ç).
+    // The keys at the US comma, period, minus, equals, slash and backslash places, by scan code
+    // as JAWS takes them: on old-pc's Turkish Q layout they carry other virtual keys (ö, ç).
+    // The keypad's slash is the slash place's scan code, extended.
     match (scan, extended) {
         (0x33, false) => return Key::Comma,
         (0x34, false) => return Key::Period,
+        (0x0C, false) => return Key::Minus,
+        (0x0D, false) => return Key::Equals,
+        (0x35, false) => return Key::Slash,
+        (0x2B, false) => return Key::Backslash,
         _ => {}
     }
     match VIRTUAL_KEY(vk as u16) {
