@@ -76,14 +76,14 @@ the Say All command".
 | Insert+Enter, Insert+Shift+Enter | MoveToNext/PriorNonLinkText | built | 289 |
 | Ctrl+Insert+Right / Left | MoveToNext/PriorDifferentElement | gap | 290 |
 | Ctrl+Insert+Up | MoveToPriorSameElement | gap | 290 |
-| Alt+Insert+Home / End | MoveToFirstHeading / moveToLastHeading | gap | 295 |
-| Ctrl+Alt+Insert+1..6, with Shift | MoveToFirstHeadingLevelN / MoveToLastHeadingLevelN | gap | 295 |
+| Alt+Insert+Home / End | MoveToFirstHeading / moveToLastHeading | built | 295 |
+| Ctrl+Alt+Insert+1..6, with Shift | MoveToFirstHeadingLevelN / MoveToLastHeadingLevelN | built | 295 |
 | Ctrl+Insert+Shift+Enter | moveToPriorHeading | gap | |
-| Ctrl+Insert+Home / End | FocusToFirstField / FocusToLastField | gap | 296 |
-| Win+Alt+Down / Up | SayNextRow / SayPriorRow | gap | 297 |
-| Win+Alt+Right / Left | SayNextColumn / SayPriorColumn | gap | 297 |
-| Alt+Win+Numpad5 (Alt+Win+Comma) | ReadCurrentRow | gap | 297 |
-| Alt+Win+Period | ReadCurrentColumn | gap | 297 |
+| Ctrl+Insert+Home / End | FocusToFirstField / FocusToLastField | built (the virtual cursor moves; the focus stays, as in JAWS) | 296 |
+| Win+Alt+Down / Up | SayNextRow / SayPriorRow | built | 297 |
+| Win+Alt+Right / Left | SayNextColumn / SayPriorColumn | built | 297 |
+| Alt+Win+Numpad5 (Alt+Win+Comma) | ReadCurrentRow | built | 297 |
+| Alt+Win+Period | ReadCurrentColumn | built | 297 |
 | Ctrl+Win+J, Ctrl+Shift+Win+J | JumpToTableCell / JumpReturnFromTableCell | gap | |
 | Alt+Win+Home / End | StepToStartOfElement / StepToEndOfElement | gap | 294 |
 | Insert+N | NavigationModeToggle (quick keys on, off, Say All only) | built (Say All only acts as off until Say All takes keys) | 298 |

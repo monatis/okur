@@ -103,6 +103,16 @@ pub enum Command {
     SayCurrentCell,
     SayColumnHeader,
     SayRowHeader,
+    /// Alt+Insert+Home and End: the page's first and last heading.
+    FirstHeading,
+    LastHeading,
+    /// Ctrl+Alt+Insert and a level (1 to 6), with Shift for the last: the first and last
+    /// heading of that level.
+    FirstHeadingAtLevel(u32),
+    LastHeadingAtLevel(u32),
+    /// Ctrl+Insert+Home and End: the page's first and last form field.
+    FirstFormField,
+    LastFormField,
     /// Windows+Alt+Numpad5 or Comma: the current row, whole.
     SayCurrentRow,
     /// Windows+Alt+Period: the current column, whole.
@@ -613,6 +623,8 @@ const CTRL_ALT: Chord = ANY.ctrl(Yes).alt(Yes);
 const CTRL_INSERT: Chord = ANY.ctrl(Yes).insert(Yes).alt(No).shift(No);
 /// Windows and Alt.
 const WIN_ALT: Chord = ANY.win(Yes).alt(Yes).ctrl(No).shift(No).insert(No);
+/// Ctrl, Alt and the JAWS key.
+const CTRL_ALT_INSERT: Chord = ANY.ctrl(Yes).alt(Yes).insert(Yes).shift(No);
 
 /// The key map, JAWS's desktop layout: the first binding that matches a key wins.
 static BINDINGS: &[Binding] = &{
@@ -717,6 +729,33 @@ static BINDINGS: &[Binding] = &{
         bind(Numpad5, SHIFT, SayHotKey),
         bind(Numpad5, JAWS, SayWord),
         bind(Numpad5, ALONE, SayCharacter),
+        // The first and last heading, of any level and of one, and the first and last form
+        // field (Default.JKM's [virtual keys]) [obs, 295, 296]; before the Ctrl and Ctrl+Alt
+        // keys that would take them.
+        bind(
+            Home,
+            ANY.alt(Yes).insert(Yes).ctrl(No).shift(No),
+            FirstHeading,
+        ),
+        bind(
+            End,
+            ANY.alt(Yes).insert(Yes).ctrl(No).shift(No),
+            LastHeading,
+        ),
+        bind(Digit(1), CTRL_ALT_INSERT, FirstHeadingAtLevel(1)),
+        bind(Digit(2), CTRL_ALT_INSERT, FirstHeadingAtLevel(2)),
+        bind(Digit(3), CTRL_ALT_INSERT, FirstHeadingAtLevel(3)),
+        bind(Digit(4), CTRL_ALT_INSERT, FirstHeadingAtLevel(4)),
+        bind(Digit(5), CTRL_ALT_INSERT, FirstHeadingAtLevel(5)),
+        bind(Digit(6), CTRL_ALT_INSERT, FirstHeadingAtLevel(6)),
+        bind(Digit(1), CTRL_ALT_INSERT.shift(Yes), LastHeadingAtLevel(1)),
+        bind(Digit(2), CTRL_ALT_INSERT.shift(Yes), LastHeadingAtLevel(2)),
+        bind(Digit(3), CTRL_ALT_INSERT.shift(Yes), LastHeadingAtLevel(3)),
+        bind(Digit(4), CTRL_ALT_INSERT.shift(Yes), LastHeadingAtLevel(4)),
+        bind(Digit(5), CTRL_ALT_INSERT.shift(Yes), LastHeadingAtLevel(5)),
+        bind(Digit(6), CTRL_ALT_INSERT.shift(Yes), LastHeadingAtLevel(6)),
+        bind(Home, CTRL_INSERT, FirstFormField),
+        bind(End, CTRL_INSERT, LastFormField),
         // Selecting with the virtual cursor (Default.JKM's Select scripts), before the plain
         // Ctrl keys that would take them [obs, 501].
         bind(End, CTRL_SHIFT, SelectToBottom),

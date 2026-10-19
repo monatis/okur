@@ -290,6 +290,14 @@ impl ScreenReaderEngine {
             Command::SayCurrentCell => self.cursor.read_current_cell(),
             Command::SayCurrentRow => self.cursor.read_current_row(),
             Command::SayCurrentColumn => self.cursor.read_current_column(),
+            Command::FirstHeading => self.cursor.move_edge_heading(false),
+            Command::LastHeading => self.cursor.move_edge_heading(true),
+            Command::FirstHeadingAtLevel(level) => {
+                self.cursor.move_edge_heading_level(*level, false)
+            }
+            Command::LastHeadingAtLevel(level) => self.cursor.move_edge_heading_level(*level, true),
+            Command::FirstFormField => self.cursor.move_edge_form_control(false),
+            Command::LastFormField => self.cursor.move_edge_form_control(true),
             Command::ReadNextRow => self.cursor.read_adjacent_row(1),
             Command::ReadPriorRow => self.cursor.read_adjacent_row(-1),
             Command::ReadNextColumn => self.cursor.read_adjacent_column(1),

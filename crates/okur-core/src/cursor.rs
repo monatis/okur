@@ -1059,6 +1059,63 @@ impl VirtualCursor {
         )
     }
 
+    /// Moves to the page's first (`last` false) or last heading: Alt+Insert+Home and End. The
+    /// heading alone is said, as its name and level: "Related stories | heading level 2"
+    /// [obs, 295/s1, s2].
+    pub fn move_edge_heading(&mut self, last: bool) -> Option<String> {
+        self.selection = None;
+        let target = if last {
+            self.buffer.headings.last()
+        } else {
+            self.buffer.headings.first()
+        }
+        .map(|h| h.0);
+        let Some(target) = target else {
+            return Some(msg::quicknav_none_headings().to_string());
+        };
+        self.offset = target;
+        self.current_node_id = self.buffer.line_at_offset(target).map(|l| l.node_id);
+        Some(self.heading_speech_at(target))
+    }
+
+    /// Moves to the first or last heading of `level`: Ctrl+Alt+Insert and the level, with
+    /// Shift for the last. As a level key does, it says the higher headings it walks past
+    /// first: "Opening schedule | heading level 2 | What readers said | heading level 3"
+    /// [obs, 295/s3-s6].
+    pub fn move_edge_heading_level(&mut self, level: u32, last: bool) -> Option<String> {
+        self.selection = None;
+        let mut of_level = self.buffer.headings.iter().filter(|&&(_, l)| l == level);
+        let target = if last {
+            of_level.next_back()
+        } else {
+            of_level.next()
+        }
+        .map(|h| h.0);
+        Some(match target {
+            Some(off) => self.move_to_heading_level(off, level),
+            None => Self::no_more_headings(level),
+        })
+    }
+
+    /// Moves to the page's first or last form field (Ctrl+Insert+Home and End), said as F
+    /// says one; the focus stays where it was [obs, 296/s1, s3].
+    pub fn move_edge_form_control(&mut self, last: bool) -> Option<String> {
+        self.selection = None;
+        let target = if last {
+            self.buffer.form_controls.last()
+        } else {
+            self.buffer.form_controls.first()
+        }
+        .copied();
+        let Some(target) = target else {
+            return Some(msg::quicknav_none_form_fields().to_string());
+        };
+        let previous = self.offset;
+        self.offset = target;
+        self.current_node_id = self.buffer.line_at_offset(target).map(|l| l.node_id);
+        Some(self.control_focus_speech(target, previous))
+    }
+
     /// Heading level keys do not wrap (§12).
     fn no_more_headings(level: u32) -> String {
         if level == 1 {
