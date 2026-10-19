@@ -51,6 +51,19 @@ The owner's decisions (2026-10-18):
 - Capture JAWS's own tables on old-pc: Customize Punctuation, Voice Adjustment's punctuation
   per context, Manage Key Labels, and the verbosity lists.
 
+Status, 2026-10-19:
+- Spoken capture: done (`fb2b266`): a step's records end at JAWS's copy confirmation. The 17
+  affected scenarios were re-recorded (`2fc0771`): spoken parity 529/950 to 550/950.
+- Keys: done (`4dfa5f5`): the numpad as with Num Lock off, and comma, period and others by
+  their US places.
+- Settings per scenario: `jaws-settings.ps1` and `run-batch.ps1` (`4dfa5f5`), tried on scratch
+  copies only; the first scenario with `jaws_settings` will prove it.
+- Tables: Customize Punctuation read
+  ([`jaws-punctuation-levels.md`](../references/jaws-punctuation-levels.md)), with
+  `capture-window.ps1` and JAWS's own reading of its list. Voice Adjustment, Manage Key Labels
+  and the verbosity lists remain.
+- Step 3's level cycle is recorded: scenario 400.
+
 ### 2. Settings with scopes
 
 - Model Okur's settings as layers: default, then application, then site or page. A value is

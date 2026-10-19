@@ -177,7 +177,8 @@ JAWS says "highlighted" restores screen echo [W7]. **Open** for all three.
   - Not in any document. It is shown in the Customize Punctuation dialog's list, which has three
     columns: Symbols, Description, Level When Spoken (Doc [S2]).
   - Reading that list on old-pc is reading JAWS's own interface, which §1.4 allows.
-  - **Open** until it is read.
+  - Read on 2026-10-19: [`jaws-punctuation-levels.md`](jaws-punctuation-levels.md), with what
+    each level does to running text (scenario 400).
 
 ### Customizing symbols
 

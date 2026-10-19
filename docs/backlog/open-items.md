@@ -14,9 +14,6 @@ and per-application and per-site settings. Those are not repeated here.
 
 ## Dialogs and lists
 
-- **The field's wording after a list focuses it.** After Select a Form Field or Select an Edit
-  Box focuses an edit field, JAWS says the field again ("Notes edit | Contains text") where Okur
-  says "Type in text." Seen at 225/s10, 228/s9 and 249/s3 (handoff 2026-10-18 dialog round).
 - **A tree child's parent name.** JAWS adds it after the position: "level 1 Primary Navigation 1
   of 1 Banner" (274/s2, 241/s2, 256/s2). Its WinForms tree doesn't (303/s8). Not explained yet.
 - **Lists not built:** Smart Glance Highlights (Insert+Ctrl+Y), Anchors, Frames, List Items and
@@ -101,8 +98,9 @@ Block quotes cannot be seen through UIA. Measure first how long users stay on th
 
 ## Measurement and harness
 
-- **The spoken capture stops at the first 500 ms pause** (audit §3.3; 46 steps). First in the
-  active plan.
+- **The signup fixture's `help@riverside-library.org`** is not at a reserved example domain, so
+  the tracer would blank it out of a trace (`crates/okur-platform/src/privacy.rs`). It has never
+  appeared in one; move it to `example.org` the next time `signup-form.html` is re-recorded.
 - **Known-gap tests:** none exist yet (AGENTS.md rule 6). Write one per group above where JAWS's
   behavior is recorded.
 - **A test asserting speech JAWS contradicts:** `crates/okur-core/src/lib.rs`, scenario 12, the
@@ -129,6 +127,10 @@ Block quotes cannot be seen through UIA. Measure first how long users stay on th
 - Accepted divergences written down and kept out of parity counts (audit §8 item 12):
   [`accepted-divergences.md`](../references/accepted-divergences.md).
 - Select a Form Field's 8 of 10 fields (audit §2.5): all 10 since `5703dad`.
+- The spoken capture cut at the first 500 ms pause (audit §3.3): a step's records now end at
+  JAWS's copy confirmation (`fb2b266`); the 17 affected scenarios re-recorded (`2fc0771`).
+- A field a list focuses, said as JAWS says it: its line in forms mode, no "Type in text."
+  (`91f413d`; live on old-pc 2026-10-19: 225 11/11, 228 12/12, 249 5/5).
 - Space with the virtual cursor (the owner's report, 2026-10-18): `410654f`, scenario 229.
 - Down and Up in a select box in forms mode: `062666c`.
 - See also the status notes in
