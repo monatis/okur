@@ -196,8 +196,12 @@ fn window_items(tree: &UiaNode) -> Vec<okur_core::WindowItem> {
             if !name.trim().is_empty() || aom.value.is_some() {
                 items.push(okur_core::WindowItem {
                     role: aom.role.clone(),
-                    name,
-                    value: aom.value.clone().filter(|v| !v.is_empty()),
+                    name: okur_core::viewer_text::without_marks(&name),
+                    value: aom
+                        .value
+                        .as_deref()
+                        .map(okur_core::viewer_text::without_marks)
+                        .filter(|v| !v.is_empty()),
                     expanded: aom.states.expanded,
                     checked: aom.states.checked,
                 });
@@ -771,7 +775,18 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             .and_then(|t| t.rsplit_once(" - "))
             .map(|(folder, _)| folder.to_owned());
     }
-    focus.dialog_lines = event.dialog_lines.clone();
+    focus.dialog_lines = event
+        .dialog_lines
+        .iter()
+        .map(|line| okur_core::viewer_text::without_marks(line))
+        .collect();
+    // Windows wraps dates in direction marks; JAWS says none [obs, 323/s2, s7].
+    focus.name = focus
+        .name
+        .map(|n| okur_core::viewer_text::without_marks(&n));
+    focus.value = focus
+        .value
+        .map(|v| okur_core::viewer_text::without_marks(&v));
     focus.app = event.process.clone();
     focus.window_items = event
         .dialog_tree

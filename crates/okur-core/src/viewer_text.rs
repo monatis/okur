@@ -79,6 +79,13 @@ struct Run {
 /// `text` without the invisible marks that steer its direction or joins (Explorer wraps
 /// dates in left-to-right marks), which a viewer line would show as stray characters.
 fn visible(text: &str) -> String {
+    without_marks(text).trim().to_owned()
+}
+
+/// `text` without the invisible marks that steer its direction or joins. Windows wraps dates
+/// in them (a file's Properties: "\u{200E}Friday, \u{200E}January ..."); JAWS's speech has
+/// none [obs, 323/s2, s7].
+pub fn without_marks(text: &str) -> String {
     text.chars()
         .filter(|c| {
             !matches!(
@@ -86,9 +93,7 @@ fn visible(text: &str) -> String {
                 '\u{200B}'..='\u{200F}' | '\u{202A}'..='\u{202E}' | '\u{2066}'..='\u{2069}' | '\u{FEFF}'
             )
         })
-        .collect::<String>()
-        .trim()
-        .to_owned()
+        .collect()
 }
 
 /// The height of one line of text in the window: the median height of its one-line items.

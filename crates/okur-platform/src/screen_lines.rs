@@ -175,6 +175,60 @@ mod windows_lines {
         rect
     }
 
+    /// A tab control's tabs as one row where its strip is: a property sheet's "General
+    /// Security Details Previous Versions", which JAWS's view of the window shows under the
+    /// title [obs, 323/s4, s7]. The tabs are not windows: MSAA gives them, with their places.
+    fn tab_row(tabs: HWND) -> Option<Run> {
+        use windows::core::Interface;
+        use windows::Win32::System::Variant::VARIANT;
+        use windows::Win32::UI::Accessibility::{AccessibleObjectFromWindow, IAccessible};
+        const OBJID_CLIENT: i32 = -4;
+        let mut object: *mut core::ffi::c_void = std::ptr::null_mut();
+        // SAFETY: MSAA's client object of a window handle, with a valid out-pointer.
+        unsafe {
+            AccessibleObjectFromWindow(tabs, OBJID_CLIENT as u32, &IAccessible::IID, &mut object)
+                .ok()?;
+        }
+        if object.is_null() {
+            return None;
+        }
+        // SAFETY: AccessibleObjectFromWindow returned an IAccessible for this IID.
+        let accessible = unsafe { IAccessible::from_raw(object) };
+        // SAFETY: plain MSAA queries on the object just obtained.
+        let count = unsafe { accessible.accChildCount() }.ok()?;
+        let mut names = Vec::new();
+        let (mut left, mut top, mut bottom) = (i32::MAX, i32::MAX, i32::MIN);
+        for id in 1..=count {
+            let child = VARIANT::from(id);
+            // SAFETY: plain MSAA queries with valid arguments and out-pointers.
+            unsafe {
+                let name = accessible
+                    .get_accName(&child)
+                    .map(|b| b.to_string())
+                    .unwrap_or_default();
+                if name.trim().is_empty() {
+                    continue;
+                }
+                let (mut x, mut y, mut width, mut height) = (0, 0, 0, 0);
+                if accessible
+                    .accLocation(&mut x, &mut y, &mut width, &mut height, &child)
+                    .is_ok()
+                {
+                    left = left.min(x);
+                    top = top.min(y);
+                    bottom = bottom.max(y + height);
+                }
+                names.push(without_accelerators(&name));
+            }
+        }
+        (!names.is_empty() && top <= bottom).then(|| Run {
+            left,
+            top,
+            bottom,
+            text: names.join(" "),
+        })
+    }
+
     /// A static control's lines as it draws them: its text wrapped at its width, less
     /// `inset` pixels (a check box's box), in its font.
     pub(crate) fn static_lines(hwnd: HWND, text: &str, inset: i32) -> Vec<String> {
@@ -410,6 +464,10 @@ mod windows_lines {
             let rect = rect_of(child);
             if !matches!(class.as_str(), "Static" | "Button") {
                 fields.push((rect.top, rect.bottom));
+            }
+            if class == "SysTabControl32" {
+                runs.extend(tab_row(child));
+                continue;
             }
             let text = text_of(child);
             if text.trim().is_empty() {
