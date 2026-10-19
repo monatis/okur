@@ -41,6 +41,22 @@ punctuation-some = Some
 punctuation-most = Most
 punctuation-all = All
 
+## Typing echo (Insert+2)
+
+typing-echo-none = None
+typing-echo-characters = Characters
+typing-echo-words = Words
+typing-echo-both = Both characters and words
+# The keys typing echo names.
+typing-echo-space = Space
+typing-echo-enter = Enter
+
+## Say Character pressed three times quickly
+
+# The character's value, digit by digit: "Character 7 4" for J, "Character 8 3 6 4" for the
+# euro sign.
+character-value = Character { $digits }
+
 ## Selecting text with Shift and the arrows
 
 selection-selected = selected { $text }

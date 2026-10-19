@@ -44,6 +44,10 @@ pub enum Command {
     SayLine,
     SayWord,
     SayCharacter,
+    /// Say Character pressed twice quickly: the character spelled phonetically.
+    SayCharacterPhonetic,
+    /// Say Character pressed three times quickly: the character's value.
+    SayCharacterValue,
 
     // Moving, then reading.
     SayNextLine,
@@ -145,6 +149,8 @@ pub enum Command {
     SettingsCenter,
     /// The next punctuation level, until Okur exits (JAWS's SetPunctuationLevel).
     SetPunctuationLevel,
+    /// The next typing echo, until Okur exits (Insert+2).
+    NextTypingEcho,
 }
 
 impl Command {
@@ -314,6 +320,7 @@ impl Command {
             "QuickSettings" => QuickSettings,
             "SettingsCenter" => SettingsCenter,
             "SetPunctuationLevel" | "Insert+Shift+2" | "JAWSKey+Shift+2" => SetPunctuationLevel,
+            "Insert+2" | "JAWSKey+2" => NextTypingEcho,
             _ => return None,
         })
     }
@@ -325,6 +332,16 @@ impl Command {
             Command::SaySystemTime => Command::SaySystemDate,
             Command::SaySystemTimeWithSeconds => Command::SayWeekNumber,
             Command::SayFont => Command::SayFontInViewer,
+            Command::SayCharacter => Command::SayCharacterPhonetic,
+            _ => return None,
+        })
+    }
+
+    /// The command pressing this command's keys three times quickly runs: Say Character's
+    /// third press says the character's value [obs, 401/s3].
+    pub fn pressed_thrice(&self) -> Option<Command> {
+        Some(match self {
+            Command::SayCharacter => Command::SayCharacterValue,
             _ => return None,
         })
     }
@@ -521,6 +538,7 @@ static BINDINGS: &[Binding] = &{
             ANY.insert(Yes).shift(Yes).ctrl(No).alt(No),
             SetPunctuationLevel,
         ),
+        bind(Digit(2), JAWS, NextTypingEcho),
         // Finding, and the form fields list.
         bind(
             Alpha('F'),

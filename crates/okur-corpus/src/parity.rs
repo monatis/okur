@@ -620,6 +620,15 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
         );
     }
 
+    fn speak_phonetic(&mut self, text: &str, _interrupt: bool) {
+        append(&self.history, text.to_owned());
+        let pitch = okur_core::pronounce::character_pitch(text);
+        append(
+            &self.spoken,
+            okur_core::pronounce::pitched(&okur_core::pronounce::phonetic(text), pitch),
+        );
+    }
+
     fn stop(&mut self) {}
 }
 
@@ -791,8 +800,8 @@ fn replayable(event: &TraceEvent) -> bool {
 struct StepEvents {
     by_step: std::collections::HashMap<String, Vec<okur_platform::event_trace::TraceEvent>>,
     /// Focus events before the first step (launch and reset), and the window in front with
-    /// its renaming (a console titled by what runs in it), replayed silently so the engine
-    /// knows the window and focus JAWS saw when step 1 began.
+    /// its renaming (a console titled by what runs in it), and the caret's moves, replayed
+    /// silently so the engine knows the window, focus and caret JAWS had when step 1 began.
     setup: Vec<okur_platform::event_trace::TraceEvent>,
     /// When each step began (unix ms), for the replay clock and key times.
     starts: std::collections::HashMap<String, u64>,
@@ -827,10 +836,15 @@ impl StepEvents {
             .map(u128::from)
             .unwrap_or(0)
             .saturating_sub(TICK_MS);
+        // The caret moves too, so a field's text is known with its caret where the reset
+        // keys left it (401: Ctrl+Home and twelve Downs before Say Character).
         let setup = events
             .iter()
             .filter(|e| {
-                (is_focus(e) || e.event == "foreground" || is_window_renamed(e))
+                (is_focus(e)
+                    || e.event == "foreground"
+                    || is_window_renamed(e)
+                    || matches!(e.event.as_str(), "caret" | "text_selection_change"))
                     && e.t_ms < first_start
                     && replayable(e)
             })

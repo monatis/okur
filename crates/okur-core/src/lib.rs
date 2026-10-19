@@ -335,7 +335,7 @@ mod tests {
 
         cursor.move_to_start();
 
-        // The first level 2 heading's own speech is a known gap: see
+        // The first one says the level 1 heading passed: see
         // `heading_level_keys_say_the_section_heading_entered` [obs, 12/s1].
         let _ = cursor.move_next_heading_level(2);
 
@@ -350,18 +350,74 @@ mod tests {
     }
 
     /// From the top of the page, 2 enters the level 1 heading's section: JAWS says that
-    /// heading first, then the level 2 heading [obs, 12/s1, 104/s1]. Pending scenario 275
-    /// records the rule across sections before it is built.
+    /// heading first, then the level 2 heading [obs, 12/s1, 104/s1].
     #[test]
-    #[ignore = "known gap: a level key says the higher heading of the section it enters (12/s1)"]
     fn heading_level_keys_say_the_section_heading_entered() {
         let mut cursor =
             VirtualCursor::new(VirtualBuffer::from_aom(&create_structural_test_tree()));
         cursor.move_to_start();
         assert_eq!(
             cursor.move_next_heading_level(2).unwrap_or_default(),
-            "System Documentation\n \u{001d} heading level 1 \u{001e}\nSection Overview\n \u{001d} heading level 2 \u{001e}"
+            "System Documentation \u{001d} heading level 1 \u{001e} \nSection Overview\n \u{001d} heading level 2 \u{001e}"
         );
+    }
+
+    /// Scenario 275's page: two level 1 sections, each with level 2 and 3 headings.
+    fn sections_tree() -> AomNode {
+        let headings = [
+            (1, "User guide"),
+            (2, "Install"),
+            (3, "Windows"),
+            (3, "macOS"),
+            (2, "Configure"),
+            (3, "Voices"),
+            (1, "Reference"),
+            (2, "Commands"),
+            (3, "Reading"),
+            (2, "Settings"),
+        ];
+        let mut children = Vec::new();
+        for (id, (level, text)) in (1usize..).step_by(2).zip(headings) {
+            children.push(
+                AomNode::new(id, Role::Heading { level })
+                    .with_name(text)
+                    .with_text(text),
+            );
+            children
+                .push(AomNode::new(id + 1, Role::Paragraph).with_text(format!("About {text}.")));
+        }
+        AomNode::new(0, Role::Document)
+            .with_name("Headings in Sections")
+            .with_children(children)
+    }
+
+    /// The headings above the level that a level key walks past, still open where it stops,
+    /// are said before the heading it reaches; going back too [obs, 275].
+    #[test]
+    fn heading_level_keys_say_the_headings_passed() {
+        let mut cursor = VirtualCursor::new(VirtualBuffer::from_aom(&sections_tree()));
+        cursor.move_to_start();
+        let mut key = |level: u32, forward: bool| {
+            let said = if forward {
+                cursor.move_next_heading_level(level)
+            } else {
+                cursor.move_prior_heading_level(level)
+            };
+            said.unwrap_or_default()
+                .replace("\n \u{001d} heading level ", "/")
+                .replace(" \u{001d} heading level ", "/")
+                .replace(" \u{001e} \n", " | ")
+                .replace(" \u{001e}", "")
+        };
+        assert_eq!(key(3, true), "User guide/1 | Install/2 | Windows/3");
+        assert_eq!(key(3, true), "macOS/3");
+        assert_eq!(key(3, true), "Configure/2 | Voices/3");
+        assert_eq!(key(3, true), "Reference/1 | Commands/2 | Reading/3");
+        assert_eq!(key(3, false), "Reference/1 | Voices/3");
+        assert_eq!(key(2, false), "Configure/2");
+        assert_eq!(key(2, false), "Install/2");
+        assert_eq!(key(1, true), "Reference/1");
+        assert_eq!(key(1, false), "User guide/1");
     }
 
     #[test]

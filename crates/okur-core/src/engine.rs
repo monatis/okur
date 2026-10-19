@@ -91,6 +91,8 @@ pub struct ScreenReaderEngine {
     /// The character the last key typed, if it typed one: a console's notification of just
     /// that character is its echo of the key.
     last_typed: Option<char>,
+    /// The word typed so far in a text field, for word echo.
+    typed_word: String,
     /// An edit key's result was read in a field its application also announces (a console):
     /// its announcements of the same change, until the next key, are not said.
     edit_read_in_console: bool,
@@ -142,8 +144,9 @@ pub struct ScreenReaderEngine {
     dialog_focus_target: Option<usize>,
     /// Dialogs opened so far: each gets the next number.
     dialog_count: u32,
-    /// The last JAWS-key command and when it was pressed, to tell a double press.
-    last_press: Option<(Press, u64)>,
+    /// The last JAWS-key command, when it was pressed and how many times quickly in a row, to
+    /// tell a double or triple press.
+    last_press: Option<(Press, u64, u32)>,
     /// User settings (JAWS defaults unless configured).
     pub settings: crate::settings::Settings,
     /// Caps Lock's state as toggled through the JAWS key, when the platform does not report it.
@@ -186,6 +189,7 @@ impl ScreenReaderEngine {
             last_native_focus: None,
             last_selected: None,
             last_typed: None,
+            typed_word: String::new(),
             edit_read_in_console: false,
             last_key_selects: false,
             last_key_tabs: false,
@@ -365,6 +369,12 @@ impl ScreenReaderEngine {
         }
         if event.modifiers.insert {
             self.jaws_key_command(event);
+            return KeyAction::Consume;
+        }
+        // Numpad 5 is Say Character wherever the focus is, in an application's text field
+        // too: JAWS keeps it from the application [obs, 401/s1-s3].
+        if event.key == Key::Numpad5 && event.modifiers.is_empty() {
+            self.execute_pressed(crate::command::Command::SayCharacter, event.time_ms);
             return KeyAction::Consume;
         }
 
@@ -765,6 +775,19 @@ impl ScreenReaderEngine {
         );
         self.resolve_settings();
         let name = level.name();
+        self.speech.speak(&name, true);
+        Some(name)
+    }
+
+    /// Typing Echo (Insert+2): the next echo, for this session only, as Set Punctuation Level.
+    pub(crate) fn next_typing_echo(&mut self) -> Option<String> {
+        let echo = self.settings.typing_echo.next();
+        self.settings_layers.set_for_session(
+            &["typing_echo"],
+            serde_json::to_value(echo).unwrap_or_default(),
+        );
+        self.resolve_settings();
+        let name = echo.name();
         self.speech.speak(&name, true);
         Some(name)
     }

@@ -581,9 +581,9 @@ mod tests {
         );
     }
 
-    /// From the top, a level key into a section says the section's heading first.
+    /// From the top, a level key into a section says the section's heading first [obs,
+    /// 104/s1, 12/s1]; across sections the higher headings it passes (275).
     #[test]
-    #[ignore = "known gap: a level key says the higher heading of the section it enters (104/s1)"]
     fn a_level_key_says_the_section_heading_entered() {
         assert_eq!(
             replay_matches("104-article-heading-levels", "s1", true),

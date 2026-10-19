@@ -18,6 +18,8 @@ enum Request {
     /// Text with every symbol named: a selection, a word read on its own.
     Symbols(String, bool),
     Character(String, bool),
+    /// A character spelled phonetically (Say Character twice).
+    Phonetic(String, bool),
     Stop,
     Configure(okur_core::settings::VoiceSettings),
 }
@@ -64,6 +66,13 @@ impl SpeechThread {
                             Request::Character(text, interrupt) => {
                                 let _ = tts.engine.speak_pitched(
                                     &okur_core::pronounce::character(&text),
+                                    okur_core::pronounce::character_pitch(&text),
+                                    interrupt,
+                                );
+                            }
+                            Request::Phonetic(text, interrupt) => {
+                                let _ = tts.engine.speak_pitched(
+                                    &okur_core::pronounce::phonetic(&text),
                                     okur_core::pronounce::character_pitch(&text),
                                     interrupt,
                                 );
@@ -118,6 +127,12 @@ impl SpeechOutput for SpeechThread {
     fn speak_character(&mut self, text: &str, interrupt: bool) {
         self.record(SpeechLogKind::Speak, text, interrupt);
         self.send(Request::Character(text.to_owned(), interrupt));
+    }
+
+    /// The speech log keeps the character; the synthesizer says its phonetic word.
+    fn speak_phonetic(&mut self, text: &str, interrupt: bool) {
+        self.record(SpeechLogKind::Speak, text, interrupt);
+        self.send(Request::Phonetic(text.to_owned(), interrupt));
     }
 
     fn stop(&mut self) {

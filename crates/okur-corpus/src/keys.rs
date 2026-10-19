@@ -81,7 +81,24 @@ pub fn parse_chord(chord: &str) -> Result<KeyEvent, String> {
         }
     }
     let key = key_from_name(last).ok_or_else(|| format!("unknown key {last:?} in {chord:?}"))?;
-    Ok(KeyEvent::new(key, modifiers, true))
+    let mut event = KeyEvent::new(key, modifiers, true);
+    event.text = typed_text(key, modifiers);
+    Ok(event)
+}
+
+/// The character a chord types, as the live hook reports it (`ToUnicode`, US letters): a
+/// letter, a digit or Space, with Shift at most.
+fn typed_text(key: Key, modifiers: Modifiers) -> Option<char> {
+    if modifiers.ctrl || modifiers.alt || modifiers.insert || modifiers.win || modifiers.caps_lock {
+        return None;
+    }
+    match key {
+        Key::Alpha(c) if modifiers.shift => Some(c.to_ascii_uppercase()),
+        Key::Alpha(c) => Some(c.to_ascii_lowercase()),
+        Key::Digit(d) if !modifiers.shift => char::from_digit(u32::from(d), 10),
+        Key::Space => Some(' '),
+        _ => None,
+    }
 }
 
 #[cfg(test)]

@@ -905,6 +905,68 @@ impl VirtualCursor {
         }
     }
 
+    /// The headings above `level` that a level key walks past from the cursor's line (`from`,
+    /// its start) to the heading at `target`, each on a line of its own, said before it. JAWS
+    /// says the ones still open where the walk ends: a heading closes the ones of its level and
+    /// below walked before it. So 3 from "Voices" to "Reading" says "Reference" and "Commands",
+    /// and Shift+3 back from "Reading" to "Voices" says "Reference" alone [obs, 275/s10, s11].
+    /// Walking forward starts on the cursor's own line: 2 from the top of the page says the
+    /// level 1 heading there (275/s1). Walking back starts on the line before it.
+    fn passed_headings(&self, from: usize, target: usize, level: u32) -> String {
+        let forward = target > from;
+        let mut passed: Vec<(usize, u32)> = self
+            .buffer
+            .headings
+            .iter()
+            .copied()
+            .filter(|&(off, _)| {
+                if forward {
+                    off >= from && off < target
+                } else {
+                    off > target && off < from
+                }
+            })
+            .collect();
+        if !forward {
+            passed.reverse();
+        }
+        let mut open: Vec<(usize, u32)> = Vec::new();
+        for (off, l) in passed {
+            while open.last().is_some_and(|&(_, top)| top >= l) {
+                open.pop();
+            }
+            open.push((off, l));
+        }
+        open.iter()
+            .filter(|&&(_, l)| l < level)
+            .map(|&(off, l)| {
+                let text = self
+                    .buffer
+                    .line_at_offset(off)
+                    .map(|line| line.text.as_str())
+                    .unwrap_or_default();
+                format!("{}\n", SpeechFormatter::format_passed_heading(l, text))
+            })
+            .collect()
+    }
+
+    /// The start of the cursor's line.
+    fn current_line_start(&self) -> usize {
+        self.buffer
+            .line_at_offset(self.offset)
+            .map(|l| l.start_offset)
+            .unwrap_or(self.offset)
+    }
+
+    /// Moves the cursor to the heading of `level` at `target`, saying the higher headings it
+    /// passes first.
+    fn move_to_heading_level(&mut self, target: usize, level: u32) -> String {
+        let passed = self.passed_headings(self.current_line_start(), target, level);
+        self.offset = target;
+        self.current_node_id = self.buffer.line_at_offset(target).map(|l| l.node_id);
+        format!("{passed}{}", self.heading_speech_at(target))
+    }
+
     /// Moves cursor to next heading of `level` (`1`–`6`).
     pub fn move_next_heading_level(&mut self, level: u32) -> Option<String> {
         self.selection = None;
@@ -914,38 +976,26 @@ impl VirtualCursor {
             .iter()
             .find(|&&(off, l)| l == level && off > self.offset)
             .map(|h| h.0);
-        match target {
-            Some(off) => {
-                self.offset = off;
-                self.current_node_id = self.buffer.line_at_offset(off).map(|l| l.node_id);
-                Some(self.heading_speech_at(off))
-            }
-            None => Some(Self::no_more_headings(level)),
-        }
+        Some(match target {
+            Some(off) => self.move_to_heading_level(off, level),
+            None => Self::no_more_headings(level),
+        })
     }
 
     /// Moves cursor to prior heading of `level` (`Shift+1`–`Shift+6`).
     pub fn move_prior_heading_level(&mut self, level: u32) -> Option<String> {
         self.selection = None;
-        let current_line_start = self
-            .buffer
-            .line_at_offset(self.offset)
-            .map(|l| l.start_offset)
-            .unwrap_or(self.offset);
+        let current_line_start = self.current_line_start();
         let target = self
             .buffer
             .headings
             .iter()
             .rfind(|&&(off, l)| l == level && off < current_line_start)
             .map(|h| h.0);
-        match target {
-            Some(off) => {
-                self.offset = off;
-                self.current_node_id = self.buffer.line_at_offset(off).map(|l| l.node_id);
-                Some(self.heading_speech_at(off))
-            }
-            None => Some(Self::no_more_headings(level)),
-        }
+        Some(match target {
+            Some(off) => self.move_to_heading_level(off, level),
+            None => Self::no_more_headings(level),
+        })
     }
 
     /// Moves cursor to next link (`U` / `MoveToNextLink`).

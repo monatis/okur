@@ -527,6 +527,15 @@ impl SpeechFormatter {
         )
     }
 
+    /// A higher heading a level key passes, said on one line before the heading it reaches:
+    /// "Reference ‹ heading level 1 ›" [obs, 275/s3].
+    pub fn format_passed_heading(level: u32, text: &str) -> String {
+        format!(
+            "{text}{}",
+            crate::linearize::role_marker(&msg::role_heading_level(level).render())
+        )
+    }
+
     /// A combo box one types in (an autocomplete): "Fruit edit combo collapsed | blank" (JAWS
     /// on the dev box), on focus and at E.
     pub fn format_edit_combo(name: &str, node: &AomNode) -> String {
@@ -943,6 +952,13 @@ pub trait SpeechOutput: Send + Sync {
     /// raises a capital's pitch ([`crate::pronounce::character_pitch`]).
     fn speak_character(&mut self, text: &str, interrupt: bool) {
         self.speak(&crate::pronounce::character(text), interrupt);
+    }
+
+    /// Speaks a character spelled phonetically (Say Character twice): the history keeps the
+    /// character, the synthesizer says its word ([`crate::pronounce::phonetic`]), a capital's
+    /// at a raised pitch [obs, 401/s2: "J" in the history, "juliett" at pitch 4 spoken].
+    fn speak_phonetic(&mut self, text: &str, interrupt: bool) {
+        self.speak(&crate::pronounce::phonetic(text), interrupt);
     }
 
     /// Returns whether speech output is currently active.

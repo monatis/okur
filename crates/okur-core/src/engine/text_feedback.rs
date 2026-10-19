@@ -2,6 +2,7 @@
 
 use super::ScreenReaderEngine;
 use crate::input::KeyEvent;
+use crate::messages::msg;
 use crate::speech::SpeechFormatter;
 
 impl ScreenReaderEngine {
@@ -30,6 +31,13 @@ impl ScreenReaderEngine {
                 .and_then(|app| app.edit_key(field, event))
         });
         if let Some(key) = crate::editing::EditKey::of(event).or(own_key) {
+            // The word being typed ends where the caret moves; Backspace takes back its last
+            // character.
+            if key == crate::editing::EditKey::DeleteBackward {
+                self.typed_word.pop();
+            } else {
+                self.typed_word.clear();
+            }
             // A document (Windows 11 Notepad; a page's multi-line field, Google Docs' with
             // braille support, where JAWS said "top of file" for Ctrl+Home and the character
             // for Home on the dev box, 2026-10-16) reads some keys otherwise.
@@ -39,6 +47,8 @@ impl ScreenReaderEngine {
                 key
             };
             self.expect_text_change(key);
+        } else if event.key == crate::Key::Enter && event.modifiers.is_empty() {
+            self.echo_enter();
         } else if let Some(c) = event.text {
             self.echo_typed(c);
             // Keep the field's known text current (no speech follows), so the next edit key
@@ -52,19 +62,45 @@ impl ScreenReaderEngine {
         }
     }
 
-    /// Says a typed character, as the typing echo setting has it.
+    /// Says a typed character, as the typing echo setting has it: the character, and with
+    /// word echo the word a space ends. Space is named only when characters alone are echoed
+    /// [obs, 403/s10, s17, s24].
     pub(super) fn echo_typed(&mut self, c: char) {
-        if self.settings.typing_echo != crate::settings::TypingEcho::Characters {
+        use crate::settings::TypingEcho;
+        let echo = self.settings.typing_echo;
+        if c == ' ' {
+            self.echo_word_end();
+            if echo == TypingEcho::Characters {
+                self.speak_echo(msg::typing_echo_space().as_str());
+            }
             return;
         }
-        let echo = if c == ' ' {
-            // Its name, as a space read alone has it.
-            crate::pronounce::character(" ")
-        } else {
-            SpeechFormatter::format_char(c)
-        };
+        self.typed_word.push(c);
+        if echo.says_characters() {
+            self.speak_echo(&SpeechFormatter::format_char(c));
+        }
+    }
+
+    /// Enter in a text field ends the word typed, and is named unless the echo is off
+    /// [obs, 403/s13, s20, s27, s34].
+    fn echo_enter(&mut self) {
+        self.echo_word_end();
+        if self.settings.typing_echo != crate::settings::TypingEcho::None {
+            self.speak_echo(msg::typing_echo_enter().as_str());
+        }
+    }
+
+    /// The word typed so far ends: word echo says it.
+    fn echo_word_end(&mut self) {
+        let word = std::mem::take(&mut self.typed_word);
+        if self.settings.typing_echo.says_words() && !word.is_empty() {
+            self.speak_echo(&word);
+        }
+    }
+
+    fn speak_echo(&mut self, echo: &str) {
         tracing::debug!(%echo, "typing echo");
-        self.speech.speak_echo(&echo);
+        self.speech.speak_echo(echo);
     }
 
     /// Remembers the edit key until the field reports its new text, and asks the platform

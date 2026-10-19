@@ -100,24 +100,62 @@ pub enum LiveRegionAppend {
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum TypingEcho {
-    /// Each character as it is typed: JAWS's default (no `TypingEcho` in `DEFAULT.JCF`).
+    /// Each character as it is typed, Space and Enter by name: JAWS's default (no
+    /// `TypingEcho` in `DEFAULT.JCF`) [obs, 403/s8-s13].
     #[default]
     Characters,
-    /// Nothing: `TypingEcho=0`, the reference machine's and the dev box's. On the dev box no
-    /// sound followed four letters typed in the Run box, while Backspace spoke (`okur
-    /// wait-silence`, 2026-10-17). JAWS's word echo is not modeled.
+    /// Each word once it is ended by Space or Enter; Enter by name [obs, 403/s15-s20].
+    Words,
+    /// Characters, and each word at its end, Space then not named [obs, 403/s22-s27].
+    Both,
+    /// Nothing, Enter neither: `TypingEcho=0`, the reference machine's and the dev box's. On
+    /// the dev box no sound followed four letters typed in the Run box, while Backspace spoke
+    /// (`okur wait-silence`, 2026-10-17) [obs, 403/s1-s6, s29-s34].
     None,
 }
 
 impl TypingEcho {
     /// The echo a `DEFAULT.JCF` `TypingEcho` value sets: "0" is none; anything else is read
-    /// as characters, the only other mode modeled.
+    /// as characters (which values JAWS writes for words and for both is not known yet).
     pub fn from_jcf(value: &str) -> Self {
         if value.trim() == "0" {
             Self::None
         } else {
             Self::Characters
         }
+    }
+
+    /// The echo Typing Echo (Insert+2) moves to: from None, Characters, Words, Both and None
+    /// again [obs, 403/s7, s14, s21, s28].
+    pub fn next(self) -> Self {
+        match self {
+            Self::None => Self::Characters,
+            Self::Characters => Self::Words,
+            Self::Words => Self::Both,
+            Self::Both => Self::None,
+        }
+    }
+
+    /// The echo's name, as JAWS says it when it changes [obs, 403/s7].
+    pub fn name(self) -> String {
+        use crate::messages::msg;
+        match self {
+            Self::None => msg::typing_echo_none(),
+            Self::Characters => msg::typing_echo_characters(),
+            Self::Words => msg::typing_echo_words(),
+            Self::Both => msg::typing_echo_both(),
+        }
+        .to_string()
+    }
+
+    /// Whether typed characters are said.
+    pub fn says_characters(self) -> bool {
+        matches!(self, Self::Characters | Self::Both)
+    }
+
+    /// Whether a word is said when it ends.
+    pub fn says_words(self) -> bool {
+        matches!(self, Self::Words | Self::Both)
     }
 }
 

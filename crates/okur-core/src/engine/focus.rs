@@ -102,6 +102,7 @@ impl ScreenReaderEngine {
         if focus.role != Role::MenuItem {
             self.last_text = focus.text.clone();
             self.pending_edit = None;
+            self.typed_word.clear();
         }
         if focus.role == Role::MenuItem {
             // A page's menu (an ARIA menu): its keys are the page's, as in forms mode, and

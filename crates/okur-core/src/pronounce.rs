@@ -38,6 +38,28 @@ pub fn character(text: &str) -> String {
     }
 }
 
+/// A character spelled phonetically (Say Character pressed twice quickly): a letter's word
+/// ("juliett" for `J`), any other character as [`character`] reads it ("euro sign", "é")
+/// [obs, 401/s2, s9, s13, s20, s22]. The history keeps the character.
+pub fn phonetic(text: &str) -> String {
+    let mut chars = text.chars();
+    match (chars.next(), chars.next()) {
+        (Some(c), None) => ('a'..='z')
+            .zip(PHONETIC)
+            .find(|(letter, _)| *letter == c.to_ascii_lowercase())
+            .map_or_else(|| character(text), |(_, word)| word.to_owned()),
+        _ => character(text),
+    }
+}
+
+/// The words of the letters a to z. JAWS said "alpha", "bravo" and "juliett" (401); the others
+/// are NATO's, until scenario 404 records JAWS's.
+const PHONETIC: [&str; 26] = [
+    "alpha", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel", "india", "juliett",
+    "kilo", "lima", "mike", "november", "oscar", "papa", "quebec", "romeo", "sierra", "tango",
+    "uniform", "victor", "whiskey", "x-ray", "yankee", "zulu",
+];
+
 /// The pitch change of a capital letter read alone, on SAPI's scale (-10 to 10). JAWS sent
 /// this for the reference voice profile's Upper Case Pitch Change of 20 [obs, 307/s35: `B` at
 /// pitch 4; 207].
@@ -429,6 +451,17 @@ mod tests {
 
     /// What JAWS sent its synthesizer for the reading fixture's line 4 at each level
     /// [obs, 400/s4, s10, s16, s22].
+    #[test]
+    fn a_letter_spelled_phonetically_is_its_word() {
+        // [obs, 401/s2, s9, s13, s17, s20, s22]
+        assert_eq!(phonetic("J"), "juliett");
+        assert_eq!(phonetic("B"), "bravo");
+        assert_eq!(phonetic("a"), "alpha");
+        assert_eq!(phonetic("€"), "euro sign");
+        assert_eq!(phonetic("é"), "é");
+        assert_eq!(phonetic("9"), "9");
+    }
+
     #[test]
     fn each_level_names_its_symbols() {
         let line = "Price $9.95, 50% off; total = 3 * 4 + 1 - 2 / 5 ^ 2 ~ 7";

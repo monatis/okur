@@ -125,7 +125,7 @@ pub fn text_lines(text: &str) -> Vec<String> {
 
 /// The character at `caret` (a line break too, which JAWS's history records as an empty
 /// entry and speaks as "blank" [obs, 307/s36]), or `None` at the end of the text.
-fn char_at(context: &TextContext) -> Option<char> {
+pub(crate) fn char_at(context: &TextContext) -> Option<char> {
     chars(&context.text).get(context.caret).copied()
 }
 

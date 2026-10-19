@@ -3368,6 +3368,107 @@ fn insert_shift_2_cycles_the_punctuation_level() {
     assert!(store.take().is_empty());
 }
 
+/// Typing Echo (Insert+2) moves from None to Characters, Words, Both and back, saying the new
+/// echo's name; until Okur exits, as Set Punctuation Level [obs, 403/s7, s14, s21, s28].
+#[test]
+fn insert_2_cycles_the_typing_echo() {
+    use crate::settings::TypingEcho;
+    let (mut engine, speech) = engine_with_speech();
+    let mut changed = engine.settings.clone();
+    changed.typing_echo = TypingEcho::None;
+    engine.set_settings(changed);
+    let store = crate::settings::RecordingSettingsStore::default();
+    engine.set_settings_store(Box::new(store.clone()));
+    let mut key = KeyEvent::new(Key::Digit(2), Modifiers::none(), true);
+    key.modifiers.insert = true;
+    speech.take();
+    let mut said = Vec::new();
+    for _ in 0..4 {
+        assert_eq!(engine.handle_key_event(&key), KeyAction::Consume);
+        said.extend(speech.take());
+    }
+    assert_eq!(
+        said,
+        ["Characters", "Words", "Both characters and words", "None"]
+    );
+    assert!(store.take().is_empty());
+}
+
+/// "ab cd" and Enter typed in a field with each typing echo: the characters with Space and
+/// Enter named; the words at Space and Enter, then Enter; both, Space then unnamed; or
+/// nothing at all [obs, 403].
+#[test]
+fn typing_echo_says_characters_words_or_both() {
+    use crate::settings::TypingEcho;
+    let said = |echo: TypingEcho| {
+        let (mut engine, speech) = engine_with_speech();
+        let mut changed = engine.settings.clone();
+        changed.typing_echo = echo;
+        engine.set_settings(changed);
+        engine.handle_focus_event(
+            &FocusEvent::new(Role::Edit)
+                .with_name("Text")
+                .with_window_title("SR Reading Fixture"),
+        );
+        speech.take();
+        for (key, text) in [
+            (Key::Alpha('A'), Some('a')),
+            (Key::Alpha('B'), Some('b')),
+            (Key::Space, Some(' ')),
+            (Key::Alpha('C'), Some('c')),
+            (Key::Alpha('D'), Some('d')),
+            (Key::Enter, None),
+        ] {
+            let mut event = KeyEvent::new(key, Modifiers::none(), true);
+            event.text = text;
+            engine.handle_key_event(&event);
+        }
+        speech.take()
+    };
+    assert_eq!(
+        said(TypingEcho::Characters),
+        ["a", "b", "Space", "c", "d", "Enter"]
+    );
+    assert_eq!(said(TypingEcho::Words), ["ab", "cd", "Enter"]);
+    assert_eq!(
+        said(TypingEcho::Both),
+        ["a", "b", "ab", "c", "d", "cd", "Enter"]
+    );
+    assert!(said(TypingEcho::None).is_empty());
+}
+
+/// Numpad 5 is Say Character in an application's text field too: once the character, twice
+/// quickly its phonetic word, three times its value
+/// [obs, 401/s1-s3].
+#[test]
+fn numpad_5_says_the_character_its_word_and_its_value() {
+    let (mut engine, speech) = engine_with_speech();
+    let mut field = FocusEvent::new(Role::Edit)
+        .with_name("Text")
+        .with_window_title("SR Reading Fixture");
+    field.text = Some(crate::event::TextContext {
+        text: "ab\r\nJAWS".into(),
+        caret: 4,
+        selection: None,
+        font: None,
+        word: None,
+    });
+    engine.handle_focus_event(&field);
+    speech.take();
+    let mut said = Vec::new();
+    for (i, time_ms) in [1000, 1200, 1400, 5000].into_iter().enumerate() {
+        let mut key = KeyEvent::new(Key::Numpad5, Modifiers::none(), true);
+        key.time_ms = time_ms;
+        assert_eq!(
+            engine.handle_key_event(&key),
+            KeyAction::Consume,
+            "press {i}"
+        );
+        said.extend(speech.take());
+    }
+    assert_eq!(said, ["J", "juliett", "Character 7 4", "J"]);
+}
+
 /// The settings in force follow the focus: an application's own, a site's over its
 /// browser's, all applications' elsewhere.
 #[test]

@@ -106,6 +106,7 @@ impl ScreenReaderEngine {
             Command::VirtualizeControl => return self.virtualize(false),
             Command::QuickSettings | Command::SettingsCenter => return self.open_settings(),
             Command::SetPunctuationLevel => return self.next_punctuation_level(),
+            Command::NextTypingEcho => return self.next_typing_echo(),
             Command::SayFont => return self.say_font(false),
             Command::SayFontInViewer => return self.say_font(true),
             _ => {}
@@ -380,7 +381,14 @@ impl ScreenReaderEngine {
             }
             Command::SayLine => Some(self.cursor.current_line()),
             Command::SayWord => Some(self.cursor.current_word()),
-            Command::SayCharacter => Some(self.cursor.current_char()),
+            Command::SayCharacter | Command::SayCharacterPhonetic => Some(self.character_here()),
+            // Its value in decimal, said digit by digit [obs, 401/s3: "Character 7 4" for J;
+            // s10: 8364 for the euro sign].
+            Command::SayCharacterValue => self.character_here().chars().next().map(|c| {
+                let digits = u32::from(c).to_string();
+                let digits: Vec<String> = digits.chars().map(String::from).collect();
+                msg::character_value(digits.join(" ")).render()
+            }),
 
             // In-buffer find commands
             Command::VirtualFind => Some(format!(
@@ -475,9 +483,11 @@ impl ScreenReaderEngine {
             // Left/Right read a character, which the synthesizer names ("space").
             let character = matches!(
                 command,
-                Command::SayNextCharacter | Command::SayPriorCharacter
+                Command::SayNextCharacter | Command::SayPriorCharacter | Command::SayCharacter
             ) && text.chars().count() == 1;
-            if character {
+            if command == Command::SayCharacterPhonetic && text.chars().count() == 1 {
+                self.speech.speak_phonetic(text, true);
+            } else if character {
                 self.speech.speak_character(text, true);
             } else if !text.is_empty() {
                 self.speech.speak(text, true);
@@ -521,6 +531,20 @@ impl ScreenReaderEngine {
                     .last_native_focus
                     .as_ref()
                     .is_some_and(|f| matches!(f.role, Role::Edit | Role::Document)))
+    }
+
+    /// The character Say Character reads: the caret's in a text field, the virtual cursor's
+    /// elsewhere.
+    fn character_here(&self) -> String {
+        if self.editing_text() {
+            return self
+                .last_text
+                .as_ref()
+                .and_then(crate::editing::char_at)
+                .map(String::from)
+                .unwrap_or_default();
+        }
+        self.cursor.current_char()
     }
 
     /// A JAWS key command (Insert+…). In a text field the reading commands read the field;
@@ -612,22 +636,48 @@ impl ScreenReaderEngine {
             return;
         }
         if let Some(command) = layout_command.or_else(|| crate::command::command_for(event)) {
-            let command = if self.pressed_twice(Press::Command(command.clone()), event.time_ms) {
-                command.pressed_twice().unwrap_or(command)
-            } else {
-                command
-            };
-            let _ = self.execute(command);
+            self.execute_pressed(command, event.time_ms);
         }
     }
 
-    /// Whether `press` repeats the last press quickly enough to be a double press
-    /// ([`Command::pressed_twice`]). A double press is not the first press of another.
+    /// Runs `command`, or what pressing its keys twice or three times quickly runs.
+    pub(super) fn execute_pressed(&mut self, command: Command, time_ms: u64) {
+        let most = if command.pressed_thrice().is_some() {
+            3
+        } else {
+            2
+        };
+        let command = match self.presses(Press::Command(command.clone()), time_ms, most) {
+            2 => command.pressed_twice().unwrap_or(command),
+            3 => command.pressed_thrice().unwrap_or(command),
+            _ => command,
+        };
+        let _ = self.execute(command);
+    }
+
+    /// How many times in a row `press` has been pressed, each quickly after the last, counting
+    /// up to `most` ([`Command::pressed_twice`], [`Command::pressed_thrice`]); the press after
+    /// the last one counted is a first press again.
+    fn presses(&mut self, press: Press, time_ms: u64, most: u32) -> u32 {
+        let count = match &self.last_press {
+            Some((last, at, count))
+                if *last == press
+                    && time_ms != 0
+                    && time_ms.saturating_sub(*at) <= DOUBLE_PRESS_MS
+                    && *count < most =>
+            {
+                count + 1
+            }
+            _ => 1,
+        };
+        self.last_press = (count < most).then_some((press, time_ms, count));
+        count
+    }
+
+    /// Whether `press` repeats the last press quickly enough to be a double press. A double
+    /// press is not the first press of another.
     fn pressed_twice(&mut self, press: Press, time_ms: u64) -> bool {
-        let twice = matches!(&self.last_press, Some((last, at))
-            if *last == press && time_ms != 0 && time_ms.saturating_sub(*at) <= DOUBLE_PRESS_MS);
-        self.last_press = (!twice).then_some((press, time_ms));
-        twice
+        self.presses(press, time_ms, 2) == 2
     }
 
     /// CapsLock as the JAWS key: a single press is the JAWS key; pressed twice quickly it
