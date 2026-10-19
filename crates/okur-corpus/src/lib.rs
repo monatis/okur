@@ -542,4 +542,75 @@ mod tests {
     fn manifest_is_current() {
         assert_eq!(manifest::check(&corpus_dir()), Ok(()));
     }
+
+    /// Whether replay says what JAWS said at `scenario`'s `step`, on the speech history layer,
+    /// and on the spoken layer too with `spoken`.
+    fn replay_matches(scenario: &str, step: &str, spoken: bool) -> Result<(), String> {
+        let steps = parity::run_one(&corpus_dir(), scenario)?;
+        let key = format!("{scenario}/{step}");
+        let found = steps
+            .iter()
+            .find(|s| s.key == key)
+            .ok_or_else(|| format!("no step {key}"))?;
+        if !found.matched {
+            return Err(format!(
+                "{key}: Okur {:?}, JAWS {:?}",
+                found.engine, found.jaws_variants
+            ));
+        }
+        match (&found.spoken, spoken) {
+            (Some(said), true) if !said.matched => Err(format!(
+                "{key} spoken: Okur {:?}, JAWS {:?}",
+                said.engine, said.jaws_variants
+            )),
+            _ => Ok(()),
+        }
+    }
+
+    // Known gaps (AGENTS.md rule 6): what JAWS was recorded saying, and Okur does not say yet.
+    // docs/backlog/open-items.md lists them; each test passes once the gap is closed.
+
+    /// Space on a select box from the virtual cursor: JAWS says only its opened list, with no
+    /// position ("list with 2 items | Red | To move to an item press the Arrow keys.").
+    #[test]
+    #[ignore = "known gap: Space on a select box says its opened list only (229/s21)"]
+    fn space_on_a_select_says_its_opened_list() {
+        assert_eq!(
+            replay_matches("229-web-space-activates", "s21", true),
+            Ok(())
+        );
+    }
+
+    /// From the top, a level key into a section says the section's heading first.
+    #[test]
+    #[ignore = "known gap: a level key says the higher heading of the section it enters (104/s1)"]
+    fn a_level_key_says_the_section_heading_entered() {
+        assert_eq!(
+            replay_matches("104-article-heading-levels", "s1", true),
+            Ok(())
+        );
+        assert_eq!(
+            replay_matches("12-struct-heading-level-2", "s1", false),
+            Ok(())
+        );
+    }
+
+    /// A native edit of several lines: the caret's line and "Contains text" on focus; Say Line
+    /// without the field's name; Ctrl+Home with "top of file".
+    #[test]
+    #[ignore = "known gap: a native multi-line edit is read as a document (316/s3, 400/s1, s5)"]
+    fn a_multi_line_edit_is_read_as_a_document() {
+        assert_eq!(
+            replay_matches("316-desktop-show-desktop", "s3", true),
+            Ok(())
+        );
+        assert_eq!(
+            replay_matches("400-desktop-punctuation-cycle", "s1", true),
+            Ok(())
+        );
+        assert_eq!(
+            replay_matches("400-desktop-punctuation-cycle", "s5", true),
+            Ok(())
+        );
+    }
 }

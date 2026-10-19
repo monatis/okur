@@ -109,10 +109,12 @@ Block quotes cannot be seen through UIA. Measure first how long users stay on th
 - **The signup fixture's `help@riverside-library.org`** is not at a reserved example domain, so
   the tracer would blank it out of a trace (`crates/okur-platform/src/privacy.rs`). It has never
   appeared in one; move it to `example.org` the next time `signup-form.html` is re-recorded.
-- **Known-gap tests:** none exist yet (AGENTS.md rule 6). Write one per group above where JAWS's
-  behavior is recorded.
-- **A test asserting speech JAWS contradicts:** `crates/okur-core/src/lib.rs`, scenario 12, the
-  section heading on level keys (104/s1, 12/s1; audit §2.6).
+- **Known-gap tests** (AGENTS.md rule 6): `crates/okur-corpus/src/lib.rs` replays the step and
+  asserts JAWS's speech (`parity::run_one`): Space on a select box (229/s21), level keys into a
+  section (104/s1, 12/s1), the native multi-line edit (316/s3, 400/s1, s5); and
+  `crates/okur-core/src/lib.rs`'s `heading_level_keys_say_the_section_heading_entered`, which
+  replaced the scenario 12 assertion JAWS contradicted. Add one for each gap whose behavior is
+  recorded; `cargo test -- --ignored` runs them.
 - **Dev-box rules:** seven rules in the code come from the owner's JAWS on the dev box, and
   old-pc's evidence contradicts them (audit §5). Record the settings and Windows version each
   was seen with, and settle each conflict with a recording.

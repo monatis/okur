@@ -453,6 +453,15 @@ pub fn run_with(corpus_dir: &Path, api: Api) -> ParityReport {
     report
 }
 
+/// Runs one scenario (`corpus_dir/scenarios/<id>.json`) against its evidence: for tests of
+/// single steps, the known gaps among them.
+pub fn run_one(corpus_dir: &Path, id: &str) -> Result<Vec<StepParity>, String> {
+    let scenario =
+        Scenario::load_from_file(corpus_dir.join("scenarios").join(format!("{id}.json")))
+            .map_err(|e| format!("{id}: {e}"))?;
+    run_scenario(corpus_dir, &scenario, snapshots::PARITY_API)
+}
+
 #[derive(Debug, Serialize)]
 struct Baseline<'a> {
     notice: &'static str,

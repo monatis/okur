@@ -335,8 +335,9 @@ mod tests {
 
         cursor.move_to_start();
 
-        let s1 = cursor.move_next_heading_level(2).unwrap_or_default();
-        assert_eq!(s1, "Section Overview\n \u{001d} heading level 2 \u{001e}");
+        // The first level 2 heading's own speech is a known gap: see
+        // `heading_level_keys_say_the_section_heading_entered` [obs, 12/s1].
+        let _ = cursor.move_next_heading_level(2);
 
         let s2 = cursor.move_next_heading_level(2).unwrap_or_default();
         assert_eq!(s2, "Architecture Guide\n \u{001d} heading level 2 \u{001e}");
@@ -345,6 +346,21 @@ mod tests {
         assert_eq!(
             prior,
             "Section Overview\n \u{001d} heading level 2 \u{001e}"
+        );
+    }
+
+    /// From the top of the page, 2 enters the level 1 heading's section: JAWS says that
+    /// heading first, then the level 2 heading [obs, 12/s1, 104/s1]. Pending scenario 275
+    /// records the rule across sections before it is built.
+    #[test]
+    #[ignore = "known gap: a level key says the higher heading of the section it enters (12/s1)"]
+    fn heading_level_keys_say_the_section_heading_entered() {
+        let mut cursor =
+            VirtualCursor::new(VirtualBuffer::from_aom(&create_structural_test_tree()));
+        cursor.move_to_start();
+        assert_eq!(
+            cursor.move_next_heading_level(2).unwrap_or_default(),
+            "System Documentation\n \u{001d} heading level 1 \u{001e}\nSection Overview\n \u{001d} heading level 2 \u{001e}"
         );
     }
 
