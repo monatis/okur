@@ -12,6 +12,21 @@ The active work is in [`2026-10-18-reading-settings.md`](../plans/2026-10-18-rea
 punctuation, typing echo, key echo, character reading, words and numbers, capitals, verbosity,
 and per-application and per-site settings. Those are not repeated here.
 
+## Everyday use
+
+[`everyday-use-gaps-2026-10-19.md`](everyday-use-gaps-2026-10-19.md) compares JAWS 2025's
+help, manual and tutorials with Okur. It lists 43 gaps ranked for everyday use, 13 places
+where Okur contradicts JAWS's documentation, and the order of work. P0:
+- the reading keys on native controls read the last web page;
+- Say All does not move the cursor;
+- selecting and copying in the virtual cursor;
+- JAWS Find, and Ctrl+F is blocked meanwhile;
+- Insert+Shift+Down in a native edit;
+- Home, End, PageUp and PageDown in the virtual cursor;
+- Word and Outlook.
+
+Scenarios 500-507 record them (old-pc round 12).
+
 ## Dialogs and lists
 
 - **A tree child's parent name.** JAWS adds it after the position: "level 1 Primary Navigation 1

@@ -26,6 +26,10 @@ param(
     # Fixtures (file names under corpus\fixtures) whose IA2 and UIA snapshots are captured into
     # <OutputDir>\snapshots before the batch: a capture must not run during another batch.
     [string[]]$Snapshots = @(),
+    # Harness scripts copied over this skill's scripts once the batch before has finished, so a
+    # changed capture script reaches only the batches queued after the change (each batch's
+    # evidence then names one capture script hash).
+    [string]$StagedScripts,
     # Give up waiting after this long.
     [int]$MaxWaitMinutes = 360
 )
@@ -43,6 +47,12 @@ while (-not (Test-Path $previous)) {
     Start-Sleep -Seconds 10
 }
 "starting $(Get-Date -Format o)" | Out-File $log -Append -Encoding utf8
+if ($StagedScripts) {
+    foreach ($script in Get-ChildItem -LiteralPath $StagedScripts -Filter *.ps1) {
+        Copy-Item -LiteralPath $script.FullName -Destination (Join-Path $PSScriptRoot $script.Name) -Force
+        "installed $($script.Name) $((Get-FileHash -LiteralPath $script.FullName).Hash.ToLower())" | Out-File $log -Append -Encoding utf8
+    }
+}
 if ($Snapshots.Count -gt 0) {
     $capture = Join-Path $PSScriptRoot 'capture-snapshot.ps1'
     $okur = 'C:\Users\ailabs\sr-harness\bin\okur.exe'

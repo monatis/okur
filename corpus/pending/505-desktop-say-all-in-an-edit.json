@@ -1,0 +1,17 @@
+{
+  "id": "505-desktop-say-all-in-an-edit",
+  "name": "Say All in a native multiline edit stopped by Ctrl, and moved by Right and Left; Insert+Up after each shows where the caret was left",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-reading.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Reading Fixture" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+Down", "during": [{ "after_ms": 4000, "command": "Ctrl" }] },
+    { "id": "s2", "type": "key", "command": "Insert+Up" },
+    { "id": "s3", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s4", "type": "key", "command": "Insert+Down", "during": [{ "after_ms": 3000, "command": "Right" }, { "after_ms": 2500, "command": "Left" }, { "after_ms": 2500, "command": "Ctrl" }] },
+    { "id": "s5", "type": "key", "command": "Insert+Up" }
+  ]
+}

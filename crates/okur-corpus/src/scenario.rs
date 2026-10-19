@@ -42,6 +42,17 @@ pub struct ScenarioStep {
     /// A `key` step's chord pressed this many times quickly ("twice quickly"); 1 when absent.
     #[serde(default)]
     pub repeat: Option<u32>,
+    /// Chords pressed while the step's speech goes on (Ctrl or Right during Say All), each
+    /// `after_ms` after the one before.
+    #[serde(default)]
+    pub during: Option<Vec<DuringKey>>,
+}
+
+/// A chord a step presses while its speech goes on.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DuringKey {
+    pub after_ms: u64,
+    pub command: String,
 }
 
 impl Scenario {
@@ -50,5 +61,25 @@ impl Scenario {
         let clean = content.trim_start_matches('\u{feff}');
         let scenario = serde_json::from_str(clean)?;
         Ok(scenario)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_step_reads_the_keys_pressed_during_its_speech() -> Result<(), serde_json::Error> {
+        let step: ScenarioStep = serde_json::from_str(
+            r#"{ "id": "s1", "type": "key", "command": "Insert+Down",
+                 "during": [{ "after_ms": 3000, "command": "Right" }, { "after_ms": 2500, "command": "Ctrl" }] }"#,
+        )?;
+        let during = step.during.unwrap_or_default();
+        let keys: Vec<(u64, &str)> = during
+            .iter()
+            .map(|key| (key.after_ms, key.command.as_str()))
+            .collect();
+        assert_eq!(keys, vec![(3000, "Right"), (2500, "Ctrl")]);
+        Ok(())
     }
 }

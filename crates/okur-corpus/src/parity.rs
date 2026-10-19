@@ -363,6 +363,12 @@ fn run_scenario(
                                 held,
                             )?;
                         }
+                        // Chords pressed while the step's speech went on, at their times.
+                        let mut at = start;
+                        for key in step.during.iter().flatten() {
+                            at += key.after_ms;
+                            press(&mut engine, &actions, &key.command, at, held)?;
+                        }
                     }
                 }
                 // Replay the OS events recorded while JAWS handled this step (e.g. the focus

@@ -37,6 +37,9 @@ Step types:
                "NumpadPlus"; "Comma", "Period", "Slash" by their US places ($ScanTable).
                An optional "repeat": N presses the chord N times quickly ("twice quickly").
                "capture_clipboard": true stores the clipboard after the step (observation.clipboard).
+               "during": [{"after_ms": 3000, "command": "Ctrl"}] presses chords while the
+               step's speech goes on, each after_ms after the one before (Say All stopped or
+               moved by Left and Right); the step settles after the last one.
   jaws_script  JAWS script name dispatched through FSAPI RunScript.
   jaws_function  JAWS function call through FSAPI RunFunction: TypeKey("Down") for keys inside
                JAWS's own dialogs (Links List, Find), which run elevated and refuse our keys.
@@ -691,6 +694,14 @@ for ($t = 1; $t -le $Repetitions; $t++) {
 
         $tStart = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
         $dispatchOk = Invoke-Step $step.type $step.command ([int]$step.repeat)
+        # "during": chords pressed while the step's speech goes on (Ctrl or Right during Say
+        # All), each after_ms after the one before; the step then settles and reads the history
+        # once, so its records end where the last of them left JAWS.
+        foreach ($d in @($step.during)) {
+            if ($null -eq $d) { continue }
+            Start-Sleep -Milliseconds ([int]$d.after_ms)
+            $dispatchOk = (Send-Chord $d.command) -and $dispatchOk
+        }
         $observed = Wait-Silence -OnsetMs 800 -QuietMs $quietMs -MaxMs $maxMs
         # "capture_clipboard": what the step copied (e.g. Ctrl+C in the Virtual Viewer), read
         # before the speech history copy replaces it.
@@ -716,7 +727,11 @@ for ($t = 1; $t -le $Repetitions; $t++) {
             step_id = $step.id
             t_start_ms = $tStart
             t_end_ms = $tEnd
-            action = [ordered]@{ type = $step.type; command = $step.command; repeat = [Math]::Max(1, [int]$step.repeat) }
+            action = if ($step.during) {
+                [ordered]@{ type = $step.type; command = $step.command; repeat = [Math]::Max(1, [int]$step.repeat); during = @($step.during) }
+            } else {
+                [ordered]@{ type = $step.type; command = $step.command; repeat = [Math]::Max(1, [int]$step.repeat) }
+            }
             observation = [ordered]@{
                 speech_raw = $transcript
                 spoken = @($spokenRecords | ForEach-Object { Get-SpokenText $_ })

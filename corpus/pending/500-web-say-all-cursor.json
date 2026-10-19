@@ -1,0 +1,22 @@
+{
+  "id": "500-web-say-all-cursor",
+  "name": "Say All (Insert+Down) stopped by Ctrl, moved by Right and Left, its rate changed by PageUp and PageDown, and H during it; Insert+Up after each shows where the virtual cursor was left",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+Down", "during": [{ "after_ms": 4000, "command": "Ctrl" }] },
+    { "id": "s2", "type": "key", "command": "Insert+Up" },
+    { "id": "s3", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s4", "type": "key", "command": "Insert+Down", "during": [{ "after_ms": 3000, "command": "Right" }, { "after_ms": 2500, "command": "Right" }, { "after_ms": 2500, "command": "Left" }, { "after_ms": 2500, "command": "Ctrl" }] },
+    { "id": "s5", "type": "key", "command": "Insert+Up" },
+    { "id": "s6", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s7", "type": "key", "command": "Insert+Down", "during": [{ "after_ms": 2500, "command": "PageUp" }, { "after_ms": 2500, "command": "PageDown" }, { "after_ms": 2500, "command": "Ctrl" }] },
+    { "id": "s8", "type": "key", "command": "Insert+Up" },
+    { "id": "s9", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s10", "type": "key", "command": "Insert+Down", "during": [{ "after_ms": 2500, "command": "H" }, { "after_ms": 3000, "command": "Ctrl" }] },
+    { "id": "s11", "type": "key", "command": "Insert+Up" }
+  ]
+}

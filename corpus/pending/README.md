@@ -24,6 +24,14 @@ To record one:
 | 298 | Insert+N, Insert+Shift+Z, Insert+Z, Insert+Escape | `news-article.html` |
 | 299 | J (Jump to Line), Shift+J, W and Shift+W (Word from List) | `news-article.html` |
 | 285 | Auto Forms Mode on: Up into an 18-line text area, through its lines, out at its top | `reading-settings.html` |
+| 500 | Say All stopped by Ctrl, moved by Right and Left, rate keys and H during it | `news-article.html` |
+| 501 | Selecting and copying with the virtual cursor, Say and Spell Selected Text | `doc-reading.html` |
+| 502 | Home, End, PageDown and PageUp with the virtual cursor | `news-article.html` |
+| 503 | Reading keys on a native check box and list box, top and bottom line, Say All in a dialog | `desktop-forms.ps1` |
+| 504 | A native edit: selected text, clipboard keys, Say To and From Cursor, sentence, paragraph | `desktop-editor.ps1` |
+| 505 | Say All in a native edit stopped by Ctrl and moved by Right and Left | `desktop-reading.ps1` |
+| 506 | JAWS Find (Ctrl+F, F3, Shift+F3, Insert+Ctrl+F) | `news-article.html` |
+| 507 | A page load stopped by Ctrl, then Numpad Plus in forms mode | `signup-form.html` |
 
 Scenarios from 400 record JAWS's reading settings (plan
 `docs/plans/2026-10-18-reading-settings.md`). Their fixtures, `reading-settings.html`
@@ -31,6 +39,10 @@ and its desktop twin `desktop-reading.ps1` (recorded with 400), hold the 18 line
 `docs/references/jaws-reading-settings-research.md` §12, the same text in both. A scenario
 that needs a setting other than old-pc's names it in `jaws_settings`
 (`skills/jaws-reference/scripts/jaws-settings.ps1`), and `run-batch.ps1` sets it.
+
+Scenarios from 500 record the everyday-use gaps of
+`docs/backlog/everyday-use-gaps-2026-10-19.md`. A step's `during` presses keys while JAWS
+still speaks (Ctrl or Right during Say All).
 
 Every scenario written here before (208, 210–219, 315–323) has been recorded; git history keeps
 the notes written with them.

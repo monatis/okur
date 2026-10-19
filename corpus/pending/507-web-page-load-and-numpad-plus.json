@@ -1,0 +1,19 @@
+{
+  "id": "507-web-page-load-and-numpad-plus",
+  "name": "A page loading (Ctrl+R): what JAWS says and reads before Ctrl stops it, and where the virtual cursor is left; then Numpad Plus in forms mode",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Ctrl+R", "during": [{ "after_ms": 7000, "command": "Ctrl" }] },
+    { "id": "s2", "type": "key", "command": "Insert+Up" },
+    { "id": "s3", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s4", "type": "key", "command": "E" },
+    { "id": "s5", "type": "key", "command": "Enter" },
+    { "id": "s6", "type": "key", "command": "NumpadPlus" },
+    { "id": "s7", "type": "key", "command": "Insert+Up" },
+    { "id": "s8", "type": "key", "command": "Down" }
+  ]
+}
