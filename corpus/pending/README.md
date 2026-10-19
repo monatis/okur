@@ -12,16 +12,9 @@ To record one:
 
 | Scenario | What it records | Fixture |
 |---|---|---|
-| 504 | A native edit: selected text, clipboard keys, Say To and From Cursor, sentence, paragraph | `desktop-editor.ps1` |
-| 505 | Say All in a native edit stopped by Ctrl and moved by Right and Left | `desktop-reading.ps1` |
 | 509 | Keyboard Help (Insert+1), Insert+F1, Insert+H, Insert+W. Recorded in round 13 and not imported: in Keyboard Help mode JAWS describes the harness's history copy instead of running it, so those steps time out (their synthesizer text is recorded) | `desktop-dialogs.ps1` |
-| 515 | Ctrl+A with nothing selected, F8, skim reading, element information | `news-article.html` |
 | 518 | Reading a Word document | `desktop-word.ps1` (here) |
 | 519 | Word's headings list, spelling errors, revisions | `desktop-word.ps1` (here) |
-| 520 | Say the clipboard (Insert+Win+X) | `desktop-editor.ps1` |
-| 521 | Excel: cells, coordinates, a column's cells, sheets, the worksheets list | `desktop-excel.ps1` (here) |
-| 522 | Reading a rich-text document in WordPad | `desktop-wordpad.ps1` (here) |
-| 523 | WordPad's ribbon | `desktop-wordpad.ps1` (here) |
 | 524 | Notepad's Save As dialog | `desktop-notepad.ps1` |
 | 525 | Notepad's Open dialog | `desktop-notepad.ps1` |
 

@@ -1,0 +1,19 @@
+{
+  "id": "527-desktop-notepad-help-keys",
+  "name": "Help keys in Notepad: screen-sensitive help (Insert+F1), hot key help (Insert+H) and Windows keys help (Insert+W), each closed with Escape, then Insert+Up",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "sr-notepad-fixture.txt - Notepad" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+F1", "settle_max_ms": 30000 },
+    { "id": "s2", "type": "key", "command": "Escape" },
+    { "id": "s3", "type": "key", "command": "Insert+H", "settle_max_ms": 60000 },
+    { "id": "s4", "type": "key", "command": "Escape" },
+    { "id": "s5", "type": "key", "command": "Insert+W", "settle_max_ms": 60000 },
+    { "id": "s6", "type": "key", "command": "Escape" },
+    { "id": "s7", "type": "key", "command": "Insert+Up" }
+  ]
+}
