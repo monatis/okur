@@ -420,9 +420,23 @@ fn set(window: HWND, index: usize, item: HWND, kind: &ControlKind, value: &Value
                     }
                 }
             }
-            (ControlKind::Text { .. } | ControlKind::ComboEdit { .. }, Value::Text(text)) => {
+            (ControlKind::Text { .. }, Value::Text(text)) => {
                 let text = wide(text);
                 let _ = SetWindowTextW(item, windows::core::PCWSTR(text.as_ptr()));
+            }
+            // An editable combo box's text goes to its edit: set on the combo box, the item that
+            // matches it is selected in the list, and the field was read with its position, "board
+            // 1 of 1", where JAWS Find's has none [obs, 506/s12].
+            (ControlKind::ComboEdit { .. }, Value::Text(text)) => {
+                let text = wide(text);
+                let edit = windows::Win32::UI::WindowsAndMessaging::FindWindowExW(
+                    Some(item),
+                    None,
+                    windows::core::w!("Edit"),
+                    None,
+                )
+                .unwrap_or(item);
+                let _ = SetWindowTextW(edit, windows::core::PCWSTR(text.as_ptr()));
             }
             _ => {}
         }

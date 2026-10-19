@@ -94,3 +94,6 @@ find-find = Find
 find-delete = Delete
 find-clear-history = Clear Find History
 find-cancel = Cancel
+
+# Ctrl+F in a page, said before JAWS Find opens [obs, 506/s1].
+virtual-find = Virtual Find

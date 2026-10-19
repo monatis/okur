@@ -445,7 +445,13 @@ impl ScreenReaderEngine {
             }),
 
             // In-buffer find commands
-            Command::VirtualFind => return self.open_find(),
+            Command::VirtualFind => {
+                if self.app_mode == AppMode::VirtualBuffer {
+                    self.speech.speak(msg::virtual_find().as_str(), true);
+                }
+                return self.open_find();
+            }
+            Command::JawsFind => return self.open_find(),
             Command::FindNext => self.cursor.find_next(),
             Command::FindPrior => self.cursor.find_prior(),
 

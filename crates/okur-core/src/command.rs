@@ -186,7 +186,10 @@ pub enum Command {
     LeftMouseClick,
 
     // Finding.
+    /// Ctrl+F in a page: JAWS Find, announced as "Virtual Find" [obs, 506/s1].
     VirtualFind,
+    /// Insert+Ctrl+F: JAWS Find, with no announcement [obs, 506/s12].
+    JawsFind,
     FindNext,
     FindPrior,
     /// Finds the text, forward from the cursor.
@@ -402,9 +405,8 @@ impl Command {
             "SayToCursor" | "Insert+Home" => SayToCursor,
             "SayFromCursor" | "Insert+PageUp" => SayFromCursor,
 
-            "^f" | "Ctrl+F" | "VirtualFind" | "JAWSFind" | "Insert+Ctrl+F" | "JAWSKey+Ctrl+F" => {
-                VirtualFind
-            }
+            "^f" | "Ctrl+F" | "VirtualFind" => VirtualFind,
+            "JAWSFind" | "Insert+Ctrl+F" | "JAWSKey+Ctrl+F" => JawsFind,
             "{F3}" | "F3" | "JAWSFindNext" | "FindNext" => FindNext,
             "+{F3}" | "+F3" | "Shift+F3" | "JAWSFindPrior" | "FindPrior" => FindPrior,
 
@@ -764,8 +766,9 @@ static BINDINGS: &[Binding] = &{
             SetPunctuationLevel,
         ),
         bind(Digit(2), JAWS, NextTypingEcho),
-        // JAWS Find: Ctrl+F in a page, Insert+Ctrl+F anywhere (Default.JKM: JAWSFind).
-        bind(Alpha('F'), ANY.ctrl(Yes).alt(No).shift(No), VirtualFind),
+        // JAWS Find: Ctrl+F in a page, Insert+Ctrl+F anywhere (Default.JKM: VirtualFind, JAWSFind).
+        bind(Alpha('F'), JAWS_CTRL, JawsFind),
+        bind(Alpha('F'), CTRL, VirtualFind),
         bind(
             Alpha('R'),
             ANY.ctrl(Yes).insert(Yes).alt(No).shift(No),
