@@ -26,10 +26,14 @@ old-pc always has a round queued behind the running one.
 
 ## 2. Notifications and progress
 
-- Toasts: the tracer and the live platform watch the shell's notification window, so that a
-  toast is said as it arrives ("New notification from Windows PowerShell, SR Fixture, Build
-  finished in 12 seconds. 1 of 1"); Repeat Last Notification (Insert+Space, Shift+N) and a
-  Notification History of Okur's own (533). Then 533 is recorded again with the new tracer.
+- Toasts: JAWS says one as it arrives ("New notification from Windows PowerShell, SR Fixture,
+  Build finished in 12 seconds. 1 of 1"), yet on old-pc no toast window opens: two probes
+  (UI Automation's window list and its WindowOpened events, 8 s after the toast) saw none, and
+  the taskbar's button became "Action Center, 3 new notifications". JAWS is likely told through
+  Windows' notification listener (WinRT `UserNotificationListener`), which needs the user's
+  permission for notification access; or the Action Center button's name changes can be
+  watched. Then Repeat Last Notification (Insert+Space, Shift+N) and a Notification History of
+  Okur's own (533), and 533 recorded again with the new tracer.
 
 ## 3. Reading
 
