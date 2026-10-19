@@ -2531,8 +2531,10 @@ mod capture {
         file.write_all(format!("{header}\n").as_bytes())
             .map_err(io_err)?;
 
+        // A trace goes into the public corpus: no one's e-mail address goes with it.
         let sink = move |event: TraceEvent| {
-            if let Ok(mut line) = serde_json::to_string(&event) {
+            if let Ok(line) = serde_json::to_string(&event) {
+                let mut line = crate::privacy::redact_addresses(&line);
                 line.push('\n');
                 let _ = file.write_all(line.as_bytes());
             }

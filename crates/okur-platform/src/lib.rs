@@ -8,6 +8,7 @@ pub mod events;
 pub mod harness;
 pub mod hook;
 pub mod ia2_snapshot;
+pub mod privacy;
 pub mod screen_lines;
 pub mod settings_file;
 pub mod text_context;
