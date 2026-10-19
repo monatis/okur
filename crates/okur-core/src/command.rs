@@ -141,6 +141,17 @@ pub enum Command {
     /// Ctrl+C with a selection made with the virtual cursor (CopySelectedTextToClipboard).
     CopySelection,
     SaySelectedText,
+    /// Insert+N: the quick keys on, off, or for Say All only (NavigationModeToggle).
+    NavigationModeToggle,
+    /// Insert+Shift+Z, Ctrl+Insert+N: the quick keys suspended or resumed.
+    QuickKeysSuspendResume,
+    /// Insert+Z: the virtual cursor off or on (VirtualPCCursorToggle).
+    VirtualCursorToggle,
+    /// Insert+Escape (RefreshScreen).
+    RefreshScreen,
+    /// Ctrl+Alt+PageUp and PageDown: the voice rate faster or slower for now.
+    RateFaster,
+    RateSlower,
     /// Insert+End: the window's top line (its title).
     SayTopLineOfWindow,
     /// Insert+Home: the line up to the cursor.
@@ -345,6 +356,10 @@ impl Command {
             "CopySelectedTextToClipboard" => CopySelection,
             "+!{DOWN}" | "SaySelection" | "SaySelectedText" => SaySelectedText,
             "SayTopLineOfWindow" | "Insert+End" => SayTopLineOfWindow,
+            "NavigationModeToggle" | "Insert+N" => NavigationModeToggle,
+            "QuickNavigationKeysSuspendOrResume" | "Insert+Shift+Z" => QuickKeysSuspendResume,
+            "VirtualPCCursorToggle" | "Insert+Z" => VirtualCursorToggle,
+            "RefreshScreen" | "Insert+Escape" => RefreshScreen,
             "SayToCursor" | "Insert+Home" => SayToCursor,
             "SayFromCursor" | "Insert+PageUp" => SayFromCursor,
 
@@ -548,6 +563,23 @@ static BINDINGS: &[Binding] = &{
             DownArrow,
             ANY.insert(Yes).shift(Yes).ctrl(No),
             SaySelectedText,
+        ),
+        // The quick keys and the virtual cursor off and on, the screen refreshed, the rate for
+        // now [obs, 298, 512].
+        bind(Alpha('N'), JAWS, NavigationModeToggle),
+        bind(Alpha('Z'), JAWS_SHIFT, QuickKeysSuspendResume),
+        bind(Alpha('N'), CTRL_INSERT, QuickKeysSuspendResume),
+        bind(Alpha('Z'), JAWS, VirtualCursorToggle),
+        bind(Key::Escape, JAWS, RefreshScreen),
+        bind(
+            Key::PageUp,
+            ANY.ctrl(Yes).alt(Yes).shift(No).insert(No),
+            RateFaster,
+        ),
+        bind(
+            Key::PageDown,
+            ANY.ctrl(Yes).alt(Yes).shift(No).insert(No),
+            RateSlower,
         ),
         // The window's top line, and the line to and from the cursor.
         bind(End, JAWS, SayTopLineOfWindow),
@@ -847,7 +879,9 @@ pub fn command_for(event: &KeyEvent) -> Option<Command> {
 /// laptop layout's reading keys.
 pub fn layout_command_for(keyboard: &KeyboardSettings, event: &KeyEvent) -> Option<Command> {
     match keyboard.layout {
-        KeyboardLayout::Laptop => lookup(LAPTOP_BINDINGS, event),
+        // The laptop keys are CapsLock's; Insert keeps the desktop's keys in the laptop layout.
+        KeyboardLayout::Laptop if event.modifiers.caps_lock => lookup(LAPTOP_BINDINGS, event),
+        KeyboardLayout::Laptop => None,
         KeyboardLayout::Desktop => None,
     }
 }
@@ -930,7 +964,17 @@ mod tests {
     #[test]
     fn the_laptop_layout_reads_with_the_jaws_key_and_letters() {
         let laptop = KeyboardSettings::for_layout(KeyboardLayout::Laptop);
-        let jaws = with(|m| m.insert = true);
+        // CapsLock held as the JAWS key, as the keyboard settings resolve it.
+        let jaws = with(|m| {
+            m.insert = true;
+            m.caps_lock = true
+        });
+        // Insert keeps the desktop's keys in the laptop layout: Insert+N is not CapsLock+N
+        // [obs, 298/s1].
+        assert_eq!(
+            layout_command_for(&laptop, &key(Key::Alpha('n'), with(|m| m.insert = true))),
+            None
+        );
         assert_eq!(
             layout_command_for(&laptop, &key(Key::Alpha('o'), jaws)),
             Some(Command::SayNextLine)
@@ -941,6 +985,7 @@ mod tests {
         );
         let jaws_shift = with(|m| {
             m.insert = true;
+            m.caps_lock = true;
             m.shift = true
         });
         assert_eq!(

@@ -91,8 +91,8 @@ P0 blocks daily use, P1 is expected by a JAWS user within days, P2 is later.
 | 15 | Help | Keyboard Help (Insert+1), hot key help (Insert+H), Windows keys help (Insert+W), screen-sensitive help (Insert+F1), the help layer (Insert+Space, J) | [H3, H8] | **Missing.** The keys are swallowed silently | P1 | 509 |
 | 16 | Speech | Speech on and off: Insert+Space then S; Shift+S for Speech On Demand | [H1, H8, K] | **Missing.** Key routing has no layers | P1 | to write (mutes old-pc: last in a batch) |
 | 17 | Speech | Speech History: Insert+Space then H | Results Viewer with the recent speech [H14] | **Missing.** Okur logs speech, but has no viewer | P1 | to write (the harness clears JAWS's history every step) |
-| 18 | Speech | Voice rate on the fly: Alt+Ctrl+PageUp and PageDown, with Win to save | Says "faster" or "slower" [H9] | **Missing** | P1 | 512 |
-| 19 | General | Quit (Insert+F4), refresh the screen (Insert+Escape) | [H4, H9] | **Missing.** Okur quits only from its console | P1 | 298 (Insert+Escape) |
+| 18 | Speech | Voice rate on the fly: Alt+Ctrl+PageUp and PageDown, with Win to save | Says "faster" or "slower" [H9] | **Done but for Win to save** (2026-10-19): "Faster", "Slower", one step each, until Insert+Escape [512] | P1 | 512 |
+| 19 | General | Quit (Insert+F4), refresh the screen (Insert+Escape) | [H4, H9] | **Partial** (2026-10-19): Insert+Escape says "Screen updated", reads the page again and puts the rate back [298, 512]; Insert+F4 is missing | P1 | 298 (Insert+Escape) |
 | 20 | Web | When a page loads: a summary, then reading starts by itself | Both on by default [S4, W2] | **Missing (B12).** Okur says the title and the mode | P1 | 507 |
 | 21 | Web | Forms mode: Numpad Plus leaves it; semi-auto mode; the quick key delay; Numpad Slash on a check box | [S5, W3] | **Partial.** Numpad Plus leaves forms mode (2026-10-19, B6 fixed; its speech checked by 507); semi-auto mode, the quick key delay and Numpad Slash are missing | P1 | 507 |
 | 22 | Editing | Cut, paste, undo, Ctrl+Delete, Shift+PageDown | Command names in [K]; what JAWS says is not known | **Partial.** Ctrl+A, Ctrl+C, selection, Backspace and Delete are built; the others are silent | P1 | 504 |
@@ -103,7 +103,7 @@ P0 blocks daily use, P1 is expected by a JAWS user within days, P2 is later.
 | 27 | Echo | Typing echo choices in the dialog, key labels, key echo | [S2]; [R] item 3 | **Partial.** All 4 modes work by Insert+2; the dialog offers 2 | P2 | [R] item 3 |
 | 28 | Cursors | JAWS cursor and mouse: Numpad Minus and Plus, Insert+Numpad Minus and Plus, Numpad Slash and Star, Alt+Delete, Insert+R | [H5] | **Missing** | P1 | helper dialogs plan §6 |
 | 29 | Windows | Window List (Insert+F10), system tray (Insert+F11) | [H2, H16] | **Missing** | P1 | 511 |
-| 30 | Web | Virtual cursor off and on, routing: Insert+Z, Insert+Delete, Ctrl+Insert+Delete | [H12, S6] | **Missing** | P1 | 298 |
+| 30 | Web | Virtual cursor off and on, routing: Insert+Z, Insert+Delete, Ctrl+Insert+Delete | [H12, S6] | **Partial** (2026-10-19): Insert+Z turns the virtual cursor off and on [298]; routing is missing | P1 | 298 |
 | 31 | Web | The remaining quick keys and first and last keys | [`jaws-quick-navigation-keys.md`](../references/jaws-quick-navigation-keys.md) | **Missing** | P1/P2 | 289-299 |
 | 32 | Web tables | Rows and columns; Alt+Ctrl+Numpad 5; the table layer | [H7, H8, P1] | **Partial (B8).** Cells and headers are built | P1 | 297 |
 | 33 | Notifications | Toasts, notification history, progress bars, tool tips | [H15, S2, S3] | **Partial.** Consoles only | P1 | to write |

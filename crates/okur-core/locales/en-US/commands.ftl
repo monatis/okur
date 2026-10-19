@@ -51,3 +51,21 @@ text-bottom-of-file = Bottom of file
 ## Say System Date (twice: the week)
 
 week-number = Week { $week }
+
+## Quick keys and the virtual cursor turned off and on [obs, 298]
+
+quick-keys-navigation = Navigation Quick Keys
+quick-keys-off = Off
+quick-keys-say-all-only = Say all only
+quick-keys-on = On
+quick-keys-suspended = Quick Keys Suspended
+quick-keys-resumed = Resuming Quick Keys
+virtual-cursor-off = use virtual PC cursor off
+virtual-cursor-on = use virtual PC cursor on
+# Insert+Escape, Refresh Screen [obs, 298/s13, 512/s7].
+screen-updated = Screen updated
+
+## The voice rate changed with Ctrl+Alt+PageUp and PageDown [obs, 512]
+
+rate-faster = Faster
+rate-slower = Slower

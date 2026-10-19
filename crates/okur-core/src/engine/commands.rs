@@ -23,6 +23,12 @@ impl ScreenReaderEngine {
             return said;
         }
         match command {
+            Command::NavigationModeToggle => return self.next_quick_keys_mode(),
+            Command::QuickKeysSuspendResume => return self.suspend_or_resume_quick_keys(),
+            Command::VirtualCursorToggle => return self.toggle_virtual_cursor(),
+            Command::RefreshScreen => return self.refresh_screen(),
+            Command::RateFaster => return self.change_rate(true),
+            Command::RateSlower => return self.change_rate(false),
             Command::SayWindow => {
                 // Dialog boxes; other windows are not read this way yet.
                 let focus = self

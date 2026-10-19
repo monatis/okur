@@ -76,7 +76,10 @@ impl KeyboardSettings {
         resolved.modifiers.insert = (m.insert && self.is_jaws_key(Key::Insert))
             || (m.caps_lock && self.is_jaws_key(Key::CapsLock))
             || (m.scroll_lock && self.is_jaws_key(Key::ScrollLock));
-        resolved.modifiers.caps_lock = false;
+        // Kept when CapsLock is the JAWS key held: the laptop layout's keys are CapsLock's, and
+        // Insert keeps the desktop's with them (Insert+N toggles the quick keys where CapsLock+N
+        // is the next sentence [obs, 298/s1, 510/s2]).
+        resolved.modifiers.caps_lock = m.caps_lock && self.is_jaws_key(Key::CapsLock);
         resolved.modifiers.scroll_lock = false;
         resolved
     }
@@ -578,7 +581,8 @@ mod tests {
         assert!(laptop.is_jaws_key(Key::Insert));
         let resolved = laptop.resolve(&chord(Key::Alpha('T'), false, true));
         assert!(resolved.modifiers.insert);
-        assert!(!resolved.modifiers.caps_lock);
+        // CapsLock is told apart: the laptop keys are its own.
+        assert!(resolved.modifiers.caps_lock);
         assert!(
             laptop
                 .resolve(&chord(Key::Alpha('T'), true, false))

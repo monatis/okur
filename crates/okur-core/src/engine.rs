@@ -28,6 +28,7 @@ mod state;
 #[cfg(test)]
 mod tests;
 mod text_feedback;
+mod toggles;
 #[cfg(test)]
 mod web_app_tests;
 
@@ -169,6 +170,13 @@ pub struct ScreenReaderEngine {
     say_all: Option<say_all::SayAll>,
     /// The mark the next part of a Say All is given.
     next_mark: u64,
+    /// What the quick keys do (Insert+N), and whether they are suspended (Insert+Shift+Z).
+    quick_keys: toggles::QuickKeys,
+    quick_keys_suspended: bool,
+    /// The virtual cursor turned off (Insert+Z): the page's keys are the browser's.
+    virtual_cursor_off: bool,
+    /// The voice rate's change for now (Ctrl+Alt+PageUp and PageDown), until Insert+Escape.
+    rate_change: i32,
     /// User settings (JAWS defaults unless configured).
     pub settings: crate::settings::Settings,
     /// Caps Lock's state as toggled through the JAWS key, when the platform does not report it.
@@ -244,6 +252,10 @@ impl ScreenReaderEngine {
             last_press: None,
             say_all: None,
             next_mark: 0,
+            quick_keys: toggles::QuickKeys::On,
+            quick_keys_suspended: false,
+            virtual_cursor_off: false,
+            rate_change: 0,
             settings: crate::settings::Settings::default(),
             caps_lock_on: false,
             viewer: None,
@@ -357,6 +369,14 @@ impl ScreenReaderEngine {
         // 2. Standalone Control tap is speech silence key
         if event.key == Key::Control && event.modifiers.is_empty() {
             return KeyAction::PassThrough;
+        }
+        // The voice rate for now, in any application [obs, 512].
+        if let Some(
+            command @ (crate::command::Command::RateFaster | crate::command::Command::RateSlower),
+        ) = crate::command::command_for(event)
+        {
+            let _ = self.execute(command);
+            return KeyAction::Consume;
         }
 
         // The JAWS key (Insert, or CapsLock in the laptop layout) and every combination with
@@ -556,6 +576,11 @@ impl ScreenReaderEngine {
             return KeyAction::PassThrough;
         }
 
+        // With the virtual cursor off the page's keys are the browser's, and so are the quick
+        // keys while they are off [obs, 298].
+        if self.virtual_cursor_off || self.quick_key_passes(event) {
+            return KeyAction::PassThrough;
+        }
         // 7. In Virtual PC Cursor mode, check if keystroke translates to a command
         if let Some(command) = crate::command::command_for(event) {
             let started = std::time::Instant::now();
@@ -822,10 +847,11 @@ impl ScreenReaderEngine {
         let settings = self
             .settings_layers
             .resolve(application.as_deref(), site.as_deref());
-        if settings.voice != self.settings.voice {
-            self.speech.configure(&settings.voice);
-        }
+        let voice_changed = settings.voice != self.settings.voice;
         self.settings = settings;
+        if voice_changed {
+            self.configure_voice();
+        }
     }
 
     /// The focus is in `application` (as the platform names it), on a page of `site`: its

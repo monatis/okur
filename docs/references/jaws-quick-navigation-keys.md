@@ -86,8 +86,8 @@ the Say All command".
 | Alt+Win+Period | ReadCurrentColumn | gap | 297 |
 | Ctrl+Win+J, Ctrl+Shift+Win+J | JumpToTableCell / JumpReturnFromTableCell | gap | |
 | Alt+Win+Home / End | StepToStartOfElement / StepToEndOfElement | gap | 294 |
-| Insert+N | NavigationModeToggle (quick keys on, off, Say All only) | gap | 298 |
-| Ctrl+Insert+N, Insert+Shift+Z | QuickNavigationKeysSuspendOrResume | gap | 298 |
+| Insert+N | NavigationModeToggle (quick keys on, off, Say All only) | built (Say All only acts as off until Say All takes keys) | 298 |
+| Ctrl+Insert+N, Insert+Shift+Z | QuickNavigationKeysSuspendOrResume | built | 298 |
 | Insert+X | SmartNavToggle | gap | |
 | Insert+F3 | VirtualHTMLFeatures | built | |
 | Insert+F5, F6, F7 | SelectAFormField, SelectAHeading, SelectALink | built | |
@@ -115,8 +115,8 @@ the Say All command".
 | Alt+Numpad5 | SaySentence | built | 291 |
 | Ctrl+Numpad5 | SayParagraph | built | 291 |
 | Insert+PageUp / Insert+Home | SayFromCursor / SayToCursor | built | 291 |
-| Insert+Z | VirtualPCCursorToggle | gap | 298 |
-| Insert+Escape | RefreshScreen | gap | 298 |
+| Insert+Z | VirtualPCCursorToggle | built | 298 |
+| Insert+Escape | RefreshScreen | built | 298 |
 | Insert+Delete, Ctrl+Insert+Delete | RouteVirtualToPc, RoutePCToVirtual | gap | |
 | Insert+F9 | SelectAFrame | gap | |
 | Ctrl+Insert+Down, Ctrl+Shift+Insert+Down | StartSkimRead, SkimReadDialog | gap | |
