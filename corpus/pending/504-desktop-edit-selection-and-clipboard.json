@@ -1,6 +1,6 @@
 {
   "id": "504-desktop-edit-selection-and-clipboard",
-  "name": "In a native multiline edit: Say and Spell Selected Text, copy, paste, cut, undo, Ctrl+Delete, Say To and From Cursor, Insert+Right and Left, sentence and paragraph, the window's bottom and top line, and Say Clipboard (Win+Insert+X)",
+  "name": "In a native multiline edit: Say and Spell Selected Text, copy, paste, cut, undo, Ctrl+Delete, Say To and From Cursor, Insert+Right and Left, sentence and paragraph, and the window's bottom and top line",
   "category": "desktop",
   "version": "1.0.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-editor.ps1",
@@ -30,7 +30,6 @@
     { "id": "s20", "type": "key", "command": "Ctrl+Z" },
     { "id": "s21", "type": "key", "command": "Ctrl+Delete" },
     { "id": "s22", "type": "key", "command": "Insert+PageDown" },
-    { "id": "s23", "type": "key", "command": "Insert+End" },
-    { "id": "s24", "type": "key", "command": "Win+Insert+X" }
+    { "id": "s23", "type": "key", "command": "Insert+End" }
   ]
 }

@@ -1,0 +1,17 @@
+{
+  "id": "520-desktop-say-clipboard",
+  "name": "Say the clipboard (Insert+Win+X, JAWS's SayClipboard) after copying a line in a native edit; the Windows key last, so Windows' own Win+X menu cannot take it; Escape after",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-editor.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Editor Fixture" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Shift+End" },
+    { "id": "s2", "type": "key", "command": "Ctrl+C" },
+    { "id": "s3", "type": "key", "command": "Insert+Win+X" },
+    { "id": "s4", "type": "key", "command": "Escape" },
+    { "id": "s5", "type": "key", "command": "Insert+Up" }
+  ]
+}

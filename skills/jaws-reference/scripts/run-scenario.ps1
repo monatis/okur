@@ -103,6 +103,19 @@ public static class SrKeyInput {
     }
 
     /// JAWS's dialog boxes (`#32770`) visible on the screen, of the process `jaws`.
+    /// Minimizes the visible top-level windows of class `cls`; returns how many.
+    public static int MinimizeClass(string cls) {
+        int count = 0;
+        var name = new StringBuilder(64);
+        for (IntPtr h = GetTopWindow(IntPtr.Zero); h != IntPtr.Zero; h = GetWindow(h, 2)) {
+            if (!IsWindowVisible(h)) continue;
+            name.Clear();
+            GetClassName(h, name, name.Capacity);
+            if (name.ToString() == cls) { ShowWindow(h, 6); count++; }
+        }
+        return count;
+    }
+
     public static System.Collections.Generic.List<IntPtr> JawsDialogs(uint jaws) {
         var found = new System.Collections.Generic.List<IntPtr>();
         var cls = new StringBuilder(64);
@@ -591,6 +604,10 @@ function Clear-LabState {
 function Start-DesktopFixture {
     $old = Find-WindowByTitle $launch.window_title
     if ($old) { Stop-Process -Id $old.Id -Force; Start-Sleep -Milliseconds 500 }
+    # Browser windows left by web scenarios are minimized: one that came forward in the middle
+    # of a desktop trial took its keys, and Insert+Shift+Down twice spelled a whole web page
+    # for minutes, so every step after it timed out (504 and 505 on old-pc, 2026-10-19).
+    [void][SrKeyInput]::MinimizeClass('Chrome_WidgetWin_1')
     Start-Process powershell -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $fixturePath) | Out-Null
     for ($i = 0; $i -lt 100; $i++) {
         $p = Find-WindowByTitle $launch.window_title

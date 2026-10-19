@@ -1,0 +1,21 @@
+{
+  "id": "517-web-speech-layer-keys",
+  "name": "The Insert+Space layer: Speech History (H) opened and closed, then speech muted (S), a Down while muted, and speech back on (S); last in its batch, since a failed trial would leave speech muted",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Down" },
+    { "id": "s2", "type": "key", "command": "Insert+Space" },
+    { "id": "s3", "type": "key", "command": "H", "settle_max_ms": 20000 },
+    { "id": "s4", "type": "key", "command": "Escape" },
+    { "id": "s5", "type": "key", "command": "Insert+Space" },
+    { "id": "s6", "type": "key", "command": "S" },
+    { "id": "s7", "type": "key", "command": "Down" },
+    { "id": "s8", "type": "key", "command": "Insert+Space" },
+    { "id": "s9", "type": "key", "command": "S" },
+    { "id": "s10", "type": "key", "command": "Down" }
+  ]
+}

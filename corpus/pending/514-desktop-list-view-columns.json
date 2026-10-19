@@ -1,0 +1,24 @@
+{
+  "id": "514-desktop-list-view-columns",
+  "name": "A list view's columns read one at a time (Ctrl+Insert+1, 2, 3), on two rows, and the reading keys on a list view item (Insert+Up, Insert+Numpad5)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-forms.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Desktop Fixture" },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Shift+Tab" },
+    { "id": "s2", "type": "key", "command": "Shift+Tab" },
+    { "id": "s3", "type": "key", "command": "Shift+Tab" },
+    { "id": "s4", "type": "key", "command": "Shift+Tab" },
+    { "id": "s5", "type": "key", "command": "Ctrl+Insert+1" },
+    { "id": "s6", "type": "key", "command": "Ctrl+Insert+2" },
+    { "id": "s7", "type": "key", "command": "Ctrl+Insert+3" },
+    { "id": "s8", "type": "key", "command": "Down" },
+    { "id": "s9", "type": "key", "command": "Ctrl+Insert+1" },
+    { "id": "s10", "type": "key", "command": "Ctrl+Insert+2" },
+    { "id": "s11", "type": "key", "command": "Insert+Up" },
+    { "id": "s12", "type": "key", "command": "Insert+Numpad5" }
+  ]
+}

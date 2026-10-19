@@ -1,0 +1,33 @@
+{
+  "id": "518-desktop-word-reading",
+  "name": "Reading a Word document: Down through a heading, paragraphs, a misspelled word, a bulleted list and into a table; Say Line, Say Word on the misspelled word, Ctrl+Right over it, Say All stopped by Ctrl, Ctrl+End and Up",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "sr-word-fixture.docx - Word" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+Up" },
+    { "id": "s2", "type": "key", "command": "Down" },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Ctrl+Right" },
+    { "id": "s5", "type": "key", "command": "Ctrl+Right" },
+    { "id": "s6", "type": "key", "command": "Ctrl+Right" },
+    { "id": "s7", "type": "key", "command": "Ctrl+Right" },
+    { "id": "s8", "type": "key", "command": "Insert+Numpad5" },
+    { "id": "s9", "type": "key", "command": "Down" },
+    { "id": "s10", "type": "key", "command": "Down" },
+    { "id": "s11", "type": "key", "command": "Down" },
+    { "id": "s12", "type": "key", "command": "Down" },
+    { "id": "s13", "type": "key", "command": "Down" },
+    { "id": "s14", "type": "key", "command": "Down" },
+    { "id": "s15", "type": "key", "command": "Tab" },
+    { "id": "s16", "type": "key", "command": "Down" },
+    { "id": "s17", "type": "key", "command": "Ctrl+End" },
+    { "id": "s18", "type": "key", "command": "Up" },
+    { "id": "s19", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s20", "type": "key", "command": "Insert+Down", "during": [{ "after_ms": 5000, "command": "Ctrl" }] },
+    { "id": "s21", "type": "key", "command": "Insert+Up" }
+  ]
+}

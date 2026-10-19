@@ -1,0 +1,23 @@
+{
+  "id": "515-web-select-all-skim-and-element-info",
+  "name": "Ctrl+A with nothing selected and Ctrl+C (clipboard captured), F8 on a table, Insert+Shift+Down, skim reading (Ctrl+Insert+Down) stopped by Ctrl, and the element's information (Insert+Shift+F1, closed with Escape)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Ctrl+A", "settle_max_ms": 30000 },
+    { "id": "s2", "type": "key", "command": "Ctrl+C", "capture_clipboard": true },
+    { "id": "s3", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s4", "type": "key", "command": "T" },
+    { "id": "s5", "type": "key", "command": "F8", "settle_max_ms": 20000 },
+    { "id": "s6", "type": "key", "command": "Insert+Shift+Down", "settle_max_ms": 20000 },
+    { "id": "s7", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s8", "type": "key", "command": "Ctrl+Insert+Down", "during": [{ "after_ms": 5000, "command": "Ctrl" }] },
+    { "id": "s9", "type": "key", "command": "Insert+Up" },
+    { "id": "s10", "type": "key", "command": "H" },
+    { "id": "s11", "type": "key", "command": "Insert+Shift+F1", "settle_max_ms": 20000 },
+    { "id": "s12", "type": "key", "command": "Escape" }
+  ]
+}

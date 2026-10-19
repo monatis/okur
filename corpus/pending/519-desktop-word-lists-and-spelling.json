@@ -1,0 +1,20 @@
+{
+  "id": "519-desktop-word-lists-and-spelling",
+  "name": "Word's JAWS lists: the headings list (Insert+F6), Down and Escape (JAWS's own TypeKey: its dialogs refuse our keys); the spelling error at the cursor and the next one (Alt+Shift+L); Insert+Shift+R revisions; and Insert+T",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "sr-word-fixture.docx - Word" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+T" },
+    { "id": "s2", "type": "key", "command": "Insert+F6", "settle_max_ms": 20000 },
+    { "id": "s3", "type": "jaws_function", "command": "TypeKey(\"Down\")" },
+    { "id": "s4", "type": "jaws_function", "command": "TypeKey(\"Escape\")" },
+    { "id": "s5", "type": "key", "command": "Alt+Shift+L", "settle_max_ms": 20000 },
+    { "id": "s6", "type": "key", "command": "Insert+Up" },
+    { "id": "s7", "type": "key", "command": "Insert+Shift+R", "settle_max_ms": 20000 },
+    { "id": "s8", "type": "key", "command": "Escape" }
+  ]
+}
