@@ -1,0 +1,29 @@
+{
+  "id": "529-desktop-native-selection-keys",
+  "name": "Selecting in a native edit by line, page and document: Shift+Down and Up, Shift+PageDown and PageUp, Ctrl+Shift+End and Home, Ctrl+A and Say Selected Text, then Ctrl+Shift+Right and Left and Shift+Home",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-reading.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Reading Fixture" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Shift+Down" },
+    { "id": "s2", "type": "key", "command": "Shift+Down" },
+    { "id": "s3", "type": "key", "command": "Shift+Up" },
+    { "id": "s4", "type": "key", "command": "Shift+PageDown" },
+    { "id": "s5", "type": "key", "command": "Shift+PageUp" },
+    { "id": "s6", "type": "key", "command": "Ctrl+Shift+End" },
+    { "id": "s7", "type": "key", "command": "Ctrl+Shift+Home" },
+    { "id": "s8", "type": "key", "command": "Right" },
+    { "id": "s9", "type": "key", "command": "Ctrl+A" },
+    { "id": "s10", "type": "key", "command": "Insert+Shift+Down" },
+    { "id": "s11", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s12", "type": "key", "command": "Ctrl+Shift+Right" },
+    { "id": "s13", "type": "key", "command": "Ctrl+Shift+Right" },
+    { "id": "s14", "type": "key", "command": "Ctrl+Shift+Left" },
+    { "id": "s15", "type": "key", "command": "End" },
+    { "id": "s16", "type": "key", "command": "Shift+Home" },
+    { "id": "s17", "type": "key", "command": "Insert+Up" }
+  ]
+}

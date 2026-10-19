@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 1934,
-  "total_steps": 2418,
+  "matched_steps": 1935,
+  "total_steps": 2425,
   "accepted_divergences": 33,
   "errors": [],
   "steps": {
@@ -2455,6 +2455,13 @@
     "523-desktop-wordpad-ribbon/s6": "mismatch",
     "523-desktop-wordpad-ribbon/s7": "match",
     "523-desktop-wordpad-ribbon/s8": "match",
-    "523-desktop-wordpad-ribbon/s9": "mismatch"
+    "523-desktop-wordpad-ribbon/s9": "mismatch",
+    "527-desktop-notepad-help-keys/s1": "mismatch",
+    "527-desktop-notepad-help-keys/s2": "mismatch",
+    "527-desktop-notepad-help-keys/s3": "mismatch",
+    "527-desktop-notepad-help-keys/s4": "mismatch",
+    "527-desktop-notepad-help-keys/s5": "mismatch",
+    "527-desktop-notepad-help-keys/s6": "mismatch",
+    "527-desktop-notepad-help-keys/s7": "match"
   }
 }

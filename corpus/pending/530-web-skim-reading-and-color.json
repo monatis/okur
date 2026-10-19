@@ -1,0 +1,24 @@
+{
+  "id": "530-web-skim-reading-and-color",
+  "name": "Skim reading in a page (Ctrl+Insert+Down) stopped by Ctrl, Insert+Up where it stopped, the Skim Reading dialog (Ctrl+Insert+Shift+Down) closed with Escape, and Say Color (Insert+5) on the heading and a paragraph",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Down" },
+    { "id": "s2", "type": "key", "command": "Insert+5" },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Insert+5" },
+    { "id": "s5", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s6", "type": "key", "command": "Ctrl+Insert+Down", "settle_max_ms": 12000,
+      "during": [ { "after_ms": 4000, "command": "Ctrl" } ] },
+    { "id": "s7", "type": "key", "command": "Insert+Up" },
+    { "id": "s8", "type": "key", "command": "Ctrl+Insert+Shift+Down", "settle_max_ms": 20000 },
+    { "id": "s9", "type": "key", "command": "Tab" },
+    { "id": "s10", "type": "key", "command": "Tab" },
+    { "id": "s11", "type": "key", "command": "Escape" },
+    { "id": "s12", "type": "key", "command": "Insert+Up" }
+  ]
+}

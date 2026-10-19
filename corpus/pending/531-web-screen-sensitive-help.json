@@ -1,0 +1,21 @@
+{
+  "id": "531-web-screen-sensitive-help",
+  "name": "Screen-sensitive help (Insert+F1) in a page: on the document's text, on a link reached with Tab, and on a heading, each message closed with Escape, then Insert+Up",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Down" },
+    { "id": "s2", "type": "key", "command": "Insert+F1", "settle_max_ms": 20000 },
+    { "id": "s3", "type": "key", "command": "Escape" },
+    { "id": "s4", "type": "key", "command": "Tab" },
+    { "id": "s5", "type": "key", "command": "Insert+F1", "settle_max_ms": 20000 },
+    { "id": "s6", "type": "key", "command": "Escape" },
+    { "id": "s7", "type": "key", "command": "H" },
+    { "id": "s8", "type": "key", "command": "Insert+F1", "settle_max_ms": 20000 },
+    { "id": "s9", "type": "key", "command": "Escape" },
+    { "id": "s10", "type": "key", "command": "Insert+Up" }
+  ]
+}

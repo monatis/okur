@@ -1,0 +1,23 @@
+{
+  "id": "532-desktop-dialog-default-button-and-hot-key",
+  "name": "In Notepad's Open dialog: Say Default Button of Dialog (Insert+E) and Say Current Control Hot Key (Shift+Numpad5) on the file name field, then on the file type list and a button after Tab, and Escape",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "sr-notepad-fixture.txt - Notepad" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Ctrl+O", "settle_max_ms": 20000 },
+    { "id": "s2", "type": "key", "command": "Insert+E" },
+    { "id": "s3", "type": "key", "command": "Shift+Numpad5" },
+    { "id": "s4", "type": "key", "command": "Tab" },
+    { "id": "s5", "type": "key", "command": "Insert+E" },
+    { "id": "s6", "type": "key", "command": "Shift+Numpad5" },
+    { "id": "s7", "type": "key", "command": "Tab" },
+    { "id": "s8", "type": "key", "command": "Shift+Numpad5" },
+    { "id": "s9", "type": "key", "command": "Escape" },
+    { "id": "s10", "type": "key", "command": "Insert+E" },
+    { "id": "s11", "type": "key", "command": "Insert+Up" }
+  ]
+}
