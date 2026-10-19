@@ -12,17 +12,6 @@ To record one:
 
 | Scenario | What it records | Fixture |
 |---|---|---|
-| 289 | N and Shift+N (non-link text), Insert+Enter and Insert+Shift+Enter | `virtual-keys.html` (here) |
-| 290 | S and D (same and different element), Ctrl+Insert+Right, Left and Up | `virtual-keys.html` (here) |
-| 291 | P (paragraphs), the sentence keys, Ctrl+Numpad5, Say from and to Cursor | `virtual-keys.html` (here) |
-| 292 | Dash (separators), Z (divisions), Y (Smart Glance highlights) | `virtual-keys.html` (here) |
-| 293 | Backslash (mail links), Slash (clickable elements), Equals (flow to and from) | `virtual-keys.html` (here) |
-| 294 | Shift+Period and Shift+Comma, Alt+Win+End and Home (step past and before an element) | `virtual-keys.html` (here) |
-| 295 | First and last heading, and at a level (Alt+Insert+Home and End, Ctrl+Alt+Insert+2) | `news-article.html` |
-| 296 | First and last form field (Ctrl+Insert+Home and End) | `signup-form.html` |
-| 297 | Table rows and columns (Win+Alt+arrows, Alt+Win+Numpad5, Alt+Win+Period) | `news-article.html` |
-| 298 | Insert+N, Insert+Shift+Z, Insert+Z, Insert+Escape | `news-article.html` |
-| 299 | J (Jump to Line), Shift+J, W and Shift+W (Word from List) | `news-article.html` |
 | 500 | Say All stopped by Ctrl, moved by Right and Left, rate keys and H during it | `news-article.html` |
 | 501 | Selecting and copying with the virtual cursor, Say and Spell Selected Text | `doc-reading.html` |
 | 502 | Home, End, PageDown and PageUp with the virtual cursor | `news-article.html` |
