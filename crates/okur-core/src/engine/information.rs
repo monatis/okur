@@ -26,9 +26,11 @@ impl ScreenReaderEngine {
         self.say(msg::default_button_is(name.trim()).to_string())
     }
 
-    /// Shift+Numpad5: the focused control's hot key, as the application gives it, "Alt+r";
-    /// in a dialog box the control's name, then "alt+" and the letter as its label writes it,
-    /// "No", "alt+N"; "no hot key" without one [obs, 537/s1, s4, s7].
+    /// Shift+Numpad5: the focused control's hot key, as the application gives it, "Alt+r"; in a
+    /// dialog box a button's or check box's name, then "alt+" and the letter as its label writes
+    /// it, "No", "alt+N", "Wrap around", "alt+r"; an edit's or combo box's name before the key,
+    /// "Find what:", "Alt+n"; an edit combo's key alone, "Alt+n"; "no hot key" without one
+    /// [obs, 537/s1, s4, s7; 540/s3, s7; 532/s3, s6].
     pub(super) fn say_hot_key(&mut self) -> Option<String> {
         if self.app_mode == AppMode::VirtualBuffer {
             return None;
@@ -52,11 +54,27 @@ impl ScreenReaderEngine {
             name.chars()
                 .find(|c| c.to_lowercase().eq(letter.to_lowercase()))
         });
+        use crate::aom::Role;
+        let edit_combo = focus.container_role == Some(Role::ComboBox);
         let said = match in_label {
-            Some(c) if focus.in_dialog_box => vec![
-                name.to_owned(),
-                msg::hot_key_in_dialog(c.to_string()).to_string(),
-            ],
+            Some(c)
+                if focus.in_dialog_box
+                    && matches!(
+                        focus.role,
+                        Role::Button | Role::CheckBox | Role::RadioButton
+                    ) =>
+            {
+                vec![
+                    name.to_owned(),
+                    msg::hot_key_in_dialog(c.to_string()).to_string(),
+                ]
+            }
+            _ if focus.in_dialog_box
+                && matches!(focus.role, Role::Edit | Role::ComboBox)
+                && !edit_combo =>
+            {
+                vec![name.to_owned(), key.to_owned()]
+            }
             _ => vec![key.to_owned()],
         };
         for (i, part) in said.iter().enumerate() {

@@ -132,10 +132,13 @@ fn key_sequence(keys: &str) -> String {
 /// where JAWS speaks the item without the container's usage hint [obs, 303/s1, s10–s11].
 fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
     let name = named(focus.name.as_deref().unwrap_or_default());
-    // A control in a dialog's group box is named after the box, every time: "Speech Rate:
-    // left right slider" (JAWS on the dev box, 2026-10-17).
+    // A control in a dialog's group box is named after the box each time the focus comes to
+    // it: "Speech Rate: left right slider" (JAWS on the dev box, 2026-10-17), "Select Printer
+    // Print to file check box"; not as the arrows move within a list [obs, 546/s2-s4].
     let name = match focus.group_box.as_deref().map(named) {
-        Some(group) if !group.is_empty() && !name.is_empty() => format!("{group} {name}"),
+        Some(group) if entering && !group.is_empty() && !name.is_empty() => {
+            format!("{group} {name}")
+        }
         _ => name,
     };
     let value = focus
