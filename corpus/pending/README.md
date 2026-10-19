@@ -20,9 +20,9 @@ To record one:
 | 534 | Numpad Slash (left click) on a page's check box and radio button | `signup-form.html` |
 | 535 | The table layer (Insert+Space, T) | `tables-navigation.html` |
 | 536 | Routing, the link's address, the frames list | `news-article.html` |
-| 537 | A Win32 message box: its default button and the hot keys | `desktop-message-box.ps1` (here) |
 | 538 | The page-load summary and reading on a page with several regions, headings and links | `news-article.html` |
 | 539 | The page-load summary on a page with tables and one heading | `tables-navigation.html` |
+| 547 | Notepad's edit as the focus comes back to it from the Find dialog and the menus, and Say Focus there | `desktop-notepad.ps1` |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.

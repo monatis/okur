@@ -37,6 +37,10 @@
       "sha256": "467dede4cfb8fc4fca76a13343cb3d3d8bba0feb038228ea37e745608bf01b0d",
       "size_bytes": 5485
     },
+    "desktop-message-box.ps1": {
+      "sha256": "ef979475560f1362859fb45123177759328c87b026725bb1741fa3716b9167ca",
+      "size_bytes": 2054
+    },
     "desktop-notepad.ps1": {
       "sha256": "7251969f618fc1cd11ab31e5f8a61bdbde2ee05504c78ebad69f23658dcdfe8e",
       "size_bytes": 827
@@ -2913,7 +2917,7 @@
       "scenario_id": "532-desktop-dialog-default-button-and-hot-key",
       "fixture": "desktop-file-dialogs.ps1",
       "evidence": {
-        "sha256": "4ff40cb6526cb139be41b693750a959da8d72a525ef9a1e0d863cc23c600cb0e",
+        "sha256": "5eebfdcf0c125eed7d39dcbd50d88066f76f9926722e704ab0200a0f8cec7945",
         "capture_script_sha256": "0891a01e0114a5b5e40440b4fd6a28afb9a22a7612d83beb59e2c37028551361",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
@@ -2927,8 +2931,8 @@
       "scenario_id": "533-desktop-toast-and-progress-bar",
       "fixture": "desktop-notifications.ps1",
       "evidence": {
-        "sha256": "f2ed19a5ed5cc0f57e03fde2985f79f199dbba2bbdf62ac8eff8d8fa2531ac03",
-        "capture_script_sha256": "fea10fa7014416142b4e9ca86996425047ca18a30d3c1e91d81df7a006cac118",
+        "sha256": "334ce58b8abe13f5739902faf84a374b0d2eac691f03a6965bb67490ef9cd5b9",
+        "capture_script_sha256": "0891a01e0114a5b5e40440b4fd6a28afb9a22a7612d83beb59e2c37028551361",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -2938,10 +2942,24 @@
       }
     },
     {
+      "scenario_id": "537-desktop-message-box-default-button",
+      "fixture": "desktop-message-box.ps1",
+      "evidence": {
+        "sha256": "168f2d074967cf63553c6fb3bfb421716185661864b289ab13c8281ee7c3b4c5",
+        "capture_script_sha256": "0891a01e0114a5b5e40440b4fd6a28afb9a22a7612d83beb59e2c37028551361",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "540-desktop-notepad-find-dialog",
       "fixture": "desktop-notepad.ps1",
       "evidence": {
-        "sha256": "5b873a79dc2a2a7b0247a5617e3b37a719eb2202f0975e02a8a011930f4d10cb",
+        "sha256": "9f694235e30866d54b995d953005c7eabfe11d0c426f3bc8b0c2ac3b3922f165",
         "capture_script_sha256": "0891a01e0114a5b5e40440b4fd6a28afb9a22a7612d83beb59e2c37028551361",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
@@ -2969,7 +2987,7 @@
       "scenario_id": "542-desktop-notepad-replace-dialog",
       "fixture": "desktop-notepad.ps1",
       "evidence": {
-        "sha256": "5b5decd9b25b8012335dc2222714f951aeb3de1d229ccb930492bad1bcb6b06e",
+        "sha256": "53bad88f4a40adc2578556a81f0935f681730d010bc52b17c53b9e37cbf99d7b",
         "capture_script_sha256": "0891a01e0114a5b5e40440b4fd6a28afb9a22a7612d83beb59e2c37028551361",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
@@ -2983,7 +3001,7 @@
       "scenario_id": "543-desktop-notepad-go-to-dialog",
       "fixture": "desktop-notepad.ps1",
       "evidence": {
-        "sha256": "a76b5cdc5c4a28ebef4ff4aee95bba85be0da74492187533e70ca6e80383677e",
+        "sha256": "60d629eabc3f80f31aa8846d0b8117917f487d37e8315ff53845b8cf059b7dfb",
         "capture_script_sha256": "0891a01e0114a5b5e40440b4fd6a28afb9a22a7612d83beb59e2c37028551361",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
@@ -3037,10 +3055,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 208,
-    "scenarios_with_evidence": 208,
-    "total_trials": 678,
-    "successful_trials": 677,
-    "deterministic_scenarios": 136
+    "scenarios": 209,
+    "scenarios_with_evidence": 209,
+    "total_trials": 681,
+    "successful_trials": 680,
+    "deterministic_scenarios": 137
   }
 }
