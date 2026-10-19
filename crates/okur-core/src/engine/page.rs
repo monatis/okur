@@ -59,6 +59,12 @@ impl ScreenReaderEngine {
     /// held up): kept to be applied as [`Self::handle_document_loaded`] keeps it. Dropped
     /// when another page has been loaded meanwhile.
     pub fn handle_page_refreshed(&mut self, title: &str, buffer: VirtualBuffer) {
+        // After Ctrl+R or F5 the page comes back as a refresh: it is a new load, announced
+        // and read [obs, 507/s1; live9, where the reload came as "page refreshed"].
+        if self.reload_asked && self.is_page_in_front(title, buffer.document_url()) {
+            let _ = self.handle_document_loaded(title, buffer);
+            return;
+        }
         if self.is_page_in_front(title, buffer.document_url()) {
             if let Some(old) = self.pending_page.replace(buffer) {
                 crate::retire::retire(old);
