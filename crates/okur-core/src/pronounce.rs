@@ -149,9 +149,9 @@ pub fn spoken_symbols(text: &str) -> String {
 /// `spoken`'s work; `point_digits`: a decimal point is "point" and the digits after it are
 /// read one by one, as at All.
 fn render(text: &str, level: Punctuation, point_digits: bool) -> String {
-    let text = single_digits(&split_words(&respelled(
+    let text = single_digits(&split_words(&respelled(&repeats_filtered(
         &text.replace(['\u{1d}', '\u{1e}'], " "),
-    )));
+    ))));
     let chars: Vec<char> = text.chars().collect();
     let mut out = String::with_capacity(text.len() * 2);
     let word = |out: &mut String, name: &str| {
@@ -226,6 +226,26 @@ fn render(text: &str, level: Punctuation, point_digits: bool) -> String {
         }
     }
     out.split_whitespace().collect::<Vec<_>>().join(" ")
+}
+
+/// Filter Repeated Characters at JAWS's default, Three: of an unbroken run of one symbol, three
+/// are spoken ("=====" as "equals equals equals" [obs, 285/s12]). Letters, digits and spaces
+/// are left alone.
+fn repeats_filtered(text: &str) -> String {
+    const KEPT: usize = 3;
+    let mut out = String::with_capacity(text.len());
+    let mut run: Option<(char, usize)> = None;
+    for c in text.chars() {
+        let count = match run {
+            Some((previous, count)) if previous == c => count + 1,
+            _ => 1,
+        };
+        run = Some((c, count));
+        if count <= KEPT || c.is_alphanumeric() || c.is_whitespace() {
+            out.push(c);
+        }
+    }
+    out
 }
 
 fn is_digit(c: Option<char>) -> bool {
@@ -617,6 +637,11 @@ mod tests {
         // [obs, 229/s22, 239/s3].
         assert_eq!(most("Chrome'u"), "Chrome'u");
         assert_eq!(most("&'("), "and ' left paren");
+        // Of a run of one symbol, three are spoken [obs, 285/s12].
+        assert_eq!(
+            most("===== *** ....."),
+            "equals equals equals star star star dot dot dot"
+        );
         assert_eq!(most("help — or call"), "help or call");
         // Symbols named at every level [obs, 313/s4].
         assert_eq!(

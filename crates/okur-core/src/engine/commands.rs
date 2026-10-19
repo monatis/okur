@@ -572,6 +572,13 @@ impl ScreenReaderEngine {
             .strip_suffix(blank.as_str())
             .map_or(said.as_str(), |s| s.trim_end_matches(['\n', ' ']))
             .to_owned();
+        // A text area reached by an arrow reads its text, where Tab says only that it has
+        // some [obs, 285/s1].
+        let contains = msg::field_contains_text();
+        let said = match (said.strip_suffix(contains.as_str()), node.value.as_deref()) {
+            (Some(field), Some(text)) if !text.trim().is_empty() => format!("{field}{text}"),
+            _ => said,
+        };
         if let Some(actions) = &self.actions {
             actions.focus(&node);
         }
