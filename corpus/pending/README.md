@@ -12,7 +12,10 @@ To record one:
 
 | Scenario | What it records | Fixture |
 |---|---|---|
-| (none) | | |
+| 275 | Heading level keys across sections: into new and same sections, back, and 1 (audit §2.6; the 2017 rule says JAWS stops at a higher heading) | `headings-sections.html` (here) |
+| 276 | A select box opened with Space: its list, Down, Up, Enter, Space, Escape (229/s21 had no position and no combo box) | `signup-form.html` |
+| 401 | Say Character once, twice, three times, with Numpad 5 and CapsLock+Comma, on J, €, é, 9, B, a | `desktop-reading.ps1` |
+| 402 | Phonetic mode after Numpad 5 twice, and which keys end it | `desktop-reading.ps1` |
 
 Scenarios from 400 record JAWS's reading settings (plan
 `docs/plans/2026-10-18-reading-settings.md`). Their fixtures, `reading-settings.html` (here)

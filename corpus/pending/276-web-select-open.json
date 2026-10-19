@@ -1,0 +1,20 @@
+{
+  "id": "276-web-select-open",
+  "name": "A select box opened with Space from the virtual cursor: its list, Down, Up, Enter to choose, Space again and Escape",
+  "category": "forms",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "C" },
+    { "id": "s2", "type": "key", "command": "Space" },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Down" },
+    { "id": "s5", "type": "key", "command": "Up" },
+    { "id": "s6", "type": "key", "command": "Enter" },
+    { "id": "s7", "type": "key", "command": "Space" },
+    { "id": "s8", "type": "key", "command": "Escape" },
+    { "id": "s9", "type": "key", "command": "Insert+Up" }
+  ]
+}

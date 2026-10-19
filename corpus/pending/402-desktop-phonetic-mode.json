@@ -1,0 +1,25 @@
+{
+  "id": "402-desktop-phonetic-mode",
+  "name": "Phonetic mode after Numpad 5 twice: Right, Right, Numpad 6, Numpad 4 and Left, then Down, Up and Right, then Numpad 5 once and Right",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-reading.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Reading Fixture" },
+  "reset": { "keys": ["Ctrl+Home", "Down", "Down", "Down", "Down", "Down", "Down", "Down", "Down", "Down", "Down", "Down", "Down"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Numpad5", "repeat": 2 },
+    { "id": "s2", "type": "key", "command": "Right" },
+    { "id": "s3", "type": "key", "command": "Right" },
+    { "id": "s4", "type": "key", "command": "Numpad6" },
+    { "id": "s5", "type": "key", "command": "Numpad4" },
+    { "id": "s6", "type": "key", "command": "Left" },
+    { "id": "s7", "type": "key", "command": "Down" },
+    { "id": "s8", "type": "key", "command": "Up" },
+    { "id": "s9", "type": "key", "command": "Right" },
+    { "id": "s10", "type": "key", "command": "Numpad5", "repeat": 2 },
+    { "id": "s11", "type": "key", "command": "Right" },
+    { "id": "s12", "type": "key", "command": "Numpad5" },
+    { "id": "s13", "type": "key", "command": "Right" }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "275-web-heading-levels-sections",
+  "name": "Heading level keys across sections: 2 and 3 forward into new and same sections, Shift+3 and Shift+2 back, 1",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/headings-sections.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "2" },
+    { "id": "s2", "type": "key", "command": "2" },
+    { "id": "s3", "type": "key", "command": "2" },
+    { "id": "s4", "type": "key", "command": "2" },
+    { "id": "s5", "type": "key", "command": "2" },
+    { "id": "s6", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s7", "type": "key", "command": "3" },
+    { "id": "s8", "type": "key", "command": "3" },
+    { "id": "s9", "type": "key", "command": "3" },
+    { "id": "s10", "type": "key", "command": "3" },
+    { "id": "s11", "type": "key", "command": "Shift+3" },
+    { "id": "s12", "type": "key", "command": "Shift+2" },
+    { "id": "s13", "type": "key", "command": "Shift+2" },
+    { "id": "s14", "type": "key", "command": "1" },
+    { "id": "s15", "type": "key", "command": "Shift+1" }
+  ]
+}
