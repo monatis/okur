@@ -77,7 +77,7 @@ impl WindowListDialog {
                 control(
                     "windows",
                     msg::window_list_running().to_string(),
-                    ControlKind::List {
+                    ControlKind::ListBox {
                         items: self.items(),
                         selected: self.selected,
                     },
@@ -172,7 +172,7 @@ mod tests {
         );
         assert!(matches!(
             spec.controls.first().map(|c| &c.kind),
-            Some(ControlKind::List { items, .. })
+            Some(ControlKind::ListBox { items, .. })
                 if items == &["Command Prompt  Minimized", "Untitled - Notepad  Restored"]
         ));
     }

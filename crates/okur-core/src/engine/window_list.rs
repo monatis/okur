@@ -60,10 +60,9 @@ impl ScreenReaderEngine {
                     actions.switch_to_window(id);
                 }
             }
-            Outcome::Closed => {
-                self.window_list = None;
-                self.returning_from_dialog();
-            }
+            // JAWS announces the window the focus goes back to: "SR Dialog Fixture | Save...
+            // Button" [obs, 511/s3].
+            Outcome::Closed => self.window_list = None,
         }
         None
     }

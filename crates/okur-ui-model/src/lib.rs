@@ -78,6 +78,12 @@ pub enum ControlKind {
         items: Vec<String>,
         selected: usize,
     },
+    /// A list box of items, one selected, named by its label shown above it: JAWS's Window
+    /// List, "Running Applications List box" [obs, 511/s1].
+    ListBox {
+        items: Vec<String>,
+        selected: usize,
+    },
     /// A tree of items, one selected, every item open. Its label names it and is not shown:
     /// JAWS's "Regions Tree view". The items are in order, each at its level (0 at the top),
     /// an item's children right after it; `selected` counts in that order.

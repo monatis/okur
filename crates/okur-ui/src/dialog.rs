@@ -26,7 +26,8 @@ use windows::Win32::UI::WindowsAndMessaging::{
     GetWindowThreadProcessId, IsDialogMessageW, IsWindow, SendMessageW, SetForegroundWindow,
     SetWindowTextW, ShowWindow, BM_GETCHECK, BM_SETCHECK, BN_CLICKED, CBN_EDITCHANGE,
     CBN_SELCHANGE, CB_ADDSTRING, CB_GETCURSEL, CB_GETLBTEXT, CB_GETLBTEXTLEN, CB_RESETCONTENT,
-    CB_SETCURSEL, DLGTEMPLATE, MSG, SW_SHOW, WM_COMMAND, WM_HSCROLL, WM_INITDIALOG, WM_NOTIFY,
+    CB_SETCURSEL, DLGTEMPLATE, LBN_SELCHANGE, LB_ADDSTRING, LB_GETCURSEL, LB_RESETCONTENT,
+    LB_SETCURSEL, MSG, SW_SHOW, WM_COMMAND, WM_HSCROLL, WM_INITDIALOG, WM_NOTIFY,
 };
 
 use crate::template::{self, IDCANCEL};
@@ -69,6 +70,7 @@ fn initial(kind: &ControlKind) -> Option<Value> {
     match kind {
         ControlKind::Choice { selected, .. }
         | ControlKind::List { selected, .. }
+        | ControlKind::ListBox { selected, .. }
         | ControlKind::Tree { selected, .. }
         | ControlKind::Radios { selected, .. } => Some(Value::Selected(*selected)),
         ControlKind::CheckBox { checked } => Some(Value::Checked(*checked)),
@@ -213,6 +215,7 @@ fn fill(window: HWND, index: usize, item: HWND, kind: &ControlKind) {
                 set_items(item, items, *selected);
             }
             ControlKind::Tree { items, selected } => fill_tree(item, items, *selected),
+            ControlKind::ListBox { items, selected } => fill_list_box(item, items, *selected),
             ControlKind::Radios { selected, .. } => {
                 set(window, index, item, kind, &Value::Selected(*selected));
             }
@@ -234,6 +237,24 @@ fn fill(window: HWND, index: usize, item: HWND, kind: &ControlKind) {
             }
             ControlKind::Group | ControlKind::Button { .. } => {}
         }
+    }
+}
+
+/// Fills a list box with `items` and selects one.
+fn fill_list_box(list: HWND, items: &[String], selected: usize) {
+    // SAFETY: messages to our own list box; each string is copied before the call returns.
+    unsafe {
+        SendMessageW(list, LB_RESETCONTENT, None, None);
+        for text in items {
+            let text = wide(text);
+            SendMessageW(
+                list,
+                LB_ADDSTRING,
+                None,
+                Some(LPARAM(text.as_ptr() as isize)),
+            );
+        }
+        SendMessageW(list, LB_SETCURSEL, Some(WPARAM(selected)), None);
     }
 }
 
@@ -407,6 +428,9 @@ fn set(window: HWND, index: usize, item: HWND, kind: &ControlKind, value: &Value
             }
             (ControlKind::List { .. }, Value::Selected(i)) => select_item(item, *i),
             (ControlKind::Tree { .. }, Value::Selected(i)) => select_tree_item(item, *i),
+            (ControlKind::ListBox { .. }, Value::Selected(i)) => {
+                SendMessageW(item, LB_SETCURSEL, Some(WPARAM(*i)), None);
+            }
             (ControlKind::Radios { options, .. }, Value::Selected(chosen)) => {
                 for option in 0..options.len() {
                     let id = template::radio_id(index, option);
@@ -487,6 +511,10 @@ pub fn set_list(id: u32, control: &str, items: &[String], selected: usize) {
                 return;
             }
             remember(window, window_id, Value::Selected(selected));
+            if matches!(kind, ControlKind::ListBox { .. }) {
+                fill_list_box(list, items, selected);
+                return;
+            }
             set_items(list, items, selected);
         }
     }
@@ -681,6 +709,13 @@ unsafe extern "system" fn dialog_proc(
                 }
                 (ControlKind::ComboEdit { .. }, _) if code == CBN_SELCHANGE => {
                     changed(window, &hit, Value::Text(chosen_text(item)));
+                }
+                (ControlKind::ListBox { .. }, _) if code == LBN_SELCHANGE => {
+                    // SAFETY: a state query on our own list box.
+                    let index = unsafe { SendMessageW(item, LB_GETCURSEL, None, None) };
+                    if let Ok(index) = usize::try_from(index.0) {
+                        changed(window, &hit, Value::Selected(index));
+                    }
                 }
                 (ControlKind::Choice { .. }, _) if code == CBN_SELCHANGE => {
                     // SAFETY: a state query on our own combo box.

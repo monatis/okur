@@ -42,6 +42,8 @@ const TVS_SHOWSELALWAYS: u32 = 0x20;
 const LVS_SINGLESEL: u32 = 0x4;
 const LVS_SHOWSELALWAYS: u32 = 0x8;
 const LVS_NOCOLUMNHEADER: u32 = 0x4000;
+const LBS_NOTIFY: u32 = 0x1;
+const LBS_NOINTEGRALHEIGHT: u32 = 0x100;
 const TBS_AUTOTICKS: u32 = 1;
 
 /// The dialog manager's ids for OK and Cancel: Enter without a default button presses OK,
@@ -133,11 +135,12 @@ pub fn radio_of(id: u16) -> Option<(usize, usize)> {
 /// left, the buttons beside it, the radio groups side by side below), any other as a form.
 /// Items are in the description's order, which is the tab order.
 pub fn layout(dialog: &DialogSpec) -> Layout {
-    if dialog
-        .controls
-        .iter()
-        .any(|c| matches!(c.kind, ControlKind::List { .. } | ControlKind::Tree { .. }))
-    {
+    if dialog.controls.iter().any(|c| {
+        matches!(
+            c.kind,
+            ControlKind::List { .. } | ControlKind::ListBox { .. } | ControlKind::Tree { .. }
+        )
+    }) {
         list_layout(dialog)
     } else {
         form_layout(dialog)
@@ -258,6 +261,37 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
                 // Its name, which JAWS's list dialogs show nowhere ("links").
                 text: control.label.clone(),
             }),
+            // A list box, named by the label above it: JAWS's Window List, "Running Applications
+            // List box" [obs, 511/s1].
+            ControlKind::ListBox { .. } => {
+                items.push(Item {
+                    class: Class::Static,
+                    style: WS_CHILD | WS_VISIBLE,
+                    x: MARGIN,
+                    y: MARGIN,
+                    cx: list_width,
+                    cy: 9,
+                    id: LABEL_ID,
+                    text: control.label.clone(),
+                });
+                items.push(Item {
+                    class: Class::Named("LISTBOX"),
+                    style: WS_CHILD
+                        | WS_VISIBLE
+                        | WS_BORDER
+                        | WS_TABSTOP
+                        | WS_GROUP
+                        | WS_VSCROLL
+                        | LBS_NOTIFY
+                        | LBS_NOINTEGRALHEIGHT,
+                    x: MARGIN,
+                    y: MARGIN + 10,
+                    cx: list_width,
+                    cy: LIST_HEIGHT - 10,
+                    id,
+                    text: String::new(),
+                });
+            }
             // A tree view takes its name from the label before it, as a dialog's tree does
             // ("Regions Tree view", JAWS's Document Regions [obs, 274/s1]).
             ControlKind::Tree { .. } => {
@@ -495,7 +529,7 @@ fn form_layout(dialog: &DialogSpec) -> Layout {
                 ) + ROW_GAP
                     + 2;
             }
-            ControlKind::List { .. } | ControlKind::Tree { .. } => {}
+            ControlKind::List { .. } | ControlKind::ListBox { .. } | ControlKind::Tree { .. } => {}
             ControlKind::Button { default } => {
                 buttons.push((id, control.label.clone(), *default));
             }
