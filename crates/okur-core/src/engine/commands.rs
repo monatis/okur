@@ -19,6 +19,9 @@ impl ScreenReaderEngine {
 
     /// Runs `command`, speaks what it reads, and returns it.
     pub fn execute(&mut self, command: Command) -> Option<String> {
+        if let Some(said) = self.read_where_focused(&command) {
+            return said;
+        }
         match command {
             Command::SayWindow => {
                 // Dialog boxes; other windows are not read this way yet.
@@ -777,7 +780,13 @@ impl ScreenReaderEngine {
             _ => None,
         };
         if let (Some(chord), Some(command)) = (moving, &layout_command) {
-            if self.app_mode == AppMode::VirtualBuffer && !self.forms_mode {
+            // A word on a native control that is not a text field is the control itself
+            // [obs, 503/s6, s7].
+            let native_control_word = self.app_mode != AppMode::VirtualBuffer
+                && !self.editing_text()
+                && matches!(command, Command::SayNextWord | Command::SayPriorWord);
+            if (self.app_mode == AppMode::VirtualBuffer && !self.forms_mode) || native_control_word
+            {
                 let _ = self.execute(command.clone());
             } else if let Some(actions) = &self.actions {
                 actions.press(&chord);

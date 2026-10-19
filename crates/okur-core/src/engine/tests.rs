@@ -329,14 +329,15 @@ fn test_engine_text_selection_and_font_query() {
     let unsel = engine.execute_command("+{LEFT}");
     assert_eq!(unsel, Some("unselected e".to_string()));
 
-    // Query active selection
+    // Query active selection [obs, 501/s8]
     let say_sel = engine.execute_command("SaySelection");
-    assert_eq!(say_sel, Some("H".to_string()));
+    assert_eq!(say_sel, Some("Selection is
+H".to_string()));
 
     // Moving cursor clears selection
     engine.execute_command("{RIGHT}");
     let no_sel = engine.execute_command("SaySelection");
-    assert_eq!(no_sel, Some("No selection".to_string()));
+    assert_eq!(no_sel, Some("Nothing selected".to_string()));
 }
 
 #[test]

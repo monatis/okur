@@ -22,6 +22,7 @@ mod commands;
 mod find;
 mod focus;
 mod page;
+mod reading;
 mod say_all;
 mod state;
 #[cfg(test)]

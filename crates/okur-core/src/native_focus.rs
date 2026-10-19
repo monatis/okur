@@ -657,6 +657,21 @@ pub fn say_focus(focus: &FocusEvent) -> String {
         .join("\n")
 }
 
+/// The control as the reading keys say it on a native control that is not a text field: Say
+/// Focus without what a key does on it ("Subscribe to updates check box checked", "General Tab
+/// selected" [obs, 503/s3, s16]).
+pub fn reading_line(focus: &FocusEvent) -> String {
+    control_lines(focus, false)
+        .iter()
+        .filter(|l| !l.on_arrival)
+        .filter(|l| !l.parts.iter().all(|p| p.kind == PartKind::Hint))
+        .map(Line::render)
+        .filter(|l| !l.is_empty())
+        .collect::<Vec<_>>()
+        .join("
+")
+}
+
 pub fn focus_line(focus: &FocusEvent) -> String {
     control_lines(focus, false)
         .iter()

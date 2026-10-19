@@ -290,6 +290,36 @@ impl VirtualCursor {
     }
 
     /// Speaks the currently selected text (`SaySelection`).
+    /// The text selected with the virtual cursor, empty without a selection.
+    pub fn selected_text(&self) -> String {
+        let Some(sel) = self.selection.filter(|s| !s.is_empty()) else {
+            return String::new();
+        };
+        let end = sel.end().min(self.buffer.len());
+        self.buffer
+            .text
+            .get(sel.start().min(end)..end)
+            .unwrap_or_default()
+            .trim()
+            .to_owned()
+    }
+
+    /// The cursor's line before the cursor, and from it to the line's end.
+    pub fn line_around_cursor(&self) -> (String, String) {
+        let Some(line) = self.buffer.line_at_offset(self.offset) else {
+            return (String::new(), String::new());
+        };
+        let at = self.offset.clamp(line.start_offset, line.end_offset);
+        let part = |from: usize, to: usize| {
+            self.buffer
+                .text
+                .get(from..to)
+                .unwrap_or_default()
+                .to_owned()
+        };
+        (part(line.start_offset, at), part(at, line.end_offset))
+    }
+
     pub fn say_selection(&self) -> String {
         if let Some(sel) = self.selection {
             if !sel.is_empty() {

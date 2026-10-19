@@ -116,6 +116,12 @@ pub enum Command {
     SelectNextLine,
     SelectPriorLine,
     SaySelectedText,
+    /// Insert+End: the window's top line (its title).
+    SayTopLineOfWindow,
+    /// Insert+Home: the line up to the cursor.
+    SayToCursor,
+    /// Insert+PageUp: the line from the cursor.
+    SayFromCursor,
 
     // Finding.
     VirtualFind,
@@ -297,6 +303,9 @@ impl Command {
             "+{DOWN}" | "SelectNextLine" => SelectNextLine,
             "+{UP}" | "SelectPriorLine" => SelectPriorLine,
             "+!{DOWN}" | "SaySelection" | "SaySelectedText" => SaySelectedText,
+            "SayTopLineOfWindow" | "Insert+End" => SayTopLineOfWindow,
+            "SayToCursor" | "Insert+Home" => SayToCursor,
+            "SayFromCursor" | "Insert+PageUp" => SayFromCursor,
 
             "^f" | "Ctrl+F" | "VirtualFind" | "JAWSFind" | "Insert+Ctrl+F" | "JAWSKey+Ctrl+F" => {
                 VirtualFind
@@ -463,6 +472,8 @@ use Held::{No, Yes};
 const SHIFT: Chord = ANY.shift(Yes).ctrl(No).alt(No);
 /// The JAWS key alone.
 const JAWS: Chord = ANY.insert(Yes).ctrl(No).alt(No).shift(No);
+/// The JAWS key with Shift.
+const JAWS_SHIFT: Chord = ANY.insert(Yes).shift(Yes).ctrl(No).alt(No);
 /// Ctrl and Alt, with or without Shift.
 const CTRL_ALT: Chord = ANY.ctrl(Yes).alt(Yes);
 /// Ctrl and the JAWS key: the element lists.
@@ -482,13 +493,19 @@ static BINDINGS: &[Binding] = &{
         // Say All and Say Line.
         bind(DownArrow, JAWS, SayAll),
         bind(UpArrow, JAWS, SayLine),
-        // Say Selected Text: JAWS key or Alt, with Shift.
+        bind(RightArrow, JAWS, SayNextWord),
+        bind(LeftArrow, JAWS, SayPriorWord),
+        // Say Selected Text: the JAWS key with Shift (Alt+Shift+Down is a JAWS cursor key in
+        // Default.JKM, MouseDown).
         bind(
             DownArrow,
             ANY.insert(Yes).shift(Yes).ctrl(No),
             SaySelectedText,
         ),
-        bind(DownArrow, ANY.alt(Yes).shift(Yes).ctrl(No), SaySelectedText),
+        // The window's top line, and the line to and from the cursor.
+        bind(End, JAWS, SayTopLineOfWindow),
+        bind(Home, JAWS, SayToCursor),
+        bind(Key::PageUp, JAWS, SayFromCursor),
         // Table rows and columns.
         bind(DownArrow, CTRL_ALT.shift(Yes), MoveToBottomOfColumn),
         bind(UpArrow, CTRL_ALT.shift(Yes), MoveToTopOfColumn),
@@ -712,6 +729,12 @@ static LAPTOP_BINDINGS: &[Binding] = &{
         bind(Alpha('L'), JAWS, SayNextWord),
         bind(Alpha('J'), JAWS, SayPriorWord),
         bind(Alpha('M'), JAWS, SayPriorCharacter),
+        // Laptop Keystrokes for Reading Text (JAWS 2025 help).
+        bind(Alpha('A'), JAWS, SayAll),
+        bind(Alpha('A'), JAWS_SHIFT, SaySelectedText),
+        bind(Alpha('Y'), JAWS_SHIFT, SayTopLineOfWindow),
+        bind(Alpha('J'), JAWS_SHIFT, SayToCursor),
+        bind(Alpha('L'), JAWS_SHIFT, SayFromCursor),
     ]
 };
 

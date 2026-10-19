@@ -62,7 +62,9 @@ character-value = Character { $digits }
 selection-selected = selected { $text }
 selection-unselected = unselected { $text }
 # Say Selected Text with nothing selected.
-selection-none = No selection
+selection-none = Nothing selected
+# Say Selected Text, before the selection [obs, 501/s8, 504/s2].
+selection-is = Selection is
 
 ## A modal dialog in a page
 

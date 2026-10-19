@@ -144,6 +144,23 @@ pub fn line_at(context: &TextContext) -> String {
     text.get(start..end).unwrap_or_default().iter().collect()
 }
 
+/// The caret's line before the caret, and from the caret to its end: Say To Cursor and Say From
+/// Cursor [obs, 504/s9, s10].
+pub fn line_around_caret(context: &TextContext) -> (String, String) {
+    let text = chars(&context.text);
+    let caret = context.caret.min(text.len());
+    let start = text
+        .get(..caret)
+        .and_then(|before| before.iter().rposition(|c| is_line_break(*c)))
+        .map_or(0, |i| i + 1);
+    let end = text
+        .get(caret..)
+        .and_then(|after| after.iter().position(|c| is_line_break(*c)))
+        .map_or(text.len(), |i| caret + i);
+    let part = |from: usize, to: usize| text.get(from..to).unwrap_or_default().iter().collect();
+    (part(start, caret), part(caret, end))
+}
+
 /// The lines from the caret's line to the end of the text, without empty ones: what Say All
 /// reads in a document (JAWS in Google Docs' document, dev box 2026-10-16: each line from the
 /// caret's, to the last).
@@ -248,7 +265,7 @@ pub fn word_around(context: &TextContext) -> String {
     text.get(start..end).unwrap_or_default().iter().collect()
 }
 
-fn selected_text(context: &TextContext) -> String {
+pub(crate) fn selected_text(context: &TextContext) -> String {
     let text = chars(&context.text);
     match context.selection {
         Some((start, end)) if start < end => {
