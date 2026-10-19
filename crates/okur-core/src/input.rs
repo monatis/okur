@@ -33,6 +33,12 @@ pub enum Key {
     /// The numeric keypad's 5 with Num Lock off (VK_CLEAR): JAWS's desktop Say Character.
     /// The keypad's other keys arrive as the arrows and Home, End, Page Up and Page Down.
     Numpad5,
+    /// The keypad's operator keys, whatever the Num Lock state: JAWS's PC cursor and leaving
+    /// forms mode (Plus), the JAWS cursor (Minus), and its mouse buttons (Slash, Star).
+    NumpadPlus,
+    NumpadMinus,
+    NumpadSlash,
+    NumpadStar,
 
     Control,
     Alt,

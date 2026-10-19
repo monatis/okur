@@ -91,7 +91,7 @@ P0 blocks daily use, P1 is expected by a JAWS user within days, P2 is later.
 | 18 | Speech | Voice rate on the fly: Alt+Ctrl+PageUp and PageDown, with Win to save | Says "faster" or "slower" [H9] | **Missing** | P1 | 512 |
 | 19 | General | Quit (Insert+F4), refresh the screen (Insert+Escape) | [H4, H9] | **Missing.** Okur quits only from its console | P1 | 298 (Insert+Escape) |
 | 20 | Web | When a page loads: a summary, then reading starts by itself | Both on by default [S4, W2] | **Missing (B12).** Okur says the title and the mode | P1 | 507 |
-| 21 | Web | Forms mode: Numpad Plus leaves it; semi-auto mode; the quick key delay; Numpad Slash on a check box | [S5, W3] | **Partial (B6).** Numpad Plus types "+" into the field | P1 | 507 |
+| 21 | Web | Forms mode: Numpad Plus leaves it; semi-auto mode; the quick key delay; Numpad Slash on a check box | [S5, W3] | **Partial.** Numpad Plus leaves forms mode (2026-10-19, B6 fixed; its speech checked by 507); semi-auto mode, the quick key delay and Numpad Slash are missing | P1 | 507 |
 | 22 | Editing | Cut, paste, undo, Ctrl+Delete, Shift+PageDown | Command names in [K]; what JAWS says is not known | **Partial.** Ctrl+A, Ctrl+C, selection, Backspace and Delete are built; the others are silent | P1 | 504 |
 | 23 | Clipboard | Say the clipboard (Win+Insert+X), view it (Insert+Space, C), append to it (Insert+Win+C) | [H10, K] | **Missing** | P1 | 504 (Win+Insert+X) |
 | 24 | Verbosity | Beginner, Intermediate and Advanced, and what each says; long and short messages | [S3] | **Partial.** The model exists; nothing changes the level, and the lists per level are not known | P1 | read the lists on old-pc first |

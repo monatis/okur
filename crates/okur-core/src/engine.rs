@@ -444,7 +444,10 @@ impl ScreenReaderEngine {
             if let Some(action) = self.arrow_out_of_field(event) {
                 return action;
             }
-            if event.key == Key::Escape {
+            // Numpad Plus leaves forms mode as Escape does (JAWS 2025 Settings Center help, Forms
+            // Mode Options; Surf's Up, Forms).
+            let numpad_plus = event.key == Key::NumpadPlus && event.modifiers.is_empty();
+            if event.key == Key::Escape || numpad_plus {
                 self.forms_mode = false;
                 let _ = self.cursor.exit_forms_mode();
                 // [obs, 205/s11]

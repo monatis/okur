@@ -9,9 +9,10 @@ use windows::Win32::Foundation::{LPARAM, LRESULT, WPARAM};
 use windows::Win32::System::Com::{CoInitializeEx, CoUninitialize, COINIT_MULTITHREADED};
 use windows::Win32::System::Threading::GetCurrentThreadId;
 use windows::Win32::UI::Input::KeyboardAndMouse::{
-    GetAsyncKeyState, GetKeyState, VIRTUAL_KEY, VK_BACK, VK_CAPITAL, VK_CLEAR, VK_CONTROL,
-    VK_DELETE, VK_DOWN, VK_END, VK_ESCAPE, VK_HOME, VK_INSERT, VK_LEFT, VK_MENU, VK_NEXT, VK_OEM_1,
-    VK_OEM_7, VK_PRIOR, VK_RETURN, VK_RIGHT, VK_SCROLL, VK_SHIFT, VK_SPACE, VK_TAB, VK_UP,
+    GetAsyncKeyState, GetKeyState, VIRTUAL_KEY, VK_ADD, VK_BACK, VK_CAPITAL, VK_CLEAR, VK_CONTROL,
+    VK_DELETE, VK_DIVIDE, VK_DOWN, VK_END, VK_ESCAPE, VK_HOME, VK_INSERT, VK_LEFT, VK_MENU,
+    VK_MULTIPLY, VK_NEXT, VK_OEM_1, VK_OEM_7, VK_PRIOR, VK_RETURN, VK_RIGHT, VK_SCROLL, VK_SHIFT,
+    VK_SPACE, VK_SUBTRACT, VK_TAB, VK_UP,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
     CallNextHookEx, DispatchMessageW, GetMessageW, PostThreadMessageW, SetWindowsHookExW,
@@ -401,6 +402,10 @@ fn translate_vk_code(vk: u32, scan: u32, extended: bool) -> Key {
     match VIRTUAL_KEY(vk as u16) {
         // The keypad's 5 with Num Lock off.
         VK_CLEAR => Key::Numpad5,
+        VK_ADD => Key::NumpadPlus,
+        VK_SUBTRACT => Key::NumpadMinus,
+        VK_DIVIDE => Key::NumpadSlash,
+        VK_MULTIPLY => Key::NumpadStar,
         VK_UP => Key::UpArrow,
         VK_DOWN => Key::DownArrow,
         VK_LEFT => Key::LeftArrow,

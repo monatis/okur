@@ -36,6 +36,10 @@ fn key_from_name(name: &str) -> Option<Key> {
         "comma" => Key::Comma,
         "period" => Key::Period,
         "numpad5" => Key::Numpad5,
+        "numpadplus" => Key::NumpadPlus,
+        "numpadminus" => Key::NumpadMinus,
+        "numpadslash" => Key::NumpadSlash,
+        "numpadstar" => Key::NumpadStar,
         // The keypad with Num Lock off sends the keys it shares with the gray ones.
         "numpad4" => Key::LeftArrow,
         "numpad6" => Key::RightArrow,

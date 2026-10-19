@@ -3663,3 +3663,19 @@ fn settings_follow_the_application_and_site_in_front() {
     engine.handle_focus_event(&explorer);
     assert_eq!(engine.settings.voice.punctuation, Punctuation::Most);
 }
+
+/// Numpad Plus leaves forms mode as Escape does, and never types "+" into the field (JAWS 2025
+/// Settings Center help, Forms Mode Options; Surf's Up, Forms).
+#[test]
+fn numpad_plus_leaves_forms_mode() {
+    let cursor = VirtualCursor::new(create_test_buffer());
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.execute_command("E");
+    let enter = KeyEvent::new(Key::Enter, Modifiers::none(), true);
+    assert_eq!(engine.handle_key_event(&enter), KeyAction::Consume);
+    assert!(engine.forms_mode);
+    let mut plus = KeyEvent::new(Key::NumpadPlus, Modifiers::none(), true);
+    plus.text = Some('+');
+    assert_eq!(engine.handle_key_event(&plus), KeyAction::Consume);
+    assert!(!engine.forms_mode);
+}
