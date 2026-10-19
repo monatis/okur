@@ -25,6 +25,7 @@ mod information;
 mod layer;
 mod page;
 mod reading;
+mod routing;
 mod say_all;
 mod state;
 #[cfg(test)]

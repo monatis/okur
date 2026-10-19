@@ -95,3 +95,12 @@ application-in-use = The application currently being used is { $app }
 # A column past the last, then how many there are.
 list-column-out-of-range = { $column } out of range
 list-view-columns = this listview only contains { $count } columns.
+
+## Routing the cursors and the page's frames [obs, 536]
+
+# Insert+Delete: the virtual cursor goes to the focus.
+route-virtual-to-pc = Route Virtual to PC
+# Ctrl+Insert+Delete: the focus goes to the virtual cursor.
+route-pc-to-virtual = Route PC to Virtual Cursor
+# Insert+F9 on a page without frames.
+no-frames-in-page = No frames found in page

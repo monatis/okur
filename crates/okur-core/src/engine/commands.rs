@@ -31,6 +31,10 @@ impl ScreenReaderEngine {
             Command::SayDefaultButton => return self.say_default_button(),
             Command::SayConfiguration => return self.say_configuration(),
             Command::SayListColumn(column) => return self.say_list_column(column),
+            Command::SayLinkAddress => return self.say_link_address(),
+            Command::RouteVirtualToPc => return self.route_virtual_to_pc(),
+            Command::RoutePcToVirtual => return self.route_pc_to_virtual(),
+            Command::SelectAFrame => return self.select_a_frame(),
             Command::RateFaster => return self.change_rate(true),
             Command::RateSlower => return self.change_rate(false),
             Command::SayWindow => {

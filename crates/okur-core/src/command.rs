@@ -172,6 +172,14 @@ pub enum Command {
     SayConfiguration,
     /// Ctrl+Insert+1 to 0: a list view item's column (1 to 10), with its header.
     SayListColumn(u8),
+    /// Ctrl+Insert+F7: the address of the link at the virtual cursor.
+    SayLinkAddress,
+    /// Insert+Delete: the virtual cursor to the focus.
+    RouteVirtualToPc,
+    /// Ctrl+Insert+Delete: the focus to the virtual cursor.
+    RoutePcToVirtual,
+    /// Insert+F9: the page's frames.
+    SelectAFrame,
 
     // Finding.
     VirtualFind,
@@ -373,6 +381,10 @@ impl Command {
             "SayBottomLineOfWindow" | "Insert+PageDown" => SayBottomLineOfWindow,
             "SayDefaultButton" | "Insert+E" => SayDefaultButton,
             "SayConfiguration" | "Insert+Q" => SayConfiguration,
+            "IndicateLinkSourceURL" | "Ctrl+Insert+F7" => SayLinkAddress,
+            "RouteVirtualToPc" | "Insert+Delete" => RouteVirtualToPc,
+            "RoutePCToVirtual" | "Ctrl+Insert+Delete" => RoutePcToVirtual,
+            "SelectAFrame" | "Insert+F9" => SelectAFrame,
             "Ctrl+Insert+1" => SayListColumn(1),
             "Ctrl+Insert+2" => SayListColumn(2),
             "Ctrl+Insert+3" => SayListColumn(3),
@@ -715,6 +727,17 @@ static BINDINGS: &[Binding] = &{
         // The dialog box's default button, and the settings in use (JAWS 2025 help) [obs, 513].
         bind(Alpha('E'), JAWS, SayDefaultButton),
         bind(Alpha('Q'), JAWS, SayConfiguration),
+        // A page's link address, routing the cursors, frames, and the prior heading by the
+        // Ctrl+Insert+Shift+Enter of the key map (Default.JKM) [obs, 536].
+        bind(Key::F(7), CTRL_INSERT, SayLinkAddress),
+        bind(Key::Delete, JAWS, RouteVirtualToPc),
+        bind(Key::Delete, CTRL_INSERT, RoutePcToVirtual),
+        bind(Key::F(9), JAWS, SelectAFrame),
+        bind(
+            Key::Enter,
+            ANY.ctrl(Yes).insert(Yes).shift(Yes).alt(No),
+            MoveToPrior(Heading),
+        ),
         // A list view's columns (JAWS 2025 help, Keystrokes for Dialog Boxes) [obs, 514].
         bind(Digit(1), CTRL_INSERT, SayListColumn(1)),
         bind(Digit(2), CTRL_INSERT, SayListColumn(2)),
