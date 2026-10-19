@@ -1484,6 +1484,11 @@ mod capture {
         let mut pid = 0u32;
         // SAFETY: valid out-pointer; a stale hwnd yields pid 0.
         unsafe { GetWindowThreadProcessId(hwnd, Some(&mut pid)) };
+        process_name_of(pid)
+    }
+
+    /// The executable's file name of process `pid`.
+    fn process_name_of(pid: u32) -> Option<String> {
         if pid == 0 {
             return None;
         }
@@ -2153,6 +2158,16 @@ mod capture {
 
     /// The processes of the window in front: its own, and for a UWP app in a frame
     /// (ApplicationFrameHost: Windows Settings) the app's, which owns its core window.
+    /// Windows' shell, whose UIA notifications are its toasts ("New notification from Windows
+    /// PowerShell, ...", which JAWS says whatever is in front [obs, 533/s1]): the notification
+    /// host, or Explorer.
+    fn is_notification_host(pid: u32) -> bool {
+        process_name_of(pid).is_some_and(|name| {
+            name.eq_ignore_ascii_case("ShellExperienceHost.exe")
+                || name.eq_ignore_ascii_case("explorer.exe")
+        })
+    }
+
     fn foreground_processes() -> [u32; 2] {
         use windows::core::w;
         use windows::Win32::UI::WindowsAndMessaging::{FindWindowExW, GetForegroundWindow};
@@ -2203,7 +2218,8 @@ mod capture {
                 .and_then(|e| unsafe { e.CurrentProcessId() }.ok())
                 .and_then(|p| u32::try_from(p).ok())
                 .unwrap_or(0);
-            if pid == 0 || !foreground_processes().contains(&pid) {
+            if pid == 0 || !(foreground_processes().contains(&pid) || is_notification_host(pid)) {
+                tracing::debug!(pid, %text, "UIA notification from a process behind, not taken");
                 return Ok(());
             }
             if let Ok(mut queue) = UIA_NOTIFICATIONS.lock() {
