@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Virtual Cursor Keys - Keys Fixture</title>
+</head>
+<body>
+  <header>
+    <nav aria-label="Site">
+      <ul>
+        <li><a href="#paragraphs">Paragraphs</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#lists">Lists</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <h1>Virtual cursor keys</h1>
+    <p>Text before any link in the page.</p>
+    <p><a href="#paragraphs">A link alone in its paragraph</a></p>
+    <p>Some text with <a href="#contact">a link inside it</a> and more text after it.</p>
+    <hr>
+    <h2 id="paragraphs">Paragraphs</h2>
+    <p>The first paragraph has two sentences. This is the second sentence of it.</p>
+    <p>The second paragraph is short.</p>
+    <div>A division holds this text.</div>
+    <div>Another division, with <span>a span inside</span> it.</div>
+    <hr>
+    <h2 id="contact">Contact</h2>
+    <p>Write to <a href="mailto:help@example.org">help@example.org</a> or call.</p>
+    <p><mark>A highlighted phrase</mark> in a paragraph, and <strong>bold words</strong> too.</p>
+    <div onclick="this.textContent = 'Clicked'">A clickable division</div>
+    <div aria-flowto="lists">This part flows to the lists.</div>
+    <h2 id="lists">Lists</h2>
+    <ul>
+      <li>First item</li>
+      <li>Second item</li>
+    </ul>
+    <ol>
+      <li>Step one</li>
+      <li>Step two</li>
+    </ol>
+  </main>
+  <footer>
+    <p>The page ends here.</p>
+  </footer>
+</body>
+</html>

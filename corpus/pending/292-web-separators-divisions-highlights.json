@@ -1,0 +1,26 @@
+{
+  "id": "292-web-separators-divisions-highlights",
+  "name": "Dash and Shift+Dash (separators), Z and Shift+Z (divisions), Y and Shift+Y (Smart Glance highlights)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/virtual-keys.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Minus" },
+    { "id": "s2", "type": "key", "command": "Minus" },
+    { "id": "s3", "type": "key", "command": "Minus" },
+    { "id": "s4", "type": "key", "command": "Shift+Minus" },
+    { "id": "s5", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s6", "type": "key", "command": "Z" },
+    { "id": "s7", "type": "key", "command": "Z" },
+    { "id": "s8", "type": "key", "command": "Z" },
+    { "id": "s9", "type": "key", "command": "Z" },
+    { "id": "s10", "type": "key", "command": "Shift+Z" },
+    { "id": "s11", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s12", "type": "key", "command": "Y" },
+    { "id": "s13", "type": "key", "command": "Y" },
+    { "id": "s14", "type": "key", "command": "Y" },
+    { "id": "s15", "type": "key", "command": "Shift+Y" }
+  ]
+}

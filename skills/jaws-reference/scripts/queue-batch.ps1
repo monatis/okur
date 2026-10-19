@@ -23,6 +23,9 @@ param(
     [int]$Repetitions = 5,
     [switch]$Trace,
     [switch]$FreshJaws,
+    # Fixtures (file names under corpus\fixtures) whose IA2 and UIA snapshots are captured into
+    # <OutputDir>\snapshots before the batch: a capture must not run during another batch.
+    [string[]]$Snapshots = @(),
     # Give up waiting after this long.
     [int]$MaxWaitMinutes = 360
 )
@@ -40,6 +43,22 @@ while (-not (Test-Path $previous)) {
     Start-Sleep -Seconds 10
 }
 "starting $(Get-Date -Format o)" | Out-File $log -Append -Encoding utf8
+if ($Snapshots.Count -gt 0) {
+    $capture = Join-Path $PSScriptRoot 'capture-snapshot.ps1'
+    $okur = 'C:\Users\ailabs\sr-harness\bin\okur.exe'
+    $folder = Join-Path $OutputDir 'snapshots'
+    New-Item -ItemType Directory -Force -Path $folder | Out-Null
+    foreach ($fixture in $Snapshots) {
+        $stem = [IO.Path]::GetFileNameWithoutExtension($fixture)
+        foreach ($api in 'ia2', 'uia') {
+            $out = Join-Path $folder "$stem.chrome.$api.json"
+            $said = & powershell -NoProfile -ExecutionPolicy Bypass -File $capture `
+                -Fixture (Join-Path 'C:\Users\ailabs\corpus\fixtures' $fixture) `
+                -OutputPath $out -Okur $okur -Api $api 2>&1 | Select-Object -Last 1
+            "snapshot $stem $api: $said" | Out-File $log -Append -Encoding utf8
+        }
+    }
+}
 $batch = @{
     ScenarioGlob = $ScenarioGlob
     OutputDir    = $OutputDir

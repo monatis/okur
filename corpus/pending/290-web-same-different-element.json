@@ -1,0 +1,25 @@
+{
+  "id": "290-web-same-different-element",
+  "name": "S and D (same and different element), Shift+S and Shift+D, and Ctrl+Insert+Right, Left and Up",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/virtual-keys.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Down" },
+    { "id": "s2", "type": "key", "command": "Down" },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "S" },
+    { "id": "s5", "type": "key", "command": "S" },
+    { "id": "s6", "type": "key", "command": "S" },
+    { "id": "s7", "type": "key", "command": "D" },
+    { "id": "s8", "type": "key", "command": "D" },
+    { "id": "s9", "type": "key", "command": "Shift+S" },
+    { "id": "s10", "type": "key", "command": "Shift+D" },
+    { "id": "s11", "type": "key", "command": "Ctrl+Insert+Right" },
+    { "id": "s12", "type": "key", "command": "Ctrl+Insert+Right" },
+    { "id": "s13", "type": "key", "command": "Ctrl+Insert+Left" },
+    { "id": "s14", "type": "key", "command": "Ctrl+Insert+Up" }
+  ]
+}

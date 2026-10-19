@@ -35,6 +35,34 @@ and per-application and per-site settings. Those are not repeated here.
 - **Punctuation per voice context** (reading, typing, messages): JAWS sets it per context in
   Voice Adjustment; Okur has one level.
 
+## Virtual cursor keys not built
+
+The owner found N unbuilt (2026-10-19). The whole key map was then compared with Okur's:
+[`jaws-quick-navigation-keys.md`](../references/jaws-quick-navigation-keys.md) lists every
+virtual cursor key of JAWS 2025 (`Default.JKM` on old-pc), what Freedom Scientific documents
+for it, and Okur's status. Scenarios 289-299 record the gaps on old-pc; `virtual-keys.html`
+is their new fixture.
+
+Order of work, most used first:
+1. N and Shift+N, Insert+Enter: non-link text (289).
+2. P and Shift+P, the sentence keys, Ctrl+Numpad5, Say from and to Cursor (291).
+3. S and D, Ctrl+Insert+arrows: same and different element (290).
+4. Alt+Insert+Home and End, Ctrl+Alt+Insert+1..6: first and last heading (295). Ctrl+Insert+Home
+   and End: first and last field (296).
+5. Win+Alt+arrows, Alt+Win+Numpad5 and Period: table rows and columns (297).
+6. Z, Dash, Y: divisions, separators, Smart Glance highlights (292).
+7. Shift+Period and Shift+Comma, Alt+Win+Home and End: step past an element (294).
+8. Insert+N, Insert+Shift+Z, Insert+Z, Insert+Escape: quick keys and the virtual cursor on and
+   off (298).
+9. Backslash, Slash, Equals: mail links, clickable elements, flow to (293).
+10. J and W: Jump to Line, Word from List (299).
+11. Not recorded yet:
+    - V (visited links), which needs IA2's traversed state;
+    - PlaceMarkers (7-0, K, Ctrl+Shift+K, Ctrl+Win+K), in the helper dialogs plan;
+    - the element information (Insert+Shift+F1), F8, Ctrl+Insert+F7;
+    - the clickable and mouse-over lists, routing (Insert+Delete), Insert+F9, skim reading;
+    - PageUp and PageDown during Say All.
+
 ## Forms and browse mode
 
 - **Forms with Up and Down in browse mode** (the owner's request, 2026-10-18).

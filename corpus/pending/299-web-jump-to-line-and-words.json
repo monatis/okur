@@ -1,0 +1,24 @@
+{
+  "id": "299-web-jump-to-line-and-words",
+  "name": "J (Jump to Line: 12, then Enter), Shift+J (back), W and Shift+W (Word from List), each dialog closed with Escape",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "J" },
+    { "id": "s2", "type": "key", "command": "1" },
+    { "id": "s3", "type": "key", "command": "2" },
+    { "id": "s4", "type": "key", "command": "Enter" },
+    { "id": "s5", "type": "key", "command": "Shift+J" },
+    { "id": "s6", "type": "key", "command": "W" },
+    { "id": "s7", "type": "key", "command": "Escape" },
+    { "id": "s8", "type": "key", "command": "Shift+W" },
+    { "id": "s9", "type": "key", "command": "Escape" }
+  ]
+}

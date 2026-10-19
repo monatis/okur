@@ -1,0 +1,20 @@
+{
+  "id": "294-web-step-past-elements",
+  "name": "Shift+Period and Shift+Comma (step past and before an element), Alt+Win+End and Alt+Win+Home, on lists and a division",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/virtual-keys.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "L" },
+    { "id": "s2", "type": "key", "command": "Shift+Period" },
+    { "id": "s3", "type": "key", "command": "Shift+Comma" },
+    { "id": "s4", "type": "key", "command": "L" },
+    { "id": "s5", "type": "key", "command": "Down" },
+    { "id": "s6", "type": "key", "command": "Shift+Period" },
+    { "id": "s7", "type": "key", "command": "Shift+Comma" },
+    { "id": "s8", "type": "key", "command": "Alt+Win+End" },
+    { "id": "s9", "type": "key", "command": "Alt+Win+Home" }
+  ]
+}

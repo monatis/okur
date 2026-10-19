@@ -1,0 +1,26 @@
+{
+  "id": "291-web-paragraphs-and-sentences",
+  "name": "P and Shift+P (paragraphs), the sentence keys (Alt+NumpadPlus, Alt+NumpadMinus, Alt+Numpad5), Ctrl+Numpad5, Say from and to Cursor (Insert+PageUp, Insert+Home)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/virtual-keys.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "P" },
+    { "id": "s2", "type": "key", "command": "P" },
+    { "id": "s3", "type": "key", "command": "P" },
+    { "id": "s4", "type": "key", "command": "P" },
+    { "id": "s5", "type": "key", "command": "Shift+P" },
+    { "id": "s6", "type": "key", "command": "Alt+NumpadPlus" },
+    { "id": "s7", "type": "key", "command": "Alt+NumpadPlus" },
+    { "id": "s8", "type": "key", "command": "Alt+NumpadMinus" },
+    { "id": "s9", "type": "key", "command": "Alt+Numpad5" },
+    { "id": "s10", "type": "key", "command": "Ctrl+Numpad5" },
+    { "id": "s11", "type": "key", "command": "Right" },
+    { "id": "s12", "type": "key", "command": "Right" },
+    { "id": "s13", "type": "key", "command": "Right" },
+    { "id": "s14", "type": "key", "command": "Insert+PageUp" },
+    { "id": "s15", "type": "key", "command": "Insert+Home" }
+  ]
+}
