@@ -166,6 +166,10 @@ pub enum Command {
     SpellFromCursor,
     /// Insert+PageDown: the window's bottom line.
     SayBottomLineOfWindow,
+    /// Insert+E: the dialog box's default button, or "Not in a dialog box".
+    SayDefaultButton,
+    /// Insert+Q: which settings are loaded, and the application in use.
+    SayConfiguration,
 
     // Finding.
     VirtualFind,
@@ -365,6 +369,8 @@ impl Command {
             "+!{DOWN}" | "SaySelection" | "SaySelectedText" => SaySelectedText,
             "SayTopLineOfWindow" | "Insert+End" => SayTopLineOfWindow,
             "SayBottomLineOfWindow" | "Insert+PageDown" => SayBottomLineOfWindow,
+            "SayDefaultButton" | "Insert+E" => SayDefaultButton,
+            "SayConfiguration" | "Insert+Q" => SayConfiguration,
             "Insert+Space" | "JAWSKey+Space" => LayerStart,
             "NavigationModeToggle" | "Insert+N" => NavigationModeToggle,
             "QuickNavigationKeysSuspendOrResume" | "Insert+Shift+Z" => QuickKeysSuspendResume,
@@ -701,6 +707,9 @@ static BINDINGS: &[Binding] = &{
         // Settings.
         bind(Alpha('V'), JAWS, QuickSettings),
         bind(Digit(6), JAWS, SettingsCenter),
+        // The dialog box's default button, and the settings in use (JAWS 2025 help) [obs, 513].
+        bind(Alpha('E'), JAWS, SayDefaultButton),
+        bind(Alpha('Q'), JAWS, SayConfiguration),
         // Before Shift+2 (the prior heading of level 2), which also matches with the JAWS key.
         bind(
             Digit(2),

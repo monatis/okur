@@ -80,3 +80,12 @@ rate-slower = Slower
 
 # The Speech History viewer (Insert+Space, H), as JAWS names it on opening.
 speech-history-title = Speech History
+
+## Say Default Button (Insert+E) and the settings in use (Insert+Q) [obs, 513]
+
+# Insert+E with no dialog box in front.
+not-in-dialog-box = Not in a dialog box
+# Insert+Q when the application has no settings of its own.
+default-settings-loaded = Default settings are loaded
+# Insert+Q: the application's executable, then spelled.
+application-in-use = The application currently being used is { $app }

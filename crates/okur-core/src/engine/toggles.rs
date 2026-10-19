@@ -114,7 +114,7 @@ impl ScreenReaderEngine {
             )
     }
 
-    fn say(&mut self, speech: String) -> Option<String> {
+    pub(super) fn say(&mut self, speech: String) -> Option<String> {
         self.speech.speak(&speech, true);
         Some(speech)
     }

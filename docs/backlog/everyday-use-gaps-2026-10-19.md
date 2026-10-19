@@ -108,10 +108,10 @@ P0 blocks daily use, P1 is expected by a JAWS user within days, P2 is later.
 | 32 | Web tables | Rows and columns; Alt+Ctrl+Numpad 5; the table layer | [H7, H8, P1] | **Partial (B8).** Cells and headers are built | P1 | 297 |
 | 33 | Notifications | Toasts, notification history, progress bars, tool tips | [H15, S2, S3] | **Partial.** Consoles only | P1 | to write |
 | 34 | Applications | Excel | [P4] | **Not covered** | P1 | needs Excel on old-pc |
-| 35 | Dialogs | Default button (Insert+E), control's hot key (Shift+Numpad 5), list view columns (Ctrl+Insert+1-0) | [H6] | **Missing.** Insert+B and Insert+Tab are built | P1/P2 | to write |
+| 35 | Dialogs | Default button (Insert+E), control's hot key (Shift+Numpad 5), list view columns (Ctrl+Insert+1-0) | [H6] | **Partial** (2026-10-19): Insert+E says "Not in a dialog box" outside one [513/s1, s7]; the default button in a dialog, Shift+Numpad 5 and the columns wait for 532 and 514. Insert+B and Insert+Tab are built | P1/P2 | 513, 514, 532 |
 | 36 | Applications | Office ribbons | [S6] | **Not checked.** Menus are built | P1 | WordPad |
 | 37 | Voice | Voice profiles, contexts, pitch; punctuation per context | [R] items 1, 8.8 | **Missing** | P2 | [R] |
-| 38 | Information | Color (Insert+5), battery (Insert+Shift+B), version (Ctrl+Insert+V), configuration (Insert+Q) | [H1, H2, H4] | **Missing** | P2 | to write |
+| 38 | Information | Color (Insert+5), battery (Insert+Shift+B), version (Ctrl+Insert+V), configuration (Insert+Q) | [H1, H2, H4] | **Partial** (2026-10-19): Insert+Q says "Default settings are loaded" and the application, spelled [513/s5]; color needs the screen's text colors, the version an event from the platform; battery is not recorded | P2 | 513, 530 |
 | 39 | Screen | Screen echo, key repeat, typing interrupt | [S2, H4] | **Missing** | P2 | [R] item 3 |
 | 40 | Reading | Skim reading, Word Index | [H13] | **Missing** | P2 | to write |
 | 41 | Web | Element information, link source, F8, frames list, visited links, live-region filter, mouse over | [P1, W1] | **Missing** | P2 | to write |

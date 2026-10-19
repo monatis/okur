@@ -21,6 +21,7 @@ const DOUBLE_PRESS_MS: u64 = 500;
 mod commands;
 mod find;
 mod focus;
+mod information;
 mod layer;
 mod page;
 mod reading;
