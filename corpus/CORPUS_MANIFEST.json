@@ -2836,6 +2836,20 @@
       }
     },
     {
+      "scenario_id": "524-desktop-save-as-dialog",
+      "fixture": "desktop-file-dialogs.ps1",
+      "evidence": {
+        "sha256": "ff71200a741710e8b64ac6c3e4c36c026151edbc1962dc5f5cd0d6eda4c4f8dd",
+        "capture_script_sha256": "0891a01e0114a5b5e40440b4fd6a28afb9a22a7612d83beb59e2c37028551361",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "525-desktop-open-dialog",
       "fixture": "desktop-file-dialogs.ps1",
       "evidence": {
@@ -2934,6 +2948,20 @@
       }
     },
     {
+      "scenario_id": "541-desktop-notepad-font-dialog",
+      "fixture": "desktop-notepad.ps1",
+      "evidence": {
+        "sha256": "c4d3c0208eed0df5fb5a59d56f76155634c53a00049fa2f8d19c0e2405952463",
+        "capture_script_sha256": "0891a01e0114a5b5e40440b4fd6a28afb9a22a7612d83beb59e2c37028551361",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "542-desktop-notepad-replace-dialog",
       "fixture": "desktop-notepad.ps1",
       "evidence": {
@@ -2960,13 +2988,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "546-desktop-notepad-print-dialog",
+      "fixture": "desktop-notepad.ps1",
+      "evidence": {
+        "sha256": "8b714dca4aa082c9280b41f53d808014bbf061515b0d116625d0ec1a7fd131e2",
+        "capture_script_sha256": "0891a01e0114a5b5e40440b4fd6a28afb9a22a7612d83beb59e2c37028551361",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 203,
-    "scenarios_with_evidence": 203,
-    "total_trials": 663,
-    "successful_trials": 662,
-    "deterministic_scenarios": 133
+    "scenarios": 206,
+    "scenarios_with_evidence": 206,
+    "total_trials": 672,
+    "successful_trials": 671,
+    "deterministic_scenarios": 134
   }
 }

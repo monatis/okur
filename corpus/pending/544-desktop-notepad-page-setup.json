@@ -20,7 +20,7 @@
     { "id": "s10", "type": "key", "command": "Tab" },
     { "id": "s11", "type": "key", "command": "Tab" },
     { "id": "s12", "type": "key", "command": "Insert+E" },
-    { "id": "s13", "type": "key", "command": "Insert+B", "settle_max_ms": 30000 },
+    { "id": "s13", "type": "key", "command": "Insert+B", "settle_max_ms": 90000 },
     { "id": "s14", "type": "key", "command": "Escape" },
     { "id": "s15", "type": "key", "command": "Insert+Up" }
   ]
