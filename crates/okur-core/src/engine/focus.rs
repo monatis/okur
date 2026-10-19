@@ -73,6 +73,21 @@ impl ScreenReaderEngine {
         announcement
     }
 
+    /// What JAWS says as native menus close: "leaving menu bar" when a window's own (Win32)
+    /// menu bar is left from the bar itself, with Alt or Escape [obs, 547/s8, s11]; else
+    /// "Leaving menus" (an item chosen in a menu, 544/s2; a WinForms menu strip, 302/s8).
+    fn leaving_menus_message(&self) -> String {
+        let own_bar = self
+            .last_native_focus
+            .as_ref()
+            .is_some_and(|f| !f.menu_bar.is_empty());
+        if self.menus.on_bar() && own_bar {
+            msg::menu_bar_left().to_string()
+        } else {
+            msg::menus_left().to_string()
+        }
+    }
+
     /// Says that menus were left, when nothing else is said with it.
     fn say_leaving_menus(&mut self) -> String {
         let speech = msg::menus_left().to_string();
@@ -184,10 +199,25 @@ impl ScreenReaderEngine {
         // A native focus outside the menus while they are active: a modern menu closed with
         // no menu-end event (File Explorer's context menu, Escape: "Leaving menus | Items View
         // MultiSelect ListBox | backlog | …"; JAWS on the dev box, 2026-10-17).
+        let leaving_message = self.leaving_menus_message();
         let leaving_menus = !focus.in_document && self.menus.in_menu_mode() && self.menus.end();
+        // The control the menus give the focus back to is said again [obs, 302/s8, 547/s8].
+        if leaving_menus {
+            self.native_focus.forget_last();
+        }
+        // Menus left through the window itself (Notepad's menu bar object reports the focus,
+        // and UI Automation's focus is the window): the control focused before the menus has
+        // it again, and JAWS says it: "leaving menu bar | edit | Type in text." [obs, 547/s8,
+        // s11].
+        let returned = self
+            .last_native_focus
+            .clone()
+            .filter(|_| leaving_menus && focus.role == Role::Window)
+            .filter(|before| before.window_title == focus.window_title);
+        let focus = returned.as_ref().unwrap_or(focus);
         let with_leaving = |speech: String| {
             if leaving_menus {
-                format!("{}\n{speech}", msg::menus_left())
+                format!("{leaving_message}\n{speech}")
             } else {
                 speech
             }
@@ -203,7 +233,7 @@ impl ScreenReaderEngine {
             match app.focus(focus, &mut cx) {
                 FocusResponse::Pass => {}
                 FocusResponse::Silent if leaving_menus => {
-                    let speech = msg::menus_left().to_string();
+                    let speech = leaving_message.clone();
                     self.speech.speak(&speech, true);
                     return Some(speech);
                 }
@@ -660,7 +690,11 @@ impl ScreenReaderEngine {
         // [obs, 545/s1]. Say Focus reads the latest.
         self.last_native_focus = Some(focus.clone());
         let Some(control) = control else {
-            return leaving_menus.then(|| self.say_leaving_menus());
+            if !leaving_menus {
+                return None;
+            }
+            self.speech.speak(&leaving_message, true);
+            return Some(leaving_message);
         };
 
         let app = self.app_for(focus);

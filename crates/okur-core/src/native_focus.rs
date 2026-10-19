@@ -167,6 +167,14 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
                     .map(|k| Line::of(PartKind::AccessKey, k).on_arrival()),
             );
         }
+        // A plain Win32 edit of several lines that UI Automation's proxy makes a document
+        // (Windows 10 Notepad): its MSAA name is empty ("Text Editor" is the proxy's own) and
+        // JAWS says neither its line nor "Contains text", on arrival and on Insert+Tab alike:
+        // " edit | | Type in text." [obs, 540/s12, 547/s1, s5, s6].
+        Role::Document if !focus.in_document && focus.plain_edit => {
+            lines.push(Line::new(vec![role(msg::role_edit_multiline().as_str())]));
+            lines.push(Line::of(PartKind::Hint, msg::hint_type_in_text()));
+        }
         // A native text document (Windows 11 Notepad's RichEdit, MSAA "editable text"): an
         // edit whose text is not read on arrival. JAWS 2025, dev box: "viewer-test.txt -
         // Notepad | Text editor edit | Contains text".
@@ -469,6 +477,12 @@ impl NativeFocus {
     /// Forgets the context, as when another window becomes active.
     pub fn reset(&mut self) {
         *self = Self::default();
+    }
+
+    /// The next focus is said even if it is the last one again: menus closing give it back
+    /// ("Leaving menus | Name: Edit | Ada | Type in text." [obs, 302/s8]).
+    pub fn forget_last(&mut self) {
+        self.last = None;
     }
 
     /// Speech for a focus event, or `None` for a repeat of the previous one.
@@ -845,6 +859,9 @@ pub struct Menus {
     /// The session was opened by an access key (Alt+F): JAWS says the menu that opens, not
     /// the bar item it opens from, and without "menu" [obs, 541/s1, 544/s1].
     by_access_key: bool,
+    /// The menu bar was introduced ("Menu bar | File | To navigate ..."): Escape back to it
+    /// from a menu opened by its access key introduces it then [obs, 547/s10].
+    bar_shown: bool,
 }
 
 /// Where a page's menu item is ([`Menus::page_focus`]).
@@ -883,6 +900,20 @@ impl Menus {
         }
     }
 
+    /// A menu bar as JAWS introduces it, on its item `name` [obs, 302/s1].
+    fn bar_intro(name: &str) -> String {
+        format!(
+            "{}\n{name}\n{}",
+            role_marker(msg::role_menu_bar().as_str()),
+            msg::hint_menu_bar_left_right()
+        )
+    }
+
+    /// Whether the focus is on the menu bar itself, no menu open.
+    pub fn on_bar(&self) -> bool {
+        self.active && self.open.is_empty() && !self.page
+    }
+
     /// The system reported menu mode starting.
     pub fn start(&mut self) {
         self.started = true;
@@ -918,13 +949,8 @@ impl Menus {
         } else if !self.active {
             self.active = true;
             // Opened by an access key, its popup follows at once and says the menu.
-            (!self.by_access_key).then(|| {
-                format!(
-                    "{}\n{name}\n{}",
-                    role_marker(msg::role_menu_bar().as_str()),
-                    msg::hint_menu_bar_left_right()
-                )
-            })
+            self.bar_shown = !self.by_access_key;
+            self.bar_shown.then(|| Self::bar_intro(name))
         } else if self.current.as_deref() == Some(name) {
             // The same item reported again (a browser reports a page's menu item twice).
             None
@@ -1116,6 +1142,10 @@ impl Menus {
     /// Speech that waits for the event stream to go quiet.
     pub fn idle(&mut self) -> Option<String> {
         let item = self.closed.take().filter(|item| !item.is_empty())?;
+        if self.by_access_key && !self.bar_shown {
+            self.bar_shown = true;
+            return Some(Self::bar_intro(&item));
+        }
         let sub_menu = state_marker(msg::state_sub_menu().as_str());
         Some(format!("{item}\n{sub_menu}\n{item} {sub_menu}"))
     }

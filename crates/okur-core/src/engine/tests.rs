@@ -3829,3 +3829,56 @@ fn help_keys_open_the_viewer_and_follow_links() {
     engine.handle_key_event(&key(Key::Escape));
     assert!(engine.viewer.is_none());
 }
+
+/// Windows 10 Notepad [obs, 547]: its edit is said as "edit" and "Type in text." alone; its
+/// menu bar, entered with Alt and left with Alt, says "leaving menu bar" and the edit again,
+/// though the focus comes back through the window itself, which stays the edit's.
+#[test]
+fn notepads_edit_and_its_menu_bar() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.app_mode = AppMode::NativeControl;
+    let title = "sr-notepad-fixture.txt - Notepad";
+    let mut edit = FocusEvent::new(Role::Document).with_name("Text Editor");
+    edit.plain_edit = true;
+    edit.read_only = Some(false);
+    edit.window_title = Some(title.to_owned());
+    edit.menu_bar = vec!["File".to_owned(), "Edit".to_owned()];
+    edit.text = Some(crate::event::TextContext {
+        text: "fn main() {\n}".to_owned(),
+        caret: 0,
+        selection: None,
+        font: None,
+        word: None,
+    });
+    let arrival = engine.handle_focus_event(&edit).unwrap_or_default();
+    assert!(
+        norm(&arrival).ends_with(&norm(&format!(
+            "\u{1d} {} \u{1e}\n{}",
+            msg::role_edit_multiline(),
+            msg::hint_type_in_text()
+        ))),
+        "{arrival:?}"
+    );
+    assert!(!arrival.contains("Text Editor"), "{arrival:?}");
+    engine.handle_accessibility_event(&AccessibilityEvent::Menu(crate::event::MenuEvent::Start));
+    let mut file = FocusEvent::new(Role::MenuItem).with_name("File");
+    file.in_menu_bar = true;
+    engine.handle_focus_event(&file);
+    let mut window = FocusEvent::new(Role::Window).with_name(title);
+    window.window_title = Some(title.to_owned());
+    let left = engine.handle_focus_event(&window).unwrap_or_default();
+    assert_eq!(
+        norm(&left),
+        norm(&format!(
+            "{}\n\u{1d} {} \u{1e}\n{}",
+            msg::menu_bar_left(),
+            msg::role_edit_multiline(),
+            msg::hint_type_in_text()
+        ))
+    );
+    assert_eq!(
+        engine.last_native_focus.as_ref().map(|f| f.role.clone()),
+        Some(Role::Document)
+    );
+}

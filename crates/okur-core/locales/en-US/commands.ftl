@@ -17,6 +17,8 @@ settings-dialog-unavailable = The settings dialog is not available
 window-title-is = Title is
 # Menus closed: the focus is back where it was.
 menus-left = Leaving menus
+# Said as a window's own menu bar is left from the bar itself (Alt, or Escape on the bar).
+menu-bar-left = leaving menu bar
 # A list's size, said after its name and role: "Fruits list | with 3 items".
 list-items-count = with { $count } items
 
