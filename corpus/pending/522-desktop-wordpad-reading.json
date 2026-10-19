@@ -1,0 +1,32 @@
+{
+  "id": "522-desktop-wordpad-reading",
+  "name": "Reading a rich-text document in WordPad: Say Line, Down through a bold heading, paragraphs, a misspelled word and bulleted lines, Ctrl+Right, Say Word, Shift+End and Say Selected Text, Ctrl+End and Up, Say Font, Say All stopped by Ctrl, and the window's top and bottom lines",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-wordpad.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "sr-wordpad-fixture.rtf - WordPad" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+Up" },
+    { "id": "s2", "type": "key", "command": "Down" },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Ctrl+Right" },
+    { "id": "s5", "type": "key", "command": "Ctrl+Right" },
+    { "id": "s6", "type": "key", "command": "Ctrl+Right" },
+    { "id": "s7", "type": "key", "command": "Insert+Numpad5" },
+    { "id": "s8", "type": "key", "command": "Down" },
+    { "id": "s9", "type": "key", "command": "Down" },
+    { "id": "s10", "type": "key", "command": "Down" },
+    { "id": "s11", "type": "key", "command": "Shift+End" },
+    { "id": "s12", "type": "key", "command": "Insert+Shift+Down" },
+    { "id": "s13", "type": "key", "command": "Ctrl+End" },
+    { "id": "s14", "type": "key", "command": "Up" },
+    { "id": "s15", "type": "key", "command": "Insert+F" },
+    { "id": "s16", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s17", "type": "key", "command": "Insert+Down", "during": [{ "after_ms": 5000, "command": "Ctrl" }] },
+    { "id": "s18", "type": "key", "command": "Insert+Up" },
+    { "id": "s19", "type": "key", "command": "Insert+End" },
+    { "id": "s20", "type": "key", "command": "Insert+PageDown" }
+  ]
+}

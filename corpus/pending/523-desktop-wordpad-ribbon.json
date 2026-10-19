@@ -1,0 +1,21 @@
+{
+  "id": "523-desktop-wordpad-ribbon",
+  "name": "WordPad's ribbon: Alt to it, Right to the next tab, Tab into its controls, Down into a list, and Escape back to the document",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-wordpad.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "sr-wordpad-fixture.rtf - WordPad" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Alt" },
+    { "id": "s2", "type": "key", "command": "Right" },
+    { "id": "s3", "type": "key", "command": "Left" },
+    { "id": "s4", "type": "key", "command": "Tab" },
+    { "id": "s5", "type": "key", "command": "Tab" },
+    { "id": "s6", "type": "key", "command": "Escape" },
+    { "id": "s7", "type": "key", "command": "Escape" },
+    { "id": "s8", "type": "key", "command": "Escape" },
+    { "id": "s9", "type": "key", "command": "Insert+Up" }
+  ]
+}

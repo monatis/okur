@@ -20,6 +20,12 @@ To record one:
 | 519 | Word's headings list, spelling errors, revisions | `desktop-word.ps1` (here) |
 | 520 | Say the clipboard (Insert+Win+X) | `desktop-editor.ps1` |
 | 521 | Excel: cells, coordinates, a column's cells, sheets, the worksheets list | `desktop-excel.ps1` (here) |
+| 522 | Reading a rich-text document in WordPad | `desktop-wordpad.ps1` (here) |
+| 523 | WordPad's ribbon | `desktop-wordpad.ps1` (here) |
+
+Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
+Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.
+518, 519 and 521 wait for the owner to activate Office there.
 
 Scenarios from 400 record JAWS's reading settings (plan
 `docs/plans/2026-10-18-reading-settings.md`). Their fixtures, `reading-settings.html`
