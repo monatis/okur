@@ -180,6 +180,8 @@ pub enum Command {
     RoutePcToVirtual,
     /// Insert+F9: the page's frames.
     SelectAFrame,
+    /// Numpad Slash: a left mouse click, on the element at the virtual cursor in a page.
+    LeftMouseClick,
 
     // Finding.
     VirtualFind,
@@ -385,6 +387,7 @@ impl Command {
             "RouteVirtualToPc" | "Insert+Delete" => RouteVirtualToPc,
             "RoutePCToVirtual" | "Ctrl+Insert+Delete" => RoutePcToVirtual,
             "SelectAFrame" | "Insert+F9" => SelectAFrame,
+            "LeftMouseButton" | "NumpadSlash" => LeftMouseClick,
             "Ctrl+Insert+1" => SayListColumn(1),
             "Ctrl+Insert+2" => SayListColumn(2),
             "Ctrl+Insert+3" => SayListColumn(3),
@@ -733,6 +736,7 @@ static BINDINGS: &[Binding] = &{
         bind(Key::Delete, JAWS, RouteVirtualToPc),
         bind(Key::Delete, CTRL_INSERT, RoutePcToVirtual),
         bind(Key::F(9), JAWS, SelectAFrame),
+        bind(Key::NumpadSlash, ALONE, LeftMouseClick),
         bind(
             Key::Enter,
             ANY.ctrl(Yes).insert(Yes).shift(Yes).alt(No),

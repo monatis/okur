@@ -104,3 +104,5 @@ route-virtual-to-pc = Route Virtual to PC
 route-pc-to-virtual = Route PC to Virtual Cursor
 # Insert+F9 on a page without frames.
 no-frames-in-page = No frames found in page
+# Numpad Slash, before the click on the element at the virtual cursor [obs, 534/s2].
+left-mouse-button = left mouse button

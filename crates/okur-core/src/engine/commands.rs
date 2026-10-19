@@ -35,6 +35,7 @@ impl ScreenReaderEngine {
             Command::RouteVirtualToPc => return self.route_virtual_to_pc(),
             Command::RoutePcToVirtual => return self.route_pc_to_virtual(),
             Command::SelectAFrame => return self.select_a_frame(),
+            Command::LeftMouseClick => return self.left_mouse_click(),
             Command::RateFaster => return self.change_rate(true),
             Command::RateSlower => return self.change_rate(false),
             Command::SayWindow => {

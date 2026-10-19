@@ -1,7 +1,8 @@
 //! The page keys that tie the virtual cursor and the focus together, and tell about the page:
 //! the link's address (Ctrl+Insert+F7), the virtual cursor routed to the focus (Insert+Delete)
-//! and the focus to the virtual cursor (Ctrl+Insert+Delete), and the page's frames (Insert+F9)
-//! (Default.JKM: IndicateLinkSourceURL, RouteVirtualToPc, RoutePCToVirtual, SelectAFrame).
+//! and the focus to the virtual cursor (Ctrl+Insert+Delete), the page's frames (Insert+F9),
+//! and the left mouse button (Numpad Slash) (Default.JKM: IndicateLinkSourceURL,
+//! RouteVirtualToPc, RoutePCToVirtual, SelectAFrame, LeftMouseButton).
 
 use super::{AppMode, ScreenReaderEngine};
 use crate::aom::Role;
@@ -67,5 +68,20 @@ impl ScreenReaderEngine {
             return None;
         }
         self.say(msg::no_frames_in_page().to_string())
+    }
+
+    /// Numpad Slash in a page: "left mouse button", and the element at the virtual cursor is
+    /// clicked; the page then reports what the click did, the check box focused and unchecked,
+    /// then checked [obs, 534/s2, s4, s9]. Elsewhere JAWS clicks at the mouse pointer, which
+    /// Okur does not move yet.
+    pub(super) fn left_mouse_click(&mut self) -> Option<String> {
+        if self.app_mode != AppMode::VirtualBuffer || self.forms_mode {
+            return None;
+        }
+        let said = self.say(msg::left_mouse_button().to_string());
+        if let (Some(actions), Some(node)) = (&self.actions, self.node_under_cursor()) {
+            actions.activate(node);
+        }
+        said
     }
 }
