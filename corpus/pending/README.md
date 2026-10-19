@@ -13,7 +13,12 @@ To record one:
 | Scenario | What it records | Fixture |
 |---|---|---|
 | 277 | Heading level keys started on a higher heading, and from text: whether the walk counts the cursor's own heading (275 cannot tell) | `headings-sections.html` |
+| 278 | Down through every line of the web app patterns page, Up five times (the owner's request: form fields read with the arrows) | `web-app-patterns.html` |
+| 279 | Down through the forms page and Up back | `forms-interaction.html` |
+| 280 | Down through the sign-up form with Auto Forms Mode on (JAWS's default; old-pc has it off), Up five times | `signup-form.html` |
 | 404 | Say Character twice on each letter a to z and on A: JAWS's phonetic words (401 has alpha, bravo, juliett) | `phonetic-alphabet.html` (here) |
+| 405 | Mixed case, words with digits, numbers, dates and money at JAWS's defaults, by line and by word (research §6) | `desktop-reading.ps1` |
+| 406 | Capitals at JAWS's defaults: Say Word and Say Line once and twice (spelled), Say All, a capital typed with Characters echo (research §5) | `desktop-reading.ps1` |
 
 Scenarios from 400 record JAWS's reading settings (plan
 `docs/plans/2026-10-18-reading-settings.md`). Their fixtures, `reading-settings.html` (here)

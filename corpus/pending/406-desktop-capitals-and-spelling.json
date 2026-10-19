@@ -1,0 +1,29 @@
+{
+  "id": "406-desktop-capitals-and-spelling",
+  "name": "Capitals at JAWS's defaults on \"Ada READ me B x\": Say Word and Say Line once and twice (spelled), Say All, and a capital typed with Characters echo",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-reading.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Reading Fixture" },
+  "reset": { "keys": ["Ctrl+Home", "Down", "Down", "Down", "Down", "Down", "Down", "Down", "Down", "Down", "Down", "Down"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "CapsLock+K" },
+    { "id": "s2", "type": "key", "command": "CapsLock+K", "repeat": 2 },
+    { "id": "s3", "type": "key", "command": "Ctrl+Right" },
+    { "id": "s4", "type": "key", "command": "CapsLock+K" },
+    { "id": "s5", "type": "key", "command": "CapsLock+K", "repeat": 2 },
+    { "id": "s6", "type": "key", "command": "CapsLock+I" },
+    { "id": "s7", "type": "key", "command": "CapsLock+I", "repeat": 2 },
+    { "id": "s8", "type": "key", "command": "Home" },
+    { "id": "s9", "type": "key", "command": "Insert+Down", "settle_max_ms": 60000 },
+    { "id": "s10", "type": "key", "command": "Ctrl+End" },
+    { "id": "s11", "type": "key", "command": "Enter" },
+    { "id": "s12", "type": "key", "command": "Insert+2" },
+    { "id": "s13", "type": "key", "command": "Shift+A" },
+    { "id": "s14", "type": "key", "command": "A" },
+    { "id": "s15", "type": "key", "command": "Insert+2" },
+    { "id": "s16", "type": "key", "command": "Insert+2" },
+    { "id": "s17", "type": "key", "command": "Insert+2" }
+  ]
+}

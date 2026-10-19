@@ -1,0 +1,30 @@
+{
+  "id": "279-web-forms-arrows-interaction",
+  "name": "Down through every line of the forms page, then Up back to the top",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/forms-interaction.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Down" },
+    { "id": "s2", "type": "key", "command": "Down" },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Down" },
+    { "id": "s5", "type": "key", "command": "Down" },
+    { "id": "s6", "type": "key", "command": "Down" },
+    { "id": "s7", "type": "key", "command": "Down" },
+    { "id": "s8", "type": "key", "command": "Down" },
+    { "id": "s9", "type": "key", "command": "Down" },
+    { "id": "s10", "type": "key", "command": "Down" },
+    { "id": "s11", "type": "key", "command": "Up" },
+    { "id": "s12", "type": "key", "command": "Up" },
+    { "id": "s13", "type": "key", "command": "Up" },
+    { "id": "s14", "type": "key", "command": "Up" },
+    { "id": "s15", "type": "key", "command": "Up" },
+    { "id": "s16", "type": "key", "command": "Up" },
+    { "id": "s17", "type": "key", "command": "Up" },
+    { "id": "s18", "type": "key", "command": "Up" },
+    { "id": "s19", "type": "key", "command": "Up" }
+  ]
+}

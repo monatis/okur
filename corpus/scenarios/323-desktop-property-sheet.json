@@ -9,7 +9,7 @@
   "reset": { "keys": [] },
   "steps": [
     { "id": "s1", "type": "key", "command": "Insert+Tab" },
-    { "id": "s2", "type": "key", "command": "Insert+B" },
+    { "id": "s2", "type": "key", "command": "Insert+B", "settle_max_ms": 60000 },
     { "id": "s3", "type": "key", "command": "Insert+Alt+W" },
     { "id": "s4", "type": "key", "command": "Down" },
     { "id": "s5", "type": "key", "command": "Down" },
