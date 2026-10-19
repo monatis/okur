@@ -855,14 +855,15 @@ impl Menus {
         let name = name.trim();
         let switching = self.closed.take().is_some() && self.open.is_empty();
         let speech = if !self.active && self.popup_pending {
-            // A page's menu opened before any item had the focus (Google Docs' Alt+Shift+A):
-            // the item is its popup's first.
+            // A menu that opened before any item had the focus, with no menu bar above it
+            // (Windows' Win+X menu), is a context menu: the item is its popup's first
+            // [obs, 520/s3]. A page's menus are [`Menus::page_focus`]'s.
             self.active = true;
             self.popup_pending = false;
             self.popup_shown = true;
             Some(format!(
                 "{}\n\n{name}\n{}",
-                role_marker(msg::role_menu().as_str()),
+                role_marker(msg::role_context_menu().as_str()),
                 msg::hint_menu_items_up_down()
             ))
         } else if !self.active {
@@ -1353,17 +1354,17 @@ To activate press Enter."
         assert!(m.end());
     }
 
-    /// A page's menu opened from its editor (the web menus fixture's Alt+Shift+F; Google
-    /// Docs' Alt+Shift+letter): the popup opens before any item has the focus, and Escape
-    /// moves the focus back to the bar item, which is said once the events go quiet.
+    /// A menu whose popup opens before any item has the focus, with no menu bar item open
+    /// (Windows' Win+X menu), is a context menu [obs, 520/s3]; Escape moves the focus back
+    /// to a bar item, which is said once the events go quiet.
     #[test]
-    fn a_page_menu_opened_from_its_editor() {
+    fn a_popup_opened_with_no_menu_bar_is_a_context_menu() {
         let mut m = Menus::default();
         m.popup_start();
         assert_eq!(
             m.focus("New").as_deref().map(norm),
             Some(norm(
-                " \u{1d} menu \u{1e} \n\nNew\nTo move through items press up or down arrow."
+                " \u{1d} Context Menu \u{1e} \n\nNew\nTo move through items press up or down arrow."
             ))
         );
         assert_eq!(m.focus("Open").as_deref(), Some("Open"));
