@@ -557,7 +557,12 @@ impl ScreenReaderEngine {
         let mut node = self
             .node_under_cursor()
             .filter(|n| {
-                n.role == Role::Edit && n.attributes.get("readonly").is_none_or(|r| r != "true")
+                let attribute = |name: &str| n.attributes.get(name).map(String::as_str);
+                // An edit, or a combo box one types in (an autocomplete: Down then goes to the
+                // page, which opens its list [obs, 286/s18, s19]).
+                let typed_in = n.role == Role::Edit
+                    || (n.role == Role::ComboBox && attribute("editable") == Some("true"));
+                typed_in && attribute("readonly") != Some("true")
             })?
             .clone();
         // What was typed in it, which the captured page does not have.
