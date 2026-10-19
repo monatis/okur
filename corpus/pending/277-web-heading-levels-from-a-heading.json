@@ -1,0 +1,22 @@
+{
+  "id": "277-web-heading-levels-from-a-heading",
+  "name": "Heading level keys started on a higher heading (2 from a level 1, Shift+2 from a level 1, Shift+3 from a level 2) and from text",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/headings-sections.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "1" },
+    { "id": "s2", "type": "key", "command": "2" },
+    { "id": "s3", "type": "key", "command": "1" },
+    { "id": "s4", "type": "key", "command": "Shift+2" },
+    { "id": "s5", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s6", "type": "key", "command": "Down" },
+    { "id": "s7", "type": "key", "command": "Down" },
+    { "id": "s8", "type": "key", "command": "2" },
+    { "id": "s9", "type": "key", "command": "Ctrl+End" },
+    { "id": "s10", "type": "key", "command": "Shift+2" },
+    { "id": "s11", "type": "key", "command": "Shift+3" }
+  ]
+}

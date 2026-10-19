@@ -1,0 +1,53 @@
+{
+  "id": "403-desktop-typing-echo-cycle",
+  "name": "Typing echo (Insert+2) pressed four times, \"ab cd\" and Enter typed before and after each press",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-reading.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Reading Fixture"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Enter"
+    ]
+  },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "A" },
+    { "id": "s2", "type": "key", "command": "B" },
+    { "id": "s3", "type": "key", "command": "Space" },
+    { "id": "s4", "type": "key", "command": "C" },
+    { "id": "s5", "type": "key", "command": "D" },
+    { "id": "s6", "type": "key", "command": "Enter" },
+    { "id": "s7", "type": "key", "command": "Insert+2" },
+    { "id": "s8", "type": "key", "command": "A" },
+    { "id": "s9", "type": "key", "command": "B" },
+    { "id": "s10", "type": "key", "command": "Space" },
+    { "id": "s11", "type": "key", "command": "C" },
+    { "id": "s12", "type": "key", "command": "D" },
+    { "id": "s13", "type": "key", "command": "Enter" },
+    { "id": "s14", "type": "key", "command": "Insert+2" },
+    { "id": "s15", "type": "key", "command": "A" },
+    { "id": "s16", "type": "key", "command": "B" },
+    { "id": "s17", "type": "key", "command": "Space" },
+    { "id": "s18", "type": "key", "command": "C" },
+    { "id": "s19", "type": "key", "command": "D" },
+    { "id": "s20", "type": "key", "command": "Enter" },
+    { "id": "s21", "type": "key", "command": "Insert+2" },
+    { "id": "s22", "type": "key", "command": "A" },
+    { "id": "s23", "type": "key", "command": "B" },
+    { "id": "s24", "type": "key", "command": "Space" },
+    { "id": "s25", "type": "key", "command": "C" },
+    { "id": "s26", "type": "key", "command": "D" },
+    { "id": "s27", "type": "key", "command": "Enter" },
+    { "id": "s28", "type": "key", "command": "Insert+2" },
+    { "id": "s29", "type": "key", "command": "A" },
+    { "id": "s30", "type": "key", "command": "B" },
+    { "id": "s31", "type": "key", "command": "Space" },
+    { "id": "s32", "type": "key", "command": "C" },
+    { "id": "s33", "type": "key", "command": "D" },
+    { "id": "s34", "type": "key", "command": "Enter" }
+  ]
+}
