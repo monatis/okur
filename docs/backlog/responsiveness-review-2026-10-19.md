@@ -22,6 +22,37 @@ Already done before this review, and not to be redone:
 - `cbcd429` partial page reads;
 - `97dd907` the speech thread.
 
+## Status (2026-10-19)
+
+Measured with the review's benchmark, release, on the 25,032-node page. After every commit,
+`parity-snapshot.sh` gave output identical to before.
+
+| Finding | Status | Commit | Measured |
+|---|---|---|---|
+| Debug-build multiplier | done: optimized dev profile | `8739b9a` | the whole three-layer parity run takes 5 s |
+| 1a parts one by one | done: one event, one rebuild | `18bf4b7` | 8 parts: 550 ms → 87 ms |
+| 1b page copies | done: owned builds | `1c49c52` | 1 part: 136-532 ms → 70 ms |
+| 1c rebuild under the lock | done: built outside, installed if the page is the same | `4478d14` | engine held 0.012 ms (was 87 ms) |
+| 2 pending page in the hook | done: indexes, old buffers freed on a thread | `1c49c52` | 37-116 ms → 0.9 ms |
+| 2c `node()` allocates | not done: 0.6 µs; recursion could overflow the hook's stack | | |
+| 3 Tab O(stops × lines) | done: binary searches, nearest stop | `8739b9a` | 35-48 ms → 0.0 ms |
+| 4 page focus scans | done: object and DOM id indexes | `1c49c52` | 27 ms → 0.4 ms |
+| 5 settle drops requests | done: the strongest is served | `bceeb4d` | test |
+| 6 superseded speech, two purges | done: batches, 3 ms stop grace | `bceeb4d` | test |
+| 7 `cmd /C ver` per capture | done: once per process | `bceeb4d` | |
+| 7 UIA client timeouts | not changed: UIA's defaults are bounded (2 s, 20 s) | | |
+| 8 hook lock fairness | done: keys go first | `e13a2ee` | test: under 100 ms while events stream |
+| 9 voice list, clipboard in the hook | done | `e13a2ee` | |
+| 9 speech log writes | not changed: `--speech-log` only, a buffered write of microseconds | | |
+| 10 same-page builds on the event loop | done: built on a thread, numbered | `9e8b9df` | test |
+| 11 rebuild before speaking | done: speak first | `bceeb4d` | |
+| 12 list clone on Enter | done: borrowed | `8739b9a` | 50.6 ms → 0.1 ms |
+| 13 UIA text polling | open: needs live checks (Notepad, Word) | | |
+| 14 voice re-applied | done: only what changed | `bceeb4d` | |
+| 15 Say All in one utterance | done: parts of whole lines | this commit | test |
+| 16 cross-process calls without timeouts | open: an NVDA-style watchdog needs live checks | | |
+| 17 smaller costs | open: `editing::chars`, linearizer allocations, the actions worker's queue, okur-ui's list | | |
+
 ## Multiplier: live runs use a debug build
 
 - `live-daemon-guide.md` runs `cargo run --bin okur -- run`, and `Cargo.toml` has no

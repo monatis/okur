@@ -24,6 +24,35 @@ enum Request {
     Configure(okur_core::settings::VoiceSettings),
 }
 
+/// The longest part of a text given to the synthesizer at once, in bytes.
+const PART: usize = 2000;
+
+/// `text` in parts of whole lines of about [`PART`] bytes (a longer line is a part of its own):
+/// Say All from the top of a page was one utterance of 430 KB, pronounced whole (24 ms
+/// optimized, 565 ms in a debug build) before the first word (responsiveness review,
+/// 2026-10-19).
+fn parts(text: &str) -> impl Iterator<Item = &str> {
+    let mut rest = text;
+    std::iter::from_fn(move || {
+        if rest.is_empty() {
+            return None;
+        }
+        let mut end = 0;
+        for (i, _) in rest.match_indices('\n') {
+            if i > PART && end > 0 {
+                break;
+            }
+            end = i + 1;
+        }
+        if end == 0 || rest.len() <= PART {
+            end = rest.len();
+        }
+        let (part, after) = rest.split_at(end);
+        rest = after;
+        Some(part)
+    })
+}
+
 /// How long a stop waits for the speech that follows it: a key stops speech, then its command
 /// speaks with an interruption, which stops speech too. Taken together, the synthesizer
 /// purges once (SAPI's purge took 750 ms on old-pc).
@@ -113,8 +142,13 @@ impl SpeechThread {
                         };
                         match request {
                             Request::Speak(text, interrupt) => {
-                                let spoken = okur_core::pronounce::spoken(&text, tts.punctuation);
-                                let _ = tts.engine.speak(&spoken, interrupt);
+                                // Long text (Say All) in parts, so that speech starts after the
+                                // first part's pronunciation, not the whole text's.
+                                for (i, part) in parts(&text).enumerate() {
+                                    let spoken =
+                                        okur_core::pronounce::spoken(part, tts.punctuation);
+                                    let _ = tts.engine.speak(&spoken, interrupt && i == 0);
+                                }
                             }
                             Request::Symbols(text, interrupt) => {
                                 let spoken = okur_core::pronounce::spoken_symbols(&text);
@@ -289,5 +323,26 @@ mod tests {
         ];
         let kept: Vec<String> = Request::superseding(calm).map(name).collect();
         assert_eq!(kept, ["one", "two"]);
+    }
+
+    /// Long text is given in parts of whole lines that make the text again; short text whole.
+    #[test]
+    fn long_text_is_spoken_in_parts_of_whole_lines() {
+        let line = "A line of a page read with Say All, long enough to count.\n";
+        let text = line.repeat(200);
+        let split: Vec<&str> = parts(&text).collect();
+        assert!(split.len() > 1);
+        assert_eq!(split.concat(), text);
+        assert!(split
+            .iter()
+            .all(|p| p.ends_with('\n') && p.len() <= PART + line.len()));
+        let long_line = "x".repeat(PART * 2);
+        let with_long = format!("one\n{long_line}\ntwo");
+        let split: Vec<&str> = parts(&with_long).collect();
+        assert_eq!(split.concat(), with_long);
+        assert_eq!(
+            parts("Hello, world.").collect::<Vec<_>>(),
+            ["Hello, world."]
+        );
     }
 }
