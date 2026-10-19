@@ -62,6 +62,12 @@ pub enum Command {
     SayPriorCharacter,
     SayNextParagraph,
     SayPriorParagraph,
+    /// Home, End, Page Up and Page Down with the virtual cursor (Default.JKM: JAWSHome,
+    /// JAWSEnd, JAWSPageUp, JAWSPageDown).
+    LineStart,
+    LineEnd,
+    PageUp,
+    PageDown,
     TopOfFile,
     BottomOfFile,
 
@@ -199,6 +205,10 @@ impl Command {
             "^{DOWN}" | "SayNextParagraph" => SayNextParagraph,
             "^{UP}" | "SayPriorParagraph" => SayPriorParagraph,
             "^{HOME}" | "TopOfFile" => TopOfFile,
+            "{HOME}" | "Home" | "JAWSHome" => LineStart,
+            "{END}" | "End" | "JAWSEnd" => LineEnd,
+            "{PGUP}" | "PageUp" | "JAWSPageUp" => PageUp,
+            "{PGDN}" | "PageDown" | "JAWSPageDown" => PageDown,
             "^{END}" | "BottomOfFile" => BottomOfFile,
 
             "H" | "h" | "MoveToNextHeading" => MoveToNext(Heading),
@@ -510,6 +520,10 @@ static BINDINGS: &[Binding] = &{
         bind(End, CTRL_ALT, TableLastCell),
         bind(Home, ANY.ctrl(Yes), TopOfFile),
         bind(End, ANY.ctrl(Yes), BottomOfFile),
+        bind(Home, ALONE, LineStart),
+        bind(End, ALONE, LineEnd),
+        bind(Key::PageUp, ALONE, Command::PageUp),
+        bind(Key::PageDown, ALONE, Command::PageDown),
         // A page's controls.
         bind(Key::Tab, ANY.shift(Yes), PriorTabStop),
         bind(Key::Tab, ALONE, NextTabStop),

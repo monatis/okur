@@ -221,6 +221,17 @@ impl ScreenReaderEngine {
             }
             Command::SayNextParagraph => self.cursor.move_next_paragraph(),
             Command::SayPriorParagraph => self.cursor.move_prior_paragraph(),
+            // Home and End move silently [obs, 502/s5, s6].
+            Command::LineStart => {
+                self.cursor.move_to_line_edge(false);
+                return None;
+            }
+            Command::LineEnd => {
+                self.cursor.move_to_line_edge(true);
+                return None;
+            }
+            Command::PageDown => Some(self.cursor.move_page(true)),
+            Command::PageUp => Some(self.cursor.move_page(false)),
             Command::TopOfFile => Some(self.cursor.move_to_start()),
             Command::BottomOfFile => Some(self.cursor.move_to_end()),
 

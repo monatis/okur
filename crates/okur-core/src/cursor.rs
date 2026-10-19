@@ -3,6 +3,10 @@ use crate::buffer::{BufferLine, VirtualBuffer};
 use crate::messages::msg;
 use crate::speech::SpeechFormatter;
 
+/// Lines a Page Down or Page Up moves the virtual cursor: JAWS's Lines Per Page, 24 by default
+/// (JAWS 2025 Settings Center help, HTML Options) [obs, 502/s7-s9].
+pub const LINES_PER_PAGE: usize = 24;
+
 /// Active text selection range within the virtual buffer.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct TextSelection {
@@ -1025,6 +1029,35 @@ impl VirtualCursor {
                 format!("{}\n", SpeechFormatter::format_passed_heading(l, text))
             })
             .collect()
+    }
+
+    /// Home or End with the virtual cursor: to the first or last character of the line
+    /// (JAWSHome, JAWSEnd), saying nothing [obs, 502/s5, s6].
+    pub fn move_to_line_edge(&mut self, end: bool) {
+        self.selection = None;
+        if let Some(line) = self.buffer.line_at_offset(self.offset) {
+            self.offset = if end {
+                line.end_offset.saturating_sub(1).max(line.start_offset)
+            } else {
+                line.start_offset
+            };
+        }
+    }
+
+    /// Page Down or Page Up with the virtual cursor: [`LINES_PER_PAGE`] lines on, or back, and
+    /// the line reached is read; at the page's end or top, its last or first line
+    /// [obs, 502/s7-s11].
+    pub fn move_page(&mut self, down: bool) -> String {
+        self.selection = None;
+        let here = self.current_line_index();
+        let last = self.buffer.lines.len().saturating_sub(1);
+        let target = if down {
+            here.saturating_add(LINES_PER_PAGE).min(last)
+        } else {
+            here.saturating_sub(LINES_PER_PAGE)
+        };
+        self.move_to_line(target);
+        self.current_line()
     }
 
     /// The start of the cursor's line.
