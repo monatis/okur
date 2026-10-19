@@ -6,6 +6,7 @@
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notifications.ps1",
   "target_app": "desktop",
   "launch": { "window_title": "SR Notification Fixture" },
+  "expects_notifications": true,
   "reset": { "keys": [] },
   "steps": [
     { "id": "s1", "type": "key", "command": "Space", "settle_max_ms": 15000 },

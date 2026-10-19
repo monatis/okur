@@ -48,6 +48,8 @@ Step types:
   key_down     A key pressed and held across the following steps ("Alt" through several
                Tabs); key_up releases it. Held keys are released when a trial ends.
   keyboard     Legacy .NET SendKeys string (kept so scenarios 01-30 stay reproducible).
+Notifications: a Windows notification JAWS announces in a step fails it, as a stray toast
+spoils the transcript; a scenario about notifications sets "expects_notifications": true.
 Reset: "reset": {"keys": [...]} runs before each trial; "window_title" names the window the
 reset leaves in front when it is not the launched one (a trial fails if another is in front).
 
@@ -792,8 +794,10 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         $tEnd = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
         if ($transcript -match "unknown script call" -or $transcript -match "unhandled script call") { $dispatchOk = $false }
         # A leaked copy confirmation, or a Windows notification JAWS announced mid-step (seen
-        # in 105 v2 trial 1), means the history was contaminated: fail, never trim.
-        $contaminated = $transcript.Contains($CopyConfirmation) -or $transcript.Contains('New notification from')
+        # in 105 v2 trial 1), means the history was contaminated: fail, never trim. A scenario
+        # about notifications says so ("expects_notifications": true, 533).
+        $strayNotification = $transcript.Contains('New notification from') -and -not $scenario.expects_notifications
+        $contaminated = $transcript.Contains($CopyConfirmation) -or $strayNotification
         # Audio with an empty history entry is recorded, not failed: JAWS speaks a space
         # character aloud but logs an empty history entry (verified 2026-10-14, 107). The
         # silent baseline above is what prevents the copy from racing ahead of speech.
