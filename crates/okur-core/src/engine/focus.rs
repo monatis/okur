@@ -389,9 +389,15 @@ impl ScreenReaderEngine {
                 .is_some_and(|item| Some(item) != target_id);
             // Without Auto Forms Mode a field keeps the mode it finds: forms mode is turned on by
             // Enter, and Tab from one field to the next keeps it (old-pc's JAWS, 212 and 213).
+            // Tab with Auto Forms Mode turns forms mode on in a select and on a radio button too
+            // [obs, 287/s4, s5].
+            let tabbed_choice = auto_forms
+                && self.last_key_tabs
+                && matches!(target_role, Some(Role::ComboBox | Role::RadioButton));
             let in_forms_mode = !opened
                 && ((is_edit && (auto_forms || self.forms_mode))
                     || (target_role == Some(Role::ComboBox) && self.forms_mode)
+                    || tabbed_choice
                     || self.web_application.is_some()
                     || (focus.in_menu && auto_forms)
                     || widget_item);
@@ -532,11 +538,16 @@ impl ScreenReaderEngine {
                 // In forms mode a combo box gets its usage hint [obs, 205/s8].
                 speech = speech.map(|s| format!("{s}\n{}", msg::hint_change_selection_arrows()));
             }
+            if target_role == Some(Role::RadioButton) && in_forms_mode {
+                // And a radio button its own [obs, 287/s4].
+                speech = speech.map(|s| format!("{s}\n{}", msg::hint_radio_up_down()));
+            }
             // Forms mode turned on by Enter adds the regions the field is in and the edit's
-            // hint [obs, 19/s2]; so does Auto Forms Mode's, Tab onto the page's first field
-            // [obs, 284/s1]. Without Auto Forms Mode Tab leaves forms mode off (204/s1, 212).
+            // hint [obs, 19/s2]; so does Auto Forms Mode's on Tab: the hint each time, the
+            // regions on the page's first field [obs, 284/s1, 287/s2, s3, s6]. Without Auto
+            // Forms Mode Tab leaves forms mode off (204/s1, 212).
             let by_enter = std::mem::take(&mut self.forms_mode_by_enter) && is_edit;
-            let by_auto_tab = entering_page && auto_forms && self.last_key_tabs && is_edit;
+            let by_auto_tab = auto_forms && self.last_key_tabs && is_edit;
             if by_enter || by_auto_tab {
                 speech = speech.map(|s| format!("{s}\n{}", msg::hint_type_in_text()));
             }
