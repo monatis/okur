@@ -21,4 +21,4 @@ $lines = @(
     'The file dialogs open in this folder.'
 )
 [System.IO.File]::WriteAllText($path, ($lines -join "`r`n"), (New-Object System.Text.UTF8Encoding $false))
-Start-Process notepad.exe -ArgumentList "`"$path`""
+Start-Process notepad.exe -WorkingDirectory $folder -ArgumentList "`"$path`""

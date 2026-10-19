@@ -17,7 +17,6 @@ To record one:
 | 519 | Word's headings list, spelling errors, revisions | `desktop-word.ps1` (here) |
 | 524 | Notepad's Save As dialog. Recorded in round 23 and not imported: the dialog opened in the lab account's home folder, and the traces list its folders; to record again in a folder of the fixture's own | `desktop-notepad-dialogs.ps1` (here) |
 | 525 | Notepad's Open dialog; as 524 | `desktop-notepad-dialogs.ps1` (here) |
-| 526 | Screen-sensitive help on the desktop fixture's controls. Recorded in round 24 and not imported: a trace caught a Chrome window whose title carries the browser profile's name | `desktop-forms.ps1` |
 | 530 | Skim reading, its dialog, and Say Color in a page. Recorded in round 26 and held back with 531: the browser profile's name in its traces; the Skim Reading dialog, JAWS's own, refused the harness's Tab and Escape | `news-article.html` |
 | 531 | Screen-sensitive help in a page. Recorded in round 26 and not imported: JAWS's page summary outlasted the 20 s settle, now 60 s; its traces, as every web trace, carry the browser window's title with the profile's name | `news-article.html` |
 | 532 | Say Default Button and Say Current Control Hot Key in Notepad's Open dialog | `desktop-notepad-dialogs.ps1` (here) |

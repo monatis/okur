@@ -1,0 +1,27 @@
+{
+  "id": "536-web-routing-and-link-source",
+  "name": "In a page: the link's address (Ctrl+Insert+F7) on a link reached with Tab, the virtual cursor moved on and routed to the focus (Insert+Delete) and the focus to it (Ctrl+Insert+Delete), the frames list (Insert+F9) closed with Escape, and Ctrl+Insert+Shift+Enter",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Tab" },
+    { "id": "s2", "type": "key", "command": "Ctrl+Insert+F7", "settle_max_ms": 15000 },
+    { "id": "s3", "type": "key", "command": "Escape" },
+    { "id": "s4", "type": "key", "command": "Down" },
+    { "id": "s5", "type": "key", "command": "Down" },
+    { "id": "s6", "type": "key", "command": "Insert+Delete" },
+    { "id": "s7", "type": "key", "command": "Insert+Up" },
+    { "id": "s8", "type": "key", "command": "Down" },
+    { "id": "s9", "type": "key", "command": "Down" },
+    { "id": "s10", "type": "key", "command": "Ctrl+Insert+Delete" },
+    { "id": "s11", "type": "key", "command": "Insert+Up" },
+    { "id": "s12", "type": "key", "command": "Insert+F9", "settle_max_ms": 15000 },
+    { "id": "s13", "type": "key", "command": "Escape" },
+    { "id": "s14", "type": "key", "command": "H" },
+    { "id": "s15", "type": "key", "command": "Ctrl+Insert+Shift+Enter" },
+    { "id": "s16", "type": "key", "command": "Insert+Up" }
+  ]
+}
