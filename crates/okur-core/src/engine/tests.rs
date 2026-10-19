@@ -3785,3 +3785,47 @@ fn a_grid_cell_and_its_file_edges() {
         Some(norm("Price Row 1  \u{1d}selected\u{1e} \n4.50"))
     );
 }
+
+/// The help keys [obs, 526, 527]: Insert+F1 shows the control's help in the Virtual Viewer
+/// and reads it all, with the hot keys link and the closing line; Enter on the link opens the
+/// hot key help, whose keys are links too; Escape reads the focus again.
+#[test]
+fn help_keys_open_the_viewer_and_follow_links() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let mut check_box = FocusEvent::new(Role::CheckBox).with_name("Subscribe to updates");
+    check_box.states.checked = Some(true);
+    check_box.window_title = Some("SR Desktop Fixture".to_owned());
+    engine.handle_focus_event(&check_box);
+    let help = engine
+        .execute(crate::command::Command::ScreenSensitiveHelp)
+        .unwrap_or_default();
+    assert_eq!(
+        help,
+        format!(
+            "{}\n\u{1d} {} \u{1e} {}\n{}",
+            msg::help_control_check_box(),
+            msg::role_link(),
+            msg::viewer_hot_keys_link(),
+            msg::viewer_close_hint()
+        )
+    );
+    // The reading ends on the last line; Up reaches the link, Enter follows it.
+    engine.handle_key_event(&key(Key::UpArrow));
+    engine.handle_key_event(&key(Key::Enter));
+    let hot_keys = engine
+        .viewer
+        .as_ref()
+        .map(crate::viewer::VirtualViewer::lines)
+        .unwrap_or_default();
+    assert_eq!(
+        hot_keys.first().map(String::as_str),
+        Some(msg::help_hot_keys_intro().as_str())
+    );
+    assert!(hot_keys
+        .iter()
+        .any(|l| l.ends_with(msg::help_key_window_title().as_str())));
+    // Escape: the check box again, as JAWS reads it.
+    engine.handle_key_event(&key(Key::Escape));
+    assert!(engine.viewer.is_none());
+}

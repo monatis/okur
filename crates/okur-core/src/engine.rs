@@ -21,6 +21,7 @@ const DOUBLE_PRESS_MS: u64 = 500;
 mod commands;
 mod find;
 mod focus;
+mod help;
 mod information;
 mod layer;
 mod page;
@@ -476,6 +477,12 @@ impl ScreenReaderEngine {
                     self.viewer = None;
                     self.close_viewer_window();
                     self.speak_focus_again();
+                    return KeyAction::Consume;
+                }
+                ViewerAction::Run(command) => {
+                    self.viewer = None;
+                    self.close_viewer_window();
+                    let _ = self.execute(command);
                     return KeyAction::Consume;
                 }
                 ViewerAction::Ignore => {}

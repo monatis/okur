@@ -130,6 +130,22 @@ divergences! {
      JAWS reads the emoji in the field itself [obs, 313/s4].",
     "the owner's rule on JAWS's accidents, 2026-10-18";
 
+    Difference::Step => [
+        "526-desktop-screen-sensitive-help/s1",
+        "526-desktop-screen-sensitive-help/s5",
+        "526-desktop-screen-sensitive-help/s10",
+        "526-desktop-screen-sensitive-help/s13",
+        "526-desktop-screen-sensitive-help/s21",
+        "527-desktop-notepad-help-keys/s1",
+        "527-desktop-notepad-help-keys/s3",
+        "527-desktop-notepad-help-keys/s5",
+    ],
+    "JAWS's help texts (Insert+F1, Insert+H, Insert+W) are Freedom Scientific's writing. \
+     Okur's help keys open the Virtual Viewer as JAWS's do, with JAWS's hot keys link and \
+     closing line, and Escape reads the focus as JAWS does; the help itself is in Okur's \
+     own words, and Insert+H lists Okur's keys.",
+    "the clean-room rule (AGENTS.md section 1.4), 2026-10-19";
+
     Difference::JawsAlsoSays("Column 65535, Row 65535") => [
         "545-desktop-data-grid/s2",
         "545-desktop-data-grid/s3",

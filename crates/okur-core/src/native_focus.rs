@@ -690,8 +690,30 @@ pub fn reading_line(focus: &FocusEvent) -> String {
         )
 }
 
-pub fn focus_line(focus: &FocusEvent) -> String {
-    control_lines(focus, false)
+/// What JAWS reads of the focus when its Virtual Viewer closes: a combo box's value and a
+/// list box item with their position, "Germany | 2 of 3", "Bananas | 2 of 3" [obs, 526/s11,
+/// s14]; another control's name, type and state, "Save... Button", "Subscribe to updates check
+/// box checked" [obs, 311/s12, 526/s6].
+pub fn after_viewer_line(focus: &FocusEvent) -> String {
+    let list_box_item = focus.role == Role::ListItem && !focus.container_is_list_view;
+    let lines = control_lines(focus, false);
+    if focus.role == Role::ComboBox || list_box_item {
+        let kept = |l: &&Line| {
+            l.parts.iter().any(|p| match p.kind {
+                PartKind::Value | PartKind::Position => true,
+                PartKind::Name => list_box_item,
+                _ => false,
+            })
+        };
+        return lines
+            .iter()
+            .filter(kept)
+            .map(Line::render)
+            .filter(|l| !l.is_empty())
+            .collect::<Vec<_>>()
+            .join("\n");
+    }
+    lines
         .iter()
         .map(Line::render)
         .find(|l| !l.is_empty())

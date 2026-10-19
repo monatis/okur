@@ -38,6 +38,9 @@ impl ScreenReaderEngine {
             Command::SelectAFrame => return self.select_a_frame(),
             Command::LeftMouseClick => return self.left_mouse_click(),
             Command::WindowList => return self.ask_window_list(),
+            Command::ScreenSensitiveHelp => return self.screen_sensitive_help(),
+            Command::HotKeyHelp => return self.hot_key_help(),
+            Command::WindowsKeysHelp => return self.windows_keys_help(),
             Command::RateFaster => return self.change_rate(true),
             Command::RateSlower => return self.change_rate(false),
             Command::SayWindow => {
@@ -1081,7 +1084,8 @@ impl ScreenReaderEngine {
                         msg::viewer_hot_keys_link()
                     ),
                     msg::viewer_close_hint().to_string(),
-                ]);
+                ])
+                .with_links(vec![(4, Command::HotKeyHelp)]);
                 let speech = viewer.message_speech();
                 self.viewer = Some(viewer);
                 self.show_viewer_window();
@@ -1283,7 +1287,20 @@ impl ScreenReaderEngine {
                 .as_ref()
                 .and_then(|text| app.line_after_viewer(&text.text, text.caret))
         } else if self.editing_text() {
-            let line = self.last_text.as_ref().map(crate::editing::line_at);
+            // A field of one line says nothing: JAWS was silent closing the viewer over the
+            // forms fixture's "Name: Ada" [obs, 322/s6, 526/s2, s22], and read the line of an
+            // edit of several lines [obs, 312/s11, 527/s2].
+            let single_line = self.app_mode != AppMode::VirtualBuffer
+                && self.last_native_focus.as_ref().is_some_and(|f| {
+                    f.role == Role::Edit
+                        && !f.multi_line
+                        && f.container_role != Some(Role::ComboBox)
+                });
+            let line = self
+                .last_text
+                .as_ref()
+                .filter(|_| !single_line)
+                .map(crate::editing::line_at);
             // A combo box's field adds its list position (JAWS on the Run dialog, dev box:
             // "C: | 1 of 6").
             let position = self
@@ -1301,7 +1318,7 @@ impl ScreenReaderEngine {
         } else {
             self.last_native_focus
                 .as_ref()
-                .map(crate::native_focus::focus_line)
+                .map(crate::native_focus::after_viewer_line)
         };
         if let Some(speech) = speech.filter(|s| !s.is_empty()) {
             self.speech.speak(&speech, true);

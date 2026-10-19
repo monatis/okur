@@ -187,6 +187,14 @@ pub enum Command {
     /// Insert+F10: the Window List, the running applications' windows to switch to.
     WindowList,
 
+    // Help, in the Virtual Viewer, in Okur's own words.
+    /// Insert+F1: what the focused control is for, and its keys.
+    ScreenSensitiveHelp,
+    /// Insert+H: Okur's keys for the window or page in front, each a link that uses it.
+    HotKeyHelp,
+    /// Insert+W: the keys Windows gives every application.
+    WindowsKeysHelp,
+
     // Finding.
     /// Ctrl+F in a page: JAWS Find, announced as "Virtual Find" [obs, 506/s1].
     VirtualFind,
@@ -397,6 +405,9 @@ impl Command {
             "SelectAFrame" | "Insert+F9" => SelectAFrame,
             "LeftMouseButton" | "NumpadSlash" => LeftMouseClick,
             "WindowList" | "Insert+F10" => WindowList,
+            "ScreenSensitiveHelp" | "Insert+F1" => ScreenSensitiveHelp,
+            "HotKeyHelp" | "Insert+H" => HotKeyHelp,
+            "WindowKeysHelp" | "WindowsKeysHelp" | "Insert+W" => WindowsKeysHelp,
             "Ctrl+Insert+1" => SayListColumn(1),
             "Ctrl+Insert+2" => SayListColumn(2),
             "Ctrl+Insert+3" => SayListColumn(3),
@@ -747,6 +758,11 @@ static BINDINGS: &[Binding] = &{
         bind(Key::F(9), JAWS, SelectAFrame),
         bind(Key::NumpadSlash, ALONE, LeftMouseClick),
         bind(Key::F(10), JAWS, WindowList),
+        // Help (JAWS 2025 help, Keystrokes for Accessing Help) [obs, 526, 527]. In the laptop
+        // layout CapsLock+H is Say Sentence, as there.
+        bind(Key::F(1), JAWS, ScreenSensitiveHelp),
+        bind(Alpha('H'), JAWS, HotKeyHelp),
+        bind(Alpha('W'), JAWS, WindowsKeysHelp),
         bind(
             Key::Enter,
             ANY.ctrl(Yes).insert(Yes).shift(Yes).alt(No),

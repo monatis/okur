@@ -14,7 +14,10 @@
 //! - Escape closes it, and the focus is read again. The viewer is a window of its own:
 //!   other keys (Tab, Shift+Tab, Enter) stay in it silently [obs, 311/s28–s31], although
 //!   JAWS help says Tab closes it; Virtualize again says "The current location is already
-//!   in a virtual view" (311/s32).
+//!   in a virtual view" (311/s32);
+//! - in the help keys' viewers (Insert+F1, Insert+H), Enter on a link closes the viewer and
+//!   runs the link's command (JAWS 2025 help, the Virtual Viewer: links are followed with
+//!   Enter).
 
 use crate::input::{Key, KeyEvent};
 use crate::ui::TextSpan;
@@ -30,6 +33,8 @@ pub enum ViewerAction {
     Copy(String),
     /// Close the viewer.
     Close,
+    /// Enter on a link line (the help keys' viewers): close the viewer and run the command.
+    Run(crate::command::Command),
     /// Not a viewer key (e.g. another JAWS command): handle it as usual.
     Ignore,
 }
@@ -43,6 +48,8 @@ pub struct VirtualViewer {
     /// What was read last on the line, as (start column, length): the line, a word or a
     /// character. A window showing the viewer marks it.
     read: (usize, usize),
+    /// The lines that are links, and the command Enter on each runs.
+    links: Vec<(usize, crate::command::Command)>,
 }
 
 /// Word classes: a word is a run of one class.
@@ -82,6 +89,7 @@ impl VirtualViewer {
             column: 0,
             all_selected: false,
             read: (0, 0),
+            links: Vec::new(),
         };
         viewer.read_line();
         viewer
@@ -95,6 +103,13 @@ impl VirtualViewer {
         viewer.line = viewer.lines.len() - 1;
         viewer.read_line();
         viewer
+    }
+
+    /// The same viewer, with `links`: lines that run a command when Enter is pressed on them
+    /// (the hot key help's keys).
+    pub fn with_links(mut self, links: Vec<(usize, crate::command::Command)>) -> Self {
+        self.links = links;
+        self
     }
 
     /// What JAWS reads when a message opens: its lines, skipping blank ones.
@@ -253,6 +268,10 @@ impl VirtualViewer {
         };
         match event.key {
             Key::Escape if plain => ViewerAction::Close,
+            Key::Enter if plain => match self.links.iter().find(|(line, _)| *line == self.line) {
+                Some((_, command)) => ViewerAction::Run(command.clone()),
+                None => ViewerAction::Speak(None),
+            },
             Key::DownArrow | Key::UpArrow if plain => {
                 self.all_selected = false;
                 line(self.move_line(event.key == Key::DownArrow))
