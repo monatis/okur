@@ -930,6 +930,13 @@ pub trait SpeechOutput: Send + Sync {
         self.speak(text, true);
     }
 
+    /// Speaks text with every symbol in it named, whatever the punctuation level: a selection
+    /// and a word read on its own, as JAWS reads them ("Friday comma, January 2 comma," after
+    /// Ctrl+A [obs, 323/s7]; "dog comma," by word [obs, 213/s11]).
+    fn speak_symbols(&mut self, text: &str, interrupt: bool) {
+        self.speak(text, interrupt);
+    }
+
     /// Speaks a character being read on its own (Left/Right, Delete). `text` is the character
     /// as JAWS's speech history records it; the synthesizer is given its name, as JAWS names
     /// spaces and symbols whatever its punctuation level ([`crate::pronounce`]). A synthesizer

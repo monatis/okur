@@ -34,6 +34,13 @@ paragraph-formatting = Paragraph formatting { $alignment }
 paragraph-left-justified = left justified
 paragraph-right-justified = right justified
 
+## Punctuation levels (Set Punctuation Level, Insert+Shift+2)
+
+punctuation-none = None
+punctuation-some = Some
+punctuation-most = Most
+punctuation-all = All
+
 ## Selecting text with Shift and the arrows
 
 selection-selected = selected { $text }

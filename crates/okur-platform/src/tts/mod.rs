@@ -126,6 +126,8 @@ pub struct TtsManager {
     kind: TtsEngineType,
     voice: Option<String>,
     speech_log: Option<SpeechLog>,
+    /// Which symbols the synthesizer is given by name (the voice settings' punctuation).
+    punctuation: okur_core::settings::Punctuation,
 }
 
 impl TtsManager {
@@ -136,6 +138,7 @@ impl TtsManager {
             kind: engine_type,
             voice: None,
             speech_log: None,
+            punctuation: okur_core::settings::Punctuation::default(),
         })
     }
 
@@ -182,12 +185,34 @@ impl TtsManager {
         self
     }
 
-    /// Speaks text using the active synthesizer.
+    /// Speaks text using the active synthesizer. The speech log keeps the text as JAWS's
+    /// history would; the synthesizer is given it as JAWS gives its own, at the punctuation
+    /// level ([`okur_core::pronounce::spoken`]).
     pub fn speak(&mut self, text: &str, interrupt: bool) -> Result<(), TtsError> {
+        let level = self.punctuation;
+        self.speak_at(text, level, interrupt)
+    }
+
+    /// Speaks text with every symbol named: a selection, a word read on its own.
+    pub fn speak_symbols(&mut self, text: &str, interrupt: bool) -> Result<(), TtsError> {
         if let Some(log) = self.speech_log.as_mut() {
             log.record(SpeechLogKind::Speak, text, interrupt);
         }
-        self.engine.speak(text, interrupt)
+        self.engine
+            .speak(&okur_core::pronounce::spoken_symbols(text), interrupt)
+    }
+
+    fn speak_at(
+        &mut self,
+        text: &str,
+        level: okur_core::settings::Punctuation,
+        interrupt: bool,
+    ) -> Result<(), TtsError> {
+        if let Some(log) = self.speech_log.as_mut() {
+            log.record(SpeechLogKind::Speak, text, interrupt);
+        }
+        self.engine
+            .speak(&okur_core::pronounce::spoken(text, level), interrupt)
     }
 
     /// Immediately stops speech.
@@ -264,6 +289,10 @@ impl okur_core::speech::SpeechOutput for TtsManager {
         let _ = self.speak(text, interrupt);
     }
 
+    fn speak_symbols(&mut self, text: &str, interrupt: bool) {
+        let _ = TtsManager::speak_symbols(self, text, interrupt);
+    }
+
     /// The speech log keeps the character as JAWS's history would; the synthesizer says its
     /// name.
     fn speak_character(&mut self, text: &str, interrupt: bool) {
@@ -318,6 +347,7 @@ impl okur_core::speech::SpeechOutput for TtsManager {
             }
         }
         self.voice = voice.voice.clone();
+        self.punctuation = voice.punctuation;
         let _ = self.set_rate(voice.rate);
         let _ = self.set_volume(voice.volume);
     }

@@ -3320,3 +3320,34 @@ fn a_page_menu_in_browse_mode_is_read_by_the_virtual_cursor() {
         "{next:?}"
     );
 }
+
+/// Set Punctuation Level (Insert+Shift+2) moves from Most to All, None, Some and back, saying
+/// the new level's name [obs, 400/s6, s12, s18, s24]. It lasts until Okur exits: the settings
+/// store is not written.
+#[test]
+fn insert_shift_2_cycles_the_punctuation_level() {
+    use crate::settings::Punctuation;
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Hello, world.")
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.handle_focus_event(&page_document());
+    let store = crate::settings::RecordingSettingsStore::default();
+    engine.set_settings_store(Box::new(store.clone()));
+    let mut key = KeyEvent::new(Key::Digit(2), Modifiers::none(), true);
+    key.modifiers.insert = true;
+    key.modifiers.shift = true;
+    speech.take();
+    let mut said = Vec::new();
+    for _ in 0..4 {
+        assert_eq!(engine.handle_key_event(&key), KeyAction::Consume);
+        said.extend(speech.take());
+    }
+    assert_eq!(said, ["All", "None", "Some", "Most"]);
+    assert_eq!(engine.settings.voice.punctuation, Punctuation::Most);
+    assert!(store.take().is_empty());
+}

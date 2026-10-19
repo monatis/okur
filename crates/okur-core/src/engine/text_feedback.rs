@@ -106,8 +106,15 @@ impl ScreenReaderEngine {
             EditKey::Character | EditKey::DeleteForward | EditKey::DeleteBackward
         ) && speech.chars().count() == 1)
             || (!speech.is_empty() && speech.chars().all(crate::editing::is_line_break));
+        // A word and a selection are read with every symbol named [obs, 213/s11, 313/s7].
+        let symbols = matches!(
+            key,
+            EditKey::Word | EditKey::DeleteWordBackward | EditKey::SelectMore | EditKey::SelectAll
+        );
         if character {
             self.speech.speak_character(&speech, true);
+        } else if symbols {
+            self.speech.speak_symbols(&speech, true);
         } else {
             self.speech.speak(&speech, true);
         }

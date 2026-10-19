@@ -699,6 +699,18 @@ impl ScreenReaderEngine {
         self.settings = settings;
     }
 
+    /// Set Punctuation Level (Insert+Shift+2): the next level, said by its name, until Okur
+    /// exits. JAWS keeps it in neither its voice profile nor its JCF [obs, 400 exploration,
+    /// 2026-10-19], so the settings store is not written.
+    pub(crate) fn next_punctuation_level(&mut self) -> Option<String> {
+        let level = self.settings.voice.punctuation.next();
+        self.settings.voice.punctuation = level;
+        self.speech.configure(&self.settings.voice);
+        let name = level.name();
+        self.speech.speak(&name, true);
+        Some(name)
+    }
+
     /// Opens the settings dialog, or brings it to the front. Okur speaks nothing itself: it
     /// reads the dialog when the dialog takes the focus, as any application's.
     pub(crate) fn open_settings(&mut self) -> Option<String> {

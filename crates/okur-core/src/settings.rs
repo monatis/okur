@@ -146,6 +146,47 @@ pub enum Synthesizer {
     NoSpeech,
 }
 
+/// JAWS's punctuation level: from which level a symbol in running text is spoken by its name
+/// (`docs/references/jaws-punctuation-levels.md`). Each symbol has the level it is named
+/// from; a level names its own symbols and those of the levels below it.
+#[derive(
+    Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default, Serialize, Deserialize,
+)]
+#[serde(rename_all = "snake_case")]
+pub enum Punctuation {
+    None,
+    Some,
+    /// JAWS's default.
+    #[default]
+    Most,
+    All,
+}
+
+impl Punctuation {
+    /// The level Set Punctuation Level (Insert+Shift+2) moves to: from Most, All, None, Some
+    /// and Most again [obs, 400/s6, s12, s18, s24].
+    pub fn next(self) -> Self {
+        match self {
+            Self::None => Self::Some,
+            Self::Some => Self::Most,
+            Self::Most => Self::All,
+            Self::All => Self::None,
+        }
+    }
+
+    /// The level's name, as JAWS says it when the level changes [obs, 400/s6].
+    pub fn name(self) -> String {
+        use crate::messages::msg;
+        match self {
+            Self::None => msg::punctuation_none(),
+            Self::Some => msg::punctuation_some(),
+            Self::Most => msg::punctuation_most(),
+            Self::All => msg::punctuation_all(),
+        }
+        .to_string()
+    }
+}
+
 /// The voice Okur speaks with (JAWS: Voice Adjustment).
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(default)]
@@ -157,6 +198,9 @@ pub struct VoiceSettings {
     pub rate: i32,
     /// 0 to 100.
     pub volume: u16,
+    /// Which symbols in running text are spoken by name. JAWS keeps it in the voice profile
+    /// too, per voice context (Voice Adjustment's Punctuation).
+    pub punctuation: Punctuation,
 }
 
 impl Default for VoiceSettings {
@@ -166,6 +210,7 @@ impl Default for VoiceSettings {
             voice: None,
             rate: 0,
             volume: 100,
+            punctuation: Punctuation::default(),
         }
     }
 }

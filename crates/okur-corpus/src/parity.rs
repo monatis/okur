@@ -364,7 +364,7 @@ fn run_scenario(
                     for converted in converter.convert(&event) {
                         if let Some(speech) = engine.handle_accessibility_event(&converted) {
                             if spoken.is_empty() {
-                                spoken.push(&speech);
+                                spoken.push(&speech, false);
                             }
                         }
                     }
@@ -372,7 +372,7 @@ fn run_scenario(
                 // An edit key that changed nothing reports the field unchanged, as live.
                 if let Some(speech) = engine.settle_pending_edit() {
                     if spoken.is_empty() {
-                        spoken.push(&speech);
+                        spoken.push(&speech, false);
                     }
                 }
                 // The step's events are over; JAWS then speaks what it deferred.
@@ -526,6 +526,8 @@ type Log = std::sync::Arc<std::sync::Mutex<Vec<String>>>;
 struct RecordingSpeech {
     history: Log,
     spoken: Log,
+    /// The punctuation level the engine's voice settings give the synthesizer.
+    punctuation: std::sync::Arc<std::sync::Mutex<okur_core::settings::Punctuation>>,
 }
 
 fn append(log: &Log, text: String) {
@@ -548,9 +550,20 @@ impl RecordingSpeech {
             .unwrap_or(true)
     }
 
-    fn push(&self, text: &str) {
+    /// `symbols`: every symbol named (a selection, a word read on its own).
+    fn push(&self, text: &str, symbols: bool) {
+        let level = self
+            .punctuation
+            .lock()
+            .map(|level| *level)
+            .unwrap_or_default();
         append(&self.history, text.to_owned());
-        append(&self.spoken, okur_core::pronounce::text(text));
+        let spoken = if symbols {
+            okur_core::pronounce::spoken_symbols(text)
+        } else {
+            okur_core::pronounce::spoken(text, level)
+        };
+        append(&self.spoken, spoken);
     }
 
     fn take(&self) -> Vec<String> {
@@ -569,7 +582,17 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
     }
 
     fn speak(&mut self, text: &str, _interrupt: bool) {
-        self.push(text);
+        self.push(text, false);
+    }
+
+    fn speak_symbols(&mut self, text: &str, _interrupt: bool) {
+        self.push(text, true);
+    }
+
+    fn configure(&mut self, voice: &okur_core::settings::VoiceSettings) {
+        if let Ok(mut level) = self.punctuation.lock() {
+            *level = voice.punctuation;
+        }
     }
 
     fn speak_character(&mut self, text: &str, _interrupt: bool) {

@@ -30,6 +30,13 @@ and per-application and per-site settings. Those are not repeated here.
   - okur-ui's Virtual Viewer window title and its "Ready";
   - how JAWS's `ACCESS_KEY=a|b|c` fields map (check by changing the setting on old-pc).
 
+## Reading settings
+
+- **Okur's settings dialog has no punctuation level yet**; it lives in the voice settings
+  (`VoiceSettings::punctuation`) and Insert+Shift+2 changes it for the session.
+- **Punctuation per voice context** (reading, typing, messages): JAWS sets it per context in
+  Voice Adjustment; Okur has one level.
+
 ## Forms and browse mode
 
 - **Forms with Up and Down in browse mode** (the owner's request, 2026-10-18; not started).
@@ -63,7 +70,10 @@ and per-application and per-site settings. Those are not repeated here.
 ## Native desktop
 
 - **A multi-line field read whole on focus** (316/s3; audit §2.1): JAWS reads the caret's line
-  and says "Contains text". Daily use, hours of work; the evidence exists.
+  and says "Contains text". Daily use, hours of work; the evidence exists. In the same kind of
+  field (a WinForms text box) JAWS's Say Line gives the line without the field's name, and
+  Ctrl+Home says "top of file" first (400/s1, s5), as in a document. Okur knows a native field
+  has several lines only from its role; the tracer would need the window's multi-line style.
 - **Dialogs** (323, 322; audit §2.3):
   - the page's name and text on Ctrl+Tab;
   - Say Window's format (323/s2);

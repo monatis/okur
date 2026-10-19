@@ -15,6 +15,8 @@ use super::{SpeechLog, SpeechLogKind, TtsManager};
 
 enum Request {
     Speak(String, bool),
+    /// Text with every symbol named: a selection, a word read on its own.
+    Symbols(String, bool),
     Character(String, bool),
     Stop,
     Configure(okur_core::settings::VoiceSettings),
@@ -52,7 +54,12 @@ impl SpeechThread {
                     if let Ok(mut tts) = worker_tts.lock() {
                         match request {
                             Request::Speak(text, interrupt) => {
-                                let _ = tts.engine.speak(&text, interrupt);
+                                let spoken = okur_core::pronounce::spoken(&text, tts.punctuation);
+                                let _ = tts.engine.speak(&spoken, interrupt);
+                            }
+                            Request::Symbols(text, interrupt) => {
+                                let spoken = okur_core::pronounce::spoken_symbols(&text);
+                                let _ = tts.engine.speak(&spoken, interrupt);
                             }
                             Request::Character(text, interrupt) => {
                                 let _ = tts.engine.speak_pitched(
@@ -99,6 +106,11 @@ impl SpeechOutput for SpeechThread {
     fn speak(&mut self, text: &str, interrupt: bool) {
         self.record(SpeechLogKind::Speak, text, interrupt);
         self.send(Request::Speak(text.to_owned(), interrupt));
+    }
+
+    fn speak_symbols(&mut self, text: &str, interrupt: bool) {
+        self.record(SpeechLogKind::Speak, text, interrupt);
+        self.send(Request::Symbols(text.to_owned(), interrupt));
     }
 
     /// The speech log keeps the character as JAWS's history would; the synthesizer says its

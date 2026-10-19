@@ -143,6 +143,8 @@ pub enum Command {
     // Okur's settings: one dialog for both, until there are enough settings for two.
     QuickSettings,
     SettingsCenter,
+    /// The next punctuation level, until Okur exits (JAWS's SetPunctuationLevel).
+    SetPunctuationLevel,
 }
 
 impl Command {
@@ -311,6 +313,7 @@ impl Command {
             "SayFontInViewer" => SayFontInViewer,
             "QuickSettings" => QuickSettings,
             "SettingsCenter" => SettingsCenter,
+            "SetPunctuationLevel" | "Insert+Shift+2" | "JAWSKey+Shift+2" => SetPunctuationLevel,
             _ => return None,
         })
     }
@@ -508,6 +511,12 @@ static BINDINGS: &[Binding] = &{
         // Settings.
         bind(Alpha('V'), JAWS, QuickSettings),
         bind(Digit(6), JAWS, SettingsCenter),
+        // Before Shift+2 (the prior heading of level 2), which also matches with the JAWS key.
+        bind(
+            Digit(2),
+            ANY.insert(Yes).shift(Yes).ctrl(No).alt(No),
+            SetPunctuationLevel,
+        ),
         // Finding, and the form fields list.
         bind(
             Alpha('F'),
