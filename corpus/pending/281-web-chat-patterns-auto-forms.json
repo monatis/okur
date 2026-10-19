@@ -1,0 +1,40 @@
+{
+  "id": "281-web-chat-patterns-auto-forms",
+  "name": "219 (WhatsApp Web's patterns) with Auto Forms Mode on, JAWS's default: old-pc has it off, the owner's JAWS on",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/web-chat.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "FormsMode": {
+        "AutoFormsMode": "1"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Escape",
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Tab" },
+    { "id": "s2", "type": "key", "command": "H" },
+    { "id": "s3", "type": "key", "command": "H" },
+    { "id": "s4", "type": "key", "command": "Down" },
+    { "id": "s5", "type": "key", "command": "Down" },
+    { "id": "s6", "type": "key", "command": "Down" },
+    { "id": "s7", "type": "key", "command": "Down" },
+    { "id": "s8", "type": "key", "command": "Shift+Tab" },
+    { "id": "s9", "type": "key", "command": "Down" },
+    { "id": "s10", "type": "key", "command": "Insert+3" },
+    { "id": "s11", "type": "key", "command": "Down" },
+    { "id": "s12", "type": "key", "command": "Insert+3" },
+    { "id": "s13", "type": "key", "command": "Right" },
+    { "id": "s14", "type": "key", "command": "Enter" },
+    { "id": "s15", "type": "key", "command": "Tab" },
+    { "id": "s16", "type": "key", "command": "Down" },
+    { "id": "s17", "type": "key", "command": "Escape" }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "408-web-capitals-and-spelling",
+  "name": "406 in the virtual cursor: Say Word and Say Line once and twice (spelled) on \"Ada READ me B x\", then Say All",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/reading-settings.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home", "Down", "Down", "Down", "Down", "Down", "Down", "Down", "Down", "Down", "Down", "Down", "Down", "Down", "Down"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+Up" },
+    { "id": "s2", "type": "key", "command": "CapsLock+K" },
+    { "id": "s3", "type": "key", "command": "CapsLock+K", "repeat": 2 },
+    { "id": "s4", "type": "key", "command": "Ctrl+Right" },
+    { "id": "s5", "type": "key", "command": "CapsLock+K" },
+    { "id": "s6", "type": "key", "command": "CapsLock+K", "repeat": 2 },
+    { "id": "s7", "type": "key", "command": "CapsLock+I" },
+    { "id": "s8", "type": "key", "command": "CapsLock+I", "repeat": 2 },
+    { "id": "s9", "type": "key", "command": "Home" },
+    { "id": "s10", "type": "key", "command": "Insert+Down", "settle_max_ms": 60000 }
+  ]
+}

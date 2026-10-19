@@ -1752,6 +1752,34 @@
       }
     },
     {
+      "scenario_id": "278-web-forms-arrows-patterns",
+      "fixture": "web-app-patterns.html",
+      "evidence": {
+        "sha256": "daef3b3bf93ecb90dacb9810730f4a71424956c059d8f6bd316dc16b9b92f757",
+        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "279-web-forms-arrows-interaction",
+      "fixture": "forms-interaction.html",
+      "evidence": {
+        "sha256": "56b16edcc5d8beb996c159d189afa7c1936d61da61c22f03cd91a0f9ff1a30fa",
+        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "28-dynamic-tab-navigation",
       "fixture": "boundaries-dynamic.html",
       "evidence": {
@@ -1762,6 +1790,20 @@
         "trials": 5,
         "successful_trials": 5,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "280-web-forms-arrows-auto-forms",
+      "fixture": "signup-form.html",
+      "evidence": {
+        "sha256": "a6f2670de81df78603fdaf73f2d064e42381c95ade2d116561a766c11e9f0fde",
+        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -2091,13 +2133,13 @@
       "scenario_id": "323-desktop-property-sheet",
       "fixture": "desktop-property-sheet.ps1",
       "evidence": {
-        "sha256": "c36cb66e3d66ec778219c98e2b30e56f9a7e9a51f20cd29f40af25d5095e0032",
-        "capture_script_sha256": "af7ebbd6c351f09b3aab34b10cfb389d2bd6e87be130f86b5337169be0634e0c",
+        "sha256": "8171a48502769938dab39c6112877583d7d94eab0f59a302a40dd85212213caf",
+        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
         "successful_trials": 3,
-        "deterministic": true,
+        "deterministic": false,
         "summary_consistent": true
       }
     },
@@ -2170,13 +2212,41 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "405-desktop-words-and-numbers",
+      "fixture": "desktop-reading.ps1",
+      "evidence": {
+        "sha256": "d70f076e0123b5c6634c045e139f61df883d9c4827e985d866249ef0ad851f57",
+        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "406-desktop-capitals-and-spelling",
+      "fixture": "desktop-reading.ps1",
+      "evidence": {
+        "sha256": "732a28bcd956b109ad91b6f5bdc36cec6be10fa8c22340ee2115b87549118449",
+        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 148,
-    "scenarios_with_evidence": 148,
-    "total_trials": 544,
-    "successful_trials": 539,
-    "deterministic_scenarios": 96
+    "scenarios": 153,
+    "scenarios_with_evidence": 153,
+    "total_trials": 559,
+    "successful_trials": 554,
+    "deterministic_scenarios": 100
   }
 }

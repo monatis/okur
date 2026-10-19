@@ -12,11 +12,9 @@ To record one:
 
 | Scenario | What it records | Fixture |
 |---|---|---|
-| 278 | Down through every line of the web app patterns page, Up five times (the owner's request: form fields read with the arrows) | `web-app-patterns.html` |
-| 279 | Down through the forms page and Up back | `forms-interaction.html` |
-| 280 | Down through the sign-up form with Auto Forms Mode on (JAWS's default; old-pc has it off), Up five times | `signup-form.html` |
-| 405 | Mixed case, words with digits, numbers, dates and money at JAWS's defaults, by line and by word (research §6) | `desktop-reading.ps1` |
-| 406 | Capitals at JAWS's defaults: Say Word and Say Line once and twice (spelled), Say All, a capital typed with Characters echo (research §5) | `desktop-reading.ps1` |
+| 281 | 219 (WhatsApp Web's patterns) with Auto Forms Mode on, JAWS's default (backlog: the dev-box rules 1 to 3) | `web-chat.html` |
+| 407 | 405 in the virtual cursor: words, numbers, dates and money by line and by word | `reading-settings.html` (here) |
+| 408 | 406 in the virtual cursor: Say Word and Say Line spelled, Say All, on the capitals line | `reading-settings.html` (here) |
 
 Scenarios from 400 record JAWS's reading settings (plan
 `docs/plans/2026-10-18-reading-settings.md`). Their fixtures, `reading-settings.html` (here)
