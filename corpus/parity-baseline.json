@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 1976,
-  "total_steps": 2448,
+  "matched_steps": 1982,
+  "total_steps": 2457,
   "accepted_divergences": 49,
   "errors": [],
   "steps": {
@@ -2501,6 +2501,15 @@
     "529-desktop-native-selection-keys/s6": "match",
     "529-desktop-native-selection-keys/s7": "match",
     "529-desktop-native-selection-keys/s8": "match",
-    "529-desktop-native-selection-keys/s9": "match"
+    "529-desktop-native-selection-keys/s9": "match",
+    "533-desktop-toast-and-progress-bar/s1": "mismatch",
+    "533-desktop-toast-and-progress-bar/s2": "match",
+    "533-desktop-toast-and-progress-bar/s3": "mismatch",
+    "533-desktop-toast-and-progress-bar/s4": "match",
+    "533-desktop-toast-and-progress-bar/s5": "mismatch",
+    "533-desktop-toast-and-progress-bar/s6": "match",
+    "533-desktop-toast-and-progress-bar/s7": "match",
+    "533-desktop-toast-and-progress-bar/s8": "match",
+    "533-desktop-toast-and-progress-bar/s9": "match"
   }
 }

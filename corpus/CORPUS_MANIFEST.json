@@ -33,6 +33,10 @@
       "sha256": "7251969f618fc1cd11ab31e5f8a61bdbde2ee05504c78ebad69f23658dcdfe8e",
       "size_bytes": 827
     },
+    "desktop-notifications.ps1": {
+      "sha256": "d12b28ca7c1e57d5c7a4f2717f22804506a96e3ffd1cd4f4a5cbede5983c7c37",
+      "size_bytes": 3275
+    },
     "desktop-property-sheet.ps1": {
       "sha256": "7ee1093e22db65dd2a4988ff22b62475f1fc28a071d9cfd659a6ee47247e0528",
       "size_bytes": 1268
@@ -2868,13 +2872,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "533-desktop-toast-and-progress-bar",
+      "fixture": "desktop-notifications.ps1",
+      "evidence": {
+        "sha256": "f2ed19a5ed5cc0f57e03fde2985f79f199dbba2bbdf62ac8eff8d8fa2531ac03",
+        "capture_script_sha256": "fea10fa7014416142b4e9ca86996425047ca18a30d3c1e91d81df7a006cac118",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 197,
-    "scenarios_with_evidence": 197,
-    "total_trials": 645,
-    "successful_trials": 644,
+    "scenarios": 198,
+    "scenarios_with_evidence": 198,
+    "total_trials": 648,
+    "successful_trials": 647,
     "deterministic_scenarios": 128
   }
 }

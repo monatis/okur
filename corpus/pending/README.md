@@ -20,7 +20,6 @@ To record one:
 | 530 | Skim reading, its dialog, and Say Color in a page. Recorded in round 26 and held back with 531: the browser profile's name in its traces; the Skim Reading dialog, JAWS's own, refused the harness's Tab and Escape | `news-article.html` |
 | 531 | Screen-sensitive help in a page. Recorded in round 26 and not imported: JAWS's page summary outlasted the 20 s settle, now 60 s; its traces, as every web trace, carry the browser window's title with the profile's name | `news-article.html` |
 | 532 | Say Default Button and Say Current Control Hot Key in Windows' Open dialog | `desktop-file-dialogs.ps1` (here) |
-| 533 | A Windows toast, Repeat Last Notification, Notification History, and a progress bar | `desktop-notifications.ps1` (here) |
 | 534 | Numpad Slash (left click) on a page's check box and radio button | `signup-form.html` |
 | 535 | The table layer (Insert+Space, T) | `tables-navigation.html` |
 | 536 | Routing, the link's address, the frames list | `news-article.html` |
