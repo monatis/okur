@@ -705,10 +705,11 @@ for ($t = 1; $t -le $Repetitions; $t++) {
 
     # A desktop trial puts the browser's windows away before its trace starts: one left in front
     # by a web scenario reached the trace with its title, which carries the browser profile's
-    # name (526, round 24).
+    # name (526, round 24). A second lets the minimizing's events go by first (300 ms was not
+    # enough: 537, round 32).
     if ($launch) {
         [void][SrKeyInput]::MinimizeClass('Chrome_WidgetWin_1')
-        Start-Sleep -Milliseconds 300
+        Start-Sleep -Milliseconds 1000
     }
     # The trace starts before setup, so replay knows the window and focus that launch and
     # reset produced, as JAWS does when step 1 begins.
