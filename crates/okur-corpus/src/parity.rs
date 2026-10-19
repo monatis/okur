@@ -371,6 +371,20 @@ fn run_scenario(
                                 held,
                             )?;
                         }
+                        // A reload: the platform reads the page again once it changes, as
+                        // Okur's page worker does live (the trace records events, not the
+                        // page reads); the engine then takes it as a new load [obs, 538/s1].
+                        if !desktop && matches!(command, "Ctrl+R" | "F5") {
+                            let reloaded = okur_core::AccessibilityEvent::DocumentLoaded {
+                                title: aom.name.clone().unwrap_or_default(),
+                                root: aom.clone(),
+                            };
+                            if let Some(speech) = engine.handle_accessibility_event(&reloaded) {
+                                if spoken.is_empty() {
+                                    spoken.push(&speech, false);
+                                }
+                            }
+                        }
                         // Chords pressed while the step's speech went on, at their times.
                         let mut at = start;
                         for key in step.during.iter().flatten() {

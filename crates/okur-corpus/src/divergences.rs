@@ -146,6 +146,26 @@ divergences! {
      own words, and Insert+H lists Okur's keys.",
     "the clean-room rule (AGENTS.md section 1.4), 2026-10-19";
 
+    Difference::JawsAlsoSays("There are 1 Smart Glance Highlights on this page.") => [
+        "539-web-page-load-summary-tables-navigation/s1",
+    ],
+    "JAWS's Smart Glance: see the next entry.",
+    "the agent with the gaps report's row 20, 2026-10-20";
+
+    Difference::JawsAlsoSays("There are 2 Smart Glance Highlights on this page.") => [
+        "507-web-page-load-and-numpad-plus/s1",
+    ],
+    "JAWS's Smart Glance: see the next entry.",
+    "the agent with the gaps report's row 20, 2026-10-20";
+
+    Difference::JawsAlsoSays("There are 4 Smart Glance Highlights on this page.") => [
+        "538-web-page-load-summary-news-article/s1",
+    ],
+    "After a page's summary JAWS counts its Smart Glance highlights, the content its own \
+     heuristic picks as a page's most important, which no observation defines and Okur does \
+     not have. Okur's page-load summary stops at the regions, headings and links.",
+    "the agent with the gaps report's row 20, 2026-10-20";
+
     Difference::JawsAlsoSays("Column 65535, Row 65535") => [
         "545-desktop-data-grid/s2",
         "545-desktop-data-grid/s3",

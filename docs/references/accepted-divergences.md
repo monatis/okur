@@ -111,6 +111,18 @@ A step can be in more than one entry; all of its entries apply.
   whole.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### JAWS counts its Smart Glance highlights after a page's summary
+
+- Steps: `507-web-page-load-and-numpad-plus/s1` ("There are 2 Smart Glance Highlights on
+  this page."), `538-web-page-load-summary-news-article/s1` ("There are 4 ..."),
+  `539-web-page-load-summary-tables-navigation/s1` ("There are 1 ...").
+- Difference: JAWS also says "There are N Smart Glance Highlights on this page.".
+- Why: Smart Glance highlights are the content JAWS's own heuristic picks as a page's most
+  important; no observation defines them, and Okur does not have them. Okur's page-load
+  summary stops at the regions, headings and links.
+- Decided by the agent with the gaps report's row 20, 2026-10-20; to be revisited if Okur
+  gets such highlights.
+
 ### The help keys in Okur's own words
 
 - Steps: `526-desktop-screen-sensitive-help/s1`, `526-desktop-screen-sensitive-help/s5`,
