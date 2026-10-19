@@ -9,8 +9,8 @@ use crate::messages::msg;
 impl ScreenReaderEngine {
     /// Insert+E: with no dialog box in front, "Not in a dialog box" [obs, 513/s1, s7]. In one,
     /// its default button, which is the focused button when a button has the focus: "default
-    /// button is No", "default button is Cancel" after Tab [obs, 537/s3, s6]. A dialog box
-    /// whose focus is elsewhere waits for its recording (532).
+    /// button is No", "default button is Cancel" after Tab [obs, 537/s3, s6]; else the one the
+    /// dialog names, "default button is Find Next" [obs, 540/s2].
     pub(super) fn say_default_button(&mut self) -> Option<String> {
         let focus = self
             .last_native_focus
@@ -19,10 +19,11 @@ impl ScreenReaderEngine {
         let Some(focus) = focus else {
             return self.say(msg::not_in_dialog_box().to_string());
         };
-        if focus.role != crate::aom::Role::Button {
-            return None;
-        }
-        let name = focus.name.clone().unwrap_or_default();
+        let name = if focus.role == crate::aom::Role::Button {
+            focus.name.clone().unwrap_or_default()
+        } else {
+            focus.default_button.clone()?
+        };
         self.say(msg::default_button_is(name.trim()).to_string())
     }
 

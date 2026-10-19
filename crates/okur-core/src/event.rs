@@ -168,6 +168,10 @@ pub struct FocusEvent {
     /// which JAWS says before the control's name ("Speech Rate: left right slider").
     #[serde(default)]
     pub group_box: Option<String>,
+    /// When a dialog box is in front: its default button, the one Enter presses, which Insert+E
+    /// says where the focus is not on a button [obs, 540/s2].
+    #[serde(default)]
+    pub default_button: Option<String>,
     /// When the active window is a dialog box: its buttons, in order (the Virtual Viewer's
     /// last line, "Yes No Cancel") [obs, 311/s14].
     pub dialog_buttons: Vec<String>,
@@ -304,6 +308,7 @@ impl FocusEvent {
             dialog_text: None,
             dialog_page: None,
             group_box: None,
+            default_button: None,
             dialog_buttons: Vec::new(),
             dialog_lines: Vec::new(),
             window_items: Vec::new(),

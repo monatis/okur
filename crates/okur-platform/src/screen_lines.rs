@@ -118,7 +118,9 @@ pub(crate) use windows_lines::text_of as control_text;
 #[cfg(windows)]
 pub(crate) use windows_lines::{class_of, owner_drawn, static_lines, symbol_font};
 #[cfg(windows)]
-pub use windows_lines::{dialog_layout, group_box_of, page_of, page_window, window_bars};
+pub use windows_lines::{
+    default_button_of, dialog_layout, group_box_of, page_of, page_window, window_bars,
+};
 
 #[cfg(windows)]
 mod windows_lines {
@@ -474,6 +476,37 @@ mod windows_lines {
             .min_by_key(|(_, r)| i64::from(r.right - r.left) * i64::from(r.bottom - r.top))
             .map(|(child, _)| without_accelerators(&text_of(child)))
             .filter(|name| !name.trim().is_empty())
+    }
+
+    /// A dialog's default button, by its text without access-key marks: the button Enter
+    /// presses, which the dialog tells (DM_GETDEFID). Insert+E says it: "default button is
+    /// Find Next" (JAWS 2025 help; [obs, 540/s2]).
+    pub fn default_button_of(dialog: HWND) -> Option<String> {
+        use windows::Win32::UI::WindowsAndMessaging::{
+            GetDlgItem, SendMessageTimeoutW, SMTO_ABORTIFHUNG, WM_USER,
+        };
+        const DM_GETDEFID: u32 = WM_USER;
+        const DC_HASDEFID: usize = 0x534B;
+        let mut answer = 0usize;
+        // SAFETY: an integer query with a timeout, to a window that may be gone.
+        let sent = unsafe {
+            SendMessageTimeoutW(
+                dialog,
+                DM_GETDEFID,
+                WPARAM(0),
+                LPARAM(0),
+                SMTO_ABORTIFHUNG,
+                200,
+                Some(&mut answer),
+            )
+        };
+        if sent.0 == 0 || (answer >> 16) & 0xFFFF != DC_HASDEFID {
+            return None;
+        }
+        let id = i32::try_from(answer & 0xFFFF).ok()?;
+        // SAFETY: plain Win32 query on the dialog's child.
+        let button = unsafe { GetDlgItem(Some(dialog), id) }.ok()?;
+        Some(without_accelerators(&text_of(button))).filter(|name| !name.trim().is_empty())
     }
 
     /// A dialog's text by screen rows, and its text that labels no field.

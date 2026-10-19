@@ -181,6 +181,10 @@ pub struct TraceEvent {
     /// For focus in that dialog box: the group box around the focused control, by its text.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub group_box: Option<String>,
+    /// For focus in that dialog box: its default button's text, without its ampersand
+    /// (DM_GETDEFID), which Insert+E says [obs, 540/s2].
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub default_button: Option<String>,
     /// For focus in that dialog box: its control tree, without the title bar (Say Window).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dialog_tree: Option<UiaNode>,
@@ -790,6 +794,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         // "General page" (dev box, 2026-10-15).
         focus.dialog_page = event.dialog_page.clone();
         focus.group_box = event.group_box.clone();
+        focus.default_button = event.default_button.clone();
         // A text that names a control beside it is that control's label, said with the
         // control, not as the dialog's text: JAWS opened Okur's settings with "Okur Settings
         // dialog | Speech Synthesizer: Combo box", without "Voice:", "Rate:" (dev box,
@@ -1161,6 +1166,9 @@ impl EventConverter {
                 .filter(|l| l.window_title == control.window_title)
             {
                 control.window_items = last.window_items.clone();
+                if control.default_button.is_none() {
+                    control.default_button = last.default_button.clone();
+                }
             }
         }
         // The event object is the focused control: its MSAA states are current, and they
@@ -1926,6 +1934,7 @@ mod capture {
                     dialog_text: Vec::new(),
                     dialog_page: None,
                     group_box: None,
+                    default_button: None,
                     dialog_tree: None,
                     notification: None,
                 };
@@ -2291,6 +2300,7 @@ mod capture {
                     dialog_text: Vec::new(),
                     dialog_page: None,
                     group_box: None,
+                    default_button: None,
                     dialog_tree: None,
                     notification: Some(notification),
                 };
@@ -2404,6 +2414,7 @@ mod capture {
                     dialog_text: Vec::new(),
                     dialog_page: None,
                     group_box: None,
+                    default_button: None,
                     dialog_tree: None,
                     notification: None,
                 };
@@ -2634,7 +2645,7 @@ mod capture {
                 } else {
                     (None, None, None)
                 };
-            let (dialog, dialog_tree, dialog_page, group_box) =
+            let (dialog, dialog_tree, dialog_page, group_box, default_button) =
                 if focused && top_window_class.as_deref() == Some("#32770") {
                     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
                     // SAFETY: plain Win32 call with no preconditions.
@@ -2650,10 +2661,12 @@ mod capture {
                         }),
                         crate::screen_lines::page_of(keyboard_focus_window(), window),
                         crate::screen_lines::group_box_of(keyboard_focus_window(), window),
+                        crate::screen_lines::default_button_of(window),
                     )
                 } else {
                     (
                         crate::screen_lines::DialogLayout::default(),
+                        None,
                         None,
                         None,
                         None,
@@ -2761,6 +2774,7 @@ mod capture {
                 dialog_text: dialog.text,
                 dialog_page,
                 group_box,
+                default_button,
                 dialog_tree,
                 notification: None,
             };
@@ -3515,6 +3529,7 @@ mod tests {
             dialog_text: Vec::new(),
             dialog_page: None,
             group_box: None,
+            default_button: None,
             dialog_tree: None,
             notification: None,
         }
