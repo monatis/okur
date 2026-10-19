@@ -12,12 +12,13 @@ To record one:
 
 | Scenario | What it records | Fixture |
 |---|---|---|
-| 281 | 219 (WhatsApp Web's patterns) with Auto Forms Mode on, JAWS's default (backlog: the dev-box rules 1 to 3) | `web-chat.html` |
-| 407 | 405 in the virtual cursor: words, numbers, dates and money by line and by word | `reading-settings.html` (here) |
-| 408 | 406 in the virtual cursor: Say Word and Say Line spelled, Say All, on the capitals line | `reading-settings.html` (here) |
+| 282 | Up from the bottom of the sign-up form with Auto Forms Mode on: each field entered from below | `signup-form.html` |
+| 283 | Down and Up through the forms page with Auto Forms Mode on: fields that hold text | `forms-interaction.html` |
+| 284 | Auto Forms Mode on: Tab into a field, type, then arrows out of it and back | `signup-form.html` |
+| 285 | Auto Forms Mode on: Up into an 18-line text area, through its lines, out at its top | `reading-settings.html` |
 
 Scenarios from 400 record JAWS's reading settings (plan
-`docs/plans/2026-10-18-reading-settings.md`). Their fixtures, `reading-settings.html` (here)
+`docs/plans/2026-10-18-reading-settings.md`). Their fixtures, `reading-settings.html`
 and its desktop twin `desktop-reading.ps1` (recorded with 400), hold the 18 lines of
 `docs/references/jaws-reading-settings-research.md` §12, the same text in both. A scenario
 that needs a setting other than old-pc's names it in `jaws_settings`

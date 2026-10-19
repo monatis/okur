@@ -1,0 +1,25 @@
+{
+  "id": "284-web-forms-auto-forms-tab-then-arrows",
+  "name": "Auto Forms Mode on: Tab into a field, type, then the arrows out of it and back, Shift+Tab, Up and Down",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "jaws_settings": { "DEFAULT.JCF": { "FormsMode": { "AutoFormsMode": "1" } } },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Tab" },
+    { "id": "s2", "type": "key", "command": "A" },
+    { "id": "s3", "type": "key", "command": "D" },
+    { "id": "s4", "type": "key", "command": "A" },
+    { "id": "s5", "type": "key", "command": "Down" },
+    { "id": "s6", "type": "key", "command": "Up" },
+    { "id": "s7", "type": "key", "command": "Up" },
+    { "id": "s8", "type": "key", "command": "Tab" },
+    { "id": "s9", "type": "key", "command": "Down" },
+    { "id": "s10", "type": "key", "command": "Down" },
+    { "id": "s11", "type": "key", "command": "Shift+Tab" },
+    { "id": "s12", "type": "key", "command": "Up" },
+    { "id": "s13", "type": "key", "command": "Up" }
+  ]
+}

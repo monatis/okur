@@ -1,0 +1,1408 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Reading Settings - Reading Fixture - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "155.0.8059.84",
+    "fixture_sha256": "cfda5bdfa966870b5ca81e14236901ac6480bdb91c7c79e6367a751712942f46",
+    "captured_at_unix_ms": 1792392821218,
+    "node_count": 40,
+    "capture_ms": 442
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Reading Settings - Reading Fixture",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/reading-settings.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "unique_id": -91979,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -91946,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            7,
+            8
+          ],
+          [
+            8,
+            9
+          ],
+          [
+            9,
+            10
+          ],
+          [
+            10,
+            11
+          ],
+          [
+            11,
+            12
+          ],
+          [
+            12,
+            13
+          ],
+          [
+            13,
+            14
+          ],
+          [
+            14,
+            15
+          ],
+          [
+            15,
+            16
+          ],
+          [
+            16,
+            17
+          ],
+          [
+            17,
+            18
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "font-family": "Times New Roman",
+              "font-size": "24pt",
+              "font-weight": "bold"
+            }
+          },
+          {
+            "start": 1,
+            "end": 14,
+            "attributes": {
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          },
+          {
+            "start": 14,
+            "end": 15,
+            "attributes": {
+              "font-family": "Consolas",
+              "font-size": "10pt"
+            }
+          },
+          {
+            "start": 15,
+            "end": 18,
+            "attributes": {
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Reading settings",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -92046,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Reading settings",
+            "lines": [
+              [
+                0,
+                16
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 16,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "24pt",
+                  "font-weight": "bold"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Reading settings",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -92018,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Reading settings",
+                "lines": [
+                  [
+                    0,
+                    16
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 16,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "24pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -92066,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "Hello, world. Is it done? Yes! Wait; maybe: no.",
+            "lines": [
+              [
+                0,
+                47
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 47,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Hello, world. Is it done? Yes! Wait; maybe: no.",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -92027,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Hello, world. Is it done? Yes! Wait; maybe: no.",
+                "lines": [
+                  [
+                    0,
+                    47
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 47,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -92067,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "Mail ada@example.org or see https://example.org/a-b_c?x=1&y=2#top",
+            "lines": [
+              [
+                0,
+                65
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 65,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Mail ada@example.org or see https://example.org/a-b_c?x=1&y=2#top",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -92038,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Mail ada@example.org or see https://example.org/a-b_c?x=1&y=2#top",
+                "lines": [
+                  [
+                    0,
+                    65
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 65,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -92033,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "C:\\Users\\Ada\\notes.txt and /usr/local/bin",
+            "lines": [
+              [
+                0,
+                41
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 41,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "C:\\Users\\Ada\\notes.txt and /usr/local/bin",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -92040,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "C:\\Users\\Ada\\notes.txt and /usr/local/bin",
+                "lines": [
+                  [
+                    0,
+                    41
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 41,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -92039,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "Price $9.95, 50% off; total = 3 * 4 + 1 - 2 / 5 ^ 2 ~ 7",
+            "lines": [
+              [
+                0,
+                55
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 55,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Price $9.95, 50% off; total = 3 * 4 + 1 - 2 / 5 ^ 2 ~ 7",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -92047,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Price $9.95, 50% off; total = 3 * 4 + 1 - 2 / 5 ^ 2 ~ 7",
+                "lines": [
+                  [
+                    0,
+                    55
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 55,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -92011,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "fn main() { let v = [1, 2]; v.len() } // done <ok> | a && b",
+            "lines": [
+              [
+                0,
+                59
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 59,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "fn main() { let v = [1, 2]; v.len() } // done <ok> | a && b",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -92052,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "fn main() { let v = [1, 2]; v.len() } // done <ok> | a && b",
+                "lines": [
+                  [
+                    0,
+                    59
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 59,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -92015,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "\"double\" 'single' “curly” ‘curly’ — em – en … ellipsis • bullet",
+            "lines": [
+              [
+                0,
+                63
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 63,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "\"double\" 'single' “curly” ‘curly’ — em – en … ellipsis • bullet",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -92056,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "\"double\" 'single' “curly” ‘curly’ — em – en … ellipsis • bullet",
+                "lines": [
+                  [
+                    0,
+                    63
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 63,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -92022,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "===== ----- ..... !!!!! ##### ***",
+            "lines": [
+              [
+                0,
+                33
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 33,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "===== ----- ..... !!!!! ##### ***",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -92064,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "===== ----- ..... !!!!! ##### ***",
+                "lines": [
+                  [
+                    0,
+                    33
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 33,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -91998,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "MenuBar getElementById XMLHttpRequest iPhone McDonald PowerShell",
+            "lines": [
+              [
+                0,
+                64
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 64,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "MenuBar getElementById XMLHttpRequest iPhone McDonald PowerShell",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -92071,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "MenuBar getElementById XMLHttpRequest iPhone McDonald PowerShell",
+                "lines": [
+                  [
+                    0,
+                    64
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 64,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -91999,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "System32 x86_64 COVID19 123RON 1st 2nd 3rd",
+            "lines": [
+              [
+                0,
+                42
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 42,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "System32 x86_64 COVID19 123RON 1st 2nd 3rd",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -92078,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "System32 x86_64 COVID19 123RON 1st 2nd 3rd",
+                "lines": [
+                  [
+                    0,
+                    42
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 42,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -92003,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "7 42 1234 54321 123456 1-800-444-4443 2.5 1,000,000 10:30",
+            "lines": [
+              [
+                0,
+                57
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 57,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "7 42 1234 54321 123456 1-800-444-4443 2.5 1,000,000 10:30",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -91952,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "7 42 1234 54321 123456 1-800-444-4443 2.5 1,000,000 10:30",
+                "lines": [
+                  [
+                    0,
+                    57
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 57,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -91978,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "03-16-00 3/2/2002 1/3 $0.02 $1,250.50",
+            "lines": [
+              [
+                0,
+                37
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 37,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "03-16-00 3/2/2002 1/3 $0.02 $1,250.50",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -92074,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "03-16-00 3/2/2002 1/3 $0.02 $1,250.50",
+                "lines": [
+                  [
+                    0,
+                    37
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 37,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -91984,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "Ada READ me B x",
+            "lines": [
+              [
+                0,
+                15
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 15,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Ada READ me B x",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -92069,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Ada READ me B x",
+                "lines": [
+                  [
+                    0,
+                    15
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 15,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -91991,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "JAWS sister-in-law 2:00 P.M. aB9 é €",
+            "lines": [
+              [
+                0,
+                36
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 36,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "JAWS sister-in-law 2:00 P.M. aB9 é €",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -92061,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "JAWS sister-in-law 2:00 P.M. aB9 é €",
+                "lines": [
+                  [
+                    0,
+                    36
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 36,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -91966,
+            "attributes": {
+              "display": "block",
+              "tag": "pre",
+              "text-align": "left"
+            },
+            "text": "\n    four spaces\n\tone tab",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                17
+              ],
+              [
+                17,
+                25
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 25,
+                "attributes": {
+                  "font-family": "Consolas",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "\n    four spaces\n\tone tab",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -92055,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "\n    four spaces\n\tone tab",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    17
+                  ],
+                  [
+                    17,
+                    25
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 25,
+                    "attributes": {
+                      "font-family": "Consolas",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -91970,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "Say All reads this. It has three sentences. The last one ends here.",
+            "lines": [
+              [
+                0,
+                67
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 67,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Say All reads this. It has three sentences. The last one ends here.",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -92051,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Say All reads this. It has three sentences. The last one ends here.",
+                "lines": [
+                  [
+                    0,
+                    67
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 67,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -91973,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "teh quick brown fxo",
+            "lines": [
+              [
+                0,
+                19
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 19,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "teh quick brown fxo",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -92041,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "teh quick brown fxo",
+                "lines": [
+                  [
+                    0,
+                    19
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 19,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -91953,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "attributes": {
+                  "font-family": "Consolas",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 42,
+                "ia2_role": 1049,
+                "msaa_states": 65536,
+                "ia2_states": 1024,
+                "unique_id": -91954,
+                "attributes": {
+                  "display": "inline",
+                  "tag": "label",
+                  "text-align": "left"
+                },
+                "text": "Text",
+                "lines": [
+                  [
+                    0,
+                    4
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 4,
+                    "attributes": {
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Text",
+                    "msaa_states": 65536,
+                    "ia2_states": 1024,
+                    "unique_id": -91968,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Text",
+                    "lines": [
+                      [
+                        0,
+                        4
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 4,
+                        "attributes": {
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 42,
+                "ia2_role": 42,
+                "name": "Text",
+                "value": "Hello, world. Is it done? Yes! Wait; maybe: no.\nMail ada@example.org or see https://example.org/a-b_c?x=1&y=2#top\nC:\\Users\\Ada\\notes.txt and /usr/local/bin\nPrice $9.95, 50% off; total = 3 * 4 + 1 - 2 / 5 ^ 2 ~ 7\nfn main() { let v = [1, 2]; v.len() } // done <ok> | a && b\n\"double\" 'single' “curly” ‘curly’ — em – en … ellipsis • bullet\n===== ----- ..... !!!!! ##### ***\nMenuBar getElementById XMLHttpRequest iPhone McDonald PowerShell\nSystem32 x86_64 COVID19 123RON 1st 2nd 3rd\n7 42 1234 54321 123456 1-800-444-4443 2.5 1,000,000 10:30\n03-16-00 3/2/2002 1/3 $0.02 $1,250.50\nAda READ me B x\nJAWS sister-in-law 2:00 P.M. aB9 é €\n\n    four spaces\n\tone tab\nSay All reads this. It has three sentences. The last one ends here.\nteh quick brown fxo",
+                "msaa_states": 1048576,
+                "ia2_states": 5640,
+                "unique_id": -91965,
+                "attributes": {
+                  "display": "inline-block",
+                  "explicit-name": "true",
+                  "id": "text",
+                  "name-from": "related-element",
+                  "tag": "textarea",
+                  "text-align": "left",
+                  "text-model": "a1"
+                },
+                "text": "Hello, world. Is it done? Yes! Wait; maybe: no.\nMail ada@example.org or see https://example.org/a-b_c?x=1&y=2#top\nC:\\Users\\Ada\\notes.txt and /usr/local/bin\nPrice $9.95, 50% off; total = 3 * 4 + 1 - 2 / 5 ^ 2 ~ 7\nfn main() { let v = [1, 2]; v.len() } // done <ok> | a && b\n\"double\" 'single' “curly” ‘curly’ — em – en … ellipsis • bullet\n===== ----- ..... !!!!! ##### ***\nMenuBar getElementById XMLHttpRequest iPhone McDonald PowerShell\nSystem32 x86_64 COVID19 123RON 1st 2nd 3rd\n7 42 1234 54321 123456 1-800-444-4443 2.5 1,000,000 10:30\n03-16-00 3/2/2002 1/3 $0.02 $1,250.50\nAda READ me B x\nJAWS sister-in-law 2:00 P.M. aB9 é €\n\n    four spaces\n\tone tab\nSay All reads this. It has three sentences. The last one ends here.\nteh quick brown fxo",
+                "lines": [
+                  [
+                    0,
+                    48
+                  ],
+                  [
+                    48,
+                    114
+                  ],
+                  [
+                    114,
+                    156
+                  ],
+                  [
+                    156,
+                    212
+                  ],
+                  [
+                    212,
+                    272
+                  ],
+                  [
+                    272,
+                    336
+                  ],
+                  [
+                    336,
+                    370
+                  ],
+                  [
+                    370,
+                    435
+                  ],
+                  [
+                    435,
+                    478
+                  ],
+                  [
+                    478,
+                    536
+                  ],
+                  [
+                    536,
+                    574
+                  ],
+                  [
+                    574,
+                    590
+                  ],
+                  [
+                    590,
+                    627
+                  ],
+                  [
+                    627,
+                    628
+                  ],
+                  [
+                    628,
+                    644
+                  ],
+                  [
+                    644,
+                    653
+                  ],
+                  [
+                    653,
+                    721
+                  ],
+                  [
+                    721,
+                    740
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 740,
+                    "attributes": {
+                      "font-family": "Consolas",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
