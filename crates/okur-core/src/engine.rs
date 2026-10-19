@@ -136,6 +136,9 @@ pub struct ScreenReaderEngine {
     page_said_for: Option<usize>,
     /// The edit key whose effect is spoken when the field next reports its text.
     pending_edit: Option<crate::editing::EditKey>,
+    /// Ctrl+Home (true) or Ctrl+End (false) pressed in an application's grid: the cell it
+    /// reaches is followed by "top of file" or "Bottom of file" and the cell again.
+    pending_file_edge: Option<bool>,
     /// The focused text field's last known text, caret and selection.
     last_text: Option<crate::event::TextContext>,
     /// Actions on the real application (focus, default action); None when headless.
@@ -243,6 +246,7 @@ impl ScreenReaderEngine {
             pass_next_key: false,
             menus: crate::native_focus::Menus::default(),
             pending_edit: None,
+            pending_file_edge: None,
             forms_mode_by_enter: false,
             focus_access_key: None,
             forms_mode_by_list: false,
@@ -575,6 +579,18 @@ impl ScreenReaderEngine {
         // navigation and typing keys MUST pass through to the OS so Windows
         // handles arrow navigation, Tab cycling, and initial-letter jumps natively!
         if self.app_mode != AppMode::VirtualBuffer {
+            // Ctrl+Home and Ctrl+End in an application's grid are its top and bottom of file
+            // [obs, 545/s6, s7].
+            let file_key = event.modifiers.ctrl
+                && !event.modifiers.alt
+                && !event.modifiers.shift
+                && matches!(event.key, Key::Home | Key::End);
+            self.pending_file_edge = (file_key
+                && self
+                    .last_native_focus
+                    .as_ref()
+                    .is_some_and(|f| f.role == crate::aom::Role::TableCell))
+            .then_some(event.key == Key::Home);
             if self.editing_text() {
                 self.edit_key_feedback(event);
             } else {

@@ -130,6 +130,22 @@ divergences! {
      JAWS reads the emoji in the field itself [obs, 313/s4].",
     "the owner's rule on JAWS's accidents, 2026-10-18";
 
+    Difference::JawsAlsoSays("Column 65535, Row 65535") => [
+        "545-desktop-data-grid/s2",
+        "545-desktop-data-grid/s3",
+        "545-desktop-data-grid/s4",
+        "545-desktop-data-grid/s5",
+        "545-desktop-data-grid/s6",
+        "545-desktop-data-grid/s7",
+        "545-desktop-data-grid/s8",
+        "545-desktop-data-grid/s10",
+        "545-desktop-data-grid/s11",
+    ],
+    "Moving between a WinForms data grid's cells, JAWS adds \"Column 65535, Row 65535\" after \
+     each cell, in every trial: 65535 is -1 as an unsigned 16-bit number, a place JAWS failed \
+     to find. The cell's name already gives its column and row (\"Quantity Row 1\").",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
+
     Difference::Step => [
         "313-desktop-say-font/s1",
         "313-desktop-say-font/s2",

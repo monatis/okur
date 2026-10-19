@@ -396,6 +396,11 @@ pub fn focus_event_from_chain(
     }
     event.name = aom.name.clone();
     event.value = aom.value.clone();
+    // An application grid's cell has its text as its value (a WinForms DataGridView's "Item
+    // Row 0" is "Pens" [obs, 545/s1]).
+    if native && event.role == Role::TableCell {
+        event.value = focused.value.clone().filter(|v| !v.trim().is_empty());
+    }
     // A slider's value is the one it reports ("Brightness left right slider | 100"), else its
     // range value, a percentage when it runs from 0 to 100 ("Adjust the output volume left
     // right slider | 34%"): Windows Settings, JAWS on the dev box (2026-10-16).
@@ -1370,6 +1375,7 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
 
 /// Updates the states a change can carry from MSAA state bits (`STATE_SYSTEM_*`).
 fn apply_msaa_states(control: &mut okur_core::FocusEvent, states: u32) {
+    const SELECTED: u32 = 0x2;
     const CHECKED: u32 = 0x10;
     const EXPANDED: u32 = 0x200;
     const COLLAPSED: u32 = 0x400;
@@ -1378,6 +1384,11 @@ fn apply_msaa_states(control: &mut okur_core::FocusEvent, states: u32) {
         okur_core::Role::CheckBox | okur_core::Role::RadioButton
     ) {
         control.states.checked = Some(states & CHECKED != 0);
+    }
+    // A grid's cell says whether it is selected: a WinForms DataGridView's cells report it
+    // through MSAA only ("Item Row 0 | selected | Pens" [obs, 545/s1]).
+    if control.role == okur_core::Role::TableCell {
+        control.states.selected = Some(states & SELECTED != 0);
     }
     if states & EXPANDED != 0 {
         control.states.expanded = Some(true);

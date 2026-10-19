@@ -111,6 +111,18 @@ A step can be in more than one entry; all of its entries apply.
   whole.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### JAWS places a data grid's cell at column and row 65535
+
+- Steps: `545-desktop-data-grid/s2` to `/s8`, `/s10`, `/s11` (the full keys:
+  `545-desktop-data-grid/s2`, `545-desktop-data-grid/s3`, `545-desktop-data-grid/s4`,
+  `545-desktop-data-grid/s5`, `545-desktop-data-grid/s6`, `545-desktop-data-grid/s7`,
+  `545-desktop-data-grid/s8`, `545-desktop-data-grid/s10`, `545-desktop-data-grid/s11`).
+- Difference: JAWS also says "Column 65535, Row 65535".
+- Why: moving between a WinForms data grid's cells, JAWS adds it after each cell, in every
+  trial. 65535 is -1 as an unsigned 16-bit number: a place JAWS failed to find. The cell's
+  name already gives its column and row ("Quantity Row 1"), and Okur says nothing more.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-18.
+
 ### JAWS finds no font in a WinForms text box
 
 - Steps: `313-desktop-say-font/s1`, `313-desktop-say-font/s2`, `313-desktop-say-font/s3`,

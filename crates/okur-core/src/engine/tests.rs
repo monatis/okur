@@ -3738,3 +3738,50 @@ fn the_window_list_switches_to_the_window_chosen() {
         .iter()
         .any(|(a, window)| a == "switch to window" && *window == 12));
 }
+
+/// A WinForms data grid [obs, 545]: a cell is said with whether it is selected and its text;
+/// Ctrl+End adds "Bottom of file" and the cell again, Say Focus reads a repeat's state.
+#[test]
+fn a_grid_cell_and_its_file_edges() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let cell = |name: &str, value: &str, selected: Option<bool>| {
+        let mut focus = FocusEvent::new(Role::TableCell).with_name(name);
+        focus.value = Some(value.to_owned());
+        focus.states.selected = selected;
+        focus.window_title = Some("SR Data Grid Fixture".to_owned());
+        focus
+    };
+    engine.handle_focus_event(&cell("Item Row 0", "Pens", None));
+    // The cell's MSAA report repeats it with its state: not said, but Say Focus has it.
+    assert_eq!(
+        engine.handle_focus_event(&cell("Item Row 0", "Pens", Some(true))),
+        None
+    );
+    let say_focus = engine.execute(crate::command::Command::SayCurrentFocus);
+    assert_eq!(
+        say_focus.map(|s| norm(&s)),
+        Some(norm("Item Row 0  \u{1d}selected\u{1e} \nPens"))
+    );
+    let ctrl = Modifiers {
+        ctrl: true,
+        ..Modifiers::none()
+    };
+    engine.handle_key_event(&KeyEvent::new(Key::End, ctrl, true));
+    assert_eq!(
+        engine
+            .handle_focus_event(&cell("Price Row 2", "18.00", Some(true)))
+            .map(|s| norm(&s)),
+        Some(norm(
+            "Price Row 2  \u{1d}selected\u{1e} \n18.00\nBottom of file\nPrice Row 2  \u{1d}selected\u{1e} \n18.00"
+        ))
+    );
+    // Another key: the next cell is said alone.
+    engine.handle_key_event(&KeyEvent::new(Key::UpArrow, Modifiers::none(), true));
+    assert_eq!(
+        engine
+            .handle_focus_event(&cell("Price Row 1", "4.50", Some(true)))
+            .map(|s| norm(&s)),
+        Some(norm("Price Row 1  \u{1d}selected\u{1e} \n4.50"))
+    );
+}

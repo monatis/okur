@@ -405,6 +405,17 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
             ]));
             lines.push(Line::of(PartKind::Hint, msg::hint_activate_enter()));
         }
+        // A grid's cell: its name (column and row, as the application gives it), whether it is
+        // selected, and its text: "Item Row 0 | selected | Pens" (a WinForms DataGridView
+        // [obs, 545/s1, s9]).
+        Role::TableCell => {
+            let mut parts = vec![name_part(name)];
+            if focus.states.selected == Some(true) {
+                parts.push(state(msg::state_selected().as_str()));
+            }
+            lines.push(Line::new(parts));
+            lines.extend(value);
+        }
         // A window taking focus is announced by its title alone (the window change).
         Role::Window => {}
         _ => {

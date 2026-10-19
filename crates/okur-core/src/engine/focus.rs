@@ -654,10 +654,14 @@ impl ScreenReaderEngine {
         if window_changed {
             self.native_focus.reset();
         }
-        let Some(control) = self.native_focus.focus(focus) else {
+        let control = self.native_focus.focus(focus);
+        // A repeat of the focus is not said, but it can carry what the first report did not:
+        // a grid cell's selected state comes with its MSAA event, after UI Automation's
+        // [obs, 545/s1]. Say Focus reads the latest.
+        self.last_native_focus = Some(focus.clone());
+        let Some(control) = control else {
             return leaving_menus.then(|| self.say_leaving_menus());
         };
-        self.last_native_focus = Some(focus.clone());
 
         let app = self.app_for(focus);
         let names_window = app.is_none_or(|app| app.names_window(focus));
@@ -666,7 +670,25 @@ impl ScreenReaderEngine {
         } else {
             control
         };
-        let speech = with_leaving(self.said(announcement).render());
+        let mut speech = with_leaving(self.said(announcement).render());
+        // Ctrl+Home or Ctrl+End in a grid: after the cell, "top of file" or "Bottom of file"
+        // and the cell read again, as Say Line reads it: "Price Row 2 | selected | 18.00 |
+        // Bottom of file | Price Row 2 | selected | 18.00" [obs, 545/s6, s7].
+        if let Some(top) = self
+            .pending_file_edge
+            .take()
+            .filter(|_| focus.role == crate::aom::Role::TableCell)
+        {
+            let edge = if top {
+                msg::text_top_of_file()
+            } else {
+                msg::text_bottom_of_file()
+            };
+            speech = format!(
+                "{speech}\n{edge}\n{}",
+                crate::native_focus::reading_line(focus)
+            );
+        }
 
         if !speech.is_empty() {
             self.speech.speak(&speech, true);
