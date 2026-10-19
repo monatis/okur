@@ -1747,12 +1747,12 @@
       "scenario_id": "301-desktop-tab-order",
       "fixture": "desktop-forms.ps1",
       "evidence": {
-        "sha256": "da7b7ccdffa88dbc1c9af9450cb356a74ecf57dc87b1dce002d74cc521bdd96b",
-        "capture_script_sha256": "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
+        "sha256": "791c3a5d27a11e8e3e57253017cb2ce005eca394897c7b3b559a23ed33a254b5",
+        "capture_script_sha256": "4df002b560b9ae7e400ebbc50588bb1d985d1b4f84f7e8a0d7d0690a57f29d6d",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
-        "trials": 5,
-        "successful_trials": 5,
+        "trials": 3,
+        "successful_trials": 3,
         "deterministic": true,
         "summary_consistent": true
       }
@@ -1761,13 +1761,13 @@
       "scenario_id": "302-desktop-menu-bar",
       "fixture": "desktop-forms.ps1",
       "evidence": {
-        "sha256": "b3120585c84c0b0b2d2da9ef2d957224b836d087fbd23546c40d6e9fc42647b8",
-        "capture_script_sha256": "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
+        "sha256": "3f16f0d63e2d1d5a162184058ff52a1b0085dc31800eb5d7385ce3eead024581",
+        "capture_script_sha256": "4df002b560b9ae7e400ebbc50588bb1d985d1b4f84f7e8a0d7d0690a57f29d6d",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
-        "trials": 5,
-        "successful_trials": 5,
-        "deterministic": true,
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
         "summary_consistent": true
       }
     },
@@ -1775,12 +1775,12 @@
       "scenario_id": "303-desktop-lists-and-trees",
       "fixture": "desktop-forms.ps1",
       "evidence": {
-        "sha256": "6ff5e53c7200cad775b0733ee140121a65d81b7d36ee570a0eadd19984d5e2b4",
-        "capture_script_sha256": "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
+        "sha256": "2d22e8a36cb1faad253bf6222a02bd45e277e96a8284bafada924b5ddad93a48",
+        "capture_script_sha256": "4df002b560b9ae7e400ebbc50588bb1d985d1b4f84f7e8a0d7d0690a57f29d6d",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
-        "trials": 5,
-        "successful_trials": 5,
+        "trials": 3,
+        "successful_trials": 3,
         "deterministic": false,
         "summary_consistent": true
       }
@@ -1789,12 +1789,12 @@
       "scenario_id": "304-desktop-state-changes",
       "fixture": "desktop-forms.ps1",
       "evidence": {
-        "sha256": "8cd3a9f923c94f05f3e23eb112a95a55f36ef5579e36e31b08089cde7576cde5",
-        "capture_script_sha256": "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
+        "sha256": "76552f150bead6cd2c4c8d02f7362c67227579afa186498e55f748dbcbba9a2c",
+        "capture_script_sha256": "4df002b560b9ae7e400ebbc50588bb1d985d1b4f84f7e8a0d7d0690a57f29d6d",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
-        "trials": 5,
-        "successful_trials": 5,
+        "trials": 3,
+        "successful_trials": 3,
         "deterministic": false,
         "summary_consistent": true
       }
@@ -1803,12 +1803,12 @@
       "scenario_id": "305-desktop-edit-review",
       "fixture": "desktop-forms.ps1",
       "evidence": {
-        "sha256": "f75ab8712bdf0d387408bf39e93daa0e21511a137de10f4bc1a0e37568092684",
-        "capture_script_sha256": "6f1c00f008cdc8ab08dcc3c72e69a05fc2d3d5f46f7c1a79fe0fa054f2f71f5a",
+        "sha256": "c307ce7fb254d30f265d0d11e038f8f445f903c74601b7bd1c7bb0082f8db4a5",
+        "capture_script_sha256": "4df002b560b9ae7e400ebbc50588bb1d985d1b4f84f7e8a0d7d0690a57f29d6d",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
-        "trials": 5,
-        "successful_trials": 5,
+        "trials": 3,
+        "successful_trials": 3,
         "deterministic": true,
         "summary_consistent": true
       }
@@ -1831,8 +1831,8 @@
       "scenario_id": "307-desktop-character-review",
       "fixture": "desktop-editor.ps1",
       "evidence": {
-        "sha256": "b4df4449ccb75e5ce16bd4f1de7816ab494a50e4801ec4a2e8112c1b94440b36",
-        "capture_script_sha256": "af7ebbd6c351f09b3aab34b10cfb389d2bd6e87be130f86b5337169be0634e0c",
+        "sha256": "1ccf80a553c48e79a54a0b801d4206d1eb31321ea2805b7fe90d7d194ef0f0d0",
+        "capture_script_sha256": "4df002b560b9ae7e400ebbc50588bb1d985d1b4f84f7e8a0d7d0690a57f29d6d",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1845,8 +1845,8 @@
       "scenario_id": "308-desktop-time-and-date",
       "fixture": "desktop-editor.ps1",
       "evidence": {
-        "sha256": "86ee2bec5ec8610d6716b20fc523cdc44776af86fc1d529b8311d69838c7c046",
-        "capture_script_sha256": "af7ebbd6c351f09b3aab34b10cfb389d2bd6e87be130f86b5337169be0634e0c",
+        "sha256": "1a9112f13a3d6d516de3c06d5f197758984e4ac17c2573ef3240840a02ff2123",
+        "capture_script_sha256": "4df002b560b9ae7e400ebbc50588bb1d985d1b4f84f7e8a0d7d0690a57f29d6d",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1859,8 +1859,8 @@
       "scenario_id": "309-desktop-jaws-key",
       "fixture": "desktop-editor.ps1",
       "evidence": {
-        "sha256": "a3c4674562f3ca6eec8a0846042aea76605584f8ee1e247d550e86d3372b7513",
-        "capture_script_sha256": "9e09948b150df37e793815f3e015a517e0994eec6a7f021f0ab180fc9edd1605",
+        "sha256": "d9ea914e5168423ad0e945b2f3793e1d9843c8ac4678f614df768a7acc72b420",
+        "capture_script_sha256": "4df002b560b9ae7e400ebbc50588bb1d985d1b4f84f7e8a0d7d0690a57f29d6d",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1887,8 +1887,8 @@
       "scenario_id": "312-desktop-virtualize-control",
       "fixture": "desktop-editor.ps1",
       "evidence": {
-        "sha256": "1a6f2099eccbb8f7d9b4570f5c1edb0b26336421c826d2051e1d62c2a4f9cec2",
-        "capture_script_sha256": "5392417977bb951de769f631535f9be146d4f534b96ef914322cc9919a9a11c9",
+        "sha256": "4d93a3fbaa2143bf47af9f62cabbd3970fbc0bdfb238d01ac70caa0999d83cb3",
+        "capture_script_sha256": "4df002b560b9ae7e400ebbc50588bb1d985d1b4f84f7e8a0d7d0690a57f29d6d",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1901,8 +1901,8 @@
       "scenario_id": "313-desktop-say-font",
       "fixture": "desktop-editor.ps1",
       "evidence": {
-        "sha256": "7a1ac1c94ca56da2992d65699c45f20bd21dcab6d4803dde3aed78587f1cdf66",
-        "capture_script_sha256": "af7ebbd6c351f09b3aab34b10cfb389d2bd6e87be130f86b5337169be0634e0c",
+        "sha256": "ee9f09a69de5153c1998910fc8069b85f6b95615f5f71de979fdfde2d077467f",
+        "capture_script_sha256": "4df002b560b9ae7e400ebbc50588bb1d985d1b4f84f7e8a0d7d0690a57f29d6d",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1929,8 +1929,8 @@
       "scenario_id": "315-desktop-richedit-lines-and-font",
       "fixture": "desktop-richedit.ps1",
       "evidence": {
-        "sha256": "4b8f5e2eb910c15d4f82d0b8bb6ba16b5d7948c05aa00e369d6ee6553548b1a9",
-        "capture_script_sha256": "9be335a7011a404643e4adc5bab44025f0075fd338ded0b4298731d163f295f6",
+        "sha256": "f8025d4ffad5465c3fc5e0e73d941c186315593d45b3fd7ccf1c33eb53c29353",
+        "capture_script_sha256": "4df002b560b9ae7e400ebbc50588bb1d985d1b4f84f7e8a0d7d0690a57f29d6d",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1943,13 +1943,13 @@
       "scenario_id": "316-desktop-show-desktop",
       "fixture": "desktop-editor.ps1",
       "evidence": {
-        "sha256": "71ba8aef296795a95cb1c85aa1f06858af03c353cb712c9bcf8b84e9d1f1dfab",
-        "capture_script_sha256": "af7ebbd6c351f09b3aab34b10cfb389d2bd6e87be130f86b5337169be0634e0c",
+        "sha256": "4f8a93aa591606a0b096e3e7eec9643fcb51233a15067ae8c41c540b8a4087be",
+        "capture_script_sha256": "4df002b560b9ae7e400ebbc50588bb1d985d1b4f84f7e8a0d7d0690a57f29d6d",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
         "successful_trials": 3,
-        "deterministic": false,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -1985,8 +1985,8 @@
       "scenario_id": "319-desktop-run-dialog-viewer",
       "fixture": "desktop-editor.ps1",
       "evidence": {
-        "sha256": "3aa283bdd6545dbc4bafb4a1519316027e34ff6adb7fcfaceb91ddb6e375797d",
-        "capture_script_sha256": "9be335a7011a404643e4adc5bab44025f0075fd338ded0b4298731d163f295f6",
+        "sha256": "fe1ad4833d21ec1c02217f44c3ce8642dbe9ee8c5932940a516ae786fc7f604b",
+        "capture_script_sha256": "4df002b560b9ae7e400ebbc50588bb1d985d1b4f84f7e8a0d7d0690a57f29d6d",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -2027,13 +2027,13 @@
       "scenario_id": "322-desktop-forms-viewer",
       "fixture": "desktop-forms.ps1",
       "evidence": {
-        "sha256": "e00f7a943363d28e8bdd995fc2709d6b7a286c2b5ad2d666394162b49ce3ab2c",
-        "capture_script_sha256": "9be335a7011a404643e4adc5bab44025f0075fd338ded0b4298731d163f295f6",
+        "sha256": "71b03dd4e73dc829e885e245fe4476909f7286b79c761d11202b7f7b15ee748d",
+        "capture_script_sha256": "4df002b560b9ae7e400ebbc50588bb1d985d1b4f84f7e8a0d7d0690a57f29d6d",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
         "successful_trials": 3,
-        "deterministic": true,
+        "deterministic": false,
         "summary_consistent": true
       }
     },
@@ -2055,8 +2055,8 @@
       "scenario_id": "400-desktop-punctuation-cycle",
       "fixture": "desktop-reading.ps1",
       "evidence": {
-        "sha256": "e90493afd28e0bd7c371d0e5e61c4052d9c4b48f3b7b960d0fb7ce60c6490730",
-        "capture_script_sha256": "9be335a7011a404643e4adc5bab44025f0075fd338ded0b4298731d163f295f6",
+        "sha256": "75b1586ec799fea6245285b469b01e14f6634fefcfbd5f3733f8d1c1f0f4b86e",
+        "capture_script_sha256": "4df002b560b9ae7e400ebbc50588bb1d985d1b4f84f7e8a0d7d0690a57f29d6d",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -2069,8 +2069,8 @@
   "statistics": {
     "scenarios": 141,
     "scenarios_with_evidence": 141,
-    "total_trials": 533,
-    "successful_trials": 528,
-    "deterministic_scenarios": 91
+    "total_trials": 523,
+    "successful_trials": 518,
+    "deterministic_scenarios": 90
   }
 }
