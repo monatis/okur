@@ -125,6 +125,10 @@ pub struct ScreenReaderEngine {
     ui: Option<Box<dyn crate::ui::UiHost>>,
     /// Where changed settings are kept; None when headless.
     settings_store: Option<Box<dyn crate::settings::SettingsStore>>,
+    /// The settings in their layers; `settings` is what they give where the focus is.
+    settings_layers: crate::settings_layers::SettingsLayers,
+    /// The application and the site `settings` were looked up for.
+    settings_place: (Option<String>, Option<String>),
     /// The settings dialog, while it is open.
     settings_dialog: Option<crate::ui::settings::SettingsDialog>,
     /// The list dialog open (the Links List, the Heading List).
@@ -195,6 +199,8 @@ impl ScreenReaderEngine {
             clock: None,
             ui: None,
             settings_store: None,
+            settings_layers: crate::settings_layers::SettingsLayers::default(),
+            settings_place: (None, None),
             settings_dialog: None,
             list_dialog: None,
             quiet_focus_until: None,
@@ -685,27 +691,76 @@ impl ScreenReaderEngine {
         self.settings_store = Some(store);
     }
 
-    /// Makes `settings` Okur's, now: the voice included, and kept in the settings store.
-    pub fn apply_settings(&mut self, settings: crate::settings::Settings) {
+    /// Makes `settings` Okur's for all applications, with no layer of their own: `okur run`'s
+    /// settings, replay's reference machine.
+    pub fn set_settings(&mut self, settings: crate::settings::Settings) {
+        self.set_settings_layers(crate::settings_layers::SettingsLayers::with_global(
+            &settings,
+        ));
+    }
+
+    /// Gives the engine its settings in their layers (the user's saved files).
+    pub fn set_settings_layers(&mut self, layers: crate::settings_layers::SettingsLayers) {
+        self.settings_layers = layers;
+        self.resolve_settings();
+    }
+
+    /// The settings in force from the layers, for the application and site the focus is in.
+    fn resolve_settings(&mut self) {
+        let (application, site) = &self.settings_place;
+        let settings = self
+            .settings_layers
+            .resolve(application.as_deref(), site.as_deref());
         if settings.voice != self.settings.voice {
             self.speech.configure(&settings.voice);
-        }
-        if settings.viewer_display != crate::settings::ViewerDisplay::OnScreen {
-            self.close_viewer_window();
-        }
-        if let Some(store) = &self.settings_store {
-            store.save(&settings);
         }
         self.settings = settings;
     }
 
+    /// The focus is in `application` (as the platform names it), on a page of `site`: its
+    /// settings are looked up anew when either changed.
+    pub(crate) fn settings_place(&mut self, application: Option<&str>, site: Option<String>) {
+        let place = (
+            application.map(crate::settings_layers::application_id),
+            site,
+        );
+        if place != self.settings_place {
+            tracing::debug!(?place, "settings looked up for another place");
+            self.settings_place = place;
+            self.resolve_settings();
+        }
+    }
+
+    /// Makes the settings dialog's changes Okur's, now, for all applications: the voice
+    /// included, and kept in the settings store. Only what the dialog changed is kept: a level
+    /// set for the session is not saved with it.
+    pub fn apply_settings(&mut self, settings: crate::settings::Settings) {
+        if settings.viewer_display != crate::settings::ViewerDisplay::OnScreen {
+            self.close_viewer_window();
+        }
+        let application = self.settings_place.0.clone();
+        self.settings_layers.change(
+            &crate::settings_layers::Scope::Global,
+            &self.settings,
+            &settings,
+            application.as_deref(),
+        );
+        if let Some(store) = &self.settings_store {
+            store.save(&self.settings_layers);
+        }
+        self.resolve_settings();
+    }
+
     /// Set Punctuation Level (Insert+Shift+2): the next level, said by its name, until Okur
     /// exits. JAWS keeps it in neither its voice profile nor its JCF [obs, 400 exploration,
-    /// 2026-10-19], so the settings store is not written.
+    /// 2026-10-19], so it goes in the session's layer and the settings store is not written.
     pub(crate) fn next_punctuation_level(&mut self) -> Option<String> {
         let level = self.settings.voice.punctuation.next();
-        self.settings.voice.punctuation = level;
-        self.speech.configure(&self.settings.voice);
+        self.settings_layers.set_for_session(
+            &["voice", "punctuation"],
+            serde_json::to_value(level).unwrap_or_default(),
+        );
+        self.resolve_settings();
         let name = level.name();
         self.speech.speak(&name, true);
         Some(name)

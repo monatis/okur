@@ -700,7 +700,7 @@ fn laptop_reading_keys_in_a_document() {
     let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
     let speech = SharedSpeech::default();
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
-    engine.settings = crate::settings::Settings::reference_machine();
+    engine.set_settings(crate::settings::Settings::reference_machine());
     let mut notepad = FocusEvent::new(Role::Document)
         .with_name("Text editor")
         .with_window_title("viewer-test.txt - Notepad");
@@ -778,7 +778,7 @@ fn test_caps_lock_as_the_jaws_key() {
     assert_ne!(engine.handle_key_event(&caps_t), KeyAction::Consume);
     assert!(speech.take().is_empty());
 
-    engine.settings = crate::settings::Settings::reference_machine();
+    engine.set_settings(crate::settings::Settings::reference_machine());
     assert_eq!(
         engine.handle_key_event(&caps(5_000, false)),
         KeyAction::Consume
@@ -1111,7 +1111,9 @@ fn a_dismissed_viewer_window_ends_the_viewer() {
 fn a_speech_only_viewer_opens_no_window() {
     let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
-    engine.settings.viewer_display = crate::settings::ViewerDisplay::SpeechOnly;
+    let mut changed = engine.settings.clone();
+    changed.viewer_display = crate::settings::ViewerDisplay::SpeechOnly;
+    engine.set_settings(changed);
     let ui = crate::ui::RecordingUiHost::default();
     engine.set_ui(Box::new(ui.clone()));
     let focus = FocusEvent::new(Role::Button)
@@ -1169,7 +1171,13 @@ fn the_settings_dialog_applies_and_keeps_changes() {
         engine.settings.typing_echo,
         crate::settings::TypingEcho::None
     );
-    assert_eq!(store.take(), [engine.settings.clone()]);
+    // Kept for all applications: only what the dialog changed.
+    assert_eq!(
+        store.take(),
+        [crate::settings_layers::SettingsLayers::with_global(
+            &engine.settings
+        )]
+    );
     assert_eq!(ui.take(), [ToUi::DialogClose { id }]);
     // Cancelled, a new dialog changes nothing.
     engine.execute_command("SettingsCenter");
@@ -1427,7 +1435,7 @@ fn a_new_message_in_a_live_region_is_read_whole() {
 #[test]
 fn jaws_mode_reads_a_growing_region_whole_each_time() {
     let (mut engine, speech) = engine_with_speech();
-    engine.settings = crate::settings::Settings::reference_machine();
+    engine.set_settings(crate::settings::Settings::reference_machine());
     engine.handle_live_region_event(&reply_region("This"));
     engine.handle_live_region_event(&reply_region("This reply"));
     assert_eq!(speech.take(), vec!["Reply\nThis", "Reply\nThis reply"]);
@@ -2450,7 +2458,9 @@ fn typing_echo_follows_the_setting() {
         (TypingEcho::None, Vec::new()),
     ] {
         let (mut engine, speech) = engine_with_speech();
-        engine.settings.typing_echo = echo;
+        let mut changed = engine.settings.clone();
+        changed.typing_echo = echo;
+        engine.set_settings(changed);
         engine.handle_focus_event(
             &FocusEvent::new(Role::Edit)
                 .with_name("Open:")
@@ -3143,7 +3153,9 @@ fn without_auto_forms_mode_a_field_waits_for_enter() {
         VirtualCursor::new(create_test_buffer()),
         Box::new(MockSpeechOutput::new()),
     );
-    engine.settings.auto_forms_mode = false;
+    let mut changed = engine.settings.clone();
+    changed.auto_forms_mode = false;
+    engine.set_settings(changed);
     let search = || {
         let mut focus = FocusEvent::new(Role::Edit)
             .with_node_id(3)
@@ -3170,7 +3182,9 @@ fn without_auto_forms_mode_a_field_waits_for_enter() {
 #[test]
 fn without_auto_forms_mode_a_page_menu_leaves_the_arrows_to_the_cursor() {
     let (mut engine, _speech) = engine_on_a_page();
-    engine.settings.auto_forms_mode = false;
+    let mut changed = engine.settings.clone();
+    changed.auto_forms_mode = false;
+    engine.set_settings(changed);
     let mut file = FocusEvent::new(Role::MenuItem).with_name("File");
     file.in_document = true;
     file.in_menu_bar = true;
@@ -3291,7 +3305,9 @@ fn a_page_menu_in_browse_mode_is_read_by_the_virtual_cursor() {
     let speech = SharedSpeech::default();
     let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
-    engine.settings.auto_forms_mode = false;
+    let mut changed = engine.settings.clone();
+    changed.auto_forms_mode = false;
+    engine.set_settings(changed);
     let mut file = FocusEvent::new(Role::MenuItem)
         .with_node_id(3)
         .with_name("File");
@@ -3350,4 +3366,40 @@ fn insert_shift_2_cycles_the_punctuation_level() {
     assert_eq!(said, ["All", "None", "Some", "Most"]);
     assert_eq!(engine.settings.voice.punctuation, Punctuation::Most);
     assert!(store.take().is_empty());
+}
+
+/// The settings in force follow the focus: an application's own, a site's over its
+/// browser's, all applications' elsewhere.
+#[test]
+fn settings_follow_the_application_and_site_in_front() {
+    use crate::settings::Punctuation;
+    use serde_json::json;
+    let mut page = AomNode::new(0, Role::Document).with_name("Mail");
+    page.attributes
+        .insert("url".into(), "https://mail.example.org/inbox".into());
+    let page = page.with_children(vec![AomNode::new(1, Role::Paragraph).with_text("Inbox")]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let mut layers = crate::settings_layers::SettingsLayers::default();
+    let level = |name: &str| match json!({"voice": {"punctuation": name}}) {
+        serde_json::Value::Object(values) => values,
+        _ => serde_json::Map::new(),
+    };
+    layers.applications.insert("notepad".into(), level("all"));
+    layers
+        .sites
+        .insert("mail.example.org".into(), level("none"));
+    engine.set_settings_layers(layers);
+    let mut notepad = FocusEvent::new(Role::Edit).with_name("Text editor");
+    notepad.app = Some("Notepad.exe".into());
+    engine.handle_focus_event(&notepad);
+    assert_eq!(engine.settings.voice.punctuation, Punctuation::All);
+    let mut mail = page_document();
+    mail.app = Some("chrome.exe".into());
+    engine.handle_focus_event(&mail);
+    assert_eq!(engine.settings.voice.punctuation, Punctuation::None);
+    let mut explorer = FocusEvent::new(Role::ListItem).with_name("Documents");
+    explorer.app = Some("explorer.exe".into());
+    engine.handle_focus_event(&explorer);
+    assert_eq!(engine.settings.voice.punctuation, Punctuation::Most);
 }

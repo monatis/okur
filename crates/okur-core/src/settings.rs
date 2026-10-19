@@ -398,20 +398,21 @@ impl Default for Settings {
     }
 }
 
-/// Where changed settings are kept, so that they hold the next time Okur starts.
+/// Where changed settings are kept, so that they hold the next time Okur starts: the saved
+/// layers (all applications, each application, each site), never the session's.
 pub trait SettingsStore: Send {
-    fn save(&self, settings: &Settings);
+    fn save(&self, layers: &crate::settings_layers::SettingsLayers);
 }
 
 /// A store that keeps what it was given, for tests.
 #[derive(Debug, Clone, Default)]
 pub struct RecordingSettingsStore {
-    saved: std::sync::Arc<std::sync::Mutex<Vec<Settings>>>,
+    saved: std::sync::Arc<std::sync::Mutex<Vec<crate::settings_layers::SettingsLayers>>>,
 }
 
 impl RecordingSettingsStore {
-    /// The settings saved so far, emptied.
-    pub fn take(&self) -> Vec<Settings> {
+    /// The layers saved so far, emptied.
+    pub fn take(&self) -> Vec<crate::settings_layers::SettingsLayers> {
         self.saved
             .lock()
             .map(|mut saved| std::mem::take(&mut *saved))
@@ -420,9 +421,9 @@ impl RecordingSettingsStore {
 }
 
 impl SettingsStore for RecordingSettingsStore {
-    fn save(&self, settings: &Settings) {
+    fn save(&self, layers: &crate::settings_layers::SettingsLayers) {
         if let Ok(mut saved) = self.saved.lock() {
-            saved.push(settings.clone());
+            saved.push(layers.clone());
         }
     }
 }

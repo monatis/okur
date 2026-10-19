@@ -75,10 +75,10 @@ enum Commands {
         #[arg(long)]
         typing_echo: Option<String>,
 
-        /// The settings file to read and save instead of the user's own, so that a test run
+        /// The settings folder to read and save instead of the user's own, so that a test run
         /// never changes the user's settings
         #[arg(long)]
-        settings_file: Option<String>,
+        settings: Option<String>,
     },
     /// Compare engine speech with recorded JAWS speech for every genuine corpus scenario
     Parity {
@@ -325,9 +325,9 @@ enum Commands {
         all: bool,
     },
     /// Write the reference machine's settings (old-pc's JAWS configuration) as a settings
-    /// file, for `run --settings-file` in a live run there
+    /// folder, for `run --settings` in a live run there
     ReferenceSettings {
-        /// Where to write them
+        /// The folder to write them in
         path: String,
     },
     /// Query hardware soundcard / default playback audio meter
@@ -758,17 +758,19 @@ async fn main() {
             jaws_key,
             live_region_whole_text,
             typing_echo,
-            settings_file,
+            settings: settings_folder,
         }) => {
-            // The saved settings, then this run's options over them.
-            let settings_file = match settings_file {
-                Some(path) => Some(okur_platform::settings_file::SettingsFile::at(path)),
-                None => okur_platform::settings_file::SettingsFile::user(),
+            // The saved settings, then this run's options over them, for this run only.
+            let settings_folder = match settings_folder {
+                Some(path) => Some(okur_platform::settings_file::SettingsFolder::at(path)),
+                None => okur_platform::settings_file::SettingsFolder::user(),
             };
-            let mut settings = settings_file
+            let mut layers = settings_folder
                 .as_ref()
-                .and_then(|file| file.load())
+                .map(|folder| folder.load())
                 .unwrap_or_default();
+            let saved = layers.resolve(None, None);
+            let mut settings = saved.clone();
             let options = RunOptions {
                 engine,
                 voice,
@@ -783,6 +785,12 @@ async fn main() {
                 eprintln!("Error: {e}");
                 std::process::exit(1);
             }
+            layers.change(
+                &okur_core::settings_layers::Scope::Session,
+                &saved,
+                &settings,
+                None,
+            );
             let engine_type = TtsEngineType::from(settings.voice.synthesizer);
 
             let mut tts = TtsManager::new(engine_type).unwrap_or_else(|e| {
@@ -855,10 +863,10 @@ async fn main() {
             if let Some(ui) = okur_platform::ui_host::ProcessUiHost::start(event_tx.clone()) {
                 engine.set_ui(Box::new(ui));
             }
-            engine.settings = settings;
-            // The settings dialog keeps what it changes in the settings file.
-            if let Some(file) = settings_file {
-                engine.set_settings_store(Box::new(file));
+            engine.set_settings_layers(layers);
+            // The settings dialog keeps what it changes in the settings folder.
+            if let Some(folder) = settings_folder {
+                engine.set_settings_store(Box::new(folder));
             }
             // Say System Time (Insert+F12) in the user's locale formats.
             #[cfg(windows)]
@@ -1301,20 +1309,17 @@ async fn main() {
             }
         }
         Some(Commands::ReferenceSettings { path }) => {
-            let settings = okur_core::settings::Settings::reference_machine();
-            match serde_json::to_string_pretty(&settings) {
-                Ok(json) => {
-                    if let Err(e) = fs::write(&path, json) {
-                        eprintln!("Error: {path}: {e}");
-                        std::process::exit(1);
-                    }
-                    println!("Wrote {path:?}");
-                }
-                Err(e) => {
-                    eprintln!("Error: {e}");
-                    std::process::exit(1);
-                }
+            use okur_core::settings::SettingsStore;
+            let layers = okur_core::settings_layers::SettingsLayers::with_global(
+                &okur_core::settings::Settings::reference_machine(),
+            );
+            let folder = okur_platform::settings_file::SettingsFolder::at(&path);
+            folder.save(&layers);
+            if folder.load() != layers {
+                eprintln!("Error: {path}: the settings were not written");
+                std::process::exit(1);
             }
+            println!("Wrote {path:?}");
         }
         Some(Commands::Parity {
             corpus_dir,

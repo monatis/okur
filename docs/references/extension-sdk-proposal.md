@@ -707,9 +707,11 @@ application, global, then the default. Quick Settings changes the application or
 front, as JAWS's does; Settings Center chooses the scope with an Application combo box
 (research §2.5; [`jaws-dialogs-and-visual-features.md`](jaws-dialogs-and-visual-features.md)).
 
-Storage: one JSON file per scope under Okur's settings folder (`settings.json`,
-`applications/<id>.json`, `sites/<host>.json`), extensions' values under their own id. The
-format can change freely while AGENTS.md's notice stands.
+Storage: one TOML file per scope under Okur's settings folder (`settings.toml`,
+`applications/<id>.toml`, `sites/<host>.toml`), built in the reading-settings round
+(`crates/okur-core/src/settings_layers.rs`, `crates/okur-platform/src/settings_file.rs`);
+extensions' values will go under their own id. The format can change freely while AGENTS.md's
+notice stands.
 
 ### 8.3 How okur-ui shows them
 

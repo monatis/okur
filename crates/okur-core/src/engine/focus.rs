@@ -54,6 +54,17 @@ impl ScreenReaderEngine {
     /// Synchronizes cursor position, activates/deactivates forms mode,
     /// and emits canonical JAWS speech announcements.
     pub fn handle_focus_event(&mut self, focus: &FocusEvent) -> Option<String> {
+        // The settings of the application in front, and of the site whose page has the focus.
+        let site = focus
+            .in_document
+            .then(|| {
+                self.cursor
+                    .buffer
+                    .document_url()
+                    .and_then(crate::settings_layers::site_of)
+            })
+            .flatten();
+        self.settings_place(focus.app.as_deref(), site);
         // Access keys are said only with JAWS's Access Key output on (the `access_key` output
         // type of the verbosity settings); old-pc's JAWS has it off (`ACCESS_KEY=0|0|0`, 306
         // recorded 2026-10-18). That takes a menu item's letter ("Yeni sekme Ctrl+T | 2 of 24",

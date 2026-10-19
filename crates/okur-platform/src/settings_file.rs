@@ -1,18 +1,33 @@
-//! Okur's settings file: what the settings dialog changed, kept between runs as JSON.
-//! A setting missing from the file has its default, so the file only grows as settings do.
+//! Okur's settings files, in TOML, by layer ([`okur_core::settings_layers`]), each holding only
+//! what it changes from the layers below it:
+//! - `settings.toml`: for all applications;
+//! - `applications/<application>.toml`: one application's, named as
+//!   [`okur_core::settings_layers::application_id`] names it (`notepad.toml`);
+//! - `sites/<host>.toml`: one web site's (`mail.example.org.toml`), which can be copied to
+//!   another user, as JAWS's Personalized Web Settings can.
+//!
+//! The session's layer is never written. Okur writes only the values that changed, so the
+//! comments and order a user gives a file stay.
 
 use std::path::{Path, PathBuf};
 
-use okur_core::settings::{Settings, SettingsStore};
+use okur_core::settings::SettingsStore;
+use okur_core::settings_layers::{SettingsLayers, Values};
+use serde_json::Value;
 
-pub struct SettingsFile {
-    path: PathBuf,
+const GLOBAL: &str = "settings.toml";
+const APPLICATIONS: &str = "applications";
+const SITES: &str = "sites";
+
+/// The folder of Okur's settings files.
+pub struct SettingsFolder {
+    folder: PathBuf,
 }
 
-impl SettingsFile {
-    /// The user's settings file: `%APPDATA%\Okur\settings.json` on Windows,
-    /// `~/Library/Application Support/Okur/settings.json` on macOS, and
-    /// `$XDG_CONFIG_HOME/okur/settings.json` (else `~/.config/okur/settings.json`) elsewhere.
+impl SettingsFolder {
+    /// The user's settings folder: `%APPDATA%\Okur` on Windows,
+    /// `~/Library/Application Support/Okur` on macOS, and `$XDG_CONFIG_HOME/okur` (else
+    /// `~/.config/okur`) elsewhere.
     pub fn user() -> Option<Self> {
         let env = |name: &str| std::env::var_os(name).map(PathBuf::from);
         let folder = if cfg!(windows) {
@@ -24,72 +39,362 @@ impl SettingsFile {
                 .or_else(|| env("HOME").map(|home| home.join(".config")))?
                 .join("okur")
         };
-        Some(Self::at(folder.join("settings.json")))
+        Some(Self::at(folder))
     }
 
-    pub fn at(path: impl Into<PathBuf>) -> Self {
-        Self { path: path.into() }
+    pub fn at(folder: impl Into<PathBuf>) -> Self {
+        Self {
+            folder: folder.into(),
+        }
     }
 
-    pub fn path(&self) -> &Path {
-        &self.path
+    pub fn folder(&self) -> &Path {
+        &self.folder
     }
 
-    /// The saved settings; `None` when there is no file, or it cannot be read (logged).
-    pub fn load(&self) -> Option<Settings> {
-        let text = std::fs::read_to_string(&self.path).ok()?;
-        serde_json::from_str(&text)
-            .map_err(|e| tracing::warn!(path = ?self.path, error = %e, "settings file not read"))
-            .ok()
+    /// The saved layers. A missing file is an empty layer; a file that cannot be read is
+    /// logged and left out.
+    pub fn load(&self) -> SettingsLayers {
+        let mut layers = SettingsLayers {
+            global: read_values(&self.folder.join(GLOBAL)).unwrap_or_default(),
+            ..SettingsLayers::default()
+        };
+        for (name, values) in read_folder(&self.folder.join(APPLICATIONS)) {
+            layers.applications.insert(name, values);
+        }
+        for (name, values) in read_folder(&self.folder.join(SITES)) {
+            layers.sites.insert(name, values);
+        }
+        layers
+    }
+
+    /// Writes `values` into the file at `path`, changing only what differs, through a
+    /// temporary file so that a failure never leaves half a file.
+    fn write(path: &Path, values: &Values, heading: &str) -> std::io::Result<()> {
+        let existing = std::fs::read_to_string(path).ok();
+        if existing.is_none() && values.is_empty() {
+            return Ok(());
+        }
+        let mut document = match existing.as_deref() {
+            Some(text) => text
+                .parse::<toml_edit::DocumentMut>()
+                .map_err(std::io::Error::other)?,
+            None => {
+                let mut document = toml_edit::DocumentMut::new();
+                document.decor_mut().set_prefix(heading);
+                document
+            }
+        };
+        sync(document.as_table_mut(), values);
+        let text = document.to_string();
+        if existing.as_deref() == Some(text.as_str()) {
+            return Ok(());
+        }
+        if let Some(folder) = path.parent() {
+            std::fs::create_dir_all(folder)?;
+        }
+        let temporary = path.with_extension("toml.tmp");
+        std::fs::write(&temporary, text)?;
+        std::fs::rename(&temporary, path)
     }
 }
 
-impl SettingsStore for SettingsFile {
-    /// Writes the whole file anew, through a temporary file, so that a failure never leaves
-    /// half a file.
-    fn save(&self, settings: &Settings) {
-        let written = (|| -> std::io::Result<()> {
-            if let Some(folder) = self.path.parent() {
-                std::fs::create_dir_all(folder)?;
+impl SettingsStore for SettingsFolder {
+    fn save(&self, layers: &SettingsLayers) {
+        let mut written = vec![Self::write(
+            &self.folder.join(GLOBAL),
+            &layers.global,
+            "# Okur's settings for all applications: only what differs from Okur's defaults.\n\
+             # Okur rewrites only the values it changes; comments stay.\n",
+        )];
+        for (kind, layer, heading) in [
+            (
+                APPLICATIONS,
+                &layers.applications,
+                "# Okur's settings for one application: only what differs from settings.toml.\n",
+            ),
+            (
+                SITES,
+                &layers.sites,
+                "# Okur's settings for one web site: only what differs from its application's.\n",
+            ),
+        ] {
+            let folder = self.folder.join(kind);
+            // A layer that was emptied loses its values; the file and its comments stay.
+            for (name, _) in read_folder(&folder) {
+                if !layer.contains_key(&name) {
+                    written.push(Self::write(
+                        &folder.join(format!("{name}.toml")),
+                        &Values::new(),
+                        heading,
+                    ));
+                }
             }
-            let text = serde_json::to_string_pretty(settings).map_err(std::io::Error::other)?;
-            let temporary = self.path.with_extension("json.tmp");
-            std::fs::write(&temporary, text)?;
-            std::fs::rename(&temporary, &self.path)
-        })();
-        if let Err(e) = written {
-            tracing::warn!(path = ?self.path, error = %e, "settings not saved");
+            for (name, values) in layer {
+                written.push(Self::write(
+                    &folder.join(format!("{name}.toml")),
+                    values,
+                    heading,
+                ));
+            }
         }
+        for result in written {
+            if let Err(e) = result {
+                tracing::warn!(folder = ?self.folder, error = %e, "settings not saved");
+            }
+        }
+    }
+}
+
+/// A settings file's values; `None` when there is no file or it cannot be read (logged).
+fn read_values(path: &Path) -> Option<Values> {
+    let text = std::fs::read_to_string(path).ok()?;
+    let table: toml::Table = toml::from_str(&text)
+        .map_err(|e| tracing::warn!(?path, error = %e, "settings file not read"))
+        .ok()?;
+    match serde_json::to_value(table) {
+        Ok(Value::Object(values)) => Some(values),
+        _ => None,
+    }
+}
+
+/// The `.toml` files of `folder`, by name without the extension.
+fn read_folder(folder: &Path) -> Vec<(String, Values)> {
+    let Ok(entries) = std::fs::read_dir(folder) else {
+        return Vec::new();
+    };
+    let mut layers: Vec<(String, Values)> = entries
+        .filter_map(Result::ok)
+        .map(|entry| entry.path())
+        .filter(|path| path.extension().is_some_and(|e| e == "toml"))
+        .filter_map(|path| {
+            let name = path.file_stem()?.to_str()?.to_lowercase();
+            Some((name, read_values(&path)?))
+        })
+        .collect();
+    layers.sort_by(|a, b| a.0.cmp(&b.0));
+    layers
+}
+
+/// Makes `table` hold exactly `values`, leaving every value that did not change as it was
+/// written, with its comments.
+fn sync(table: &mut toml_edit::Table, values: &Values) {
+    let names: Vec<String> = table.iter().map(|(name, _)| name.to_owned()).collect();
+    for (index, name) in names.iter().enumerate() {
+        if !values.get(name).is_none_or(Value::is_null) {
+            continue;
+        }
+        // The comments above a removed value go to what follows it.
+        let comments = table
+            .key(name)
+            .and_then(|key| key.leaf_decor().prefix())
+            .and_then(|prefix| prefix.as_str())
+            .filter(|prefix| prefix.contains('#'))
+            .map(str::to_owned);
+        table.remove(name);
+        let Some(comments) = comments else {
+            continue;
+        };
+        let next = names.iter().skip(index + 1).find(|n| table.contains_key(n));
+        if let Some(next) = next {
+            if let Some(next_table) = table.get_mut(next).and_then(|i| i.as_table_mut()) {
+                let prefix = next_table
+                    .decor()
+                    .prefix()
+                    .and_then(|p| p.as_str())
+                    .unwrap_or_default()
+                    .to_owned();
+                next_table
+                    .decor_mut()
+                    .set_prefix(format!("{comments}{prefix}"));
+            } else if let Some(mut key) = table.key_mut(next) {
+                let prefix = key
+                    .leaf_decor()
+                    .prefix()
+                    .and_then(|p| p.as_str())
+                    .unwrap_or_default()
+                    .to_owned();
+                key.leaf_decor_mut()
+                    .set_prefix(format!("{comments}{prefix}"));
+            }
+        }
+    }
+    for (name, value) in values {
+        match value {
+            Value::Null => {}
+            Value::Object(inner) => {
+                if !table.get(name).is_some_and(toml_edit::Item::is_table) {
+                    // Implicit: a table holding only tables has no header of its own.
+                    let mut new = toml_edit::Table::new();
+                    new.set_implicit(true);
+                    table.insert(name, toml_edit::Item::Table(new));
+                }
+                if let Some(inner_table) = table.get_mut(name).and_then(|i| i.as_table_mut()) {
+                    sync(inner_table, inner);
+                }
+            }
+            value => {
+                let unchanged = table
+                    .get(name)
+                    .and_then(toml_edit::Item::as_value)
+                    .is_some_and(|written| json_of(written) == *value);
+                if unchanged {
+                    continue;
+                }
+                let Some(mut new) = toml_of(value) else {
+                    continue;
+                };
+                // In place, so that the key's comments and the value's own stay.
+                match table.get_mut(name) {
+                    Some(item) => {
+                        if let Some(old) = item.as_value() {
+                            *new.decor_mut() = old.decor().clone();
+                        }
+                        *item = toml_edit::Item::Value(new);
+                    }
+                    None => {
+                        table.insert(name, toml_edit::Item::Value(new));
+                    }
+                }
+            }
+        }
+    }
+}
+
+/// A setting's value in TOML (TOML has no null: a null is not written).
+fn toml_of(value: &Value) -> Option<toml_edit::Value> {
+    Some(match value {
+        Value::Null => return None,
+        Value::Bool(b) => (*b).into(),
+        Value::Number(n) => match n.as_i64() {
+            Some(i) => i.into(),
+            None => n.as_f64()?.into(),
+        },
+        Value::String(s) => s.as_str().into(),
+        Value::Array(items) => {
+            let mut array = toml_edit::Array::new();
+            for item in items.iter().filter_map(toml_of) {
+                array.push(item);
+            }
+            toml_edit::Value::Array(array)
+        }
+        Value::Object(fields) => {
+            let mut inline = toml_edit::InlineTable::new();
+            for (name, field) in fields {
+                if let Some(field) = toml_of(field) {
+                    inline.insert(name, field);
+                }
+            }
+            toml_edit::Value::InlineTable(inline)
+        }
+    })
+}
+
+/// A written TOML value as a setting's value, to tell whether it changed.
+fn json_of(value: &toml_edit::Value) -> Value {
+    match value {
+        toml_edit::Value::String(s) => Value::String(s.value().clone()),
+        toml_edit::Value::Integer(i) => Value::from(*i.value()),
+        toml_edit::Value::Float(f) => Value::from(*f.value()),
+        toml_edit::Value::Boolean(b) => Value::Bool(*b.value()),
+        toml_edit::Value::Datetime(d) => Value::String(d.value().to_string()),
+        toml_edit::Value::Array(items) => Value::Array(items.iter().map(json_of).collect()),
+        toml_edit::Value::InlineTable(fields) => Value::Object(
+            fields
+                .iter()
+                .map(|(name, field)| (name.to_owned(), json_of(field)))
+                .collect(),
+        ),
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use okur_core::settings::{KeyboardLayout, KeyboardSettings, TypingEcho, ViewerDisplay};
+    use okur_core::settings::{Punctuation, Settings, TypingEcho};
+    use okur_core::settings_layers::Scope;
 
-    #[test]
-    fn settings_survive_a_save_and_missing_ones_take_their_defaults() {
+    fn folder(name: &str) -> PathBuf {
         let folder =
-            std::env::temp_dir().join(format!("okur-settings-test-{}", std::process::id()));
-        let file = SettingsFile::at(folder.join("settings.json"));
-        assert_eq!(file.load(), None);
-        let mut settings = Settings {
-            keyboard: KeyboardSettings::for_layout(KeyboardLayout::Laptop),
-            typing_echo: TypingEcho::None,
-            viewer_display: ViewerDisplay::SpeechOnly,
-            ..Default::default()
-        };
-        settings.voice.rate = 4;
-        file.save(&settings);
-        assert_eq!(file.load(), Some(settings));
-        // A file from an older Okur, with fewer settings.
-        let _ = std::fs::write(file.path(), r#"{"typing_echo":"none"}"#);
-        let expected = Settings {
-            typing_echo: TypingEcho::None,
-            ..Default::default()
-        };
-        assert_eq!(file.load(), Some(expected));
+            std::env::temp_dir().join(format!("okur-settings-{name}-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&folder);
+        folder
+    }
+
+    /// Each layer is saved in its own file with only its changes, and read back the same.
+    #[test]
+    fn layers_survive_a_save() {
+        let root = folder("layers");
+        let files = SettingsFolder::at(&root);
+        assert_eq!(files.load(), SettingsLayers::default());
+        let mut layers = SettingsLayers::default();
+        let before = layers.resolve(None, None);
+        let mut after = before.clone();
+        after.typing_echo = TypingEcho::None;
+        after.voice.rate = 4;
+        layers.change(&Scope::Global, &before, &after, None);
+        let before = layers.resolve(Some("notepad"), None);
+        let mut after = before.clone();
+        after.voice.punctuation = Punctuation::All;
+        layers.change(&Scope::Application("notepad".into()), &before, &after, None);
+        let before = layers.resolve(Some("chrome"), Some("example.org"));
+        let mut after = before.clone();
+        after.auto_forms_mode = false;
+        layers.change(
+            &Scope::Site("example.org".into()),
+            &before,
+            &after,
+            Some("chrome"),
+        );
+        files.save(&layers);
+        assert_eq!(files.load(), layers);
+        let global = std::fs::read_to_string(root.join("settings.toml")).unwrap_or_default();
+        assert!(global.contains("typing_echo = \"none\""), "{global}");
+        assert!(global.contains("[voice]\nrate = 4"), "{global}");
+        let notepad =
+            std::fs::read_to_string(root.join("applications/notepad.toml")).unwrap_or_default();
+        assert!(
+            notepad.contains("[voice]\npunctuation = \"all\""),
+            "{notepad}"
+        );
+        assert!(root.join("sites/example.org.toml").exists());
+        let _ = std::fs::remove_dir_all(&root);
+    }
+
+    /// A user's comments and order stay when Okur changes a value; a value set back to the
+    /// default leaves the file.
+    #[test]
+    fn comments_stay() {
+        let root = folder("comments");
+        let _ = std::fs::create_dir_all(&root);
+        let _ = std::fs::write(
+            root.join("settings.toml"),
+            "# mine\ntyping_echo = \"none\" # quiet typing\n\n[voice]\n# fast\nrate = 6\n",
+        );
+        let files = SettingsFolder::at(&root);
+        let mut layers = files.load();
+        assert_eq!(layers.resolve(None, None).voice.rate, 6);
+        let before = layers.resolve(None, None);
+        let mut after = before.clone();
+        after.voice.rate = 8;
+        after.typing_echo = Settings::default().typing_echo;
+        layers.change(&Scope::Global, &before, &after, None);
+        files.save(&layers);
+        let text = std::fs::read_to_string(root.join("settings.toml")).unwrap_or_default();
+        assert_eq!(text, "# mine\n\n[voice]\n# fast\nrate = 8\n");
+        let _ = std::fs::remove_dir_all(&root);
+    }
+
+    /// A file Okur cannot read is left out, and the others still count.
+    #[test]
+    fn an_unreadable_file_is_left_out() {
+        let root = folder("broken");
+        let _ = std::fs::create_dir_all(root.join("applications"));
+        let _ = std::fs::write(root.join("settings.toml"), "typing_echo = \"none\"\n");
+        let _ = std::fs::write(root.join("applications/notepad.toml"), "voice = [\n");
+        let layers = SettingsFolder::at(&root).load();
+        assert_eq!(layers.resolve(None, None).typing_echo, TypingEcho::None);
+        assert!(layers.applications.is_empty());
+        let _ = std::fs::remove_dir_all(&root);
     }
 }

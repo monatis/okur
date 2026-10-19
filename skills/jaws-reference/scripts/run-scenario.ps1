@@ -248,11 +248,14 @@ $okurRun = $null
 if ($Reader -eq 'okur') {
     $jaws = $null
     $OkurSpeechLog = Join-Path $env:TEMP "okur-live-$([guid]::NewGuid().ToString('N')).jsonl"
-    $okurSettings = Join-Path $env:TEMP 'okur-live-settings.json'
+    # A settings folder of its own, with the reference machine's settings for all applications,
+    # made anew for every run.
+    $okurSettings = Join-Path $env:TEMP 'okur-live-settings'
+    Remove-Item -Recurse -Force $okurSettings -ErrorAction SilentlyContinue
     & $Okur reference-settings $okurSettings | Out-Null
     Invoke-JawsProcess -Stop
     $okurArgs = @(
-        'run', '--settings-file', "`"$okurSettings`"", '--speech-log', "`"$OkurSpeechLog`"",
+        'run', '--settings', "`"$okurSettings`"", '--speech-log', "`"$OkurSpeechLog`"",
         '--engine', 'sapi5', '--voice', "`"$OkurVoice`"")
     if ($OkurDebugLog) { $okurArgs += @('--debug-log', "`"$OkurDebugLog`"") }
     $okurRun = Start-Process -FilePath $Okur -WindowStyle Hidden -PassThru -ArgumentList $okurArgs

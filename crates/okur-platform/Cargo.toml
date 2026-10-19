@@ -12,6 +12,9 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }
 tokio = { workspace = true }
+# Okur's settings files: read with toml, written with toml_edit so a user's comments stay.
+toml = "1"
+toml_edit = "0.25"
 tracing = { workspace = true }
 xa11y = { workspace = true }
 xa11y-windows = { workspace = true }

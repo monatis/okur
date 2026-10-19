@@ -59,13 +59,20 @@ Settings"; OK and Apply save, Cancel and Escape drop what was not applied):
 - typing echo, reading a growing live region's whole text, and showing the Virtual Viewer on
   screen.
 
-They are kept in `%APPDATA%\Okur\settings.json` on Windows,
-`~/Library/Application Support/Okur/settings.json` on macOS, and
-`$XDG_CONFIG_HOME/okur/settings.json` elsewhere. A setting missing from the file has its
-default. The command-line options (`--engine`, `--voice`, `--rate`, `--volume`,
+They are kept in Okur's settings folder: `%APPDATA%\Okur` on Windows,
+`~/Library/Application Support/Okur` on macOS, and `$XDG_CONFIG_HOME/okur` elsewhere. Its TOML
+files hold only what differs from the layer below, as JAWS's own settings files do:
+- `settings.toml`: for all applications (what the settings dialog saves);
+- `applications/<application>.toml`: one application's, named after its executable
+  (`notepad.toml`, `chrome.toml`);
+- `sites/<host>.toml`: one web site's (`mail.example.org.toml`), over its browser's.
+
+A setting is looked up from the most specific layer down to Okur's default; Insert+Shift+2's
+punctuation level lasts until Okur exits. Okur rewrites only the values it changes, so your
+comments stay. The command-line options (`--engine`, `--voice`, `--rate`, `--volume`,
 `--keyboard-layout`, `--jaws-key`, `--typing-echo`, `--live-region-whole-text`) change a
-setting for one run only; tests also pass `--settings-file <path>`, so that pressing OK in a
-test never changes the user's settings.
+setting for one run only; tests also pass `--settings <folder>`, so that pressing OK in a test
+never changes the user's settings.
 
 To stop the daemon cleanly, press `Ctrl+C`.
 

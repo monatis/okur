@@ -271,7 +271,7 @@ fn run_scenario(
     let actions = okur_core::actions::RecordingActions::default();
     engine.set_actions(Box::new(actions.clone()));
     // JAWS's settings when the evidence was recorded.
-    engine.settings = replay_settings(&evidence);
+    engine.set_settings(replay_settings(&evidence));
     if desktop {
         engine.app_mode = okur_core::engine::AppMode::NativeControl;
     }
