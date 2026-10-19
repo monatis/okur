@@ -875,6 +875,9 @@ static BINDINGS: &[Binding] = &{
         bind(F(5), JAWS, SelectAFormField),
         bind(F(6), JAWS, SelectAHeading),
         bind(F(7), JAWS, SelectALink),
+        // Say Current Cell: Ctrl+Alt+Numpad5, as JAWS documents it (Keystrokes for Working in
+        // Tables), and with the number row's 5.
+        bind(Numpad5, CTRL_ALT, SayCurrentCell),
         bind(Digit(5), CTRL_ALT, SayCurrentCell),
         // Quick navigation: the key moves to the next, Shift with it to the prior.
         bind(Alpha('H'), SHIFT, MoveToPrior(Heading)),
