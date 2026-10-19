@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 1938,
-  "total_steps": 2425,
+  "matched_steps": 1955,
+  "total_steps": 2442,
   "accepted_divergences": 33,
   "errors": [],
   "steps": {
@@ -2462,6 +2462,23 @@
     "527-desktop-notepad-help-keys/s4": "mismatch",
     "527-desktop-notepad-help-keys/s5": "mismatch",
     "527-desktop-notepad-help-keys/s6": "mismatch",
-    "527-desktop-notepad-help-keys/s7": "match"
+    "527-desktop-notepad-help-keys/s7": "match",
+    "529-desktop-native-selection-keys/s1": "match",
+    "529-desktop-native-selection-keys/s10": "match",
+    "529-desktop-native-selection-keys/s11": "match",
+    "529-desktop-native-selection-keys/s12": "match",
+    "529-desktop-native-selection-keys/s13": "match",
+    "529-desktop-native-selection-keys/s14": "match",
+    "529-desktop-native-selection-keys/s15": "match",
+    "529-desktop-native-selection-keys/s16": "match",
+    "529-desktop-native-selection-keys/s17": "match",
+    "529-desktop-native-selection-keys/s2": "match",
+    "529-desktop-native-selection-keys/s3": "match",
+    "529-desktop-native-selection-keys/s4": "match",
+    "529-desktop-native-selection-keys/s5": "match",
+    "529-desktop-native-selection-keys/s6": "match",
+    "529-desktop-native-selection-keys/s7": "match",
+    "529-desktop-native-selection-keys/s8": "match",
+    "529-desktop-native-selection-keys/s9": "match"
   }
 }

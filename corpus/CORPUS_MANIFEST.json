@@ -2840,13 +2840,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "529-desktop-native-selection-keys",
+      "fixture": "desktop-reading.ps1",
+      "evidence": {
+        "sha256": "b479429cb8040e9bb5ddbaa0c304220e285c9e3dabb427eece1cb1b05aff2e5a",
+        "capture_script_sha256": "475e9155d1ae9736e7a793372b31153f976d3ee28e78f71d189b4b42d5359d67",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 195,
-    "scenarios_with_evidence": 195,
-    "total_trials": 639,
-    "successful_trials": 638,
-    "deterministic_scenarios": 126
+    "scenarios": 196,
+    "scenarios_with_evidence": 196,
+    "total_trials": 642,
+    "successful_trials": 641,
+    "deterministic_scenarios": 127
   }
 }

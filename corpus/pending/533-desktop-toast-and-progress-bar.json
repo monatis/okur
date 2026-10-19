@@ -1,0 +1,22 @@
+{
+  "id": "533-desktop-toast-and-progress-bar",
+  "name": "A Windows toast as it arrives, Repeat Last Notification (Insert+Space, Shift+N) and Notification History (Insert+Space, N) closed with Escape, then a progress bar going from 0 to 100% while focus stays on its button",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notifications.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Notification Fixture" },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Space", "settle_max_ms": 15000 },
+    { "id": "s2", "type": "key", "command": "Insert+Space" },
+    { "id": "s3", "type": "key", "command": "Shift+N", "settle_max_ms": 10000 },
+    { "id": "s4", "type": "key", "command": "Insert+Space" },
+    { "id": "s5", "type": "key", "command": "N", "settle_max_ms": 15000 },
+    { "id": "s6", "type": "key", "command": "Insert+Up" },
+    { "id": "s7", "type": "key", "command": "Escape" },
+    { "id": "s8", "type": "key", "command": "Tab" },
+    { "id": "s9", "type": "key", "command": "Space", "settle_max_ms": 15000 },
+    { "id": "s10", "type": "key", "command": "Insert+Up" }
+  ]
+}
