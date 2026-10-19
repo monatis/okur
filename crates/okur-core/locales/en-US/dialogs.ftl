@@ -17,6 +17,8 @@ settings-voice = &Voice:
 settings-voice-default = Default
 settings-rate = &Rate:
 settings-volume = V&olume:
+# JAWS's Voice Adjustment's Punctuation; the levels are punctuation-none to punctuation-all.
+settings-punctuation = &Punctuation:
 settings-group-keyboard = Keyboard
 settings-layout = Keyboard &Layout:
 settings-layout-desktop = Desktop

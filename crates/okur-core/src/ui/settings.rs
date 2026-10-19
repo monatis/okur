@@ -7,8 +7,8 @@ use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
 
 use crate::messages::{msg, StaticMessage};
 use crate::settings::{
-    JawsKey, KeyboardLayout, KeyboardSettings, LiveRegionAppend, Settings, Synthesizer, TypingEcho,
-    ViewerDisplay,
+    JawsKey, KeyboardLayout, KeyboardSettings, LiveRegionAppend, Punctuation, Settings,
+    Synthesizer, TypingEcho, ViewerDisplay,
 };
 
 /// A choice's label in the catalog.
@@ -28,6 +28,13 @@ const JAWS_KEYS: [(JawsKey, Label); 3] = [
     (JawsKey::Insert, msg::settings_jaws_key_insert),
     (JawsKey::CapsLock, msg::settings_jaws_key_caps_lock),
     (JawsKey::ScrollLock, msg::settings_jaws_key_scroll_lock),
+];
+/// JAWS's punctuation levels, as Voice Adjustment lists them.
+const PUNCTUATIONS: [(Punctuation, Label); 4] = [
+    (Punctuation::None, msg::punctuation_none),
+    (Punctuation::Some, msg::punctuation_some),
+    (Punctuation::Most, msg::punctuation_most),
+    (Punctuation::All, msg::punctuation_all),
 ];
 /// JAWS's names for its typing echo choices (Settings Center, User).
 const ECHOES: [(TypingEcho, Label); 2] = [
@@ -148,6 +155,14 @@ impl SettingsDialog {
                     },
                 ),
                 control(
+                    "punctuation",
+                    msg::settings_punctuation(),
+                    choice(
+                        names(&PUNCTUATIONS),
+                        position(&PUNCTUATIONS, s.voice.punctuation),
+                    ),
+                ),
+                control(
                     "keyboard",
                     msg::settings_group_keyboard(),
                     ControlKind::Group,
@@ -241,6 +256,11 @@ impl SettingsDialog {
             ("rate", Value::Number(n)) => s.voice.rate = n.clamp(-10, 10),
             ("volume", Value::Number(n)) => {
                 s.voice.volume = u16::try_from(n.clamp(0, 100)).unwrap_or(100);
+            }
+            ("punctuation", Value::Selected(i)) => {
+                if let Some(level) = pick(&PUNCTUATIONS, i) {
+                    s.voice.punctuation = level;
+                }
             }
             ("layout", Value::Selected(i)) => {
                 if let Some(layout) = pick(&LAYOUTS, i) {
@@ -368,6 +388,10 @@ mod tests {
             dialog.handle(&changed("viewer_on_screen", Value::Checked(false))),
             Outcome::Nothing
         );
+        assert_eq!(
+            dialog.handle(&changed("punctuation", Value::Selected(3))),
+            Outcome::Nothing
+        );
         // Another dialog's events change nothing.
         let other = FromUi::DialogChanged {
             id: 9,
@@ -385,6 +409,7 @@ mod tests {
             ..Default::default()
         };
         expected.voice.rate = 3;
+        expected.voice.punctuation = crate::settings::Punctuation::All;
         assert_eq!(
             applied,
             Outcome::Apply {

@@ -32,8 +32,6 @@ and per-application and per-site settings. Those are not repeated here.
 
 ## Reading settings
 
-- **Okur's settings dialog has no punctuation level yet**; it lives in the voice settings
-  (`VoiceSettings::punctuation`) and Insert+Shift+2 changes it for the session.
 - **Punctuation per voice context** (reading, typing, messages): JAWS sets it per context in
   Voice Adjustment; Okur has one level.
 
