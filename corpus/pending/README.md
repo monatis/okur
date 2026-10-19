@@ -23,7 +23,6 @@ To record one:
 | 297 | Table rows and columns (Win+Alt+arrows, Alt+Win+Numpad5, Alt+Win+Period) | `news-article.html` |
 | 298 | Insert+N, Insert+Shift+Z, Insert+Z, Insert+Escape | `news-article.html` |
 | 299 | J (Jump to Line), Shift+J, W and Shift+W (Word from List) | `news-article.html` |
-| 285 | Auto Forms Mode on: Up into an 18-line text area, through its lines, out at its top | `reading-settings.html` |
 | 500 | Say All stopped by Ctrl, moved by Right and Left, rate keys and H during it | `news-article.html` |
 | 501 | Selecting and copying with the virtual cursor, Say and Spell Selected Text | `doc-reading.html` |
 | 502 | Home, End, PageDown and PageUp with the virtual cursor | `news-article.html` |
