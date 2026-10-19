@@ -1,0 +1,24 @@
+{
+  "id": "509-desktop-keyboard-help",
+  "name": "Keyboard Help (Insert+1) describing keys instead of running them, screen-sensitive help (Insert+F1), hot key help (Insert+H) and Windows keys help (Insert+W), each viewer closed with Escape",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-dialogs.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Dialog Fixture" },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+1" },
+    { "id": "s2", "type": "key", "command": "Insert+Up" },
+    { "id": "s3", "type": "key", "command": "Insert+Up", "repeat": 2 },
+    { "id": "s4", "type": "key", "command": "Tab" },
+    { "id": "s5", "type": "key", "command": "Insert+T" },
+    { "id": "s6", "type": "key", "command": "Insert+1" },
+    { "id": "s7", "type": "key", "command": "Insert+F1", "settle_max_ms": 20000 },
+    { "id": "s8", "type": "key", "command": "Escape" },
+    { "id": "s9", "type": "key", "command": "Insert+H", "settle_max_ms": 20000 },
+    { "id": "s10", "type": "key", "command": "Escape" },
+    { "id": "s11", "type": "key", "command": "Insert+W", "settle_max_ms": 20000 },
+    { "id": "s12", "type": "key", "command": "Escape" }
+  ]
+}

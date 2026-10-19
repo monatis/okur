@@ -32,6 +32,11 @@ To record one:
 | 505 | Say All in a native edit stopped by Ctrl and moved by Right and Left | `desktop-reading.ps1` |
 | 506 | JAWS Find (Ctrl+F, F3, Shift+F3, Insert+Ctrl+F) | `news-article.html` |
 | 507 | A page load stopped by Ctrl, then Numpad Plus in forms mode | `signup-form.html` |
+| 508 | A text area's lines with the virtual cursor (Say All reads each with "Edit", 408/s10) | `reading-settings.html` |
+| 509 | Keyboard Help (Insert+1), Insert+F1, Insert+H, Insert+W | `desktop-dialogs.ps1` |
+| 510 | Laptop layout: sentences, paragraphs, Say To and From Cursor, selected text, top and bottom line, color, character value, Say All | `desktop-reading.ps1` |
+| 511 | The Window List (Insert+F10) and the system tray (Insert+F11) | `desktop-dialogs.ps1` |
+| 512 | Voice rate on the fly (Ctrl+Alt+PageUp and PageDown), Insert+Escape | `news-article.html` |
 
 Scenarios from 400 record JAWS's reading settings (plan
 `docs/plans/2026-10-18-reading-settings.md`). Their fixtures, `reading-settings.html`

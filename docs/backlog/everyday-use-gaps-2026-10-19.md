@@ -18,7 +18,8 @@ JAWS parity (Ia2): 1714/2045 steps match exactly; 33 accepted divergences not co
 
 Per the owner's rule, each gap is found in the documentation, then recorded on old-pc, then
 built. The "Recording" column names the scenario that records it. Scenarios 500-507 were
-queued on old-pc on 2026-10-19 as round 12, behind rounds 9-11.
+queued on old-pc on 2026-10-19 as round 12, behind rounds 9-11; 508-512 followed as
+round 13.
 
 ## Sources
 
@@ -80,14 +81,14 @@ P0 blocks daily use, P1 is expected by a JAWS user within days, P2 is later.
 | 8 | Applications | Outlook: message list, opening a message, reading it, attachments (Insert+A), header keys (Alt+1-9) | [P3] | **Not covered** | P0 | Needs Outlook on old-pc |
 | 9 | Reading | A multi-line native field on focus | The caret's line, then "Contains text" (316/s3, 400/s1, s5) | **Done** on 2026-10-19 (`6c4b81d`, with the task switcher and apostrophe fixes after it) | P0 | recorded |
 | 10 | Reading | Prior and next word with the desktop layout: Insert+Left and Insert+Right | [H1, W1] | **Missing.** The keys are swallowed silently; the laptop keys work | P1 | 503, 504 |
-| 11 | Reading | The laptop layout's other keys: CapsLock+A, Shift+A, Y, N, H, Ctrl+U, O, I, Shift+J, L, Y, N, 5, Semicolon, P | [H17, W1] | **Partial.** 9 laptop keys are built | P1 | after 320 |
+| 11 | Reading | The laptop layout's other keys: CapsLock+A, Shift+A, Y, N, H, Ctrl+U, O, I, Shift+J, L, Y, N, 5, Semicolon, P | [H17, W1] | **Partial.** 9 laptop keys are built | P1 | 510 |
 | 12 | Reading | Sentences and paragraphs: Alt+Numpad 5, Alt+Numpad Minus and Plus, Ctrl+Numpad 5; P and Shift+P | [H1, W1] | **Missing.** Numpad Plus and Minus reach Okur as unknown keys | P1 | 291, 504 |
 | 13 | Reading | Say To and From Cursor: Insert+Home, Insert+PageUp; twice quickly spells | [H1] | **Missing** | P1 | 291, 504 |
 | 14 | Reading | Top and bottom line of the window: Insert+End, Insert+PageDown | The bottom line is usually the status bar [H2] | **Missing.** The Virtual Viewer already reads status bars | P1 | 503, 504 |
-| 15 | Help | Keyboard Help (Insert+1), hot key help (Insert+H), Windows keys help (Insert+W), screen-sensitive help (Insert+F1), the help layer (Insert+Space, J) | [H3, H8] | **Missing.** The keys are swallowed silently | P1 | to write |
+| 15 | Help | Keyboard Help (Insert+1), hot key help (Insert+H), Windows keys help (Insert+W), screen-sensitive help (Insert+F1), the help layer (Insert+Space, J) | [H3, H8] | **Missing.** The keys are swallowed silently | P1 | 509 |
 | 16 | Speech | Speech on and off: Insert+Space then S; Shift+S for Speech On Demand | [H1, H8, K] | **Missing.** Key routing has no layers | P1 | to write (mutes old-pc: last in a batch) |
 | 17 | Speech | Speech History: Insert+Space then H | Results Viewer with the recent speech [H14] | **Missing.** Okur logs speech, but has no viewer | P1 | to write (the harness clears JAWS's history every step) |
-| 18 | Speech | Voice rate on the fly: Alt+Ctrl+PageUp and PageDown, with Win to save | Says "faster" or "slower" [H9] | **Missing** | P1 | to write |
+| 18 | Speech | Voice rate on the fly: Alt+Ctrl+PageUp and PageDown, with Win to save | Says "faster" or "slower" [H9] | **Missing** | P1 | 512 |
 | 19 | General | Quit (Insert+F4), refresh the screen (Insert+Escape) | [H4, H9] | **Missing.** Okur quits only from its console | P1 | 298 (Insert+Escape) |
 | 20 | Web | When a page loads: a summary, then reading starts by itself | Both on by default [S4, W2] | **Missing (B12).** Okur says the title and the mode | P1 | 507 |
 | 21 | Web | Forms mode: Numpad Plus leaves it; semi-auto mode; the quick key delay; Numpad Slash on a check box | [S5, W3] | **Partial (B6).** Numpad Plus types "+" into the field | P1 | 507 |
@@ -98,7 +99,7 @@ P0 blocks daily use, P1 is expected by a JAWS user within days, P2 is later.
 | 26 | Reading settings | Say All unit, capitals during Say All, blank lines, and the rest of [R]'s options | [S1, R] | **Partial.** The defaults are built; none is a setting yet | P1 | [R] §13 |
 | 27 | Echo | Typing echo choices in the dialog, key labels, key echo | [S2]; [R] item 3 | **Partial.** All 4 modes work by Insert+2; the dialog offers 2 | P2 | [R] item 3 |
 | 28 | Cursors | JAWS cursor and mouse: Numpad Minus and Plus, Insert+Numpad Minus and Plus, Numpad Slash and Star, Alt+Delete, Insert+R | [H5] | **Missing** | P1 | helper dialogs plan §6 |
-| 29 | Windows | Window List (Insert+F10), system tray (Insert+F11) | [H2, H16] | **Missing** | P1 | to write (never Delete in the list: it closes an application) |
+| 29 | Windows | Window List (Insert+F10), system tray (Insert+F11) | [H2, H16] | **Missing** | P1 | 511 |
 | 30 | Web | Virtual cursor off and on, routing: Insert+Z, Insert+Delete, Ctrl+Insert+Delete | [H12, S6] | **Missing** | P1 | 298 |
 | 31 | Web | The remaining quick keys and first and last keys | [`jaws-quick-navigation-keys.md`](../references/jaws-quick-navigation-keys.md) | **Missing** | P1/P2 | 289-299 |
 | 32 | Web tables | Rows and columns; Alt+Ctrl+Numpad 5; the table layer | [H7, H8, P1] | **Partial (B8).** Cells and headers are built | P1 | 297 |

@@ -1,0 +1,21 @@
+{
+  "id": "508-web-text-area-lines-in-browse-mode",
+  "name": "A text area's lines with the virtual cursor (Auto Forms Mode off): E onto it, Down and Up through its lines, Insert+Up, and Up from the end of the page",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/reading-settings.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "E" },
+    { "id": "s2", "type": "key", "command": "Down" },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Down" },
+    { "id": "s5", "type": "key", "command": "Up" },
+    { "id": "s6", "type": "key", "command": "Insert+Up" },
+    { "id": "s7", "type": "key", "command": "Ctrl+End" },
+    { "id": "s8", "type": "key", "command": "Up" },
+    { "id": "s9", "type": "key", "command": "Up" },
+    { "id": "s10", "type": "key", "command": "Up" }
+  ]
+}
