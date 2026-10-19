@@ -306,8 +306,11 @@ function Wait-Silence([int]$OnsetMs = 800, [int]$QuietMs = 500, [int]$MaxMs = 40
 }
 
 # How long a step waits for JAWS to reach its copy confirmation, speaking what it still had
-# queued when its history was copied.
+# queued when its history was copied: counted from JAWS's last utterance, so a long read (Say
+# Window in a dialog speaks for more than 15 s, 323/s2) is waited for while it goes on; and at
+# most $ConfirmationMaxMs in all.
 $ConfirmationWaitMs = 15000
+$ConfirmationMaxMs = 180000
 
 # Copies the speech history exactly once, and cuts the recorder's records where JAWS's copy
 # confirmation begins. JAWS queues that confirmation behind whatever it has not spoken yet
@@ -333,9 +336,17 @@ function Read-SpeechHistoryOnce([long]$SpokenStart) {
     if (Test-Path $SpokenLog) {
         $spokenEnd = 'timeout'
         $deadline = [DateTime]::UtcNow.AddMilliseconds($ConfirmationWaitMs)
+        $limit = [DateTime]::UtcNow.AddMilliseconds($ConfirmationMaxMs)
+        $seen = 0
         do {
             # @(): Windows PowerShell returns one record as itself, and a lone object has no Count.
             $records = @(Read-SpokenSince $SpokenStart)
+            if ($records.Count -gt $seen) {
+                # JAWS is still speaking what it had queued.
+                $seen = $records.Count
+                $deadline = [DateTime]::UtcNow.AddMilliseconds($ConfirmationWaitMs)
+                if ($deadline -gt $limit) { $deadline = $limit }
+            }
             $at = -1
             for ($i = 0; $i -lt $records.Count; $i++) {
                 if ((Get-SpokenText $records[$i]).Trim() -eq $CopyConfirmation) { $at = $i; break }
