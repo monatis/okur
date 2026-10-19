@@ -811,15 +811,6 @@ impl SpeechFormatter {
         msg::paragraph_formatting(words).render()
     }
 
-    /// Formats selection action announcement matching JAWS conventions.
-    pub fn format_selection(selected: bool, text: &str) -> String {
-        if selected {
-            msg::selection_selected(text).render()
-        } else {
-            msg::selection_unselected(text).render()
-        }
-    }
-
     /// Formats modal dialog entry announcement.
     pub fn format_dialog_entry(title: &str) -> String {
         if title.is_empty() {

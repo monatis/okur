@@ -364,6 +364,16 @@ impl ScreenReaderEngine {
             Command::SelectPriorCharacter => self.cursor.select_prior_char(),
             Command::SelectNextLine => self.cursor.select_next_line(),
             Command::SelectPriorLine => self.cursor.select_prior_line(),
+            Command::SelectNextWord => self.cursor.select_next_word(),
+            Command::SelectPriorWord => self.cursor.select_prior_word(),
+            Command::SelectToLineEnd => self.cursor.select_to_line_edge(true),
+            Command::SelectToLineStart => self.cursor.select_to_line_edge(false),
+            Command::SelectToBottom => self.cursor.select_to_page_edge(true),
+            Command::SelectToTop => self.cursor.select_to_page_edge(false),
+            Command::SelectNextPage => self.cursor.select_page(true),
+            Command::SelectPriorPage => self.cursor.select_page(false),
+            Command::SelectAll => self.cursor.select_all(),
+            Command::CopySelection => self.copy_selection(),
             Command::SaySelectedText => Some(self.cursor.say_selection()),
 
             // Modal dialog commands

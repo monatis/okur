@@ -59,8 +59,10 @@ character-value = Character { $digits }
 
 ## Selecting text with Shift and the arrows
 
-selection-selected = selected { $text }
-selection-unselected = unselected { $text }
+# A character or word taken out of a selection with the virtual cursor.
+selection-removed = unselected
+# Lines taken out of a selection (Ctrl+A) [obs, 501/s13].
+selection-removed-lines = Unselected
 # Say Selected Text with nothing selected.
 selection-none = Nothing selected
 # Say Selected Text, before the selection [obs, 501/s8, 504/s2].

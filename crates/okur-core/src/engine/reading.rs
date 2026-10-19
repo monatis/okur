@@ -74,3 +74,19 @@ impl ScreenReaderEngine {
         Some(Some(speech))
     }
 }
+
+impl ScreenReaderEngine {
+    /// Ctrl+C with a selection made with the virtual cursor: the selection goes on the
+    /// clipboard and JAWS's "Copied selection to clipboard" is said [obs, 501/s9, s14].
+    /// Without one the key is the browser's.
+    pub(super) fn copy_selection(&mut self) -> Option<String> {
+        let text = self.cursor.selection_for_clipboard();
+        if text.is_empty() {
+            return None;
+        }
+        if let Some(actions) = &self.actions {
+            actions.copy_text(&text);
+        }
+        Some(msg::clipboard_copied_selection().to_string())
+    }
+}

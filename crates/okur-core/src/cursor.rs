@@ -136,157 +136,210 @@ impl VirtualCursor {
         self.selection = None;
     }
 
-    /// Extends selection to next character (`Shift+{RIGHT}`).
-    pub fn select_next_char(&mut self) -> Option<String> {
-        let max_offset = if let Some((_, max_off)) = self.active_modal_range() {
-            max_off
-        } else {
-            self.buffer.len()
-        };
-
-        if self.offset >= max_offset {
+    /// Selecting with the virtual cursor (JAWS's Select scripts): the selection runs from where
+    /// it began to `target`, and what changed is read in JAWS's way for the key [obs, 501].
+    fn select_to(&mut self, target: usize, reading: SelectionReading) -> Option<String> {
+        let (min, max) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
+        let target = target.clamp(min, max);
+        if target == self.offset {
             return None;
         }
-
-        let current_char = self.buffer.char_at(self.offset)?;
-        let next_offset = (self.offset + current_char.len_utf8()).min(max_offset);
-        if next_offset == self.offset {
-            return None;
-        }
-
-        let mut sel = self
+        let anchor = self.selection.map_or(self.offset, |s| s.anchor);
+        let before = self
             .selection
-            .unwrap_or(TextSelection::new(self.offset, self.offset));
-        let prior_active = sel.active;
-        sel.active = next_offset;
-        self.selection = Some(sel);
-        self.offset = next_offset;
-
-        if sel.active > sel.anchor {
-            Some(SpeechFormatter::format_selection(
-                true,
-                &current_char.to_string(),
-            ))
-        } else {
-            let unsel_slice = self
-                .buffer
-                .text
-                .get(prior_active..next_offset)
-                .unwrap_or_default();
-            Some(SpeechFormatter::format_selection(false, unsel_slice))
-        }
+            .filter(|s| !s.is_empty())
+            .map_or((anchor, anchor), |s| (s.start(), s.end()));
+        let left_line = self.current_line_index();
+        self.offset = target;
+        self.current_node_id = self.buffer.line_at_offset(target).map(|l| l.node_id);
+        let after = TextSelection::new(anchor, target);
+        self.selection = (!after.is_empty()).then_some(after);
+        let after = (after.start(), after.end());
+        let added = range_gained(before, after);
+        let removed = range_gained(after, before);
+        let said = match reading {
+            SelectionReading::Run => {
+                let (range, word) = match (added, removed) {
+                    (Some(range), _) => (range, msg::selection_added()),
+                    (None, Some(range)) => (range, msg::selection_removed()),
+                    (None, None) => return None,
+                };
+                let line = self.buffer.line_at_offset(range.0)?;
+                let text = self.buffer.text.get(range.0..range.1).unwrap_or_default();
+                format!("{}{text}\n{word}", line_marks(line))
+            }
+            SelectionReading::Lines => {
+                let mut said = Vec::new();
+                if let Some(range) = removed {
+                    said.push(msg::selection_removed_lines().to_string());
+                    said.extend(self.selected_lines(range));
+                }
+                if let Some(range) = added {
+                    said.push(msg::selection_added().to_string());
+                    said.extend(self.selected_lines(range));
+                }
+                said.join("\n")
+            }
+            SelectionReading::LineLeft => {
+                let word = if added.is_some() {
+                    msg::selection_added()
+                } else {
+                    msg::selection_removed()
+                };
+                let line = self.buffer.lines.get(left_line)?;
+                format!("{word}\n{}", self.format_line_announcement(line))
+            }
+        };
+        Some(said)
     }
 
-    /// Extends selection to prior character (`Shift+{LEFT}`).
+    /// The lines `range` covers, each as the virtual cursor reads the part of it in `range`:
+    /// its marks, then the part [obs, 501/s6, s12].
+    fn selected_lines(&self, range: (usize, usize)) -> Vec<String> {
+        self.buffer
+            .lines
+            .iter()
+            .filter(|line| line.end_offset > range.0 && line.start_offset < range.1)
+            .filter_map(|line| {
+                let part = self
+                    .buffer
+                    .text
+                    .get(range.0.max(line.start_offset)..range.1.min(line.end_offset))?;
+                (!part.trim().is_empty()).then(|| format!("{}{part}", line_marks(line)))
+            })
+            .collect()
+    }
+
+    /// Extends selection to next character (`Shift+Right`): " heading level 1 T | selected"
+    /// [obs, 501/s2].
+    pub fn select_next_char(&mut self) -> Option<String> {
+        let ch = self.buffer.char_at(self.offset)?;
+        self.select_to(self.offset + ch.len_utf8(), SelectionReading::Run)
+    }
+
+    /// Extends selection to prior character (`Shift+Left`).
     pub fn select_prior_char(&mut self) -> Option<String> {
-        let min_offset = if let Some((min_off, _)) = self.active_modal_range() {
-            min_off
-        } else {
-            0
-        };
-
-        if self.offset <= min_offset {
-            return None;
-        }
-
-        let mut prev = self.offset - 1;
-        while prev > min_offset && !self.buffer.text.is_char_boundary(prev) {
+        let mut prev = self.offset.checked_sub(1)?;
+        while prev > 0 && !self.buffer.text.is_char_boundary(prev) {
             prev -= 1;
         }
-
-        let ch = self.buffer.char_at(prev)?;
-        let mut sel = self
-            .selection
-            .unwrap_or(TextSelection::new(self.offset, self.offset));
-        let prior_active = sel.active;
-        sel.active = prev;
-        self.selection = Some(sel);
-        self.offset = prev;
-
-        if sel.active < sel.anchor {
-            Some(SpeechFormatter::format_selection(true, &ch.to_string()))
-        } else {
-            let unsel_slice = self.buffer.text.get(prev..prior_active).unwrap_or_default();
-            Some(SpeechFormatter::format_selection(false, unsel_slice))
-        }
+        self.select_to(prev, SelectionReading::Run)
     }
 
-    /// Extends selection to next line (`Shift+{DOWN}`).
+    /// Extends selection to the next word's start (`Ctrl+Shift+Right`): " heading level 1 e |
+    /// selected" [obs, 501/s5].
+    pub fn select_next_word(&mut self) -> Option<String> {
+        let line_end = self
+            .buffer
+            .line_at_offset(self.offset)
+            .map(|l| l.end_offset);
+        let target = self
+            .buffer
+            .next_word_from(self.offset)
+            .map(|w| w.start_offset)
+            .or(line_end)?;
+        self.select_to(target, SelectionReading::Run)
+    }
+
+    /// Extends selection to the prior word's start (`Ctrl+Shift+Left`).
+    pub fn select_prior_word(&mut self) -> Option<String> {
+        let target = self
+            .buffer
+            .prior_word_from(self.offset)
+            .map_or(0, |w| w.start_offset);
+        self.select_to(target, SelectionReading::Run)
+    }
+
+    /// Extends selection to the line's end or start (`Shift+End`, `Shift+Home`): "selected |
+    /// heading level 1 Accessibility Engine Specification" [obs, 501/s6, s11].
+    pub fn select_to_line_edge(&mut self, end: bool) -> Option<String> {
+        let line = self.buffer.line_at_offset(self.offset)?;
+        let target = if end {
+            line.end_offset
+        } else {
+            line.start_offset
+        };
+        self.select_to(target, SelectionReading::Lines)
+    }
+
+    /// Extends selection to the next line's start (`Shift+Down`), reading the line it leaves
+    /// [obs, 501/s7].
     pub fn select_next_line(&mut self) -> Option<String> {
-        let max_offset = if let Some((_, max_off)) = self.active_modal_range() {
-            max_off
-        } else {
-            self.buffer.len()
-        };
-
-        let next_line = self.buffer.next_line_from(self.offset)?;
-        if next_line.start_offset > max_offset {
-            return None;
-        }
-
-        let mut sel = self
-            .selection
-            .unwrap_or(TextSelection::new(self.offset, self.offset));
-        let prior_active = sel.active;
-        let new_offset = next_line.start_offset;
-        sel.active = new_offset;
-        self.selection = Some(sel);
-        self.offset = new_offset;
-        self.current_node_id = Some(next_line.node_id);
-
-        let line_text = &next_line.text;
-        if sel.active >= sel.anchor {
-            Some(SpeechFormatter::format_selection(true, line_text))
-        } else {
-            let unsel = if prior_active < new_offset {
-                self.buffer
-                    .text
-                    .get(prior_active..new_offset)
-                    .unwrap_or_default()
-            } else {
-                line_text
-            };
-            Some(SpeechFormatter::format_selection(false, unsel))
-        }
+        let target = self.buffer.next_line_from(self.offset)?.start_offset;
+        self.select_to(target, SelectionReading::LineLeft)
     }
 
-    /// Extends selection to prior line (`Shift+{UP}`).
+    /// Extends selection to the prior line's start (`Shift+Up`).
     pub fn select_prior_line(&mut self) -> Option<String> {
-        let min_offset = if let Some((min_off, _)) = self.active_modal_range() {
-            min_off
+        let target = self.buffer.prior_line_from(self.offset)?.start_offset;
+        self.select_to(target, SelectionReading::Lines)
+    }
+
+    /// Extends selection to the page's top or bottom (`Ctrl+Shift+Home`, `Ctrl+Shift+End`)
+    /// [obs, 501/s12].
+    pub fn select_to_page_edge(&mut self, end: bool) -> Option<String> {
+        let target = if end { self.buffer.len() } else { 0 };
+        self.select_to(target, SelectionReading::Lines)
+    }
+
+    /// Extends selection by [`LINES_PER_PAGE`] lines (`Shift+PageDown`, `Shift+PageUp`).
+    pub fn select_page(&mut self, down: bool) -> Option<String> {
+        let here = self.current_line_index();
+        let target_line = if down {
+            here.saturating_add(LINES_PER_PAGE)
         } else {
-            0
+            here.saturating_sub(LINES_PER_PAGE)
         };
+        let target = match self.buffer.lines.get(target_line) {
+            Some(line) => line.start_offset,
+            None => self.buffer.len(),
+        };
+        self.select_to(target, SelectionReading::Lines)
+    }
 
-        let prior_line = self.buffer.prior_line_from(self.offset)?;
-        if prior_line.start_offset < min_offset {
-            return None;
-        }
-
-        let mut sel = self
+    /// Ctrl+A with the virtual cursor: what was selected is unselected, and the page from where
+    /// the selection began (the cursor, without one) to its end is selected. JAWS, with a
+    /// selection begun at the third paragraph and extended to the top: "Unselected | the
+    /// title, heading and paragraph | selected | the last two paragraphs" [obs, 501/s13].
+    pub fn select_all(&mut self) -> Option<String> {
+        let anchor = self.selection.map_or(self.offset, |s| s.anchor);
+        let before = self
             .selection
-            .unwrap_or(TextSelection::new(self.offset, self.offset));
-        let prior_active = sel.active;
-        let new_offset = prior_line.start_offset;
-        sel.active = new_offset;
-        self.selection = Some(sel);
-        self.offset = new_offset;
-        self.current_node_id = Some(prior_line.node_id);
-
-        let line_text = &prior_line.text;
-        if sel.active <= sel.anchor {
-            Some(SpeechFormatter::format_selection(true, line_text))
-        } else {
-            let unsel = if prior_active > new_offset {
-                self.buffer
-                    .text
-                    .get(new_offset..prior_active)
-                    .unwrap_or_default()
-            } else {
-                line_text
-            };
-            Some(SpeechFormatter::format_selection(false, unsel))
+            .filter(|s| !s.is_empty())
+            .map(|s| (s.start(), s.end()));
+        let end = self.buffer.len();
+        self.selection = Some(TextSelection::new(anchor, end));
+        self.offset = end;
+        let mut said = Vec::new();
+        if let Some(range) = before {
+            said.push(msg::selection_removed_lines().to_string());
+            said.extend(self.selected_lines(range));
         }
+        said.push(msg::selection_added().to_string());
+        said.extend(self.selected_lines((anchor, end)));
+        Some(said.join("\n"))
+    }
+
+    /// The selection as Ctrl+C puts it on the clipboard: each line's selected part, paragraphs
+    /// apart ("...paramount.\r\n\r\nRust provides..." [obs, 501/s14]); empty without one.
+    pub fn selection_for_clipboard(&self) -> String {
+        let Some(sel) = self.selection.filter(|s| !s.is_empty()) else {
+            return String::new();
+        };
+        self.buffer
+            .lines
+            .iter()
+            .filter(|line| line.end_offset > sel.start() && line.start_offset < sel.end())
+            .filter_map(|line| {
+                let part = self
+                    .buffer
+                    .text
+                    .get(sel.start().max(line.start_offset)..sel.end().min(line.end_offset))?;
+                let part = part.trim();
+                (!part.is_empty()).then_some(part)
+            })
+            .collect::<Vec<_>>()
+            .join("\r\n\r\n")
     }
 
     /// Speaks the currently selected text (`SaySelection`).
@@ -2540,4 +2593,37 @@ impl VirtualCursor {
             Some(format!("{}\n{}", msg::quicknav_wrap_bottom(), speech))
         }
     }
+}
+
+/// How a selection key reads what it changed [obs, 501].
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum SelectionReading {
+    /// A character or a word: its line's marks and the text, then "selected" (" heading level
+    /// 1 T | selected").
+    Run,
+    /// Lines: "selected", then the part of each line ("selected | heading level 1 Accessibility
+    /// Engine Specification").
+    Lines,
+    /// Shift+Down: "selected", then the whole line the cursor leaves.
+    LineLeft,
+}
+
+/// What `after` covers that `before` does not, as one range: both run from the same anchor.
+fn range_gained(before: (usize, usize), after: (usize, usize)) -> Option<(usize, usize)> {
+    if after.1 > before.1 {
+        Some((before.1.max(after.0), after.1))
+    } else if after.0 < before.0 {
+        Some((after.0, before.0.min(after.1)))
+    } else {
+        None
+    }
+}
+
+/// The marks the virtual cursor says before a line's text: " heading level 1 " for a
+/// heading, nothing for plain text.
+fn line_marks(line: &BufferLine) -> &str {
+    line.speech
+        .strip_suffix(line.text.as_str())
+        .filter(|marks| marks.contains('\u{1d}'))
+        .unwrap_or_default()
 }

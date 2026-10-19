@@ -566,6 +566,10 @@ impl ScreenReaderEngine {
             if res.is_some() {
                 return KeyAction::Consume;
             }
+            // Ctrl+C without a selection made with the virtual cursor is the browser's copy.
+            if command == crate::command::Command::CopySelection {
+                return KeyAction::PassThrough;
+            }
             // For navigation keys, consume even if boundary reached so host window doesn't scroll
             if matches!(
                 event.key,

@@ -115,6 +115,22 @@ pub enum Command {
     SelectPriorCharacter,
     SelectNextLine,
     SelectPriorLine,
+    /// Ctrl+Shift+Right and Left: to the next or prior word (Default.JKM: SelectNextWord).
+    SelectNextWord,
+    SelectPriorWord,
+    /// Shift+End and Shift+Home: to the line's end or start.
+    SelectToLineEnd,
+    SelectToLineStart,
+    /// Ctrl+Shift+End and Ctrl+Shift+Home: to the page's bottom or top (SelectToBottom).
+    SelectToBottom,
+    SelectToTop,
+    /// Shift+PageDown and Shift+PageUp: a page of lines (SelectNextScreen).
+    SelectNextPage,
+    SelectPriorPage,
+    /// Ctrl+A (SelectAll).
+    SelectAll,
+    /// Ctrl+C with a selection made with the virtual cursor (CopySelectedTextToClipboard).
+    CopySelection,
     SaySelectedText,
     /// Insert+End: the window's top line (its title).
     SayTopLineOfWindow,
@@ -302,6 +318,16 @@ impl Command {
             "+{LEFT}" | "SelectPriorCharacter" => SelectPriorCharacter,
             "+{DOWN}" | "SelectNextLine" => SelectNextLine,
             "+{UP}" | "SelectPriorLine" => SelectPriorLine,
+            "SelectNextWord" => SelectNextWord,
+            "SelectPriorWord" => SelectPriorWord,
+            "SelectToEndOfLine" => SelectToLineEnd,
+            "SelectToStartOfLine" => SelectToLineStart,
+            "SelectToBottom" => SelectToBottom,
+            "SelectToTop" => SelectToTop,
+            "SelectNextScreen" => SelectNextPage,
+            "SelectPriorScreen" => SelectPriorPage,
+            "SelectAll" => SelectAll,
+            "CopySelectedTextToClipboard" => CopySelection,
             "+!{DOWN}" | "SaySelection" | "SaySelectedText" => SaySelectedText,
             "SayTopLineOfWindow" | "Insert+End" => SayTopLineOfWindow,
             "SayToCursor" | "Insert+Home" => SayToCursor,
@@ -472,6 +498,10 @@ use Held::{No, Yes};
 const SHIFT: Chord = ANY.shift(Yes).ctrl(No).alt(No);
 /// The JAWS key alone.
 const JAWS: Chord = ANY.insert(Yes).ctrl(No).alt(No).shift(No);
+/// Ctrl alone.
+const CTRL: Chord = ANY.ctrl(Yes).shift(No).alt(No).insert(No);
+/// Ctrl and Shift.
+const CTRL_SHIFT: Chord = ANY.ctrl(Yes).shift(Yes).alt(No).insert(No);
 /// The JAWS key with Shift.
 const JAWS_SHIFT: Chord = ANY.insert(Yes).shift(Yes).ctrl(No).alt(No);
 /// Ctrl and Alt, with or without Shift.
@@ -518,6 +548,9 @@ static BINDINGS: &[Binding] = &{
         // Combo boxes.
         bind(DownArrow, ANY.alt(Yes).ctrl(No).shift(No), ExpandComboBox),
         bind(UpArrow, ANY.alt(Yes).ctrl(No).shift(No), CollapseComboBox),
+        // Selecting by word, before the word keys that would take it [obs, 501/s5].
+        bind(RightArrow, CTRL_SHIFT, SelectNextWord),
+        bind(LeftArrow, CTRL_SHIFT, SelectPriorWord),
         // Paragraphs and words.
         bind(DownArrow, ANY.ctrl(Yes), SayNextParagraph),
         bind(UpArrow, ANY.ctrl(Yes), SayPriorParagraph),
@@ -532,6 +565,16 @@ static BINDINGS: &[Binding] = &{
         // list; research Item 4).
         bind(Numpad5, JAWS, SayWord),
         bind(Numpad5, ALONE, SayCharacter),
+        // Selecting with the virtual cursor (Default.JKM's Select scripts), before the plain
+        // Ctrl keys that would take them [obs, 501].
+        bind(End, CTRL_SHIFT, SelectToBottom),
+        bind(Home, CTRL_SHIFT, SelectToTop),
+        bind(End, SHIFT.insert(No), SelectToLineEnd),
+        bind(Home, SHIFT.insert(No), SelectToLineStart),
+        bind(Key::PageDown, SHIFT.insert(No), SelectNextPage),
+        bind(Key::PageUp, SHIFT.insert(No), SelectPriorPage),
+        bind(Alpha('A'), CTRL, SelectAll),
+        bind(Alpha('C'), CTRL, CopySelection),
         // Top and bottom, of a table or the page.
         bind(Home, CTRL_ALT, TableFirstCell),
         bind(End, CTRL_ALT, TableLastCell),

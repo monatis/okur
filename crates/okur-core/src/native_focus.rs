@@ -668,8 +668,10 @@ pub fn reading_line(focus: &FocusEvent) -> String {
         .map(Line::render)
         .filter(|l| !l.is_empty())
         .collect::<Vec<_>>()
-        .join("
-")
+        .join(
+            "
+",
+        )
 }
 
 pub fn focus_line(focus: &FocusEvent) -> String {
