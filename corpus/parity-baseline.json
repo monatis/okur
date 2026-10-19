@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 2159,
+  "matched_steps": 2160,
   "total_steps": 2655,
   "accepted_divergences": 60,
   "errors": [],
@@ -2566,7 +2566,7 @@
     "533-desktop-toast-and-progress-bar/s9": "match",
     "534-web-numpad-slash-check-box/s1": "match",
     "534-web-numpad-slash-check-box/s10": "mismatch",
-    "534-web-numpad-slash-check-box/s2": "mismatch",
+    "534-web-numpad-slash-check-box/s2": "match",
     "534-web-numpad-slash-check-box/s3": "match",
     "534-web-numpad-slash-check-box/s4": "match",
     "534-web-numpad-slash-check-box/s5": "match",

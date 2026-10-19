@@ -586,6 +586,9 @@ impl ScreenReaderEngine {
             // Forms mode turned on by an element list: the regions as with Enter, no hint, and
             // the field's line after it [obs, 249/s3].
             let by_list = std::mem::take(&mut self.forms_mode_by_list) && is_edit;
+            // A left click from the virtual cursor (Numpad Slash): the regions as with Enter
+            // [obs, 534/s2].
+            let by_click = self.clicked.take().is_some_and(|id| Some(id) == target_id);
             // Back in an autocomplete from its list: "Fruit edit combo collapsed | Apricot |
             // To set the value use the Arrow keys or type the value." (JAWS on the dev box),
             // and into a combo box one types in: Google Sheets' cell editor, "D1 edit combo |
@@ -613,7 +616,7 @@ impl ScreenReaderEngine {
                 }
             }
             if entering_page {
-                let regions = if by_enter || by_list || by_auto_tab {
+                let regions = if by_enter || by_list || by_auto_tab || by_click {
                     target_id
                         .map(|id| self.region_markers(id))
                         .unwrap_or_default()

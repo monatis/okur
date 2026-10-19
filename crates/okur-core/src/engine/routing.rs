@@ -79,6 +79,7 @@ impl ScreenReaderEngine {
             return None;
         }
         let said = self.say(msg::left_mouse_button().to_string());
+        self.clicked = self.node_under_cursor().map(|node| node.id);
         if let (Some(actions), Some(node)) = (&self.actions, self.node_under_cursor()) {
             actions.activate(node);
         }

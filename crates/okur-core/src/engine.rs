@@ -195,6 +195,9 @@ pub struct ScreenReaderEngine {
     layer_open: bool,
     /// The table layer (Insert+Space, T): the arrows move by cell until Escape.
     table_layer: bool,
+    /// The page element Numpad Slash clicked at the virtual cursor: its focus is said as
+    /// Enter's is, with the regions it is in [obs, 534/s2].
+    clicked: Option<usize>,
     /// Speech turned off with Insert+Space, S.
     speech_muted: bool,
     /// User settings (JAWS defaults unless configured).
@@ -282,6 +285,7 @@ impl ScreenReaderEngine {
             rate_change: 0,
             layer_open: false,
             table_layer: false,
+            clicked: None,
             speech_muted: false,
             settings: crate::settings::Settings::default(),
             caps_lock_on: false,
