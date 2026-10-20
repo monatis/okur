@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur -- parity --write-baseline",
-  "matched_steps": 4728,
+  "matched_steps": 4729,
   "total_steps": 4901,
   "accepted_divergences": 104,
   "errors": [],
@@ -5023,6 +5023,6 @@
     "664-desktop-notepad-ctrl-backspace/s6": "match",
     "664-desktop-notepad-ctrl-backspace/s7": "match",
     "664-desktop-notepad-ctrl-backspace/s8": "match",
-    "664-desktop-notepad-ctrl-backspace/s9": "mismatch"
+    "664-desktop-notepad-ctrl-backspace/s9": "match"
   }
 }

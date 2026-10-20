@@ -2766,6 +2766,16 @@ fn a_plain_multi_line_edit_is_silent_on_home() {
         norm(&speech.take().join(" ")).contains("top of file"),
         "Ctrl+Home names the top"
     );
+    // Windows 10 Notepad's edit, a Document to UI Automation, is a plain edit by its class.
+    let mut notepad = FocusEvent::new(Role::Document).with_name("Text Editor");
+    notepad.platform.element_class = Some("Edit".to_owned());
+    notepad.multi_line = true;
+    notepad.text = Some(context(7));
+    engine.handle_focus_event(&notepad);
+    speech.take();
+    engine.handle_key_event(&key(Key::Home));
+    engine.handle_accessibility_event(&AccessibilityEvent::TextContext(context(0)));
+    assert_eq!(norm(&speech.take().join(" ")), "");
 }
 
 /// A page's multi-line field reads keys as a document does: Google Docs' document with
