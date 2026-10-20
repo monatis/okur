@@ -28,6 +28,7 @@ impl ScreenReaderEngine {
             Command::RefreshScreen => return self.refresh_screen(),
             Command::SayDefaultButton => return self.say_default_button(),
             Command::SayConfiguration => return self.say_configuration(),
+            Command::SayAppVersion => return self.say_app_version(),
             Command::SayHotKey => return self.say_hot_key(),
             Command::MoveToNext(crate::command::Element::MailLink) => {
                 return self.move_to_mail_link(true)

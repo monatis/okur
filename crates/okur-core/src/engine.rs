@@ -127,6 +127,9 @@ pub struct ScreenReaderEngine {
     forms_mode_by_enter: bool,
     /// The focused control's access key, whatever the Access Key output: Say Focus says it.
     focus_access_key: Option<String>,
+    /// The focused application's product name and version, as the last focus gave them
+    /// (Ctrl+Insert+V).
+    focus_app_version: Option<(String, String)>,
     /// Forms mode was just turned on by one of JAWS's element lists giving a field the focus:
     /// the field's focus is followed by its line, as Say Line reads it [obs, 249/s3].
     forms_mode_by_list: bool,
@@ -253,6 +256,7 @@ impl ScreenReaderEngine {
             pending_file_edge: None,
             forms_mode_by_enter: false,
             focus_access_key: None,
+            focus_app_version: None,
             forms_mode_by_list: false,
             page_said_for: None,
             pending_page: None,

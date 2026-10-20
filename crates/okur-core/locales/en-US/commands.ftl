@@ -91,6 +91,8 @@ not-in-dialog-box = Not in a dialog box
 default-settings-loaded = Default settings are loaded
 # Insert+Q: the application's executable, then spelled.
 application-in-use = The application currently being used is { $app }
+# Ctrl+Insert+V: the application's product name and version [obs, 513/s4].
+app-version = { $product } Version { $version }
 
 ## A list view's columns, Ctrl+Insert+1 to 0 [obs, 514/s5-s7]
 

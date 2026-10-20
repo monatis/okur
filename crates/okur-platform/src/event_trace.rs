@@ -131,6 +131,13 @@ pub struct TraceEvent {
     pub window_title: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub process: Option<String>,
+    /// The process's executable's product name and version, from its version resource
+    /// (Ctrl+Insert+V: "Microsoft® Windows® Operating System Version 10.0.19041.1" [obs,
+    /// 513/s4]).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub process_product: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub process_version: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub object: Option<TraceObject>,
     /// For focus and foreground events: the focused element and its ancestors, outermost
@@ -911,6 +918,8 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         .value
         .map(|v| okur_core::viewer_text::without_marks(&v));
     focus.app = event.process.clone();
+    focus.app_product = event.process_product.clone();
+    focus.app_version = event.process_version.clone();
     focus.window_items = event
         .dialog_tree
         .as_ref()
@@ -1448,6 +1457,8 @@ fn menu_bar_return(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     focus.window_title = Some(title);
     focus.platform.window_class = event.window_class.clone();
     focus.app = event.process.clone();
+    focus.app_product = event.process_product.clone();
+    focus.app_version = event.process_version.clone();
     // The field the window gives the focus back to, as the trace read it.
     focus.text = event.text_context.clone();
     Some(focus)
@@ -1499,6 +1510,8 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     }
     apply_msaa_states(&mut focus, object.states);
     focus.app = event.process.clone();
+    focus.app_product = event.process_product.clone();
+    focus.app_version = event.process_version.clone();
     focus.in_ribbon = true;
     Some(focus)
 }
@@ -1647,8 +1660,108 @@ mod capture {
         process_name_of(pid)
     }
 
+    /// The product name and version of the executable of the process that owns `hwnd`, from
+    /// its version resource (ProductName, ProductVersion), read once per executable.
+    fn process_product_of(hwnd: HWND) -> (Option<String>, Option<String>) {
+        type Product = (Option<String>, Option<String>);
+        thread_local! {
+            static PRODUCTS: std::cell::RefCell<std::collections::HashMap<String, Product>> =
+                std::cell::RefCell::new(std::collections::HashMap::new());
+        }
+        let mut pid = 0u32;
+        // SAFETY: valid out-pointer; a stale hwnd yields pid 0.
+        unsafe { GetWindowThreadProcessId(hwnd, Some(&mut pid)) };
+        let Some(path) = process_image_of(pid) else {
+            return (None, None);
+        };
+        PRODUCTS.with(|products| {
+            products
+                .borrow_mut()
+                .entry(path.clone())
+                .or_insert_with(|| version_strings(&path))
+                .clone()
+        })
+    }
+
+    /// ProductName and ProductVersion from the version resource of the file at `path`.
+    fn version_strings(path: &str) -> (Option<String>, Option<String>) {
+        use windows::core::PCWSTR;
+        use windows::Win32::Storage::FileSystem::{
+            GetFileVersionInfoSizeW, GetFileVersionInfoW, VerQueryValueW,
+        };
+        let wide: Vec<u16> = path.encode_utf16().chain(std::iter::once(0)).collect();
+        // SAFETY: NUL-terminated path; the size query writes nothing else.
+        let size = unsafe { GetFileVersionInfoSizeW(PCWSTR(wide.as_ptr()), None) };
+        if size == 0 {
+            return (None, None);
+        }
+        let mut data = vec![0u8; size as usize];
+        // SAFETY: the buffer is `size` bytes, as asked.
+        let read = unsafe {
+            GetFileVersionInfoW(PCWSTR(wide.as_ptr()), None, size, data.as_mut_ptr().cast())
+        };
+        if read.is_err() {
+            return (None, None);
+        }
+        // A value of the version block: a pointer into `data` and its length.
+        let query = |sub: &str| -> Option<(*const std::ffi::c_void, u32)> {
+            let sub: Vec<u16> = sub.encode_utf16().chain(std::iter::once(0)).collect();
+            let mut value: *mut std::ffi::c_void = std::ptr::null_mut();
+            let mut len = 0u32;
+            // SAFETY: `data` holds the block GetFileVersionInfoW filled; the result points
+            // into it.
+            let found = unsafe {
+                VerQueryValueW(
+                    data.as_ptr().cast(),
+                    PCWSTR(sub.as_ptr()),
+                    &mut value,
+                    &mut len,
+                )
+            }
+            .as_bool();
+            (found && !value.is_null() && len > 0).then_some((value.cast_const(), len))
+        };
+        // The first language and code page the file lists, else US English in Unicode.
+        let translation = query("\\VarFileInfo\\Translation")
+            .filter(|&(_, len)| len >= 4)
+            .map(|(value, _)| {
+                // SAFETY: at least four bytes: a language and a code page, two u16s.
+                let pair = unsafe { std::slice::from_raw_parts(value.cast::<u16>(), 2) };
+                format!(
+                    "{:04x}{:04x}",
+                    pair.first().copied().unwrap_or(0x0409),
+                    pair.get(1).copied().unwrap_or(0x04b0)
+                )
+            })
+            .unwrap_or_else(|| "040904b0".to_owned());
+        let string = |name: &str| -> Option<String> {
+            let (value, len) = query(&format!("\\StringFileInfo\\{translation}\\{name}"))?;
+            // SAFETY: a string value of `len` UTF-16 units, its NUL included.
+            let units = unsafe { std::slice::from_raw_parts(value.cast::<u16>(), len as usize) };
+            let text = String::from_utf16_lossy(units);
+            let text = text.trim_end_matches('\0').trim().to_owned();
+            (!text.is_empty()).then_some(text)
+        };
+        (string("ProductName"), string("ProductVersion"))
+    }
+
+    /// Notepad's own version resource names Windows as its product (live: reads a system
+    /// file).
+    #[test]
+    #[ignore = "live: reads C:\\Windows\\notepad.exe"]
+    fn a_system_executable_names_its_product_and_version() {
+        let (product, version) = version_strings("C:\\Windows\\notepad.exe");
+        assert!(product.is_some_and(|p| p.contains("Windows")));
+        assert!(version.is_some_and(|v| v.starts_with("10.")));
+    }
+
     /// The executable's file name of process `pid`.
     fn process_name_of(pid: u32) -> Option<String> {
+        process_image_of(pid).and_then(|path| path.rsplit('\\').next().map(str::to_owned))
+    }
+
+    /// The executable's full path of process `pid`.
+    fn process_image_of(pid: u32) -> Option<String> {
         if pid == 0 {
             return None;
         }
@@ -1668,8 +1781,9 @@ mod capture {
             if !ok {
                 return None;
             }
-            let path = String::from_utf16_lossy(buf.get(..len as usize).unwrap_or_default());
-            path.rsplit('\\').next().map(str::to_owned)
+            Some(String::from_utf16_lossy(
+                buf.get(..len as usize).unwrap_or_default(),
+            ))
         }
     }
 
@@ -2064,6 +2178,8 @@ mod capture {
                     status_bar: Vec::new(),
                     window_title: None,
                     process: None,
+                    process_product: None,
+                    process_version: None,
                     object: None,
                     focus_chain: Vec::new(),
                     focus_siblings: Vec::new(),
@@ -2430,6 +2546,8 @@ mod capture {
                     status_bar: Vec::new(),
                     window_title: None,
                     process: None,
+                    process_product: None,
+                    process_version: None,
                     object: None,
                     focus_chain: Vec::new(),
                     focus_siblings: Vec::new(),
@@ -2544,6 +2662,8 @@ mod capture {
                     status_bar: Vec::new(),
                     window_title: None,
                     process: None,
+                    process_product: None,
+                    process_version: None,
                     object: None,
                     focus_chain: Vec::new(),
                     focus_siblings: Vec::new(),
@@ -2890,6 +3010,12 @@ mod capture {
             } else {
                 (Vec::new(), Vec::new())
             };
+            // What Ctrl+Insert+V says: the focused application's product and version.
+            let (process_product, process_version) = if focused {
+                process_product_of(hwnd)
+            } else {
+                (None, None)
+            };
             let event = TraceEvent {
                 t_ms,
                 event: name.to_owned(),
@@ -2904,6 +3030,8 @@ mod capture {
                 status_bar,
                 window_title: Some(title).filter(|s| !s.is_empty()),
                 process: process_name(hwnd),
+                process_product,
+                process_version,
                 object,
                 focus_chain: focus,
                 focus_siblings,
@@ -3702,6 +3830,8 @@ mod tests {
             status_bar: Vec::new(),
             window_title: None,
             process: None,
+            process_product: None,
+            process_version: None,
             object: None,
             focus_chain: vec![node(GROUP, "Plan", false), node(RADIO, "Pro", true)],
             focus_siblings: siblings,

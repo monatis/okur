@@ -105,6 +105,15 @@ impl ScreenReaderEngine {
         Some(said.join("\n"))
     }
 
+    /// Ctrl+Insert+V: the application's product name and version, as its executable gives
+    /// them: "Microsoft® Windows® Operating System Version 10.0.19041.1" for a PowerShell
+    /// window [obs, 513/s4]. Without them nothing is said: what JAWS says then is not
+    /// recorded.
+    pub(super) fn say_app_version(&mut self) -> Option<String> {
+        let (product, version) = self.focus_app_version.clone()?;
+        self.say(msg::app_version(product.as_str(), version.as_str()).to_string())
+    }
+
     /// Ctrl+Insert+1 to 0 on a list view's item: the column's header and its text, "Name",
     /// "budget.xlsx"; past the last column, "3 out of range", "this listview only contains 2
     /// columns." [obs, 514/s5-s7, s9, s10]. The first column is the item's name.

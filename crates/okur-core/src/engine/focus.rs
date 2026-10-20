@@ -127,6 +127,9 @@ impl ScreenReaderEngine {
     }
 
     pub fn handle_focus_event(&mut self, focus: &FocusEvent) -> Option<String> {
+        if let (Some(product), Some(version)) = (&focus.app_product, &focus.app_version) {
+            self.focus_app_version = Some((product.clone(), version.clone()));
+        }
         // The settings of the application in front, and of the site whose page has the focus.
         let site = focus
             .in_document

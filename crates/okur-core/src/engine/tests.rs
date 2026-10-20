@@ -3992,3 +3992,24 @@ fn separators_divisions_and_mail_links() {
         actions.requests()
     );
 }
+
+/// Ctrl+Insert+V: the focused application's product name and version, as its executable
+/// gives them [obs, 513/s4]; before any focus with them, nothing.
+#[test]
+fn ctrl_insert_v_says_the_applications_version() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    assert_eq!(engine.execute(crate::command::Command::SayAppVersion), None);
+    let mut button = FocusEvent::new(Role::Button)
+        .with_name("Save...")
+        .with_window_title("SR Dialog Fixture");
+    button.app_product = Some("Microsoft® Windows® Operating System".to_owned());
+    button.app_version = Some("10.0.19041.1".to_owned());
+    engine.handle_focus_event(&button);
+    assert_eq!(
+        engine
+            .execute(crate::command::Command::SayAppVersion)
+            .as_deref(),
+        Some("Microsoft® Windows® Operating System Version 10.0.19041.1")
+    );
+}

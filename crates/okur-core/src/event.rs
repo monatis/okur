@@ -217,6 +217,12 @@ pub struct FocusEvent {
     /// The application, as the platform names it: its executable on Windows
     /// ("SearchHost.exe"), its bundle identifier on macOS. For application modules (`apps/`).
     pub app: Option<String>,
+    /// The application's product name and version, as its executable gives them: what
+    /// Ctrl+Insert+V says [obs, 513/s4].
+    #[serde(default)]
+    pub app_product: Option<String>,
+    #[serde(default)]
+    pub app_version: Option<String>,
     /// What the platform calls the focus's windows and elements, for application modules.
     pub platform: PlatformIds,
 }
@@ -329,6 +335,8 @@ impl FocusEvent {
             menu_bar: Vec::new(),
             status_bar: Vec::new(),
             app: None,
+            app_product: None,
+            app_version: None,
             platform: PlatformIds::default(),
         }
     }

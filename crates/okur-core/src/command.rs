@@ -207,6 +207,8 @@ pub enum Command {
     SayDefaultButton,
     /// Insert+Q: which settings are loaded, and the application in use.
     SayConfiguration,
+    /// Ctrl+Insert+V: the application's product name and version.
+    SayAppVersion,
     /// Shift+Numpad5: the focused control's hot key.
     SayHotKey,
     /// Ctrl+Insert+1 to 0: a list view item's column (1 to 10), with its header.
@@ -442,6 +444,7 @@ impl Command {
             "SayBottomLineOfWindow" | "Insert+PageDown" => SayBottomLineOfWindow,
             "SayDefaultButton" | "Insert+E" => SayDefaultButton,
             "SayConfiguration" | "Insert+Q" => SayConfiguration,
+            "SayAppVersion" => SayAppVersion,
             "SayHotKey" | "Shift+Numpad5" => SayHotKey,
             "IndicateLinkSourceURL" | "Ctrl+Insert+F7" => SayLinkAddress,
             "RouteVirtualToPc" | "Insert+Delete" => RouteVirtualToPc,
@@ -842,6 +845,7 @@ static BINDINGS: &[Binding] = &{
         // The dialog box's default button, and the settings in use (JAWS 2025 help) [obs, 513].
         bind(Alpha('E'), JAWS, SayDefaultButton),
         bind(Alpha('Q'), JAWS, SayConfiguration),
+        bind(Alpha('V'), CTRL_INSERT, SayAppVersion),
         // A page's link address, routing the cursors, frames, and the prior heading by the
         // Ctrl+Insert+Shift+Enter of the key map (Default.JKM) [obs, 536].
         bind(Key::F(7), CTRL_INSERT, SayLinkAddress),
