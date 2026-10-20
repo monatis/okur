@@ -18,6 +18,7 @@ To record one:
 | 561 | The clipboard keys: SayClipboard, View Clipboard Text, AppendSelectedTextToClipboard (the Windows-key scripts called by name). Round 59 failed: Escape did not close the "Clipboard Text" window View Clipboard Text opens, which then stayed open across trials, and a second View Clipboard Text asked "Overwrite Clipboard Text Viewer" (Yes, No). Needs another way to close that window before it is recorded again | `desktop-editor.ps1` |
 | 593-612 | Ten more recorded scenarios at Intermediate (593-602) and Advanced (603-612) verbosity, generated from 216, 228, 283, 289, 302, 501, 504, 524, 526 and 540 with their steps unchanged | as their sources |
 | 613 | A Turkish page (`lang="tr"`, ç ğ ı İ ö ş ü) read by character, word and line, spelled, and with Say All, in JAWS's English voice (old-pc's language detection is off) | `turkish-text.html` (here) |
+| 614 | Insert+Tab with JAWS's text analysis on a second Notepad fixture: how far brackets pair, which symbols, numbers, spaces and cases it names (568 left open whether parentheses are paired across lines or not checked) | `desktop-proofing-2.ps1` (here) |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.
