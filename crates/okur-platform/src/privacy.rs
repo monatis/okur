@@ -2,6 +2,9 @@
 //! reference machine's browser may show its user's account: Chrome's new tab page named the
 //! signed-in Google account, with its e-mail address, in a trace of scenario 220 (2026-10-19).
 
+/// What an e-mail address is replaced with.
+pub const ADDRESS_MARK: &str = "<address>";
+
 /// `text` with every e-mail address replaced by `<address>`, except addresses at the domains
 /// reserved for examples (RFC 2606: `example.com`, `example.net`, `example.org`, and names
 /// under `.example`, `.test`, `.invalid`, `.localhost`), which the fixtures use and replay
@@ -24,7 +27,7 @@ pub fn redact_addresses(text: &str) -> String {
                 for _ in 0..local {
                     out.pop();
                 }
-                out.push_str("<address>");
+                out.push_str(ADDRESS_MARK);
                 i += 1 + domain.chars().count();
                 continue;
             }

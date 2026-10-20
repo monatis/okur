@@ -469,10 +469,24 @@ fn run_scenario(
         }
         use crate::divergences::{compare, Comparison};
         let key = format!("{}/{}", scenario.id, step.id);
+        // The tracer redacts e-mail addresses outside the example domains (privacy.rs); where
+        // Okur read a redacted one from the trace, JAWS's transcript is redacted the same way
+        // (news-article.html's address [239/s3]).
+        let redacted = |okur: &str, jaws: Vec<String>| -> Vec<String> {
+            if okur.contains(okur_platform::privacy::ADDRESS_MARK) {
+                jaws.iter()
+                    .map(|t| okur_platform::privacy::redact_addresses(t))
+                    .collect()
+            } else {
+                jaws
+            }
+        };
+        let jaws = redacted(&engine_speech, jaws);
         let comparison = compare(&key, &engine_speech, &jaws);
         let engine_spoken = spoken.take_spoken().join(" ");
         let spoken_parity = spoken_variants.as_ref().map(|all| {
             let jaws_variants = all.get(&step.id).cloned().unwrap_or_default();
+            let jaws_variants = redacted(&engine_spoken, jaws_variants);
             SpokenParity {
                 matched: compare(&key, &engine_spoken, &jaws_variants) == Comparison::Matched,
                 engine: engine_spoken,
