@@ -687,6 +687,21 @@ impl ScreenReaderEngine {
                 if let Some(title) = self.cursor.buffer.document_title() {
                     speech = speech.map(|s| format!("{title}\n{regions}{s}"));
                 }
+                // An element list's Enter moved the virtual cursor into named groups: they are
+                // said first, "Settings group", then the page [obs, 260/s3].
+                let groups = std::mem::take(&mut self.list_entered_groups);
+                if !groups.is_empty() {
+                    let said: Vec<String> = groups
+                        .iter()
+                        .map(|name| {
+                            format!(
+                                "{name}{}",
+                                crate::linearize::role_marker(msg::role_group().as_str())
+                            )
+                        })
+                        .collect();
+                    speech = speech.map(|s| format!("{}\n{s}", said.join("\n")));
+                }
             }
             if by_list {
                 if let Some(line) = target_id.and_then(|id| self.field_forms_line(id)) {

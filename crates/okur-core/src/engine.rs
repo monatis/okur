@@ -210,6 +210,9 @@ pub struct ScreenReaderEngine {
     /// The radio button that Space or Numpad Slash checked while another of its group was
     /// checked: its focus is said without its position [obs, 205/s6, 534/s9].
     radio_switched: Option<usize>,
+    /// The named groups the virtual cursor entered as an element list's Enter moved it to
+    /// a control: said before the page as the focus comes back [obs, 260/s3, 246/s3].
+    list_entered_groups: Vec<String>,
     /// Speech turned off with Insert+Space, S.
     speech_muted: bool,
     /// User settings (JAWS defaults unless configured).
@@ -302,6 +305,7 @@ impl ScreenReaderEngine {
             table_layer: false,
             clicked: None,
             radio_switched: None,
+            list_entered_groups: Vec::new(),
             speech_muted: false,
             settings: crate::settings::Settings::default(),
             caps_lock_on: false,
@@ -1324,6 +1328,29 @@ impl ScreenReaderEngine {
             // 228/s9, s10].
             Outcome::Focus(field) => {
                 close(self);
+                // The named groups around the control that the virtual cursor was outside of.
+                let from = self.cursor.offset;
+                self.list_entered_groups = self
+                    .cursor
+                    .buffer
+                    .ancestors(field.node_id)
+                    .into_iter()
+                    .rev()
+                    .filter(|a| {
+                        matches!(a.role, crate::aom::Role::Group | crate::aom::Role::TabList)
+                    })
+                    .filter_map(|a| {
+                        let name = a.name.as_deref().map(str::trim).filter(|n| !n.is_empty())?;
+                        let span = self.cursor.buffer.bounded.iter().find(|&&(s, e)| {
+                            self.cursor
+                                .buffer
+                                .line_at_offset(s)
+                                .is_some_and(|l| l.node_id == a.id)
+                                && e >= s
+                        })?;
+                        (from < span.0 || from > span.1).then(|| name.to_owned())
+                    })
+                    .collect();
                 self.cursor.jump_to_element_offset(field.offset);
                 // JAWS's element lists leave the speech to the focus: the page and its regions
                 // as the focus enters them, then the control [obs, 247/s3, 250/s3].
