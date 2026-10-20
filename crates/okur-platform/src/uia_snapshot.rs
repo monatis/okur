@@ -1025,11 +1025,95 @@ pub(crate) mod capture {
                 uia.ElementFromHandleBuildCache(hwnd, &request).ok()?,
             )
         };
+        let items = (
+            // SAFETY: UIA client query on a valid automation object.
+            unsafe { uia.ControlViewCondition() }.ok()?,
+            request_for(uia, AutomationElementMode_Full, ITEM_PROPERTIES)?,
+        );
         let mut budget = MAX_WINDOW_TREE;
-        let mut tree = read_subtree(&walker, &request, &window, 6, &mut budget)?;
+        let mut tree = read_window_tree(&walker, &request, &items, &window, 6, &mut budget)?;
         assign_group_boxes(&walker, &request, &window, &mut tree);
         tree.children.retain(|c| c.control_type != UIA_TITLEBAR);
         Some(tree)
+    }
+
+    /// What is read of each item of a list, tree or grid in a window's tree: what Say Window,
+    /// the dialog's labels and its lists' names use. A Win32 list's items come through UI
+    /// Automation's MSAA proxy, a window message per property: the Font dialog's tree, its
+    /// 187 fonts read with every property, took 801 ms (median, old-pc, 541; performance
+    /// review P6).
+    const ITEM_PROPERTIES: &[UIA_PROPERTY_ID] = &[
+        UIA_ControlTypePropertyId,
+        UIA_LocalizedControlTypePropertyId,
+        UIA_NamePropertyId,
+        UIA_ValueValuePropertyId,
+        UIA_ValueIsReadOnlyPropertyId,
+        UIA_ClassNamePropertyId,
+        UIA_AutomationIdPropertyId,
+        UIA_ToggleToggleStatePropertyId,
+        UIA_ExpandCollapseExpandCollapseStatePropertyId,
+        UIA_SelectionItemIsSelectedPropertyId,
+        UIA_IsEnabledPropertyId,
+        UIA_IsOffscreenPropertyId,
+    ];
+
+    /// [`read_subtree`] for a window: a list's, tree's or grid's items are read a level at a
+    /// time, in one call each, with [`ITEM_PROPERTIES`].
+    fn read_window_tree(
+        walker: &IUIAutomationTreeWalker,
+        request: &IUIAutomationCacheRequest,
+        items: &(IUIAutomationCondition, IUIAutomationCacheRequest),
+        element: &IUIAutomationElement,
+        depth: usize,
+        budget: &mut usize,
+    ) -> Option<UiaNode> {
+        const ITEM_CONTAINERS: [i32; 4] = [
+            UIA_ListControlTypeId.0,
+            UIA_TreeControlTypeId.0,
+            UIA_DataGridControlTypeId.0,
+            UIA_TableControlTypeId.0,
+        ];
+        if depth > 0
+            && int(element, UIA_ControlTypePropertyId).is_some_and(|t| ITEM_CONTAINERS.contains(&t))
+        {
+            let (condition, item_request) = items;
+            *budget = budget.checked_sub(1)?;
+            let mut node = read_node(element, usize::MAX);
+            // SAFETY: UIA client queries on valid automation objects.
+            let children =
+                unsafe { element.FindAllBuildCache(TreeScope_Children, condition, item_request) };
+            let Ok(children) = children else {
+                return Some(node);
+            };
+            let count = unsafe { children.Length() }.unwrap_or(0);
+            for index in 0..count {
+                // SAFETY: an index below the array's length.
+                let Ok(child) = (unsafe { children.GetElement(index) }) else {
+                    continue;
+                };
+                match read_level(condition, item_request, &child, depth - 1, budget) {
+                    Some(child) => node.children.push(child),
+                    None => break,
+                }
+            }
+            return Some(node);
+        }
+        *budget = budget.checked_sub(1)?;
+        let mut node = read_node(element, usize::MAX);
+        if depth == 0 {
+            return Some(node);
+        }
+        // SAFETY: UIA tree walking on valid elements.
+        let mut current = unsafe { walker.GetFirstChildElementBuildCache(element, request) }.ok();
+        while let Some(el) = current {
+            match read_window_tree(walker, request, items, &el, depth - 1, budget) {
+                Some(child) => node.children.push(child),
+                None => break,
+            }
+            // SAFETY: as above.
+            current = unsafe { walker.GetNextSiblingElementBuildCache(&el, request) }.ok();
+        }
+        Some(node)
     }
 
     /// An element of the taskbar met by [`taskbar_elements`].
