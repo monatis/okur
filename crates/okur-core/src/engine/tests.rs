@@ -3576,6 +3576,52 @@ fn an_arrow_back_onto_a_field_says_what_was_typed() {
     assert!(engine.forms_mode);
 }
 
+/// Without Auto Forms Mode, Tab onto a field turns forms mode on once the virtual cursor has
+/// moved since the page loaded, with the field's hint; Tab first after the load leaves it off,
+/// and an empty field is said without "blank" [obs, 629/s1, s2; 630/s2, s3].
+#[test]
+fn tab_turns_forms_mode_on_once_the_virtual_cursor_has_moved() {
+    let mut name = AomNode::new(2, Role::Edit).with_name("Full name");
+    name.attributes.insert("required".into(), "true".into());
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Create your account"),
+            name,
+        ]);
+    let start = |moved: bool| {
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+        let speech = SharedSpeech::default();
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+        let mut changed = engine.settings.clone();
+        changed.auto_forms_mode = false;
+        engine.set_settings(changed);
+        engine.handle_document_loaded("Web Menus", VirtualBuffer::from_aom(&page));
+        engine.on_idle();
+        engine.handle_focus_event(&page_document());
+        if moved {
+            engine.handle_key_event(&key(Key::DownArrow));
+        }
+        speech.take();
+        engine.handle_key_event(&key(Key::Tab));
+        let mut field = FocusEvent::new(Role::Edit)
+            .with_node_id(2)
+            .with_name("Full name");
+        field.in_document = true;
+        engine.handle_focus_event(&field);
+        (engine, speech)
+    };
+    let (first, speech) = start(false);
+    assert!(!first.forms_mode);
+    let said = norm(&speech.take().join(" "));
+    assert!(!said.contains("blank"), "{said}");
+    assert!(!said.contains("Type in text."), "{said}");
+    let (moved, speech) = start(true);
+    assert!(moved.forms_mode);
+    let said = norm(&speech.take().join(" "));
+    assert!(said.ends_with("Type in text."), "{said}");
+}
+
 /// Without Auto Forms Mode, the arrows read a field's line and stay in browse mode [obs, 201].
 #[test]
 fn without_auto_forms_mode_the_arrows_read_a_fields_line() {

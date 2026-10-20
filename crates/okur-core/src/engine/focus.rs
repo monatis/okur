@@ -465,8 +465,24 @@ impl ScreenReaderEngine {
             let tabbed_choice = auto_forms
                 && self.last_key_tabs
                 && matches!(target_role, Some(Role::ComboBox | Role::RadioButton));
+            // Without Auto Forms Mode, Tab onto a field of one line turns forms mode on once
+            // the virtual cursor has moved since the page loaded: Tab first after the load,
+            // or after Say Line, leaves it off [obs, 629, 631; 630, 621, 555]. Onto a text area
+            // it stays off [obs, 212/s11, s12].
+            let tabbed_field = is_edit
+                && self.last_key_tabs
+                && self.cursor_moved_since_load
+                && target_id
+                    .and_then(|id| self.cursor.buffer.node(id))
+                    .is_some_and(|n| n.attributes.get("multiline").is_none_or(|m| m != "true"));
+            // Tab from a field in forms mode onto a radio button keeps forms mode, as onto a
+            // field or a combo box [obs, 621/s6-s8, 555/s6].
+            let tabbed_radio =
+                self.forms_mode && self.last_key_tabs && target_role == Some(Role::RadioButton);
             let in_forms_mode = !opened
                 && ((is_edit && (auto_forms || self.forms_mode))
+                    || tabbed_field
+                    || tabbed_radio
                     || (target_role == Some(Role::ComboBox) && self.forms_mode)
                     || tabbed_choice
                     || self.web_application.is_some()
@@ -639,11 +655,26 @@ impl ScreenReaderEngine {
                 speech = speech.map(|s| format!("{s}\n{}", msg::hint_radio_up_down()));
             }
             // Forms mode turned on by Enter adds the regions the field is in and the edit's
-            // hint [obs, 19/s2]; so does Auto Forms Mode's on Tab: the hint each time, the
-            // regions on the page's first field [obs, 284/s1, 287/s2, s3, s6]. Without Auto
-            // Forms Mode Tab leaves forms mode off (204/s1, 212).
+            // hint [obs, 19/s2]; so does Tab where it turns or keeps forms mode on: the hint
+            // each time, the regions on the page's first field [obs, 284/s1, 287/s2, s3, s6;
+            // 630/s2, 621/s3-s8]. Where Tab leaves forms mode off there is neither (204/s1,
+            // 629/s1).
             let by_enter = std::mem::take(&mut self.forms_mode_by_enter) && is_edit;
-            let by_auto_tab = auto_forms && self.last_key_tabs && is_edit;
+            let by_auto_tab = in_forms_mode && self.last_key_tabs && is_edit;
+            // Where Tab leaves forms mode off, an empty field of one line is said without
+            // "blank": "Full name Edit Required" [obs, 204/s1, 622/s1, 629/s1]. A text area
+            // keeps it (204/s6).
+            let one_line = target_id
+                .and_then(|id| self.cursor.buffer.node(id))
+                .is_some_and(|n| n.attributes.get("multiline").is_none_or(|m| m != "true"));
+            if is_edit && self.last_key_tabs && !in_forms_mode && one_line {
+                let blank = msg::blank();
+                speech = speech.map(|s| {
+                    s.strip_suffix(blank.as_str())
+                        .map_or(s.as_str(), |s| s.trim_end_matches(['\n', ' ']))
+                        .to_owned()
+                });
+            }
             if by_enter || by_auto_tab {
                 speech = speech.map(|s| format!("{s}\n{}", msg::hint_type_in_text()));
             }

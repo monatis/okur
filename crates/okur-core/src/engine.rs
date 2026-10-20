@@ -102,6 +102,9 @@ pub struct ScreenReaderEngine {
     /// The field an arrow put the focus on (Auto Forms Mode), already said: its focus event
     /// is not said again.
     arrow_focus: Option<usize>,
+    /// A key has moved the virtual cursor since the page loaded: without Auto Forms Mode, Tab
+    /// onto a field turns forms mode on only then [obs, 629, 630, 631].
+    cursor_moved_since_load: bool,
     /// Key presses so far, to tell the key right after another.
     keys_pressed: u64,
     /// The field an arrow last left in forms mode, the key that left it, and whether it went
@@ -290,6 +293,7 @@ impl ScreenReaderEngine {
             option_list: None,
             option_said: None,
             arrow_focus: None,
+            cursor_moved_since_load: false,
             keys_pressed: 0,
             field_left: None,
             field_texts: std::collections::HashMap::new(),
@@ -403,7 +407,11 @@ impl ScreenReaderEngine {
         if event.is_down {
             self.keys_pressed += 1;
         }
+        let offset = self.cursor.offset;
         let action = self.handle_key(event);
+        if self.app_mode == AppMode::VirtualBuffer && self.cursor.offset != offset {
+            self.cursor_moved_since_load = true;
+        }
         self.refresh_stale_page();
         action
     }
