@@ -12,12 +12,15 @@ The rounds queued at the end of round 2, in order (each behind the one before):
 
 | Round | What | Then |
 |---|---|---|
-| 53 | 548-555: the forms fixture, a message box and the sign-up form at Beginner, Intermediate and Advanced verbosity | build the levels (§1) |
+| 53 | 548-555: the forms fixture, a message box and the sign-up form at Beginner, Intermediate and Advanced verbosity | failed; recorded again in 58 |
 | live11 | Okur reading 222-260 and 274: its own list dialogs, live (`okur live-parity`) | compare with the replay of the same steps |
 | 54 | 246-274 again, with the elevated tracer and the lab's Chrome | import; most element-list steps should now replay |
 | 55 | 275-299, 19, 20, 29 again | import |
 | 56 | the 3xx desktop scenarios whose traces caught a browser title | import |
 | 57 | 401-408 and the 5xx scenarios with a browser title in their traces | import |
+| 58 | 548-555 again (53 failed: Say Window outlasted its settle; now 60 s, and a failed run keeps its output in `<id>-run.log`) | build the levels (§1) |
+| 59 | 237 (missed in 52); 556-557 (Shift+Period and Shift+Comma outside lists), 558 (S and D on a plain page), 559 (where Jump to Line goes), 560 (the Word List), 561 (the clipboard keys, the Windows-key scripts by name), 562 (a large selection), 563 (following aria-flowto) | build each; 562 sets the "N characters up to" rule |
+| snap60 | `virtual-keys.chrome.ia2.json` captured again with IA2 relations (`okur.exe` cd4bb985) | import the snapshot: Has Flows To and Equals replay |
 
 For each: fetch with `lab-fetch.sh` (a stalled fetch is stopped and started again), grep the
 evidence and traces for links, the lab account's folders and the owner's name, check the
