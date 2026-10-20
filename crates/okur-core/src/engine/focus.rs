@@ -46,6 +46,11 @@ impl ScreenReaderEngine {
             self.last_page_focus = Some(id);
         }
         if self.option_list.as_deref() != Some(list.as_str()) {
+            if std::mem::take(&mut self.select_opened) {
+                lines.push(crate::linearize::state_marker(
+                    msg::state_expanded().as_str(),
+                ));
+            }
             if let Some(count) = focus.item_count {
                 lines.push(format!(
                     "{list}  \u{1d} {} \u{1e} \n{}",

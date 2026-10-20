@@ -206,6 +206,16 @@ impl ScreenReaderEngine {
                     .as_str(),
                 )
             }
+            // A select box opened from the focus it already had (Space after Enter closed its
+            // list): "expanded", said with its list as the list takes the focus [obs, 276/s7].
+            // Opened from the virtual cursor, the focus comes to it with the same key and only
+            // its list is said [obs, 276/s2, 229/s21].
+            Role::ComboBox
+                if control.states.expanded == Some(true) && self.focus_at_key == Some(id) =>
+            {
+                self.select_opened = true;
+                return None;
+            }
             Role::ComboBox if before.value != control.value => control.value.clone()?,
             // Space on a tab selects it [obs, 29/s4].
             Role::Tab

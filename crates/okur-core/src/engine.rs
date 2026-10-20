@@ -72,6 +72,11 @@ pub struct ScreenReaderEngine {
     native_focus: crate::native_focus::NativeFocus,
     /// The page node that last had focus, to drop repeated focus events on it.
     last_page_focus: Option<usize>,
+    /// The page node that had the focus as the last key went down.
+    focus_at_key: Option<usize>,
+    /// The select box with the focus opened its list with the last key: its list is said as
+    /// "expanded" [obs, 276/s7].
+    select_opened: bool,
     /// The last page focus was said as its line, without the table it is in: the next focus
     /// says the table as newly entered.
     focus_table_unsaid: bool,
@@ -248,6 +253,8 @@ impl ScreenReaderEngine {
             last_window_kind: None,
             native_focus: crate::native_focus::NativeFocus::default(),
             last_page_focus: None,
+            focus_at_key: None,
+            select_opened: false,
             focus_table_unsaid: false,
             tab_start: None,
             activated_item: None,
@@ -417,6 +424,8 @@ impl ScreenReaderEngine {
         self.quiet_focus_until = None;
         self.dialog_focus_target = None;
         self.page_said_for = None;
+        self.focus_at_key = self.last_page_focus;
+        self.select_opened = false;
 
         // A Say All key steers the reading instead of ending it.
         if let Some(action) = self.say_all_key(event) {

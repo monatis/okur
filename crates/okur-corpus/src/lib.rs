@@ -582,6 +582,8 @@ mod tests {
         );
         // The first time, as the page's first focus: the page and its regions first (276).
         assert_eq!(replay_matches("276-web-select-open", "s2", true), Ok(()));
+        // Space on the select with the focus (Enter closed its list): "expanded" first.
+        assert_eq!(replay_matches("276-web-select-open", "s7", true), Ok(()));
     }
 
     /// From the top, a level key into a section says the section's heading first [obs,

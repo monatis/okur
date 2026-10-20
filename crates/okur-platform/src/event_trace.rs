@@ -1258,8 +1258,19 @@ impl EventConverter {
             return None;
         }
         // The control as UIA reports it now; without a focus chain (a failed UIA read), the
-        // last focus with the event object's MSAA states.
-        let mut control = match focus_event_from_trace(event) {
+        // last focus with the event object's MSAA states. The chain is read after the event,
+        // and the focus can have moved on from the control the event is about: a select's
+        // list takes the focus as the select expands [obs, 276/s7]. The change is then the
+        // last focus's, the event object.
+        let chain_control = focus_event_from_trace(event);
+        let last_name = self.last_focus.as_ref().and_then(|l| l.name.as_ref());
+        let moved_on = same_object
+            && object_name.is_some()
+            && object_name == last_name
+            && chain_control
+                .as_ref()
+                .is_some_and(|c| c.name.as_ref() != object_name);
+        let mut control = match chain_control.filter(|_| !moved_on) {
             Some(control) => control,
             None => self.last_focus.clone()?,
         };
@@ -4196,6 +4207,47 @@ mod tests {
             "the focused button's change"
         );
         assert!(converter.convert(&change("Pricing")).is_empty());
+    }
+
+    /// Space on a select with the focus: its state change is read after its list has taken
+    /// the focus, so the focus chain ends in the list's item. The change is the select's, the
+    /// event's object, expanded by its MSAA states [obs, 276/s7].
+    #[test]
+    fn a_change_read_after_the_focus_moved_on_is_the_focused_controls() {
+        const COMBO_BOX: i32 = 50003;
+        const EXPANDED: u32 = 0x200;
+        let select = node(COMBO_BOX, "Home branch", true);
+        let object = |states: u32| {
+            Some(TraceObject {
+                role: Some(46),
+                name: Some("Home branch".to_owned()),
+                value: Some("Northside".to_owned()),
+                states,
+                shortcut: None,
+            })
+        };
+        let focus = TraceEvent {
+            object: object(0),
+            focus_chain: vec![select.clone()],
+            ..focus_event(Vec::new())
+        };
+        let expanded = TraceEvent {
+            event: "state_change".to_owned(),
+            object: object(EXPANDED),
+            focus_chain: vec![select, node(UIA_LISTITEM, "Northside", true)],
+            ..focus_event(Vec::new())
+        };
+        let mut converter = EventConverter::default();
+        assert_eq!(converter.convert(&focus).len(), 1);
+        assert!(
+            matches!(
+                converter.convert(&expanded).as_slice(),
+                [okur_core::AccessibilityEvent::Change { control, .. }]
+                    if control.role == okur_core::Role::ComboBox
+                        && control.states.expanded == Some(true)
+            ),
+            "the select, expanded"
+        );
     }
 
     /// Down in a select: the value change carries the focus's text, which a select has none
