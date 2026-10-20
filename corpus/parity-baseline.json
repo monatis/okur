@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 2448,
+  "matched_steps": 2449,
   "total_steps": 2655,
   "accepted_divergences": 60,
   "errors": [],
@@ -1078,7 +1078,7 @@
     "25-table-row-up/s3": "match",
     "250-web-list-check-boxes-enter/s1": "match",
     "250-web-list-check-boxes-enter/s2": "match",
-    "250-web-list-check-boxes-enter/s3": "mismatch",
+    "250-web-list-check-boxes-enter/s3": "match",
     "250-web-list-check-boxes-enter/s4": "match",
     "250-web-list-check-boxes-enter/s5": "match",
     "251-web-list-graphics-enter/s1": "match",

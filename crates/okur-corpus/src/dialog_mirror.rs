@@ -15,9 +15,15 @@ use okur_core::input::{Key, KeyEvent};
 use okur_core::ui::{Control, ControlKind, DialogSpec, FromUi, RecordingUiHost, ToUi, Value};
 use okur_core::{FocusEvent, Role};
 
-/// A dialog's label without its access key mark ("&Move To Heading": "Move To Heading").
+/// A dialog's label without its access key mark ("&Move To Heading": "Move To Heading"), its
+/// spaces single: JAWS's items join their parts with runs of them ("I agree to the terms of
+/// use check box   not checked" [obs, 250/s2]).
 fn plain(label: &str) -> String {
-    label.replace('&', "").trim().to_owned()
+    label
+        .replace('&', "")
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ")
 }
 
 #[derive(Debug, Default)]
