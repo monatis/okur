@@ -20,6 +20,7 @@ To record one:
 | 613 | A Turkish page (`lang="tr"`, ç ğ ı İ ö ş ü) read by character, word and line, spelled, and with Say All, in JAWS's English voice (old-pc's language detection is off) | `turkish-text.html` (here) |
 | 617 | Ctrl+Shift+End from ten depths of fifteen plain 80-character paragraphs: the size at which JAWS stops reading a selection and says "selected N characters up to", how it counts N, and how much of the end it says (562 left all three open) | `selection-sizes.html` (here) |
 | 618, 619 | Say Color (Insert+5) on the 148 CSS named colors and a 6x6x6 RGB grid, for JAWS's color table (565 showed names of its own: blue2, lime green 2, dark slate gray); their IA2 snapshots give the RGB of each line | `color-names.html`, `color-grid.html` (here) |
+| 620 | Ctrl+Shift+End over 103 lines of 9 characters, selecting 989 to 1029 characters: the size from which JAWS says "selected N characters up to" (617 put it between 971 and 1052). 617, recorded in round 82, waits in the scratchpad for its page's snapshot, which is captured with 620's | `selection-threshold.html` (here) |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.
