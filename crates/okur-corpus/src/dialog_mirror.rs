@@ -76,11 +76,17 @@ impl DialogMirror {
 
     /// The focus as Okur's window would report it where JAWS's dialog differs: Okur's list
     /// or tree is named by the label above it (okur-ui draws one), where JAWS's Document
-    /// Regions tree has none in its window ("Regions Tree view" [obs, 241/s1]).
+    /// Regions tree has none in its window ("Regions Tree view" [obs, 241/s1]); and Okur's
+    /// window has Okur's name in its title where JAWS's has its own (AGENTS.md §1.5): "Okur
+    /// Find" for "JAWS Find" [obs, 506/s12].
     pub fn as_okur_window(&self, focus: &mut FocusEvent) {
         let Some(dialog) = &self.dialog else {
             return;
         };
+        let title = focus.window_title.as_deref().unwrap_or_default();
+        if crate::parity::in_okurs_name(title) != title && plain(title) == plain(&dialog.title) {
+            focus.window_title = Some(dialog.title.clone());
+        }
         let unnamed = focus
             .container_name
             .as_deref()
@@ -264,5 +270,29 @@ mod tests {
         assert!(mirror.is_closed_dialog(&focus));
         focus.window_title = Some("Find".to_owned());
         assert!(!mirror.is_closed_dialog(&focus));
+    }
+
+    /// In JAWS's dialog standing for Okur's, the title is Okur's, as live [obs, 506/s12];
+    /// another window keeps its own.
+    #[test]
+    fn jaws_dialog_reports_okurs_title() {
+        let host = RecordingUiHost::default();
+        let mut mirror = DialogMirror::default();
+        host.send(ToUi::DialogShow {
+            dialog: DialogSpec {
+                id: 3,
+                title: "Okur Find".to_owned(),
+                controls: Vec::new(),
+            },
+        });
+        mirror.sync(&host);
+        let mut focus = FocusEvent::new(Role::ComboBox).with_name("Find what:");
+        focus.window_title = Some("JAWS Find".to_owned());
+        mirror.as_okur_window(&mut focus);
+        assert_eq!(focus.window_title.as_deref(), Some("Okur Find"));
+        let mut other = FocusEvent::new(Role::Edit);
+        other.window_title = Some("JAWS notes - Notepad".to_owned());
+        mirror.as_okur_window(&mut other);
+        assert_eq!(other.window_title.as_deref(), Some("JAWS notes - Notepad"));
     }
 }
