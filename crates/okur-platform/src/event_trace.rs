@@ -2130,6 +2130,17 @@ mod capture {
         "menu_popup_end",
     ];
 
+    /// Whether the application of `hwnd`'s window has stopped answering (Windows calls a window
+    /// hung once it has pumped no message for 5 s).
+    fn in_hung_window(hwnd: HWND) -> bool {
+        use windows::Win32::UI::WindowsAndMessaging::{GetAncestor, IsHungAppWindow, GA_ROOT};
+        // SAFETY: plain Win32 queries on a window handle that may be gone.
+        unsafe {
+            let top = GetAncestor(hwnd, GA_ROOT);
+            !top.is_invalid() && IsHungAppWindow(top).as_bool()
+        }
+    }
+
     /// Whether `hwnd` belongs to the process of the foreground window.
     fn in_foreground_process(hwnd: HWND) -> bool {
         use windows::Win32::UI::WindowsAndMessaging::{
@@ -3029,6 +3040,13 @@ mod capture {
                 && ((!LIVE_EVENTS.contains(&name) && !foreground_renamed)
                     || (changes_focus_context && !in_foreground_process(hwnd)))
             {
+                return;
+            }
+            // A hung application's window is not read live: each cross-process call into it
+            // would wait for it, and every focus and event behind it with it (performance
+            // review, 2026-10-20, P4). Its events are dropped until it answers again.
+            if state.live && in_hung_window(hwnd) {
+                tracing::debug!(event = name, "event of a hung window not read");
                 return;
             }
             // A live region outside a Chromium page is read from UIA's own event

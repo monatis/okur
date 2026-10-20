@@ -453,16 +453,13 @@ fn load_page_if_new(
             let _ = sender.send(AccessibilityEvent::DocumentLoaded { title, root });
             let _ = pages.send(PageRequest::Refine(ForegroundWindow::now()));
         }
+        // The page in full through IA2 takes seconds on a big page (3 s on GitHub's): the page
+        // worker reads it, and this thread goes on with the focus and the events behind it,
+        // which a read here held up (performance review, 2026-10-20, P4). The page then comes
+        // after its focus, as a refresh does.
         Err(e) => {
-            tracing::debug!("quick page capture failed ({e}); capturing through IA2");
-            match crate::actions::capture_foreground_page() {
-                Ok(root) => {
-                    let ms = started.elapsed().as_millis();
-                    tracing::debug!(%title, ms, "page loaded");
-                    let _ = sender.send(AccessibilityEvent::DocumentLoaded { title, root });
-                }
-                Err(e) => tracing::warn!("page capture failed: {e}"),
-            }
+            tracing::debug!("quick page capture failed ({e}); the page worker reads it");
+            let _ = pages.send(PageRequest::Refine(ForegroundWindow::now()));
         }
     }
 }

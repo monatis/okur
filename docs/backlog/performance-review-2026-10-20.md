@@ -41,6 +41,7 @@ before and after each change gave identical output.
 | P9 steps 1-2: role-and-name index for page focus, the DOM id index for live regions | done; step 3 (ancestors) not yet | `730f73e` | page focus found by name, 25,032 nodes: the first 11.3 → 8.7 ms (index built), the next 4.5 → 0.43 ms |
 | P2 step 1: the hook installed again after a key of 200 ms or more | done; steps 2-3 (priorities, the O(page) rule) not yet; the re-install not yet seen live | this commit | test: the threshold |
 | P8: page parts spliced and built on the blocking pool | done; live check to come (a web application whose page changes) | this commit | read: the event loop no longer builds them (135-175 ms at 25,032 nodes in the review) |
+| P4 steps 1 and 3: a failed quick page read goes to the page worker; a hung window's events are not read live | done; live checks to come (a big page, a hung test application) | this commit | read |
 
 ## Summary: the five worst
 
