@@ -574,6 +574,12 @@ fn say_window_title_in_a_page_says_where_the_cursor_is() {
         engine.execute_command("SayWindowTitle").as_deref(),
         Some("Title is\nNews\narticle\nlevel 3\nheading is What changes")
     );
+    // Short messages say the level and the heading alone [obs, 636/s7, 637/s7].
+    let mut settings = engine.settings.clone();
+    settings.verbosity.level = crate::settings::VerbosityLevel::Intermediate;
+    engine.set_settings(settings);
+    let said = engine.execute_command("SayWindowTitle").unwrap_or_default();
+    assert!(said.ends_with("article\n3\nWhat changes"), "{said:?}");
 }
 
 /// A selection of up to 1000 characters is read whole; a longer one is said by its size and its

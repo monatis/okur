@@ -318,6 +318,8 @@ divergences! {
     Difference::Step => [
         "280-web-forms-arrows-auto-forms/s7",
         "632-web-field-returned-later/s10",
+        "640-web-field-returned-later-intermediate/s10",
+        "641-web-field-returned-later-advanced/s10",
     ],
     "With Auto Forms Mode, Down onto the email field said it \"Required\" in every trial, \
      though nothing makes it required (no required attribute; UIA's IsRequiredForForm and \

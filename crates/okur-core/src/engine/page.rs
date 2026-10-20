@@ -283,7 +283,7 @@ impl ScreenReaderEngine {
     /// 2, an article in the main region 3), and the last heading in it up to the cursor,
     /// "heading is What changes". Tables, lists and sections without a name are not counted;
     /// outside every region there is nothing [obs, 624, 625].
-    pub(super) fn title_context(&self) -> Vec<String> {
+    pub(super) fn title_context(&self) -> Vec<crate::announcement::Line> {
         let buffer = &self.cursor.buffer;
         let Some(line) = buffer.line_at_offset(self.cursor.offset) else {
             return Vec::new();
@@ -317,7 +317,18 @@ impl ScreenReaderEngine {
         let Some(name) = buffer.line_at_offset(start).map(|l| l.text.clone()) else {
             return Vec::new();
         };
-        let mut said = vec![name, msg::title_region_level(regions.len() + 1).to_string()];
+        use crate::announcement::{Line, PartKind};
+        // Short messages (Intermediate, Advanced) say the level and the heading alone:
+        // "article | 3 | What changes" [obs, 636/s7, 637/s7].
+        let level = regions.len() + 1;
+        let mut said = vec![
+            Line::of(PartKind::Message, name),
+            Line::of(
+                PartKind::Message,
+                msg::title_region_level(level).to_string(),
+            )
+            .short(level.to_string()),
+        ];
         let heading = buffer
             .headings
             .iter()
@@ -325,7 +336,13 @@ impl ScreenReaderEngine {
             .and_then(|&(at, _)| buffer.line_at_offset(at))
             .map(|l| l.text.clone());
         if let Some(heading) = heading {
-            said.push(msg::title_heading_is(heading).to_string());
+            said.push(
+                Line::of(
+                    PartKind::Message,
+                    msg::title_heading_is(heading.as_str()).to_string(),
+                )
+                .short(heading),
+            );
         }
         said
     }

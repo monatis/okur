@@ -154,9 +154,7 @@ impl ScreenReaderEngine {
                 // In a page, where the virtual cursor is: its region, level and heading
                 // [obs, 624, 625].
                 if self.app_mode == AppMode::VirtualBuffer && !self.forms_mode {
-                    lines.extend(self.title_context().into_iter().map(|part| {
-                        crate::announcement::Line::of(crate::announcement::PartKind::Message, part)
-                    }));
+                    lines.extend(self.title_context());
                 }
                 let speech = crate::announcement::Announcement::new(lines);
                 let speech = self.said(speech).render();

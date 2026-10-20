@@ -241,7 +241,9 @@ A step can be in more than one entry; all of its entries apply.
 
 ### "Required" for a field that is not required (Auto Forms Mode)
 
-- Steps: `280-web-forms-arrows-auto-forms/s7`, `632-web-field-returned-later/s10`.
+- Steps: `280-web-forms-arrows-auto-forms/s7`, `632-web-field-returned-later/s10`, and 632
+  at Intermediate and Advanced, `640-web-field-returned-later-intermediate/s10`,
+  `641-web-field-returned-later-advanced/s10`.
 - Difference: the whole step. JAWS says "Email address Edit Required | sam@example.com"; Okur
   says it without "Required". 632 arrived at the field the same way, Down from its label, and
   JAWS said "Required" there too, then not on Say Line right after (632/s11).
