@@ -3115,6 +3115,15 @@ mod capture {
         id_child: i32,
         element: Option<&IUIAutomationElement>,
     ) {
+        // Before anything is read: a read that never returns leaves this as the log's last
+        // line, naming the event (613's tracer stopped a second after the page loaded).
+        tracing::debug!(
+            event = name,
+            hwnd = hwnd.0 as isize,
+            id_object,
+            id_child,
+            "reading event"
+        );
         let (title, class) = if hwnd.is_invalid() {
             (String::new(), String::new())
         } else {
