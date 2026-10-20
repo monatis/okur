@@ -1648,8 +1648,13 @@ mod tests {
             return;
         };
         let mut cursor = crate::cursor::VirtualCursor::new(buffer);
+        // A paragraph outside such elements is one line, at its own edges: its end goes on to
+        // the next element's line, its start back [obs, 557/s3, s4].
         cursor.move_to_line(before);
-        assert_eq!(cursor.move_element_edge(true), None);
+        assert_eq!(
+            cursor.move_element_edge(true).as_deref(),
+            Some("list of 2 items")
+        );
         cursor.move_to_line(inner);
         assert_eq!(
             cursor.move_element_edge(true).as_deref(),

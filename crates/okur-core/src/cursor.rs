@@ -1553,14 +1553,40 @@ impl VirtualCursor {
             .line_at_offset(self.offset)
             .map(|l| l.start_offset)
             .unwrap_or(self.offset);
-        let (start, end_line) = self
+        let around = self
             .buffer
             .bounded
             .iter()
             .copied()
             .filter(|&(start, end_line)| start <= here && here <= end_line)
-            .max_by_key(|&(start, end_line)| (start, std::cmp::Reverse(end_line)))?;
-        let target = if end { end_line } else { start };
+            .max_by_key(|&(start, end_line)| (start, std::cmp::Reverse(end_line)));
+        let target = match around {
+            Some((start, end_line)) => {
+                if end {
+                    end_line
+                } else {
+                    start
+                }
+            }
+            // Outside such elements a heading or a paragraph is the element, one line, already
+            // at its edges: its end goes on to the next element's, its start back to the prior
+            // one's; on the page's title the cursor stays ("The screen reader engine parses …"
+            // after the heading, the heading back from it, the title on the title [obs,
+            // 557/s1, s3-s6; 556/s1, s2]).
+            None => {
+                let line = self.buffer.line_at_offset(here);
+                let index = line.map_or(0, |l| l.line_index);
+                let on_title = line.is_some_and(|l| l.role == Role::Document);
+                let next = if on_title {
+                    None
+                } else if end {
+                    self.buffer.lines.get(index + 1)
+                } else {
+                    index.checked_sub(1).and_then(|i| self.buffer.lines.get(i))
+                };
+                next.map_or(here, |l| l.start_offset)
+            }
+        };
         self.offset = target;
         self.current_node_id = self.buffer.line_at_offset(target).map(|l| l.node_id);
         Some(self.line_speech_at(target))
