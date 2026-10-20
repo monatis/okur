@@ -62,9 +62,9 @@ the Say All command".
 | Z | MoveToNextDivision | Division | built | 292 |
 | `'` Apostrophe | MoveToNextTab | Tab Control | built | |
 | `;` SemiColon | MoveToNextOnMouseOverElement | Move to OnMouseOver | bound; mouse-over detection missing | |
-| `/` Slash | MoveToNextOnClickElement | Clickable Element | gap | 293 |
+| `/` Slash | MoveToNextOnClickElement | Clickable Element | bound; click handlers not read yet, so "There are no clickable elements on this page." as JAWS says in Chrome | 293 |
 | `-` Dash | MoveToNextSeparator | Separator | built | 292 |
-| `=` Equals | MoveToFlowTo (Shift: MoveToFlowFrom) | | gap | 293 |
+| `=` Equals | MoveToFlowTo (Shift: MoveToFlowFrom) | | bound; aria-flowto not captured yet, so "No more flows found" | 293 |
 | `\` Backslash | MoveToNextMailToLink | | built (the link takes the focus, as in JAWS) | 293 |
 | Shift+`,` / Shift+`.` | StepToStartOfElement / StepToEndOfElement | Step Before / Past Element | built (the innermost list, table, region, block quote, article, group or dialog) | 294 |
 | F3 / Shift+F3 | JAWSFindNext / JAWSFindPrior | JAWS Find Next / Previous | built | |

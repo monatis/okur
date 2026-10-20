@@ -1623,6 +1623,35 @@ impl VirtualCursor {
         self.line_nav(t, false, msg::quicknav_none_on_mouse_over().as_str())
     }
 
+    /// Moves to the next or prior element with a click handler (`/`, `Shift+/`). JAWS in
+    /// Chrome found none on a page with an `onclick` division: "There are no clickable
+    /// elements on this page." [obs, 293/s4-s6].
+    pub fn move_on_click(&mut self, forward: bool) -> Option<String> {
+        let t = self.buffer.on_click.clone();
+        self.line_nav(t, forward, msg::quicknav_none_clickable().as_str())
+    }
+
+    /// Follows aria-flowto from the element at the cursor (`=`), or back to the element that
+    /// flows to it (`Shift+=`), reading the line it lands on; without one, "No more flows
+    /// found" [obs, 293/s8, s9].
+    pub fn move_flow(&mut self, to: bool) -> Option<String> {
+        self.selection = None;
+        let here = self
+            .buffer
+            .line_at_offset(self.offset)
+            .map_or(self.offset, |l| l.start_offset);
+        let target = self.buffer.flows.iter().find_map(|&(from, into)| match to {
+            true => (from == here).then_some(into),
+            false => (into == here).then_some(from),
+        });
+        let Some(target) = target else {
+            return Some(msg::quicknav_none_flows().to_string());
+        };
+        self.offset = target;
+        self.current_node_id = self.buffer.line_at_offset(target).map(|l| l.node_id);
+        Some(self.line_speech_at(target))
+    }
+
     /// Moves cursor to next tab (`'`). The no-tabs message is unrecorded, so it is silent.
     pub fn move_next_tab(&mut self) -> Option<String> {
         let t: Vec<usize> = self.buffer.tabs.iter().map(|t| t.offset).collect();

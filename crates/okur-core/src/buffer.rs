@@ -208,6 +208,11 @@ pub struct VirtualBuffer {
     pub main_region: Option<usize>,
     /// Elements with onMouseOver handlers (`;`); empty until a source exposes them.
     pub on_mouse_over: Vec<usize>,
+    /// Elements with click handlers (`/`); empty until a source exposes them.
+    pub on_click: Vec<usize>,
+    /// aria-flowto (`=`, `Shift+=`): each flow's element and the element it flows to, by their
+    /// lines' offsets; empty until the page capture reads IA2's flows-to relations.
+    pub flows: Vec<(usize, usize)>,
     pub comboboxes: Vec<usize>,
     pub trees: Vec<usize>,
     pub tree_items: Vec<usize>,

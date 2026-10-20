@@ -17,6 +17,10 @@ quicknav-none-lists = There are no lists on this page.
 quicknav-none-math = There are no math equations on this page.
 # Elements that react to the mouse moving over them (onMouseOver).
 quicknav-none-on-mouse-over = There are no onMouseOver elements on this page.
+# Elements with a click handler (onClick).
+quicknav-none-clickable = There are no clickable elements on this page.
+# aria-flowto: the element at the cursor flows to no other, or none flows to it.
+quicknav-none-flows = No more flows found
 # Place markers: places on a page the user marked.
 quicknav-none-placemarkers = There are no PlaceMarkers on this page.
 quicknav-none-radio-buttons = There are no radio buttons on this page.

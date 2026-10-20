@@ -1609,6 +1609,44 @@ mod tests {
         );
     }
 
+    /// Equals follows a flow to its element and Shift+Equals back; elsewhere "No more flows
+    /// found" [obs, 293/s8, s9].
+    #[test]
+    fn a_flow_is_followed_both_ways() {
+        let para = |id: usize, text: &str| {
+            AomNode::new(id, Role::Paragraph).with_children(vec![AomNode::new(
+                id + 100,
+                Role::Text,
+            )
+            .with_text(text)])
+        };
+        let root = AomNode::new(0, Role::Document).with_children(vec![
+            para(1, "Start here"),
+            para(2, "In between"),
+            para(3, "Go on here"),
+        ]);
+        let mut buffer = crate::buffer::VirtualBuffer::from_aom(&root);
+        let start = |text: &str| {
+            buffer
+                .lines
+                .iter()
+                .find(|l| l.text == text)
+                .map_or(0, |l| l.start_offset)
+        };
+        let flow = (start("Start here"), start("Go on here"));
+        let between = buffer.lines.iter().position(|l| l.text == "In between");
+        buffer.flows.push(flow);
+        let mut cursor = crate::cursor::VirtualCursor::new(buffer);
+        cursor.move_to_line(between.unwrap_or_default());
+        assert_eq!(
+            cursor.move_flow(true).as_deref(),
+            Some("No more flows found")
+        );
+        cursor.move_to_line(0);
+        assert_eq!(cursor.move_flow(true).as_deref(), Some("Go on here"));
+        assert_eq!(cursor.move_flow(false).as_deref(), Some("Start here"));
+    }
+
     /// aria-roledescription on the dev box (JAWS, 2026-10-16): said in place of a button's,
     /// link's, check box's and edit's role in reading; on focus, a link keeps its own role.
     #[test]

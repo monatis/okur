@@ -278,6 +278,8 @@ impl ScreenReaderEngine {
             Command::ReadPriorColumn => self.cursor.read_adjacent_column(-1),
             Command::StepToStartOfElement => self.cursor.move_element_edge(false),
             Command::StepToEndOfElement => self.cursor.move_element_edge(true),
+            Command::FlowTo => self.cursor.move_flow(true),
+            Command::FlowFrom => self.cursor.move_flow(false),
             Command::SayColumnHeader => self.cursor.read_current_col_header(),
             Command::SayRowHeader => self.cursor.read_current_row_header(),
 
@@ -898,6 +900,7 @@ impl ScreenReaderEngine {
             (Element::Article, false) => c.move_prior_article(),
             (Element::OnMouseOver, true) => c.move_next_on_mouse_over(),
             (Element::OnMouseOver, false) => c.move_prior_on_mouse_over(),
+            (Element::OnClick, next) => c.move_on_click(next),
             (Element::Tab, true) => c.move_next_tab(),
             (Element::Tab, false) => c.move_prior_tab(),
             // Place markers are not built yet, so a page has none [obs, 221/s4-s5].

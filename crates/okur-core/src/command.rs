@@ -19,6 +19,8 @@ pub enum Element {
     Table,
     Article,
     OnMouseOver,
+    /// An element with a click handler (Slash).
+    OnClick,
     /// An ARIA tab.
     Tab,
     PlaceMarker,
@@ -133,6 +135,9 @@ pub enum Command {
     /// element the virtual cursor is in.
     StepToStartOfElement,
     StepToEndOfElement,
+    /// Equals and Shift+Equals: along aria-flowto (MoveToFlowTo, MoveToFlowFrom).
+    FlowTo,
+    FlowFrom,
 
     // A page's controls.
     NextTabStop,
@@ -333,6 +338,8 @@ impl Command {
             "SayPriorSentence" => SayPriorSentence,
             "StepToStartOfElement" => StepToStartOfElement,
             "StepToEndOfElement" => StepToEndOfElement,
+            "MoveToFlowTo" => FlowTo,
+            "MoveToFlowFrom" => FlowFrom,
             "N" | "n" | "MoveToNextNonLinkText" | "Insert+Enter" => NextNonLinkText,
             "Shift+N" | "MoveToPriorNonLinkText" | "Insert+Shift+Enter" => PriorNonLinkText,
             "+H" | "+h" | "MoveToPriorHeading" => MoveToPrior(Heading),
@@ -357,6 +364,8 @@ impl Command {
             "Q" | "q" | "+Q" | "+q" | "MoveToMainRegion" => MoveToMainRegion,
             ";" | "MoveToNextOnMouseOverElement" => MoveToNext(OnMouseOver),
             "+;" | "MoveToPriorOnMouseOverElement" => MoveToPrior(OnMouseOver),
+            "/" | "MoveToNextOnClickElement" => MoveToNext(OnClick),
+            "+/" | "MoveToPriorOnClickElement" => MoveToPrior(OnClick),
             "'" | "MoveToNextTab" => MoveToNext(Element::Tab),
             "+'" | "MoveToPriorTab" => MoveToPrior(Element::Tab),
             "K" | "k" | "MoveToNextPlaceMarker" => MoveToNext(PlaceMarker),
@@ -1005,6 +1014,10 @@ static BINDINGS: &[Binding] = &{
         bind(Digit(6), ALONE, MoveToNext(HeadingLevel(6))),
         bind(Semicolon, SHIFT, MoveToPrior(OnMouseOver)),
         bind(Semicolon, ALONE, MoveToNext(OnMouseOver)),
+        bind(Slash, SHIFT, MoveToPrior(OnClick)),
+        bind(Slash, ALONE, MoveToNext(OnClick)),
+        bind(Equals, SHIFT, FlowFrom),
+        bind(Equals, ALONE, FlowTo),
         bind(Apostrophe, SHIFT, MoveToPrior(Element::Tab)),
         bind(Apostrophe, ALONE, MoveToNext(Element::Tab)),
     ]
