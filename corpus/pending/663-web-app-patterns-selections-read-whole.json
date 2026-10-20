@@ -1,0 +1,29 @@
+{
+  "id": "663-web-app-patterns-selections-read-whole",
+  "name": "Where JAWS's text of the web application patterns page is longer than Okur's (653/s1: 1134 characters for Okur's 984): selections from the fourth and sixth headings to the page's end, short enough for JAWS to read them whole, and one from the second heading, counted",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "H" },
+    { "id": "s2", "type": "key", "command": "H" },
+    { "id": "s3", "type": "key", "command": "H" },
+    { "id": "s4", "type": "key", "command": "H" },
+    { "id": "s5", "type": "key", "command": "Ctrl+Shift+End" },
+    { "id": "s6", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s7", "type": "key", "command": "H" },
+    { "id": "s8", "type": "key", "command": "H" },
+    { "id": "s9", "type": "key", "command": "H" },
+    { "id": "s10", "type": "key", "command": "H" },
+    { "id": "s11", "type": "key", "command": "H" },
+    { "id": "s12", "type": "key", "command": "H" },
+    { "id": "s13", "type": "key", "command": "Ctrl+Shift+End" },
+    { "id": "s14", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s15", "type": "key", "command": "H" },
+    { "id": "s16", "type": "key", "command": "H" },
+    { "id": "s17", "type": "key", "command": "Ctrl+Shift+End" },
+    { "id": "s18", "type": "key", "command": "Ctrl+Home" }
+  ]
+}
