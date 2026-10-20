@@ -569,9 +569,22 @@ impl<'a> Builder<'a> {
                 self.end_paragraph_since(first_line);
             }
             // JAWS's virtual cursor reads a menu bar's items as lines, "File menu sub menu
-            // collapsed", and ends it with "MenuBar end" [obs, 218/s1-s4, Auto Forms Mode off].
+            // collapsed", after its name and size, "Main menu MenuBar with 3 items" [obs,
+            // 652/s1], and ends it with "MenuBar end" [obs, 218/s1-s4, Auto Forms Mode off].
             Class::MenuBar => {
                 self.flush();
+                let items = node
+                    .children
+                    .iter()
+                    .filter(|c| c.role == Role::MenuItem)
+                    .count();
+                if items > 0 {
+                    let start = match node.name.as_deref().map(squash).filter(|n| !n.is_empty()) {
+                        Some(name) => msg::menu_bar_start_named(name.as_str(), items).render(),
+                        None => msg::menu_bar_start(items).render(),
+                    };
+                    self.emit_boundary(node.id, node.role.clone(), &start);
+                }
                 let start = self.buffer.lines.len();
                 self.visit_children(node);
                 self.flush();
@@ -1986,8 +1999,8 @@ mod tests {
         assert!(heading_line.is_some_and(|(_, off)| buffer.tab_stops.contains(&off)));
     }
 
-    /// A page's menu bar in the virtual cursor: its items' lines, then "MenuBar end"
-    /// [obs, 218/s1-s4].
+    /// A page's menu bar in the virtual cursor: its name and size, its items' lines, then
+    /// "MenuBar end" [obs, 652/s1; 218/s1-s4].
     #[test]
     fn a_menu_bar_reads_its_items_as_lines() {
         let item = |id: usize, name: &str, submenu: bool| {
@@ -2008,6 +2021,7 @@ mod tests {
         assert_eq!(
             speech,
             vec![
+                "Main menu MenuBar with 2 items".to_owned(),
                 format!(
                     "File{}{}{}",
                     role_marker("menu"),
