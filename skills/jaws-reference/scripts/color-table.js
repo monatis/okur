@@ -19,11 +19,13 @@ for (const line of fs.readFileSync(rgbPath, 'utf8').split('\n')) {
   seen.set(key, table.length);
   table.push([key, name]);
 }
-// The colors JAWS was seen to name otherwise than X11, or that X11 lacks [obs, 565, 618].
+// The colors JAWS was seen to name otherwise than X11, or that X11 lacks [obs, 565, 618]; and
+// two of its own that 619's grid shows, each where JAWS said it: "crimson" at 102 0 51 (CSS
+// crimson is "firebrick3" to JAWS) and "Dark Gray" at 153 255 255.
 const own = [
   '128 128 128\tgray', '128 0 0\tmaroon', '128 0 128\tpurple', '0 128 0\tlime green 2',
   '169 169 169\tDark Gray', '128 128 0\tolive', '192 192 192\tsilver', '0 128 128\tteal',
-  '75 0 130\tindigo',
+  '75 0 130\tindigo', '102 0 51\tcrimson', '153 255 255\tDark Gray',
 ];
 const extra = [];
 for (const line of own) {

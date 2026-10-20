@@ -37,13 +37,15 @@ pub fn name_of(color: Rgb) -> Option<&'static str> {
         .map(|(_, name)| name.as_str())
 }
 
-/// How far apart two colors are, for the nearest name: the squared differences weighted as the
-/// eye sees them, green most (2, 4, 3). It names #123456 "dark slate gray", as JAWS does,
-/// where the plain distance finds "midnight blue" [obs, 565/s15]; and all 148 CSS colors as
-/// JAWS names them [obs, 618].
+/// How far apart two colors are, for the nearest name: the "redmean" distance, the squared
+/// differences weighted by how red the two are (2 + r̄/256 for red, 4 for green, 2 + (255 −
+/// r̄)/256 for blue), here times 512 to stay in integers. It names all 148 CSS colors, the
+/// 216 colors of a 6 by 6 by 6 grid and #123456 as JAWS does [obs, 618, 619, 565/s15], where
+/// the plain distance misses 37 of those 365 and fixed weights (2, 4, 3) 18.
 fn distance(a: Rgb, b: Rgb) -> u32 {
     let d = |x: u8, y: u8| u32::from(x.abs_diff(y)).pow(2);
-    2 * d(a.r, b.r) + 4 * d(a.g, b.g) + 3 * d(a.b, b.b)
+    let red_sum = u32::from(a.r) + u32::from(b.r);
+    (1024 + red_sum) * d(a.r, b.r) + 2048 * d(a.g, b.g) + (1534 - red_sum) * d(a.b, b.b)
 }
 
 /// A color by its red, green and blue, each 0 to 255.
