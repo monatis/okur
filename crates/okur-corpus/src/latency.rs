@@ -51,6 +51,22 @@ fn number(line: &str, name: &str) -> Option<u64> {
     field(line, name)?.parse().ok()
 }
 
+/// An event read's stages, each with the milliseconds since the read began, as the tracer logs
+/// them: `stages=[("chain", 3), ("position", 3), ("window", 150)]`.
+fn stages(line: &str) -> Vec<(String, u64)> {
+    let Some(start) = line.find(" stages=[") else {
+        return Vec::new();
+    };
+    let rest = line.get(start + " stages=[".len()..).unwrap_or_default();
+    let list = rest.split(']').next().unwrap_or_default();
+    list.split("), (")
+        .filter_map(|entry| {
+            let (name, ms) = entry.trim_matches(['(', ')']).split_once(", ")?;
+            Some((name.trim_matches('"').to_owned(), ms.trim().parse().ok()?))
+        })
+        .collect()
+}
+
 /// The message of a log line: the words after the target (`okur: `) and before the first
 /// field.
 fn message(line: &str) -> Option<String> {
@@ -143,6 +159,15 @@ pub fn summarize(log: &str) -> Vec<Category> {
                 if let Some(us) = number(line, "us") {
                     add(format!("event read: {}", event()), us);
                 }
+                // Each stage's own time: the log gives them cumulative, in milliseconds.
+                let mut before = 0;
+                for (stage, ms) in stages(line) {
+                    add(
+                        format!("event read: {}, {stage}", event()),
+                        ms.saturating_sub(before) * 1000,
+                    );
+                    before = ms;
+                }
             }
             "event handled" => {
                 if let Some(us) = number(line, "us") {
@@ -220,6 +245,27 @@ mod tests {
             categories.last().map(|c| c.micros.clone()),
             Some(vec![820_000])
         );
+    }
+
+    /// An event read's stages are timed each on its own, from the tracer's cumulative times.
+    #[test]
+    fn an_event_reads_stages_are_timed_each() {
+        let log = concat!(
+            "2026-10-20T19:00:00.000000Z DEBUG okur_platform::event_trace: event read ",
+            "event=\"focus\" us=161000 stages=[(\"chain\", 3), (\"position\", 4), ",
+            "(\"context\", 10), (\"window\", 160)]\n"
+        );
+        let categories = summarize(log);
+        let micros = |name: &str| {
+            categories
+                .iter()
+                .find(|c| c.name == name)
+                .map(|c| c.micros.clone())
+        };
+        assert_eq!(micros("event read: focus"), Some(vec![161_000]));
+        assert_eq!(micros("event read: focus, chain"), Some(vec![3_000]));
+        assert_eq!(micros("event read: focus, position"), Some(vec![1_000]));
+        assert_eq!(micros("event read: focus, window"), Some(vec![150_000]));
     }
 
     /// A key is paired with the next speech audio, by chord; audio after another key, or
