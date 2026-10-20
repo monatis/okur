@@ -38,7 +38,9 @@ public class SnapshotWin32 {
 "@
 
 $fixturePath = (Resolve-Path $Fixture).Path
-$html = Get-Content -Raw -Path $fixturePath
+# UTF-8 without a byte order mark, as every fixture is: the system code page would garble a
+# title such as "Türkçe Metin".
+$html = Get-Content -Raw -Encoding UTF8 -Path $fixturePath
 $expectedTitle = if ($html -match '(?is)<title>\s*(.*?)\s*</title>') { $Matches[1] } else { $null }
 
 $chromeExe = @(
