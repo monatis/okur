@@ -20,6 +20,7 @@ pub mod retire;
 pub mod settings;
 pub mod settings_layers;
 pub mod speech;
+pub mod text_analysis;
 pub mod ui;
 pub mod viewer;
 pub mod viewer_text;

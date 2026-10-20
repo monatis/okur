@@ -119,3 +119,12 @@ key-followed-by = { $keys } followed by { $key }
 access-key-alt = alt+{ $letter }
 # A menu named after the item it opened from: "File menu".
 menu-named = { $name } menu
+
+## JAWS's text analysis: what Say Current Focus (Insert+Tab) adds after a text field, one per
+## inconsistency of the caret's line, with its column from 1 [obs, 568, 571/s4].
+text-analysis-space-run = Space run at column { $column }
+text-analysis-missing-initial-cap = Missing initial cap { $symbol } at column { $column }
+text-analysis-inverted-cap = Inverted cap { $symbol } at column { $column }
+text-analysis-stray-punctuation = Stray punctuation { $symbol } at column { $column }
+text-analysis-unspaced-punctuation = Unspaced punctuation { $symbol } at column { $column }
+text-analysis-unclosed = Unclosed { $symbol } at column { $column }

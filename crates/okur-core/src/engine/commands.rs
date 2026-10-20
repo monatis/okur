@@ -100,6 +100,22 @@ impl ScreenReaderEngine {
                         crate::native_focus::say_focus(&focus)
                     })
                     .filter(|s| !s.is_empty())?;
+                // A text field's line (an edit, or a document such as Notepad's): JAWS's text
+                // analysis names its inconsistencies after the field ("edit | Type in text. | Space
+                // run at column 4" [obs, 568/s4]).
+                let analysis = self
+                    .last_native_focus
+                    .as_ref()
+                    .filter(|f| {
+                        matches!(f.role, crate::aom::Role::Edit | crate::aom::Role::Document)
+                    })
+                    .and(self.last_text.as_ref())
+                    .map(|text| crate::text_analysis::describe_line(&text.text, text.caret))
+                    .unwrap_or_default();
+                let speech = std::iter::once(speech)
+                    .chain(analysis)
+                    .collect::<Vec<_>>()
+                    .join("\n");
                 self.speech.speak(&speech, true);
                 return Some(speech);
             }
