@@ -421,8 +421,12 @@ fn run_scenario(
                 // change that follows Tab), exactly as the live listener would deliver them.
                 for event in replay.for_step(&step.id) {
                     for mut converted in converter.convert(&event) {
-                        // Where JAWS's dialog differs from Okur's window, the focus is Okur's.
+                        // Where JAWS's dialog differs from Okur's window, the focus is Okur's;
+                        // JAWS's dialog going away after Okur's closed is not.
                         if let okur_core::AccessibilityEvent::Focus(focus) = &mut converted {
+                            if mirror.is_closed_dialog(focus) {
+                                continue;
+                            }
                             mirror.as_okur_window(focus);
                         }
                         note_text(&mut last_text, &converted);

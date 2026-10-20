@@ -31,6 +31,9 @@ pub struct DialogMirror {
     dialog: Option<DialogSpec>,
     /// The control the focus is on, by its index in the dialog's controls.
     focused: Option<usize>,
+    /// The title of the dialog last closed: JAWS's dialog, standing for it, can still report
+    /// a focus of its own as it goes, which Okur's window would not.
+    closed: Option<String>,
 }
 
 impl DialogMirror {
@@ -39,10 +42,12 @@ impl DialogMirror {
         for message in host.take() {
             match message {
                 ToUi::DialogShow { dialog } => {
+                    self.closed = None;
                     self.focused = dialog.controls.iter().position(is_tab_stop);
                     self.dialog = Some(dialog);
                 }
                 ToUi::DialogClose { id } if self.dialog.as_ref().is_some_and(|d| d.id == id) => {
+                    self.closed = self.dialog.as_ref().map(|d| plain(&d.title));
                     self.dialog = None;
                     self.focused = None;
                 }
@@ -53,6 +58,16 @@ impl DialogMirror {
 
     pub fn is_open(&self) -> bool {
         self.dialog.is_some()
+    }
+
+    /// Whether `focus` is in the dialog just closed: JAWS's dialog taking the focus as it
+    /// goes ("Select a Form Field" dialog, after Enter [obs, 228/s9]), which Okur's window,
+    /// already closed, does not report. Delivered, it was a window of its own, which took
+    /// the field just focused out of forms mode.
+    pub fn is_closed_dialog(&self, focus: &FocusEvent) -> bool {
+        self.dialog.is_none()
+            && self.closed.is_some()
+            && focus.window_title.as_deref().map(plain) == self.closed
     }
 
     /// The focus as Okur's window would report it where JAWS's dialog differs: Okur's list
@@ -183,6 +198,7 @@ impl DialogMirror {
             _ => None,
         };
         if matches!(report, Some(FromUi::DialogClosed { .. })) {
+            self.closed = self.dialog.as_ref().map(|d| plain(&d.title));
             self.dialog = None;
             self.focused = None;
         }
