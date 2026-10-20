@@ -527,21 +527,25 @@ impl VirtualCursor {
         self.current_line()
     }
 
-    /// Moves cursor to the end of the document (`^{END}`).
+    /// Moves cursor to the last line of the document (`^{END}`), at its start, as JAWS's
+    /// does: Ctrl+Shift+Home from there selects up to that line [obs, 643/s22], and End then
+    /// goes to its end [obs, 635/s13-s16].
     pub fn move_to_end(&mut self) -> String {
         self.selection = None;
-        if let Some((_, end)) = self.active_modal_range() {
-            self.offset = end;
-            self.current_node_id = self
-                .buffer
-                .spans
-                .iter()
-                .rfind(|s| s.end_offset <= end)
-                .map(|s| s.node_id);
-        } else {
-            self.offset = self.buffer.len();
-            self.current_node_id = self.buffer.spans.last().map(|s| s.node_id);
-        }
+        let end = match self.active_modal_range() {
+            Some((_, end)) => end,
+            None => self.buffer.len(),
+        };
+        self.offset = self
+            .buffer
+            .line_at_offset(end)
+            .map_or(end, |line| line.start_offset.min(end));
+        self.current_node_id = self
+            .buffer
+            .spans
+            .iter()
+            .rfind(|s| s.start_offset <= self.offset)
+            .map(|s| s.node_id);
         self.current_table_pos = None;
         self.current_line()
     }

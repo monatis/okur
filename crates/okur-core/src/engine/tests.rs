@@ -636,6 +636,43 @@ fn a_long_selection_is_said_by_its_size_and_end() {
     );
 }
 
+/// Say Line pressed again within 350 ms spells the virtual cursor's line to its end, which
+/// JAWS says as a space; 400 ms later it reads the line again [obs, 654/s3, s5]. Ctrl+End
+/// goes to the last line's start [obs, 643/s22].
+#[test]
+fn say_line_twice_spells_to_the_line_end_within_jaws_window() {
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Window")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("banner"),
+            AomNode::new(2, Role::Paragraph).with_text("News"),
+        ]);
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(speech.clone()),
+    );
+    engine.cursor.move_to_line(1);
+    let say_line = |time_ms: u64| {
+        let mut key = KeyEvent::new(Key::UpArrow, Modifiers::none(), true);
+        key.modifiers.insert = true;
+        key.time_ms = time_ms;
+        key
+    };
+    let said = |engine: &mut ScreenReaderEngine, time_ms: u64| {
+        speech.take();
+        engine.handle_key_event(&say_line(time_ms));
+        norm(&speech.take().join(" "))
+    };
+    assert_eq!(said(&mut engine, 1000), "banner");
+    assert!(said(&mut engine, 1300).ends_with("space"));
+    assert_eq!(said(&mut engine, 5000), "banner");
+    assert_eq!(said(&mut engine, 5400), "banner");
+    engine.execute_command("BottomOfFile");
+    let last = engine.cursor.buffer.lines.last().map(|l| l.start_offset);
+    assert_eq!(Some(engine.cursor.offset), last);
+}
+
 /// End goes past the line's last letter, saying nothing; Left then says that letter, as JAWS
 /// says it after End on a link's line [obs, 635/s20, s21].
 #[test]

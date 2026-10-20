@@ -14,9 +14,11 @@ use crate::input::{Key, KeyAction, KeyEvent};
 use crate::messages::msg;
 use crate::speech::SpeechOutput;
 
-/// The longest gap between two presses of a JAWS command that counts as "twice quickly"
-/// (the Windows default double-click time).
-const DOUBLE_PRESS_MS: u64 = 500;
+/// The longest gap between two presses of a command that counts as "twice quickly", as JAWS
+/// counts it, not Windows' double-click time (500 ms): Say Line pressed again 300 ms later
+/// spelled the line in 3 of 3 trials, 350 ms later in 1 of 3, 400 ms later in none
+/// [obs, 654]; Keyboard Help took 400 ms as two presses [obs, 642/s3].
+const DOUBLE_PRESS_MS: u64 = 350;
 
 mod commands;
 mod cursors;

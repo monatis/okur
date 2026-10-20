@@ -779,21 +779,27 @@ impl ScreenReaderEngine {
                 .word_at_offset(self.cursor.offset)
                 .map(|w| w.text.clone())?
         };
-        let text = text.trim();
-        if text.is_empty() {
+        let trimmed = text.trim();
+        if trimmed.is_empty() {
             return None;
         }
-        self.speech.speak_spelled(text, true);
-        Some(crate::pronounce::spelled(text))
+        // The virtual cursor's line is spelled to its end, which JAWS says as a space: "b a n
+        // n e r space" [obs, 654/s2, 408/s8]; a text field's line is not (406/s8).
+        let text = if line && !self.editing_text() {
+            format!("{trimmed} ")
+        } else {
+            trimmed.to_owned()
+        };
+        self.speech.speak_spelled(&text, true);
+        Some(crate::pronounce::spelled(&text))
     }
 
     /// The line Say Line reads. On the field that has the page's focus, a text field or a
     /// combo box whose label is a line of its own, it is the field as its quick key says it,
     /// without "blank" or its description: "Full name Edit Required", "Home branch Combo box
     /// collapsed Northside" [obs, 507/s7, 248/s4, 249/s4]; Down onto it reads the line alone
-    /// [obs, 201/s5, s17]. (A radio button just clicked is said without its position [obs,
-    /// 534/s10], but one focused from Select a Radio Button with it [obs, 246/s4]: not told
-    /// apart yet.)
+    /// [obs, 201/s5, s17]. A radio button is said with its position [obs, 246/s4]; JAWS leaves
+    /// it out right after its mouse click checked one, an accepted divergence (534/s10).
     fn line_here(&self) -> String {
         use crate::announcement::PartKind;
         // A focused tab adds its place among its list's tabs: "Advanced Tab 2 of 2" [obs,
