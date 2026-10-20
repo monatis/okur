@@ -1032,6 +1032,103 @@ pub(crate) mod capture {
         Some(tree)
     }
 
+    /// The taskbar's notification area's icons, as JAWS's system tray list gives them: the
+    /// buttons of `TrayNotifyWnd` (the chevron to the hidden icons, the icons shown, the input
+    /// indicator, the clock, the Action Center), left to right, each with the middle of its
+    /// rectangle for its clicks ("Notification Chevron", "0% available (plugged in)", "Touch
+    /// keyboard", "Tray Input Indicator - Turkish", "System Clock, …", "Action Center, …"
+    /// [obs, 511/s4, Windows 10]). Where the taskbar has no `TrayNotifyWnd`, its whole tree.
+    pub(crate) fn tray_icons(uia: &IUIAutomation) -> Vec<okur_core::event::TrayIcon> {
+        use windows::core::w;
+        use windows::Win32::UI::WindowsAndMessaging::{FindWindowExW, FindWindowW};
+        const BUTTON: i32 = 50000;
+        const MENU_ITEM: i32 = 50011;
+        const SPLIT_BUTTON: i32 = 50031;
+        /// Elements walked, at most: the taskbar's tree is small, a hung shell's is not read.
+        const MAX_TRAY_TREE: usize = 400;
+        // SAFETY: window lookups by static class names.
+        let Ok(taskbar) = (unsafe { FindWindowW(w!("Shell_TrayWnd"), None) }) else {
+            return Vec::new();
+        };
+        // SAFETY: as above.
+        let root = unsafe { FindWindowExW(Some(taskbar), None, w!("TrayNotifyWnd"), None) }
+            .unwrap_or(taskbar);
+        let Some(request) = properties_request(uia, AutomationElementMode_Full) else {
+            return Vec::new();
+        };
+        // SAFETY: UIA client queries on a valid automation object.
+        let (Ok(walker), Ok(element)) = (unsafe { uia.ControlViewWalker() }, unsafe {
+            uia.ElementFromHandleBuildCache(root, &request)
+        }) else {
+            return Vec::new();
+        };
+        let mut found: Vec<(windows::Win32::Foundation::RECT, String)> = Vec::new();
+        let mut stack = vec![(element, 0usize)];
+        let mut budget = MAX_TRAY_TREE;
+        while let Some((element, depth)) = stack.pop() {
+            budget = match budget.checked_sub(1) {
+                Some(left) => left,
+                None => break,
+            };
+            let kind = int(&element, UIA_ControlTypePropertyId).unwrap_or_default();
+            let name = string(&element, UIA_NamePropertyId);
+            let offscreen = boolean(&element, UIA_IsOffscreenPropertyId).unwrap_or(false);
+            if matches!(kind, BUTTON | MENU_ITEM | SPLIT_BUTTON) && !offscreen {
+                // SAFETY: a property read on a valid element.
+                if let (Some(name), Ok(rect)) =
+                    (name, unsafe { element.CurrentBoundingRectangle() })
+                {
+                    if rect.right > rect.left && rect.bottom > rect.top {
+                        found.push((rect, name));
+                    }
+                }
+                continue;
+            }
+            if depth >= 6 {
+                continue;
+            }
+            // Children pushed last to first, so they are walked in order.
+            let mut children = Vec::new();
+            // SAFETY: UIA tree walking on valid elements.
+            let mut child =
+                unsafe { walker.GetFirstChildElementBuildCache(&element, &request) }.ok();
+            while let Some(el) = child {
+                // SAFETY: as above.
+                child = unsafe { walker.GetNextSiblingElementBuildCache(&el, &request) }.ok();
+                children.push((el, depth + 1));
+            }
+            stack.extend(children.into_iter().rev());
+        }
+        // Left to right on a taskbar along the bottom or top, top to bottom on one at a side.
+        let wide = found
+            .iter()
+            .map(|(r, _)| r.left)
+            .max()
+            .zip(found.iter().map(|(r, _)| r.left).min())
+            .map(|(max, min)| max - min)
+            >= found
+                .iter()
+                .map(|(r, _)| r.top)
+                .max()
+                .zip(found.iter().map(|(r, _)| r.top).min())
+                .map(|(max, min)| max - min);
+        found.sort_by_key(|(r, _)| {
+            if wide {
+                (r.left, r.top)
+            } else {
+                (r.top, r.left)
+            }
+        });
+        found
+            .into_iter()
+            .map(|(r, name)| okur_core::event::TrayIcon {
+                name,
+                x: r.left + (r.right - r.left) / 2,
+                y: r.top + (r.bottom - r.top) / 2,
+            })
+            .collect()
+    }
+
     /// Names each of a dialog's controls after the group box it sits in, by their rectangles
     /// (the innermost box around the control's).
     fn assign_group_boxes(

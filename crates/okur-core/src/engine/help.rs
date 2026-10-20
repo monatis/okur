@@ -25,7 +25,7 @@ const PAGE_KEYS: [(fn() -> StaticMessage, Command); 6] = [
     (msg::help_key_element_lists, Command::VirtualHtmlFeatures),
     (msg::help_key_find, Command::VirtualFind),
 ];
-const WINDOW_KEYS: [(fn() -> StaticMessage, Command); 12] = [
+const WINDOW_KEYS: [(fn() -> StaticMessage, Command); 13] = [
     (msg::help_key_control_help, Command::ScreenSensitiveHelp),
     (msg::help_key_windows_keys, Command::WindowsKeysHelp),
     (msg::help_key_window_title, Command::SayWindowTitle),
@@ -33,6 +33,7 @@ const WINDOW_KEYS: [(fn() -> StaticMessage, Command); 12] = [
     (msg::help_key_current_control, Command::SayCurrentFocus),
     (msg::help_key_default_button, Command::SayDefaultButton),
     (msg::help_key_window_list, Command::WindowList),
+    (msg::help_key_system_tray, Command::SystemTrayList),
     (msg::help_key_time, Command::SaySystemTime),
     (msg::help_key_settings_in_use, Command::SayConfiguration),
     (msg::help_key_quick_settings, Command::QuickSettings),

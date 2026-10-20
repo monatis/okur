@@ -47,6 +47,7 @@ impl ScreenReaderEngine {
             Command::SelectAFrame => return self.select_a_frame(),
             Command::LeftMouseClick => return self.left_mouse_click(),
             Command::WindowList => return self.ask_window_list(),
+            Command::SystemTrayList => return self.ask_tray_list(),
             Command::ScreenSensitiveHelp => return self.screen_sensitive_help(),
             Command::HotKeyHelp => return self.hot_key_help(),
             Command::WindowsKeysHelp => return self.windows_keys_help(),

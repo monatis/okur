@@ -109,6 +109,8 @@ mod windows_actions {
         ListWindows,
         /// A window to the front.
         SwitchTo(u64),
+        /// The notification area's icons, answered even when there are none.
+        ListTray,
     }
 
     /// The virtual key of a key the screen reader sends for a reading command.
@@ -296,6 +298,18 @@ mod windows_actions {
                                 let _ = events.send(AccessibilityEvent::TopWindows(windows));
                             }
                             Request::SwitchTo(id) => crate::top_windows::switch_to(id),
+                            Request::ListTray => {
+                                let Some(events) = events.as_ref() else {
+                                    tracing::warn!("tray list impossible: no event channel");
+                                    continue;
+                                };
+                                let icons = uia
+                                    .as_ref()
+                                    .map(crate::uia_snapshot::capture::tray_icons)
+                                    .unwrap_or_default();
+                                tracing::debug!(icons = icons.len(), "tray icons listed");
+                                let _ = events.send(AccessibilityEvent::TrayIcons(icons));
+                            }
                         }
                     }
                 }
@@ -484,6 +498,20 @@ mod windows_actions {
             self.send(Request::SwitchTo(id))
         }
 
+        fn list_tray_icons(&self) -> bool {
+            self.send(Request::ListTray)
+        }
+
+        /// On a thread of its own, once Okur's dialog has had time to close: a click while it
+        /// still had the focus would close the menu the click opens.
+        fn click_mouse(&self, x: i32, y: i32, click: okur_core::actions::MouseClick) -> bool {
+            std::thread::spawn(move || {
+                std::thread::sleep(std::time::Duration::from_millis(250));
+                super::click_at(x, y, click);
+            });
+            true
+        }
+
         fn read_page_elements(&self, ids: &[&str]) -> bool {
             self.send(Request::PageElements(
                 ids.iter().map(|id| (*id).to_owned()).collect(),
@@ -610,6 +638,62 @@ pub fn clipboard_text() -> Option<String> {
         });
         let _ = CloseClipboard();
         text
+    }
+}
+
+/// The notification area's icons now, for harness checks (`okur tray`).
+#[cfg(windows)]
+pub fn tray_icons_now() -> Vec<okur_core::event::TrayIcon> {
+    use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
+    // SAFETY: COM initialization for this thread.
+    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+    crate::uia_snapshot::capture::automation()
+        .map(|uia| crate::uia_snapshot::capture::tray_icons(&uia))
+        .unwrap_or_default()
+}
+
+/// Clicks the mouse at `x`, `y` (real pixels, the process being DPI aware): the pointer moves
+/// there, then the buttons are pressed and released in one `SendInput` call, twice for a
+/// double click.
+#[cfg(windows)]
+fn click_at(x: i32, y: i32, click: okur_core::actions::MouseClick) {
+    use okur_core::actions::MouseClick;
+    use windows::Win32::UI::Input::KeyboardAndMouse::{
+        SendInput, INPUT, INPUT_0, INPUT_MOUSE, MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP,
+        MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP, MOUSEINPUT, MOUSE_EVENT_FLAGS,
+    };
+    use windows::Win32::UI::WindowsAndMessaging::SetCursorPos;
+    let button = |flags: MOUSE_EVENT_FLAGS| INPUT {
+        r#type: INPUT_MOUSE,
+        Anonymous: INPUT_0 {
+            mi: MOUSEINPUT {
+                dx: 0,
+                dy: 0,
+                mouseData: 0,
+                dwFlags: flags,
+                time: 0,
+                dwExtraInfo: 0,
+            },
+        },
+    };
+    let (down, up) = match click {
+        MouseClick::RightSingle => (MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP),
+        MouseClick::LeftSingle | MouseClick::LeftDouble => {
+            (MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP)
+        }
+    };
+    let mut inputs = vec![button(down), button(up)];
+    if click == MouseClick::LeftDouble {
+        inputs.extend([button(down), button(up)]);
+    }
+    let size = i32::try_from(std::mem::size_of::<INPUT>()).unwrap_or(0);
+    // SAFETY: plain Win32 calls: the pointer moves, then well-formed mouse button inputs.
+    unsafe {
+        if SetCursorPos(x, y).is_err() {
+            tracing::warn!(x, y, "the mouse could not be moved to click");
+            return;
+        }
+        SendInput(&inputs, size);
     }
 }
 

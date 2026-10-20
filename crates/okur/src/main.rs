@@ -119,6 +119,9 @@ enum Commands {
         #[arg(long, default_value = "focus")]
         action: String,
     },
+    /// List the taskbar's notification area icons as the system tray list (Insert+F11) gives
+    /// them, with the points their clicks go to (Windows)
+    Tray,
     /// Read the focused edit's text at its caret, as caret keys do in an edit (Windows)
     Caret {
         /// char, word or line
@@ -700,6 +703,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::LiveRegion(_)) => "live region",
         Some(AccessibilityEvent::ViewerText(_)) => "viewer text",
         Some(AccessibilityEvent::TopWindows(_)) => "top windows",
+        Some(AccessibilityEvent::TrayIcons(_)) => "tray icons",
         Some(AccessibilityEvent::PageElements(_)) => "page elements",
         Some(AccessibilityEvent::DocumentLoaded { .. }) => "document loaded",
         Some(AccessibilityEvent::Ui(_)) => "okur window",
@@ -1650,6 +1654,14 @@ async fn main() {
                 let _ = key;
                 eprintln!("caret is only available on Windows");
             }
+        }
+        Some(Commands::Tray) => {
+            #[cfg(windows)]
+            for icon in okur_platform::actions::tray_icons_now() {
+                println!("{} @ {}, {}", icon.name, icon.x, icon.y);
+            }
+            #[cfg(not(windows))]
+            eprintln!("tray is only available on Windows");
         }
         Some(Commands::Trace {
             out,

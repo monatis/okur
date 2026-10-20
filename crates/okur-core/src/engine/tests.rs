@@ -3801,6 +3801,59 @@ fn the_window_list_switches_to_the_window_chosen() {
         .any(|(a, window)| a == "switch to window" && *window == 12));
 }
 
+/// Insert+F11 asks the platform for the notification area's icons and opens the system tray
+/// list on them; Enter (its default button, Right Single Click) closes it and right-clicks
+/// the icon chosen (JAWS 2025 help, Select a System Tray Icon Dialog Box).
+#[test]
+fn the_system_tray_list_clicks_the_icon_chosen() {
+    use crate::event::TrayIcon;
+    use crate::ui::{FromUi, ToUi, Value};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.app_mode = AppMode::NativeControl;
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let actions = crate::actions::RecordingActions::reading_windows();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut f11 = KeyEvent::new(Key::F(11), Modifiers::none(), true);
+    f11.modifiers.insert = true;
+    assert_eq!(engine.handle_key_event(&f11), KeyAction::Consume);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(a, _)| a == "list tray icons"));
+    let icon = |name: &str, x: i32| TrayIcon {
+        name: name.to_owned(),
+        x,
+        y: 1060,
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::TrayIcons(vec![
+        icon("Notification Chevron", 1500),
+        icon("Touch keyboard", 1600),
+    ]));
+    let sent = ui.take();
+    let Some(ToUi::DialogShow { dialog }) = sent.first() else {
+        panic_free_fail(&format!("no dialog shown: {sent:?}"));
+        return;
+    };
+    assert_eq!(dialog.title, "Select a System Tray Icon");
+    let id = dialog.id;
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "icons".into(),
+        value: Value::Selected(1),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "right".into(),
+    }));
+    assert!(matches!(ui.take().first(), Some(ToUi::DialogClose { id: closed }) if *closed == id));
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(a, x)| a == "RightSingle click at 1600, 1060" && *x == 1600));
+}
+
 /// A WinForms data grid [obs, 545]: a cell is said with whether it is selected and its text;
 /// Ctrl+End adds "Bottom of file" and the cell again, Say Focus reads a repeat's state.
 #[test]

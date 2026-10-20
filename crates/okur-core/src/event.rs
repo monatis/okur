@@ -474,6 +474,15 @@ pub struct TopWindow {
     pub on_top: bool,
 }
 
+/// An icon of the taskbar's notification area, as the system tray list shows it (Insert+F11):
+/// its name, and the screen point (real pixels) its clicks go to.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct TrayIcon {
+    pub name: String,
+    pub x: i32,
+    pub y: i32,
+}
+
 /// How a window is shown: JAWS's Window List says it after the title.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum WindowState {
@@ -508,6 +517,9 @@ pub enum AccessibilityEvent {
     /// The applications' windows, front to back, asked for by the Window List (Insert+F10;
     /// [`crate::actions::ApplicationActions::list_windows`]).
     TopWindows(Vec<TopWindow>),
+    /// The notification area's icons, left to right, asked for by the system tray list
+    /// (Insert+F11; [`crate::actions::ApplicationActions::list_tray_icons`]).
+    TrayIcons(Vec<TrayIcon>),
     /// Page elements asked for by DOM id, each with its subtree, as they are now; empty when
     /// none was found ([`crate::actions::ApplicationActions::read_page_elements`]).
     PageElements(Vec<crate::aom::AomNode>),

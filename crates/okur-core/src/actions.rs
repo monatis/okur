@@ -7,6 +7,14 @@
 
 use crate::aom::AomNode;
 
+/// A click of the mouse, as JAWS's system tray list offers them.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum MouseClick {
+    LeftSingle,
+    RightSingle,
+    LeftDouble,
+}
+
 /// Platform actions on the live element a buffer node was captured from.
 pub trait ApplicationActions: Send {
     /// Requests keyboard focus on the node's element. Returns false when the node has no
@@ -51,6 +59,19 @@ pub trait ApplicationActions: Send {
     /// Brings window `id` (a [`crate::event::TopWindow`]'s) to the front, restored if minimized.
     fn switch_to_window(&self, id: u64) -> bool {
         let _ = id;
+        false
+    }
+
+    /// Asks for the notification area's icons; they come back as
+    /// [`crate::event::AccessibilityEvent::TrayIcons`]. False when unsupported.
+    fn list_tray_icons(&self) -> bool {
+        false
+    }
+
+    /// Clicks the mouse at `x`, `y` in screen pixels (a system tray icon chosen in its list).
+    /// False when unsupported.
+    fn click_mouse(&self, x: i32, y: i32, click: MouseClick) -> bool {
+        let _ = (x, y, click);
         false
     }
 
@@ -246,6 +267,27 @@ impl ApplicationActions for RecordingActions {
             log.push((
                 "switch to window".to_owned(),
                 usize::try_from(id).unwrap_or(usize::MAX),
+            ));
+        }
+        true
+    }
+
+    /// Taken where windows are read, as [`RecordingActions::list_windows`]: replay's traces
+    /// hold no tray icons to answer with.
+    fn list_tray_icons(&self) -> bool {
+        if self.windows {
+            if let Ok(mut log) = self.log.lock() {
+                log.push(("list tray icons".to_owned(), 0));
+            }
+        }
+        self.windows
+    }
+
+    fn click_mouse(&self, x: i32, y: i32, click: MouseClick) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((
+                format!("{click:?} click at {x}, {y}"),
+                usize::try_from(x).unwrap_or(0),
             ));
         }
         true

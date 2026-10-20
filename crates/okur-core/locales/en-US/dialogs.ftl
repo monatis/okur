@@ -114,3 +114,12 @@ window-list-cancel = Cancel
 window-minimized = Minimized
 window-maximized = Maximized
 window-restored = Restored
+
+## The system tray list (Insert+F11): JAWS 2025 help, Select a System Tray Icon Dialog Box.
+## Its list has no label; JAWS names it by the dialog [obs, 511/s4].
+
+tray-title = Select a System Tray Icon
+tray-right-click = Right Single Click
+tray-left-click = Left Single Click
+tray-left-double-click = Left Double Click
+tray-cancel = Cancel

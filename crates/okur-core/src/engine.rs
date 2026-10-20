@@ -34,6 +34,7 @@ mod state;
 mod tests;
 mod text_feedback;
 mod toggles;
+mod tray;
 #[cfg(test)]
 mod web_app_tests;
 mod window_list;
@@ -183,6 +184,9 @@ pub struct ScreenReaderEngine {
     /// The Window List while it is open, and whether its windows were asked for and not come.
     window_list: Option<crate::ui::windows::WindowListDialog>,
     window_list_asked: bool,
+    /// The system tray list while it is open, and whether its icons were asked for.
+    tray_dialog: Option<crate::ui::tray::TrayDialog>,
+    tray_asked: bool,
     /// Ctrl+R or F5 was pressed in a page: its next load is a new one, announced, not a
     /// capture of the page again [obs, 507/s1].
     reload_asked: bool,
@@ -303,6 +307,8 @@ impl ScreenReaderEngine {
             find_dialog: None,
             window_list: None,
             window_list_asked: false,
+            tray_dialog: None,
+            tray_asked: false,
             reload_asked: false,
             find_options: crate::ui::find::FindOptions::default(),
             find_histories: std::collections::HashMap::new(),
@@ -948,6 +954,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::LiveRegion(live) => self.handle_live_region_event(live),
             AccessibilityEvent::ViewerText(lines) => self.open_screen_viewer(lines),
             AccessibilityEvent::TopWindows(windows) => self.open_window_list(windows),
+            AccessibilityEvent::TrayIcons(icons) => self.open_tray_list(icons),
             AccessibilityEvent::PageElements(elements) => self.say_page_font(elements),
             AccessibilityEvent::Ui(message) => self.handle_ui_event(message),
             AccessibilityEvent::PageChanged => {
@@ -1130,6 +1137,7 @@ impl ScreenReaderEngine {
             }
             _ if self.is_find_event(message) => self.handle_find_event(message),
             _ if self.is_window_list_event(message) => self.handle_window_list_event(message),
+            _ if self.is_tray_event(message) => self.handle_tray_event(message),
             _ => {
                 let outcome = self.settings_dialog.as_mut()?.handle(message);
                 match outcome {

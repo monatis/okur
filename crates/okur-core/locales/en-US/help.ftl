@@ -37,6 +37,7 @@ help-key-read-window = Read the window, Insert+B
 help-key-current-control = Say the current control, Insert+Tab
 help-key-default-button = Say a dialog box's default button, Insert+E
 help-key-window-list = List the open windows, Insert+F10
+help-key-system-tray = List the system tray icons, Insert+F11
 help-key-time = Say the time, Insert+F12
 help-key-settings-in-use = Say the settings in use, Insert+Q
 help-key-quick-settings = Change Okur's settings, Insert+V
