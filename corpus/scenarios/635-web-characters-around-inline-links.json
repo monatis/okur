@@ -1,0 +1,32 @@
+{
+  "id": "635-web-characters-around-inline-links",
+  "name": "The characters JAWS's virtual text holds around the news article's inline links and at the page's end, by Left and Right one character at a time: before Contact us (the footer's \"Gazette. \" then the link), before each Related stories link (a list item that is only a link), after the byline's Maria Lopez, and past the last line. Okur's count of a large selection is a few characters short of JAWS's on this page (562/s13, s17, s20: 2030 for 2035)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Ctrl+End" },
+    { "id": "s2", "type": "key", "command": "Shift+Tab" },
+    { "id": "s3", "type": "key", "command": "Left" },
+    { "id": "s4", "type": "key", "command": "Left" },
+    { "id": "s5", "type": "key", "command": "Right" },
+    { "id": "s6", "type": "key", "command": "Right" },
+    { "id": "s7", "type": "key", "command": "Shift+Tab" },
+    { "id": "s8", "type": "key", "command": "Left" },
+    { "id": "s9", "type": "key", "command": "Left" },
+    { "id": "s10", "type": "key", "command": "Shift+Tab" },
+    { "id": "s11", "type": "key", "command": "Left" },
+    { "id": "s12", "type": "key", "command": "Left" },
+    { "id": "s13", "type": "key", "command": "Ctrl+End" },
+    { "id": "s14", "type": "key", "command": "End" },
+    { "id": "s15", "type": "key", "command": "Right" },
+    { "id": "s16", "type": "key", "command": "Left" },
+    { "id": "s17", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s18", "type": "key", "command": "Tab" },
+    { "id": "s19", "type": "key", "command": "Right" },
+    { "id": "s20", "type": "key", "command": "End" },
+    { "id": "s21", "type": "key", "command": "Left" }
+  ]
+}

@@ -4344,13 +4344,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "635-web-characters-around-inline-links",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "56e3cb7ad6e6b35bcedf99313baae7a6a5de680272e30f5d434e97f17cd6b475",
+        "capture_script_sha256": "bf89d333b1eca515dc0da6a3e2407056055b80d500d56700db4951d636c177c7",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 299,
-    "scenarios_with_evidence": 299,
-    "total_trials": 951,
-    "successful_trials": 951,
-    "deterministic_scenarios": 187
+    "scenarios": 300,
+    "scenarios_with_evidence": 300,
+    "total_trials": 954,
+    "successful_trials": 954,
+    "deterministic_scenarios": 188
   }
 }
