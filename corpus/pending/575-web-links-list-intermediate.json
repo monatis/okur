@@ -1,0 +1,79 @@
+{
+    "id":  "575-web-links-list-intermediate",
+    "name":  "The Links List (Insert+F7): its opening, Tab through its controls (JAWS\u0027s own TypeKey: its elevated dialog refuses our keys), Down twice in the list, Enter to move to the link, and reading on (at JAWS\u0027s Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 222-web-links-list)",
+    "category":  "realistic-pages",
+    "version":  "1.0.0",
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html",
+    "target_app":  "chrome",
+    "reset":  {
+                  "keys":  [
+                               "Escape",
+                               "Ctrl+Home"
+                           ]
+              },
+    "steps":  [
+                  {
+                      "id":  "s1",
+                      "type":  "key",
+                      "command":  "Insert+F7",
+                      "settle_max_ms":  15000
+                  },
+                  {
+                      "id":  "s2",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"Tab\")"
+                  },
+                  {
+                      "id":  "s3",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"Tab\")"
+                  },
+                  {
+                      "id":  "s4",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"Tab\")"
+                  },
+                  {
+                      "id":  "s5",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"Tab\")"
+                  },
+                  {
+                      "id":  "s6",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"Tab\")"
+                  },
+                  {
+                      "id":  "s7",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"Tab\")"
+                  },
+                  {
+                      "id":  "s8",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s9",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s10",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"Enter\")"
+                  },
+                  {
+                      "id":  "s11",
+                      "type":  "key",
+                      "command":  "Down"
+                  }
+              ],
+    "jaws_settings":  {
+                          "DEFAULT.JCF":  {
+                                              "Options":  {
+                                                              "Verbosity":  "1"
+                                                          }
+                                          }
+                      }
+}

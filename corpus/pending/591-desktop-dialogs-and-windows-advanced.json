@@ -1,0 +1,85 @@
+{
+    "id":  "591-desktop-dialogs-and-windows-advanced",
+    "name":  "Message box, a second window, Alt+Tab, Alt+F4, a modal dialog with text, window title (at JAWS\u0027s Advanced verbosity, DEFAULT.JCF Options Verbosity=2; otherwise as 306-desktop-dialogs-and-windows)",
+    "category":  "desktop",
+    "version":  "1.0.0",
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/desktop-dialogs.ps1",
+    "target_app":  "desktop",
+    "launch":  {
+                   "window_title":  "SR Dialog Fixture"
+               },
+    "reset":  {
+                  "keys":  [
+
+                           ]
+              },
+    "steps":  [
+                  {
+                      "id":  "s1",
+                      "type":  "key",
+                      "command":  "Enter"
+                  },
+                  {
+                      "id":  "s2",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s3",
+                      "type":  "key",
+                      "command":  "Escape"
+                  },
+                  {
+                      "id":  "s4",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s5",
+                      "type":  "key",
+                      "command":  "Enter"
+                  },
+                  {
+                      "id":  "s6",
+                      "type":  "key",
+                      "command":  "Alt+Tab"
+                  },
+                  {
+                      "id":  "s7",
+                      "type":  "key",
+                      "command":  "Alt+Tab"
+                  },
+                  {
+                      "id":  "s8",
+                      "type":  "key",
+                      "command":  "Alt+F4"
+                  },
+                  {
+                      "id":  "s9",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s10",
+                      "type":  "key",
+                      "command":  "Enter"
+                  },
+                  {
+                      "id":  "s11",
+                      "type":  "key",
+                      "command":  "Enter"
+                  },
+                  {
+                      "id":  "s12",
+                      "type":  "key",
+                      "command":  "Insert+T"
+                  }
+              ],
+    "jaws_settings":  {
+                          "DEFAULT.JCF":  {
+                                              "Options":  {
+                                                              "Verbosity":  "2"
+                                                          }
+                                          }
+                      }
+}

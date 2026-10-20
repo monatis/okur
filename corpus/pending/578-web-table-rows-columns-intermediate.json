@@ -1,0 +1,77 @@
+{
+    "id":  "578-web-table-rows-columns-intermediate",
+    "name":  "Table rows and columns: Win+Alt+Down and Up (rows), Win+Alt+Right and Left (columns), Alt+Win+Numpad5 (current row), Alt+Win+Period (current column) (at JAWS\u0027s Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 297-web-table-rows-columns)",
+    "category":  "realistic-pages",
+    "version":  "1.0.0",
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+    "target_app":  "chrome",
+    "reset":  {
+                  "keys":  [
+                               "Ctrl+Home"
+                           ]
+              },
+    "steps":  [
+                  {
+                      "id":  "s1",
+                      "type":  "key",
+                      "command":  "T"
+                  },
+                  {
+                      "id":  "s2",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s3",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s4",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s5",
+                      "type":  "key",
+                      "command":  "Win+Alt+Down"
+                  },
+                  {
+                      "id":  "s6",
+                      "type":  "key",
+                      "command":  "Win+Alt+Down"
+                  },
+                  {
+                      "id":  "s7",
+                      "type":  "key",
+                      "command":  "Win+Alt+Up"
+                  },
+                  {
+                      "id":  "s8",
+                      "type":  "key",
+                      "command":  "Win+Alt+Right"
+                  },
+                  {
+                      "id":  "s9",
+                      "type":  "key",
+                      "command":  "Win+Alt+Left"
+                  },
+                  {
+                      "id":  "s10",
+                      "type":  "key",
+                      "command":  "Alt+Win+Numpad5"
+                  },
+                  {
+                      "id":  "s11",
+                      "type":  "key",
+                      "command":  "Alt+Win+Period"
+                  }
+              ],
+    "jaws_settings":  {
+                          "DEFAULT.JCF":  {
+                                              "Options":  {
+                                                              "Verbosity":  "1"
+                                                          }
+                                          }
+                      }
+}

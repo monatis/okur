@@ -1,0 +1,154 @@
+{
+    "id":  "576-web-element-lists-items-intermediate",
+    "name":  "Virtual HTML Features (Insert+F3): every item, Down through all 22, then Tab through its controls and Escape (at JAWS\u0027s Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 230-web-element-lists-items)",
+    "category":  "realistic-pages",
+    "version":  "1.0.0",
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html",
+    "target_app":  "chrome",
+    "reset":  {
+                  "keys":  [
+                               "Escape",
+                               "Ctrl+Home"
+                           ]
+              },
+    "steps":  [
+                  {
+                      "id":  "s1",
+                      "type":  "key",
+                      "command":  "Insert+F3",
+                      "settle_max_ms":  15000
+                  },
+                  {
+                      "id":  "s2",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s3",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s4",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s5",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s6",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s7",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s8",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s9",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s10",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s11",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s12",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s13",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s14",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s15",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s16",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s17",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s18",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s19",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s20",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s21",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s22",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"DownArrow\")"
+                  },
+                  {
+                      "id":  "s23",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"Tab\")"
+                  },
+                  {
+                      "id":  "s24",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"Tab\")"
+                  },
+                  {
+                      "id":  "s25",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"Tab\")"
+                  },
+                  {
+                      "id":  "s26",
+                      "type":  "jaws_function",
+                      "command":  "TypeKey(\"Escape\")"
+                  }
+              ],
+    "jaws_settings":  {
+                          "DEFAULT.JCF":  {
+                                              "Options":  {
+                                                              "Verbosity":  "1"
+                                                          }
+                                          }
+                      }
+}

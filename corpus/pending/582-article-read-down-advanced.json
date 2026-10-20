@@ -1,0 +1,392 @@
+{
+    "id":  "582-article-read-down-advanced",
+    "name":  "Read the article line by line with Down Arrow (at JAWS\u0027s Advanced verbosity, DEFAULT.JCF Options Verbosity=2; otherwise as 101-article-read-down)",
+    "category":  "realistic-pages",
+    "version":  "1.0.0",
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+    "target_app":  "chrome",
+    "reset":  {
+                  "keys":  [
+                               "Ctrl+Home"
+                           ]
+              },
+    "steps":  [
+                  {
+                      "id":  "s1",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s2",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s3",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s4",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s5",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s6",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s7",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s8",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s9",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s10",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s11",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s12",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s13",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s14",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s15",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s16",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s17",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s18",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s19",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s20",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s21",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s22",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s23",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s24",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s25",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s26",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s27",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s28",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s29",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s30",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s31",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s32",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s33",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s34",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s35",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s36",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s37",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s38",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s39",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s40",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s41",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s42",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s43",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s44",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s45",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s46",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s47",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s48",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s49",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s50",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s51",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s52",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s53",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s54",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s55",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s56",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s57",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s58",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s59",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s60",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s61",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s62",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s63",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s64",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s65",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s66",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s67",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s68",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s69",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s70",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s71",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s72",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s73",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s74",
+                      "type":  "key",
+                      "command":  "Down"
+                  }
+              ],
+    "jaws_settings":  {
+                          "DEFAULT.JCF":  {
+                                              "Options":  {
+                                                              "Verbosity":  "2"
+                                                          }
+                                          }
+                      }
+}

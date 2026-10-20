@@ -22,6 +22,7 @@ To record one:
 | 569 | Route PC to Virtual on a heading, a paragraph, a list, a list item, a graphic and a table cell | `news-article.html` |
 | 570 | The Speech History's other layer keys (`Default.JKM`): Insert+Space, Ctrl+H copies it to the clipboard, Shift+H clears it, then H shows what was said since | `news-article.html` |
 | 571 | Insert+F4 (ShutDownJAWS) asks before quitting; Tab in its question, Escape answers no, then Insert+Tab in Notepad. Last in its batch | `desktop-notepad.ps1` |
+| 572-591 | Ten recorded scenarios again at JAWS's Intermediate (572-581) and Advanced (582-591) verbosity, `Verbosity` in DEFAULT.JCF's Options, generated from 101, 204, 205, 222, 230, 241, 297, 303, 304 and 306 with their steps unchanged: what each level changes across reading, forms, lists, regions, tables, trees and dialogs | as their sources |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.

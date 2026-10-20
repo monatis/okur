@@ -1,0 +1,95 @@
+{
+    "id":  "579-desktop-lists-and-trees-intermediate",
+    "name":  "Arrow keys in a list box, tree view, list view and tab control (at JAWS\u0027s Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 303-desktop-lists-and-trees)",
+    "category":  "desktop",
+    "version":  "1.0.0",
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/desktop-forms.ps1",
+    "target_app":  "desktop",
+    "launch":  {
+                   "window_title":  "SR Desktop Fixture"
+               },
+    "reset":  {
+                  "keys":  [
+                               "Tab",
+                               "Tab",
+                               "Tab",
+                               "Tab",
+                               "Tab",
+                               "Tab"
+                           ]
+              },
+    "steps":  [
+                  {
+                      "id":  "s1",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s2",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s3",
+                      "type":  "key",
+                      "command":  "Up"
+                  },
+                  {
+                      "id":  "s4",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s5",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s6",
+                      "type":  "key",
+                      "command":  "Up"
+                  },
+                  {
+                      "id":  "s7",
+                      "type":  "key",
+                      "command":  "Right"
+                  },
+                  {
+                      "id":  "s8",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s9",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s10",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s11",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s12",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s13",
+                      "type":  "key",
+                      "command":  "Right"
+                  }
+              ],
+    "jaws_settings":  {
+                          "DEFAULT.JCF":  {
+                                              "Options":  {
+                                                              "Verbosity":  "1"
+                                                          }
+                                          }
+                      }
+}
