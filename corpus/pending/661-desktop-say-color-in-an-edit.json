@@ -1,0 +1,18 @@
+{
+  "id": "661-desktop-say-color-in-an-edit",
+  "name": "Say Color (Insert+5) in a native multiline edit, at its start and after Down and End, then on the window's other control with Tab: what JAWS says outside a page, where it said \"default on default\" on a dialog's button (513/s3)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-editor.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Editor Fixture" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+5" },
+    { "id": "s2", "type": "key", "command": "Down" },
+    { "id": "s3", "type": "key", "command": "End" },
+    { "id": "s4", "type": "key", "command": "Insert+5" },
+    { "id": "s5", "type": "key", "command": "Tab" },
+    { "id": "s6", "type": "key", "command": "Insert+5" }
+  ]
+}

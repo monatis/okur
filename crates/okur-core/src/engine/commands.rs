@@ -1159,8 +1159,11 @@ impl ScreenReaderEngine {
     /// [obs, 565, 618, 530/s2]. Nothing elsewhere yet: JAWS reads a window's colors from its
     /// screen, which Okur has no model of.
     fn say_color(&mut self) -> Option<String> {
-        if self.app_mode != AppMode::VirtualBuffer || self.forms_mode {
-            return None;
+        // Outside a page Okur reads no colors yet: JAWS says "default on default" where it
+        // finds none, on a dialog's button [obs, 513/s3].
+        if self.app_mode != AppMode::VirtualBuffer {
+            let default = msg::color_default().to_string();
+            return self.say(msg::color_on(default.clone(), default).to_string());
         }
         let formatting = self
             .cursor

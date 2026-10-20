@@ -1,0 +1,18 @@
+{
+  "id": "662-web-say-color-in-forms-mode",
+  "name": "Say Color (Insert+5) in a page's field: E to the sign-up form's first edit, Insert+5 with the virtual cursor, Enter into forms mode, type \"ab\", Insert+5, Escape, Insert+5",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "E" },
+    { "id": "s2", "type": "key", "command": "Insert+5" },
+    { "id": "s3", "type": "key", "command": "Enter" },
+    { "id": "s4", "type": "text", "command": "ab" },
+    { "id": "s5", "type": "key", "command": "Insert+5" },
+    { "id": "s6", "type": "key", "command": "Escape" },
+    { "id": "s7", "type": "key", "command": "Insert+5" }
+  ]
+}

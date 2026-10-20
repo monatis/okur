@@ -812,6 +812,13 @@ fn say_color_names_the_text_and_background_colors() {
         engine.execute_command("SayColor").as_deref(),
         Some("blue2 on white")
     );
+    // Outside a page Okur reads no colors: "default on default", as JAWS says on a dialog's
+    // button [obs, 513/s3].
+    engine.handle_focus_event(&FocusEvent::new(Role::Button).with_name("Open second window"));
+    assert_eq!(
+        engine.execute_command("SayColor").as_deref(),
+        Some("default on default")
+    );
 }
 
 #[test]

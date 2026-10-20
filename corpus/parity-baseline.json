@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur -- parity --write-baseline",
-  "matched_steps": 4581,
+  "matched_steps": 4582,
   "total_steps": 4750,
   "accepted_divergences": 104,
   "errors": [],
@@ -2373,7 +2373,7 @@
     "512-web-rate-on-the-fly/s8": "match",
     "513-desktop-dialog-helpers/s1": "match",
     "513-desktop-dialog-helpers/s2": "accepted divergence",
-    "513-desktop-dialog-helpers/s3": "mismatch",
+    "513-desktop-dialog-helpers/s3": "match",
     "513-desktop-dialog-helpers/s4": "match",
     "513-desktop-dialog-helpers/s5": "match",
     "513-desktop-dialog-helpers/s6": "match",
