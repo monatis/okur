@@ -1125,6 +1125,51 @@ pub struct EventConverter {
     last_live_region: Option<(String, u128)>,
 }
 
+/// The last focus's MSAA identity (`hwnd`, `id_object`, `id_child`) and name, and the focused
+/// control's own name from its focus chain.
+type FocusIdentity = ((isize, i32, i32, Option<String>), Option<String>);
+
+thread_local! {
+    /// The last focus as the converter on this thread knows it. Live, the WinEvent thread reads
+    /// a state or selection change's MSAA object first and skips the rest of the read when the
+    /// change is not the focused control's, which the converter would drop: 73% of the state
+    /// changes recorded (performance review P5, step 2).
+    static CONVERTER_FOCUS: std::cell::RefCell<Option<FocusIdentity>> =
+        const { std::cell::RefCell::new(None) };
+}
+
+/// Whether a change event, by its MSAA identity and object's name, concerns the focused
+/// control, as the converter passes changes on: the focus's own object, or one of its name.
+/// The focus event's MSAA object can be the browser window while the focused control is a page
+/// button (focus left on it, then Space expanded it, GitHub): the control's own name, from the
+/// focus chain, is compared too.
+fn concerns_focus(
+    (focused, control_name): (&(isize, i32, i32, Option<String>), Option<&String>),
+    (hwnd, id_object, id_child): (isize, i32, i32),
+    object_name: Option<&String>,
+) -> bool {
+    let (focus_hwnd, focus_object, focus_child, name) = focused;
+    let same_object = hwnd == *focus_hwnd && id_object == *focus_object && id_child == *focus_child;
+    let focus_on_window = control_name.is_some() && name.as_ref() != control_name;
+    let same_name = object_name.is_some()
+        && (object_name == name.as_ref() || (focus_on_window && object_name == control_name));
+    same_object || same_name
+}
+
+/// Whether the converter on this thread would pass on a change of this object: none before a
+/// focus.
+#[cfg(windows)]
+fn change_concerns_converter_focus(
+    identity: (isize, i32, i32),
+    object_name: Option<&String>,
+) -> bool {
+    CONVERTER_FOCUS.with(|focus| {
+        focus.borrow().as_ref().is_some_and(|(focused, control)| {
+            concerns_focus((focused, control.as_ref()), identity, object_name)
+        })
+    })
+}
+
 /// A window's own name changed (its title), not a control's in it.
 pub fn is_window_renamed(event: &TraceEvent) -> bool {
     event.event == "name_change" && event.id_object == OBJID_WINDOW
@@ -1269,6 +1314,12 @@ impl EventConverter {
                 let name = event.object.as_ref().and_then(|o| o.name.clone());
                 self.focused = Some((event.hwnd, event.id_object, event.id_child, name));
                 self.focused_control = focus.name.clone();
+                CONVERTER_FOCUS.with(|known| {
+                    *known.borrow_mut() = self
+                        .focused
+                        .clone()
+                        .map(|focused| (focused, self.focused_control.clone()));
+                });
                 self.last_focus = Some(focus.clone());
                 return Some(AccessibilityEvent::Focus(focus));
             }
@@ -1287,18 +1338,16 @@ impl EventConverter {
             "selection" => ChangeKind::Selection,
             _ => return None,
         };
-        let (hwnd, id_object, id_child, name) = self.focused.as_ref()?;
+        let focused = self.focused.as_ref()?;
+        let (hwnd, id_object, id_child, _) = focused;
         let same_object =
             event.hwnd == *hwnd && event.id_object == *id_object && event.id_child == *id_child;
-        // The focus event's MSAA object can be the browser window while the focused control is
-        // a page button (focus left on it, then Space expanded it, GitHub): the control's own
-        // name, from the focus chain, is compared too.
         let object_name = event.object.as_ref().and_then(|o| o.name.as_ref());
-        let control_name = self.focused_control.as_ref();
-        let focus_on_window = control_name.is_some() && name.as_ref() != control_name;
-        let same_name = object_name.is_some()
-            && (object_name == name.as_ref() || (focus_on_window && object_name == control_name));
-        if !(same_object || same_name) {
+        if !concerns_focus(
+            (focused, self.focused_control.as_ref()),
+            (event.hwnd, event.id_object, event.id_child),
+            object_name,
+        ) {
             return None;
         }
         // The control as UIA reports it now; without a focus chain (a failed UIA read), the
@@ -3049,6 +3098,21 @@ mod capture {
                 tracing::debug!(event = name, "event of a hung window not read");
                 return;
             }
+            // A state or selection change of another control than the focused one is not read
+            // further live: the converter would drop it, and deciding needs only the event's
+            // MSAA object. The focus, its ancestors, siblings and text, read for a change, were
+            // read in vain for 73% of the state changes recorded (performance review P5,
+            // step 2).
+            if state.live && matches!(name, "state_change" | "selection") {
+                let object = msaa_object(hwnd, id_object, id_child);
+                let object_name = object.as_ref().and_then(|o| o.name.as_ref());
+                if !super::change_concerns_converter_focus(
+                    (hwnd.0 as isize, id_object, id_child),
+                    object_name,
+                ) {
+                    return;
+                }
+            }
             // A live region outside a Chromium page is read from UIA's own event
             // ([`UiaLiveRegionHandler`]); this one has nothing to read, and its MSAA object took
             // 970 ms to answer as Windows Settings opened (dev box, 2026-10-17).
@@ -4417,6 +4481,26 @@ mod tests {
             "the focused button's change"
         );
         assert!(converter.convert(&change("Pricing")).is_empty());
+        // Live, the reader decides from the same focus before reading the change further
+        // (performance review P5, step 2): the converter's focus is the one it checks.
+        #[cfg(windows)]
+        {
+            let name = |n: &str| Some(n.to_owned());
+            let identity = (7, focus.id_object, -16936);
+            assert!(super::change_concerns_converter_focus(
+                identity,
+                name("Solutions").as_ref()
+            ));
+            assert!(!super::change_concerns_converter_focus(
+                identity,
+                name("Pricing").as_ref()
+            ));
+            // The focus's own object, whatever its name now.
+            assert!(super::change_concerns_converter_focus(
+                (focus.hwnd, focus.id_object, focus.id_child),
+                None
+            ));
+        }
     }
 
     /// Space on a select with the focus: its state change is read after its list has taken
