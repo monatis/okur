@@ -90,6 +90,25 @@ impl ScreenReaderEngine {
         self.say(msg::no_frames_in_page().to_string())
     }
 
+    /// The radio button at the virtual cursor, when checking it unchecks another of its group:
+    /// the page then reports both changes, and JAWS says the radio button checked without its
+    /// position [obs, 205/s6, 534/s9]; checking one in a group with none checked, it keeps the
+    /// position [obs, 229/s10].
+    pub(super) fn radio_switching_here(&self) -> Option<usize> {
+        let node = self.node_under_cursor()?;
+        if node.role != crate::aom::Role::RadioButton || node.states.checked == Some(true) {
+            return None;
+        }
+        let group = node.attributes.get("group_id")?;
+        let other_checked = self.cursor.buffer.nodes().any(|other| {
+            other.id != node.id
+                && other.role == crate::aom::Role::RadioButton
+                && other.attributes.get("group_id") == Some(group)
+                && other.states.checked == Some(true)
+        });
+        other_checked.then_some(node.id)
+    }
+
     /// Numpad Slash in a page: "left mouse button", and the element at the virtual cursor is
     /// clicked; the page then reports what the click did, the check box focused and unchecked,
     /// then checked [obs, 534/s2, s4, s9]. Elsewhere JAWS clicks at the mouse pointer, which
@@ -100,6 +119,7 @@ impl ScreenReaderEngine {
         }
         let said = self.say(msg::left_mouse_button().to_string());
         self.clicked = self.node_under_cursor().map(|node| node.id);
+        self.radio_switched = self.radio_switching_here();
         if let (Some(actions), Some(node)) = (&self.actions, self.node_under_cursor()) {
             actions.activate(node);
         }

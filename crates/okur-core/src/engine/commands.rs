@@ -307,6 +307,7 @@ impl ScreenReaderEngine {
             // Space on text does nothing, and the page never gets the key [obs, 229/s2: no
             // "page keydown Space" in its event log].
             Command::Activate => {
+                self.radio_switched = self.radio_switching_here();
                 if let (Some(actions), Some(node)) = (&self.actions, self.node_under_cursor()) {
                     let editable = node.attributes.get("editable").is_some_and(|e| e == "true");
                     let (handled, forms_mode) = match node.role {

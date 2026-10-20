@@ -207,6 +207,9 @@ pub struct ScreenReaderEngine {
     /// The page element Numpad Slash clicked at the virtual cursor: its focus is said as
     /// Enter's is, with the regions it is in [obs, 534/s2].
     clicked: Option<usize>,
+    /// The radio button that Space or Numpad Slash checked while another of its group was
+    /// checked: its focus is said without its position [obs, 205/s6, 534/s9].
+    radio_switched: Option<usize>,
     /// Speech turned off with Insert+Space, S.
     speech_muted: bool,
     /// User settings (JAWS defaults unless configured).
@@ -298,6 +301,7 @@ impl ScreenReaderEngine {
             layer_open: false,
             table_layer: false,
             clicked: None,
+            radio_switched: None,
             speech_muted: false,
             settings: crate::settings::Settings::default(),
             caps_lock_on: false,
