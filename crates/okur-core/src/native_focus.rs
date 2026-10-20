@@ -304,7 +304,16 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
                     .iter()
                     .map(|c| Line::of(PartKind::Value, named(c))),
             );
-            lines.extend(position(focus));
+            // Moving within the list, its place is the list position verbosity switches
+            // ("Cherries" at Advanced); entering the list says it at every level [obs, 549/s8,
+            // s9].
+            lines.extend(position(focus).map(|line| {
+                if entering {
+                    line
+                } else {
+                    Line::of(PartKind::ListPosition, line.render().trim().to_owned())
+                }
+            }));
             if entering {
                 lines.push(Line::of(
                     PartKind::Hint,
@@ -758,7 +767,7 @@ pub fn after_viewer_line(focus: &FocusEvent) -> String {
     if focus.role == Role::ComboBox || list_box_item {
         let kept = |l: &&Line| {
             l.parts.iter().any(|p| match p.kind {
-                PartKind::Value | PartKind::Position => true,
+                PartKind::Value | PartKind::Position | PartKind::ListPosition => true,
                 PartKind::Name => list_box_item,
                 _ => false,
             })

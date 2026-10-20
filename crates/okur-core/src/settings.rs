@@ -307,16 +307,35 @@ pub enum OutputType {
     AccessKey,
     /// Usage hints: "To activate press Enter."
     Hint,
+    /// An item's place as the arrows move within a list: "Cherries | 3 of 3" at Beginner and
+    /// Intermediate, "Cherries" at Advanced; entering the list still says it [obs, 548-549/s8,
+    /// s9]. JAWS's "Announce Position and Count when navigating in lists".
+    ListPosition,
 }
 
 impl OutputType {
-    pub const ALL: [OutputType; 2] = [OutputType::AccessKey, OutputType::Hint];
+    pub const ALL: [OutputType; 3] = [
+        OutputType::AccessKey,
+        OutputType::Hint,
+        OutputType::ListPosition,
+    ];
 
     /// JAWS's key for the type in `DEFAULT.JCF` `[OutputModes]`, where it is known.
     pub fn jcf_key(self) -> Option<&'static str> {
         match self {
             Self::AccessKey => Some("ACCESS_KEY"),
             Self::Hint => None,
+            Self::ListPosition => Some("ANNOUNCE_POSITION_AND_COUNT"),
+        }
+    }
+
+    /// The type's modes, Beginner first, where the user's settings name none: JAWS's shipped
+    /// `DEFAULT.JCF` (`ANNOUNCE_POSITION_AND_COUNT=1|2|0`, `TUTOR=1|1|1`,
+    /// `ACCESS_KEY=1|1|1`).
+    pub fn default_modes(self) -> [OutputMode; 3] {
+        match self {
+            Self::AccessKey | Self::Hint => [OutputMode::On; 3],
+            Self::ListPosition => [OutputMode::On, OutputMode::On, OutputMode::Off],
         }
     }
 
@@ -327,6 +346,7 @@ impl OutputType {
         match kind {
             PartKind::AccessKey | PartKind::Shortcut => Some(Self::AccessKey),
             PartKind::Hint => Some(Self::Hint),
+            PartKind::ListPosition => Some(Self::ListPosition),
             _ => None,
         }
     }
@@ -372,6 +392,7 @@ impl Verbosity {
             .get(&output)
             .and_then(|modes| modes.get(self.level.index()))
             .copied()
+            .or_else(|| output.default_modes().get(self.level.index()).copied())
             .unwrap_or(OutputMode::On)
     }
 
@@ -527,6 +548,19 @@ mod tests {
         assert_eq!(verbosity.level, VerbosityLevel::Beginner);
         assert!(OutputType::ALL.iter().all(|t| verbosity.is_on(*t)));
         assert_eq!(verbosity.message_length(), MessageLength::Long);
+        // A list's position as the arrows move in it is JAWS's 1|2|0: off at Advanced alone,
+        // where the settings name no mode [obs, 549/s9].
+        for (level, on) in [
+            (VerbosityLevel::Intermediate, true),
+            (VerbosityLevel::Advanced, false),
+        ] {
+            let at = Verbosity {
+                level,
+                ..Verbosity::default()
+            };
+            assert_eq!(at.is_on(OutputType::ListPosition), on, "{level:?}");
+            assert!(at.is_on(OutputType::Hint));
+        }
 
         assert_eq!(
             Verbosity::modes_from_jcf("0|0|0|Access Key"),

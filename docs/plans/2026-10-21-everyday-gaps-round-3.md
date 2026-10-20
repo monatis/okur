@@ -24,6 +24,7 @@ The rounds queued at the end of round 2, in order (each behind the one before):
 | live12 | Okur reading live: its list dialogs (222-260, 274) and round 3's features (205, 284, 293, 294, 323, 513, 515, 516, 534), `okur.exe` 87fadfd0 | `okur live-parity` against live11 and the replay |
 | 61 | 568 (JAWS's text analysis on Insert+Tab, a new Notepad fixture), 569 (Route PC to Virtual on elements that cannot take the focus) | build each |
 | 62 | 516 and 546 again with `okur.exe` 71c6fe60 (built at `d4b5da4`: DPI aware, so positions are real pixels; an edit's up-down buddy; `okur tray`), 570 (the Speech History's Ctrl+H and Shift+H), 571 (Insert+F4's question, last) | import: 516's cursor points and 546/s8's spin box should replay; build 570 and 571; then `okur tray` on old-pc against 511/s4's six icons |
+| 63 | 204 again on a freshly started JAWS (`-FreshJaws`): the verbosity rounds, run on a restarted JAWS, have hints on Tab in page forms ("Type in text.") at every level that 204's long-running JAWS did not say | if 204 then has them, JAWS's state since its start decides the hints: settle which state the corpus should hold |
 
 For each: fetch with `lab-fetch.sh` (a stalled fetch is stopped and started again), grep the
 evidence and traces for links, the lab account's folders and the owner's name, check the

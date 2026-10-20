@@ -26,6 +26,9 @@ pub enum PartKind {
     State,
     /// Its place among its siblings: "2 of 5".
     Position,
+    /// An item's place as the arrows move within its list: "3 of 3", which verbosity can leave
+    /// out ([`crate::settings::OutputType::ListPosition`]).
+    ListPosition,
     /// Its depth: a tree item's "level 2".
     Level,
     /// Its description (aria-description, help text).

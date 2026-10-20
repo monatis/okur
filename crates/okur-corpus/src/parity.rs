@@ -846,7 +846,7 @@ fn replay_clock(evidence: &Value) -> Result<Option<(FixedClock, i32)>, String> {
 /// reference machine's configuration (unchanged since before any evidence was recorded).
 fn replay_settings(evidence: &Value) -> okur_core::settings::Settings {
     use okur_core::settings::{
-        KeyboardLayout, KeyboardSettings, OutputMode, OutputType, Settings, TypingEcho, Verbosity,
+        KeyboardLayout, KeyboardSettings, OutputType, Settings, TypingEcho, Verbosity,
     };
     let mut settings = Settings::reference_machine();
     let options = evidence.pointer("/provenance/jaws_settings/DEFAULT.JCF/Options");
@@ -882,14 +882,14 @@ fn replay_settings(evidence: &Value) -> okur_core::settings::Settings {
             _ => okur_core::settings::VerbosityLevel::Beginner,
         };
         // The verbosity output types JAWS's JCF names: one mode per level and the type's
-        // name ("0|0|0|Access Key"). A type the file leaves out is on, JAWS's default.
+        // name ("0|0|0|Access Key"). A type the file leaves out has JAWS's shipped modes.
         for output in OutputType::ALL {
             let Some(key) = output.jcf_key() else {
                 continue;
             };
             let modes = jcf("OutputModes", key)
                 .and_then(|v| Verbosity::modes_from_jcf(&v))
-                .unwrap_or([OutputMode::On; 3]);
+                .unwrap_or(output.default_modes());
             settings.verbosity.set_modes(output, modes);
         }
     }

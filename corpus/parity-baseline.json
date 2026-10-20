@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 2533,
+  "matched_steps": 2534,
   "total_steps": 2724,
   "accepted_divergences": 74,
   "errors": [],
@@ -2747,7 +2747,7 @@
     "549-desktop-forms-verbosity-advanced/s6": "match",
     "549-desktop-forms-verbosity-advanced/s7": "match",
     "549-desktop-forms-verbosity-advanced/s8": "match",
-    "549-desktop-forms-verbosity-advanced/s9": "mismatch",
+    "549-desktop-forms-verbosity-advanced/s9": "match",
     "550-desktop-message-box-verbosity-intermediate/s1": "match",
     "550-desktop-message-box-verbosity-intermediate/s2": "match",
     "550-desktop-message-box-verbosity-intermediate/s3": "mismatch",
