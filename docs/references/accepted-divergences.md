@@ -192,7 +192,11 @@ A step can be in more than one entry; all of its entries apply.
   `611-desktop-screen-sensitive-help-advanced/s21`; and Keyboard Help's descriptions,
   `634-desktop-keyboard-help-spoken/s2`, `634-desktop-keyboard-help-spoken/s3`,
   `634-desktop-keyboard-help-spoken/s4`, `634-desktop-keyboard-help-spoken/s5`,
-  `634-desktop-keyboard-help-spoken/s6` (steps of JAWS's speech alone: Keyboard Help
+  `634-desktop-keyboard-help-spoken/s6`, and the second presses of 642,
+  `642-desktop-keyboard-help-second-press/s2` to `/s6` (in full:
+  `642-desktop-keyboard-help-second-press/s2`, `642-desktop-keyboard-help-second-press/s3`,
+  `642-desktop-keyboard-help-second-press/s4`, `642-desktop-keyboard-help-second-press/s5`,
+  `642-desktop-keyboard-help-second-press/s6`) (steps of JAWS's speech alone: Keyboard Help
   describes the capture's history scripts instead of running them).
 - Difference: the whole step: the help's words.
 - Why: JAWS's help texts (screen-sensitive help, Insert+F1; hot key help, Insert+H; Windows
@@ -204,6 +208,10 @@ A step can be in more than one entry; all of its entries apply.
   summary, a link's address, a heading's level (531). In Keyboard Help (Insert+1) a key is
   named as JAWS names it ("Insert plus Up Arrow"), then described in Okur's words, a longer
   description when pressed twice quickly; a key Okur leaves to the application says so (634).
+  Pressed twice quickly, JAWS's recorder holds the key once and the long description: the
+  first press's description, queued behind its key, is flushed by the second press before
+  the synthesizer gets it (642/s2); Okur's spoken record keeps every utterance it was asked
+  to say.
 - Decided under the clean-room rule (AGENTS.md §1.4), 2026-10-19.
 
 ### JAWS places a data grid's cell at column and row 65535

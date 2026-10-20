@@ -218,6 +218,11 @@ divergences! {
         "634-desktop-keyboard-help-spoken/s4",
         "634-desktop-keyboard-help-spoken/s5",
         "634-desktop-keyboard-help-spoken/s6",
+        "642-desktop-keyboard-help-second-press/s2",
+        "642-desktop-keyboard-help-second-press/s3",
+        "642-desktop-keyboard-help-second-press/s4",
+        "642-desktop-keyboard-help-second-press/s5",
+        "642-desktop-keyboard-help-second-press/s6",
     ],
     "JAWS's help texts (Insert+F1, Insert+H, Insert+W, and Keyboard Help's descriptions of \
      keys) are Freedom Scientific's writing. Okur's help keys open the Virtual Viewer as \
