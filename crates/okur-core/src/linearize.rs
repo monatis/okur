@@ -1290,7 +1290,42 @@ pub fn build_owned(root: AomNode) -> VirtualBuffer {
             node.attributes.insert(name.to_owned(), value);
         }
     }
+    resolve_flows(&mut buffer);
     buffer
+}
+
+/// aria-flowto: each element that flows to others (its `flows-to` uniqueIDs), and where those
+/// are, by the lines they start on; the element's line ends "Has Flows To" [obs, 292/s9].
+fn resolve_flows(buffer: &mut VirtualBuffer) {
+    let line_start = |buffer: &VirtualBuffer, id: usize| {
+        let start = buffer.start_of(id)?;
+        buffer.line_at_offset(start).map(|l| l.start_offset)
+    };
+    let mut flows = Vec::new();
+    for node in buffer.nodes() {
+        let Some(targets) = node.attributes.get("flows-to") else {
+            continue;
+        };
+        let Some(from) = line_start(buffer, node.id) else {
+            continue;
+        };
+        flows.extend(
+            targets
+                .split_whitespace()
+                .filter_map(|object| buffer.node_with_object(object))
+                .filter_map(|target| line_start(buffer, target))
+                .map(|into| (from, into)),
+        );
+    }
+    for &(from, _) in &flows {
+        let said = msg::flow_has_flows_to().to_string();
+        if let Some(line) = buffer.lines.iter_mut().find(|l| l.start_offset == from) {
+            if !line.speech.ends_with(&said) {
+                line.speech = format!("{}\n{said}", line.speech);
+            }
+        }
+    }
+    buffer.flows = flows;
 }
 
 /// The buffer's lines and indexes for `root`, and the attributes to add to its nodes.
@@ -1645,6 +1680,50 @@ mod tests {
         cursor.move_to_line(0);
         assert_eq!(cursor.move_flow(true).as_deref(), Some("Go on here"));
         assert_eq!(cursor.move_flow(false).as_deref(), Some("Start here"));
+    }
+
+    /// An element's aria-flowto, its IA2 flows-to targets by uniqueID, is a flow from its line
+    /// to the target's, and its line ends "Has Flows To" [obs, 292/s9].
+    #[test]
+    fn flows_to_resolve_by_unique_id() {
+        let object = |node: AomNode, id: &str| {
+            let mut node = node;
+            node.attributes
+                .insert(crate::aom::UNIQUE_ID_ATTR.to_owned(), id.to_owned());
+            node
+        };
+        let mut from = object(
+            AomNode::new(1, Role::Paragraph)
+                .with_children(vec![AomNode::new(101, Role::Text).with_text("This part")]),
+            "-10",
+        );
+        from.attributes
+            .insert("flows-to".to_owned(), "-30".to_owned());
+        let root = AomNode::new(0, Role::Document).with_children(vec![
+            from,
+            AomNode::new(2, Role::Paragraph)
+                .with_children(vec![AomNode::new(102, Role::Text).with_text("Between")]),
+            object(
+                AomNode::new(3, Role::Heading { level: 2 }).with_name("Lists"),
+                "-30",
+            ),
+        ]);
+        let buffer = crate::buffer::VirtualBuffer::from_aom(&root);
+        let start = |text: &str| {
+            buffer
+                .lines
+                .iter()
+                .find(|l| l.text == text)
+                .map(|l| l.start_offset)
+        };
+        assert_eq!(
+            buffer.flows.first().copied(),
+            start("This part").zip(start("Lists"))
+        );
+        assert_eq!(
+            buffer.lines.first().map(|l| l.speech.as_str()),
+            Some("This part\nHas Flows To")
+        );
     }
 
     /// aria-roledescription on the dev box (JAWS, 2026-10-16): said in place of a button's,

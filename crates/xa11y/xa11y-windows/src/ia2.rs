@@ -118,6 +118,10 @@ pub struct Ia2Node {
     /// line-through.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub text_runs: Vec<Ia2TextRun>,
+    /// IA2 relations (`IAccessible2::relations`): each relation's type (`flowsTo`,
+    /// `labelledBy`, ...) and its targets' uniqueIDs.
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub relations: BTreeMap<String, Vec<i32>>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub children: Vec<Ia2Node>,
 }
@@ -304,12 +308,21 @@ mod com {
         fn get_oldText(&self, segment: *mut c_void) -> HRESULT;
     }
 
+    #[windows_core::interface("7CDF86EE-C3DA-496a-BDA4-281B336E1FDC")]
+    pub unsafe trait IAccessibleRelation: IUnknown {
+        fn get_relationType(&self, kind: *mut BSTR) -> HRESULT;
+        fn get_localizedRelationType(&self, kind: *mut BSTR) -> HRESULT;
+        fn get_nTargets(&self, n: *mut i32) -> HRESULT;
+        fn get_target(&self, index: i32, target: *mut *mut c_void) -> HRESULT;
+        fn get_targets(&self, max: i32, targets: *mut *mut c_void, n: *mut i32) -> HRESULT;
+    }
+
     pub mod capture {
         use super::super::{
             parse_attributes, Ia2Node, Ia2TextPosition, Ia2TextRun, Ia2TextState,
             EMBEDDED_OBJECT_CHAR, FONT_ATTRIBUTES, IA2_TEXT_BOUNDARY_LINE, IA2_TEXT_OFFSET_LENGTH,
         };
-        use super::{IAccessible2, IAccessibleText};
+        use super::{IAccessible2, IAccessibleRelation, IAccessibleText};
         use windows::core::{Interface, BSTR, PCWSTR};
         use windows::Win32::Foundation::HWND;
         use windows::Win32::System::Com::{IDispatch, IServiceProvider};
@@ -432,6 +445,66 @@ mod com {
             }
         }
 
+        /// An object's IA2 relations, each type with its targets' uniqueIDs: aria-flowto is
+        /// `flowsTo`, which JAWS follows with Equals.
+        fn read_relations(ia2: &IAccessible2, node: &mut Ia2Node) {
+            const MAX_RELATIONS: i32 = 32;
+            const MAX_TARGETS: i32 = 64;
+            let mut n = 0i32;
+            // SAFETY: valid interface, out-pointer to a local.
+            if unsafe { ia2.get_nRelations(&mut n) }.is_err() || n <= 0 {
+                return;
+            }
+            for index in 0..n.min(MAX_RELATIONS) {
+                let mut raw: *mut std::ffi::c_void = std::ptr::null_mut();
+                // SAFETY: as above; on success `raw` holds a reference this code now owns.
+                if unsafe { ia2.get_relation(index, &mut raw) }.is_err() || raw.is_null() {
+                    continue;
+                }
+                // SAFETY: `raw` is an owned IAccessibleRelation pointer from get_relation.
+                let relation = unsafe { IAccessibleRelation::from_raw(raw) };
+                let mut kind = BSTR::default();
+                // SAFETY: valid interface; BSTR ownership transfers to `kind`.
+                if unsafe { relation.get_relationType(&mut kind) }.is_err() {
+                    continue;
+                }
+                let mut targets = 0i32;
+                // SAFETY: valid interface, out-pointer to a local.
+                if unsafe { relation.get_nTargets(&mut targets) }.is_err() {
+                    continue;
+                }
+                let mut ids = Vec::new();
+                for t in 0..targets.clamp(0, MAX_TARGETS) {
+                    let mut raw: *mut std::ffi::c_void = std::ptr::null_mut();
+                    // SAFETY: as above; on success `raw` is an owned IUnknown pointer.
+                    if unsafe { relation.get_target(t, &mut raw) }.is_err() || raw.is_null() {
+                        continue;
+                    }
+                    // SAFETY: `raw` is an owned IUnknown pointer from get_target.
+                    let target = unsafe { windows_core::IUnknown::from_raw(raw) };
+                    let id = target
+                        .cast::<IAccessible>()
+                        .ok()
+                        .and_then(|acc| ia2_of(&acc))
+                        .and_then(|target| {
+                            let mut id = 0i32;
+                            // SAFETY: valid interface, out-pointer to a local.
+                            unsafe { target.get_uniqueID(&mut id) }
+                                .ok()
+                                .ok()
+                                .map(|()| id)
+                        });
+                    ids.extend(id);
+                }
+                if !ids.is_empty() {
+                    node.relations
+                        .entry(kind.to_string())
+                        .or_default()
+                        .extend(ids);
+                }
+            }
+        }
+
         fn read_node(acc: &IAccessible, depth: usize) -> Ia2Node {
             let me = self_child();
             let mut node = Ia2Node::default();
@@ -481,6 +554,7 @@ mod com {
                         node.group_position = Some([level, similar, position]);
                     }
                 }
+                read_relations(&ia2, &mut node);
                 if let Ok(text) = ia2.cast::<IAccessibleText>() {
                     read_text(&text, &mut node);
                 }

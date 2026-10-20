@@ -21,6 +21,8 @@ quicknav-none-on-mouse-over = There are no onMouseOver elements on this page.
 quicknav-none-clickable = There are no clickable elements on this page.
 # aria-flowto: the element at the cursor flows to no other, or none flows to it.
 quicknav-none-flows = No more flows found
+# Said after an element with aria-flowto.
+flow-has-flows-to = Has Flows To
 # Place markers: places on a page the user marked.
 quicknav-none-placemarkers = There are no PlaceMarkers on this page.
 quicknav-none-radio-buttons = There are no radio buttons on this page.

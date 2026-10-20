@@ -434,6 +434,11 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     if let Some(description) = attr("roledescription") {
         set_attr("roledescription", description);
     }
+    // aria-flowto: the objects this one flows to, by their IA2 uniqueIDs (Equals follows them).
+    if let Some(targets) = node.relations.get("flowsTo").filter(|t| !t.is_empty()) {
+        let ids: Vec<String> = targets.iter().map(i32::to_string).collect();
+        set_attr("flows-to", ids.join(" "));
+    }
     // The live object behind the node, for actions (focus, default action).
     if let Some(unique_id) = node.unique_id {
         set_attr(crate::actions::UNIQUE_ID_ATTR, unique_id.to_string());
