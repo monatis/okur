@@ -1,0 +1,14 @@
+{
+  "id": "630-web-down-then-tab-escape",
+  "name": "Down once after the sign-up form loads, then Tab and Escape: whether one arrow before Tab is what brings forms mode and the usage hints (555 and 621: Down twice, then Tab)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Down" },
+    { "id": "s2", "type": "key", "command": "Tab" },
+    { "id": "s3", "type": "key", "command": "Escape" }
+  ]
+}

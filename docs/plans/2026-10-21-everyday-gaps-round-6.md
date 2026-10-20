@@ -21,11 +21,12 @@ hours or about thirty commits, not more.
 | 89 | 621 and 622: what brings the hints on Tab | §2 |
 | 90 | 623 (F3 after Okur Find), 624 and 625 (Insert+T in a page), 626 (a field arrowed back onto) | §1 |
 | 91 | 509 (Keyboard Help, again with the speech recorder voice), 627 (the clipboard keys in their key map's order), 628 (the layer's help and Command Search) | §3 |
-| perf92 | 540, 541, 323 and 524 once each with `-TraceTimings` (the release tracer `b6f072e9`) | P6's measurement (§4) |
+| perf92 | 540, 541, 323 and 524 once each with `-TraceTimings` (the release tracer `3edbc77e`, PerMonitorV2 in its manifest and its rectangles logged); 516 (the PC cursor's place, 1.25 times JAWS's still in round 85); 613 (round 86's three trials failed: the tracer stopped reading events and did not exit) | P6's measurement (§4); the DPI and the tracer hang from the logs |
+| 93 | 629, 630, 631: Tab first after load, after Down, after Say Line, each then Escape | §2 |
 
 For each: fetch with `lab-fetch.sh`, check every trial passed and the capture script's hash
-against the committed one (perf92 installs `run-scenario.ps1` `87215244`; the rounds before it
-run `1a29afa8`), check each scenario's hash against the committed file, grep the evidence and
+against the committed one (the rounds before perf92
+run `1a29afa8`); perf92 installs the committed `run-scenario.ps1` (`6187b33d`) for itself and every round after it, check each scenario's hash against the committed file, grep the evidence and
 traces for links, the lab account's folders and the owner's name, compare parity before and
 after, and commit the corpus alone, with the baseline from the committed code. Before queueing
 more, check `Get-MpThreatDetection` on old-pc.
