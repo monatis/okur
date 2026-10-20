@@ -139,7 +139,7 @@ Implemented in `okur-core::editing`. JAWS speaks after the application handled t
   JAWS's defaults are the desktop layout, character echo and Auto forms mode. Evidence since 2026-10-14 records these files as `provenance.jaws_settings`. Replay uses them, falling back to `Settings::reference_machine()`.
 - **Desktop layout:** Insert is the JAWS key.
 - **Laptop layout:** CapsLock is the JAWS key, and Insert works as well (`CapsLock+T` and `Insert+T` both speak the title).
-- **Choosing the JAWS key:** Settings Center can choose Insert, CapsLock or ScrollLock for a layout (`okur run --keyboard-layout`, `--jaws-key`).
+- **Choosing the JAWS key:** Settings Center can choose Insert, CapsLock or ScrollLock for a layout (`okur run --keyboard-layout`, `--okur-key`; Okur names it the Okur key).
 - **CapsLock as the JAWS key, pressed twice quickly:** toggles Caps Lock and says `Caps lock on` or `Caps lock off`. Auto-repeat while it is held is not a second press.
 
 ## 9. Time and date [obs, 308]

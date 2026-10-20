@@ -48,8 +48,8 @@ Where to go from here:
 > Cursor, JAWS's lists of links, headings and other elements, tables, selecting and copying),
 > dialog boxes and menus, Notepad, File Explorer, Windows Settings, Windows Terminal, the
 > desktop, Alt+Tab and Windows search are read as JAWS reads them. It is not yet a
-> replacement for your screen reader: reading with the JAWS cursor, the clipboard keys and
-> Microsoft Office are among what is still missing (see [Not yet](#not-yet)).
+> replacement for your screen reader: reading with the Okur cursor (JAWS's JAWS cursor), the
+> clipboard keys and Microsoft Office are among what is still missing (see [Not yet](#not-yet)).
 > Those everyday gaps on Windows are being closed first; macOS, whose accessibility layer is
 > in place, comes after them.
 
@@ -95,7 +95,8 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   - tables: Ctrl+Alt and the arrows, a whole row or column with Windows+Alt and the arrows,
     and the table layer (Insert+Space, then T);
   - selecting with Shift and the arrows, Ctrl+A or F8, and copying with Ctrl+C;
-  - JAWS Find (Ctrl+F or Insert+Ctrl+F, then F3 and Shift+F3), its history kept per site;
+  - Okur Find, JAWS Find in Okur's name (Ctrl+F or Insert+Ctrl+F, then F3 and Shift+F3), its
+    history kept per site;
   - forms mode, turned on by Tab or the arrows (Auto Forms Mode) or with Enter, and off with
     Escape or Numpad Plus; Space clicks the control at the cursor, as JAWS does;
   - routing the cursors (Insert+Delete, Ctrl+Insert+Delete), a click with Numpad Slash, a
@@ -131,7 +132,7 @@ in [accepted divergences](docs/references/accepted-divergences.md).
 - **The Virtual Viewer** (Insert+Alt+W) on screen as JAWS shows it, for windows, controls and
   consoles, Windows Terminal included; the Speech History (Insert+Space, then H; Ctrl+H
   copies it and Shift+H clears it).
-- **Okur's own dialogs** are real Windows dialogs: the lists above, JAWS Find and the Window
+- **Okur's own dialogs** are real Windows dialogs: the lists above, Okur Find and the Window
   List, with JAWS's controls and labels, and Okur Settings (Insert+6 or Insert+V).
 - **Speech:** JAWS's punctuation levels and symbol names (Insert+Shift+2); typing echo by
   characters, words, both or none (Insert+2); a reading key pressed twice quickly spells,
@@ -142,7 +143,8 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   at Advanced it leaves out what JAWS leaves out there, such as a list's positions, a field's
   description and a group box's name.
 - **Quitting with Insert+F4,** after JAWS's question (Enter quits, Escape stays).
-- **Both keyboard layouts,** desktop and laptop, with Insert or CapsLock as the JAWS key.
+- **Both keyboard layouts,** desktop and laptop, with Insert or CapsLock as the Okur key
+  (JAWS's JAWS key).
 - **OneCore and SAPI 5 voices.**
 
 The [reference documentation](docs/references/) describes these behaviors in detail.
@@ -151,7 +153,7 @@ The [reference documentation](docs/references/) describes these behaviors in det
 
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
-- reading at the JAWS cursor, and clicking with the mouse keys outside pages (the cursor keys
+- reading at the Okur cursor, and clicking with the mouse keys outside pages (the cursor keys
   already work: Numpad Minus, Numpad Plus, Insert+Numpad Minus, Alt+Delete);
 - the clipboard keys: say, view and add to the clipboard;
 - the rest of what the verbosity levels change, as further recordings show it;
@@ -190,7 +192,7 @@ There are no ready-made downloads yet: Okur is built from its source code.
    target\release\okur run
    ```
 
-   With a laptop keyboard (CapsLock as the JAWS key):
+   With a laptop keyboard (CapsLock as the Okur key):
 
    ```
    target\release\okur run --keyboard-layout laptop
@@ -206,11 +208,12 @@ silent there (Windows Settings' "Rename this PC" dialog is one). JAWS runs that 
 Okur says so when it starts without administrator rights.
 
 Two screen readers speaking at once is hard to follow. Unload your usual screen reader first,
-or if you keep it running, give Okur another JAWS key so the two do not both act on the same
-command: `--jaws-key scrolllock` (then ScrollLock+T says the window title, and so on).
+or if you keep it running, give Okur another key as its Okur key so the two do not both act
+on the same command: `--okur-key scrolllock` (then ScrollLock+T says the window title, and so
+on).
 
 Okur's settings dialog, opened with Insert+6 or Insert+V, sets the voice, its rate and
-volume, the punctuation level, the verbosity level, the keyboard layout and JAWS key, typing
+volume, the punctuation level, the verbosity level, the keyboard layout and Okur key, typing
 echo, live regions, whether the Virtual Viewer shows on screen, and whether Insert+F4 asks
 before quitting. OK or Apply uses the change at once and saves it in
 `%APPDATA%\Okur\settings.toml`.
@@ -221,8 +224,8 @@ Options of `okur run` change a setting for that run only:
 |---|---|
 | `--engine onecore`, `sapi5` or `no-speech` | which speech engine to use (by default OneCore, else SAPI 5) |
 | `--voice <name>`, `--rate <-10 to 10>`, `--volume <0 to 100>` | the voice |
-| `--keyboard-layout desktop` or `laptop` | the JAWS keyboard layout |
-| `--jaws-key insert`, `capslock` or `scrolllock` | the JAWS key |
+| `--keyboard-layout desktop` or `laptop` | the keyboard layout, as JAWS's |
+| `--okur-key insert`, `capslock` or `scrolllock` | the Okur key, Okur's modifier (JAWS's JAWS key) |
 | `--live-region-whole-text` | read a growing live region whole each time, as JAWS does |
 | `--typing-echo none` | say nothing as you type (JAWS's Typing Echo set to None); `characters`, the default, says each character. Insert+2 goes through all four of JAWS's choices while Okur runs |
 | `--debug-log <file>` | record keys, events and timings, for reporting a problem |

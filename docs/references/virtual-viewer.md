@@ -226,7 +226,7 @@ On the dev box, only with the user's permission (verification-loop §7):
   `okur keys --allow <process> --title <title>`, saving the clipboard before and restoring
   it after.
 - `okur jaws-history` shows what JAWS spoke.
-- With JAWS running, run Okur with `--jaws-key scrolllock` and send `ScrollLock+Alt+W`, so
+- With JAWS running, run Okur with `--okur-key scrolllock` and send `ScrollLock+Alt+W`, so
   that only Okur takes the command.
 
 On old-pc, record scenarios 322 and 323 (`corpus/pending/`).

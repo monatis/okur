@@ -55,7 +55,7 @@ cargo run --bin okur -- run --fixture corpus/fixtures/boundaries-dynamic.html
 Okur's settings are the ones its settings dialog saved (Insert+6 or Insert+V: "Okur
 Settings"; OK and Apply save, Cancel and Escape drop what was not applied):
 - synthesizer, voice, rate and volume;
-- keyboard layout and JAWS key;
+- keyboard layout and Okur key (JAWS's JAWS key);
 - typing echo, reading a growing live region's whole text, and showing the Virtual Viewer on
   screen.
 
@@ -70,7 +70,7 @@ files hold only what differs from the layer below, as JAWS's own settings files 
 A setting is looked up from the most specific layer down to Okur's default; Insert+Shift+2's
 punctuation level lasts until Okur exits. Okur rewrites only the values it changes, so your
 comments stay. The command-line options (`--engine`, `--voice`, `--rate`, `--volume`,
-`--keyboard-layout`, `--jaws-key`, `--typing-echo`, `--live-region-whole-text`) change a
+`--keyboard-layout`, `--okur-key`, `--typing-echo`, `--live-region-whole-text`) change a
 setting for one run only; tests also pass `--settings <folder>`, so that pressing OK in a test
 never changes the user's settings.
 
