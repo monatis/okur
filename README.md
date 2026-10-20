@@ -140,9 +140,11 @@ The [reference documentation](docs/references/) describes these behaviors in det
 
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
-- the JAWS cursor and the mouse keys;
+- reading at the JAWS cursor, and clicking with the mouse keys outside pages (the cursor keys
+  already work: Numpad Minus, Numpad Plus, Insert+Numpad Minus, Alt+Delete);
 - the clipboard keys: say, view and add to the clipboard;
-- the verbosity levels (Beginner, Intermediate, Advanced): nothing changes the level yet;
+- what the verbosity levels change (Beginner, Intermediate, Advanced): the settings dialog sets
+  the level, but nothing it says depends on it yet;
 - Speech On Demand, Keyboard Help (Insert+1), quitting with Insert+F4, and the system tray
   list (Insert+F11);
 - Say All by sentence or paragraph, and skim reading;
