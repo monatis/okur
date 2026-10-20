@@ -76,6 +76,8 @@ pub struct ScreenReaderEngine {
     last_page_focus: Option<usize>,
     /// The page node that had the focus as the last key went down.
     focus_at_key: Option<usize>,
+    /// The last key routed the focus to the virtual cursor (Ctrl+Insert+Delete).
+    routed: bool,
     /// The select box with the focus opened its list with the last key: its list is said as
     /// "expanded" [obs, 276/s7].
     select_opened: bool,
@@ -265,6 +267,7 @@ impl ScreenReaderEngine {
             native_focus: crate::native_focus::NativeFocus::default(),
             last_page_focus: None,
             focus_at_key: None,
+            routed: false,
             select_opened: false,
             focus_table_unsaid: false,
             tab_start: None,
@@ -442,6 +445,7 @@ impl ScreenReaderEngine {
         self.dialog_focus_target = None;
         self.page_said_for = None;
         self.focus_at_key = self.last_page_focus;
+        self.routed = false;
         self.select_opened = false;
         self.combo_items.clear();
 

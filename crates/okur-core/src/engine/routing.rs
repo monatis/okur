@@ -70,6 +70,7 @@ impl ScreenReaderEngine {
         if let (Some(actions), Some(node)) = (&self.actions, self.node_under_cursor()) {
             actions.focus(node);
         }
+        self.routed = true;
         self.say(msg::route_pc_to_virtual().to_string())
     }
 

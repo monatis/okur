@@ -378,8 +378,24 @@ impl ScreenReaderEngine {
                 focus.web_application.is_some() && focus.web_application != self.web_application;
             self.web_application = focus.web_application.clone();
             if target_role == Some(Role::Document) {
+                // Route PC to Virtual on what cannot take the focus (a graphic) gives it to the
+                // page, away from the element that had it (a link): JAWS reads the virtual
+                // cursor's line [obs, 569/s8]. A key that reads the line itself (Up onto the
+                // page's title) does not have it read again [obs, 283/s18].
+                let left_element = self.routed
+                    && self.last_page_focus.is_some()
+                    && !from_browser_ui
+                    && !tab_switched
+                    && !leaving_menus;
                 // The page itself has focus: the next control focus enters the page.
                 self.last_page_focus = None;
+                if left_element {
+                    let line = self.cursor.current_line();
+                    if !line.trim().is_empty() {
+                        self.speech.speak(&line, false);
+                        return Some(line);
+                    }
+                }
                 self.focus_table_unsaid = false;
                 self.tab_start = None;
                 // JAWS names the page coming back to it: "Web Menus document" (Escape in
