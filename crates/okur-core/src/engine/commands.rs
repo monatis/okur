@@ -726,17 +726,25 @@ impl ScreenReaderEngine {
                 msg::position(tab.index.to_string(), tab.total.to_string())
             );
         }
+        // A field's line, focused or only under the virtual cursor, is said as the field with
+        // its name, which its line leaves to the label above it: "Full name Edit Required"
+        // where Down says "Required Edit" [obs, 564/s2, s15, s16].
         let focused_field = self
             .cursor
             .buffer
             .line_at_offset(self.cursor.offset)
-            .filter(|line| Some(line.node_id) == self.last_page_focus)
             .and_then(|line| self.cursor.buffer.node(line.node_id))
             .filter(|node| {
                 matches!(
                     node.role,
                     crate::aom::Role::Edit | crate::aom::Role::ComboBox
                 )
+            })
+            // A text area's lines under the virtual cursor are read as lines: "Edit |
+            // C:\Users\Ada\notes.txt and /usr/local/bin" [obs, 508/s6].
+            .filter(|node| {
+                Some(node.id) == self.last_page_focus
+                    || node.attributes.get("multiline").is_none_or(|m| m != "true")
             });
         let Some(node) = focused_field else {
             return self.cursor.current_line();

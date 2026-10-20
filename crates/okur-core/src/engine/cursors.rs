@@ -30,6 +30,11 @@ impl ScreenReaderEngine {
     /// Numpad Plus with the JAWS cursor active: "PC Cursor" [obs, 516/s7].
     pub(super) fn activate_pc_cursor(&mut self) -> Option<String> {
         self.active_cursor = ActiveCursor::Pc;
+        // In a page the PC cursor is the virtual one: "virtual PC Cursor" [obs, 564/s19].
+        if self.app_mode == super::AppMode::VirtualBuffer {
+            let said = self.virtual_pc_message();
+            return self.say(said);
+        }
         self.say(msg::cursor_pc().to_string())
     }
 
