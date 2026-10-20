@@ -1,5 +1,8 @@
 # Plan: everyday-use gaps, round 3 (2026-10-21)
 
+Superseded by [`2026-10-21-everyday-gaps-round-4.md`](2026-10-21-everyday-gaps-round-4.md); what was done
+under it is in [`../handoff/2026-10-20-everyday-gaps-round-4.md`](../handoff/2026-10-20-everyday-gaps-round-4.md).
+
 Follows [`../handoff/2026-10-20-everyday-gaps-round-2.md`](../handoff/2026-10-20-everyday-gaps-round-2.md).
 The list stays [`docs/backlog/everyday-use-gaps-2026-10-19.md`](../backlog/everyday-use-gaps-2026-10-19.md):
 the gaps are closed before macOS. Each item is found in JAWS's documentation, recorded on

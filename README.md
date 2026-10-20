@@ -4,7 +4,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Rust 1.99.0](https://img.shields.io/badge/rust-1.99.0-orange.svg?logo=rust)](rust-toolchain.toml)
 [![Platforms: Windows; macOS in progress](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%28in%20progress%29-lightgrey.svg)](#platforms)
-[![JAWS parity: 2457 of 2652 recorded steps](https://img.shields.io/badge/JAWS%20parity-2457%2F2652%20steps-brightgreen.svg)](#where-it-stands)
+[![JAWS parity: 3162 of 3372 recorded steps](https://img.shields.io/badge/JAWS%20parity-3162%2F3372%20steps-brightgreen.svg)](#where-it-stands)
 
 **An open screen reader that keeps your JAWS muscle memory.**
 
@@ -48,20 +48,20 @@ Where to go from here:
 > Cursor, JAWS's lists of links, headings and other elements, tables, selecting and copying),
 > dialog boxes and menus, Notepad, File Explorer, Windows Settings, Windows Terminal, the
 > desktop, Alt+Tab and Windows search are read as JAWS reads them. It is not yet a
-> replacement for your screen reader: the JAWS cursor, the clipboard keys, the verbosity
-> levels and Microsoft Office are among what is still missing (see [Not yet](#not-yet)).
+> replacement for your screen reader: reading with the JAWS cursor, the clipboard keys and
+> Microsoft Office are among what is still missing (see [Not yet](#not-yet)).
 > Those everyday gaps on Windows are being closed first; macOS, whose accessibility layer is
 > in place, comes after them.
 
-Every figure is tool output, rerun for this README.
+Every figure is tool output, rerun for this README at commit `129c052` (2026-10-20).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **2457 of 2652** | `okur parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **2357 of 2600** | `okur parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **63** | `okur parity` |
-| Recorded JAWS scenarios, trials | **217, 705** (704 of the trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1127 passed, 0 failed** (198 ignored: they need a live desktop) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **3162 of 3372** | `okur parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **3054 of 3320** | `okur parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **75** | `okur parity` |
+| Recorded JAWS scenarios, trials | **261, 837** (all 837 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1211 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
@@ -143,13 +143,12 @@ documentation describes and Okur lacks, most important first. Among them:
 - reading at the JAWS cursor, and clicking with the mouse keys outside pages (the cursor keys
   already work: Numpad Minus, Numpad Plus, Insert+Numpad Minus, Alt+Delete);
 - the clipboard keys: say, view and add to the clipboard;
-- what the verbosity levels change (Beginner, Intermediate, Advanced): the settings dialog sets
-  the level, but nothing it says depends on it yet;
-- Speech On Demand, Keyboard Help (Insert+1), quitting with Insert+F4, and the system tray
-  list (Insert+F11);
+- the rest of what the verbosity levels change: the settings dialog sets the level, and Okur
+  already leaves out positions, descriptions and group names and says JAWS's short messages
+  where the recordings show them;
+- Speech On Demand and Keyboard Help (Insert+1);
 - Say All by sentence or paragraph, and skim reading;
-- the S and D quick keys, Jump to Line, visited links, PlaceMarkers, custom labels and
-  Flexible Web;
+- visited links, PlaceMarkers, custom labels and Flexible Web;
 - notifications (toasts);
 - settings for one application or one site from the settings dialog, which saves them for
   every application;
