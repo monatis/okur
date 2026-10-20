@@ -32,6 +32,11 @@ settings-group-reading = Reading
 settings-typing-echo = Typing &Echo:
 settings-typing-echo-off = Off
 settings-typing-echo-characters = Characters
+# JAWS's user verbosity levels (Settings Center): what is said, and how much.
+settings-verbosity = Ver&bosity Level:
+settings-verbosity-beginner = Beginner
+settings-verbosity-intermediate = Intermediate
+settings-verbosity-advanced = Advanced
 settings-live-region-whole-text = Read the &Whole Text of a Growing Live Region
 settings-viewer-on-screen = &Show Virtual Viewer on Screen
 settings-ok = OK

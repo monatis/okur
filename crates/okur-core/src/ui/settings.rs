@@ -8,7 +8,7 @@ use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
 use crate::messages::{msg, StaticMessage};
 use crate::settings::{
     JawsKey, KeyboardLayout, KeyboardSettings, LiveRegionAppend, Punctuation, Settings,
-    Synthesizer, TypingEcho, ViewerDisplay,
+    Synthesizer, TypingEcho, VerbosityLevel, ViewerDisplay,
 };
 
 /// A choice's label in the catalog.
@@ -40,6 +40,15 @@ const PUNCTUATIONS: [(Punctuation, Label); 4] = [
 const ECHOES: [(TypingEcho, Label); 2] = [
     (TypingEcho::None, msg::settings_typing_echo_off),
     (TypingEcho::Characters, msg::settings_typing_echo_characters),
+];
+/// JAWS's user verbosity levels.
+const LEVELS: [(VerbosityLevel, Label); 3] = [
+    (VerbosityLevel::Beginner, msg::settings_verbosity_beginner),
+    (
+        VerbosityLevel::Intermediate,
+        msg::settings_verbosity_intermediate,
+    ),
+    (VerbosityLevel::Advanced, msg::settings_verbosity_advanced),
 ];
 
 /// What the engine does after the dialog handled an event.
@@ -184,6 +193,11 @@ impl SettingsDialog {
                     choice(names(&ECHOES), position(&ECHOES, s.typing_echo)),
                 ),
                 control(
+                    "verbosity",
+                    msg::settings_verbosity(),
+                    choice(names(&LEVELS), position(&LEVELS, s.verbosity.level)),
+                ),
+                control(
                     "live_region_whole_text",
                     msg::settings_live_region_whole_text(),
                     ControlKind::CheckBox {
@@ -285,6 +299,11 @@ impl SettingsDialog {
                     s.typing_echo = echo;
                 }
             }
+            ("verbosity", Value::Selected(i)) => {
+                if let Some(level) = pick(&LEVELS, i) {
+                    s.verbosity.level = level;
+                }
+            }
             ("live_region_whole_text", Value::Checked(checked)) => {
                 s.live_region_append = if checked {
                     LiveRegionAppend::WholeText
@@ -352,6 +371,13 @@ mod tests {
             find("typing_echo"),
             Some(ControlKind::Choice {
                 options: vec!["Off".into(), "Characters".into()],
+                selected: 0
+            })
+        );
+        assert_eq!(
+            find("verbosity"),
+            Some(ControlKind::Choice {
+                options: vec!["Beginner".into(), "Intermediate".into(), "Advanced".into()],
                 selected: 0
             })
         );
