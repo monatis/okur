@@ -723,7 +723,8 @@ if ($scenario.fixture -and -not $launch) {
     # A cold browser start takes longer than a new tab: wait for the fixture's window.
     for ($i = 0; $i -lt 100; $i++) {
         $w = if ($targetProc -eq 'chrome') { Get-LabChromeWindow } else { Get-Process $targetProc -ErrorAction SilentlyContinue }
-        $w = $w | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero -and (-not $expectedTitle -or $_.MainWindowTitle.StartsWith($expectedTitle)) }
+        # A window being created can have no title yet (round 118's 670 stopped on it).
+        $w = $w | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero -and (-not $expectedTitle -or ($_.MainWindowTitle -and $_.MainWindowTitle.StartsWith($expectedTitle))) }
         if ($w) { break }
         Start-Sleep -Milliseconds 200
     }
