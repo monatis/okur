@@ -243,6 +243,7 @@ fn window_items(tree: &UiaNode) -> Vec<okur_core::WindowItem> {
                     expanded: aom.states.expanded,
                     checked: aom.states.checked,
                     read_only: child.value_is_read_only == Some(true),
+                    group: child.group_box.clone(),
                 });
             }
             walk(child, items);

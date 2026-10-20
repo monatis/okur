@@ -99,6 +99,9 @@ pub struct WindowItem {
     /// An edit whose value cannot be changed: "read only edit" [obs, 323/s2].
     #[serde(default)]
     pub read_only: bool,
+    /// The group box the control sits in: Say Window names the control after it.
+    #[serde(default)]
+    pub group: Option<String>,
 }
 
 /// Event representing OS-level keyboard focus changes across applications and controls.

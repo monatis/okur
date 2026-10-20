@@ -105,6 +105,11 @@ pub struct UiaNode {
     /// settings List box"; dev box, 2026-10-17).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
+    /// For a control of a dialog's tree: the group box it sits in, by their rectangles (a
+    /// Win32 dialog's tree is flat, its group boxes beside their controls). JAWS's Say Window
+    /// names a control after its group box ("Direction Up radio button"; 540/s4).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub group_box: Option<String>,
     pub is_enabled: bool,
     pub is_offscreen: bool,
     pub is_password: bool,
@@ -547,6 +552,7 @@ pub(crate) mod capture {
             live_setting: int(el, UIA_LiveSettingPropertyId).filter(|&v| v != 0),
             is_dialog: boolean(el, UIA_IsDialogPropertyId).filter(|&v| v),
             label: None,
+            group_box: None,
             is_enabled: boolean(el, UIA_IsEnabledPropertyId).unwrap_or(true),
             is_offscreen: boolean(el, UIA_IsOffscreenPropertyId).unwrap_or(false),
             is_password: boolean(el, UIA_IsPasswordPropertyId).unwrap_or(false),
@@ -1015,8 +1021,55 @@ pub(crate) mod capture {
         };
         let mut budget = MAX_WINDOW_TREE;
         let mut tree = read_subtree(&walker, &request, &window, 6, &mut budget)?;
+        assign_group_boxes(&walker, &request, &window, &mut tree);
         tree.children.retain(|c| c.control_type != UIA_TITLEBAR);
         Some(tree)
+    }
+
+    /// Names each of a dialog's controls after the group box it sits in, by their rectangles
+    /// (the innermost box around the control's).
+    fn assign_group_boxes(
+        walker: &IUIAutomationTreeWalker,
+        request: &IUIAutomationCacheRequest,
+        window: &IUIAutomationElement,
+        tree: &mut UiaNode,
+    ) {
+        const UIA_GROUP: i32 = 50026;
+        let mut rects = Vec::new();
+        // SAFETY: UIA tree walking and property reads on valid elements.
+        let mut current = unsafe { walker.GetFirstChildElementBuildCache(window, request) }.ok();
+        while let Some(element) = current {
+            rects.push(unsafe { element.CurrentBoundingRectangle() }.ok());
+            current = unsafe { walker.GetNextSiblingElementBuildCache(&element, request) }.ok();
+        }
+        if rects.len() != tree.children.len() {
+            return;
+        }
+        let area = |r: &windows::Win32::Foundation::RECT| {
+            i64::from(r.right - r.left) * i64::from(r.bottom - r.top)
+        };
+        let groups: Vec<(windows::Win32::Foundation::RECT, String)> = tree
+            .children
+            .iter()
+            .zip(&rects)
+            .filter(|(child, _)| child.control_type == UIA_GROUP)
+            .filter_map(|(child, rect)| Some(((*rect)?, child.name.clone()?)))
+            .filter(|(_, name)| !name.trim().is_empty())
+            .collect();
+        for (child, rect) in tree.children.iter_mut().zip(&rects) {
+            let Some(rect) = rect else { continue };
+            child.group_box = groups
+                .iter()
+                .filter(|(group, name)| {
+                    Some(name) != child.name.as_ref()
+                        && group.left <= rect.left
+                        && group.top <= rect.top
+                        && rect.right <= group.right
+                        && rect.bottom <= group.bottom
+                })
+                .min_by_key(|(group, _)| area(group))
+                .map(|(_, name)| name.clone());
+        }
     }
 
     /// `element` (fetched with `request`) and its control-view subtree to `depth`, each child

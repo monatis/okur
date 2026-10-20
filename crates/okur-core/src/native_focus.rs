@@ -625,8 +625,17 @@ pub fn say_window(title: &str, items: &[crate::event::WindowItem]) -> String {
         } else {
             named(&item.name)
         };
+        // A control in a group box is named after it: "Direction Up radio button" [obs,
+        // 540/s4].
+        let name = match item.group.as_deref().map(named).filter(|g| !g.is_empty()) {
+            Some(group) if name.is_empty() => group,
+            Some(group) => format!("{group} {name}"),
+            None => name,
+        };
         let mut parts = vec![name_part(name)];
         match item.role {
+            // A group box: "Direction group" [obs, 540/s4].
+            Role::Group => parts.push(role(msg::role_group().as_str())),
             Role::Text => {
                 labelled = items.get(i + 1).is_some_and(|next| {
                     next.role != Role::Text && named(&next.name) == named(&item.name)
@@ -664,6 +673,18 @@ pub fn say_window(title: &str, items: &[crate::event::WindowItem]) -> String {
             _ => {}
         }
         parts.extend(item.value.clone().map(|v| Part::new(PartKind::Value, v)));
+        // A radio button in a group box says its place among the box's: "1 of 2" [obs,
+        // 540/s4].
+        if item.role == Role::RadioButton && item.group.is_some() {
+            let in_box = |other: &&&crate::event::WindowItem| {
+                other.role == Role::RadioButton && other.group == item.group
+            };
+            let place = items.iter().take(i).filter(in_box).count() + 1;
+            let total = items.iter().filter(in_box).count();
+            lines.push(Line::new(parts).render());
+            lines.push(msg::position(place, total).render());
+            continue;
+        }
         let line = Line::new(parts).render();
         if !line.trim().is_empty() {
             lines.push(line);
@@ -1801,6 +1822,37 @@ To activate press Enter."
     /// A file's Properties page, as old-pc's JAWS read it with Say Window: role marks, a label
     /// said once, images left out [obs, 323/s2].
     #[test]
+    fn say_window_names_group_boxes() {
+        use crate::event::WindowItem;
+        let item =
+            |role: Role, name: &str, group: Option<&str>, checked: Option<bool>| WindowItem {
+                role,
+                name: name.to_owned(),
+                value: None,
+                expanded: None,
+                checked,
+                read_only: false,
+                group: group.map(str::to_owned),
+            };
+        // Notepad's Find dialog [obs, 540/s4].
+        let items = [
+            item(Role::Group, "Direction", None, None),
+            item(Role::RadioButton, "Up", Some("Direction"), Some(false)),
+            item(Role::RadioButton, "Down", Some("Direction"), Some(true)),
+            item(Role::Button, "Find Next", None, None),
+        ];
+        assert_eq!(
+            norm(&say_window("Find", &items)),
+            norm(
+                "Find dialog\nDirection \u{1d} group \u{1e}\n\
+                 Direction Up \u{1d} radio button \u{1e} \u{1d}not checked\u{1e}\n1 of 2\n\
+                 Direction Down \u{1d} radio button \u{1e} \u{1d}checked\u{1e}\n2 of 2\n\
+                 Find Next \u{1d} Button \u{1e}"
+            )
+        );
+    }
+
+    #[test]
     fn say_window_reads_a_dialog_in_order() {
         use crate::event::WindowItem;
         let item = |role: Role, name: &str, value: Option<&str>| WindowItem {
@@ -1810,6 +1862,7 @@ To activate press Enter."
             expanded: None,
             checked: None,
             read_only: false,
+            group: None,
         };
         let read_only = |name: &str, value: &str| WindowItem {
             read_only: true,
