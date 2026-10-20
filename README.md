@@ -4,7 +4,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Rust 1.99.0](https://img.shields.io/badge/rust-1.99.0-orange.svg?logo=rust)](rust-toolchain.toml)
 [![Platforms: Windows; macOS in progress](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%28in%20progress%29-lightgrey.svg)](#platforms)
-[![JAWS parity: 4224 of 4422 recorded steps](https://img.shields.io/badge/JAWS%20parity-4224%2F4422%20steps-brightgreen.svg)](#where-it-stands)
+[![JAWS parity: 4439 of 4612 recorded steps](https://img.shields.io/badge/JAWS%20parity-4439%2F4612%20steps-brightgreen.svg)](#where-it-stands)
 
 **An open screen reader that keeps your JAWS muscle memory.**
 
@@ -57,19 +57,19 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `3cf36df` (2026-10-20).
+Every figure is tool output, rerun for this README at commit `842e4c5` (2026-10-20).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **4224 of 4422** | `okur parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **4104 of 4370** | `okur parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **88** | `okur parity` |
-| Recorded JAWS scenarios, trials | **285, 909** (all 909 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1226 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **4439 of 4612** | `okur parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **4314 of 4567** | `okur parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **102** | `okur parity` |
+| Recorded JAWS scenarios, trials | **300, 954** (all 954 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1242 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
-The 88 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
+The 102 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
 accidents, which Okur does not copy: in a data grid, JAWS adds "Column 65535, Row 65535", a
 place it failed to find. Others are JAWS's help texts, which are Freedom Scientific's writing;
 Okur says its help in its own words. Each one is listed, with the reason and who decided it,
@@ -138,7 +138,8 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   application's version (Ctrl+Insert+V), and in a page the text's colors by the names JAWS
   gives them (Insert+5: "blue2 on white").
 - **Help** in Okur's own words: Insert+F1 for the control or the page element you are on,
-  Insert+H for Okur's keys there, Insert+W for Windows' keys.
+  Insert+H for Okur's keys there, Insert+W for Windows' keys, and Keyboard Help (Insert+1),
+  where each key is named and described instead of run.
 - **The Virtual Viewer** (Insert+Alt+W) on screen as JAWS shows it, for windows, controls and
   consoles, Windows Terminal included; the Speech History (Insert+Space, then H; Ctrl+H
   copies it and Shift+H clears it).
@@ -169,7 +170,7 @@ documentation describes and Okur lacks, most important first. Among them:
   keys outside web pages;
 - the keys JAWS adds for the clipboard: saying it (Insert+Windows+X), viewing it and adding
   to it (copying, cutting and pasting already work);
-- Keyboard Help (Insert+1), the Word List and skim reading;
+- the Word List and skim reading;
 - Speech On Demand (Shift+S in the speech layer only says it is not available, as JAWS does
   in full speech mode);
 - notifications (toasts) and the notification history;

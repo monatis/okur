@@ -1,0 +1,87 @@
+{
+  "id": "639-web-say-title-in-sections-advanced",
+  "name": "Insert+T in a page of sections without articles: the banner's heading, a section's second- and third-level headings, the next section, the complementary region and the footer (with 624: what JAWS adds after the title, and where) (at JAWS's Advanced verbosity, DEFAULT.JCF Options Verbosity=2; otherwise as 625-web-say-title-in-sections)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/structural-navigation.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+T"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Insert+T"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+T"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Insert+T"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Insert+T"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Insert+T"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Ctrl+End"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Insert+T"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "2"
+      }
+    }
+  }
+}

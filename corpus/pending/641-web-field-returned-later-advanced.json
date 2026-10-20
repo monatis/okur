@@ -1,0 +1,80 @@
+{
+  "id": "641-web-field-returned-later-advanced",
+  "name": "Down back onto a field Up left, not at once (626: Down straight back said nothing; 283 and 284: Up back read the field): Tab into the sign-up form's name, type \"abc\", Up twice out of it, Up once more, Down to its label and Down onto it, Down twice out, Down onto the next field, Insert+Up, with 626's Auto Forms Mode (at JAWS's Advanced verbosity, DEFAULT.JCF Options Verbosity=2; otherwise as 632-web-field-returned-later)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "FormsMode": {
+        "AutoFormsMode": "1"
+      },
+      "Options": {
+        "Verbosity": "2"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s2",
+      "type": "text",
+      "command": "abc"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}
