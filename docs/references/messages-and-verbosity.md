@@ -119,8 +119,18 @@ Output types are Okur's ids (`OutputType`), each mapped to JAWS's `DEFAULT.JCF`
 
 | Okur id | JAWS key | Parts | Today |
 |---|---|---|---|
-| `access_key` | `ACCESS_KEY` (`0\|0\|0\|Access Key`) | AccessKey, Shortcut | off on old-pc; the only type switched |
+| `access_key` | `ACCESS_KEY` (`0\|0\|0\|Access Key`) | AccessKey, Shortcut | off on old-pc (shipped `1\|1\|1`) |
 | `hint` | not known yet | Hint | on |
+| `list_position` | `ANNOUNCE_POSITION_AND_COUNT` (shipped `1\|2\|0`) | ListPosition | off at Advanced: a list's item, a combo box's open list (548-549, 590) |
+| `description` | not known yet | Description | off at Advanced (552-553) |
+| `control_group_name` | `CONTROL_GROUP_NAME` (shipped `1\|2\|0`) | GroupName | off at Advanced: a dialog control's group box (585) |
+
+JAWS's shipped `Default.JCF` (`C:\ProgramData\Freedom Scientific\JAWS\2025\SETTINGS\enu`)
+lists the other types with their modes per level (0 off, 1 long, 2 short): `CONTROL_NAME`,
+`CONTROL_TYPE`, `DIALOG_NAME`, `DIALOG_TEXT`, `ITEM_STATE`, `POSITION`, `STATUS`, `TUTOR`
+and more are `1|2|2` or `1|1|1`, on at every level; `SMART_HELP` and `APP_START` are `1|0|0`,
+`JAWS_MESSAGE` and `SELECT` `1|2|0`. A type joins Okur's when a recording shows what it
+switches.
 
 How it is applied:
 - the engine says the parts of a native focus (and an application module's announcement)

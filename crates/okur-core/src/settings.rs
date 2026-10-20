@@ -315,14 +315,19 @@ pub enum OutputType {
     /// Intermediate, not at Advanced ("Email address edit | sam@example.com | Type in text."
     /// [obs, 552-553/s4]). JAWS's key for it is not known.
     Description,
+    /// The group box a dialog's control is in, said before its name: "Sort Links In Tab
+    /// Order radio button" at Beginner and Intermediate, "In Tab Order radio button" at
+    /// Advanced [obs, 585/s5, s6]. JAWS's "Control Group Name".
+    ControlGroupName,
 }
 
 impl OutputType {
-    pub const ALL: [OutputType; 4] = [
+    pub const ALL: [OutputType; 5] = [
         OutputType::AccessKey,
         OutputType::Hint,
         OutputType::ListPosition,
         OutputType::Description,
+        OutputType::ControlGroupName,
     ];
 
     /// JAWS's key for the type in `DEFAULT.JCF` `[OutputModes]`, where it is known.
@@ -331,16 +336,17 @@ impl OutputType {
             Self::AccessKey => Some("ACCESS_KEY"),
             Self::Hint | Self::Description => None,
             Self::ListPosition => Some("ANNOUNCE_POSITION_AND_COUNT"),
+            Self::ControlGroupName => Some("CONTROL_GROUP_NAME"),
         }
     }
 
     /// The type's modes, Beginner first, where the user's settings name none: JAWS's shipped
-    /// `DEFAULT.JCF` (`ANNOUNCE_POSITION_AND_COUNT=1|2|0`, `TUTOR=1|1|1`,
-    /// `ACCESS_KEY=1|1|1`).
+    /// `DEFAULT.JCF` (`ANNOUNCE_POSITION_AND_COUNT=1|2|0`, `CONTROL_GROUP_NAME=1|2|0`,
+    /// `TUTOR=1|1|1`, `ACCESS_KEY=1|1|1`).
     pub fn default_modes(self) -> [OutputMode; 3] {
         match self {
             Self::AccessKey | Self::Hint => [OutputMode::On; 3],
-            Self::ListPosition | Self::Description => {
+            Self::ListPosition | Self::Description | Self::ControlGroupName => {
                 [OutputMode::On, OutputMode::On, OutputMode::Off]
             }
         }
@@ -355,6 +361,7 @@ impl OutputType {
             PartKind::Hint => Some(Self::Hint),
             PartKind::ListPosition => Some(Self::ListPosition),
             PartKind::Description => Some(Self::Description),
+            PartKind::GroupName => Some(Self::ControlGroupName),
             _ => None,
         }
     }

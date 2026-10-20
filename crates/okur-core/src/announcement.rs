@@ -39,6 +39,9 @@ pub enum PartKind {
     Shortcut,
     /// Its access key: "alt+S", "Alt followed by I".
     AccessKey,
+    /// The group box a dialog's control is in, said before its name: "Sort Links" in "Sort Links
+    /// In Tab Order radio button" ([`crate::settings::OutputType::ControlGroupName`]).
+    GroupName,
     /// A container entered on the way to it: a named group, a list, a dialog.
     Container,
     /// One of Okur's own messages about it: "Open List Box".

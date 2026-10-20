@@ -74,6 +74,16 @@ fn position(focus: &FocusEvent) -> Option<Line> {
     }
 }
 
+/// [`position`] as the arrows move through a list: a combo box's value as its list opens and
+/// as the arrows move in it, which Advanced verbosity says without it ("Germany" [obs,
+/// 590/s11, s12]).
+fn list_position(focus: &FocusEvent) -> Option<Line> {
+    match (focus.item_index, focus.item_count) {
+        (Some(i), Some(n)) => Some(Line::of(PartKind::ListPosition, msg::position(i, n))),
+        _ => None,
+    }
+}
+
 fn checked(focus: &FocusEvent) -> Part {
     if focus.states.checked == Some(true) {
         state(msg::state_checked().as_str())
@@ -136,13 +146,37 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
     let name = named(focus.name.as_deref().unwrap_or_default());
     // A control in a dialog's group box is named after the box each time the focus comes to
     // it: "Speech Rate: left right slider" (JAWS on the dev box, 2026-10-17), "Select Printer
-    // Print to file check box"; not as the arrows move within a list [obs, 546/s2-s4].
-    let name = match focus.group_box.as_deref().map(named) {
-        Some(group) if entering && !group.is_empty() && !name.is_empty() => {
-            format!("{group} {name}")
-        }
-        _ => name,
+    // Print to file check box"; not as the arrows move within a list [obs, 546/s2-s4]. The
+    // box's name is a part of its own, which Advanced verbosity leaves out [obs, 585/s5].
+    let group = focus
+        .group_box
+        .as_deref()
+        .map(named)
+        .filter(|group| entering && !group.is_empty() && !name.is_empty());
+    let Some(group) = group else {
+        return control_lines_named(focus, entering, name);
     };
+    let mut lines = control_lines_named(focus, entering, name.clone());
+    let named_part = lines.iter_mut().find_map(|line| {
+        let at = line
+            .parts
+            .iter()
+            .position(|part| part.kind == PartKind::Name && part.text == name)?;
+        Some((line, at))
+    });
+    match named_part {
+        Some((line, at)) => {
+            line.parts
+                .insert(at, Part::new(PartKind::GroupName, format!("{group} ")));
+            lines
+        }
+        // A control whose name is not a part of its own: the box joins its name.
+        None => control_lines_named(focus, entering, format!("{group} {name}")),
+    }
+}
+
+/// [`control_lines`] with the control's name as it is said.
+fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<Line> {
     let value = focus
         .value
         .as_deref()
@@ -865,7 +899,7 @@ pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<Announce
                         .iter()
                         .map(|v| Line::of(PartKind::Value, named(v))),
                 );
-                lines.extend(position(after));
+                lines.extend(list_position(after));
                 Some(Announcement::new(lines))
             } else {
                 // Closing it re-announces the combo box as on focus [obs, 304/s13].
@@ -878,7 +912,13 @@ pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<Announce
                 .iter()
                 .map(|v| Line::of(PartKind::Value, named(v)))
                 .collect();
-            lines.extend(position(after));
+            // In its open list the arrows move through a list; closed, its value changes and
+            // keeps its position at every level ("Brazil | 3 of 3" [obs, 590/s9]).
+            if after.states.expanded == Some(true) {
+                lines.extend(list_position(after));
+            } else {
+                lines.extend(position(after));
+            }
             Some(Announcement::new(lines))
         }
         _ => None,
@@ -2149,5 +2189,58 @@ mod kind_tests {
         said.retain(|kind| kind != PartKind::AccessKey);
         field.access_key = None;
         assert_eq!(said.render(), focus_speech(&field, None).render());
+    }
+
+    /// A group box's name is a part of its own before the control's name, which verbosity can
+    /// leave out: "Sort Links In Tab Order radio button", "In Tab Order radio button" at
+    /// Advanced [obs, 585/s5].
+    #[test]
+    fn a_group_boxs_name_is_a_part_of_its_own() {
+        let mut radio = FocusEvent::new(Role::RadioButton).with_name("In Tab Order");
+        radio.group_box = Some("Sort Links".to_owned());
+        radio.states.checked = Some(true);
+        let mut said = focus_speech(&radio, None);
+        assert!(said.render().starts_with("Sort Links In Tab Order"));
+        said.retain(|kind| kind != PartKind::GroupName);
+        assert!(
+            said.render().starts_with("In Tab Order"),
+            "{}",
+            said.render()
+        );
+    }
+
+    /// A combo box's value says its position as a list position in its open list, which
+    /// Advanced verbosity leaves out, and as a position when the arrows change it closed
+    /// [obs, 590/s9, s11, s12].
+    #[test]
+    fn a_combo_boxs_position_is_a_list_position_in_its_open_list() {
+        let combo = |value: &str, index: usize, expanded: Option<bool>| {
+            let mut focus = FocusEvent::new(Role::ComboBox).with_name("Country:");
+            focus.value = Some(value.to_owned());
+            focus.item_index = Some(index);
+            focus.item_count = Some(3);
+            focus.states.expanded = expanded;
+            focus
+        };
+        let kinds = |before: FocusEvent, after: FocusEvent| {
+            change_speech(&before, &after)
+                .map(|a| a.kinds())
+                .unwrap_or_default()
+        };
+        assert_eq!(
+            kinds(combo("Germany", 2, None), combo("Brazil", 3, None)),
+            [PartKind::Value, PartKind::Position]
+        );
+        assert_eq!(
+            kinds(combo("Germany", 2, None), combo("Germany", 2, Some(true))),
+            [PartKind::Message, PartKind::Value, PartKind::ListPosition]
+        );
+        assert_eq!(
+            kinds(
+                combo("Germany", 2, Some(true)),
+                combo("Brazil", 3, Some(true))
+            ),
+            [PartKind::Value, PartKind::ListPosition]
+        );
     }
 }
