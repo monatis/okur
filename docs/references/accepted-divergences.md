@@ -151,6 +151,15 @@ A step can be in more than one entry; all of its entries apply.
   whole.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### A radio button's place after JAWS's mouse click
+
+- Step: `534-web-numpad-slash-check-box/s10`.
+- Difference: Okur also says the radio button's place in its group, "2 of 3".
+- Why: after Numpad Slash (the left mouse button) checked the radio button, JAWS's Say Line
+  said it without its place in the group in all three trials. Say Line on a radio button says
+  the place otherwise (246/s4), as Down onto one does (534/s8). Okur says it.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-21.
+
 ### JAWS counts its Smart Glance highlights after a page's summary
 
 - Steps: `507-web-page-load-and-numpad-plus/s1` ("There are 2 Smart Glance Highlights on

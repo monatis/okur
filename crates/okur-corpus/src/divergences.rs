@@ -185,6 +185,12 @@ divergences! {
      JAWS reads the emoji in the field itself [obs, 313/s4].",
     "the owner's rule on JAWS's accidents, 2026-10-18";
 
+    Difference::OkurAlsoSays("2 of 3") => ["534-web-numpad-slash-check-box/s10"],
+    "Say Line on a radio button JAWS's mouse click has just checked leaves out its place in \
+     its group, which Say Line on a radio button says otherwise (246/s4, \"2 of 3\") and Down \
+     onto one (534/s8). Okur says it.",
+    "the owner's rule on JAWS's accidents, 2026-10-21";
+
     Difference::Step => [
         "526-desktop-screen-sensitive-help/s1",
         "526-desktop-screen-sensitive-help/s5",
