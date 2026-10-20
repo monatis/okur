@@ -113,11 +113,11 @@ fn access_key(focus: &FocusEvent, own_text: bool) -> Option<Line> {
         }
         None => key.to_owned(),
     };
-    // A control with its own text keeps its key when Say Focus repeats it ("Read-only check
-    // box | not checked | To check press Spacebar. | alt+R" [obs, 323/s1]); a field named by
-    // a label says it on arrival only ("Open: edit combo | C: | 1 of 6", dev box).
-    let line = Line::of(PartKind::AccessKey, said);
-    Some(if own_text { line } else { line.on_arrival() })
+    // Say Focus repeats the key, a control with its own text ("Read-only check box | not
+    // checked | To check press Spacebar. | alt+R" [obs, 323/s1]) and one named by a label
+    // alike ("Script: Combo box | Western | 1 of 7 | … | Alt+r", "Line number: Edit | 1 |
+    // Type in text. | Alt+l" [obs, 541/s8, 543/s2]).
+    Some(Line::of(PartKind::AccessKey, said))
 }
 
 /// A key sequence as UI Automation gives it ("Alt, I"), as JAWS says it: "Alt followed by I".
@@ -238,6 +238,7 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
                     .filter(|k| !k.is_empty())
                     .map(|k| Line::of(PartKind::Shortcut, k).on_arrival()),
             );
+            lines.extend(access_key(focus, false));
         }
         Role::CheckBox => {
             lines.push(Line::new(vec![
@@ -1785,6 +1786,15 @@ To activate press Enter."
             norm(&say_focus(&event(Role::Button, "OK"))),
             norm("OK  \u{1d} Button \u{1e} \nTo activate press spacebar.")
         );
+        // A combo box or an edit named by a label keeps its access key [obs, 541/s8, 543/s2].
+        let mut script = event(Role::ComboBox, "Script:");
+        script.value = Some("Western".to_owned());
+        script.access_key = Some("Alt+r".to_owned());
+        assert!(norm(&say_focus(&script)).ends_with("Arrow keys. Alt+r"));
+        let mut line = event(Role::Edit, "Line number:");
+        line.value = Some("1".to_owned());
+        line.access_key = Some("Alt+l".to_owned());
+        assert!(norm(&say_focus(&line)).ends_with("Type in text. Alt+l"));
         let mut notepad = event(Role::Document, "Text editor");
         notepad.read_only = Some(false);
         notepad.text = Some(crate::event::TextContext {
