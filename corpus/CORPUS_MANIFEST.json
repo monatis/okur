@@ -125,6 +125,10 @@
       "sha256": "6410ceb02b6220c87d511509c9ccc573311c7dce1eff21af3f6a497b80cfca61",
       "size_bytes": 1479
     },
+    "selection-threshold.html": {
+      "sha256": "4382d9d4d777f5e078ba143491951b52435d39e63b8b71db47e5e62c1c224734",
+      "size_bytes": 2090
+    },
     "signup-form.html": {
       "sha256": "141f98219e00ce80559e312fdf548a7b3b9f41087250648d09b6040c6433badf",
       "size_bytes": 2134
@@ -4172,13 +4176,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "620-web-selection-threshold",
+      "fixture": "selection-threshold.html",
+      "evidence": {
+        "sha256": "011aae16c43f8b60410a3b5b8ef9f4048219b862c0ab279bc838503a639b455a",
+        "capture_script_sha256": "1a29afa81bce20a11ca15d7f40d1f6272f4d8a22da463fae92b539d1a64d7c8d",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 287,
-    "scenarios_with_evidence": 287,
-    "total_trials": 915,
-    "successful_trials": 915,
-    "deterministic_scenarios": 179
+    "scenarios": 288,
+    "scenarios_with_evidence": 288,
+    "total_trials": 918,
+    "successful_trials": 918,
+    "deterministic_scenarios": 180
   }
 }
