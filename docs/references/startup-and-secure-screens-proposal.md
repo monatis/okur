@@ -1,6 +1,157 @@
 # Starting Okur at sign-in and on secure screens, and quitting it: proposal
 
-**Status:** proposal for the owner to approve or amend, 2026-10-20. Nothing here is built.
+**Status:** approved by the owner, 2026-10-20. M0 to M3 are built as code (M3 never run);
+nothing of M4 to M7. See [Status](#status) for what is done and what waits for old-pc.
+
+## Status
+
+As of 2026-10-20, branch `worktree-agent-a941eac1fa29ee91b`, rebased on `main` at `c719d58`.
+Nothing was run on old-pc, and nothing was installed, signed, registered or trusted on the dev
+box: only `okur doctor` (read only) and the test suite ran here.
+
+**Commits.**
+
+| Commit | What |
+| --- | --- |
+| `7694582` | M0 and M1: `okur doctor`, the library split, `okur-sr.exe`, one Okur per desktop |
+| `e7a651f` | M2: Insert+F4, `confirm_exit`, the question, the exit path |
+| `84e4036` | M3: `okur-setup` install and uninstall; `signing/dev-signing.ps1` |
+| `a781583` | `okur run` says why it does not start; the screen-reader flag is set only when off |
+
+**Checks, pasted from the tools** (the branch at `a781583`):
+
+- `cargo test --workspace`: every test binary `ok`, none failed. It includes okur-corpus's
+  parity ratchet, so every step's outcome is the committed `corpus/parity-baseline.json`'s.
+- `okur parity`: "JAWS parity (Ia2): 2707/2904 steps match exactly; 74 accepted divergences not
+  counted (0 scenarios could not run)"; "JAWS spoken parity: 2603/2852 steps match exactly".
+  Before the rebase, on `3704ef4`, `okur parity`'s whole output was the same byte for byte
+  before and after M0-M2 (2642/2859, spoken 2538/2807).
+- `okur invariants`: "Buffer invariants: 0 violation(s)". `okur corpus-manifest`: "Corpus
+  manifest is current." `corpus/` was not touched.
+- `mt.exe -inputresource:<exe>;#1` on the debug build: `okur-sr.exe` has
+  `level="asInvoker" uiAccess="true"`; `okur.exe`, `okur-sr-no-uiaccess.exe` and
+  `okur-setup.exe` have `uiAccess="false"`.
+- `okur doctor` on the dev box (a Medium copy of `okur.exe` from `target\`): integrity Medium
+  (0x2000), TokenUIAccess 0, not elevated (limited token), signature "not signed", manifest
+  "level=asInvoker uiAccess=false", screen reader flag on (JAWS), `okur_okur_v1 not present`,
+  HKLM Configuration `"FreedomScientific_JAWS_v2025"`.
+
+### M0. Facts
+
+| Item | State | Where | Tests |
+| --- | --- | --- | --- |
+| `okur doctor [--pid N]`: session, desktop and input desktop, account and SID, integrity, `TokenUIAccess`, elevation and its type, whether the executable is under Program Files, its signature (`WinVerifyTrust`), its embedded manifest, the screen-reader flag, the copy running on this desktop, the AT key and both `Configuration` lists | done | `crates/okur/src/doctor.rs`; `okur-platform`'s `elevation.rs`, `desktop.rs`, `signature.rs`, `registry.rs`, `ease_of_access.rs` | `doctor::tests` (the report, Program Files), `elevation::tests`, `signature::tests`, `desktop::tests`, `ease_of_access::tests`, `registry::tests` |
+| `okur-sr.exe --doctor-exit [file]`: the report of the UI Access process itself, to the console that started it or to a file (never on the secure desktop) | done | `crates/okur/src/sr.rs` | `sr::tests` |
+| E0, E1, and §4's C9 and C14 verdicts updated | not done | old-pc | needs old-pc and Q1 |
+
+### M1. Process hygiene
+
+| Item | State | Where | Tests |
+| --- | --- | --- | --- |
+| The library split: `crates/okur` is a library (`run`, `startup`, `control`, `doctor`, `sr`) with `okur.exe` (console, no UI Access, runs from `target\` as before), `okur-sr.exe` (no console, `uiAccess="true"`) and `okur-sr-no-uiaccess.exe` (for installs whose signature does not verify) | done | `crates/okur/{build.rs,manifests/,src/}` | build; `mt.exe` above. `okur-sr` has no test binary of its own (a test program with its manifest would not start) |
+| The keyboard hook on its own thread's desktop; the forced `OpenDesktopW("default")` is gone | done | `okur-platform/src/hook/windows.rs` | live only |
+| The mutex `Local\Okur-<desktop>`, held by a thread of its own; an automatic start steps aside for a running copy, a manual start asks it to quit (4 s) and ends it if it stays | done | `okur-platform/src/instance.rs`, `crates/okur/src/startup.rs` | `startup::tests` (the instance rules against a stand-in), `instance::tests::one_copy_holds_the_lock_at_a_time` (a real mutex) |
+| The control pipe `\\.\pipe\okur-<session>-<desktop>` (DACL: the user, SYSTEM, Administrators; local clients only; first instance only): `ping`, `status`, `quit`. `okur quit` and `okur-sr.exe --quit` | done | `instance.rs`, `crates/okur/src/control.rs` | `instance::tests::the_control_pipe_answers_one_line` (a real pipe), `control::tests` |
+| `SPI_SETSCREENREADER` on while Okur runs (only when it was off, and cleared only then: JAWS may have it on), `SetProcessShutdownParameters(0x100, SHUTDOWN_NORETRY)`, a hidden top-level window for `WM_QUERYENDSESSION`/`WM_ENDSESSION`, and one exit path for every way out | done | `okur-platform/src/process.rs`, `crates/okur/src/run.rs` | live only |
+| The Shift+Shift escape at `--ease-of-access` and `--sign-in` | done | `process.rs`, `startup.rs` | `process::tests` (a mock key state), `startup::tests::both_shifts_stop_an_automatic_start_only` |
+| `elevation.rs` reads `TokenUIAccess` and the integrity level; the startup note about elevated windows depends on both | done | `okur-platform/src/elevation.rs` | `elevation::tests` |
+| `okur-ui` started with a copy of Okur's token, UI Access cleared and integrity Medium, and allowed the foreground for each dialog | done, **only when Okur has UI Access**: an `okur run` started from an administrator terminal keeps its `okur-ui` at its own level, as before | `okur-platform/src/lowered_process.rs`, `ui_host.rs` | live only (`okur doctor --pid <okur-ui's pid>`) |
+| Argument handling | done | `sr.rs` | `sr::tests` |
+
+Decisions made on the way, for the owner to confirm or reverse:
+
+- **No copy starts on the secure desktop** (`Winlogon`) until M6's secure mode: one there runs
+  as SYSTEM and would have files, dialogs and logs within reach (R3). It exits silently.
+- **`--sign-in` starts Okur as JAWS's default, Always, does,** until M4's resolver reads the
+  user's choice. `/hardwarebuttonlaunch` counts as `--ease-of-access`.
+- Ease of Access's start and exit notification (AccessibilityTemp and Win+U) is M4's, and
+  `SetDefaultDllDirectories` is in §5.7's table (M6): neither is built.
+- If `CreateProcessAsUserW` with the lowered token fails, `okur-ui` is started the plain way,
+  at Okur's level, with a warning in the debug log.
+
+### M2. Insert+F4
+
+| Item | State | Where | Tests |
+| --- | --- | --- | --- |
+| `Command::ShutDown`, bound to JAWSKey+F4 (`ShutDownJAWS` in `Default.JKM`) and called by `ShutDownJAWS`, `Insert+F4` | done | `okur-core/src/command.rs` | `command::tests::the_jaws_key_and_f4_shut_okur_down` |
+| `confirm_exit`, on by default (JAWS's "Prompt to Confirm When Exiting JAWS"), with a check box in Okur's settings dialog; off, Insert+F4 exits at once | done | `settings.rs`, `ui/settings.rs` | `ui::settings` tests, `engine::quit::tests::without_confirmation_insert_f4_exits_at_once` |
+| The question as one of Okur's dialogs: its text static (new `ControlKind::Message`), OK the default, Cancel; Escape closes it and the focus returns quietly | done; **its words are placeholders** in `dialogs.ftl` (`quit-title`, `quit-question`, `quit-ok`, `quit-cancel`), commented to be replaced by 571's recording; JAWS's help gives no wording | `okur-core/src/ui/quit.rs`, `engine/quit.rs`, `okur-ui-model`, `okur-ui` (`template.rs`, `dialog.rs`), `okur-corpus`'s dialog mirror | `ui::quit::tests`, `engine::quit::tests`, `okur-ui`'s `a_message_is_static_text_above_the_buttons` |
+| The exit path: keyboard unhooked first, events stopped, Okur's last words waited for at most 1.5 s, `okur-ui`'s input closed, the screen-reader flag cleared, the mutex released, the process ended. The engine only asks (`set_exit`); headless, as in replay, Insert+F4 does nothing | done | `crates/okur/src/run.rs`, `engine/quit.rs` | `engine::quit::tests::insert_f4_asks_first_and_ok_exits`; the process's end is live only |
+| Scenario 571 imported, the J2 scenario ("Insert+F4, Enter") written and recorded, `okur parity --only 571` | not done | `corpus/` was not touched | needs old-pc |
+
+Notes: Okur's last words stay "Okur exiting." (now `okur-exiting` in `commands.ftl`) until J2
+records what JAWS says; whether JAWS says anything as its question closes is 571's step s3. With
+no `okur-ui` to ask in, Insert+F4 exits at once. Insert+H's list of keys does not name Insert+F4
+yet (it would change 526 and 527's replay).
+
+### M3. Signed UI Access install (code only, never run)
+
+| Item | State | Where | Tests |
+| --- | --- | --- | --- |
+| `okur-setup install [--from <folder>] [--silent] [--no-start] [--no-start-after-sign-in]`: unelevated, it starts itself elevated (`runas`) for the machine's part; every copy asked to quit over its pipe and stragglers in the install folder ended; the files copied to `%ProgramFiles%\Okur` (the UI Access `okur-sr.exe` only if `WinVerifyTrust` accepts it, else `okur-sr-no-uiaccess.exe` under that name; files in use renamed aside and deleted at the next start); the registry of §5.4 without HKLM `Configuration`; Okur started through the shell by the unelevated copy | done | `crates/okur-setup/src/{main,setup,plan,args}.rs` | `plan::tests`, `setup::tests` (install and uninstall into a temporary folder against `MemoryRegistry` and a stand-in machine), `args::tests` |
+| `okur-setup uninstall [--silent]`: copies stopped, Okur's name out of HKLM's and the user's `Configuration` (other names kept), its keys and Run value deleted, its files gone (at the next start where in use), `%APPDATA%\Okur` kept | done | as above | `setup::tests::uninstall_removes_what_install_wrote_and_only_that` |
+| `crates/okur-setup/signing/dev-signing.ps1` (§5.11): `-NewCertificate`, `-Sign`, `-Verify`, `-TrustOnLab`, `-UndoLab`, `-UndoDevBox`, each behind `ShouldProcess` (`-WhatIf`) | written, never run | as named | `signing_tests` read it as text: the certificate's scope, and no bcdedit, test signing, Trusted Publishers or exported key |
+
+Notes, for the owner:
+
+- **The Run key's value is written by default** (§5.4): until M4's choices, every user's
+  sign-in then starts Okur, beside JAWS on old-pc. Install with `--no-start-after-sign-in`
+  there.
+- `secure-settings\` is not seeded (M6). The installer's words are English in its code, not
+  in the catalog, until M7's installer dialogs. Publisher in Apps & features: the workspace's
+  `authors`.
+
+### Live checks on old-pc, with the exact steps
+
+On the dev box, build and push (the lab's `lab-push.ps1` pushes only `okur.exe`: copy the
+others to `C:\Users\ailabs\sr-harness\bin` the same way):
+
+```powershell
+cargo build --release -p okur -p okur-ui -p okur-setup
+# target\release\: okur.exe, okur-sr.exe, okur-sr-no-uiaccess.exe, okur-ui.exe, okur-setup.exe
+```
+
+1. **M0, E1 without a certificate** (no owner's yes needed). On old-pc, unelevated:
+   ```powershell
+   cd C:\Users\ailabs\sr-harness\bin
+   .\okur.exe doctor
+   Start-Process .\okur-sr.exe -ArgumentList '--doctor-exit', "$env:TEMP\e1a.txt" -Wait; Get-Content $env:TEMP\e1a.txt
+   ```
+   Case (a): does the start fail ("A referral was returned from the server") or run without
+   UI Access (`TokenUIAccess 0`)? Note which.
+2. **M1, one copy per desktop.** With `.\okur.exe run --settings <lab settings>` running in a
+   terminal, start a second one in another: the first says "Okur exiting." and ends, the second
+   runs (`Get-Process okur` shows one). `.\okur.exe quit` ends it ("Okur was asked to quit, and
+   is quitting."); `.\okur.exe doctor` then shows "Okur on this desktop: none answers".
+   `Start-Process .\okur-sr-no-uiaccess.exe -ArgumentList '--ease-of-access'` twice: one
+   process. Hold both Shift keys while starting it with `--sign-in`: no process. Listen: no
+   console window flashes.
+3. **M2.** With `okur.exe run` in front of Notepad: Insert+F4 opens "Exit Okur"; Escape, then
+   Insert+Tab reads Notepad. Insert+F4, Enter: "Okur exiting.", the process is gone, and
+   `okur keys`' modifier guard reports no held key. Then import 571 and write J2's scenario.
+4. **M3 and E1 with the certificate** (needs the owner's yes, Q1). On the dev box:
+   `crates\okur-setup\signing\dev-signing.ps1 -NewCertificate -WhatIf`, then without `-WhatIf`;
+   then `-Sign -Thumbprint <THUMB> -BuildDir target\release`. Copy the `.cer` and the release
+   programs to old-pc. On old-pc, elevated: `dev-signing.ps1 -TrustOnLab -CertificateFile
+   <path>`. Then, unelevated: `.\okur-setup.exe install --from <folder> --no-start-after-sign-in`
+   and accept its UAC prompt. Check:
+   - `Get-AuthenticodeSignature "C:\Program Files\Okur\okur-sr.exe"` says Valid;
+   - `Start-Process "C:\Program Files\Okur\okur-sr.exe" -ArgumentList '--doctor-exit',
+     "$env:TEMP\e1c.txt" -Wait; Get-Content $env:TEMP\e1c.txt` (through the shell: `&` and
+     `-NoNewWindow` use CreateProcess, which a UI Access program refuses with error 740, case
+     (e)): TokenUIAccess 1, integrity High (an administrator), in Program Files yes, signature
+     valid;
+   - `okur doctor --pid <okur-ui's pid>`: integrity Medium, TokenUIAccess 0 (else the lowered
+     start failed: the debug log says why);
+   - `reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Accessibility\ATs\okur_okur_v1"`
+     and the Uninstall, App Paths and `HKLM\SOFTWARE\Okur` keys, pasted; Apps & features lists
+     Okur;
+   - elevated Notepad (`Start-Process notepad -Verb RunAs`): Okur reads its text and hears its
+     keys (`--debug-log`);
+   - sign out and in (the owner): no "apps are blocking shutdown" screen;
+   - `okur-setup.exe uninstall`, then the same `reg query`s: every key gone, JAWS's names still in
+     both `Configuration` lists; `C:\Program Files\Okur` gone (or empty until the next start).
+   - Undo: `dev-signing.ps1 -UndoLab -Thumbprint <THUMB>` on old-pc (elevated).
 
 **Scope.** What Okur needs so that a blind user can rely on it the way they rely on JAWS
 from the moment the computer starts:
