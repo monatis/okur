@@ -90,8 +90,12 @@ foreach ($f in $files) {
     }
     $runnerArgs = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $runner, '-ScenarioFile', $f.FullName, '-Repetitions', $Repetitions, '-OutputPath', $out, '-Quiet')
     if ($Trace) { $runnerArgs += @('-TraceDir', (Join-Path $OutputDir 'traces')) }
-    & powershell @runnerArgs
+    # What the run said, kept when it failed: round 53's eight failures told nothing else.
+    $said = & powershell @runnerArgs 2>&1
     $code = $LASTEXITCODE
+    if ($code -ne 0) {
+        $said | Select-Object -Last 40 | Out-File (Join-Path $OutputDir "$id-run.log") -Encoding utf8
+    }
     "[$i/$($files.Count)] $id exit=$code $([int]$sw.Elapsed.TotalSeconds)s" | Out-File $log -Append -Encoding utf8
 }
 # Old-pc's own settings back for whatever runs next.
