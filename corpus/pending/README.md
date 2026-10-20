@@ -21,6 +21,7 @@ To record one:
 | 617 | Ctrl+Shift+End from ten depths of fifteen plain 80-character paragraphs: the size at which JAWS stops reading a selection and says "selected N characters up to", how it counts N, and how much of the end it says (562 left all three open) | `selection-sizes.html` (here) |
 | 618, 619 | Say Color (Insert+5) on the 148 CSS named colors and a 6x6x6 RGB grid, for JAWS's color table (565 showed names of its own: blue2, lime green 2, dark slate gray); their IA2 snapshots give the RGB of each line | `color-names.html`, `color-grid.html` (here) |
 | 620 | Ctrl+Shift+End over 103 lines of 9 characters, selecting 989 to 1029 characters: the size from which JAWS says "selected N characters up to" (617 put it between 971 and 1052). 617, recorded in round 82, waits in the scratchpad for its page's snapshot, which is captured with 620's | `selection-threshold.html` (here) |
+| 621, 622 | Usage hints on Tab in the sign-up form ("Type in text."): 555's keys with no Verbosity setting (621), and 204's with Verbosity=0 written (622). 552, 553 and 555 (Down twice, then Tab; Verbosity set) have the hints at every level; 204, 573 and 583 (Tab from the top) have none at any level: the way in or the setting | `signup-form.html` |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.

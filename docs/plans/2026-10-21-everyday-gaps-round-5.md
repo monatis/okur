@@ -45,9 +45,12 @@ leaves every batch after it waiting.
 
 ## 2. Verbosity, beyond what is built
 
-- The hints on Tab ("Type in text." in page forms at every level in the verbosity rounds,
-  none in 204 even on a fresh JAWS): compare the JCF files `jaws-settings.ps1` writes for a
-  level with old-pc's own; a key it writes may turn the hints on.
+- The hints on Tab ("Type in text.", "To change the selection ..." in page forms): 552, 553 and
+  555 (Down twice, then Tab; Verbosity written at each level) have them at every level, 204,
+  573 and 583 (Tab from the top; no Verbosity, then Intermediate and Advanced written) have
+  none at any level. The recorded settings differ only in the Verbosity key, so the way in is
+  the likelier cause. 621 (555's keys, no Verbosity) and 622 (204's keys, Verbosity=0) decide.
+  Also 555/s10: Escape says "virtual PC Cursor" there, nothing in Okur.
 - 552-555 (the forms fixture at each level, 7 steps each), 591/s6, 586/s1 and 587/s2 (the
   same as at Beginner).
 - 610/s6: Tab onto a toolbar's button at Advanced drops "Tool bar"; containers in general are

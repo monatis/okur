@@ -1,0 +1,25 @@
+{
+  "id": "622-form-tab-order-beginner-set",
+  "name": "204 (Tab through the sign-up form from the top) with Verbosity set to Beginner in DEFAULT.JCF, JAWS's default written out: whether the setting alone brings the usage hints on Tab (621 tests how the form is reached)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "jaws_settings": { "DEFAULT.JCF": { "Options": { "Verbosity": "0" } } },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Tab" },
+    { "id": "s2", "type": "key", "command": "Tab" },
+    { "id": "s3", "type": "key", "command": "Tab" },
+    { "id": "s4", "type": "key", "command": "Tab" },
+    { "id": "s5", "type": "key", "command": "Tab" },
+    { "id": "s6", "type": "key", "command": "Tab" },
+    { "id": "s7", "type": "key", "command": "Tab" },
+    { "id": "s8", "type": "key", "command": "Tab" },
+    { "id": "s9", "type": "key", "command": "Tab" },
+    { "id": "s10", "type": "key", "command": "Tab" },
+    { "id": "s11", "type": "key", "command": "Tab" },
+    { "id": "s12", "type": "key", "command": "Tab" },
+    { "id": "s13", "type": "key", "command": "Tab" }
+  ]
+}
