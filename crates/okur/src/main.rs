@@ -793,6 +793,7 @@ fn init_logging(cli: &Cli) {
 async fn main() {
     let cli = Cli::parse();
     init_logging(&cli);
+    okur_platform::init();
 
     match cli.command {
         Some(Commands::Run {

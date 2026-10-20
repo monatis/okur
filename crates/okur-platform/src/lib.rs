@@ -32,7 +32,21 @@ pub use tts::{
     TtsEngineType, TtsError, TtsManager, VoiceInfo,
 };
 
+/// Process-wide setup, before any thread reads the screen. On Windows the process is aware of
+/// each monitor's DPI: positions and sizes are real pixels, as JAWS gives them ("PC Cursor
+/// active | 1045, 544" for a button whose middle a DPI-unaware process read as 668, 348 at
+/// 125% [obs, 516/s8]), and the mouse goes where the element is.
 pub fn init() {
+    #[cfg(windows)]
+    {
+        use windows::Win32::UI::HiDpi::{
+            SetProcessDpiAwarenessContext, DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2,
+        };
+        // SAFETY: a process-wide setting with a constant argument, made at startup; it fails
+        // harmlessly when the awareness is already set.
+        let _ =
+            unsafe { SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2) };
+    }
     tracing::info!("okur-platform initialized");
 }
 
