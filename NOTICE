@@ -7,3 +7,8 @@ This product includes software derived from xa11y 0.15.2
 (https://github.com/xa11y/xa11y), Copyright (c) 2025 Stephen Crowe, licensed under the
 MIT License. The vendored crates in crates/xa11y keep that license; its text is in
 crates/xa11y/LICENSE.
+
+This product includes color names from X.Org's rgb.txt
+(https://gitlab.freedesktop.org/xorg/app/rgb), Copyright 1985, 1989, 1998 The Open Group and
+Copyright (c) 1994, 2008, Oracle and/or its affiliates. They are in
+crates/okur-core/locales/en-US/colors.txt, whose header holds their permission notice.

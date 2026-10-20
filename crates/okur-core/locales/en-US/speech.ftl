@@ -46,6 +46,13 @@ paragraph-formatting = Paragraph formatting { $alignment }
 paragraph-left-justified = left justified
 paragraph-right-justified = right justified
 
+## Say Color (Insert+5)
+
+# The text's color and its background's, by their names in colors.txt: "blue2 on white"
+# [obs, 565, 618]. Where the cursor is on no text, both are "default" [obs, 565/s1, 530/s2].
+color-on = { $foreground } on { $background }
+color-default = default
+
 ## Punctuation levels (Set Punctuation Level, Insert+Shift+2)
 
 punctuation-none = None

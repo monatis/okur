@@ -62,6 +62,8 @@ impl FontInfo {
             italic: self.italic,
             underline: self.underline,
             alignment: self.alignment.clone(),
+            color: None,
+            background: None,
         }
     }
 }

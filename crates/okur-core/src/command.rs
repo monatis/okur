@@ -299,6 +299,8 @@ pub enum Command {
     VirtualizeControl,
     SayFont,
     SayFontInViewer,
+    /// Insert+5: the text's color and its background's at the cursor.
+    SayColor,
 
     // Okur's settings: one dialog for both, until there are enough settings for two.
     QuickSettings,
@@ -543,6 +545,7 @@ impl Command {
             "VirtualizeWindow" => VirtualizeWindow,
             "VirtualizeControl" => VirtualizeControl,
             "Insert+F" | "SayFont" | "WhatFont" => SayFont,
+            "Insert+5" | "SayColor" => SayColor,
             "SayFontInViewer" => SayFontInViewer,
             "QuickSettings" => QuickSettings,
             "SettingsCenter" => SettingsCenter,
@@ -891,6 +894,7 @@ static BINDINGS: &[Binding] = &{
             VirtualizeControl,
         ),
         bind(Alpha('F'), OKUR, SayFont),
+        bind(Digit(5), OKUR, SayColor),
         // Settings.
         bind(Alpha('V'), OKUR, QuickSettings),
         bind(Digit(6), OKUR, SettingsCenter),

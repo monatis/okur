@@ -494,6 +494,45 @@ fn test_engine_text_selection_and_font_query() {
     assert_eq!(no_sel, Some("Nothing selected".to_string()));
 }
 
+/// Say Color (Insert+5) names the text's color and its background's from the color table:
+/// "red on white", the link blue "blue2 on white"; the page's title line, which is no text of
+/// the page, is "default on default" [obs, 565/s1, s5, s7].
+#[test]
+fn say_color_names_the_text_and_background_colors() {
+    use crate::color::Rgb;
+    let colored = |id: usize, text: &str, color: Rgb| {
+        let mut formatting = crate::aom::TextFormatting::new();
+        formatting.color = Some(color);
+        formatting.background = Some(Rgb::new(255, 255, 255));
+        AomNode::new(id, Role::Paragraph)
+            .with_text(text)
+            .with_formatting(formatting)
+    };
+    let aom = AomNode::new(0, Role::Document)
+        .with_name("Text Colors")
+        .with_children(vec![
+            colored(1, "Pure red text.", Rgb::new(255, 0, 0)),
+            colored(2, "Link blue text.", Rgb::new(0, 0, 238)),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&aom));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.cursor.move_to_start();
+    assert_eq!(
+        engine.execute_command("SayColor").as_deref(),
+        Some("default on default")
+    );
+    engine.execute_command("{DOWN}");
+    assert_eq!(
+        engine.execute_command("Insert+5").as_deref(),
+        Some("red on white")
+    );
+    engine.execute_command("{DOWN}");
+    assert_eq!(
+        engine.execute_command("SayColor").as_deref(),
+        Some("blue2 on white")
+    );
+}
+
 #[test]
 fn test_engine_modal_dialog_confinement_and_escape() {
     let mut dlg = AomNode::new(10, Role::Dialog)

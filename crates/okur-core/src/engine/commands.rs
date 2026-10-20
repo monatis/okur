@@ -172,6 +172,7 @@ impl ScreenReaderEngine {
             Command::SpellLine => return self.spell(true),
             Command::SayFont => return self.say_font(false),
             Command::SayFontInViewer => return self.say_font(true),
+            Command::SayColor => return self.say_color(),
             _ => {}
         }
         // On the desktop and the taskbar, Windows moves and the focus is read: the page
@@ -1089,6 +1090,30 @@ impl ScreenReaderEngine {
                 .map(crate::event::FontInfo::formatting)
         };
         self.speak_font(formatting, in_viewer)
+    }
+
+    /// Say Color (Insert+5): in a page, the text's color and its background's at the virtual
+    /// cursor, "blue2 on white"; "default on default" where the cursor is on no text
+    /// [obs, 565, 618, 530/s2]. Nothing elsewhere yet: JAWS reads a window's colors from its
+    /// screen, which Okur has no model of.
+    fn say_color(&mut self) -> Option<String> {
+        if self.app_mode != AppMode::VirtualBuffer || self.forms_mode {
+            return None;
+        }
+        let formatting = self
+            .cursor
+            .buffer
+            .text_formatting_at_offset(self.cursor.offset);
+        let name = |color: Option<crate::color::Rgb>| {
+            color
+                .and_then(crate::color::name_of)
+                .map_or_else(|| msg::color_default().to_string(), str::to_owned)
+        };
+        let (foreground, background) = match formatting {
+            Some(f) => (name(f.color), name(f.background)),
+            None => (name(None), name(None)),
+        };
+        self.say(msg::color_on(foreground, background).to_string())
     }
 
     /// Says the font that the page's own controls show, read for Say Font (`pending_font`).

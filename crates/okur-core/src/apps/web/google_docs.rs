@@ -109,7 +109,7 @@ impl AppModule for GoogleDocs {
             bold: pressed(BOLD),
             italic: pressed(ITALIC),
             underline: pressed(UNDERLINE),
-            alignment: None,
+            ..TextFormatting::default()
         };
         (formatting != TextFormatting::default()).then_some(formatting)
     }

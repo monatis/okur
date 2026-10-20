@@ -115,6 +115,12 @@ pub struct TextFormatting {
     pub underline: bool,
     #[serde(default)]
     pub alignment: Option<String>,
+    /// The text's color, for Say Color.
+    #[serde(default)]
+    pub color: Option<crate::color::Rgb>,
+    /// The color behind the text; none where it is transparent.
+    #[serde(default)]
+    pub background: Option<crate::color::Rgb>,
 }
 
 impl Eq for TextFormatting {}
@@ -166,6 +172,8 @@ impl TextFormatting {
             italic: child.italic || self.italic,
             underline: child.underline || self.underline,
             alignment: child.alignment.clone().or_else(|| self.alignment.clone()),
+            color: child.color.or(self.color),
+            background: child.background.or(self.background),
         }
     }
 }

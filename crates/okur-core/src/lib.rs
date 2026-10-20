@@ -4,6 +4,7 @@ pub mod aom;
 pub mod apps;
 pub mod buffer;
 pub mod clock;
+pub mod color;
 pub mod command;
 pub mod cursor;
 pub mod editing;

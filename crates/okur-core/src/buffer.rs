@@ -1322,6 +1322,26 @@ impl VirtualBuffer {
             })
     }
 
+    /// The formatting of the text at `offset` itself: none on a line Okur says for an element
+    /// (a region's "banner", a list's "list of 4 items"), where [`Self::formatting_at_offset`]
+    /// takes the nearest text's. Say Color says "default" there, as JAWS does [obs, 530/s2].
+    pub fn text_formatting_at_offset(&self, offset: usize) -> Option<TextFormatting> {
+        let said_for_element = |span: &BufferSpan| {
+            span.role == Role::Document
+                || self
+                    .bounded
+                    .iter()
+                    .any(|&(start, end)| span.start_offset == start || span.start_offset == end)
+        };
+        self.spans
+            .iter()
+            .filter(|s| offset >= s.start_offset && offset <= s.end_offset)
+            .min_by_key(|s| s.end_offset - s.start_offset)
+            .filter(|s| !said_for_element(s))
+            .and_then(|s| self.node(s.node_id))
+            .and_then(|n| n.formatting.clone())
+    }
+
     /// Returns the list of all links in the document for the Links List dialog.
     pub fn get_links_list(&self) -> Vec<LinkListItem> {
         let mut items = Vec::new();

@@ -16,6 +16,10 @@ okur-core/src/linearize.rs: "mailto:"
 okur-core/src/linearize.rs: "flows-to"
 okur-core/src/speech.rs: "mailto:"
 okur-core/src/command.rs: *
+# The color table's file, and the CSS color notation Chromium reports.
+okur-core/src/color.rs: "../locales/en-US/colors.txt"
+okur-core/src/color.rs: "rgba("
+okur-core/src/color.rs: "rgb("
 okur-core/src/actions.rs: "activate"
 okur-core/src/actions.rs: "caret"
 okur-core/src/actions.rs: "caret to"

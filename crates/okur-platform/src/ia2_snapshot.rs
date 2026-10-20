@@ -158,8 +158,8 @@ fn font_size_points(raw: &str) -> Option<f32> {
     raw.strip_suffix("pt").unwrap_or(raw).trim().parse().ok()
 }
 
-/// Say Font's formatting from an IA2 text run (`font-family`, `font-size`, `font-weight`,
-/// `font-style`, `text-underline-style`).
+/// Say Font's and Say Color's formatting from an IA2 text run (`font-family`, `font-size`,
+/// `font-weight`, `font-style`, `text-underline-style`, `color`, `background-color`).
 fn text_formatting(
     attributes: &std::collections::BTreeMap<String, String>,
 ) -> Option<okur_core::aom::TextFormatting> {
@@ -180,6 +180,8 @@ fn text_formatting(
         italic: get("font-style").is_some_and(|s| s == "italic" || s == "oblique"),
         underline: get("text-underline-style").is_some_and(|s| !s.is_empty() && s != "none"),
         alignment: None,
+        color: get("color").and_then(okur_core::color::Rgb::parse_css),
+        background: get("background-color").and_then(okur_core::color::Rgb::parse_css),
     })
 }
 
