@@ -4442,13 +4442,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "642-desktop-keyboard-help-second-press",
+      "fixture": "desktop-dialogs.ps1",
+      "evidence": {
+        "sha256": "90f84bca09e19c155fadd2272732e27dec992ff16f00a16dfad7f91e9b8c1db4",
+        "capture_script_sha256": "bf89d333b1eca515dc0da6a3e2407056055b80d500d56700db4951d636c177c7",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 306,
-    "scenarios_with_evidence": 306,
-    "total_trials": 972,
-    "successful_trials": 972,
-    "deterministic_scenarios": 192
+    "scenarios": 307,
+    "scenarios_with_evidence": 307,
+    "total_trials": 975,
+    "successful_trials": 975,
+    "deterministic_scenarios": 193
   }
 }
