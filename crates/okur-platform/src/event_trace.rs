@@ -958,6 +958,29 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         if let (Some(container), Some(tree)) = (container, &event.dialog_tree) {
             focus.container_name = label_before(tree, container.runtime_id.as_deref());
         }
+        // With no text before it, the list is named by its dialog: "Select a System Tray Icon
+        // List box" (JAWS's own dialog, its only list unlabelled [obs, 511/s4]).
+        if focus
+            .container_name
+            .as_deref()
+            .is_none_or(|n| n.trim().is_empty())
+            && focus.container_role == Some(okur_core::Role::List)
+        {
+            focus.container_name = event
+                .dialog_tree
+                .as_ref()
+                .and_then(|tree| tree.name.clone())
+                .filter(|n| !n.trim().is_empty());
+            // The list is named as it is entered, too.
+            if let (Some(name), Some(list)) = (
+                &focus.container_name,
+                focus.groups.iter_mut().rev().find(|g| g.list),
+            ) {
+                if list.name.trim().is_empty() {
+                    list.name = name.clone();
+                }
+            }
+        }
     }
     // JAWS names buttons by their MSAA role: ROLE_SYSTEM_BUTTONMENU is a "button menu"
     // even when UIA reports a plain button [obs, 204/s11–s12].

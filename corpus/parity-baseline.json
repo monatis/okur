@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 2479,
+  "matched_steps": 2480,
   "total_steps": 2641,
   "accepted_divergences": 74,
   "errors": [],
@@ -2360,7 +2360,7 @@
     "511-desktop-window-list-and-tray/s1": "match",
     "511-desktop-window-list-and-tray/s2": "match",
     "511-desktop-window-list-and-tray/s3": "match",
-    "511-desktop-window-list-and-tray/s4": "mismatch",
+    "511-desktop-window-list-and-tray/s4": "match",
     "511-desktop-window-list-and-tray/s5": "match",
     "511-desktop-window-list-and-tray/s6": "mismatch",
     "512-web-rate-on-the-fly/s1": "match",

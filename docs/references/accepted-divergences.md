@@ -76,7 +76,8 @@ A step can be in more than one entry; all of its entries apply.
   `252-web-list-lists-enter/s1`, `254-web-list-paragraphs-enter/s1`,
   `255-web-list-block-quotes-enter/s1`, `257-web-list-tables-enter/s1`,
   `258-web-list-glance-highlights-enter/s1`, `259-web-list-divisions-enter/s1`,
-  `260-web-list-tabs-enter/s1`.
+  `260-web-list-tabs-enter/s1`; and Insert+F11's Select a System Tray Icon,
+  `511-desktop-window-list-and-tray/s4` (its version, round 57).
 - In the recordings of 2026-10-19 (round 9, JAWS freshly started for the batch), JAWS no longer
   said its version or the list's tutor message before the Links List, the Heading List and
   Virtual HTML Features, and said nothing before some dialogs at all: those steps were taken
