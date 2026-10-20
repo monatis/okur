@@ -1025,9 +1025,20 @@ pub(crate) mod capture {
                 uia.ElementFromHandleBuildCache(hwnd, &request).ok()?,
             )
         };
+        // A list's items are read where the window shows them, as Say Window reads the
+        // window's screen: the Font dialog's font list shows a few of its 187 fonts, and reading
+        // all of them took 673 ms (90th percentile, perf105b; performance review P6).
+        // SAFETY: UIA client queries on a valid automation object.
+        let on_screen = unsafe {
+            uia.CreateAndCondition(
+                &uia.ControlViewCondition().ok()?,
+                &uia.CreatePropertyCondition(UIA_IsOffscreenPropertyId, &VARIANT::from(false))
+                    .ok()?,
+            )
+        }
+        .ok()?;
         let items = (
-            // SAFETY: UIA client query on a valid automation object.
-            unsafe { uia.ControlViewCondition() }.ok()?,
+            on_screen,
             request_for(uia, AutomationElementMode_Full, ITEM_PROPERTIES)?,
         );
         let mut budget = MAX_WINDOW_TREE;
