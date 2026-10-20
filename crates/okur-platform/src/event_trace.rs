@@ -2110,14 +2110,16 @@ mod capture {
         )
     }
 
-    /// The events the live screen reader consumes ([`EventConverter`]).
-    const LIVE_EVENTS: [&str; 14] = [
+    /// The events the live screen reader consumes ([`EventConverter`]). Not caret and text
+    /// selection events: live, the actions worker reads the field after each key, and without
+    /// their text the converter makes nothing of them, though reading their MSAA object cost
+    /// the WinEvent thread a cross-process call or six for each, 16% of all events (performance
+    /// review, 2026-10-20, P5; `caret_events_without_their_text_give_nothing`).
+    const LIVE_EVENTS: [&str; 12] = [
         "focus",
         "uia_focus",
         "uia_selected",
         "foreground",
-        "caret",
-        "text_selection_change",
         "value_change",
         "state_change",
         "selection",

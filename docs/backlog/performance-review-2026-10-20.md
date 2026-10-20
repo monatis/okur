@@ -35,7 +35,8 @@ before and after each change gave identical output.
 
 | Finding | Status | Commit | Measured |
 |---|---|---|---|
-| P1 steps 1-2: span index, `block_text` gathered as far as the item keeps | done; step 3 (offsets alone for Z) not needed yet | this commit | Z 559 → 9.7 ms, Shift+Z 547 → 10.4 ms, Ctrl+Insert+Z 579 → 12.1 ms, P 468 → 8.8 ms, X 450 → 6.6 ms |
+| P1 steps 1-2: span index, `block_text` gathered as far as the item keeps | done; step 3 (offsets alone for Z) not needed yet | `e3a1f22` | Z 559 → 9.7 ms, Shift+Z 547 → 10.4 ms, Ctrl+Insert+Z 579 → 12.1 ms, P 468 → 8.8 ms, X 450 → 6.6 ms |
+| P5 step 1: caret and text selection events not read live | done; live check on old-pc (305, 313, 400, 403, 504, 522) to come | this commit | test: all 3,191 in the traces give nothing without their text |
 
 ## Summary: the five worst
 

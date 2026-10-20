@@ -508,6 +508,40 @@ mod tests {
         assert!(pages > 30, "{pages} pages");
     }
 
+    /// Live, a caret or text-selection event's text is not read (the actions worker reads the
+    /// field after the key), and that text is all the converter could use of it: without it,
+    /// every one in the corpus's traces gives nothing and leaves the converter as it was. So
+    /// the live reader skips them (performance review, 2026-10-20, P5).
+    #[test]
+    fn caret_events_without_their_text_give_nothing() {
+        use okur_platform::event_trace::{read_trace, EventConverter};
+        let entries = std::fs::read_dir(corpus_dir().join("traces"));
+        assert!(entries.is_ok(), "{entries:?}");
+        let Ok(entries) = entries else {
+            return;
+        };
+        let mut carets = 0;
+        for path in entries.flatten().map(|e| e.path()) {
+            let Ok((_, events)) = read_trace(&path) else {
+                continue;
+            };
+            let mut converter = EventConverter::default();
+            for event in events {
+                if matches!(event.event.as_str(), "caret" | "text_selection_change") {
+                    carets += 1;
+                    let mut bare = event.clone();
+                    bare.text_context = None;
+                    let before = format!("{converter:?}");
+                    let converted = converter.convert(&bare);
+                    assert!(converted.is_empty(), "{}: {converted:?}", path.display());
+                    assert_eq!(format!("{converter:?}"), before, "{}", path.display());
+                }
+                let _ = converter.convert(&event);
+            }
+        }
+        assert!(carets > 1000, "{carets} caret events");
+    }
+
     /// Semantics only IA2 carries without localization: block quotes (UIA gives only a
     /// localized control type), inline versus block elements, and the IA2 form states.
     #[test]
