@@ -62,6 +62,8 @@ A step can be in more than one entry; all of its entries apply.
   browser's title, or the dialog's list before the dialog itself. Okur's dialog opens without
   them, and some trials of the same keys have none of it either.
 - Steps (the step that opens the dialog, s1, of each):
+  `222-web-links-list/s1`, `223-web-links-list-escape/s1`, `231-web-list-radio-buttons/s1`,
+  `232-web-list-buttons/s1`, `226-web-element-lists/s3`,
   `224-web-headings-list/s1`, `225-web-form-fields-list/s1`, `226-web-element-lists/s1`,
   `227-web-form-fields-list-items/s1`, `228-web-form-fields-list-edit/s1`,
   `230-web-element-lists-items/s1`, `233-web-list-combo-boxes/s1`, `234-web-list-edits/s1`,
@@ -79,6 +81,12 @@ A step can be in more than one entry; all of its entries apply.
   said its version or the list's tutor message before the Links List, the Heading List and
   Virtual HTML Features, and said nothing before some dialogs at all: those steps were taken
   off this list and the entry for the version removed.
+- Round 52 (2026-10-20) recorded 221-245 again in the lab's own Chrome, and JAWS said them again
+  before the Links List (222, 223), Select a Radio Button (231) and Select a Button (232): those
+  steps were put back, with `226-web-element-lists/s3`, where Enter opens the Heading List from
+  Virtual HTML Features. On the spoken layer, where JAWS's speech has no line breaks and no
+  role marks, the step is compared from the last place JAWS says what Okur's speech begins
+  with, the dialog's title and "dialog".
 - Decided under the owner's ruling on JAWS's version, 2026-10-18.
 
 ### A stray comma in Virtual HTML Features

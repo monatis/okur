@@ -39,6 +39,17 @@ fn from_its_dialog(text: &str) -> Option<&str> {
     (line > 0).then(|| text.get(line..)).flatten()
 }
 
+/// The same on the spoken layer, where JAWS's synthesizer calls are joined by spaces and the
+/// dialog's role has no mark: JAWS's transcript from the last place it says what Okur's
+/// speech begins with, the dialog's title and "dialog" ("Links List dialog").
+fn spoken_from_its_dialog(text: &str, ours: &str) -> Option<String> {
+    const DIALOG: &str = " dialog";
+    let named = ours.get(..ours.find(DIALOG)? + DIALOG.len())?;
+    let text = normalize(text);
+    let at = text.rfind(named).filter(|&at| at > 0)?;
+    text.get(at..).map(str::to_owned)
+}
+
 /// One decision: the steps it covers (`<scenario_id>/<step_id>`), what differs, why, and who
 /// decided when.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -64,6 +75,11 @@ macro_rules! divergences {
 
 divergences! {
     Difference::JawsSaysBeforeItsDialog => [
+        "222-web-links-list/s1",
+        "223-web-links-list-escape/s1",
+        "226-web-element-lists/s3",
+        "231-web-list-radio-buttons/s1",
+        "232-web-list-buttons/s1",
         "224-web-headings-list/s1",
         "225-web-form-fields-list/s1",
         "226-web-element-lists/s1",
@@ -294,23 +310,24 @@ pub fn compare(step: &str, okur: &str, jaws: &[String]) -> Comparison {
     if differences.contains(&Difference::Step) {
         return Comparison::Accepted;
     }
-    let without = |text: &str, okur_side: bool| {
+    let without = |text: &str, okur_side: bool, ours: &str| {
         let removed = differences
             .iter()
             .fold(text.to_owned(), |text, difference| {
                 match (difference, okur_side) {
                     (Difference::JawsAlsoSays(phrase), false)
                     | (Difference::OkurAlsoSays(phrase), true) => text.replace(phrase, " "),
-                    (Difference::JawsSaysBeforeItsDialog, false) => {
-                        from_its_dialog(&text).map_or(text.clone(), str::to_owned)
-                    }
+                    (Difference::JawsSaysBeforeItsDialog, false) => from_its_dialog(&text)
+                        .map(str::to_owned)
+                        .or_else(|| spoken_from_its_dialog(&text, ours))
+                        .unwrap_or(text),
                     _ => text,
                 }
             });
         normalize(&removed)
     };
-    let ours = without(okur, true);
-    if jaws.iter().any(|v| without(v, false) == ours) {
+    let ours = without(okur, true, "");
+    if jaws.iter().any(|v| without(v, false, &ours) == ours) {
         Comparison::Matched
     } else {
         Comparison::Differs
@@ -365,6 +382,28 @@ mod tests {
 
     fn jaws(texts: &[&str]) -> Vec<String> {
         texts.iter().map(|t| (*t).to_owned()).collect()
+    }
+
+    /// On the spoken layer JAWS's speech before its dialog is left out from where it names the
+    /// dialog as Okur does; what follows must still match [live11, 222/s1].
+    #[test]
+    fn spoken_speech_before_the_dialog_is_left_out() {
+        let step = "222-web-links-list/s1";
+        let okur = "Links List dialog links List view News 1 of 4";
+        let recorded = jaws(&[
+            "links List view News 1 of 4 To change the selection press Up or Down Arrow. \
+             Links List dialog links List view News 1 of 4",
+        ]);
+        assert_eq!(compare(step, okur, &recorded), Comparison::Matched);
+        assert_eq!(
+            compare(step, "Links List dialog links", &recorded),
+            Comparison::Differs
+        );
+        // Elsewhere it counts.
+        assert_eq!(
+            compare("101-article-read-down/s1", okur, &recorded),
+            Comparison::Differs
+        );
     }
 
     /// A phrase JAWS also says is left out of JAWS's transcript; the rest must still match.
