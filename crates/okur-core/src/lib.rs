@@ -726,9 +726,9 @@ mod tests {
         assert_eq!(cursor.current_table_col(), Some(1));
         assert_eq!(cursor.current_table_row(), Some(1));
 
-        // Edge check at row 1
+        // Edge check at row 1: "top of column" [obs, 592/s8]
         let edge_up = cursor.move_table_cell_up().unwrap_or_default();
-        assert_eq!(edge_up, "edge of table");
+        assert_eq!(edge_up, "top of column");
     }
 
     #[test]

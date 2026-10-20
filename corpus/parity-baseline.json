@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 3147,
+  "matched_steps": 3152,
   "total_steps": 3373,
   "accepted_divergences": 74,
   "errors": [],
@@ -3444,13 +3444,13 @@
     "592-web-table-edges-intermediate/s11": "match",
     "592-web-table-edges-intermediate/s12": "match",
     "592-web-table-edges-intermediate/s13": "match",
-    "592-web-table-edges-intermediate/s2": "mismatch",
-    "592-web-table-edges-intermediate/s3": "mismatch",
+    "592-web-table-edges-intermediate/s2": "match",
+    "592-web-table-edges-intermediate/s3": "match",
     "592-web-table-edges-intermediate/s4": "match",
     "592-web-table-edges-intermediate/s5": "match",
-    "592-web-table-edges-intermediate/s6": "mismatch",
+    "592-web-table-edges-intermediate/s6": "match",
     "592-web-table-edges-intermediate/s7": "match",
-    "592-web-table-edges-intermediate/s8": "mismatch",
-    "592-web-table-edges-intermediate/s9": "mismatch"
+    "592-web-table-edges-intermediate/s8": "match",
+    "592-web-table-edges-intermediate/s9": "match"
   }
 }

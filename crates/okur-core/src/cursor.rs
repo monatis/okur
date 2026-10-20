@@ -2577,7 +2577,13 @@ impl VirtualCursor {
             .tables
             .iter()
             .position(|t| t.start_offset > self.offset);
-        self.enter_table(maybe_idx.unwrap_or(0))
+        // Past the last table the search goes on from the top, and says so [obs, 592/s9].
+        match maybe_idx {
+            Some(index) => self.enter_table(index),
+            None => self
+                .enter_table(0)
+                .map(|speech| format!("{}\n{speech}", msg::quicknav_wrap_top())),
+        }
     }
 
     /// Enters the table starting at `offset` (Select a Table), as T enters it.
@@ -2618,18 +2624,15 @@ impl VirtualCursor {
         if self.buffer.tables.is_empty() {
             return Some(msg::quicknav_none_tables().to_string());
         }
-        let current_start = self
-            .buffer
-            .tables
-            .iter()
-            .rfind(|t| t.start_offset <= self.offset)
-            .map(|t| t.start_offset)
-            .unwrap_or(self.offset);
+        // The prior table is the last one starting before the cursor: from inside a table, that
+        // table [obs, 109/s10]; before the first, the search goes on from the bottom and says
+        // so.
         let maybe_idx = self
             .buffer
             .tables
             .iter()
-            .rposition(|t| t.start_offset < current_start);
+            .rposition(|t| t.start_offset < self.offset);
+        let wrapped = maybe_idx.is_none();
         let table_idx = maybe_idx.unwrap_or(self.buffer.tables.len().saturating_sub(1));
         let table = self.buffer.tables.get(table_idx)?;
         self.offset = table.start_offset;
@@ -2652,7 +2655,11 @@ impl VirtualCursor {
             first_cell_text,
             self.short_messages(),
         );
-        Some(speech)
+        Some(if wrapped {
+            format!("{}\n{speech}", msg::quicknav_wrap_bottom())
+        } else {
+            speech
+        })
     }
 
     /// Moves to cell to the right within the active row (`Ctrl+Alt+RightArrow`).
@@ -2780,7 +2787,8 @@ impl VirtualCursor {
                 ));
             }
         }
-        Some(msg::table_edge().to_string())
+        // Above the first row, "top of column" [obs, 592/s8].
+        Some(msg::table_column_top().to_string())
     }
 
     /// Moves to the first cell of the current table (`Ctrl+Alt+Home`).
@@ -3017,12 +3025,21 @@ impl VirtualCursor {
         let Some(target) = index.checked_add_signed(step).filter(|&i| i < count) else {
             return Some(
                 match (line, step > 0) {
-                    // With short messages, "Last row" [obs, 578/s6]; the other edges' short
-                    // forms are not recorded yet.
+                    // With short messages, "Last row", "First row", "First column", "Last
+                    // column" [obs, 578/s6; 592/s2, s3, s6].
                     (TableLine::Row, true) if self.short_messages() => {
                         msg::table_on_last_row_short()
                     }
                     (TableLine::Row, true) => msg::table_on_last_row(),
+                    (TableLine::Row, false) if self.short_messages() => {
+                        msg::table_on_first_row_short()
+                    }
+                    (TableLine::Column, true) if self.short_messages() => {
+                        msg::table_on_last_column_short()
+                    }
+                    (TableLine::Column, false) if self.short_messages() => {
+                        msg::table_on_first_column_short()
+                    }
                     (TableLine::Row, false) => msg::table_on_first_row(),
                     (TableLine::Column, true) => msg::table_on_last_column(),
                     (TableLine::Column, false) => msg::table_on_first_column(),

@@ -25,8 +25,11 @@ table-focus-cell = column { $column } row { $row }
 table-layer = Table layer
 # Reading the next or prior row or column whole (Windows+Alt and an arrow) found none further.
 table-on-last-row = You are on the last row in the table.
-# With short messages [obs, 578/s6].
+# With short messages [obs, 578/s6; 592/s2, s3, s6].
 table-on-last-row-short = Last row
 table-on-first-row = You are on the first row in the table.
+table-on-first-row-short = First row
 table-on-last-column = You are on the last column in the table.
+table-on-last-column-short = Last column
 table-on-first-column = You are on the first column in the table.
+table-on-first-column-short = First column
