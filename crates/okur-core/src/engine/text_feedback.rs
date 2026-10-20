@@ -41,10 +41,22 @@ impl ScreenReaderEngine {
             // A document (Windows 11 Notepad; a page's multi-line field, Google Docs' with
             // braille support, where JAWS said "top of file" for Ctrl+Home and the character
             // for Home on the dev box, 2026-10-16) reads some keys otherwise.
-            let key = if self.editing_document() {
-                key.in_document(event.key, event.modifiers.ctrl)
-            } else {
-                key
+            // A plain multi-line edit (Windows 10 Notepad's, a WinForms text box) says "top of
+            // file" for Ctrl+Home as a document does [obs, 660/s4], but nothing for Home
+            // [obs, 504/s5, 664/s9, 406/s8].
+            let plain_edit = self.app_mode != super::AppMode::VirtualBuffer
+                && self
+                    .last_native_focus
+                    .as_ref()
+                    .is_some_and(|f| f.role == crate::aom::Role::Edit);
+            let key = match key.in_document(event.key, event.modifiers.ctrl) {
+                _ if !self.editing_document() => key,
+                crate::editing::EditKey::Character
+                    if plain_edit && key == crate::editing::EditKey::Silent =>
+                {
+                    key
+                }
+                document => document,
             };
             self.expect_text_change(key);
         } else if event.key == crate::Key::Enter && event.modifiers.is_empty() {

@@ -2729,6 +2729,45 @@ fn a_page_menu_opened_from_a_field_takes_its_keys() {
     assert!(engine.forms_mode);
 }
 
+/// A plain multi-line edit (Windows 10 Notepad's, a WinForms text box) says nothing for Home,
+/// as JAWS there [obs, 504/s5, 664/s9, 406/s8], and "top of file" for Ctrl+Home as a
+/// document does [obs, 660/s4].
+#[test]
+fn a_plain_multi_line_edit_is_silent_on_home() {
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(create_test_buffer()),
+        Box::new(speech.clone()),
+    );
+    engine.set_actions(Box::new(crate::actions::RecordingActions::default()));
+    let context = |caret: usize| crate::event::TextContext {
+        text: "fn main\r\n    let x".to_owned(),
+        caret,
+        selection: None,
+        font: None,
+        word: None,
+        misspelled: Vec::new(),
+    };
+    let mut field = FocusEvent::new(Role::Edit).with_name("Text Editor");
+    field.multi_line = true;
+    field.text = Some(context(7));
+    engine.handle_focus_event(&field);
+    speech.take();
+    engine.handle_key_event(&key(Key::Home));
+    engine.handle_accessibility_event(&AccessibilityEvent::TextContext(context(0)));
+    assert_eq!(norm(&speech.take().join(" ")), "");
+    let mut ctrl = Modifiers::none();
+    ctrl.ctrl = true;
+    engine.handle_key_event(&KeyEvent::new(Key::End, ctrl, true));
+    engine.handle_accessibility_event(&AccessibilityEvent::TextContext(context(18)));
+    engine.handle_key_event(&KeyEvent::new(Key::Home, ctrl, true));
+    engine.handle_accessibility_event(&AccessibilityEvent::TextContext(context(0)));
+    assert!(
+        norm(&speech.take().join(" ")).contains("top of file"),
+        "Ctrl+Home names the top"
+    );
+}
+
 /// A page's multi-line field reads keys as a document does: Google Docs' document with
 /// braille support, JAWS on the dev box (2026-10-16). Home says the character it lands on,
 /// Ctrl+Home "top of file" and the line, Say Line the line alone, and Say Font the font and
