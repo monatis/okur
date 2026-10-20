@@ -692,7 +692,9 @@ impl ScreenReaderEngine {
     /// combo box whose label is a line of its own, it is the field as its quick key says it,
     /// without "blank" or its description: "Full name Edit Required", "Home branch Combo box
     /// collapsed Northside" [obs, 507/s7, 248/s4, 249/s4]; Down onto it reads the line alone
-    /// [obs, 201/s5, s17].
+    /// [obs, 201/s5, s17]. (A radio button just clicked is said without its position [obs,
+    /// 534/s10], but one focused from Select a Radio Button with it [obs, 246/s4]: not told
+    /// apart yet.)
     fn line_here(&self) -> String {
         use crate::announcement::PartKind;
         let focused_field = self

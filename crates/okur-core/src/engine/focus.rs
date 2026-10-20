@@ -592,6 +592,29 @@ impl ScreenReaderEngine {
             // A left click from the virtual cursor (Numpad Slash): the regions as with Enter
             // [obs, 534/s2].
             let by_click = self.clicked.take().is_some_and(|id| Some(id) == target_id);
+            // A radio button that click checked is said without its position: "left mouse
+            // button | Student radio button checked" [obs, 534/s9].
+            if by_click && target_role == Some(Role::RadioButton) {
+                let position = target_id
+                    .and_then(|id| self.cursor.buffer.node(id))
+                    .and_then(|n| {
+                        Some(
+                            msg::position(
+                                n.attributes.get("posinset")?,
+                                n.attributes.get("setsize")?,
+                            )
+                            .to_string(),
+                        )
+                    });
+                if let Some(position) = position {
+                    speech = speech.map(|s| {
+                        s.lines()
+                            .filter(|line| line.trim() != position)
+                            .collect::<Vec<_>>()
+                            .join("\n")
+                    });
+                }
+            }
             // Back in an autocomplete from its list: "Fruit edit combo collapsed | Apricot |
             // To set the value use the Arrow keys or type the value." (JAWS on the dev box),
             // and into a combo box one types in: Google Sheets' cell editor, "D1 edit combo |
