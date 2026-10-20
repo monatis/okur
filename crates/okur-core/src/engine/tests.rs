@@ -739,6 +739,42 @@ fn a_selected_list_item_says_its_link() {
     );
 }
 
+/// A page whose last line closes a region ends with a line break in JAWS's text: a selection
+/// to the end counts one more character, and its last 20 end with the region's end line
+/// [obs, 562/s20, 650/s1]; a page ending with a paragraph does not [obs, 617, 651].
+#[test]
+fn a_selection_to_a_region_end_counts_its_line_break() {
+    let paragraph = |n: usize| {
+        AomNode::new(n, Role::Paragraph).with_text(format!(
+            "Paragraph {n:02} of fifteen, eighty characters each: alpha bravo charlie delta."
+        ))
+    };
+    let footer = AomNode::new(
+        20,
+        Role::Landmark {
+            landmark_type: "contentinfo".to_owned(),
+        },
+    )
+    .with_children((1..=15).map(paragraph).collect());
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Regions")
+        .with_children(vec![footer]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.cursor.move_to_start();
+    let length = engine.cursor.buffer.text.chars().count();
+    assert_eq!(
+        engine.execute_command("SelectToBottom").as_deref(),
+        Some(
+            format!(
+                "selected\n{} characters up to\nent information end",
+                length + 1 - 20
+            )
+            .as_str()
+        )
+    );
+}
+
 /// Say Color (Insert+5) names the text's color and its background's from the color table:
 /// "red on white", the link blue "blue2 on white"; the page's title line, which is no text of
 /// the page, is "default on default" [obs, 565/s1, s5, s7].
