@@ -743,9 +743,16 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         .or(dialog.and_then(|w| w.name.as_deref()))
         .or(event.top_window_title.as_deref())
         .or(active_window.and_then(|w| w.name.as_deref()));
+    // A focus event from a window already gone (Okur's own list dialog as it closes) has no
+    // class: the focus it reads is UIA's, in the window with the keyboard focus. Taken as
+    // not the page's, it left Okur out of the virtual cursor after Enter in the Regions list
+    // (live11, 256/s4).
     let mut focus = focus_event_from_chain(
         &event.focus_chain,
-        event.window_class.as_deref(),
+        event
+            .window_class
+            .as_deref()
+            .or(event.focus_window_class.as_deref()),
         top_window,
     )?;
     let focused = event.focus_chain.last()?;
@@ -3621,6 +3628,23 @@ mod tests {
             node(UIA_EDIT, "Document content", true),
         ];
         assert_eq!(focus_event_from_trace(&event), None);
+    }
+
+    /// A focus event from a window already gone (Okur's own list dialog as it closes) reads
+    /// UIA's focus: the page, in the window with the keyboard focus (live11, 256/s4).
+    #[test]
+    fn a_focus_from_a_window_gone_is_in_the_focus_window() {
+        let mut event = focus_event(Vec::new());
+        event.focus_chain = vec![node(UIA_DOCUMENT, "Riverside Gazette", true)];
+        assert_eq!(
+            focus_event_from_trace(&event).map(|f| f.in_document),
+            Some(false)
+        );
+        event.focus_window_class = Some("Chrome_RenderWidgetHostHWND".to_owned());
+        assert_eq!(
+            focus_event_from_trace(&event).map(|f| f.in_document),
+            Some(true)
+        );
     }
 
     fn focus_event(siblings: Vec<UiaNode>) -> TraceEvent {
