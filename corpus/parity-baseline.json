@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 2645,
+  "matched_steps": 2649,
   "total_steps": 2859,
   "accepted_divergences": 74,
   "errors": [],
@@ -2927,16 +2927,16 @@
     "566-web-speech-on-demand/s8": "match",
     "566-web-speech-on-demand/s9": "match",
     "567-web-misspelled-words/s1": "match",
-    "567-web-misspelled-words/s10": "mismatch",
+    "567-web-misspelled-words/s10": "match",
     "567-web-misspelled-words/s11": "match",
     "567-web-misspelled-words/s12": "mismatch",
     "567-web-misspelled-words/s2": "match",
-    "567-web-misspelled-words/s3": "mismatch",
+    "567-web-misspelled-words/s3": "match",
     "567-web-misspelled-words/s4": "match",
     "567-web-misspelled-words/s5": "match",
     "567-web-misspelled-words/s6": "match",
-    "567-web-misspelled-words/s7": "mismatch",
+    "567-web-misspelled-words/s7": "match",
     "567-web-misspelled-words/s8": "mismatch",
-    "567-web-misspelled-words/s9": "mismatch"
+    "567-web-misspelled-words/s9": "match"
   }
 }

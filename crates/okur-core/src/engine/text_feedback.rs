@@ -131,6 +131,16 @@ impl ScreenReaderEngine {
         if !context.text.is_empty() && context.text.chars().all(|c| c == '\u{fffc}') {
             return None;
         }
+        // A field's misspellings stay while its text does: a read that does not report them
+        // keeps the last ones (the word keys' reads in a page field gave none, where the read
+        // at its end gave "teh" [567 traces]).
+        let mut context = context.clone();
+        if context.misspelled.is_empty() {
+            if let Some(last) = self.last_text.as_ref().filter(|l| l.text == context.text) {
+                context.misspelled = last.misspelled.clone();
+            }
+        }
+        let context = &context;
         let before = self.last_text.replace(context.clone());
         let key = self.pending_edit.take()?;
         let field = self.text_field_line();
@@ -197,11 +207,24 @@ impl ScreenReaderEngine {
         } else {
             self.last_native_focus.as_ref().and_then(|f| f.name.clone())
         };
-        format!(
+        // A required page field says so after its role: "Full name Edit Required" [obs,
+        // 567/s3].
+        let required = self.forms_mode
+            && self
+                .node_under_cursor()
+                .is_some_and(|n| n.attributes.get("required").is_some_and(|r| r == "true"));
+        let mut line = format!(
             "{}  \u{1d} {} \u{1e} ",
             name.as_deref().unwrap_or_default().trim(),
             crate::messages::msg::role_edit()
-        )
+        );
+        if required {
+            line.push_str(&format!(
+                " \u{1d}{}\u{1e} ",
+                crate::messages::msg::state_required()
+            ));
+        }
+        line
     }
 
     /// A page's edit field as JAWS says it when one of its lists puts it in forms mode: its

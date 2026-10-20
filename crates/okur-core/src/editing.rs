@@ -177,6 +177,16 @@ pub fn misspelled_mark(context: &TextContext) -> Option<String> {
         .then(|| format!("\u{1d}{} \u{1e} ", msg::misspelled()))
 }
 
+/// JAWS's mark before a word the field marks misspelled, the caret at it: "‹Misspelled › teh"
+/// [obs, 567/s7].
+pub fn misspelled_word_mark(context: &TextContext) -> Option<String> {
+    context
+        .misspelled
+        .iter()
+        .any(|&(s, e)| s <= context.caret && context.caret < e)
+        .then(|| format!("\u{1d}{} \u{1e} ", msg::misspelled()))
+}
+
 /// The first line of the caret's paragraph, the lines between blank lines: JAWS's paragraph
 /// keys in a text field read it [obs, 510/s4-s6, 504/s15].
 pub fn paragraph_first_line(context: &TextContext) -> String {
@@ -449,7 +459,11 @@ pub fn speech_in(
         }
         // A word move that stops at a line's end reads the line break, as a character move onto
         // it does [obs, 320/s7, s11].
-        EditKey::Word => or_line_break(word_at(after)),
+        EditKey::Word => format!(
+            "{}{}",
+            misspelled_word_mark(after).unwrap_or_default(),
+            or_line_break(word_at(after))
+        ),
         EditKey::Line => format!(
             "{}{}",
             misspelled_mark(after).unwrap_or_default(),
@@ -538,7 +552,12 @@ pub fn speech_in(
             if line.trim().is_empty() {
                 field.to_owned()
             } else {
-                format!("{field}\n{}", line.trim())
+                // After the mark of a misspelled word in it [obs, 567/s3].
+                format!(
+                    "{field}\n{}{}",
+                    misspelled_mark(after).unwrap_or_default(),
+                    line.trim()
+                )
             }
         }
     })
