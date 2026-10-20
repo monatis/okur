@@ -869,6 +869,13 @@ fn replay_settings(evidence: &Value) -> okur_core::settings::Settings {
                 .map(str::to_owned)
         };
         settings.auto_forms_mode = jcf("FormsMode", "AutoFormsMode").is_none_or(|v| v != "0");
+        // The user verbosity level, `Verbosity` in Options: 0 Beginner (JAWS's default), 1
+        // Intermediate, 2 Advanced (548-555 record each).
+        settings.verbosity.level = match options.get("Verbosity").and_then(Value::as_str) {
+            Some("1") => okur_core::settings::VerbosityLevel::Intermediate,
+            Some("2") => okur_core::settings::VerbosityLevel::Advanced,
+            _ => okur_core::settings::VerbosityLevel::Beginner,
+        };
         // The verbosity output types JAWS's JCF names: one mode per level and the type's
         // name ("0|0|0|Access Key"). A type the file leaves out is on, JAWS's default.
         for output in OutputType::ALL {
