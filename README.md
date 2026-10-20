@@ -4,7 +4,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Rust 1.99.0](https://img.shields.io/badge/rust-1.99.0-orange.svg?logo=rust)](rust-toolchain.toml)
 [![Platforms: Windows; macOS in progress](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%28in%20progress%29-lightgrey.svg)](#platforms)
-[![JAWS parity: 3162 of 3372 recorded steps](https://img.shields.io/badge/JAWS%20parity-3162%2F3372%20steps-brightgreen.svg)](#where-it-stands)
+[![JAWS parity: 3391 of 3655 recorded steps](https://img.shields.io/badge/JAWS%20parity-3391%2F3655%20steps-brightgreen.svg)](#where-it-stands)
 
 **An open screen reader that keeps your JAWS muscle memory.**
 
@@ -53,19 +53,19 @@ Where to go from here:
 > Those everyday gaps on Windows are being closed first; macOS, whose accessibility layer is
 > in place, comes after them.
 
-Every figure is tool output, rerun for this README at commit `129c052` (2026-10-20).
+Every figure is tool output, rerun for this README at commit `7235929` (2026-10-20).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **3162 of 3372** | `okur parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **3054 of 3320** | `okur parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **75** | `okur parity` |
-| Recorded JAWS scenarios, trials | **261, 837** (all 837 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Steps matching JAWS's speech history, word for word | **3391 of 3655** | `okur parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **3281 of 3603** | `okur parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **76** | `okur parity` |
+| Recorded JAWS scenarios, trials | **280, 894** (all 894 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
 | Tests | **1211 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
-The 63 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
+The 76 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
 accidents, which Okur does not copy: in a data grid, JAWS adds "Column 65535, Row 65535", a
 place it failed to find. Others are JAWS's help texts, which are Freedom Scientific's writing;
 Okur says its help in its own words. Each one is listed, with the reason and who decided it,
@@ -85,7 +85,9 @@ in [accepted divergences](docs/references/accepted-divergences.md).
     check boxes, radio buttons, combo boxes, lists and list items, tables, graphics, regions,
     articles, divisions, separators, tabs and mail links; N past a run of links; the first
     and last heading or form field; Shift+Comma and Shift+Period to the start and end of a
-    list, table or region; Equals to where the page says reading goes next (aria-flowto);
+    list, table or region; Equals to where the page says reading goes next (aria-flowto); S
+    and D to the next element of the same or of another type (and Ctrl+Insert with Up, Right
+    and Left); Jump to Line (J, and Shift+J back);
   - JAWS's lists: links, headings and form fields (Insert+F7, Insert+F6, Insert+F5), Virtual
     HTML Features (Insert+F3), the element lists on Ctrl+Insert and a letter (buttons, edits,
     check boxes, radio buttons, combo boxes, graphics, lists, articles, paragraphs, block
@@ -116,21 +118,30 @@ in [accepted divergences](docs/references/accepted-divergences.md).
     and a number), trees, combo boxes and data grids;
   - Notepad and its dialogs, WordPad's and Paint's ribbons, File Explorer, Windows Settings,
     Windows Terminal, the desktop, the Alt+Tab switcher and Windows search;
-  - the Window List (Insert+F10), to switch to another window.
+  - the Window List (Insert+F10), to switch to another window, and the system tray list
+    (Insert+F11), to open or click an icon.
 - **Editing** in text fields: characters, words, lines, sentences and paragraphs; selections
   said as JAWS says them, and Say Selected Text (Insert+Shift+Down); cut, paste and undo; a
   field of several lines read as a document; the window's top and bottom line (Insert+End,
-  Insert+PageDown); Say Font.
+  Insert+PageDown); Say Font; misspelled words marked; and JAWS's text analysis on Insert+Tab
+  (runs of spaces, stray or unspaced punctuation, a missing capital, brackets and quotes left
+  open, each with its column).
 - **Help** in Okur's own words: Insert+F1 for the control or the page element you are on,
   Insert+H for Okur's keys there, Insert+W for Windows' keys.
 - **The Virtual Viewer** (Insert+Alt+W) on screen as JAWS shows it, for windows, controls and
-  consoles, Windows Terminal included; the Speech History (Insert+Space, then H).
+  consoles, Windows Terminal included; the Speech History (Insert+Space, then H; Ctrl+H
+  copies it and Shift+H clears it).
 - **Okur's own dialogs** are real Windows dialogs: the lists above, JAWS Find and the Window
   List, with JAWS's controls and labels, and Okur Settings (Insert+6 or Insert+V).
 - **Speech:** JAWS's punctuation levels and symbol names (Insert+Shift+2); typing echo by
   characters, words, both or none (Insert+2); a reading key pressed twice quickly spells,
   with capitals at a higher pitch; the rate on the fly (Ctrl+Alt+PageUp and PageDown); speech
   off and on (Insert+Space, then S).
+- **Verbosity levels:** Beginner, Intermediate and Advanced, as JAWS has them. Above
+  Beginner Okur says JAWS's short messages ("Last row", "3 columns and 3 rows", "virtual PC");
+  at Advanced it leaves out what JAWS leaves out there, such as a list's positions, a field's
+  description and a group box's name.
+- **Quitting with Insert+F4,** after JAWS's question (Enter quits, Escape stays).
 - **Both keyboard layouts,** desktop and laptop, with Insert or CapsLock as the JAWS key.
 - **OneCore and SAPI 5 voices.**
 
@@ -143,10 +154,10 @@ documentation describes and Okur lacks, most important first. Among them:
 - reading at the JAWS cursor, and clicking with the mouse keys outside pages (the cursor keys
   already work: Numpad Minus, Numpad Plus, Insert+Numpad Minus, Alt+Delete);
 - the clipboard keys: say, view and add to the clipboard;
-- the rest of what the verbosity levels change: the settings dialog sets the level, and Okur
-  already leaves out positions, descriptions and group names and says JAWS's short messages
-  where the recordings show them;
-- Speech On Demand and Keyboard Help (Insert+1);
+- the rest of what the verbosity levels change, as further recordings show it;
+- Speech On Demand, Keyboard Help (Insert+1), Say Color's names and the Word List;
+- starting by itself at sign-in and on Windows' sign-in screen: an installer and a build
+  with UI Access are written, and wait for a signed release;
 - Say All by sentence or paragraph, and skim reading;
 - visited links, PlaceMarkers, custom labels and Flexible Web;
 - notifications (toasts);
@@ -185,7 +196,9 @@ There are no ready-made downloads yet: Okur is built from its source code.
    target\release\okur run --keyboard-layout laptop
    ```
 
-4. To stop it, Alt+Tab to the command prompt it runs in and press Ctrl+C.
+4. To stop it, press Insert+F4 and Enter (Escape keeps it running), or run `okur quit` in
+   another command prompt. Starting Okur again while one runs replaces it: one Okur speaks
+   on a desktop at a time.
 
 Run it from a command prompt opened as administrator to hear applications that run as
 administrator. Windows keeps their windows from programs that do not, so otherwise Okur is
@@ -197,9 +210,10 @@ or if you keep it running, give Okur another JAWS key so the two do not both act
 command: `--jaws-key scrolllock` (then ScrollLock+T says the window title, and so on).
 
 Okur's settings dialog, opened with Insert+6 or Insert+V, sets the voice, its rate and
-volume, the punctuation level, the keyboard layout and JAWS key, typing echo, live regions,
-and whether the Virtual Viewer shows on screen. OK or Apply uses the change at once and saves
-it in `%APPDATA%\Okur\settings.toml`.
+volume, the punctuation level, the verbosity level, the keyboard layout and JAWS key, typing
+echo, live regions, whether the Virtual Viewer shows on screen, and whether Insert+F4 asks
+before quitting. OK or Apply uses the change at once and saves it in
+`%APPDATA%\Okur\settings.toml`.
 
 Options of `okur run` change a setting for that run only:
 
@@ -280,9 +294,12 @@ release build, Okur running next to JAWS:
 | Reading a focus change in a 300-item list (median) | **55 ms**, from 1,792 ms |
 | Building a 9,866-node page's virtual buffer | **14 ms**, from 59 ms |
 | The engine handling a key (90th percentile) | **0.1 ms** or less |
+| Z (next division) on a page of 25,032 elements | **9.7 ms**, from 559 ms |
 
 Most gains came from measuring first: every stage of an accessibility event read and every
-key's way to speech is timed in the debug log.
+key's way to speech is timed in the debug log. The last row is the engine's own benchmark
+([`crates/okur-core/examples/big_page_keys.rs`](crates/okur-core/examples/big_page_keys.rs)),
+from the [performance review](docs/backlog/performance-review-2026-10-20.md) of 2026-10-20.
 
 ### Repository map
 
@@ -294,9 +311,13 @@ key's way to speech is timed in the debug log.
   settings files.
 - [`crates/okur-corpus`](crates/okur-corpus): parity replay, accepted divergences,
   invariants, the corpus manifest and the latency summary.
-- [`crates/okur`](crates/okur): the screen reader and the harness commands (`run`, `parity`,
+- [`crates/okur`](crates/okur): the screen reader (`okur.exe`, and `okur-sr.exe`, the build
+  installed with UI Access) and the harness commands (`run`, `quit`, `doctor`, `parity`,
   `live-parity`, `evidence`, `trace`, `snapshot`, `latency`, `keys`, `jaws-history`, and
   more).
+- [`crates/okur-setup`](crates/okur-setup): installs and uninstalls Okur (its start at
+  sign-in, its Ease of Access registration) and the development signing script; not yet for
+  users.
 - [`crates/okur-ui`](crates/okur-ui): draws Okur's own windows (its dialogs and the Virtual
   Viewer on screen) natively, in a process of its own.
 - [`crates/okur-ui-model`](crates/okur-ui-model): what Okur and `okur-ui` say to each other.
