@@ -30,10 +30,14 @@ Get-ChildItem -LiteralPath \$root -Recurse -File | ForEach-Object {
     \$hash + ' ' + \$_.FullName.Substring(\$root.Length + 1).Replace('\\', '/')
 }
 EOF
-listing=$(opendesk exec --peer "$PEER" --timeout 300 --file "$query" | tr -d '\r' | grep -E '^[0-9a-f]{64} ' || true)
+listing=$(timeout 360 opendesk exec --peer "$PEER" --timeout 300 --file "$query" | tr -d '\r' | grep -E '^[0-9a-f]{64} ' || true)
 
+# One pull can hang on a connection that stopped answering (rounds 50, 54, 55): each gets a
+# time limit and three tries, and a file that still fails is named and left for the next run.
+PULL_TIMEOUT=${PULL_TIMEOUT:-180}
 fetched=0
 same=0
+failed=()
 while read -r hash rel; do
     [ -n "$hash" ] || continue
     dest="$LOCAL/$rel"
@@ -42,7 +46,23 @@ while read -r hash rel; do
         continue
     fi
     mkdir -p "$(dirname "$dest")"
-    opendesk pull --peer "$PEER" "$REMOTE/$rel" "$dest" > /dev/null
-    fetched=$((fetched + 1))
+    got=no
+    for _ in 1 2 3; do
+        if timeout "$PULL_TIMEOUT" opendesk pull --peer "$PEER" "$REMOTE/$rel" "$dest" > /dev/null 2>&1 \
+            && [ "$(sha256sum "$dest" | cut -d' ' -f1)" = "$hash" ]; then
+            got=yes
+            break
+        fi
+    done
+    if [ "$got" = yes ]; then
+        fetched=$((fetched + 1))
+    else
+        rm -f "$dest"
+        failed+=("$rel")
+    fi
 done <<< "$listing"
-echo "lab-fetch: $fetched file(s) fetched, $same already here, from $REMOTE (peer $PEER)"
+echo "lab-fetch: $fetched file(s) fetched, $same already here, ${#failed[@]} failed, from $REMOTE (peer $PEER)"
+for rel in "${failed[@]}"; do
+    echo "lab-fetch: not fetched: $rel" >&2
+done
+[ ${#failed[@]} -eq 0 ]
