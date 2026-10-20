@@ -42,7 +42,8 @@ box: only `okur doctor` (read only) and the test suite ran here.
 | --- | --- | --- | --- |
 | `okur doctor [--pid N]`: session, desktop and input desktop, account and SID, integrity, `TokenUIAccess`, elevation and its type, whether the executable is under Program Files, its signature (`WinVerifyTrust`), its embedded manifest, the screen-reader flag, the copy running on this desktop, the AT key and both `Configuration` lists | done | `crates/okur/src/doctor.rs`; `okur-platform`'s `elevation.rs`, `desktop.rs`, `signature.rs`, `registry.rs`, `ease_of_access.rs` | `doctor::tests` (the report, Program Files), `elevation::tests`, `signature::tests`, `desktop::tests`, `ease_of_access::tests`, `registry::tests` |
 | `okur-sr.exe --doctor-exit [file]`: the report of the UI Access process itself, to the console that started it or to a file (never on the secure desktop) | done | `crates/okur/src/sr.rs` | `sr::tests` |
-| E0, E1, and §4's C9 and C14 verdicts updated | not done | old-pc | needs old-pc and Q1 |
+| E1 without a certificate (case (a)) | done on old-pc, 2026-10-20 (`startup-checks.ps1`, log below): an unsigned `okur-sr.exe` with `uiAccess="true"` does not start, "A referral was returned from the server" | old-pc | `checks.log` |
+| E1 with the certificate, E0, and §4's C9 and C14 verdicts | not done | old-pc | needs the owner's certificate steps (Q1: yes) |
 
 ### M1. Process hygiene
 
@@ -69,6 +70,31 @@ Decisions made on the way, for the owner to confirm or reverse:
   `SetDefaultDllDirectories` is in §5.7's table (M6): neither is built.
 - If `CreateProcessAsUserW` with the lowered token fails, `okur-ui` is started the plain way,
   at Okur's level, with a warning in the debug log.
+
+**Checked on old-pc, 2026-10-20** (`skills/jaws-reference/scripts/startup-checks.ps1`, run
+between batches with the release build of `4ebc29c`: `okur.exe` e5517d37, `okur-sr.exe`
+6c5415fb, `okur-sr-no-uiaccess.exe` 57b62df8). Its `checks.log`, quoted:
+
+```
+--- E1: okur-sr.exe --doctor-exit (unsigned, uiAccess=true)
+    did not start: This command cannot be run due to the error: A referral was returned from the server.
+--- M1a: okur run twice
+    with one: Okur on this desktop                 okur pid=14732 session=1 desktop=Default version=0.1.0 exe=C:\Users\ailabs\sr-harness\okur-release\okur.exe
+    first ended: True (exit code 0); second running: True; okur.exe processes: 1
+    okur quit: Okur was asked to quit, and is quitting.
+    second ended: True; okur.exe processes: 0
+    after quit: Okur on this desktop                 none answers
+--- M1b: --ease-of-access twice
+    okur-sr-no-uiaccess.exe processes: 1
+    okur quit: Okur was asked to quit, and is quitting.
+    after quit: 0
+--- M1c: --sign-in with both Shift keys held
+    okur-sr-no-uiaccess.exe processes: 0
+```
+
+`okur doctor` there, unelevated: integrity Medium (0x2000), TokenUIAccess 0, not signed,
+manifest `level=asInvoker uiAccess=false`, screen reader flag on (JAWS), `okur_okur_v1 not
+present`. Not checked by the script: that no console window flashes (a listening check).
 
 ### M2. Insert+F4
 
