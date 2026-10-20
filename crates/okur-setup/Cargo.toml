@@ -1,0 +1,22 @@
+[package]
+name = "okur-setup"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+build = "build.rs"
+
+[lib]
+name = "okur_setup"
+path = "src/lib.rs"
+
+# The installer and uninstaller. It runs as its caller (asInvoker) and starts itself
+# elevated for the machine's part; it is never run by the tests.
+[[bin]]
+name = "okur-setup"
+path = "src/main.rs"
+test = false
+bench = false
+
+[dependencies]
+okur-platform = { workspace = true }

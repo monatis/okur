@@ -955,6 +955,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "okur-setup"
+version = "0.1.0"
+dependencies = [
+ "okur-platform",
+]
+
+[[package]]
 name = "okur-speech-recorder"
 version = "0.1.0"
 dependencies = [

@@ -218,6 +218,92 @@ pub fn image_path(pid: u32) -> Option<std::path::PathBuf> {
     }
 }
 
+/// Starts a program through the shell (`ShellExecuteExW`), as Windows requires of a UI Access
+/// program: `CreateProcess` of one fails with `ERROR_ELEVATION_REQUIRED`. `verb` "runas"
+/// asks for elevation (the installer's worker), `None` opens it as the caller. With `wait`,
+/// waits for it to end and returns its exit code.
+pub fn shell_execute(
+    program: &std::path::Path,
+    parameters: &str,
+    verb: Option<&str>,
+    wait: bool,
+) -> Result<Option<u32>, String> {
+    #[cfg(windows)]
+    {
+        windows_impl::shell_execute(program, parameters, verb, wait)
+    }
+    #[cfg(not(windows))]
+    {
+        let _ = (program, parameters, verb, wait);
+        Err("programs are started through the shell only on Windows".to_owned())
+    }
+}
+
+/// The running processes whose executable is one of `names` (file names, any case), with
+/// their executables' paths where they can be read.
+pub fn processes_named(names: &[&str]) -> Vec<(u32, Option<std::path::PathBuf>)> {
+    #[cfg(windows)]
+    {
+        windows_impl::processes_named(names)
+    }
+    #[cfg(not(windows))]
+    {
+        let _ = names;
+        Vec::new()
+    }
+}
+
+/// Asks Windows to delete a file, or an empty folder, when it next starts: a running program
+/// cannot be deleted (it can be renamed first).
+pub fn delete_at_reboot(path: &std::path::Path) -> Result<(), String> {
+    #[cfg(windows)]
+    {
+        use windows::core::{HSTRING, PCWSTR};
+        use windows::Win32::Storage::FileSystem::{MoveFileExW, MOVEFILE_DELAY_UNTIL_REBOOT};
+        let wide = HSTRING::from(path.as_os_str());
+        // SAFETY: a valid path; no new name means delete.
+        unsafe {
+            MoveFileExW(
+                PCWSTR(wide.as_ptr()),
+                PCWSTR::null(),
+                MOVEFILE_DELAY_UNTIL_REBOOT,
+            )
+        }
+        .map_err(|e| format!("{}: {e}", path.display()))
+    }
+    #[cfg(not(windows))]
+    {
+        let _ = path;
+        Err("deleting at the next start is Windows'".to_owned())
+    }
+}
+
+/// Shows a message in a standard message box and waits for OK: the installer's word where
+/// no console started it. Screen readers read it as any message box.
+pub fn message_box(title: &str, text: &str) {
+    #[cfg(windows)]
+    {
+        use windows::core::{HSTRING, PCWSTR};
+        use windows::Win32::UI::WindowsAndMessaging::{
+            MessageBoxW, MB_ICONINFORMATION, MB_OK, MB_SETFOREGROUND,
+        };
+        let (title, text) = (HSTRING::from(title), HSTRING::from(text));
+        // SAFETY: the strings outlive the call.
+        let _ = unsafe {
+            MessageBoxW(
+                None,
+                PCWSTR(text.as_ptr()),
+                PCWSTR(title.as_ptr()),
+                MB_OK | MB_ICONINFORMATION | MB_SETFOREGROUND,
+            )
+        };
+    }
+    #[cfg(not(windows))]
+    {
+        println!("{title}: {text}");
+    }
+}
+
 /// Attaches a program without a console of its own (`okur-sr.exe`) to the console of the
 /// program that started it, so that what it prints is seen there; false when there is none.
 pub fn attach_parent_console() -> bool {
@@ -270,6 +356,84 @@ mod windows_impl {
         } {
             tracing::warn!(on, "screen reader flag not set: {e}");
         }
+    }
+
+    pub(super) fn shell_execute(
+        program: &std::path::Path,
+        parameters: &str,
+        verb: Option<&str>,
+        wait: bool,
+    ) -> Result<Option<u32>, String> {
+        use windows::core::{HSTRING, PCWSTR};
+        use windows::Win32::System::Threading::{
+            GetExitCodeProcess, WaitForSingleObject, INFINITE,
+        };
+        use windows::Win32::UI::Shell::{
+            ShellExecuteExW, SEE_MASK_NOASYNC, SEE_MASK_NOCLOSEPROCESS, SHELLEXECUTEINFOW,
+        };
+        use windows::Win32::UI::WindowsAndMessaging::SW_SHOWNORMAL;
+        let file = HSTRING::from(program.as_os_str());
+        let parameters = HSTRING::from(parameters);
+        let verb = verb.map(HSTRING::from);
+        let mut info = SHELLEXECUTEINFOW {
+            cbSize: u32::try_from(std::mem::size_of::<SHELLEXECUTEINFOW>()).unwrap_or(0),
+            fMask: SEE_MASK_NOCLOSEPROCESS | SEE_MASK_NOASYNC,
+            lpVerb: verb.as_ref().map_or(PCWSTR::null(), |v| PCWSTR(v.as_ptr())),
+            lpFile: PCWSTR(file.as_ptr()),
+            lpParameters: PCWSTR(parameters.as_ptr()),
+            nShow: SW_SHOWNORMAL.0,
+            ..Default::default()
+        };
+        // SAFETY: the strings outlive the call; the process handle is closed below.
+        unsafe { ShellExecuteExW(&mut info) }.map_err(|e| format!("{}: {e}", program.display()))?;
+        if info.hProcess.is_invalid() {
+            return Ok(None);
+        }
+        let process = crate::elevation::windows_impl::Owned(info.hProcess);
+        if !wait {
+            return Ok(None);
+        }
+        let mut code = 0u32;
+        // SAFETY: the started process's handle.
+        unsafe {
+            let _ = WaitForSingleObject(process.0, INFINITE);
+            GetExitCodeProcess(process.0, &mut code)
+        }
+        .map_err(|e| format!("{}: {e}", program.display()))?;
+        Ok(Some(code))
+    }
+
+    pub(super) fn processes_named(names: &[&str]) -> Vec<(u32, Option<std::path::PathBuf>)> {
+        use windows::Win32::System::Diagnostics::ToolHelp::{
+            CreateToolhelp32Snapshot, Process32FirstW, Process32NextW, PROCESSENTRY32W,
+            TH32CS_SNAPPROCESS,
+        };
+        // SAFETY: a snapshot of the process list, closed by `Owned`.
+        let Ok(snapshot) = (unsafe { CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0) }) else {
+            return Vec::new();
+        };
+        let snapshot = crate::elevation::windows_impl::Owned(snapshot);
+        let mut entry = PROCESSENTRY32W {
+            dwSize: u32::try_from(std::mem::size_of::<PROCESSENTRY32W>()).unwrap_or(0),
+            ..Default::default()
+        };
+        let mut found = Vec::new();
+        // SAFETY: the snapshot and an entry of the size it says.
+        let mut more = unsafe { Process32FirstW(snapshot.0, &mut entry) }.is_ok();
+        while more {
+            let len = entry
+                .szExeFile
+                .iter()
+                .position(|&c| c == 0)
+                .unwrap_or(entry.szExeFile.len());
+            let name = String::from_utf16_lossy(entry.szExeFile.get(..len).unwrap_or_default());
+            if names.iter().any(|n| n.eq_ignore_ascii_case(&name)) {
+                found.push((entry.th32ProcessID, super::image_path(entry.th32ProcessID)));
+            }
+            // SAFETY: as above.
+            more = unsafe { Process32NextW(snapshot.0, &mut entry) }.is_ok();
+        }
+        found
     }
 
     pub(super) fn key_down(vk: i32) -> bool {
