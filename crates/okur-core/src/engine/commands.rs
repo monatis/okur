@@ -1156,19 +1156,22 @@ impl ScreenReaderEngine {
 
     /// Say Color (Insert+5): in a page, the text's color and its background's at the virtual
     /// cursor, "blue2 on white"; "default on default" where the cursor is on no text
-    /// [obs, 565, 618, 530/s2]. Nothing elsewhere yet: JAWS reads a window's colors from its
-    /// screen, which Okur has no model of.
+    /// [obs, 565, 618, 530/s2]. Elsewhere a text field's colors, which JAWS reads from the
+    /// screen; other controls have none.
     fn say_color(&mut self) -> Option<String> {
-        // Outside a page Okur reads no colors yet: JAWS says "default on default" where it
-        // finds none, on a dialog's button [obs, 513/s3].
-        if self.app_mode != AppMode::VirtualBuffer {
-            let default = msg::color_default().to_string();
-            return self.say(msg::color_on(default.clone(), default).to_string());
-        }
-        let formatting = self
-            .cursor
-            .buffer
-            .text_formatting_at_offset(self.cursor.offset);
+        // Outside a page, a text field's colors at its caret, "black on white" [obs, 661/s1];
+        // JAWS says "default on default" where it finds none, on a dialog's button [obs,
+        // 513/s3].
+        let formatting = if self.app_mode == AppMode::VirtualBuffer {
+            self.cursor
+                .buffer
+                .text_formatting_at_offset(self.cursor.offset)
+        } else {
+            self.last_text
+                .as_ref()
+                .and_then(|t| t.font.as_ref())
+                .map(crate::event::FontInfo::formatting)
+        };
         let name = |color: Option<crate::color::Rgb>| {
             color
                 .and_then(crate::color::name_of)

@@ -105,13 +105,64 @@ mod reader {
     /// proxy gives its character cell's height for the size, 24 point for a Consolas of 22,
     /// where JAWS says "Font is Consolas 22 point", with no paragraph formatting [obs, 314/s1].
     fn with_edit_font(mut context: TextContext) -> TextContext {
-        if let Some(font) = focused_window()
+        let focused = focused_window();
+        if let Some(font) = focused
+            .as_ref()
             .filter(|(_, class)| class == "EDIT")
-            .and_then(|(hwnd, _)| win32_font(hwnd))
+            .and_then(|(hwnd, _)| win32_font(*hwnd))
         {
             context.font = Some(font);
         }
+        // A Win32 or WinForms edit that reports no colors draws with the system's window
+        // text and window colors, unless its parent paints it otherwise: JAWS reads "black on
+        // white" from a WinForms text box's screen [obs, 661/s1, s4].
+        if let (Some(font), Some((hwnd, class))) = (context.font.as_mut(), focused.as_ref()) {
+            let edit = class == "EDIT" || class.contains(".EDIT.");
+            if edit && font.color.is_none() && font.background.is_none() {
+                let (color, background) = edit_system_colors(*hwnd);
+                font.color = Some(color);
+                font.background = Some(background);
+            }
+        }
         context
+    }
+
+    /// The colors a Win32 edit draws with by default: the window text on the window color,
+    /// or on the button face color when it is read-only (`WM_CTLCOLORSTATIC`).
+    fn edit_system_colors(
+        hwnd: windows::Win32::Foundation::HWND,
+    ) -> (okur_core::color::Rgb, okur_core::color::Rgb) {
+        use windows::Win32::Graphics::Gdi::{GetSysColor, SYS_COLOR_INDEX};
+        use windows::Win32::UI::WindowsAndMessaging::{GetWindowLongW, GWL_STYLE};
+        const COLOR_WINDOW: i32 = 5;
+        const COLOR_WINDOWTEXT: i32 = 8;
+        const COLOR_BTNFACE: i32 = 15;
+        const ES_READONLY: i32 = 0x0800;
+        // SAFETY: a style read of a window, and system color reads; no preconditions.
+        let (style, text, window, face) = unsafe {
+            (
+                GetWindowLongW(hwnd, GWL_STYLE),
+                GetSysColor(SYS_COLOR_INDEX(COLOR_WINDOWTEXT)),
+                GetSysColor(SYS_COLOR_INDEX(COLOR_WINDOW)),
+                GetSysColor(SYS_COLOR_INDEX(COLOR_BTNFACE)),
+            )
+        };
+        let background = if style & ES_READONLY != 0 {
+            face
+        } else {
+            window
+        };
+        (colorref(text as i32), colorref(background as i32))
+    }
+
+    /// A Windows COLORREF (0x00BBGGRR) as a color.
+    pub(super) fn colorref(value: i32) -> okur_core::color::Rgb {
+        let byte = |shift: i32| ((value >> shift) & 0xFF) as u8;
+        okur_core::color::Rgb {
+            r: byte(0),
+            g: byte(8),
+            b: byte(16),
+        }
     }
 
     /// Puts the caret of the focused Win32 edit (Notepad's, a WinForms text box, a rich edit) at
@@ -337,9 +388,10 @@ mod reader {
     fn uia_font(range: &IUIAutomationTextRange) -> Option<okur_core::FontInfo> {
         use windows::Win32::System::Variant::VARIANT;
         use windows::Win32::UI::Accessibility::{
-            TextUnit_Character, UIA_FontNameAttributeId, UIA_FontSizeAttributeId,
-            UIA_FontWeightAttributeId, UIA_HorizontalTextAlignmentAttributeId,
-            UIA_IsItalicAttributeId, UIA_UnderlineStyleAttributeId, UIA_TEXTATTRIBUTE_ID,
+            TextUnit_Character, UIA_BackgroundColorAttributeId, UIA_FontNameAttributeId,
+            UIA_FontSizeAttributeId, UIA_FontWeightAttributeId, UIA_ForegroundColorAttributeId,
+            UIA_HorizontalTextAlignmentAttributeId, UIA_IsItalicAttributeId,
+            UIA_UnderlineStyleAttributeId, UIA_TEXTATTRIBUTE_ID,
         };
         // SAFETY: UIA text range calls on a valid range.
         unsafe {
@@ -372,6 +424,8 @@ mod reader {
                     .is_some_and(|v| bool::try_from(&v) == Ok(true)),
                 underline: int(UIA_UnderlineStyleAttributeId).is_some_and(|u| u != 0),
                 alignment: alignment.map(str::to_owned),
+                color: int(UIA_ForegroundColorAttributeId).map(colorref),
+                background: int(UIA_BackgroundColorAttributeId).map(colorref),
             })
         }
     }
@@ -479,6 +533,7 @@ mod reader {
             let family =
                 String::from_utf16_lossy(logfont.lfFaceName.get(..family_len).unwrap_or_default());
             let points_tenths = pixels * 720 / dpi.unsigned_abs();
+            let (color, background) = edit_system_colors(hwnd);
             Some(okur_core::FontInfo {
                 family,
                 // Whole points, as a font dialog sets them.
@@ -487,6 +542,8 @@ mod reader {
                 italic: logfont.lfItalic != 0,
                 underline: logfont.lfUnderline != 0,
                 alignment: None,
+                color: Some(color),
+                background: Some(background),
             })
         }
     }
@@ -503,6 +560,28 @@ mod tests {
         assert_eq!(css_alignment("justify"), Some("justified"));
         assert_eq!(css_alignment("end"), Some("right"));
         assert_eq!(css_alignment("-webkit-auto"), None);
+    }
+
+    /// A COLORREF holds blue, green and red from its high byte down.
+    #[cfg(windows)]
+    #[test]
+    fn a_colorref_is_a_color() {
+        assert_eq!(
+            reader::colorref(0x00FF_8000),
+            okur_core::color::Rgb {
+                r: 0,
+                g: 0x80,
+                b: 0xFF
+            }
+        );
+        assert_eq!(
+            reader::colorref(0x00FF_FFFF),
+            okur_core::color::Rgb {
+                r: 255,
+                g: 255,
+                b: 255
+            }
+        );
     }
 
     #[test]

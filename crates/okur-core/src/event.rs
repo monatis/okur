@@ -50,6 +50,12 @@ pub struct FontInfo {
     /// Paragraph alignment: `left`, `right`, `centered` or `justified`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub alignment: Option<String>,
+    /// The text's color and its background's, where the field reports or draws them: Say
+    /// Color names them [obs, 661: "black on white" in a text box].
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<crate::color::Rgb>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub background: Option<crate::color::Rgb>,
 }
 
 impl FontInfo {
@@ -62,8 +68,8 @@ impl FontInfo {
             italic: self.italic,
             underline: self.underline,
             alignment: self.alignment.clone(),
-            color: None,
-            background: None,
+            color: self.color,
+            background: self.background,
         }
     }
 }

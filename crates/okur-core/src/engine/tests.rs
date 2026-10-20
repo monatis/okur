@@ -812,12 +812,36 @@ fn say_color_names_the_text_and_background_colors() {
         engine.execute_command("SayColor").as_deref(),
         Some("blue2 on white")
     );
-    // Outside a page Okur reads no colors: "default on default", as JAWS says on a dialog's
-    // button [obs, 513/s3].
+    // Outside a page a control without text colors is "default on default", as JAWS says on
+    // a dialog's button [obs, 513/s3]; a text field says its own [obs, 661/s1].
     engine.handle_focus_event(&FocusEvent::new(Role::Button).with_name("Open second window"));
     assert_eq!(
         engine.execute_command("SayColor").as_deref(),
         Some("default on default")
+    );
+    let mut field = FocusEvent::new(Role::Edit).with_name("Notes");
+    field.text = Some(crate::event::TextContext {
+        text: "a".into(),
+        caret: 0,
+        selection: None,
+        font: Some(crate::event::FontInfo {
+            family: "Consolas".into(),
+            size_tenths: 110,
+            color: Some(Rgb { r: 0, g: 0, b: 0 }),
+            background: Some(Rgb {
+                r: 255,
+                g: 255,
+                b: 255,
+            }),
+            ..crate::event::FontInfo::default()
+        }),
+        word: None,
+        misspelled: Vec::new(),
+    });
+    engine.handle_focus_event(&field);
+    assert_eq!(
+        engine.execute_command("SayColor").as_deref(),
+        Some("black on white")
     );
 }
 
