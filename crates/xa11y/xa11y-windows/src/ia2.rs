@@ -143,14 +143,17 @@ pub struct Ia2TextRun {
     pub attributes: BTreeMap<String, String>,
 }
 
-/// The text attributes a run keeps (Say Font's).
-pub const FONT_ATTRIBUTES: [&str; 6] = [
+/// The text attributes a run keeps: Say Font's, and Say Color's (`color`,
+/// `background-color`, as Chromium gives them: `rgb(0, 0, 238)`).
+pub const FONT_ATTRIBUTES: [&str; 8] = [
     "font-family",
     "font-size",
     "font-weight",
     "font-style",
     "text-underline-style",
     "text-line-through-style",
+    "color",
+    "background-color",
 ];
 
 pub fn parse_attributes(raw: &str) -> BTreeMap<String, String> {
