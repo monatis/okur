@@ -98,6 +98,21 @@ fn squash(text: &str) -> String {
     text.split_whitespace().collect::<Vec<_>>().join(" ")
 }
 
+/// An editable text area's lines, as the virtual cursor reads them: its value by line breaks.
+/// Empty for any other field (a field of one line is read whole).
+fn text_area_lines(node: &AomNode) -> Vec<&str> {
+    if node.role != Role::Edit
+        || attr(node, "multiline") != Some("true")
+        || attr(node, "readonly") == Some("true")
+    {
+        return Vec::new();
+    }
+    node.value
+        .as_deref()
+        .map(|v| v.lines().collect())
+        .unwrap_or_default()
+}
+
 /// Whether `text` is only a list marker such as `•`, `◦`, `▪` or `3.`.
 fn is_list_marker(text: &str) -> bool {
     let t = text.trim();
@@ -795,7 +810,8 @@ impl<'a> Builder<'a> {
                 }
                 s.push_str(&role_marker(kind));
                 if let Some(v) = node.value.as_deref().filter(|v| !v.trim().is_empty()) {
-                    s.push_str(v);
+                    // A text area's first line; its others are lines of their own (below).
+                    s.push_str(text_area_lines(node).first().copied().unwrap_or(v));
                 }
                 s
             }
@@ -918,6 +934,19 @@ impl<'a> Builder<'a> {
             squash(&speech.replace([RS, RE], " "))
         };
         let off = self.emit(node.id, node.role.clone(), &text, speech);
+        // A text area's lines after its first are lines of the page, each with the field's
+        // role: " Edit | Mail ada@example.org ..." [obs, 508/s2-s5; 408's Say All].
+        if node.role == Role::Edit {
+            let kind = role_marker(msg::role_edit().as_str());
+            for line in text_area_lines(node).into_iter().skip(1) {
+                self.emit(
+                    node.id,
+                    node.role.clone(),
+                    &squash(line),
+                    format!("{kind}{line}"),
+                );
+            }
+        }
 
         match &node.role {
             Role::Button | Role::MenuButton if node.states.disabled => {}
@@ -1494,6 +1523,33 @@ mod tests {
             cursor.focus_node(2).as_deref(),
             Some("Name \u{1d} Edit \u{1e} \nAda")
         );
+    }
+
+    /// A text area in the virtual cursor: each of its lines is a line of the page with the
+    /// field's role, " Edit | Mail ada@example.org" [obs, 508].
+    #[test]
+    fn a_text_area_is_read_line_by_line() {
+        let mut notes = AomNode::new(1, Role::Edit)
+            .with_name("Notes")
+            .with_value("First line\nSecond line");
+        notes
+            .attributes
+            .insert("multiline".to_owned(), "true".to_owned());
+        let root = AomNode::new(0, Role::Document).with_children(vec![notes]);
+        let buffer = crate::buffer::VirtualBuffer::from_aom(&root);
+        let speech: Vec<String> = buffer
+            .lines
+            .iter()
+            .map(|l| l.speech.split_whitespace().collect::<Vec<_>>().join(" "))
+            .collect();
+        assert_eq!(
+            speech,
+            vec![
+                "Notes \u{1d} Edit \u{1e} First line".to_owned(),
+                "\u{1d} Edit \u{1e} Second line".to_owned()
+            ]
+        );
+        assert!(buffer.lines.iter().all(|l| l.node_id == 1));
     }
 
     /// aria-roledescription on the dev box (JAWS, 2026-10-16): said in place of a button's,
