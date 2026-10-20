@@ -2,9 +2,9 @@
     "format_version":  2,
     "scenario_id":  "516-desktop-jaws-cursor",
     "scenario_version":  "1.0.0",
-    "timestamp":  "2026-10-20T12:24:37.2488471+03:00",
+    "timestamp":  "2026-10-20T19:45:32.0184694+03:00",
     "provenance":  {
-                       "capture_script_sha256":  "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+                       "capture_script_sha256":  "1a29afa81bce20a11ca15d7f40d1f6272f4d8a22da463fae92b539d1a64d7c8d",
                        "scenario_sha256":  "568afbaec0efe6a694579299c5b713efa21c3d33592df426d2b546b7864cf2f3",
                        "fixture_sha256":  "8f1a7824d4171b14b66b3a97d4469f8ff25d4f9ef4dcf5618757296570829c66",
                        "host":  "DESKTOP-DCNAKQQ",
@@ -413,14 +413,14 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-20T12:24:37.3831092+03:00",
+                       "timestamp":  "2026-10-20T19:45:32.1476671+03:00",
                        "foreground_window_start":  "SR Dialog Fixture",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792488293381,
-                                                "t_end_ms":  1792488294822,
+                                                "t_start_ms":  1792514743941,
+                                                "t_end_ms":  1792514745343,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "NumpadMinus",
@@ -429,12 +429,48 @@
                                                 "observation":  {
                                                                     "speech_raw":  "JAWS Cursor",
                                                                     "spoken":  [
+                                                                                   "Speech history cleared",
                                                                                    "JAWS Cursor",
                                                                                    ""
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488293627,
+                                                                                               "t":  1792514743960,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Speech",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "52",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "history",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "53",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "cleared",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792514744168,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -457,7 +493,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488293697,
+                                                                                               "t":  1792514744241,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -473,7 +509,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  665,
+                                                                    "settle_ms":  1020,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -482,26 +518,26 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792488295780,
-                                                "t_end_ms":  1792488299928,
+                                                "t_start_ms":  1792514746333,
+                                                "t_end_ms":  1792514750500,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Alt+Delete",
                                                                "repeat":  1
                                                            },
                                                 "observation":  {
-                                                                    "speech_raw":  "JAWS Cursor active\n836, 436\nApplication window restriction",
+                                                                    "speech_raw":  "JAWS Cursor active\n1045, 544\nApplication window restriction",
                                                                     "spoken":  [
                                                                                    "JAWS Cursor active",
                                                                                    "",
-                                                                                   "836, 436",
+                                                                                   "1045, 544",
                                                                                    "",
                                                                                    "Application window restriction",
                                                                                    ""
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488295974,
+                                                                                               "t":  1792514746522,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -536,7 +572,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488296147,
+                                                                                               "t":  1792514746691,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -547,11 +583,11 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488296347,
+                                                                                               "t":  1792514746891,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "836,",
+                                                                                                                 "text":  "1045,",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -563,14 +599,14 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "436",
+                                                                                                                 "text":  "544",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              }
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488297798,
+                                                                                               "t":  1792514748352,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -581,7 +617,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488297997,
+                                                                                               "t":  1792514748551,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -616,7 +652,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488298857,
+                                                                                               "t":  1792514749451,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -632,7 +668,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3831,
+                                                                    "settle_ms":  3824,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -641,8 +677,8 @@
                                             },
                                             {
                                                 "step_id":  "s3",
-                                                "t_start_ms":  1792488300939,
-                                                "t_end_ms":  1792488302359,
+                                                "t_start_ms":  1792514751493,
+                                                "t_end_ms":  1792514752929,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Insert+NumpadMinus",
@@ -656,7 +692,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488301134,
+                                                                                               "t":  1792514751696,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -703,7 +739,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488301307,
+                                                                                               "t":  1792514751871,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -719,7 +755,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1102,
+                                                                    "settle_ms":  1140,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -728,8 +764,8 @@
                                             },
                                             {
                                                 "step_id":  "s4",
-                                                "t_start_ms":  1792488303372,
-                                                "t_end_ms":  1792488305816,
+                                                "t_start_ms":  1792514753945,
+                                                "t_end_ms":  1792514756353,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Insert+Up",
@@ -743,7 +779,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488303564,
+                                                                                               "t":  1792514754132,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -754,7 +790,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488303567,
+                                                                                               "t":  1792514754135,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -770,7 +806,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  912,
+                                                                    "settle_ms":  898,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  true,
                                                                     "baseline_settled":  true
@@ -779,62 +815,11 @@
                                             },
                                             {
                                                 "step_id":  "s5",
-                                                "t_start_ms":  1792488306640,
-                                                "t_end_ms":  1792488308934,
+                                                "t_start_ms":  1792514757201,
+                                                "t_end_ms":  1792514759461,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Up",
-                                                               "repeat":  1
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "",
-                                                                    "spoken":  [
-                                                                                   "blank",
-                                                                                   ""
-                                                                               ],
-                                                                    "spoken_records":  [
-                                                                                           {
-                                                                                               "t":  1792488306698,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "blank",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           },
-                                                                                           {
-                                                                                               "t":  1792488306700,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "1",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           }
-                                                                                       ],
-                                                                    "spoken_end":  "confirmation",
-                                                                    "clipboard":  null,
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  814,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  true,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
-                                                "t_start_ms":  1792488309776,
-                                                "t_end_ms":  1792488312256,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Insert+Up",
                                                                "repeat":  1
                                                            },
                                                 "observation":  {
@@ -846,7 +831,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488309777,
+                                                                                               "t":  1792514757201,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -881,7 +866,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488310013,
+                                                                                               "t":  1792514757237,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -892,7 +877,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488310016,
+                                                                                               "t":  1792514757240,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -908,7 +893,94 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  936,
+                                                                    "settle_ms":  811,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  true,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1792514760308,
+                                                "t_end_ms":  1792514762745,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+Up",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "",
+                                                                    "spoken":  [
+                                                                                   "Speech history cleared",
+                                                                                   "blank",
+                                                                                   ""
+                                                                               ],
+                                                                    "spoken_records":  [
+                                                                                           {
+                                                                                               "t":  1792514760330,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Speech",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "10",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "history",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "11",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "cleared",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792514760532,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "blank",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792514760535,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "1",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  891,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  true,
                                                                     "baseline_settled":  true
@@ -917,8 +989,8 @@
                                             },
                                             {
                                                 "step_id":  "s7",
-                                                "t_start_ms":  1792488313106,
-                                                "t_end_ms":  1792488314334,
+                                                "t_start_ms":  1792514763568,
+                                                "t_end_ms":  1792514764757,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "NumpadPlus",
@@ -927,12 +999,48 @@
                                                 "observation":  {
                                                                     "speech_raw":  "PC Cursor",
                                                                     "spoken":  [
+                                                                                   "Speech history cleared",
                                                                                    "PC Cursor",
                                                                                    ""
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488313154,
+                                                                                               "t":  1792514763569,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Speech",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "10",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "history",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "11",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "cleared",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792514763607,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -955,7 +1063,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488313278,
+                                                                                               "t":  1792514763731,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -971,7 +1079,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  994,
+                                                                    "settle_ms":  938,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -980,8 +1088,8 @@
                                             },
                                             {
                                                 "step_id":  "s8",
-                                                "t_start_ms":  1792488315348,
-                                                "t_end_ms":  1792488318544,
+                                                "t_start_ms":  1792514765770,
+                                                "t_end_ms":  1792514768974,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Alt+Delete",
@@ -997,7 +1105,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488315556,
+                                                                                               "t":  1792514765970,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1032,7 +1140,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488315777,
+                                                                                               "t":  1792514766192,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -1043,7 +1151,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488315977,
+                                                                                               "t":  1792514766391,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1066,7 +1174,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488317478,
+                                                                                               "t":  1792514767892,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -1082,7 +1190,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2863,
+                                                                    "settle_ms":  2847,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1091,8 +1199,8 @@
                                             },
                                             {
                                                 "step_id":  "s9",
-                                                "t_start_ms":  1792488319552,
-                                                "t_end_ms":  1792488321120,
+                                                "t_start_ms":  1792514769967,
+                                                "t_end_ms":  1792514771480,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Insert+Up",
@@ -1106,7 +1214,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488319755,
+                                                                                               "t":  1792514770151,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1129,7 +1237,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488320027,
+                                                                                               "t":  1792514770421,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -1155,32 +1263,19 @@
                                         ],
                        "trial_success":  true,
                        "trace_file":  "516-desktop-jaws-cursor-trial1.jsonl",
-                       "lab_state_cleared":  {
-                                                 "shell_windows_closed":  [
-
-                                                                          ],
-                                                 "modifiers_held":  [
-
-                                                                    ],
-                                                 "jaws_window_in_front":  true,
-                                                 "jaws_dialogs_closed":  0,
-                                                 "modifiers_still_held":  [
-
-                                                                          ]
-                                             },
                        "page_load_settled":  true,
-                       "trace_sha256":  "6987c84be919012e550aed8f24aa37b816d24ae42946c455876bc3fca9e098ef"
+                       "trace_sha256":  "307e3ee7679acfd85c0d53a347d456d7d50e76832aedd3b471cd6da65201f361"
                    },
                    {
                        "trial_index":  2,
-                       "timestamp":  "2026-10-20T12:25:21.2435207+03:00",
+                       "timestamp":  "2026-10-20T19:46:11.5533505+03:00",
                        "foreground_window_start":  "SR Dialog Fixture",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792488331608,
-                                                "t_end_ms":  1792488332749,
+                                                "t_start_ms":  1792514784591,
+                                                "t_end_ms":  1792514785757,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "NumpadMinus",
@@ -1189,48 +1284,12 @@
                                                 "observation":  {
                                                                     "speech_raw":  "JAWS Cursor",
                                                                     "spoken":  [
-                                                                                   "Speech history cleared",
                                                                                    "JAWS Cursor",
                                                                                    ""
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488331609,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "Speech",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "33",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "history",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "34",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "cleared",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           },
-                                                                                           {
-                                                                                               "t":  1792488331645,
+                                                                                               "t":  1792514784664,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1253,7 +1312,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488331717,
+                                                                                               "t":  1792514784732,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -1269,7 +1328,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  894,
+                                                                    "settle_ms":  916,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1278,8 +1337,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792488333755,
-                                                "t_end_ms":  1792488337998,
+                                                "t_start_ms":  1792514786769,
+                                                "t_end_ms":  1792514790949,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Alt+Delete",
@@ -1297,7 +1356,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488333965,
+                                                                                               "t":  1792514786976,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1332,7 +1391,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488334137,
+                                                                                               "t":  1792514787151,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -1343,7 +1402,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488334337,
+                                                                                               "t":  1792514787351,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1366,7 +1425,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488335788,
+                                                                                               "t":  1792514788801,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -1377,7 +1436,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488335987,
+                                                                                               "t":  1792514789001,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1412,7 +1471,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488336898,
+                                                                                               "t":  1792514789911,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -1428,7 +1487,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3866,
+                                                                    "settle_ms":  3845,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1437,8 +1496,8 @@
                                             },
                                             {
                                                 "step_id":  "s3",
-                                                "t_start_ms":  1792488338971,
-                                                "t_end_ms":  1792488340404,
+                                                "t_start_ms":  1792514791962,
+                                                "t_end_ms":  1792514793382,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Insert+NumpadMinus",
@@ -1452,7 +1511,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488339162,
+                                                                                               "t":  1792514792159,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1499,7 +1558,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488339337,
+                                                                                               "t":  1792514792331,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -1515,7 +1574,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1121,
+                                                                    "settle_ms":  1122,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1524,8 +1583,8 @@
                                             },
                                             {
                                                 "step_id":  "s4",
-                                                "t_start_ms":  1792488341417,
-                                                "t_end_ms":  1792488343844,
+                                                "t_start_ms":  1792514794411,
+                                                "t_end_ms":  1792514796862,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Insert+Up",
@@ -1539,7 +1598,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488341602,
+                                                                                               "t":  1792514794617,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1550,7 +1609,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488341604,
+                                                                                               "t":  1792514794620,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -1566,7 +1625,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  911,
+                                                                    "settle_ms":  893,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  true,
                                                                     "baseline_settled":  true
@@ -1575,8 +1634,8 @@
                                             },
                                             {
                                                 "step_id":  "s5",
-                                                "t_start_ms":  1792488344667,
-                                                "t_end_ms":  1792488346928,
+                                                "t_start_ms":  1792514797685,
+                                                "t_end_ms":  1792514799931,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Up",
@@ -1585,48 +1644,12 @@
                                                 "observation":  {
                                                                     "speech_raw":  "",
                                                                     "spoken":  [
-                                                                                   "Speech history cleared",
                                                                                    "blank",
                                                                                    ""
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488344668,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "Speech",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "10",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "history",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "11",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "cleared",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           },
-                                                                                           {
-                                                                                               "t":  1792488344703,
+                                                                                               "t":  1792514797711,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1637,7 +1660,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488344706,
+                                                                                               "t":  1792514797714,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -1653,7 +1676,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  811,
+                                                                    "settle_ms":  773,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  true,
                                                                     "baseline_settled":  true
@@ -1662,8 +1685,8 @@
                                             },
                                             {
                                                 "step_id":  "s6",
-                                                "t_start_ms":  1792488347795,
-                                                "t_end_ms":  1792488350248,
+                                                "t_start_ms":  1792514800777,
+                                                "t_end_ms":  1792514803330,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Insert+Up",
@@ -1678,7 +1701,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488347816,
+                                                                                               "t":  1792514800777,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1713,7 +1736,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488348024,
+                                                                                               "t":  1792514801017,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1724,7 +1747,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488348027,
+                                                                                               "t":  1792514801020,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -1740,7 +1763,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  916,
+                                                                    "settle_ms":  958,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  true,
                                                                     "baseline_settled":  true
@@ -1749,8 +1772,8 @@
                                             },
                                             {
                                                 "step_id":  "s7",
-                                                "t_start_ms":  1792488351077,
-                                                "t_end_ms":  1792488352309,
+                                                "t_start_ms":  1792514804159,
+                                                "t_end_ms":  1792514805355,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "NumpadPlus",
@@ -1759,48 +1782,12 @@
                                                 "observation":  {
                                                                     "speech_raw":  "PC Cursor",
                                                                     "spoken":  [
-                                                                                   "Speech history cleared",
                                                                                    "PC Cursor",
                                                                                    ""
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488351078,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "Speech",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "10",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "history",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "11",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "cleared",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           },
-                                                                                           {
-                                                                                               "t":  1792488351127,
+                                                                                               "t":  1792514804191,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1823,7 +1810,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488351247,
+                                                                                               "t":  1792514804312,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -1839,7 +1826,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  997,
+                                                                    "settle_ms":  954,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1848,8 +1835,8 @@
                                             },
                                             {
                                                 "step_id":  "s8",
-                                                "t_start_ms":  1792488353319,
-                                                "t_end_ms":  1792488356481,
+                                                "t_start_ms":  1792514806364,
+                                                "t_end_ms":  1792514809540,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Alt+Delete",
@@ -1865,7 +1852,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488353502,
+                                                                                               "t":  1792514806565,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1900,7 +1887,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488353727,
+                                                                                               "t":  1792514806791,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -1911,7 +1898,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488353927,
+                                                                                               "t":  1792514806991,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1934,7 +1921,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488355437,
+                                                                                               "t":  1792514808501,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -1959,8 +1946,8 @@
                                             },
                                             {
                                                 "step_id":  "s9",
-                                                "t_start_ms":  1792488357493,
-                                                "t_end_ms":  1792488359054,
+                                                "t_start_ms":  1792514810556,
+                                                "t_end_ms":  1792514812126,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Insert+Up",
@@ -1974,7 +1961,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488357678,
+                                                                                               "t":  1792514810758,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1997,7 +1984,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488357947,
+                                                                                               "t":  1792514811032,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -2013,7 +2000,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1247,
+                                                                    "settle_ms":  1227,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -2024,18 +2011,18 @@
                        "trial_success":  true,
                        "trace_file":  "516-desktop-jaws-cursor-trial2.jsonl",
                        "page_load_settled":  true,
-                       "trace_sha256":  "f18b8ff78ddc1ff408078380f41bca7ce404c4a5b66edb34014049858d76b1b2"
+                       "trace_sha256":  "34a9aa35a0bb79600538b2debe3009a54a638e5b03d6f62e827f25ac003d1794"
                    },
                    {
                        "trial_index":  3,
-                       "timestamp":  "2026-10-20T12:25:59.1067626+03:00",
+                       "timestamp":  "2026-10-20T19:46:52.1598096+03:00",
                        "foreground_window_start":  "SR Dialog Fixture",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792488369473,
-                                                "t_end_ms":  1792488370618,
+                                                "t_start_ms":  1792514825137,
+                                                "t_end_ms":  1792514826287,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "NumpadMinus",
@@ -2050,7 +2037,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488369475,
+                                                                                               "t":  1792514825137,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -2060,7 +2047,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "33",
+                                                                                                                 "text":  "49",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -2072,7 +2059,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "34",
+                                                                                                                 "text":  "50",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -2085,7 +2072,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488369511,
+                                                                                               "t":  1792514825174,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -2108,7 +2095,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488369577,
+                                                                                               "t":  1792514825241,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -2124,7 +2111,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  915,
+                                                                    "settle_ms":  916,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -2133,8 +2120,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792488371627,
-                                                "t_end_ms":  1792488375863,
+                                                "t_start_ms":  1792514827297,
+                                                "t_end_ms":  1792514831464,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Alt+Delete",
@@ -2152,7 +2139,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488371836,
+                                                                                               "t":  1792514827482,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -2187,7 +2174,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488372007,
+                                                                                               "t":  1792514827661,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -2198,7 +2185,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488372207,
+                                                                                               "t":  1792514827861,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -2221,7 +2208,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488373658,
+                                                                                               "t":  1792514829311,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -2232,7 +2219,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488373867,
+                                                                                               "t":  1792514829521,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -2267,7 +2254,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488374767,
+                                                                                               "t":  1792514830421,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -2283,7 +2270,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3865,
+                                                                    "settle_ms":  3823,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -2292,8 +2279,8 @@
                                             },
                                             {
                                                 "step_id":  "s3",
-                                                "t_start_ms":  1792488376855,
-                                                "t_end_ms":  1792488378283,
+                                                "t_start_ms":  1792514832473,
+                                                "t_end_ms":  1792514833897,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Insert+NumpadMinus",
@@ -2307,7 +2294,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488377042,
+                                                                                               "t":  1792514832669,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -2354,7 +2341,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488377217,
+                                                                                               "t":  1792514832841,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -2370,7 +2357,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1121,
+                                                                    "settle_ms":  1106,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -2379,8 +2366,8 @@
                                             },
                                             {
                                                 "step_id":  "s4",
-                                                "t_start_ms":  1792488379289,
-                                                "t_end_ms":  1792488381731,
+                                                "t_start_ms":  1792514834913,
+                                                "t_end_ms":  1792514837324,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Insert+Up",
@@ -2394,7 +2381,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488379477,
+                                                                                               "t":  1792514835120,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -2405,7 +2392,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488379480,
+                                                                                               "t":  1792514835123,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -2421,7 +2408,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  895,
+                                                                    "settle_ms":  875,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  true,
                                                                     "baseline_settled":  true
@@ -2430,8 +2417,8 @@
                                             },
                                             {
                                                 "step_id":  "s5",
-                                                "t_start_ms":  1792488382554,
-                                                "t_end_ms":  1792488384822,
+                                                "t_start_ms":  1792514838170,
+                                                "t_end_ms":  1792514840449,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Up",
@@ -2440,13 +2427,115 @@
                                                 "observation":  {
                                                                     "speech_raw":  "",
                                                                     "spoken":  [
-                                                                                   "Speech history cleared",
                                                                                    "blank",
                                                                                    ""
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488382556,
+                                                                                               "t":  1792514838221,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "blank",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792514838224,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "1",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  812,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  true,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1792514841294,
+                                                "t_end_ms":  1792514843673,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+Up",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "",
+                                                                    "spoken":  [
+                                                                                   "blank",
+                                                                                   ""
+                                                                               ],
+                                                                    "spoken_records":  [
+                                                                                           {
+                                                                                               "t":  1792514841384,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "blank",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792514841386,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "1",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  787,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  true,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s7",
+                                                "t_start_ms":  1792514844518,
+                                                "t_end_ms":  1792514845714,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "NumpadPlus",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "PC Cursor",
+                                                                    "spoken":  [
+                                                                                   "Speech history cleared",
+                                                                                   "PC Cursor",
+                                                                                   ""
+                                                                               ],
+                                                                    "spoken_records":  [
+                                                                                           {
+                                                                                               "t":  1792514844519,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -2481,109 +2570,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488382593,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "blank",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           },
-                                                                                           {
-                                                                                               "t":  1792488382596,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "1",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           }
-                                                                                       ],
-                                                                    "spoken_end":  "confirmation",
-                                                                    "clipboard":  null,
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  808,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  true,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
-                                                "t_start_ms":  1792488385647,
-                                                "t_end_ms":  1792488388117,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Insert+Up",
-                                                               "repeat":  1
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "",
-                                                                    "spoken":  [
-                                                                                   "blank",
-                                                                                   ""
-                                                                               ],
-                                                                    "spoken_records":  [
-                                                                                           {
-                                                                                               "t":  1792488385873,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "blank",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           },
-                                                                                           {
-                                                                                               "t":  1792488385876,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "1",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           }
-                                                                                       ],
-                                                                    "spoken_end":  "confirmation",
-                                                                    "clipboard":  null,
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  955,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  true,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s7",
-                                                "t_start_ms":  1792488388982,
-                                                "t_end_ms":  1792488390207,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "NumpadPlus",
-                                                               "repeat":  1
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "PC Cursor",
-                                                                    "spoken":  [
-                                                                                   "PC Cursor",
-                                                                                   ""
-                                                                               ],
-                                                                    "spoken_records":  [
-                                                                                           {
-                                                                                               "t":  1792488389015,
+                                                                                               "t":  1792514844553,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -2606,7 +2593,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488389137,
+                                                                                               "t":  1792514844671,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -2622,7 +2609,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  956,
+                                                                    "settle_ms":  957,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -2631,8 +2618,8 @@
                                             },
                                             {
                                                 "step_id":  "s8",
-                                                "t_start_ms":  1792488391194,
-                                                "t_end_ms":  1792488394381,
+                                                "t_start_ms":  1792514846720,
+                                                "t_end_ms":  1792514849887,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Alt+Delete",
@@ -2648,7 +2635,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488391393,
+                                                                                               "t":  1792514846921,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -2683,7 +2670,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488391617,
+                                                                                               "t":  1792514847141,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -2694,7 +2681,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488391817,
+                                                                                               "t":  1792514847341,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -2717,7 +2704,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488393317,
+                                                                                               "t":  1792514848842,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -2733,7 +2720,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2869,
+                                                                    "settle_ms":  2833,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -2742,8 +2729,8 @@
                                             },
                                             {
                                                 "step_id":  "s9",
-                                                "t_start_ms":  1792488395392,
-                                                "t_end_ms":  1792488396958,
+                                                "t_start_ms":  1792514850919,
+                                                "t_end_ms":  1792514852444,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Insert+Up",
@@ -2757,7 +2744,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792488395582,
+                                                                                               "t":  1792514851109,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -2780,7 +2767,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792488395857,
+                                                                                               "t":  1792514851381,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -2796,7 +2783,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1227,
+                                                                    "settle_ms":  1206,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -2807,8 +2794,8 @@
                        "trial_success":  true,
                        "trace_file":  "516-desktop-jaws-cursor-trial3.jsonl",
                        "page_load_settled":  true,
-                       "trace_sha256":  "eaa3d889e872322a1d3227e4086070990d5e738da9856f294a59a38ef8c4650c"
+                       "trace_sha256":  "714bb3b1b297857a36fbdbcb2445e8aa8a513c40f4a2aad7646aa22d53e7c195"
                    }
                ],
-    "total_elapsed_ms":  120272
+    "total_elapsed_ms":  120967
 }
