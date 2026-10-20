@@ -21,6 +21,8 @@ To record one:
 | 556 | Shift+Period and Shift+Comma across a news article: regions, the article, a nested list (twice at its end), a table cell, a block quote, the footer | `news-article.html` |
 | 557 | The same keys where no element is around the text | `doc-reading.html` |
 | 558 | S and D, with Shift, and Ctrl+Insert+Right, Left and Up from paragraphs, list items, a list, links and headings: what JAWS counts as the same element | `same-element.html` (new) |
+| 559 | Jump to Line (J) with a line and Enter, then where the cursor went; Shift+J; a line past the last | `news-article.html` |
+| 560 | The Word List (Ctrl+Insert+W), and W and Shift+W with a word chosen and without | `news-article.html` |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.
