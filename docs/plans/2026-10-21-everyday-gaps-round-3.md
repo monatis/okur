@@ -23,7 +23,7 @@ The rounds queued at the end of round 2, in order (each behind the one before):
 | snap60 | virtual-keys, colors and news-article captured through IA2 again, with relations and text colors (`okur.exe` 36671d07) | import the snapshots: Has Flows To, Equals and Say Color replay |
 | live12 | Okur reading live: its list dialogs (222-260, 274) and round 3's features (205, 284, 293, 294, 323, 513, 515, 516, 534), `okur.exe` 87fadfd0 | `okur live-parity` against live11 and the replay |
 | 61 | 568 (JAWS's text analysis on Insert+Tab, a new Notepad fixture), 569 (Route PC to Virtual on elements that cannot take the focus) | build each |
-| 62 | 516 and 546 again with `okur.exe` c0eff923 (built at `5ccd78c`: DPI aware, so positions are real pixels; an edit's up-down buddy), 570 (the Speech History's Ctrl+H and Shift+H), 571 (Insert+F4's question, last) | import: 516's cursor points and 546/s8's spin box should replay; build 570 and 571 |
+| 62 | 516 and 546 again with `okur.exe` 71c6fe60 (built at `d4b5da4`: DPI aware, so positions are real pixels; an edit's up-down buddy; `okur tray`), 570 (the Speech History's Ctrl+H and Shift+H), 571 (Insert+F4's question, last) | import: 516's cursor points and 546/s8's spin box should replay; build 570 and 571; then `okur tray` on old-pc against 511/s4's six icons |
 
 For each: fetch with `lab-fetch.sh` (a stalled fetch is stopped and started again), grep the
 evidence and traces for links, the lab account's folders and the owner's name, check the
