@@ -1,0 +1,23 @@
+{
+  "id": "563-web-flow-to",
+  "name": "aria-flowto: Z to the division that flows to the lists, Say Line, Up and Down onto it, Equals to follow the flow, Say Line, Shift+Equals back, Equals twice",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/virtual-keys.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Z" },
+    { "id": "s2", "type": "key", "command": "Z" },
+    { "id": "s3", "type": "key", "command": "Z" },
+    { "id": "s4", "type": "key", "command": "Z" },
+    { "id": "s5", "type": "key", "command": "Insert+Up" },
+    { "id": "s6", "type": "key", "command": "Up" },
+    { "id": "s7", "type": "key", "command": "Down" },
+    { "id": "s8", "type": "key", "command": "Equals" },
+    { "id": "s9", "type": "key", "command": "Insert+Up" },
+    { "id": "s10", "type": "key", "command": "Shift+Equals" },
+    { "id": "s11", "type": "key", "command": "Equals" },
+    { "id": "s12", "type": "key", "command": "Equals" }
+  ]
+}

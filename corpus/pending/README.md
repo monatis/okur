@@ -25,6 +25,7 @@ To record one:
 | 560 | The Word List (Ctrl+Insert+W), and W and Shift+W with a word chosen and without | `news-article.html` |
 | 561 | The clipboard keys: SayClipboard, View Clipboard Text, AppendSelectedTextToClipboard (the Windows-key scripts called by name) | `desktop-editor.ps1` |
 | 562 | Selections of growing size, each copied: where JAWS says "selected N characters up to" instead of the text, and how it counts | `news-article.html` |
+| 563 | aria-flowto: the division that flows to the lists read, then Equals and Shift+Equals along the flow | `virtual-keys.html` |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.
