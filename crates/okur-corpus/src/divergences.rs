@@ -274,6 +274,20 @@ divergences! {
     "the owner's rule on JAWS's accidents, 2026-10-18";
 
     Difference::Step => [
+        "285-web-text-area-arrows-auto-forms/s19",
+        "285-web-text-area-arrows-auto-forms/s20",
+        "285-web-text-area-arrows-auto-forms/s21",
+        "285-web-text-area-arrows-auto-forms/s22",
+        "285-web-text-area-arrows-auto-forms/s23",
+        "285-web-text-area-arrows-auto-forms/s24",
+    ],
+    "The same accident from a text area holding text: with Auto Forms Mode, Up from its first \
+     line went to \"main region\", then the page's title for every Up after, in every trial of \
+     round 55, skipping the page's lines above the field. Okur goes on to the line before the \
+     field (its label, \"Text\") and up through the page.",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
+
+    Difference::Step => [
         "522-desktop-wordpad-reading/s1",
         "522-desktop-wordpad-reading/s2",
         "522-desktop-wordpad-reading/s3",

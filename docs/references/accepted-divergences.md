@@ -229,6 +229,19 @@ A step can be in more than one entry; all of its entries apply.
   area went to the page's first lines and stayed there, skipping the whole form above it.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### Up out of a text area holding text jumps to the page's top (Auto Forms Mode)
+
+- Steps: `285-web-text-area-arrows-auto-forms/s19` to `/s24` (the full keys:
+  `285-web-text-area-arrows-auto-forms/s19`, `285-web-text-area-arrows-auto-forms/s20`,
+  `285-web-text-area-arrows-auto-forms/s21`, `285-web-text-area-arrows-auto-forms/s22`,
+  `285-web-text-area-arrows-auto-forms/s23`, `285-web-text-area-arrows-auto-forms/s24`).
+- Difference: the whole step. JAWS says "main region", then the page's title for every Up
+  after it; Okur reads the field's label, "Text", and the page's lines above it.
+- Why: the accident of 282 again, from a text area that holds text: Up from its first line
+  went to the page's first lines in every trial of round 55 (2026-10-20), skipping the lines
+  between.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-18.
+
 ### JAWS reads nothing of WordPad's document
 
 - Steps: `522-desktop-wordpad-reading/s1` to `/s6`, `/s8` to `/s14`, `/s16` to `/s18` (the
