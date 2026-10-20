@@ -331,7 +331,8 @@ from the [performance review](docs/backlog/performance-review-2026-10-20.md) of 
 - [`crates/okur`](crates/okur): the screen reader (`okur.exe`, and `okur-sr.exe`, the build
   installed with UI Access) and the harness commands (`run`, `quit`, `doctor`, `parity`,
   `live-parity`, `evidence`, `trace`, `snapshot`, `latency`, `keys`, `jaws-history`, and
-  more).
+  more), with `okur-lab-keys.exe`, the lab machine's key sender with UI Access for JAWS's own
+  dialogs.
 - [`crates/okur-setup`](crates/okur-setup): installs and uninstalls Okur (its start at
   sign-in, its Ease of Access registration) and the development signing script; not yet for
   users.
