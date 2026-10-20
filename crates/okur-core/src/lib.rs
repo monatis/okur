@@ -12,6 +12,7 @@ pub mod element_lists;
 pub mod engine;
 pub mod event;
 pub mod input;
+pub mod keyboard_help;
 pub mod linearize;
 pub mod live_text;
 pub mod messages;
