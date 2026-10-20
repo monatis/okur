@@ -6,11 +6,11 @@
     "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
     "window_title": "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
     "window_class": "Chrome_WidgetWin_1",
-    "process_version": "155.0.8059.40",
+    "process_version": "155.0.8059.84",
     "fixture_sha256": "b3567efa1f8f22dfc3fbc0347978c42909d2921a59b1559fdb51dac6120b0fa4",
-    "captured_at_unix_ms": 1792010639047,
+    "captured_at_unix_ms": 1792480866046,
     "node_count": 128,
-    "capture_ms": 1091
+    "capture_ms": 752
   },
   "root": {
     "msaa_role": 15,
@@ -19,7 +19,7 @@
     "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
     "msaa_states": 1048644,
     "ia2_states": 1024,
-    "unique_id": -998,
+    "unique_id": -105159,
     "attributes": {
       "explicit-name": "true",
       "name-from": "related-element",
@@ -50,6 +50,8 @@
         "start": 0,
         "end": 4,
         "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
           "font-family": "Times New Roman",
           "font-size": "12pt"
         }
@@ -61,7 +63,7 @@
         "ia2_role": 1069,
         "msaa_states": 0,
         "ia2_states": 1024,
-        "unique_id": -969,
+        "unique_id": -105122,
         "attributes": {
           "display": "block",
           "tag": "header",
@@ -84,6 +86,8 @@
             "start": 0,
             "end": 1,
             "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,238)",
               "font-family": "Times New Roman",
               "font-size": "12pt",
               "text-underline-style": "solid"
@@ -93,6 +97,8 @@
             "start": 1,
             "end": 2,
             "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
               "font-family": "Times New Roman",
               "font-size": "12pt"
             }
@@ -106,7 +112,7 @@
             "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#top",
             "msaa_states": 5242880,
             "ia2_states": 1024,
-            "unique_id": -975,
+            "unique_id": -105130,
             "attributes": {
               "display": "inline",
               "name-from": "contents",
@@ -125,6 +131,8 @@
                 "start": 0,
                 "end": 17,
                 "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,238)",
                   "font-family": "Times New Roman",
                   "font-size": "12pt",
                   "text-underline-style": "solid"
@@ -138,7 +146,7 @@
                 "name": "Riverside Gazette",
                 "msaa_states": 4194304,
                 "ia2_states": 1024,
-                "unique_id": -943,
+                "unique_id": -105073,
                 "attributes": {
                   "name-from": "contents"
                 },
@@ -154,6 +162,8 @@
                     "start": 0,
                     "end": 17,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt",
                       "text-underline-style": "solid"
@@ -169,7 +179,7 @@
             "name": "Primary",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -916,
+            "unique_id": -105043,
             "attributes": {
               "display": "block",
               "explicit-name": "true",
@@ -190,6 +200,8 @@
                 "start": 0,
                 "end": 1,
                 "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
                   "font-family": "Times New Roman",
                   "font-size": "12pt"
                 }
@@ -201,7 +213,7 @@
                 "ia2_role": 33,
                 "msaa_states": 64,
                 "ia2_states": 1024,
-                "unique_id": -917,
+                "unique_id": -105045,
                 "attributes": {
                   "display": "block",
                   "setsize": "4",
@@ -237,6 +249,8 @@
                     "start": 0,
                     "end": 4,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt"
                     }
@@ -248,7 +262,7 @@
                     "ia2_role": 34,
                     "msaa_states": 64,
                     "ia2_states": 1024,
-                    "unique_id": -924,
+                    "unique_id": -105058,
                     "attributes": {
                       "display": "list-item",
                       "level": "1",
@@ -274,6 +288,8 @@
                         "start": 0,
                         "end": 2,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -282,6 +298,8 @@
                         "start": 2,
                         "end": 3,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt",
                           "text-underline-style": "solid"
@@ -295,7 +313,7 @@
                         "name": "• ",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -915,
+                        "unique_id": -105078,
                         "attributes": {
                           "display": "inline-block",
                           "name-from": "contents",
@@ -314,6 +332,8 @@
                             "start": 0,
                             "end": 2,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -327,7 +347,7 @@
                         "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#news",
                         "msaa_states": 5242880,
                         "ia2_states": 1024,
-                        "unique_id": -934,
+                        "unique_id": -105068,
                         "attributes": {
                           "display": "inline",
                           "name-from": "contents",
@@ -346,6 +366,8 @@
                             "start": 0,
                             "end": 4,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt",
                               "text-underline-style": "solid"
@@ -359,7 +381,7 @@
                             "name": "News",
                             "msaa_states": 4194304,
                             "ia2_states": 1024,
-                            "unique_id": -920,
+                            "unique_id": -105046,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -375,6 +397,8 @@
                                 "start": 0,
                                 "end": 4,
                                 "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,238)",
                                   "font-family": "Times New Roman",
                                   "font-size": "12pt",
                                   "text-underline-style": "solid"
@@ -391,7 +415,7 @@
                     "ia2_role": 34,
                     "msaa_states": 64,
                     "ia2_states": 1024,
-                    "unique_id": -936,
+                    "unique_id": -105072,
                     "attributes": {
                       "display": "list-item",
                       "level": "1",
@@ -417,6 +441,8 @@
                         "start": 0,
                         "end": 2,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -425,6 +451,8 @@
                         "start": 2,
                         "end": 3,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt",
                           "text-underline-style": "solid"
@@ -438,7 +466,7 @@
                         "name": "• ",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -922,
+                        "unique_id": -105049,
                         "attributes": {
                           "display": "inline-block",
                           "name-from": "contents",
@@ -457,6 +485,8 @@
                             "start": 0,
                             "end": 2,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -470,7 +500,7 @@
                         "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#sports",
                         "msaa_states": 5242880,
                         "ia2_states": 1024,
-                        "unique_id": -945,
+                        "unique_id": -105087,
                         "attributes": {
                           "display": "inline",
                           "name-from": "contents",
@@ -489,6 +519,8 @@
                             "start": 0,
                             "end": 6,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt",
                               "text-underline-style": "solid"
@@ -502,7 +534,7 @@
                             "name": "Sports",
                             "msaa_states": 4194304,
                             "ia2_states": 1024,
-                            "unique_id": -892,
+                            "unique_id": -105053,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -518,6 +550,8 @@
                                 "start": 0,
                                 "end": 6,
                                 "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,238)",
                                   "font-family": "Times New Roman",
                                   "font-size": "12pt",
                                   "text-underline-style": "solid"
@@ -534,7 +568,7 @@
                     "ia2_role": 34,
                     "msaa_states": 64,
                     "ia2_states": 1024,
-                    "unique_id": -877,
+                    "unique_id": -104986,
                     "attributes": {
                       "display": "list-item",
                       "level": "1",
@@ -560,6 +594,8 @@
                         "start": 0,
                         "end": 2,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -568,6 +604,8 @@
                         "start": 2,
                         "end": 3,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt",
                           "text-underline-style": "solid"
@@ -581,7 +619,7 @@
                         "name": "• ",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -898,
+                        "unique_id": -105014,
                         "attributes": {
                           "display": "inline-block",
                           "name-from": "contents",
@@ -600,6 +638,8 @@
                             "start": 0,
                             "end": 2,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -613,7 +653,7 @@
                         "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#culture",
                         "msaa_states": 5242880,
                         "ia2_states": 1024,
-                        "unique_id": -880,
+                        "unique_id": -105000,
                         "attributes": {
                           "display": "inline",
                           "name-from": "contents",
@@ -632,6 +672,8 @@
                             "start": 0,
                             "end": 7,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt",
                               "text-underline-style": "solid"
@@ -645,7 +687,7 @@
                             "name": "Culture",
                             "msaa_states": 4194304,
                             "ia2_states": 1024,
-                            "unique_id": -905,
+                            "unique_id": -105017,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -661,6 +703,8 @@
                                 "start": 0,
                                 "end": 7,
                                 "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,238)",
                                   "font-family": "Times New Roman",
                                   "font-size": "12pt",
                                   "text-underline-style": "solid"
@@ -677,7 +721,7 @@
                     "ia2_role": 34,
                     "msaa_states": 64,
                     "ia2_states": 1024,
-                    "unique_id": -887,
+                    "unique_id": -105010,
                     "attributes": {
                       "display": "list-item",
                       "level": "1",
@@ -703,6 +747,8 @@
                         "start": 0,
                         "end": 2,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -711,6 +757,8 @@
                         "start": 2,
                         "end": 3,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt",
                           "text-underline-style": "solid"
@@ -724,7 +772,7 @@
                         "name": "• ",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -868,
+                        "unique_id": -105029,
                         "attributes": {
                           "display": "inline-block",
                           "name-from": "contents",
@@ -743,6 +791,8 @@
                             "start": 0,
                             "end": 2,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -756,7 +806,7 @@
                         "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#opinion",
                         "msaa_states": 5242880,
                         "ia2_states": 1024,
-                        "unique_id": -893,
+                        "unique_id": -105015,
                         "attributes": {
                           "display": "inline",
                           "name-from": "contents",
@@ -775,6 +825,8 @@
                             "start": 0,
                             "end": 7,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt",
                               "text-underline-style": "solid"
@@ -788,7 +840,7 @@
                             "name": "Opinion",
                             "msaa_states": 4194304,
                             "ia2_states": 1024,
-                            "unique_id": -879,
+                            "unique_id": -104987,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -804,6 +856,8 @@
                                 "start": 0,
                                 "end": 7,
                                 "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,238)",
                                   "font-family": "Times New Roman",
                                   "font-size": "12pt",
                                   "text-underline-style": "solid"
@@ -826,7 +880,7 @@
         "ia2_role": 1069,
         "msaa_states": 0,
         "ia2_states": 1024,
-        "unique_id": -900,
+        "unique_id": -105026,
         "attributes": {
           "display": "block",
           "tag": "main",
@@ -845,6 +899,8 @@
             "start": 0,
             "end": 1,
             "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
               "font-family": "Times New Roman",
               "font-size": "12pt"
             }
@@ -856,7 +912,7 @@
             "ia2_role": 15,
             "msaa_states": 64,
             "ia2_states": 1024,
-            "unique_id": -908,
+            "unique_id": -105036,
             "attributes": {
               "display": "block",
               "tag": "article",
@@ -922,6 +978,8 @@
                 "start": 0,
                 "end": 1,
                 "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
                   "font-family": "Times New Roman",
                   "font-size": "24pt",
                   "font-weight": "bold"
@@ -931,6 +989,8 @@
                 "start": 1,
                 "end": 4,
                 "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
                   "font-family": "Times New Roman",
                   "font-size": "12pt"
                 }
@@ -939,6 +999,8 @@
                 "start": 4,
                 "end": 5,
                 "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
                   "font-family": "Times New Roman",
                   "font-size": "18pt",
                   "font-weight": "bold"
@@ -948,6 +1010,8 @@
                 "start": 5,
                 "end": 7,
                 "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
                   "font-family": "Times New Roman",
                   "font-size": "12pt"
                 }
@@ -956,6 +1020,8 @@
                 "start": 7,
                 "end": 8,
                 "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
                   "font-family": "Times New Roman",
                   "font-size": "18pt",
                   "font-weight": "bold"
@@ -965,6 +1031,8 @@
                 "start": 8,
                 "end": 9,
                 "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
                   "font-family": "Times New Roman",
                   "font-size": "12pt"
                 }
@@ -973,6 +1041,8 @@
                 "start": 9,
                 "end": 10,
                 "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
                   "font-family": "Times New Roman",
                   "font-size": "14pt",
                   "font-weight": "bold"
@@ -982,6 +1052,8 @@
                 "start": 10,
                 "end": 13,
                 "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
                   "font-family": "Times New Roman",
                   "font-size": "12pt"
                 }
@@ -994,7 +1066,7 @@
                 "name": "City Library Expands Evening Hours",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -980,
+                "unique_id": -105135,
                 "attributes": {
                   "display": "block",
                   "level": "1",
@@ -1019,6 +1091,8 @@
                     "start": 0,
                     "end": 34,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "24pt",
                       "font-weight": "bold"
@@ -1032,7 +1106,7 @@
                     "name": "City Library Expands Evening Hours",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -889,
+                    "unique_id": -105008,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -1048,6 +1122,8 @@
                         "start": 0,
                         "end": 34,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "24pt",
                           "font-weight": "bold"
@@ -1062,7 +1138,7 @@
                 "ia2_role": 1054,
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -985,
+                "unique_id": -105143,
                 "attributes": {
                   "display": "block",
                   "tag": "p",
@@ -1080,6 +1156,8 @@
                     "start": 0,
                     "end": 3,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt"
                     }
@@ -1088,6 +1166,8 @@
                     "start": 3,
                     "end": 4,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt",
                       "text-underline-style": "solid"
@@ -1097,6 +1177,8 @@
                     "start": 4,
                     "end": 17,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt"
                     }
@@ -1109,7 +1191,7 @@
                     "name": "By ",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -997,
+                    "unique_id": -105013,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -1125,6 +1207,8 @@
                         "start": 0,
                         "end": 3,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -1138,7 +1222,7 @@
                     "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#author",
                     "msaa_states": 5242880,
                     "ia2_states": 1024,
-                    "unique_id": -999,
+                    "unique_id": -105160,
                     "attributes": {
                       "display": "inline",
                       "name-from": "contents",
@@ -1157,6 +1241,8 @@
                         "start": 0,
                         "end": 11,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt",
                           "text-underline-style": "solid"
@@ -1170,7 +1256,7 @@
                         "name": "Maria Lopez",
                         "msaa_states": 4194304,
                         "ia2_states": 1024,
-                        "unique_id": -1005,
+                        "unique_id": -105165,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -1186,6 +1272,8 @@
                             "start": 0,
                             "end": 11,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt",
                               "text-underline-style": "solid"
@@ -1201,7 +1289,7 @@
                     "name": ", published ",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -1008,
+                    "unique_id": -105168,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -1217,6 +1305,8 @@
                         "start": 0,
                         "end": 12,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -1228,7 +1318,7 @@
                     "ia2_role": 1065,
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -956,
+                    "unique_id": -105103,
                     "attributes": {
                       "datetime": "2026-03-14",
                       "display": "inline",
@@ -1247,6 +1337,8 @@
                         "start": 0,
                         "end": 14,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -1259,7 +1351,7 @@
                         "name": "March 14, 2026",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -981,
+                        "unique_id": -105178,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -1275,6 +1367,8 @@
                             "start": 0,
                             "end": 14,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -1290,7 +1384,7 @@
                 "ia2_role": 1054,
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -953,
+                "unique_id": -105099,
                 "attributes": {
                   "display": "block",
                   "tag": "p",
@@ -1300,6 +1394,10 @@
                 "lines": [
                   [
                     0,
+                    144
+                  ],
+                  [
+                    144,
                     186
                   ]
                 ],
@@ -1308,6 +1406,8 @@
                     "start": 0,
                     "end": 48,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt"
                     }
@@ -1316,6 +1416,8 @@
                     "start": 48,
                     "end": 49,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt",
                       "font-weight": "bold"
@@ -1325,6 +1427,8 @@
                     "start": 49,
                     "end": 150,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt"
                     }
@@ -1333,6 +1437,8 @@
                     "start": 150,
                     "end": 151,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt",
                       "font-style": "italic"
@@ -1342,6 +1448,8 @@
                     "start": 151,
                     "end": 186,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt"
                     }
@@ -1354,7 +1462,7 @@
                     "name": "The Riverside City Library will stay open until ",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -984,
+                    "unique_id": -105134,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -1370,6 +1478,8 @@
                         "start": 0,
                         "end": 48,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -1381,7 +1491,7 @@
                     "ia2_role": 1065,
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -948,
+                    "unique_id": -105092,
                     "attributes": {
                       "display": "inline",
                       "tag": "strong",
@@ -1399,6 +1509,8 @@
                         "start": 0,
                         "end": 6,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt",
                           "font-weight": "bold"
@@ -1412,7 +1524,7 @@
                         "name": "9 p.m.",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -1003,
+                        "unique_id": -105141,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -1428,6 +1540,8 @@
                             "start": 0,
                             "end": 6,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt",
                               "font-weight": "bold"
@@ -1443,7 +1557,7 @@
                     "name": " on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which ",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -963,
+                    "unique_id": -105161,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -1451,6 +1565,10 @@
                     "lines": [
                       [
                         0,
+                        95
+                      ],
+                      [
+                        95,
                         101
                       ]
                     ],
@@ -1459,6 +1577,8 @@
                         "start": 0,
                         "end": 101,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -1470,7 +1590,7 @@
                     "ia2_role": 1065,
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -1009,
+                    "unique_id": -105174,
                     "attributes": {
                       "display": "inline",
                       "tag": "em",
@@ -1488,6 +1608,8 @@
                         "start": 0,
                         "end": 4,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt",
                           "font-style": "italic"
@@ -1501,7 +1623,7 @@
                         "name": "most",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -952,
+                        "unique_id": -105105,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -1517,6 +1639,8 @@
                             "start": 0,
                             "end": 4,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt",
                               "font-style": "italic"
@@ -1532,7 +1656,7 @@
                     "name": " respondents asked for later hours.",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -950,
+                    "unique_id": -105098,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -1548,6 +1672,8 @@
                         "start": 0,
                         "end": 35,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -1562,7 +1688,7 @@
                 "name": "Front entrance of the Riverside City Library at dusk",
                 "msaa_states": 64,
                 "ia2_states": 1024,
-                "unique_id": -1004,
+                "unique_id": -105167,
                 "attributes": {
                   "display": "inline",
                   "explicit-name": "true",
@@ -1578,7 +1704,7 @@
                 "name": "What changes",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -996,
+                "unique_id": -105156,
                 "attributes": {
                   "display": "block",
                   "level": "2",
@@ -1603,6 +1729,8 @@
                     "start": 0,
                     "end": 12,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "18pt",
                       "font-weight": "bold"
@@ -1616,7 +1744,7 @@
                     "name": "What changes",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -973,
+                    "unique_id": -105093,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -1632,6 +1760,8 @@
                         "start": 0,
                         "end": 12,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "18pt",
                           "font-weight": "bold"
@@ -1646,7 +1776,7 @@
                 "ia2_role": 1054,
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -988,
+                "unique_id": -105147,
                 "attributes": {
                   "display": "block",
                   "tag": "p",
@@ -1656,6 +1786,10 @@
                 "lines": [
                   [
                     0,
+                    153
+                  ],
+                  [
+                    153,
                     194
                   ]
                 ],
@@ -1664,6 +1798,8 @@
                     "start": 0,
                     "end": 194,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt"
                     }
@@ -1676,7 +1812,7 @@
                     "name": "Membership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org — or call 555-0142. Attendance rose 3.5% last year, and staff say they can't wait.",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -967,
+                    "unique_id": -105123,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -1684,6 +1820,10 @@
                     "lines": [
                       [
                         0,
+                        153
+                      ],
+                      [
+                        153,
                         194
                       ]
                     ],
@@ -1692,6 +1832,8 @@
                         "start": 0,
                         "end": 194,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -1705,7 +1847,7 @@
                 "ia2_role": 33,
                 "msaa_states": 64,
                 "ia2_states": 1024,
-                "unique_id": -989,
+                "unique_id": -105145,
                 "attributes": {
                   "display": "block",
                   "setsize": "3",
@@ -1737,6 +1879,8 @@
                     "start": 0,
                     "end": 3,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt"
                     }
@@ -1748,7 +1892,7 @@
                     "ia2_role": 34,
                     "msaa_states": 64,
                     "ia2_states": 1024,
-                    "unique_id": -982,
+                    "unique_id": -105139,
                     "attributes": {
                       "display": "list-item",
                       "level": "1",
@@ -1774,6 +1918,8 @@
                         "start": 0,
                         "end": 33,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -1786,7 +1932,7 @@
                         "name": "• ",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -961,
+                        "unique_id": -105115,
                         "attributes": {
                           "display": "inline-block",
                           "name-from": "contents",
@@ -1805,6 +1951,8 @@
                             "start": 0,
                             "end": 2,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -1817,7 +1965,7 @@
                         "name": "Weekday hours: 9 a.m. to 9 p.m.",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -925,
+                        "unique_id": -105111,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -1833,6 +1981,8 @@
                             "start": 0,
                             "end": 31,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -1846,7 +1996,7 @@
                     "ia2_role": 34,
                     "msaa_states": 64,
                     "ia2_states": 1024,
-                    "unique_id": -902,
+                    "unique_id": -105028,
                     "attributes": {
                       "display": "list-item",
                       "level": "1",
@@ -1876,6 +2026,8 @@
                         "start": 0,
                         "end": 38,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -1888,7 +2040,7 @@
                         "name": "• ",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -921,
+                        "unique_id": -105059,
                         "attributes": {
                           "display": "inline-block",
                           "name-from": "contents",
@@ -1907,6 +2059,8 @@
                             "start": 0,
                             "end": 2,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -1919,7 +2073,7 @@
                         "name": "Weekend hours, which do not change:",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -918,
+                        "unique_id": -105051,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -1935,6 +2089,8 @@
                             "start": 0,
                             "end": 35,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -1946,7 +2102,7 @@
                         "ia2_role": 33,
                         "msaa_states": 64,
                         "ia2_states": 1024,
-                        "unique_id": -899,
+                        "unique_id": -105024,
                         "attributes": {
                           "display": "block",
                           "setsize": "2",
@@ -1974,6 +2130,8 @@
                             "start": 0,
                             "end": 2,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -1985,7 +2143,7 @@
                             "ia2_role": 34,
                             "msaa_states": 64,
                             "ia2_states": 1024,
-                            "unique_id": -894,
+                            "unique_id": -105018,
                             "attributes": {
                               "display": "list-item",
                               "level": "2",
@@ -2011,6 +2169,8 @@
                                 "start": 0,
                                 "end": 29,
                                 "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
                                   "font-family": "Times New Roman",
                                   "font-size": "12pt"
                                 }
@@ -2023,7 +2183,7 @@
                                 "name": "◦ ",
                                 "msaa_states": 0,
                                 "ia2_states": 1024,
-                                "unique_id": -940,
+                                "unique_id": -105048,
                                 "attributes": {
                                   "display": "inline-block",
                                   "name-from": "contents",
@@ -2042,6 +2202,8 @@
                                     "start": 0,
                                     "end": 2,
                                     "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
                                       "font-family": "Times New Roman",
                                       "font-size": "12pt"
                                     }
@@ -2054,7 +2216,7 @@
                                 "name": "Saturday: 10 a.m. to 6 p.m.",
                                 "msaa_states": 0,
                                 "ia2_states": 1024,
-                                "unique_id": -935,
+                                "unique_id": -105079,
                                 "attributes": {
                                   "name-from": "contents"
                                 },
@@ -2070,6 +2232,8 @@
                                     "start": 0,
                                     "end": 27,
                                     "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
                                       "font-family": "Times New Roman",
                                       "font-size": "12pt"
                                     }
@@ -2083,7 +2247,7 @@
                             "ia2_role": 34,
                             "msaa_states": 64,
                             "ia2_states": 1024,
-                            "unique_id": -883,
+                            "unique_id": -105004,
                             "attributes": {
                               "display": "list-item",
                               "level": "2",
@@ -2109,6 +2273,8 @@
                                 "start": 0,
                                 "end": 24,
                                 "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
                                   "font-family": "Times New Roman",
                                   "font-size": "12pt"
                                 }
@@ -2121,7 +2287,7 @@
                                 "name": "◦ ",
                                 "msaa_states": 0,
                                 "ia2_states": 1024,
-                                "unique_id": -933,
+                                "unique_id": -105070,
                                 "attributes": {
                                   "display": "inline-block",
                                   "name-from": "contents",
@@ -2140,6 +2306,8 @@
                                     "start": 0,
                                     "end": 2,
                                     "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
                                       "font-family": "Times New Roman",
                                       "font-size": "12pt"
                                     }
@@ -2152,7 +2320,7 @@
                                 "name": "Sunday: noon to 5 p.m.",
                                 "msaa_states": 0,
                                 "ia2_states": 1024,
-                                "unique_id": -885,
+                                "unique_id": -105067,
                                 "attributes": {
                                   "name-from": "contents"
                                 },
@@ -2168,6 +2336,8 @@
                                     "start": 0,
                                     "end": 22,
                                     "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
                                       "font-family": "Times New Roman",
                                       "font-size": "12pt"
                                     }
@@ -2185,7 +2355,7 @@
                     "ia2_role": 34,
                     "msaa_states": 64,
                     "ia2_states": 1024,
-                    "unique_id": -876,
+                    "unique_id": -104997,
                     "attributes": {
                       "display": "list-item",
                       "level": "1",
@@ -2211,6 +2381,8 @@
                         "start": 0,
                         "end": 6,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -2219,6 +2391,8 @@
                         "start": 6,
                         "end": 7,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt",
                           "text-underline-style": "solid"
@@ -2228,6 +2402,8 @@
                         "start": 7,
                         "end": 20,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -2240,7 +2416,7 @@
                         "name": "• ",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -878,
+                        "unique_id": -105001,
                         "attributes": {
                           "display": "inline-block",
                           "name-from": "contents",
@@ -2259,6 +2435,8 @@
                             "start": 0,
                             "end": 2,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -2271,7 +2449,7 @@
                         "name": "New ",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -872,
+                        "unique_id": -104998,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -2287,6 +2465,8 @@
                             "start": 0,
                             "end": 4,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -2300,7 +2480,7 @@
                         "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#study-rooms",
                         "msaa_states": 5242880,
                         "ia2_states": 1024,
-                        "unique_id": -944,
+                        "unique_id": -105085,
                         "attributes": {
                           "display": "inline",
                           "name-from": "contents",
@@ -2319,6 +2499,8 @@
                             "start": 0,
                             "end": 11,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt",
                               "text-underline-style": "solid"
@@ -2332,7 +2514,7 @@
                             "name": "study rooms",
                             "msaa_states": 4194304,
                             "ia2_states": 1024,
-                            "unique_id": -904,
+                            "unique_id": -104992,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -2348,6 +2530,8 @@
                                 "start": 0,
                                 "end": 11,
                                 "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,238)",
                                   "font-family": "Times New Roman",
                                   "font-size": "12pt",
                                   "text-underline-style": "solid"
@@ -2363,7 +2547,7 @@
                         "name": " open in May.",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -891,
+                        "unique_id": -105031,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -2379,6 +2563,8 @@
                             "start": 0,
                             "end": 13,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -2395,7 +2581,7 @@
                 "name": "Opening schedule",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -939,
+                "unique_id": -105080,
                 "attributes": {
                   "display": "block",
                   "level": "2",
@@ -2420,6 +2606,8 @@
                     "start": 0,
                     "end": 16,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "18pt",
                       "font-weight": "bold"
@@ -2433,7 +2621,7 @@
                     "name": "Opening schedule",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -992,
+                    "unique_id": -105020,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -2449,6 +2637,8 @@
                         "start": 0,
                         "end": 16,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "18pt",
                           "font-weight": "bold"
@@ -2464,7 +2654,7 @@
                 "name": "Branch hours after the change",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -930,
+                "unique_id": -105064,
                 "attributes": {
                   "display": "table",
                   "explicit-name": "true",
@@ -2496,18 +2686,25 @@
                     "start": 0,
                     "end": 4,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt"
                     }
                   }
                 ],
+                "relations": {
+                  "labelledBy": [
+                    -105055
+                  ]
+                },
                 "children": [
                   {
                     "msaa_role": 20,
                     "ia2_role": 1026,
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -926,
+                    "unique_id": -105055,
                     "attributes": {
                       "display": "table-caption",
                       "tag": "caption",
@@ -2525,11 +2722,18 @@
                         "start": 0,
                         "end": 29,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
                       }
                     ],
+                    "relations": {
+                      "labelFor": [
+                        -105064
+                      ]
+                    },
                     "children": [
                       {
                         "msaa_role": 41,
@@ -2537,7 +2741,7 @@
                         "name": "Branch hours after the change",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -995,
+                        "unique_id": -105149,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -2553,6 +2757,8 @@
                             "start": 0,
                             "end": 29,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -2566,7 +2772,7 @@
                     "ia2_role": 28,
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -913,
+                    "unique_id": -105040,
                     "attributes": {
                       "display": "table-row",
                       "tag": "tr",
@@ -2592,6 +2798,8 @@
                         "start": 0,
                         "end": 3,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt",
                           "font-weight": "bold"
@@ -2605,7 +2813,7 @@
                         "name": "Branch",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -970,
+                        "unique_id": -105121,
                         "attributes": {
                           "display": "table-cell",
                           "name-from": "contents",
@@ -2625,6 +2833,8 @@
                             "start": 0,
                             "end": 6,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt",
                               "font-weight": "bold"
@@ -2638,7 +2848,7 @@
                             "name": "Branch",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -977,
+                            "unique_id": -105154,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -2654,6 +2864,8 @@
                                 "start": 0,
                                 "end": 6,
                                 "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
                                   "font-family": "Times New Roman",
                                   "font-size": "12pt",
                                   "font-weight": "bold"
@@ -2669,7 +2881,7 @@
                         "name": "Weekdays",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -971,
+                        "unique_id": -105124,
                         "attributes": {
                           "display": "table-cell",
                           "name-from": "contents",
@@ -2689,6 +2901,8 @@
                             "start": 0,
                             "end": 8,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt",
                               "font-weight": "bold"
@@ -2702,7 +2916,7 @@
                             "name": "Weekdays",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -1006,
+                            "unique_id": -105131,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -2718,6 +2932,8 @@
                                 "start": 0,
                                 "end": 8,
                                 "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
                                   "font-family": "Times New Roman",
                                   "font-size": "12pt",
                                   "font-weight": "bold"
@@ -2733,7 +2949,7 @@
                         "name": "Details",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -966,
+                        "unique_id": -105116,
                         "attributes": {
                           "display": "table-cell",
                           "name-from": "contents",
@@ -2753,6 +2969,8 @@
                             "start": 0,
                             "end": 7,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt",
                               "font-weight": "bold"
@@ -2766,7 +2984,7 @@
                             "name": "Details",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -1011,
+                            "unique_id": -105170,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -2782,6 +3000,8 @@
                                 "start": 0,
                                 "end": 7,
                                 "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
                                   "font-family": "Times New Roman",
                                   "font-size": "12pt",
                                   "font-weight": "bold"
@@ -2798,7 +3018,7 @@
                     "ia2_role": 28,
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -955,
+                    "unique_id": -105101,
                     "attributes": {
                       "display": "table-row",
                       "tag": "tr",
@@ -2824,6 +3044,8 @@
                         "start": 0,
                         "end": 1,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt",
                           "font-weight": "bold"
@@ -2833,6 +3055,8 @@
                         "start": 1,
                         "end": 3,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -2845,7 +3069,7 @@
                         "name": "Central",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -958,
+                        "unique_id": -105109,
                         "attributes": {
                           "display": "table-cell",
                           "name-from": "contents",
@@ -2865,6 +3089,8 @@
                             "start": 0,
                             "end": 7,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt",
                               "font-weight": "bold"
@@ -2878,7 +3104,7 @@
                             "name": "Central",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -1001,
+                            "unique_id": -105176,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -2894,6 +3120,8 @@
                                 "start": 0,
                                 "end": 7,
                                 "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
                                   "font-family": "Times New Roman",
                                   "font-size": "12pt",
                                   "font-weight": "bold"
@@ -2909,7 +3137,7 @@
                         "name": "9 a.m. to 9 p.m.",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -949,
+                        "unique_id": -105094,
                         "attributes": {
                           "display": "table-cell",
                           "name-from": "contents",
@@ -2929,6 +3157,8 @@
                             "start": 0,
                             "end": 16,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -2941,7 +3171,7 @@
                             "name": "9 a.m. to 9 p.m.",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -960,
+                            "unique_id": -105158,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -2957,6 +3187,8 @@
                                 "start": 0,
                                 "end": 16,
                                 "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
                                   "font-family": "Times New Roman",
                                   "font-size": "12pt"
                                 }
@@ -2971,7 +3203,7 @@
                         "name": "Directions",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -867,
+                        "unique_id": -105172,
                         "attributes": {
                           "display": "table-cell",
                           "name-from": "contents",
@@ -2991,6 +3223,8 @@
                             "start": 0,
                             "end": 1,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt",
                               "text-underline-style": "solid"
@@ -3005,7 +3239,7 @@
                             "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#central",
                             "msaa_states": 5242880,
                             "ia2_states": 1024,
-                            "unique_id": -869,
+                            "unique_id": -105179,
                             "attributes": {
                               "display": "inline",
                               "name-from": "contents",
@@ -3024,6 +3258,8 @@
                                 "start": 0,
                                 "end": 10,
                                 "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,238)",
                                   "font-family": "Times New Roman",
                                   "font-size": "12pt",
                                   "text-underline-style": "solid"
@@ -3037,7 +3273,7 @@
                                 "name": "Directions",
                                 "msaa_states": 4194304,
                                 "ia2_states": 1024,
-                                "unique_id": -962,
+                                "unique_id": -105102,
                                 "attributes": {
                                   "name-from": "contents"
                                 },
@@ -3053,6 +3289,8 @@
                                     "start": 0,
                                     "end": 10,
                                     "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,238)",
                                       "font-family": "Times New Roman",
                                       "font-size": "12pt",
                                       "text-underline-style": "solid"
@@ -3071,7 +3309,7 @@
                     "ia2_role": 28,
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -1002,
+                    "unique_id": -105164,
                     "attributes": {
                       "display": "table-row",
                       "tag": "tr",
@@ -3097,6 +3335,8 @@
                         "start": 0,
                         "end": 1,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt",
                           "font-weight": "bold"
@@ -3106,6 +3346,8 @@
                         "start": 1,
                         "end": 3,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -3118,7 +3360,7 @@
                         "name": "Northside",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -986,
+                        "unique_id": -105146,
                         "attributes": {
                           "display": "table-cell",
                           "name-from": "contents",
@@ -3138,6 +3380,8 @@
                             "start": 0,
                             "end": 9,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt",
                               "font-weight": "bold"
@@ -3151,7 +3395,7 @@
                             "name": "Northside",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -951,
+                            "unique_id": -105112,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -3167,6 +3411,8 @@
                                 "start": 0,
                                 "end": 9,
                                 "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
                                   "font-family": "Times New Roman",
                                   "font-size": "12pt",
                                   "font-weight": "bold"
@@ -3182,7 +3428,7 @@
                         "name": "10 a.m. to 8 p.m.",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -978,
+                        "unique_id": -105132,
                         "attributes": {
                           "display": "table-cell",
                           "name-from": "contents",
@@ -3202,6 +3448,8 @@
                             "start": 0,
                             "end": 17,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -3214,7 +3462,7 @@
                             "name": "10 a.m. to 8 p.m.",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -972,
+                            "unique_id": -105095,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -3230,6 +3478,8 @@
                                 "start": 0,
                                 "end": 17,
                                 "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
                                   "font-family": "Times New Roman",
                                   "font-size": "12pt"
                                 }
@@ -3244,7 +3494,7 @@
                         "name": "Directions",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -983,
+                        "unique_id": -105138,
                         "attributes": {
                           "display": "table-cell",
                           "name-from": "contents",
@@ -3264,6 +3514,8 @@
                             "start": 0,
                             "end": 1,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt",
                               "text-underline-style": "solid"
@@ -3278,7 +3530,7 @@
                             "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#northside",
                             "msaa_states": 5242880,
                             "ia2_states": 1024,
-                            "unique_id": -910,
+                            "unique_id": -105032,
                             "attributes": {
                               "display": "inline",
                               "name-from": "contents",
@@ -3297,6 +3549,8 @@
                                 "start": 0,
                                 "end": 10,
                                 "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,238)",
                                   "font-family": "Times New Roman",
                                   "font-size": "12pt",
                                   "text-underline-style": "solid"
@@ -3310,7 +3564,7 @@
                                 "name": "Directions",
                                 "msaa_states": 4194304,
                                 "ia2_states": 1024,
-                                "unique_id": -974,
+                                "unique_id": -105119,
                                 "attributes": {
                                   "name-from": "contents"
                                 },
@@ -3326,6 +3580,8 @@
                                     "start": 0,
                                     "end": 10,
                                     "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,238)",
                                       "font-family": "Times New Roman",
                                       "font-size": "12pt",
                                       "text-underline-style": "solid"
@@ -3345,9 +3601,9 @@
                 "msaa_role": 20,
                 "ia2_role": 1044,
                 "name": "What readers said",
-                "msaa_states": 0,
+                "msaa_states": 65536,
                 "ia2_states": 1024,
-                "unique_id": -911,
+                "unique_id": -105042,
                 "attributes": {
                   "display": "block",
                   "level": "3",
@@ -3372,6 +3628,8 @@
                     "start": 0,
                     "end": 17,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "14pt",
                       "font-weight": "bold"
@@ -3383,9 +3641,9 @@
                     "msaa_role": 41,
                     "ia2_role": 41,
                     "name": "What readers said",
-                    "msaa_states": 0,
+                    "msaa_states": 65536,
                     "ia2_states": 1024,
-                    "unique_id": -965,
+                    "unique_id": -105129,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -3401,6 +3659,8 @@
                         "start": 0,
                         "end": 17,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "14pt",
                           "font-weight": "bold"
@@ -3413,9 +3673,9 @@
               {
                 "msaa_role": 20,
                 "ia2_role": 1073,
-                "msaa_states": 0,
+                "msaa_states": 65536,
                 "ia2_states": 1024,
-                "unique_id": -903,
+                "unique_id": -105034,
                 "attributes": {
                   "display": "block",
                   "tag": "blockquote",
@@ -3433,6 +3693,8 @@
                     "start": 0,
                     "end": 1,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt"
                     }
@@ -3442,9 +3704,9 @@
                   {
                     "msaa_role": 20,
                     "ia2_role": 1054,
-                    "msaa_states": 0,
+                    "msaa_states": 65536,
                     "ia2_states": 1024,
-                    "unique_id": -874,
+                    "unique_id": -104993,
                     "attributes": {
                       "display": "block",
                       "tag": "p",
@@ -3462,6 +3724,8 @@
                         "start": 0,
                         "end": 32,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -3472,9 +3736,9 @@
                         "msaa_role": 41,
                         "ia2_role": 41,
                         "name": "Finally, I can study after work.",
-                        "msaa_states": 0,
+                        "msaa_states": 65536,
                         "ia2_states": 1024,
-                        "unique_id": -923,
+                        "unique_id": -105114,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -3490,6 +3754,8 @@
                             "start": 0,
                             "end": 32,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -3505,7 +3771,7 @@
                 "ia2_role": 1054,
                 "msaa_states": 65536,
                 "ia2_states": 1024,
-                "unique_id": -888,
+                "unique_id": -105011,
                 "attributes": {
                   "display": "block",
                   "tag": "p",
@@ -3515,10 +3781,14 @@
                 "lines": [
                   [
                     0,
-                    233
+                    149
                   ],
                   [
-                    233,
+                    149,
+                    299
+                  ],
+                  [
+                    299,
                     396
                   ]
                 ],
@@ -3527,6 +3797,8 @@
                     "start": 0,
                     "end": 396,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt"
                     }
@@ -3539,7 +3811,7 @@
                     "name": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before most people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available at the times when the community actually needs them, according to the library director.",
                     "msaa_states": 65536,
                     "ia2_states": 1024,
-                    "unique_id": -928,
+                    "unique_id": -105056,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -3547,10 +3819,14 @@
                     "lines": [
                       [
                         0,
-                        233
+                        149
                       ],
                       [
-                        233,
+                        149,
+                        299
+                      ],
+                      [
+                        299,
                         396
                       ]
                     ],
@@ -3559,6 +3835,8 @@
                         "start": 0,
                         "end": 396,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -3572,7 +3850,7 @@
                 "ia2_role": 33,
                 "msaa_states": 65600,
                 "ia2_states": 1024,
-                "unique_id": -886,
+                "unique_id": -105007,
                 "attributes": {
                   "display": "block",
                   "setsize": "3",
@@ -3604,6 +3882,8 @@
                     "start": 0,
                     "end": 3,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt"
                     }
@@ -3615,7 +3895,7 @@
                     "ia2_role": 34,
                     "msaa_states": 65600,
                     "ia2_states": 1024,
-                    "unique_id": -932,
+                    "unique_id": -105066,
                     "attributes": {
                       "display": "list-item",
                       "level": "1",
@@ -3641,6 +3921,8 @@
                         "start": 0,
                         "end": 22,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -3653,7 +3935,7 @@
                         "name": "1. ",
                         "msaa_states": 65536,
                         "ia2_states": 1024,
-                        "unique_id": -919,
+                        "unique_id": -105062,
                         "attributes": {
                           "display": "inline-block",
                           "name-from": "contents",
@@ -3672,6 +3954,8 @@
                             "start": 0,
                             "end": 3,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -3684,7 +3968,7 @@
                         "name": "Board vote in March",
                         "msaa_states": 65536,
                         "ia2_states": 1024,
-                        "unique_id": -941,
+                        "unique_id": -105047,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -3700,6 +3984,8 @@
                             "start": 0,
                             "end": 19,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -3713,7 +3999,7 @@
                     "ia2_role": 34,
                     "msaa_states": 65600,
                     "ia2_states": 1024,
-                    "unique_id": -946,
+                    "unique_id": -105088,
                     "attributes": {
                       "display": "list-item",
                       "level": "1",
@@ -3739,6 +4025,8 @@
                         "start": 0,
                         "end": 18,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -3751,7 +4039,7 @@
                         "name": "2. ",
                         "msaa_states": 65536,
                         "ia2_states": 1024,
-                        "unique_id": -947,
+                        "unique_id": -105082,
                         "attributes": {
                           "display": "inline-block",
                           "name-from": "contents",
@@ -3770,6 +4058,8 @@
                             "start": 0,
                             "end": 3,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -3782,7 +4072,7 @@
                         "name": "Hiring in April",
                         "msaa_states": 65536,
                         "ia2_states": 1024,
-                        "unique_id": -942,
+                        "unique_id": -105089,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -3798,6 +4088,8 @@
                             "start": 0,
                             "end": 15,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -3811,7 +4103,7 @@
                     "ia2_role": 34,
                     "msaa_states": 65600,
                     "ia2_states": 1024,
-                    "unique_id": -938,
+                    "unique_id": -105077,
                     "attributes": {
                       "display": "list-item",
                       "level": "1",
@@ -3837,6 +4129,8 @@
                         "start": 0,
                         "end": 20,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -3849,7 +4143,7 @@
                         "name": "3. ",
                         "msaa_states": 65536,
                         "ia2_states": 1024,
-                        "unique_id": -873,
+                        "unique_id": -105083,
                         "attributes": {
                           "display": "inline-block",
                           "name-from": "contents",
@@ -3868,6 +4162,8 @@
                             "start": 0,
                             "end": 3,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -3880,7 +4176,7 @@
                         "name": "Review in October",
                         "msaa_states": 65536,
                         "ia2_states": 1024,
-                        "unique_id": -890,
+                        "unique_id": -104995,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -3896,6 +4192,8 @@
                             "start": 0,
                             "end": 17,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt"
                             }
@@ -3916,7 +4214,7 @@
         "name": "Related stories",
         "msaa_states": 65536,
         "ia2_states": 1024,
-        "unique_id": -914,
+        "unique_id": -105041,
         "attributes": {
           "display": "block",
           "explicit-name": "true",
@@ -3941,6 +4239,8 @@
             "start": 0,
             "end": 1,
             "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
               "font-family": "Times New Roman",
               "font-size": "18pt",
               "font-weight": "bold"
@@ -3950,6 +4250,8 @@
             "start": 1,
             "end": 2,
             "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
               "font-family": "Times New Roman",
               "font-size": "12pt"
             }
@@ -3962,7 +4264,7 @@
             "name": "Related stories",
             "msaa_states": 65536,
             "ia2_states": 1024,
-            "unique_id": -929,
+            "unique_id": -105063,
             "attributes": {
               "display": "block",
               "level": "2",
@@ -3987,6 +4289,8 @@
                 "start": 0,
                 "end": 15,
                 "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
                   "font-family": "Times New Roman",
                   "font-size": "18pt",
                   "font-weight": "bold"
@@ -4000,7 +4304,7 @@
                 "name": "Related stories",
                 "msaa_states": 65536,
                 "ia2_states": 1024,
-                "unique_id": -881,
+                "unique_id": -105012,
                 "attributes": {
                   "name-from": "contents"
                 },
@@ -4016,6 +4320,8 @@
                     "start": 0,
                     "end": 15,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "18pt",
                       "font-weight": "bold"
@@ -4030,7 +4336,7 @@
             "ia2_role": 33,
             "msaa_states": 65600,
             "ia2_states": 1024,
-            "unique_id": -993,
+            "unique_id": -105152,
             "attributes": {
               "display": "block",
               "setsize": "2",
@@ -4058,6 +4364,8 @@
                 "start": 0,
                 "end": 2,
                 "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
                   "font-family": "Times New Roman",
                   "font-size": "12pt"
                 }
@@ -4069,7 +4377,7 @@
                 "ia2_role": 34,
                 "msaa_states": 65600,
                 "ia2_states": 1024,
-                "unique_id": -897,
+                "unique_id": -105025,
                 "attributes": {
                   "display": "list-item",
                   "level": "1",
@@ -4095,6 +4403,8 @@
                     "start": 0,
                     "end": 2,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt"
                     }
@@ -4103,6 +4413,8 @@
                     "start": 2,
                     "end": 3,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt",
                       "text-underline-style": "solid"
@@ -4116,7 +4428,7 @@
                     "name": "• ",
                     "msaa_states": 65536,
                     "ia2_states": 1024,
-                    "unique_id": -895,
+                    "unique_id": -105006,
                     "attributes": {
                       "display": "inline-block",
                       "name-from": "contents",
@@ -4135,6 +4447,8 @@
                         "start": 0,
                         "end": 2,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -4148,7 +4462,7 @@
                     "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#budget",
                     "msaa_states": 5308416,
                     "ia2_states": 1024,
-                    "unique_id": -901,
+                    "unique_id": -105027,
                     "attributes": {
                       "display": "inline",
                       "name-from": "contents",
@@ -4167,6 +4481,8 @@
                         "start": 0,
                         "end": 31,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt",
                           "text-underline-style": "solid"
@@ -4180,7 +4496,7 @@
                         "name": "Council approves library budget",
                         "msaa_states": 4259840,
                         "ia2_states": 1024,
-                        "unique_id": -912,
+                        "unique_id": -105022,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -4196,6 +4512,8 @@
                             "start": 0,
                             "end": 31,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt",
                               "text-underline-style": "solid"
@@ -4212,7 +4530,7 @@
                 "ia2_role": 34,
                 "msaa_states": 65600,
                 "ia2_states": 1024,
-                "unique_id": -871,
+                "unique_id": -104990,
                 "attributes": {
                   "display": "list-item",
                   "level": "1",
@@ -4238,6 +4556,8 @@
                     "start": 0,
                     "end": 2,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt"
                     }
@@ -4246,6 +4566,8 @@
                     "start": 2,
                     "end": 3,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt",
                       "text-underline-style": "solid"
@@ -4259,7 +4581,7 @@
                     "name": "• ",
                     "msaa_states": 65536,
                     "ia2_states": 1024,
-                    "unique_id": -907,
+                    "unique_id": -105038,
                     "attributes": {
                       "display": "inline-block",
                       "name-from": "contents",
@@ -4278,6 +4600,8 @@
                         "start": 0,
                         "end": 2,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt"
                         }
@@ -4291,7 +4615,7 @@
                     "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#bookfair",
                     "msaa_states": 5308416,
                     "ia2_states": 1024,
-                    "unique_id": -875,
+                    "unique_id": -104996,
                     "attributes": {
                       "display": "inline",
                       "name-from": "contents",
@@ -4310,6 +4634,8 @@
                         "start": 0,
                         "end": 24,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt",
                           "text-underline-style": "solid"
@@ -4323,7 +4649,7 @@
                         "name": "Spring book fair returns",
                         "msaa_states": 4259840,
                         "ia2_states": 1024,
-                        "unique_id": -979,
+                        "unique_id": -105037,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -4339,6 +4665,8 @@
                             "start": 0,
                             "end": 24,
                             "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
                               "font-family": "Times New Roman",
                               "font-size": "12pt",
                               "text-underline-style": "solid"
@@ -4359,7 +4687,7 @@
         "ia2_role": 1069,
         "msaa_states": 65536,
         "ia2_states": 1024,
-        "unique_id": -884,
+        "unique_id": -105005,
         "attributes": {
           "display": "block",
           "tag": "footer",
@@ -4378,6 +4706,8 @@
             "start": 0,
             "end": 1,
             "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
               "font-family": "Times New Roman",
               "font-size": "12pt"
             }
@@ -4389,7 +4719,7 @@
             "ia2_role": 1054,
             "msaa_states": 65536,
             "ia2_states": 1024,
-            "unique_id": -931,
+            "unique_id": -105065,
             "attributes": {
               "display": "block",
               "tag": "p",
@@ -4407,6 +4737,8 @@
                 "start": 0,
                 "end": 26,
                 "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
                   "font-family": "Times New Roman",
                   "font-size": "12pt"
                 }
@@ -4415,6 +4747,8 @@
                 "start": 26,
                 "end": 27,
                 "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,238)",
                   "font-family": "Times New Roman",
                   "font-size": "12pt",
                   "text-underline-style": "solid"
@@ -4428,7 +4762,7 @@
                 "name": "© 2026 Riverside Gazette. ",
                 "msaa_states": 65536,
                 "ia2_states": 1024,
-                "unique_id": -994,
+                "unique_id": -105137,
                 "attributes": {
                   "name-from": "contents"
                 },
@@ -4444,6 +4778,8 @@
                     "start": 0,
                     "end": 26,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt"
                     }
@@ -4457,7 +4793,7 @@
                 "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html#contact",
                 "msaa_states": 5308416,
                 "ia2_states": 1024,
-                "unique_id": -937,
+                "unique_id": -105075,
                 "attributes": {
                   "display": "inline",
                   "name-from": "contents",
@@ -4476,6 +4812,8 @@
                     "start": 0,
                     "end": 10,
                     "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
                       "font-family": "Times New Roman",
                       "font-size": "12pt",
                       "text-underline-style": "solid"
@@ -4489,7 +4827,7 @@
                     "name": "Contact us",
                     "msaa_states": 4259840,
                     "ia2_states": 1024,
-                    "unique_id": -987,
+                    "unique_id": -105153,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -4505,6 +4843,8 @@
                         "start": 0,
                         "end": 10,
                         "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
                           "font-family": "Times New Roman",
                           "font-size": "12pt",
                           "text-underline-style": "solid"

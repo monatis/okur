@@ -15,18 +15,9 @@ To record one:
 | 509 | Keyboard Help (Insert+1), Insert+F1, Insert+H, Insert+W. Recorded in round 13 and not imported: in Keyboard Help mode JAWS describes the harness's history copy instead of running it, so those steps time out (their synthesizer text is recorded) | `desktop-dialogs.ps1` |
 | 518 | Reading a Word document | `desktop-word.ps1` (here) |
 | 519 | Word's headings list, spelling errors, revisions | `desktop-word.ps1` (here) |
-| 556 | Shift+Period and Shift+Comma across a news article: regions, the article, a nested list (twice at its end), a table cell, a block quote, the footer | `news-article.html` |
-| 557 | The same keys where no element is around the text | `doc-reading.html` |
-| 558 | S and D, with Shift, and Ctrl+Insert+Right, Left and Up from paragraphs, list items, a list, links and headings: what JAWS counts as the same element | `same-element.html` (new) |
-| 559 | Jump to Line (J) with a line and Enter, then where the cursor went; Shift+J; a line past the last | `news-article.html` |
-| 560 | The Word List (Ctrl+Insert+W), and W and Shift+W with a word chosen and without | `news-article.html` |
-| 561 | The clipboard keys: SayClipboard, View Clipboard Text, AppendSelectedTextToClipboard (the Windows-key scripts called by name) | `desktop-editor.ps1` |
-| 562 | Selections of growing size, each copied: where JAWS says "selected N characters up to" instead of the text, and how it counts | `news-article.html` |
-| 563 | aria-flowto: the division that flows to the lists read, then Equals and Shift+Equals along the flow | `virtual-keys.html` |
-| 564 | Say Line on a field whose label is a line of its own: reached by its quick key, by the arrows, and with the focus | `signup-form.html` |
-| 565 | Say Color (Insert+5) on text in named, unnamed and default colors, and on backgrounds | `colors.html` (new) |
-| 566 | Speech On Demand on and off, and which keys speak while it is on | `news-article.html` |
-| 567 | Spelling errors in a field of several words: Say Line, the words, Say Word, the field read again | `signup-form.html` |
+| 558 | S and D, with Shift, and Ctrl+Insert+Right, Left and Up from paragraphs, list items, a list, links and headings: what JAWS counts as the same element. Recorded in round 59 (every trial passed); waits for a snapshot of its fixture, `same-element.chrome.ia2.json`, to replay | `same-element.html` |
+| 561 | The clipboard keys: SayClipboard, View Clipboard Text, AppendSelectedTextToClipboard (the Windows-key scripts called by name). Round 59 failed: Escape did not close the "Clipboard Text" window View Clipboard Text opens, which then stayed open across trials, and a second View Clipboard Text asked "Overwrite Clipboard Text Viewer" (Yes, No). Needs another way to close that window before it is recorded again | `desktop-editor.ps1` |
+| 562 | Selections of growing size, each copied: where JAWS says "selected N characters up to" instead of the text, and how it counts. Round 59 failed only because 561's "Overwrite Clipboard Text Viewer" question was still open; its transcripts were sound. Record it again on its own | `news-article.html` |
 | 568 | JAWS's text analysis: Insert+Tab and Insert+Up on Notepad lines holding one inconsistency each | `desktop-proofing.ps1` (new) |
 | 569 | Route PC to Virtual on a heading, a paragraph, a list, a list item, a graphic and a table cell | `news-article.html` |
 | 570 | The Speech History's other layer keys (`Default.JKM`): Insert+Space, Ctrl+H copies it to the clipboard, Shift+H clears it, then H shows what was said since | `news-article.html` |
