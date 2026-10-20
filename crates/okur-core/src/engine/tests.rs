@@ -186,6 +186,50 @@ fn test_engine_key_event_handling_and_forms_mode() {
     assert_eq!(engine.handle_key_event(&down_event), KeyAction::Consume);
 }
 
+/// A page field's description is said as it takes the focus at Beginner and Intermediate
+/// verbosity, not at Advanced [obs, 552-553/s4].
+#[test]
+fn a_fields_description_is_left_out_at_advanced() {
+    use crate::settings::VerbosityLevel;
+    let mut email = AomNode::new(2, Role::Edit)
+        .with_name("Email address")
+        .with_value("sam@example.com");
+    email.attributes.insert(
+        "description".to_owned(),
+        "We never share your email.".to_owned(),
+    );
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Form")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Sign up"),
+            email,
+        ]);
+    for (level, described) in [
+        (VerbosityLevel::Intermediate, true),
+        (VerbosityLevel::Advanced, false),
+    ] {
+        let (mut engine, _speech) = engine_with_speech();
+        let mut settings = engine.settings.clone();
+        settings.verbosity.level = level;
+        engine.set_settings(settings);
+        engine.handle_accessibility_event(&AccessibilityEvent::DocumentLoaded {
+            title: "Form".to_owned(),
+            root: page.clone(),
+        });
+        let mut focus = FocusEvent::new(Role::Edit)
+            .with_node_id(2)
+            .with_name("Email address");
+        focus.in_document = true;
+        let said = engine.handle_focus_event(&focus).unwrap_or_default();
+        assert!(said.contains("sam@example.com"), "{level:?}: {said}");
+        assert_eq!(
+            said.contains("We never share"),
+            described,
+            "{level:?}: {said}"
+        );
+    }
+}
+
 /// Escape out of forms mode says "virtual PC Cursor" at Beginner verbosity, and JAWS's short
 /// message, "virtual PC", above it [obs, 555/s10; 552/s10, 553/s10].
 #[test]

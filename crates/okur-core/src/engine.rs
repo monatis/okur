@@ -346,6 +346,7 @@ impl ScreenReaderEngine {
             VirtualCursor::new(buffer),
         ));
         self.cursor.move_to_start();
+        self.cursor.verbosity = self.settings.verbosity.clone();
         self.forms_mode = false;
         self.app_mode = AppMode::VirtualBuffer;
         self.say_all = None;
@@ -1024,6 +1025,8 @@ impl ScreenReaderEngine {
             .settings_layers
             .resolve(application.as_deref(), site.as_deref());
         let voice_changed = settings.voice != self.settings.voice;
+        // The cursor says a page control's focus itself, at the verbosity in force.
+        self.cursor.verbosity = settings.verbosity.clone();
         self.settings = settings;
         if voice_changed {
             self.configure_voice();

@@ -311,20 +311,25 @@ pub enum OutputType {
     /// Intermediate, "Cherries" at Advanced; entering the list still says it [obs, 548-549/s8,
     /// s9]. JAWS's "Announce Position and Count when navigating in lists".
     ListPosition,
+    /// A control's description (a page field's aria-describedby text): said at Beginner and
+    /// Intermediate, not at Advanced ("Email address edit | sam@example.com | Type in text."
+    /// [obs, 552-553/s4]). JAWS's key for it is not known.
+    Description,
 }
 
 impl OutputType {
-    pub const ALL: [OutputType; 3] = [
+    pub const ALL: [OutputType; 4] = [
         OutputType::AccessKey,
         OutputType::Hint,
         OutputType::ListPosition,
+        OutputType::Description,
     ];
 
     /// JAWS's key for the type in `DEFAULT.JCF` `[OutputModes]`, where it is known.
     pub fn jcf_key(self) -> Option<&'static str> {
         match self {
             Self::AccessKey => Some("ACCESS_KEY"),
-            Self::Hint => None,
+            Self::Hint | Self::Description => None,
             Self::ListPosition => Some("ANNOUNCE_POSITION_AND_COUNT"),
         }
     }
@@ -335,7 +340,9 @@ impl OutputType {
     pub fn default_modes(self) -> [OutputMode; 3] {
         match self {
             Self::AccessKey | Self::Hint => [OutputMode::On; 3],
-            Self::ListPosition => [OutputMode::On, OutputMode::On, OutputMode::Off],
+            Self::ListPosition | Self::Description => {
+                [OutputMode::On, OutputMode::On, OutputMode::Off]
+            }
         }
     }
 
@@ -347,6 +354,7 @@ impl OutputType {
             PartKind::AccessKey | PartKind::Shortcut => Some(Self::AccessKey),
             PartKind::Hint => Some(Self::Hint),
             PartKind::ListPosition => Some(Self::ListPosition),
+            PartKind::Description => Some(Self::Description),
             _ => None,
         }
     }

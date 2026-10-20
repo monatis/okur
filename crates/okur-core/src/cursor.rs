@@ -72,6 +72,9 @@ pub struct VirtualCursor {
     pub selection: Option<TextSelection>,
     pub active_modal_root: Option<usize>,
     pub search: SearchState,
+    /// The verbosity a page control's focus is said at (its description at Advanced), as the
+    /// engine last set it.
+    pub verbosity: crate::settings::Verbosity,
 }
 
 impl VirtualCursor {
@@ -85,6 +88,7 @@ impl VirtualCursor {
             selection: None,
             active_modal_root: None,
             search: SearchState::default(),
+            verbosity: crate::settings::Verbosity::default(),
         }
     }
 
@@ -1049,7 +1053,7 @@ impl VirtualCursor {
         else {
             return String::new();
         };
-        SpeechFormatter::format_control_focus(node, |node_id| {
+        let mut said = SpeechFormatter::control_focus(node, |node_id| {
             // The container's own span is the widest one carrying its id (its start and
             // end lines have narrower spans of their own).
             self.buffer
@@ -1058,7 +1062,11 @@ impl VirtualCursor {
                 .filter(|s| s.node_id == node_id)
                 .max_by_key(|s| s.end_offset - s.start_offset)
                 .is_some_and(|s| previous > s.start_offset && previous < s.end_offset)
-        })
+        });
+        // What the verbosity level leaves out: a field's description at Advanced [obs,
+        // 553/s4].
+        said.retain(|kind| self.verbosity.says(kind));
+        said.render_all()
     }
 
     fn heading_speech_at(&self, offset: usize) -> String {
