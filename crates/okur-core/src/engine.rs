@@ -102,6 +102,12 @@ pub struct ScreenReaderEngine {
     /// The field an arrow put the focus on (Auto Forms Mode), already said: its focus event
     /// is not said again.
     arrow_focus: Option<usize>,
+    /// Key presses so far, to tell the key right after another.
+    keys_pressed: u64,
+    /// The field an arrow last left in forms mode, the key that left it, and whether it went
+    /// down: Down straight back onto it after Up turns forms mode on silently
+    /// [obs, 626/s5, s9; 567/s12].
+    field_left: Option<(usize, u64, bool)>,
     /// The text last known in a page's fields, by node, kept as the focus leaves them: the
     /// buffer keeps the values the page had when it was captured, and an arrow back onto a
     /// field says what was typed in it [obs, 284/s6].
@@ -284,6 +290,8 @@ impl ScreenReaderEngine {
             option_list: None,
             option_said: None,
             arrow_focus: None,
+            keys_pressed: 0,
+            field_left: None,
             field_texts: std::collections::HashMap::new(),
             web_application: None,
             page_focus_is_field: false,
@@ -392,6 +400,9 @@ impl ScreenReaderEngine {
     /// Intercepts navigation keys, manages forms mode transitions, silences ongoing speech,
     /// and returns whether the key was consumed or should pass through to the OS.
     pub fn handle_key_event(&mut self, event: &KeyEvent) -> KeyAction {
+        if event.is_down {
+            self.keys_pressed += 1;
+        }
         let action = self.handle_key(event);
         self.refresh_stale_page();
         action

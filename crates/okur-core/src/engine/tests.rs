@@ -3569,6 +3569,11 @@ fn an_arrow_back_onto_a_field_says_what_was_typed() {
     );
     engine.handle_key_event(&key(Key::UpArrow));
     assert_eq!(norm(&speech.take().join(" ")), "Full name");
+    // Down straight back onto the field Up has just left says nothing: forms mode is on again,
+    // by JAWS's sound alone [obs, 626/s5, 567/s12].
+    engine.handle_key_event(&key(Key::DownArrow));
+    assert_eq!(norm(&speech.take().join(" ")), "");
+    assert!(engine.forms_mode);
 }
 
 /// Without Auto Forms Mode, the arrows read a field's line and stay in browse mode [obs, 201].

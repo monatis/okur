@@ -520,7 +520,8 @@ impl ScreenReaderEngine {
             _ => None,
         };
         let speech = if matches!(command, Command::SayNextLine | Command::SayPriorLine) {
-            self.arrow_onto_field().or(speech)
+            self.arrow_onto_field(command == Command::SayNextLine)
+                .or(speech)
         } else {
             speech
         };
@@ -622,7 +623,7 @@ impl ScreenReaderEngine {
     /// and land in an edit field ..., forms mode is automatically on" (Surf's Up, "Using Forms
     /// with JAWS"); other controls stay in browse mode (280/s13, s18). The focus event that
     /// follows is not said again.
-    pub(super) fn arrow_onto_field(&mut self) -> Option<String> {
+    pub(super) fn arrow_onto_field(&mut self, down: bool) -> Option<String> {
         if !self.settings.auto_forms_mode
             || self.forms_mode
             || self.app_mode != AppMode::VirtualBuffer
@@ -640,6 +641,17 @@ impl ScreenReaderEngine {
                 typed_in && attribute("readonly") != Some("true")
             })?
             .clone();
+        // Down straight back onto the field Up has just left: JAWS turns forms mode on with
+        // its sound alone, saying nothing, and the next arrow reads the field's line where its
+        // caret was [obs, 626/s5, s6, s9; 567/s12]. Up back onto a field Down left reads it,
+        // at once or later, though the focus stayed in it all along [obs, 284/s7; 283/s13: no
+        // focus event from s8 to s14].
+        if down && self.field_left == Some((node.id, self.keys_pressed.saturating_sub(1), false)) {
+            self.forms_mode = true;
+            self.cursor.forms_mode_active = true;
+            self.page_focus_is_field = true;
+            return Some(String::new());
+        }
         // What was typed in it, which the captured page does not have.
         if let Some(text) = self.field_texts.get(&node.id) {
             node.value = Some(text.clone());
@@ -731,6 +743,7 @@ impl ScreenReaderEngine {
         self.remember_field_text();
         self.forms_mode = false;
         let _ = self.cursor.exit_forms_mode();
+        self.field_left = Some((field, self.keys_pressed, down));
         self.cursor.move_to_node_id(field);
         let speech = if down {
             self.cursor.move_next_line()
@@ -738,7 +751,7 @@ impl ScreenReaderEngine {
             self.cursor.move_prior_line()
         };
         // The line reached may be a field itself.
-        let speech = self.arrow_onto_field().or(speech);
+        let speech = self.arrow_onto_field(down).or(speech);
         if let Some(text) = speech.as_deref().filter(|t| !t.is_empty()) {
             self.speech.speak(text, true);
         }
