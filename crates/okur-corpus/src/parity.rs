@@ -502,11 +502,19 @@ fn run_scenario(
                             }
                         }
                         mirror.sync(&ui);
-                        if let okur_core::AccessibilityEvent::Focus(focus) = &converted {
-                            for report in mirror.focus(focus) {
-                                let report = okur_core::AccessibilityEvent::Ui(report);
-                                let _ = engine.handle_accessibility_event(&report);
+                        let reports = match &converted {
+                            okur_core::AccessibilityEvent::Focus(focus)
+                            | okur_core::AccessibilityEvent::Change { control: focus, .. } => {
+                                mirror.focus(focus)
                             }
+                            okur_core::AccessibilityEvent::TextContext(context) => {
+                                mirror.typed(&context.text)
+                            }
+                            _ => Vec::new(),
+                        };
+                        for report in reports {
+                            let report = okur_core::AccessibilityEvent::Ui(report);
+                            let _ = engine.handle_accessibility_event(&report);
                             mirror.sync(&ui);
                         }
                     }

@@ -123,8 +123,9 @@ impl DialogMirror {
         }
     }
 
-    /// The focus moved in the traced dialog: which control of Okur's it is, and the window's
-    /// report of a list item selected or a radio button checked by it.
+    /// The focus moved in the traced dialog, or its focused control changed: which control of
+    /// Okur's it is, and the window's report of a list item selected, a radio button checked
+    /// or a text typed.
     pub fn focus(&mut self, focus: &FocusEvent) -> Vec<FromUi> {
         let Some(dialog) = &mut self.dialog else {
             return Vec::new();
@@ -173,6 +174,19 @@ impl DialogMirror {
                         None => (false, None),
                     }
                 }
+                // The text typed into an edit combo, as its window reports each change
+                // ("b", "bo", … "board" in JAWS Find's Find what [obs, 506/s2-s6]).
+                (ControlKind::ComboEdit { text, .. }, Role::Edit | Role::ComboBox)
+                    if plain(&control.label) == name =>
+                {
+                    match focus.value.as_deref() {
+                        Some(value) if value != text => {
+                            value.clone_into(text);
+                            (true, Some(Value::Text(value.to_owned())))
+                        }
+                        _ => (true, None),
+                    }
+                }
                 (ControlKind::Button { .. }, Role::Button)
                 | (ControlKind::CheckBox { .. }, Role::CheckBox) => {
                     (plain(&control.label) == name, None)
@@ -190,6 +204,29 @@ impl DialogMirror {
             }
         }
         reports
+    }
+
+    /// The focused field's text, as the traced dialog's edit reports it after a key: what
+    /// Okur's window reports of the text typed into its focused edit combo ("b", "bo", …
+    /// "board" in JAWS Find's Find what [obs, 633/s2-s6]).
+    pub fn typed(&mut self, typed: &str) -> Vec<FromUi> {
+        let Some(dialog) = &mut self.dialog else {
+            return Vec::new();
+        };
+        let Some(control) = self.focused.and_then(|i| dialog.controls.get_mut(i)) else {
+            return Vec::new();
+        };
+        match &mut control.kind {
+            ControlKind::ComboEdit { text, .. } if text != typed => {
+                typed.clone_into(text);
+                vec![FromUi::DialogChanged {
+                    id: dialog.id,
+                    control: control.id.clone(),
+                    value: Value::Text(typed.to_owned()),
+                }]
+            }
+            _ => Vec::new(),
+        }
     }
 
     /// What the window reports for a key the user pressed in it.
@@ -294,5 +331,39 @@ mod tests {
         other.window_title = Some("JAWS notes - Notepad".to_owned());
         mirror.as_okur_window(&mut other);
         assert_eq!(other.window_title.as_deref(), Some("JAWS notes - Notepad"));
+    }
+
+    /// The text typed into the focused edit combo, as the traced field reports it after each
+    /// key, is what Okur's window reports; the same text again reports nothing
+    /// [obs, 633/s2-s6].
+    #[test]
+    fn typed_text_is_reported_as_okurs_window_would() {
+        let host = RecordingUiHost::default();
+        let mut mirror = DialogMirror::default();
+        host.send(ToUi::DialogShow {
+            dialog: DialogSpec {
+                id: 4,
+                title: "Okur Find".to_owned(),
+                controls: vec![Control {
+                    id: "what".to_owned(),
+                    label: "Find &what:".to_owned(),
+                    kind: ControlKind::ComboEdit {
+                        text: "library".to_owned(),
+                        history: vec!["library".to_owned()],
+                    },
+                    enabled: true,
+                }],
+            },
+        });
+        mirror.sync(&host);
+        assert_eq!(
+            mirror.typed("b"),
+            vec![FromUi::DialogChanged {
+                id: 4,
+                control: "what".to_owned(),
+                value: Value::Text("b".to_owned()),
+            }]
+        );
+        assert_eq!(mirror.typed("b"), Vec::new());
     }
 }

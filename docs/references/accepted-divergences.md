@@ -85,7 +85,8 @@ A step can be in more than one entry; all of its entries apply.
   `255-web-list-block-quotes-enter/s1`, `257-web-list-tables-enter/s1`,
   `258-web-list-glance-highlights-enter/s1`, `259-web-list-divisions-enter/s1`,
   `260-web-list-tabs-enter/s1`; and Insert+F11's Select a System Tray Icon,
-  `511-desktop-window-list-and-tray/s4` (its version, round 57).
+  `511-desktop-window-list-and-tray/s4` (its version, round 57); and JAWS Find,
+  `506-web-jaws-find/s1` (its Find what field said before the dialog, in some trials).
 - In the recordings of 2026-10-19 (round 9, JAWS freshly started for the batch), JAWS no longer
   said its version or the list's tutor message before the Links List, the Heading List and
   Virtual HTML Features, and said nothing before some dialogs at all: those steps were taken
@@ -219,6 +220,24 @@ A step can be in more than one entry; all of its entries apply.
   shows the font in the Virtual Viewer, as JAWS does when it finds one. So the scenario's later
   keys (Down, Ctrl+A, Escape) act in that viewer, not in the field, and those steps differ too.
 - Proposed by the parity gap audit; accepted by the owner, 2026-10-19.
+
+### F3 right after JAWS Find
+
+- Steps: `506-web-jaws-find/s8`, `506-web-jaws-find/s9`, `506-web-jaws-find/s10`,
+  `506-web-jaws-find/s11`, `633-web-jaws-find-next-board/s9`,
+  `633-web-jaws-find-next-board/s10`, `633-web-jaws-find-next-board/s11`,
+  `633-web-jaws-find-next-board/s12`, `633-web-jaws-find-next-board/s13`,
+  `633-web-jaws-find-next-board/s14`.
+- Difference: the whole step. JAWS says nothing on F3 and Shift+F3, and Say Line then reads
+  the match's line or a line above it; Okur says the next or previous match's line.
+- Why: right after JAWS Find found "board", F3 and Shift+F3 said nothing in every trial of 506
+  and 633, and the virtual cursor landed on no match: it stayed on the match's line, or ended a
+  line or two above it on lines without the word (633: "published March 14, 2026", then "Maria
+  Lopez,"), and not the same way in both scenarios. From the top of the page F3 found the match
+  and said its line (633/s16), as JAWSFindNext, which JAWS's key map binds to F3, is to: find
+  the next occurrence of the text last searched for. Okur's F3 and Shift+F3 always go to the
+  next or previous match and say its line.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-20.
 
 ### "Required" for a field that is not required (Auto Forms Mode)
 

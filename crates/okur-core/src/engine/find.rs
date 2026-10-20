@@ -104,6 +104,18 @@ impl ScreenReaderEngine {
         }
     }
 
+    /// A focus in Okur Find: its Find what edit combo is said without a position, as JAWS says
+    /// its own ("Find what: edit combo | board" [obs, 506/s12, 633/s1]), though the window's
+    /// history list holds the text it shows.
+    pub(super) fn as_find_dialog_focus(&self, focus: &mut crate::event::FocusEvent) {
+        let in_find = self.find_dialog.is_some()
+            && focus.window_title.as_deref() == Some(crate::messages::msg::find_dialog().as_str());
+        if in_find && focus.container_role == Some(crate::aom::Role::ComboBox) {
+            focus.item_index = None;
+            focus.item_count = None;
+        }
+    }
+
     /// Keeps the dialog's options and history for its next opening.
     fn keep_find(&mut self, dialog: &FindDialog) {
         self.find_options = dialog.options();
@@ -149,6 +161,27 @@ mod tests {
 
     fn send(engine: &mut ScreenReaderEngine, message: FromUi) -> Option<String> {
         engine.handle_accessibility_event(&AccessibilityEvent::Ui(message))
+    }
+
+    /// Find what is said without the place its text has in the history list, as JAWS says
+    /// its own Find what ("Find what: edit combo | board" [obs, 506/s12, 633/s1]).
+    #[test]
+    fn find_what_is_said_without_a_position() {
+        let (mut engine, _ui) = engine();
+        ctrl_f(&mut engine);
+        let mut field = crate::event::FocusEvent::new(Role::Edit).with_name("Find what:");
+        field.window_title = Some("Okur Find".to_owned());
+        field.container_role = Some(Role::ComboBox);
+        field.value = Some("board".to_owned());
+        field.item_index = Some(1);
+        field.item_count = Some(2);
+        let said = engine.handle_focus_event(&field).unwrap_or_default();
+        assert!(said.contains("board"), "{said}");
+        assert!(!said.contains("1 of 2"), "{said}");
+        // Another window's edit combo keeps its position (the Run dialog's "C: | 1 of 26").
+        field.window_title = Some("Run".to_owned());
+        let said = engine.handle_focus_event(&field).unwrap_or_default();
+        assert!(said.contains("1 of 2"), "{said}");
     }
 
     #[test]

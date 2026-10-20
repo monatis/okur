@@ -35,9 +35,26 @@ const DIALOG_MARK: &str = "\u{1d} dialog \u{1e}";
 /// JAWS's transcript from the line that names its dialog on, if it names one after saying
 /// something else.
 fn from_its_dialog(text: &str) -> Option<&str> {
-    let mark = text.find(DIALOG_MARK)?;
-    let line = text.get(..mark)?.rfind('\n').map_or(0, |n| n + 1);
+    let line = dialog_line(text)?;
     (line > 0).then(|| text.get(line..)).flatten()
+}
+
+/// Where the line that names a dialog starts.
+fn dialog_line(text: &str) -> Option<usize> {
+    let mark = text.find(DIALOG_MARK)?;
+    Some(text.get(..mark)?.rfind('\n').map_or(0, |n| n + 1))
+}
+
+/// [`from_its_dialog`] after what Okur says before its own dialog line, when JAWS says that
+/// first too: "Virtual Find" before JAWS Find [obs, 506/s1].
+fn from_its_dialog_after(text: &str, okur_before: &str) -> Option<String> {
+    let rest = from_its_dialog(text)?;
+    Some(match text.strip_prefix(okur_before) {
+        Some(_) if !okur_before.is_empty() && !rest.starts_with(okur_before) => {
+            format!("{okur_before}{rest}")
+        }
+        _ => rest.to_owned(),
+    })
 }
 
 /// The same on the spoken layer, where JAWS's synthesizer calls are joined by spaces and the
@@ -111,6 +128,7 @@ divergences! {
         "259-web-list-divisions-enter/s1",
         "260-web-list-tabs-enter/s1",
         "511-desktop-window-list-and-tray/s4",
+        "506-web-jaws-find/s1",
     ],
     "Opening one of its list dialogs, JAWS's speech passes through its own windows before it \
      names the dialog: its main window (its version, a list's tutor message) and the browser's \
@@ -278,6 +296,26 @@ divergences! {
     "the owner's rule on JAWS's accidents, 2026-10-18";
 
     Difference::Step => [
+        "506-web-jaws-find/s8",
+        "506-web-jaws-find/s9",
+        "506-web-jaws-find/s10",
+        "506-web-jaws-find/s11",
+        "633-web-jaws-find-next-board/s9",
+        "633-web-jaws-find-next-board/s10",
+        "633-web-jaws-find-next-board/s11",
+        "633-web-jaws-find-next-board/s12",
+        "633-web-jaws-find-next-board/s13",
+        "633-web-jaws-find-next-board/s14",
+    ],
+    "Right after JAWS Find found \"board\", F3 and Shift+F3 say nothing, in every trial of 506 \
+     and 633, and the virtual cursor lands on no match: it stays on the match's line, or ends \
+     a line or two above it, on lines without the word (633: \"published March 14, 2026\", \
+     then \"Maria Lopez,\"), and not the same way in both. From the top of the page F3 finds \
+     the match and says its line (633/s16), as JAWSFindNext, F3 in JAWS's key map, is to. \
+     Okur's F3 and Shift+F3 always go to the next or previous match and say its line.",
+    "the owner's rule on JAWS's accidents, 2026-10-20";
+
+    Difference::Step => [
         "280-web-forms-arrows-auto-forms/s7",
         "632-web-field-returned-later/s10",
     ],
@@ -430,6 +468,10 @@ pub fn compare(step: &str, okur: &str, jaws: &[String]) -> Comparison {
     if differences.contains(&Difference::Step) {
         return Comparison::Accepted;
     }
+    // What Okur says before its own dialog's line ("Virtual Find").
+    let okur_before = dialog_line(okur)
+        .and_then(|line| okur.get(..line))
+        .unwrap_or_default();
     let without = |text: &str, okur_side: bool, ours: &str| {
         let removed = differences
             .iter()
@@ -437,10 +479,11 @@ pub fn compare(step: &str, okur: &str, jaws: &[String]) -> Comparison {
                 match (difference, okur_side) {
                     (Difference::JawsAlsoSays(phrase), false)
                     | (Difference::OkurAlsoSays(phrase), true) => text.replace(phrase, " "),
-                    (Difference::JawsSaysBeforeItsDialog, false) => from_its_dialog(&text)
-                        .map(str::to_owned)
-                        .or_else(|| spoken_from_its_dialog(&text, ours))
-                        .unwrap_or(text),
+                    (Difference::JawsSaysBeforeItsDialog, false) => {
+                        from_its_dialog_after(&text, okur_before)
+                            .or_else(|| spoken_from_its_dialog(&text, ours))
+                            .unwrap_or(text)
+                    }
                     _ => text,
                 }
             });
@@ -502,6 +545,25 @@ mod tests {
 
     fn jaws(texts: &[&str]) -> Vec<String> {
         texts.iter().map(|t| (*t).to_owned()).collect()
+    }
+
+    /// What Okur says before its own dialog, and JAWS first too, stays compared: "Virtual
+    /// Find", then JAWS's Find what field said before JAWS Find [obs, 506/s1].
+    #[test]
+    fn speech_before_the_dialog_is_left_out_after_what_both_say_first() {
+        let jaws = "Virtual Find\nFind what: \u{1d} edit combo \u{1e}\nboard\n\
+                    JAWS Find \u{1d} dialog \u{1e}\nFind what:";
+        let dialog = "JAWS Find \u{1d} dialog \u{1e}\nFind what:";
+        assert_eq!(
+            from_its_dialog_after(jaws, "Virtual Find\n"),
+            Some(format!("Virtual Find\n{dialog}"))
+        );
+        assert_eq!(from_its_dialog_after(jaws, ""), Some(dialog.to_owned()));
+        // What JAWS did not say first is not put back.
+        assert_eq!(
+            from_its_dialog_after(jaws, "Links\n"),
+            Some(dialog.to_owned())
+        );
     }
 
     /// On the spoken layer JAWS's speech before its dialog is left out from where it names the

@@ -165,7 +165,8 @@ impl ScreenReaderEngine {
         // Say Focus says a control's access key whatever the Access Key output: old-pc's
         // JAWS, with it off, said "alt+R" [obs, 323/s1].
         self.focus_access_key = focus.access_key.clone();
-        let keyed = self.keys_as_output(focus);
+        let mut keyed = self.keys_as_output(focus);
+        self.as_find_dialog_focus(&mut keyed);
         let focus = &keyed;
         self.last_selected = None;
         if focus.role != Role::MenuItem {
