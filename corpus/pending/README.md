@@ -23,6 +23,7 @@ To record one:
 | 558 | S and D, with Shift, and Ctrl+Insert+Right, Left and Up from paragraphs, list items, a list, links and headings: what JAWS counts as the same element | `same-element.html` (new) |
 | 559 | Jump to Line (J) with a line and Enter, then where the cursor went; Shift+J; a line past the last | `news-article.html` |
 | 560 | The Word List (Ctrl+Insert+W), and W and Shift+W with a word chosen and without | `news-article.html` |
+| 561 | The clipboard keys: SayClipboard, View Clipboard Text, AppendSelectedTextToClipboard (the Windows-key scripts called by name) | `desktop-editor.ps1` |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.

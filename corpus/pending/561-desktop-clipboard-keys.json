@@ -1,0 +1,27 @@
+{
+  "id": "561-desktop-clipboard-keys",
+  "name": "The clipboard in a native edit: a line copied, then JAWS's SayClipboard (Windows+JAWSKey+X, called by name: Windows' Win+X menu takes the keys), View Clipboard Text (Insert+Space, C) and Escape; a second line selected and AppendSelectedTextToClipboard (Insert+Windows+C, by name), SayClipboard and View Clipboard Text again",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-editor.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Editor Fixture" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Shift+End" },
+    { "id": "s2", "type": "key", "command": "Ctrl+C", "capture_clipboard": true },
+    { "id": "s3", "type": "jaws_script", "command": "SayClipboard" },
+    { "id": "s4", "type": "key", "command": "Insert+Space" },
+    { "id": "s5", "type": "key", "command": "C" },
+    { "id": "s6", "type": "key", "command": "Insert+Up" },
+    { "id": "s7", "type": "key", "command": "Escape" },
+    { "id": "s8", "type": "key", "command": "Down" },
+    { "id": "s9", "type": "key", "command": "Home" },
+    { "id": "s10", "type": "key", "command": "Shift+End" },
+    { "id": "s11", "type": "jaws_script", "command": "AppendSelectedTextToClipboard", "capture_clipboard": true },
+    { "id": "s12", "type": "jaws_script", "command": "SayClipboard" },
+    { "id": "s13", "type": "key", "command": "Insert+Space" },
+    { "id": "s14", "type": "key", "command": "C" },
+    { "id": "s15", "type": "key", "command": "Escape" }
+  ]
+}
