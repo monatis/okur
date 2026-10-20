@@ -16,12 +16,10 @@ To record one:
 | 518 | Reading a Word document | `desktop-word.ps1` (here) |
 | 519 | Word's headings list, spelling errors, revisions | `desktop-word.ps1` (here) |
 | 561 | The clipboard keys: SayClipboard, View Clipboard Text, AppendSelectedTextToClipboard (the Windows-key scripts called by name). Round 59 failed: Escape did not close the "Clipboard Text" window View Clipboard Text opens, which then stayed open across trials, and a second View Clipboard Text asked "Overwrite Clipboard Text Viewer" (Yes, No). Needs another way to close that window before it is recorded again | `desktop-editor.ps1` |
-| 598, 613 | Round 79 failed one step of each in every trial for the step's 10 seconds: 598/s13 (Ctrl+A at Intermediate reads the whole page) and 613/s16 (spelling a line); both wait longer now | as written |
-| 613 | A Turkish page (`lang="tr"`, ç ğ ı İ ö ş ü) read by character, word and line, spelled, and with Say All, in JAWS's English voice (old-pc's language detection is off) | `turkish-text.html` (here) |
-| 617 | Ctrl+Shift+End from ten depths of fifteen plain 80-character paragraphs: the size at which JAWS stops reading a selection and says "selected N characters up to", how it counts N, and how much of the end it says (562 left all three open) | `selection-sizes.html` (here) |
-| 618, 619 | Say Color (Insert+5) on the 148 CSS named colors and a 6x6x6 RGB grid, for JAWS's color table (565 showed names of its own: blue2, lime green 2, dark slate gray); their IA2 snapshots give the RGB of each line | `color-names.html`, `color-grid.html` (here) |
-| 620 | Ctrl+Shift+End over 103 lines of 9 characters, selecting 989 to 1029 characters: the size from which JAWS says "selected N characters up to" (617 put it between 971 and 1052). 617, recorded in round 82, waits in the scratchpad for its page's snapshot, which is captured with 620's | `selection-threshold.html` (here) |
-| 621, 622 | Usage hints on Tab in the sign-up form ("Type in text."): 555's keys with no Verbosity setting (621), and 204's with Verbosity=0 written (622). 552, 553 and 555 (Down twice, then Tab; Verbosity set) have the hints at every level; 204, 573 and 583 (Tab from the top) have none at any level: the way in or the setting | `signup-form.html` |
+| 613 | A Turkish page (`lang="tr"`, ç ğ ı İ ö ş ü) read by character, word and line, spelled, and with Say All, in JAWS's English voice (old-pc's language detection is off). Recorded in round 114, its 3 trials passed once run-scenario read the fixture's title as UTF-8 (`f78ec7b`); waits for its page's snapshots (snap116) | `turkish-text.html` (here) |
+| 627 | The clipboard keys in their key map's order. Round 91 was inconclusive: Windows+Insert+X reached Windows' own Win+X menu from the harness's keys; to be recorded with `okur-lab-keys` | `desktop-editor.ps1` |
+| 628 | The layer's help and Command Search. Round 91 was inconclusive on old-pc's Turkish keyboard layout | `desktop-dialogs.ps1` |
+| 665 | Say Window in Notepad's Font dialog, waited for long enough to read its 187 fonts (round 115) | `desktop-notepad.ps1` |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.
