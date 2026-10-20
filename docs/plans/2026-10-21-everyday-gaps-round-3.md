@@ -22,7 +22,7 @@ The rounds queued at the end of round 2, in order (each behind the one before):
 | 59 | 237 (missed in 52), 284 again (its spelling errors traced); 556-557 (Shift+Period and Shift+Comma outside lists), 558 (S and D on a plain page), 559 (where Jump to Line goes), 560 (the Word List), 561 (the clipboard keys, the Windows-key scripts by name), 562 (a large selection), 563 (following aria-flowto), 564 (Say Line on form fields), 565 (Say Color on colors.html), 566 (Speech On Demand), 567 (spelling errors in a field of several words) | build each; 562 sets the "N characters up to" rule |
 | snap60 | virtual-keys, colors and news-article captured through IA2 again, with relations and text colors (`okur.exe` 36671d07) | import the snapshots: Has Flows To, Equals and Say Color replay |
 | live12 | Okur reading live: its list dialogs (222-260, 274) and round 3's features (205, 284, 293, 294, 323, 513, 515, 516, 534), `okur.exe` 87fadfd0 | `okur live-parity` against live11 and the replay |
-| 61 | 568 (JAWS's text analysis on Insert+Tab, a new Notepad fixture) | learn the checks; build them |
+| 61 | 568 (JAWS's text analysis on Insert+Tab, a new Notepad fixture), 569 (Route PC to Virtual on elements that cannot take the focus) | build each |
 
 For each: fetch with `lab-fetch.sh` (a stalled fetch is stopped and started again), grep the
 evidence and traces for links, the lab account's folders and the owner's name, check the

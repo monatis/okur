@@ -1,0 +1,27 @@
+{
+  "id": "569-web-route-pc-to-elements",
+  "name": "Ctrl+Insert+Delete (Route PC to Virtual) with the virtual cursor on a heading, a paragraph, a list's start, a list item's link, a table's cell and a figure's graphic in the news article, each followed by Say Line: what JAWS says of an element that cannot take the focus",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "1" },
+    { "id": "s2", "type": "key", "command": "Ctrl+Insert+Delete" },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Down" },
+    { "id": "s5", "type": "key", "command": "Ctrl+Insert+Delete" },
+    { "id": "s6", "type": "key", "command": "Insert+Up" },
+    { "id": "s7", "type": "key", "command": "G" },
+    { "id": "s8", "type": "key", "command": "Ctrl+Insert+Delete" },
+    { "id": "s9", "type": "key", "command": "L" },
+    { "id": "s10", "type": "key", "command": "Ctrl+Insert+Delete" },
+    { "id": "s11", "type": "key", "command": "Down" },
+    { "id": "s12", "type": "key", "command": "Ctrl+Insert+Delete" },
+    { "id": "s13", "type": "key", "command": "T" },
+    { "id": "s14", "type": "key", "command": "Ctrl+Alt+Down" },
+    { "id": "s15", "type": "key", "command": "Ctrl+Insert+Delete" },
+    { "id": "s16", "type": "key", "command": "Insert+Up" }
+  ]
+}
