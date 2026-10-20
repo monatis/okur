@@ -1,0 +1,20 @@
+{
+  "id": "642-desktop-keyboard-help-second-press",
+  "name": "Keyboard Help's wait for a second press: with Insert+1 on, Say Line pressed, then pressed again 200, 400, 600, 800 and 1200 ms later. Pressed twice quickly JAWS said the key once and the longer description (634/s3); the speech recorder's times show when JAWS describes the first press, and from which interval two presses are two. Steps from the speech recorder alone, as 634",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-dialogs.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Dialog Fixture" },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+1", "history": false },
+    { "id": "s2", "type": "key", "command": "Insert+Up", "history": false, "during": [{ "after_ms": 200, "command": "Insert+Up" }] },
+    { "id": "s3", "type": "key", "command": "Insert+Up", "history": false, "during": [{ "after_ms": 400, "command": "Insert+Up" }] },
+    { "id": "s4", "type": "key", "command": "Insert+Up", "history": false, "during": [{ "after_ms": 600, "command": "Insert+Up" }] },
+    { "id": "s5", "type": "key", "command": "Insert+Up", "history": false, "during": [{ "after_ms": 800, "command": "Insert+Up" }] },
+    { "id": "s6", "type": "key", "command": "Insert+Up", "history": false, "during": [{ "after_ms": 1200, "command": "Insert+Up" }] },
+    { "id": "s7", "type": "key", "command": "Insert+1", "history": false },
+    { "id": "s8", "type": "key", "command": "Insert+Up" }
+  ]
+}
