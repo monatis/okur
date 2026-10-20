@@ -1281,6 +1281,8 @@ impl VirtualCursor {
         let (position, whole) = match before {
             Some((r, _)) if r == row => (msg::table_column(col).render(), false),
             Some((_, c)) if c == col => (msg::table_row(row).render(), false),
+            // With short messages "col 2 row 2" [obs, 593/s11, s12; 603/s11, s12].
+            _ if self.short_messages() => (msg::table_focus_cell_short(col, row).render(), true),
             _ => (msg::table_focus_cell(col, row).render(), true),
         };
         Some((header, position, whole))

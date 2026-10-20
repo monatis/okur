@@ -669,8 +669,10 @@ fn focus_speech_within(
 /// the Run dialog, observed on the dev box (research): "Run | dialog | Type the name of a
 /// program, … | Open: | Open: | combo box | collapsed | C: | Open: | edit | C: | Open |
 /// button | OK | button | Cancel | button | Browse... | button".
-pub fn say_window(title: &str, items: &[crate::event::WindowItem]) -> String {
-    let mut lines = vec![format!("{title} {}", msg::role_dialog())];
+pub fn say_window(title: &str, items: &[crate::event::WindowItem]) -> Announcement {
+    // With short messages the title line is not said [obs, 602/s4, 612/s4].
+    let mut lines =
+        vec![Line::of(PartKind::Message, format!("{title} {}", msg::role_dialog())).short("")];
     let checked = |c: Option<bool>| {
         state(if c == Some(true) {
             msg::state_checked().as_str()
@@ -689,13 +691,17 @@ pub fn say_window(title: &str, items: &[crate::event::WindowItem]) -> String {
             named(&item.name)
         };
         // A control in a group box is named after it: "Direction Up radio button" [obs,
-        // 540/s4].
-        let name = match item.group.as_deref().map(named).filter(|g| !g.is_empty()) {
-            Some(group) if name.is_empty() => group,
-            Some(group) => format!("{group} {name}"),
-            None => name,
+        // 540/s4]; the box's name is a part of its own, which Advanced leaves out [obs,
+        // 612/s4].
+        let group = item.group.as_deref().map(named).filter(|g| !g.is_empty());
+        let mut parts = match group {
+            Some(group) if name.is_empty() => vec![name_part(group)],
+            Some(group) => vec![
+                Part::new(PartKind::GroupName, format!("{group} ")),
+                name_part(name),
+            ],
+            None => vec![name_part(name)],
         };
-        let mut parts = vec![name_part(name)];
         match item.role {
             // A group box: "Direction group" [obs, 540/s4].
             Role::Group => parts.push(role(msg::role_group().as_str())),
@@ -744,16 +750,16 @@ pub fn say_window(title: &str, items: &[crate::event::WindowItem]) -> String {
             };
             let place = items.iter().take(i).filter(in_box).count() + 1;
             let total = items.iter().filter(in_box).count();
-            lines.push(Line::new(parts).render());
-            lines.push(msg::position(place, total).render());
+            lines.push(Line::new(parts));
+            lines.push(Line::of(PartKind::Position, msg::position(place, total)));
             continue;
         }
-        let line = Line::new(parts).render();
-        if !line.trim().is_empty() {
+        let line = Line::new(parts);
+        if !line.render().trim().is_empty() {
             lines.push(line);
         }
     }
-    lines.join("\n")
+    Announcement::new(lines)
 }
 
 /// Say Current Focus (Insert+Tab): the focused control's lines again, without what JAWS
@@ -1995,7 +2001,7 @@ To activate press Enter."
             item(Role::Button, "Find Next", None, None),
         ];
         assert_eq!(
-            norm(&say_window("Find", &items)),
+            norm(&say_window("Find", &items).render()),
             norm(
                 "Find dialog\nDirection \u{1d} group \u{1e}\n\
                  Direction Up \u{1d} radio button \u{1e} \u{1d}not checked\u{1e}\n1 of 2\n\
@@ -2035,7 +2041,7 @@ To activate press Enter."
             },
         ];
         assert_eq!(
-            norm(&say_window("notes.txt Properties", &items)),
+            norm(&say_window("notes.txt Properties", &items).render()),
             norm(
                 "notes.txt Properties dialog\nFile name:  \u{1d} Edit \u{1e} \nnotes.txt\n\
                  Type of file: \n \u{1d} read only edit \u{1e} \nText Document (.txt)\n\

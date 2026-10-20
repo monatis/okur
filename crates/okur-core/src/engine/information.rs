@@ -24,6 +24,10 @@ impl ScreenReaderEngine {
         } else {
             focus.default_button.clone()?
         };
+        // With short messages, the button alone: "Find Next" [obs, 602/s2, 612/s2].
+        if self.settings.verbosity.message_length() == crate::settings::MessageLength::Short {
+            return self.say(name.trim().to_owned());
+        }
         self.say(msg::default_button_is(name.trim()).to_string())
     }
 
@@ -77,6 +81,15 @@ impl ScreenReaderEngine {
                 vec![name.to_owned(), key.to_owned()]
             }
             _ => vec![key.to_owned()],
+        };
+        // With short messages, the name and the key in one, "Find what:, Alt+n", "Wrap
+        // around, alt+r" [obs, 602/s3, s7; 612/s3, s7].
+        let short =
+            self.settings.verbosity.message_length() == crate::settings::MessageLength::Short;
+        let said = if short && said.len() > 1 {
+            vec![said.join(", ")]
+        } else {
+            said
         };
         for (i, part) in said.iter().enumerate() {
             self.speech.speak(part, i == 0);

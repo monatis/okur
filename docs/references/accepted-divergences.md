@@ -152,7 +152,17 @@ A step can be in more than one entry; all of its entries apply.
   `526-desktop-screen-sensitive-help/s21`, `527-desktop-notepad-help-keys/s1`,
   `527-desktop-notepad-help-keys/s3`, `527-desktop-notepad-help-keys/s5`,
   `531-web-screen-sensitive-help/s2`, `531-web-screen-sensitive-help/s5`,
-  `531-web-screen-sensitive-help/s8`.
+  `531-web-screen-sensitive-help/s8`; and 526's steps again at Intermediate and Advanced verbosity,
+  `601-desktop-screen-sensitive-help-intermediate/s1`, `/s5`, `/s10`, `/s13`, `/s21` (in full:
+  `601-desktop-screen-sensitive-help-intermediate/s5`,
+  `601-desktop-screen-sensitive-help-intermediate/s10`,
+  `601-desktop-screen-sensitive-help-intermediate/s13`,
+  `601-desktop-screen-sensitive-help-intermediate/s21`), and
+  `611-desktop-screen-sensitive-help-advanced/s1`,
+  `611-desktop-screen-sensitive-help-advanced/s5`,
+  `611-desktop-screen-sensitive-help-advanced/s10`,
+  `611-desktop-screen-sensitive-help-advanced/s13`,
+  `611-desktop-screen-sensitive-help-advanced/s21`.
 - Difference: the whole step: the help's words.
 - Why: JAWS's help texts (screen-sensitive help, Insert+F1; hot key help, Insert+H; Windows
   keys help, Insert+W) are Freedom Scientific's writing. Okur's help keys open the Virtual
@@ -279,7 +289,9 @@ A step can be in more than one entry; all of its entries apply.
 
 ### "Unavailable" on returning from a file dialog
 
-- Steps: `524-desktop-save-as-dialog/s11`, `532-desktop-dialog-default-button-and-hot-key/s9`.
+- Steps: `524-desktop-save-as-dialog/s11`, `532-desktop-dialog-default-button-and-hot-key/s9`,
+  and 524's at Intermediate and Advanced verbosity,
+  `600-desktop-save-as-dialog-intermediate/s11` and `610-desktop-save-as-dialog-advanced/s11`.
 - Difference: the whole step. JAWS says "Unavailable | Save As... Button | To activate press
   spacebar." without the window's title; Okur says the window's title, then the button.
 - Why: Escape out of a common file dialog (Save As, Open) leaves the owner window disabled by

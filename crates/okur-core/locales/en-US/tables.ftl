@@ -21,6 +21,8 @@ table-not-in-table = Not in a table.
 table-edge = edge of table
 # A focus entering a table cell, or moving to another row and column at once.
 table-focus-cell = column { $column } row { $row }
+# With short messages [obs, 593/s11, s12].
+table-focus-cell-short = col { $column } row { $row }
 # The table layer (Insert+Space, T) turned on: the arrows move by cell until Escape.
 table-layer = Table layer
 # Reading the next or prior row or column whole (Windows+Alt and an arrow) found none further.

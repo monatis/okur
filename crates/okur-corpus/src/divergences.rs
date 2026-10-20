@@ -162,6 +162,16 @@ divergences! {
         "526-desktop-screen-sensitive-help/s10",
         "526-desktop-screen-sensitive-help/s13",
         "526-desktop-screen-sensitive-help/s21",
+        "601-desktop-screen-sensitive-help-intermediate/s1",
+        "601-desktop-screen-sensitive-help-intermediate/s5",
+        "601-desktop-screen-sensitive-help-intermediate/s10",
+        "601-desktop-screen-sensitive-help-intermediate/s13",
+        "601-desktop-screen-sensitive-help-intermediate/s21",
+        "611-desktop-screen-sensitive-help-advanced/s1",
+        "611-desktop-screen-sensitive-help-advanced/s5",
+        "611-desktop-screen-sensitive-help-advanced/s10",
+        "611-desktop-screen-sensitive-help-advanced/s13",
+        "611-desktop-screen-sensitive-help-advanced/s21",
         "527-desktop-notepad-help-keys/s1",
         "527-desktop-notepad-help-keys/s3",
         "527-desktop-notepad-help-keys/s5",
@@ -321,6 +331,8 @@ divergences! {
 
     Difference::Step => [
         "524-desktop-save-as-dialog/s11",
+        "600-desktop-save-as-dialog-intermediate/s11",
+        "610-desktop-save-as-dialog-advanced/s11",
         "532-desktop-dialog-default-button-and-hot-key/s9",
     ],
     "Escape out of a common file dialog (Save As, Open) returns to the button that opened it, \

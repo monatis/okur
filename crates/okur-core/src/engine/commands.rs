@@ -66,6 +66,7 @@ impl ScreenReaderEngine {
                     focus.window_title.as_deref().unwrap_or_default(),
                     &focus.window_items,
                 );
+                let speech = self.said(speech).render();
                 self.speech.speak(&speech, true);
                 return Some(speech);
             }
