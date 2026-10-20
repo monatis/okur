@@ -1491,6 +1491,30 @@ impl VirtualCursor {
         )
     }
 
+    /// Moves to the start or the end of the element the cursor is in (Shift+Comma and
+    /// Shift+Period, Alt+Windows+Home and End): of the elements with a line of their own at
+    /// both ends, the innermost, read as that line ("list of 2 items", "list end"); from a
+    /// list's item it is the list [obs, 294].
+    pub fn move_element_edge(&mut self, end: bool) -> Option<String> {
+        self.selection = None;
+        let here = self
+            .buffer
+            .line_at_offset(self.offset)
+            .map(|l| l.start_offset)
+            .unwrap_or(self.offset);
+        let (start, end_line) = self
+            .buffer
+            .bounded
+            .iter()
+            .copied()
+            .filter(|&(start, end_line)| start <= here && here <= end_line)
+            .max_by_key(|&(start, end_line)| (start, std::cmp::Reverse(end_line)))?;
+        let target = if end { end_line } else { start };
+        self.offset = target;
+        self.current_node_id = self.buffer.line_at_offset(target).map(|l| l.node_id);
+        Some(self.line_speech_at(target))
+    }
+
     /// Moves cursor to next list container (`L` / `MoveToNextList`).
     pub fn move_next_list(&mut self) -> Option<String> {
         let t = self.buffer.lists.clone();

@@ -276,6 +276,8 @@ impl ScreenReaderEngine {
             Command::ReadPriorRow => self.cursor.read_adjacent_row(-1),
             Command::ReadNextColumn => self.cursor.read_adjacent_column(1),
             Command::ReadPriorColumn => self.cursor.read_adjacent_column(-1),
+            Command::StepToStartOfElement => self.cursor.move_element_edge(false),
+            Command::StepToEndOfElement => self.cursor.move_element_edge(true),
             Command::SayColumnHeader => self.cursor.read_current_col_header(),
             Command::SayRowHeader => self.cursor.read_current_row_header(),
 

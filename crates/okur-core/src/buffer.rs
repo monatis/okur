@@ -200,6 +200,9 @@ pub struct VirtualBuffer {
     pub graphics: Vec<usize>,
     /// Horizontal rules, by their line's offset.
     pub separators: Vec<usize>,
+    /// Elements with a line of their own at their start and at their end (lists, tables,
+    /// regions, block quotes, articles, named groups, dialogs): the two lines' offsets.
+    pub bounded: Vec<(usize, usize)>,
     pub articles: Vec<usize>,
     /// Start of the first main landmark, if any (`Q`).
     pub main_region: Option<usize>,

@@ -66,7 +66,7 @@ the Say All command".
 | `-` Dash | MoveToNextSeparator | Separator | built | 292 |
 | `=` Equals | MoveToFlowTo (Shift: MoveToFlowFrom) | | gap | 293 |
 | `\` Backslash | MoveToNextMailToLink | | built (the link takes the focus, as in JAWS) | 293 |
-| Shift+`,` / Shift+`.` | StepToStartOfElement / StepToEndOfElement | Step Before / Past Element | gap | 294 |
+| Shift+`,` / Shift+`.` | StepToStartOfElement / StepToEndOfElement | Step Before / Past Element | built (the innermost list, table, region, block quote, article, group or dialog) | 294 |
 | F3 / Shift+F3 | JAWSFindNext / JAWSFindPrior | JAWS Find Next / Previous | built | |
 
 ## Other virtual cursor keys (`[virtual keys]`)
@@ -85,7 +85,7 @@ the Say All command".
 | Alt+Win+Numpad5 (Alt+Win+Comma) | ReadCurrentRow | built | 297 |
 | Alt+Win+Period | ReadCurrentColumn | built | 297 |
 | Ctrl+Win+J, Ctrl+Shift+Win+J | JumpToTableCell / JumpReturnFromTableCell | gap | |
-| Alt+Win+Home / End | StepToStartOfElement / StepToEndOfElement | gap | 294 |
+| Alt+Win+Home / End | StepToStartOfElement / StepToEndOfElement | built | 294 |
 | Insert+N | NavigationModeToggle (quick keys on, off, Say All only) | built (Say All only acts as off until Say All takes keys) | 298 |
 | Ctrl+Insert+N, Insert+Shift+Z | QuickNavigationKeysSuspendOrResume | built | 298 |
 | Insert+X | SmartNavToggle | gap | |

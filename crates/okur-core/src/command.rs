@@ -129,6 +129,10 @@ pub enum Command {
     /// Windows+Alt+Right and Left: the next or prior column, whole.
     ReadNextColumn,
     ReadPriorColumn,
+    /// Shift+Comma and Shift+Period, Alt+Windows+Home and End: the start and the end of the
+    /// element the virtual cursor is in.
+    StepToStartOfElement,
+    StepToEndOfElement,
 
     // A page's controls.
     NextTabStop,
@@ -325,6 +329,8 @@ impl Command {
             "SaySentence" => SaySentence,
             "SayNextSentence" => SayNextSentence,
             "SayPriorSentence" => SayPriorSentence,
+            "StepToStartOfElement" => StepToStartOfElement,
+            "StepToEndOfElement" => StepToEndOfElement,
             "N" | "n" | "MoveToNextNonLinkText" | "Insert+Enter" => NextNonLinkText,
             "Shift+N" | "MoveToPriorNonLinkText" | "Insert+Shift+Enter" => PriorNonLinkText,
             "+H" | "+h" | "MoveToPriorHeading" => MoveToPrior(Heading),
@@ -697,6 +703,9 @@ static BINDINGS: &[Binding] = &{
         bind(Numpad5, WIN_ALT, SayCurrentRow),
         bind(Comma, WIN_ALT, SayCurrentRow),
         bind(Period, WIN_ALT, SayCurrentColumn),
+        // The start and the end of the element (Default.JKM's [virtual keys]) [obs, 294].
+        bind(Home, WIN_ALT, StepToStartOfElement),
+        bind(End, WIN_ALT, StepToEndOfElement),
         // Combo boxes.
         bind(DownArrow, ANY.alt(Yes).ctrl(No).shift(No), ExpandComboBox),
         bind(UpArrow, ANY.alt(Yes).ctrl(No).shift(No), CollapseComboBox),
@@ -957,6 +966,8 @@ static BINDINGS: &[Binding] = &{
         bind(Minus, ALONE, MoveToNext(Separator)),
         bind(Backslash, SHIFT, MoveToPrior(MailLink)),
         bind(Backslash, ALONE, MoveToNext(MailLink)),
+        bind(Comma, SHIFT.insert(No), StepToStartOfElement),
+        bind(Period, SHIFT.insert(No), StepToEndOfElement),
         bind(Alpha('L'), SHIFT, MoveToPrior(List)),
         bind(Alpha('L'), ALONE, MoveToNext(List)),
         bind(Alpha('I'), SHIFT, MoveToPrior(ListItem)),

@@ -1153,7 +1153,8 @@ impl<'a> Builder<'a> {
         }
 
         self.flush();
-        self.emit_boundary(node.id, node.role.clone(), msg::table_end().as_str());
+        let end_line = self.emit_boundary(node.id, node.role.clone(), msg::table_end().as_str());
+        self.buffer.bounded.push((start_offset, end_line));
         let end_offset = self.offset();
         self.buffer.table_offsets.push(start_offset);
         self.buffer.tables.push(TableGrid {
@@ -1176,6 +1177,11 @@ impl<'a> Builder<'a> {
     /// Records a container span (and dialog range) from its start line to the current end.
     fn record_container(&mut self, node: &AomNode, start_offset: usize) {
         let end_offset = self.offset();
+        if let Some(end_line) = self.buffer.lines.last() {
+            self.buffer
+                .bounded
+                .push((start_offset, end_line.start_offset));
+        }
         self.buffer.spans.push(BufferSpan {
             start_offset,
             end_offset,
@@ -1550,6 +1556,57 @@ mod tests {
             ]
         );
         assert!(buffer.lines.iter().all(|l| l.node_id == 1));
+    }
+
+    /// Shift+Period and Shift+Comma move to the end and the start of the innermost element
+    /// with lines at both ends; a list's item is in its list [obs, 294/s5-s7].
+    #[test]
+    fn the_element_edges_are_the_innermost_elements_lines() {
+        let item = |id: usize, text: &str| {
+            AomNode::new(id, Role::ListItem)
+                .with_children(vec![AomNode::new(id + 100, Role::Text).with_text(text)])
+        };
+        let inner = AomNode::new(4, Role::List).with_children(vec![item(5, "Inner")]);
+        let root = AomNode::new(0, Role::Document).with_children(vec![
+            AomNode::new(1, Role::Paragraph)
+                .with_children(vec![AomNode::new(101, Role::Text).with_text("Before")]),
+            AomNode::new(2, Role::List).with_children(vec![
+                item(3, "First"),
+                AomNode::new(6, Role::ListItem).with_children(vec![
+                    AomNode::new(106, Role::Text).with_text("Second"),
+                    inner,
+                ]),
+            ]),
+        ]);
+        let buffer = crate::buffer::VirtualBuffer::from_aom(&root);
+        let line_of = |text: &str| buffer.lines.iter().position(|l| l.text.contains(text));
+        let lines = (line_of("Before"), line_of("First"), line_of("Inner"));
+        assert!(
+            matches!(lines, (Some(_), Some(_), Some(_))),
+            "{:?}",
+            buffer.lines
+        );
+        let (Some(before), Some(first), Some(inner)) = lines else {
+            return;
+        };
+        let mut cursor = crate::cursor::VirtualCursor::new(buffer);
+        cursor.move_to_line(before);
+        assert_eq!(cursor.move_element_edge(true), None);
+        cursor.move_to_line(inner);
+        assert_eq!(
+            cursor.move_element_edge(true).as_deref(),
+            Some("list end nesting level 1")
+        );
+        assert_eq!(
+            cursor.move_element_edge(false).as_deref(),
+            Some("list of 1 items nesting level 1")
+        );
+        cursor.move_to_line(first);
+        assert_eq!(cursor.move_element_edge(true).as_deref(), Some("list end"));
+        assert_eq!(
+            cursor.move_element_edge(false).as_deref(),
+            Some("list of 2 items")
+        );
     }
 
     /// aria-roledescription on the dev box (JAWS, 2026-10-16): said in place of a button's,
