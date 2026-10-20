@@ -30,6 +30,7 @@ To record one:
 | 565 | Say Color (Insert+5) on text in named, unnamed and default colors, and on backgrounds | `colors.html` (new) |
 | 566 | Speech On Demand on and off, and which keys speak while it is on | `news-article.html` |
 | 567 | Spelling errors in a field of several words: Say Line, the words, Say Word, the field read again | `signup-form.html` |
+| 568 | JAWS's text analysis: Insert+Tab and Insert+Up on Notepad lines holding one inconsistency each | `desktop-proofing.ps1` (new) |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.
