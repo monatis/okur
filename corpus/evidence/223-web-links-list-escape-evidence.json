@@ -2,9 +2,9 @@
     "format_version":  2,
     "scenario_id":  "223-web-links-list-escape",
     "scenario_version":  "1.0.0",
-    "timestamp":  "2026-10-19T13:23:14.3549705+03:00",
+    "timestamp":  "2026-10-20T02:02:04.1542407+03:00",
     "provenance":  {
-                       "capture_script_sha256":  "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+                       "capture_script_sha256":  "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
                        "scenario_sha256":  "18c40be697a490f8756aac4dec1f52852ab7f7a626694598d9910f50c2c760e2",
                        "fixture_sha256":  "f8305f4a493bcca6966c5446363fd5993e3304fa415df45ec0820f7e420b7ef8",
                        "host":  "DESKTOP-DCNAKQQ",
@@ -14,6 +14,7 @@
                        "culture":  "en-US",
                        "utc_offset_minutes":  180,
                        "chrome_version":  "155.0.8059.84",
+                       "chrome_profile":  "sr-harness",
                        "jaws_version":  "2025.2505.43.400",
                        "jaws_settings":  {
                                              "DEFAULT.JCF":  {
@@ -405,7 +406,9 @@
                                                                            }
                                          },
                        "reader":  "jaws",
-                       "okur_sha256":  null
+                       "okur_sha256":  null,
+                       "trace_elevated":  true,
+                       "other_browsers_closed":  0
                    },
     "environment":  {
                         "os_version":  "Microsoft Windows NT 10.0.19045.0",
@@ -419,23 +422,24 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-19T13:23:16.6272596+03:00",
+                       "timestamp":  "2026-10-20T02:02:06.8520310+03:00",
                        "foreground_window_start":  "Web App Patterns - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792405404396,
-                                                "t_end_ms":  1792405408906,
+                                                "t_start_ms":  1792450934839,
+                                                "t_end_ms":  1792450941067,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Insert+F7",
                                                                "repeat":  1
                                                            },
                                                 "observation":  {
-                                                                    "speech_raw":  "Links List  \u001d dialog \u001e \nlinks  \u001d List view \u001e \nCurrent Page Overview\n1 of 15\nTo move to items use the Arrow keys.",
+                                                                    "speech_raw":  "JAWS Version 2025.2505.43 \nLinks List  \u001d dialog \u001e \nlinks  \u001d List view \u001e \nCurrent Page Overview\n1 of 15\nTo move to items use the Arrow keys.",
                                                                     "spoken":  [
                                                                                    "Speech history cleared",
+                                                                                   "JAWS Version 2025.2505.43",
                                                                                    "Links List dialog  ",
                                                                                    "links List view  ",
                                                                                    "Current Page Overview",
@@ -444,7 +448,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792405404424,
+                                                                                               "t":  1792450934857,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -479,11 +483,11 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405404716,
+                                                                                               "t":  1792450935205,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "Links",
+                                                                                                                 "text":  "JAWS",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -495,13 +499,48 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "List",
+                                                                                                                 "text":  "Version",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
                                                                                                                  "text":  "2",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "2025.2505.43",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792450936428,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Links",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "3",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "List",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "4",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -514,7 +553,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405404943,
+                                                                                               "t":  1792450937137,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -524,7 +563,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "3",
+                                                                                                                 "text":  "5",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -537,7 +576,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405405543,
+                                                                                               "t":  1792450937738,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -547,7 +586,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "4",
+                                                                                                                 "text":  "6",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -559,7 +598,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "5",
+                                                                                                                 "text":  "7",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -572,7 +611,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405406244,
+                                                                                               "t":  1792450938438,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -582,7 +621,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "6",
+                                                                                                                 "text":  "8",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -594,7 +633,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "7",
+                                                                                                                 "text":  "9",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -607,35 +646,11 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405406853,
+                                                                                               "t":  1792450939038,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
                                                                                                                  "text":  "To",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "8",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "move",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "9",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "to",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -647,7 +662,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "items",
+                                                                                                                 "text":  "move",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -659,7 +674,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "use",
+                                                                                                                 "text":  "to",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -671,7 +686,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "the",
+                                                                                                                 "text":  "items",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -683,13 +698,37 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "Arrow",
+                                                                                                                 "text":  "use",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
                                                                                                                  "text":  "14",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "the",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "15",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Arrow",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "16",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -707,7 +746,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3487,
+                                                                    "settle_ms":  5778,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -716,8 +755,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792405410576,
-                                                "t_end_ms":  1792405413105,
+                                                "t_start_ms":  1792450942722,
+                                                "t_end_ms":  1792450945265,
                                                 "action":  {
                                                                "type":  "jaws_function",
                                                                "command":  "TypeKey(\"DownArrow\")",
@@ -733,7 +772,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792405410609,
+                                                                                               "t":  1792450942754,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -743,7 +782,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "21",
+                                                                                                                 "text":  "23",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -755,7 +794,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "22",
+                                                                                                                 "text":  "24",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -768,7 +807,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405410784,
+                                                                                               "t":  1792450942927,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -779,18 +818,18 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405411283,
+                                                                                               "t":  1792450943428,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "23",
+                                                                                                                 "text":  "25",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              }
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405411484,
+                                                                                               "t":  1792450943628,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -800,7 +839,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "24",
+                                                                                                                 "text":  "26",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -812,7 +851,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "25",
+                                                                                                                 "text":  "27",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -839,8 +878,8 @@
                                             },
                                             {
                                                 "step_id":  "s3",
-                                                "t_start_ms":  1792405414803,
-                                                "t_end_ms":  1792405417287,
+                                                "t_start_ms":  1792450946960,
+                                                "t_end_ms":  1792450949454,
                                                 "action":  {
                                                                "type":  "jaws_function",
                                                                "command":  "TypeKey(\"Escape\")",
@@ -853,7 +892,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792405414840,
+                                                                                               "t":  1792450946997,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -863,7 +902,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "32",
+                                                                                                                 "text":  "34",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -875,7 +914,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "33",
+                                                                                                                 "text":  "35",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -893,7 +932,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1101,
+                                                                    "settle_ms":  1099,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  true,
                                                                     "baseline_settled":  true
@@ -902,8 +941,8 @@
                                             },
                                             {
                                                 "step_id":  "s4",
-                                                "t_start_ms":  1792405418113,
-                                                "t_end_ms":  1792405419664,
+                                                "t_start_ms":  1792450950301,
+                                                "t_end_ms":  1792450951837,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Down",
@@ -916,7 +955,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792405418180,
+                                                                                               "t":  1792450950366,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -956,7 +995,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1285,
+                                                                    "settle_ms":  1286,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -967,6 +1006,9 @@
                        "trial_success":  true,
                        "trace_file":  "223-web-links-list-escape-trial1.jsonl",
                        "lab_state_cleared":  {
+                                                 "shell_windows_closed":  [
+
+                                                                          ],
                                                  "modifiers_held":  [
 
                                                                     ],
@@ -977,27 +1019,30 @@
                                                                           ]
                                              },
                        "page_load_settled":  false,
-                       "trace_sha256":  "c2e814a7d58e362dc16e1115e0e115f72500f0b81bc4a35756cd68f0633447ac"
+                       "trace_sha256":  "a9c2224d43e3e340fb4e5de0ce022349f09ed635dd66115f6c287cf8b4ee8145"
                    },
                    {
                        "trial_index":  2,
-                       "timestamp":  "2026-10-19T13:23:39.7230899+03:00",
+                       "timestamp":  "2026-10-20T02:02:31.9102365+03:00",
                        "foreground_window_start":  "Web App Patterns - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792405427269,
-                                                "t_end_ms":  1792405431696,
+                                                "t_start_ms":  1792450959619,
+                                                "t_end_ms":  1792450965978,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Insert+F7",
                                                                "repeat":  1
                                                            },
                                                 "observation":  {
-                                                                    "speech_raw":  "Links List  \u001d dialog \u001e \nlinks  \u001d List view \u001e \nCurrent Page Overview\n1 of 15\nTo move to items use the Arrow keys.",
+                                                                    "speech_raw":  "links  \u001d List view \u001e \nCurrent Page Overview\n1 of 15\nLinks List  \u001d dialog \u001e \nlinks  \u001d List view \u001e \nCurrent Page Overview\n1 of 15\nTo move to items use the Arrow keys.",
                                                                     "spoken":  [
                                                                                    "Speech history cleared",
+                                                                                   "links List view  ",
+                                                                                   "Current Page Overview",
+                                                                                   "1 of 15",
                                                                                    "Links List dialog  ",
                                                                                    "links List view  ",
                                                                                    "Current Page Overview",
@@ -1006,7 +1051,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792405427292,
+                                                                                               "t":  1792450959642,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1041,42 +1086,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405427577,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "Links",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "1",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "List",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "2",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "dialog  ",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           },
-                                                                                           {
-                                                                                               "t":  1792405427803,
+                                                                                               "t":  1792450959952,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1086,7 +1096,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "3",
+                                                                                                                 "text":  "1",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1099,7 +1109,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405428404,
+                                                                                               "t":  1792450960078,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1109,7 +1119,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "4",
+                                                                                                                 "text":  "2",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1121,7 +1131,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "5",
+                                                                                                                 "text":  "3",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1134,7 +1144,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405429104,
+                                                                                               "t":  1792450960777,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1144,7 +1154,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "6",
+                                                                                                                 "text":  "4",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1156,7 +1166,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "7",
+                                                                                                                 "text":  "5",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1169,11 +1179,46 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405429713,
+                                                                                               "t":  1792450961388,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "To",
+                                                                                                                 "text":  "Links",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "6",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "List",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "7",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "dialog  ",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792450962088,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "links",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1185,7 +1230,18 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "move",
+                                                                                                                 "text":  "List view  ",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792450962688,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Current",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1197,7 +1253,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "to",
+                                                                                                                 "text":  "Page",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1209,7 +1265,18 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "items",
+                                                                                                                 "text":  "Overview",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792450963388,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "1",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1221,7 +1288,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "use",
+                                                                                                                 "text":  "of",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1233,7 +1300,18 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "the",
+                                                                                                                 "text":  "15",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792450963988,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "To",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1245,13 +1323,73 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "Arrow",
+                                                                                                                 "text":  "move",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
                                                                                                                  "text":  "14",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "to",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "15",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "items",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "16",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "use",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "17",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "the",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "18",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Arrow",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "19",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1269,7 +1407,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3536,
+                                                                    "settle_ms":  6047,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1278,8 +1416,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792405433395,
-                                                "t_end_ms":  1792405435946,
+                                                "t_start_ms":  1792450967682,
+                                                "t_end_ms":  1792450970196,
                                                 "action":  {
                                                                "type":  "jaws_function",
                                                                "command":  "TypeKey(\"DownArrow\")",
@@ -1295,7 +1433,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792405433432,
+                                                                                               "t":  1792450967727,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1305,7 +1443,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "21",
+                                                                                                                 "text":  "26",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1317,7 +1455,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "22",
+                                                                                                                 "text":  "27",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1330,7 +1468,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405433603,
+                                                                                               "t":  1792450967898,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1341,18 +1479,18 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405434104,
+                                                                                               "t":  1792450968397,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "23",
+                                                                                                                 "text":  "28",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              }
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405434304,
+                                                                                               "t":  1792450968597,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1362,7 +1500,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "24",
+                                                                                                                 "text":  "29",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1374,7 +1512,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "25",
+                                                                                                                 "text":  "30",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1392,7 +1530,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2371,
+                                                                    "settle_ms":  2352,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1401,8 +1539,8 @@
                                             },
                                             {
                                                 "step_id":  "s3",
-                                                "t_start_ms":  1792405437658,
-                                                "t_end_ms":  1792405440171,
+                                                "t_start_ms":  1792450971911,
+                                                "t_end_ms":  1792450974416,
                                                 "action":  {
                                                                "type":  "jaws_function",
                                                                "command":  "TypeKey(\"Escape\")",
@@ -1415,7 +1553,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792405437700,
+                                                                                               "t":  1792450971949,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1425,7 +1563,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "32",
+                                                                                                                 "text":  "37",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1437,7 +1575,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "33",
+                                                                                                                 "text":  "38",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1464,8 +1602,8 @@
                                             },
                                             {
                                                 "step_id":  "s4",
-                                                "t_start_ms":  1792405440994,
-                                                "t_end_ms":  1792405442534,
+                                                "t_start_ms":  1792450975258,
+                                                "t_end_ms":  1792450976883,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Down",
@@ -1478,7 +1616,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792405441056,
+                                                                                               "t":  1792450975312,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1518,7 +1656,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1306,
+                                                                    "settle_ms":  1287,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1529,6 +1667,9 @@
                        "trial_success":  true,
                        "trace_file":  "223-web-links-list-escape-trial2.jsonl",
                        "lab_state_cleared":  {
+                                                 "shell_windows_closed":  [
+
+                                                                          ],
                                                  "modifiers_held":  [
 
                                                                     ],
@@ -1539,27 +1680,28 @@
                                                                           ]
                                              },
                        "page_load_settled":  false,
-                       "trace_sha256":  "b2d3cf2f63f8bfa2895bdbc1007889632dce78b6816b93e335505ac4b1c90028"
+                       "trace_sha256":  "591387dee1692811afe964be402dacdacc4875bfdcd1237b92486364162f4958"
                    },
                    {
                        "trial_index":  3,
-                       "timestamp":  "2026-10-19T13:24:02.6215233+03:00",
+                       "timestamp":  "2026-10-20T02:02:56.9191876+03:00",
                        "foreground_window_start":  "Web App Patterns - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792405450256,
-                                                "t_end_ms":  1792405454727,
+                                                "t_start_ms":  1792450984643,
+                                                "t_end_ms":  1792450990795,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Insert+F7",
                                                                "repeat":  1
                                                            },
                                                 "observation":  {
-                                                                    "speech_raw":  "Links List  \u001d dialog \u001e \nlinks  \u001d List view \u001e \nCurrent Page Overview\n1 of 15\nTo move to items use the Arrow keys.",
+                                                                    "speech_raw":  "JAWS Version 2025.2505.43 \nLinks List  \u001d dialog \u001e \nlinks  \u001d List view \u001e \nCurrent Page Overview\n1 of 15\nTo move to items use the Arrow keys.",
                                                                     "spoken":  [
                                                                                    "Speech history cleared",
+                                                                                   "JAWS Version 2025.2505.43",
                                                                                    "Links List dialog  ",
                                                                                    "links List view  ",
                                                                                    "Current Page Overview",
@@ -1568,7 +1710,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792405450279,
+                                                                                               "t":  1792450984678,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1603,11 +1745,11 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405450577,
+                                                                                               "t":  1792450984976,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "Links",
+                                                                                                                 "text":  "JAWS",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1619,13 +1761,48 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "List",
+                                                                                                                 "text":  "Version",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
                                                                                                                  "text":  "2",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "2025.2505.43",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792450986198,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Links",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "3",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "List",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "4",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1638,7 +1815,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405450803,
+                                                                                               "t":  1792450986898,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1648,7 +1825,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "3",
+                                                                                                                 "text":  "5",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1661,7 +1838,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405451404,
+                                                                                               "t":  1792450987498,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1671,7 +1848,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "4",
+                                                                                                                 "text":  "6",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1683,7 +1860,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "5",
+                                                                                                                 "text":  "7",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1696,7 +1873,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405452103,
+                                                                                               "t":  1792450988208,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1706,7 +1883,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "6",
+                                                                                                                 "text":  "8",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1718,7 +1895,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "7",
+                                                                                                                 "text":  "9",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1731,35 +1908,11 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405452713,
+                                                                                               "t":  1792450988807,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
                                                                                                                  "text":  "To",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "8",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "move",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "9",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "to",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1771,7 +1924,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "items",
+                                                                                                                 "text":  "move",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1783,7 +1936,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "use",
+                                                                                                                 "text":  "to",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1795,7 +1948,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "the",
+                                                                                                                 "text":  "items",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1807,13 +1960,37 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "Arrow",
+                                                                                                                 "text":  "use",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
                                                                                                                  "text":  "14",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "the",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "15",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Arrow",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "16",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1831,7 +2008,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3551,
+                                                                    "settle_ms":  5809,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1840,8 +2017,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792405456407,
-                                                "t_end_ms":  1792405458915,
+                                                "t_start_ms":  1792450992495,
+                                                "t_end_ms":  1792450995023,
                                                 "action":  {
                                                                "type":  "jaws_function",
                                                                "command":  "TypeKey(\"DownArrow\")",
@@ -1857,7 +2034,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792405456445,
+                                                                                               "t":  1792450992531,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1867,7 +2044,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "21",
+                                                                                                                 "text":  "23",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1879,7 +2056,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "22",
+                                                                                                                 "text":  "24",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1892,7 +2069,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405456613,
+                                                                                               "t":  1792450992708,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1903,18 +2080,18 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405457113,
+                                                                                               "t":  1792450993208,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "23",
+                                                                                                                 "text":  "25",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              }
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792405457313,
+                                                                                               "t":  1792450993407,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1924,7 +2101,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "24",
+                                                                                                                 "text":  "26",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1936,7 +2113,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "25",
+                                                                                                                 "text":  "27",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1954,7 +2131,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  2339,
+                                                                    "settle_ms":  2364,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1963,8 +2140,8 @@
                                             },
                                             {
                                                 "step_id":  "s3",
-                                                "t_start_ms":  1792405460615,
-                                                "t_end_ms":  1792405463135,
+                                                "t_start_ms":  1792450996743,
+                                                "t_end_ms":  1792450999236,
                                                 "action":  {
                                                                "type":  "jaws_function",
                                                                "command":  "TypeKey(\"Escape\")",
@@ -1977,7 +2154,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792405460657,
+                                                                                               "t":  1792450996781,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1987,7 +2164,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "32",
+                                                                                                                 "text":  "34",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1999,7 +2176,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "bookmark",
-                                                                                                                 "text":  "33",
+                                                                                                                 "text":  "35",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -2017,7 +2194,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1119,
+                                                                    "settle_ms":  1080,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  true,
                                                                     "baseline_settled":  true
@@ -2026,8 +2203,8 @@
                                             },
                                             {
                                                 "step_id":  "s4",
-                                                "t_start_ms":  1792405463974,
-                                                "t_end_ms":  1792405465502,
+                                                "t_start_ms":  1792451000060,
+                                                "t_end_ms":  1792451001591,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Down",
@@ -2040,7 +2217,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792405464025,
+                                                                                               "t":  1792451000112,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -2080,7 +2257,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1268,
+                                                                    "settle_ms":  1289,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -2091,6 +2268,9 @@
                        "trial_success":  true,
                        "trace_file":  "223-web-links-list-escape-trial3.jsonl",
                        "lab_state_cleared":  {
+                                                 "shell_windows_closed":  [
+
+                                                                          ],
                                                  "modifiers_held":  [
 
                                                                     ],
@@ -2101,8 +2281,8 @@
                                                                           ]
                                              },
                        "page_load_settled":  false,
-                       "trace_sha256":  "ffbe75945459c2a3d08af0afc5dfc67d6d932d2ab073131539aae5bfd12268cc"
+                       "trace_sha256":  "458f7566d4c5ee7a5894a05cce008f6e56c44feeadbf4fdd6e6820636aba3258"
                    }
                ],
-    "total_elapsed_ms":  72047
+    "total_elapsed_ms":  78334
 }
