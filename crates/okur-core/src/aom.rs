@@ -54,6 +54,9 @@ pub enum Role {
     SplitButton,
     /// A horizontal rule (`hr`, MSAA `ROLE_SYSTEM_SEPARATOR`): a line of its own, "----- | separator".
     Separator,
+    /// A tool bar (UIA ToolBar, a Win32 `ToolbarWindow32`): its buttons' container, said as
+    /// "Tool bar" when the focus enters it [obs, 524/s6].
+    ToolBar,
     Generic,
 }
 

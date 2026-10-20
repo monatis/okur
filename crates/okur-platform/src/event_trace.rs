@@ -29,6 +29,7 @@ const UIA_BUTTON: i32 = 50000;
 const UIA_EDIT: i32 = 50004;
 const UIA_COMBOBOX: i32 = 50003;
 const UIA_MENUITEM: i32 = 50011;
+const UIA_TOOLBAR: i32 = 50021;
 /// The window class of Win32 dialog boxes (message boxes, common dialogs).
 const WIN32_DIALOG_CLASS: &str = "#32770";
 /// A Win32 popup menu's window.
@@ -771,6 +772,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         top_window,
     )?;
     let focused = event.focus_chain.last()?;
+    toolbar_button(event, focused, &mut focus);
     // A Win32 dialog's control names its access key through MSAA only: the focus event's
     // object is the control ("Script: Combo box … Alt+r" [obs, 541/s8]).
     if focus.access_key.is_none() {
@@ -1548,6 +1550,48 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     focus.bounds = event.focus_chain.last().and_then(|n| n.bounds);
     focus.in_ribbon = true;
     Some(focus)
+}
+
+/// A Win32 toolbar's button with the focus: UI Automation's focus stays on the toolbar
+/// (`ToolbarWindow32`), and the MSAA event's object is the button, a child of it. The focus is
+/// the button, in the toolbar: "Tool bar | Hide Folders Button | To activate press spacebar."
+/// [obs, 524/s6].
+fn toolbar_button(event: &TraceEvent, toolbar: &UiaNode, focus: &mut okur_core::FocusEvent) {
+    use okur_core::Role;
+    const PUSHBUTTON: i32 = 0x2B;
+    const CHECKBUTTON: i32 = 0x2C;
+    const BUTTONDROPDOWN: i32 = 0x38;
+    const SPLITBUTTON: i32 = 0x3E;
+    if toolbar.control_type != UIA_TOOLBAR || event.id_child <= 0 {
+        return;
+    }
+    let Some(object) = event.object.as_ref() else {
+        return;
+    };
+    let Some(name) = object
+        .name
+        .as_deref()
+        .map(str::trim)
+        .filter(|n| !n.is_empty())
+    else {
+        return;
+    };
+    let role = match object.role {
+        Some(PUSHBUTTON) => Role::Button,
+        Some(CHECKBUTTON) => Role::CheckBox,
+        Some(BUTTONDROPDOWN | SPLITBUTTON) => Role::SplitButton,
+        _ => return,
+    };
+    focus.container_role = Some(Role::ToolBar);
+    focus.container_name = focus.name.take();
+    focus.platform.container_class = toolbar.class_name.clone();
+    focus.role = role;
+    focus.name = Some(name.to_owned());
+    focus.value = None;
+    focus.states = okur_core::aom::NodeStates::default();
+    apply_msaa_states(focus, object.states);
+    focus.item_index = None;
+    focus.item_count = None;
 }
 
 /// Updates the states a change can carry from MSAA state bits (`STATE_SYSTEM_*`).
@@ -4261,6 +4305,40 @@ mod tests {
             ),
             "the select, expanded"
         );
+    }
+
+    /// Tab onto a file dialog's toolbar button: UIA's focus stays on the toolbar, the MSAA
+    /// event's object is the button. The focus is the button in a toolbar [obs, 524/s6].
+    #[test]
+    fn a_toolbar_button_focused_through_msaa_is_the_focus() {
+        let toolbar = TraceEvent {
+            window_class: Some("ToolbarWindow32".to_owned()),
+            id_child: 1,
+            object: Some(TraceObject {
+                role: Some(0x2B),
+                name: Some("Hide Folders".to_owned()),
+                value: None,
+                states: 0,
+                shortcut: None,
+            }),
+            focus_chain: vec![node(UIA_WINDOW, "Save As", false), node(50021, "", true)],
+            ..focus_event(Vec::new())
+        };
+        let focus = focus_event_from_trace(&toolbar);
+        assert!(
+            focus
+                .as_ref()
+                .is_some_and(|f| f.role == okur_core::Role::Button
+                    && f.name.as_deref() == Some("Hide Folders")
+                    && f.container_role == Some(okur_core::Role::ToolBar)),
+            "{focus:?}"
+        );
+        // The toolbar's own focus (no child) stays the toolbar's.
+        let own = TraceEvent {
+            id_child: 0,
+            ..toolbar
+        };
+        assert!(focus_event_from_trace(&own).is_some_and(|f| f.role != okur_core::Role::Button));
     }
 
     /// Down in the Font dialog's font field: its open list's item takes the WinEvent focus

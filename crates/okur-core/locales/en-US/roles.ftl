@@ -66,6 +66,8 @@ role-split-button = split button
 role-tab = Tab
 # A button with a pressed state (aria-pressed).
 role-toggle-button = Toggle button
+# A tool bar entered by the focus (a Win32 toolbar of buttons).
+role-tool-bar = Tool bar
 role-tree-item = tree item
 role-tree-view = Tree view
 role-tree-view-viewer = tree view

@@ -57,6 +57,8 @@ fn container_entry(focus: &FocusEvent) -> Option<Line> {
         Role::List if focus.container_is_list_view => msg::role_list_view().as_str(),
         Role::List => msg::role_list_box().as_str(),
         Role::Tree => msg::role_tree_view().as_str(),
+        // "Tool bar | Hide Folders Button" (a file dialog's unnamed toolbar [obs, 524/s6]).
+        Role::ToolBar => msg::role_tool_bar().as_str(),
         _ => return None,
     };
     Some(Line::new(vec![
@@ -1766,6 +1768,22 @@ To activate press Enter."
         assert_eq!(
             norm(&focus_speech(&apply, None).render()),
             norm("Apply  \u{1d} Button \u{1e} \nTo activate press spacebar.\nalt+A")
+        );
+    }
+
+    /// A button in an unnamed toolbar, the focus coming from outside it: "Tool bar | Hide
+    /// Folders Button | To activate press spacebar." [obs, 524/s6].
+    #[test]
+    fn a_toolbar_is_said_as_the_focus_enters_it() {
+        let button = in_container(
+            event(Role::Button, "Hide Folders"),
+            Role::ToolBar,
+            "",
+            "ToolbarWindow32",
+        );
+        assert_eq!(
+            norm(&focus_speech(&button, None).render()),
+            norm("\u{1d} Tool bar \u{1e} Hide Folders \u{1d} Button \u{1e} To activate press spacebar.")
         );
     }
 
