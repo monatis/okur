@@ -576,9 +576,10 @@ impl ScreenReaderEngine {
                     if let Some(actions) = &self.actions {
                         actions.copy_text(&text);
                     }
-                    // [obs, 311/s11]
-                    self.speech
-                        .speak(msg::clipboard_copied_selection().as_str(), true);
+                    // [obs, 311/s11], worded for the level as the other copies are.
+                    if let Some(copied) = self.copied_message() {
+                        self.speech.speak(&copied, true);
+                    }
                     return KeyAction::Consume;
                 }
                 ViewerAction::Close => {

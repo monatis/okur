@@ -203,16 +203,24 @@ impl VirtualCursor {
                 };
                 let line = self.buffer.line_at_offset(range.0)?;
                 let text = self.buffer.text.get(range.0..range.1).unwrap_or_default();
-                format!("{}{text}\n{word}", line_marks(line))
+                if self.says_selection() {
+                    format!("{}{text}\n{word}", line_marks(line))
+                } else {
+                    format!("{}{text}", line_marks(line))
+                }
             }
             SelectionReading::Lines => {
                 let mut said = Vec::new();
                 if let Some(range) = removed {
-                    said.push(msg::selection_removed_lines().to_string());
+                    if self.says_selection() {
+                        said.push(msg::selection_removed_lines().to_string());
+                    }
                     said.extend(self.selected_lines(range));
                 }
                 if let Some(range) = added {
-                    said.push(msg::selection_added().to_string());
+                    if self.says_selection() {
+                        said.push(msg::selection_added().to_string());
+                    }
                     said.extend(self.selected_lines(range));
                 }
                 said.join("\n")
@@ -224,7 +232,12 @@ impl VirtualCursor {
                     msg::selection_removed()
                 };
                 let line = self.buffer.lines.get(left_line)?;
-                format!("{word}\n{}", self.format_line_announcement(line))
+                let line = self.format_line_announcement(line);
+                if self.says_selection() {
+                    format!("{word}\n{line}")
+                } else {
+                    line
+                }
             }
         };
         Some(said)
@@ -349,10 +362,14 @@ impl VirtualCursor {
         self.offset = end;
         let mut said = Vec::new();
         if let Some(range) = before {
-            said.push(msg::selection_removed_lines().to_string());
+            if self.says_selection() {
+                said.push(msg::selection_removed_lines().to_string());
+            }
             said.extend(self.selected_lines(range));
         }
-        said.push(msg::selection_added().to_string());
+        if self.says_selection() {
+            said.push(msg::selection_added().to_string());
+        }
         said.extend(self.selected_lines((anchor, end)));
         Some(said.join("\n"))
     }
@@ -377,7 +394,10 @@ impl VirtualCursor {
             .last()?;
         let range = (first.start_offset, last.end_offset);
         self.selection = Some(TextSelection::new(range.0, range.1));
-        let mut said = vec![msg::selection_added().to_string()];
+        let mut said = Vec::new();
+        if self.says_selection() {
+            said.push(msg::selection_added().to_string());
+        }
         said.extend(self.selected_lines(range));
         Some(said.join("\n"))
     }
@@ -835,6 +855,12 @@ impl VirtualCursor {
             },
             _ => self.line_speech_at(stop.offset),
         }
+    }
+
+    /// "selected" and "unselected" are said as a selection changes: JAWS's Select output, off
+    /// at Advanced ("T" where Beginner says "T selected" [obs, 608/s2]).
+    fn says_selection(&self) -> bool {
+        self.verbosity.is_on(crate::settings::OutputType::Select)
     }
 
     /// JAWS's short messages are said (Intermediate and Advanced verbosity).

@@ -123,7 +123,9 @@ A step can be in more than one entry; all of its entries apply.
 
 ### JAWS's bottom line drops an emoji
 
-- Step: `504-desktop-edit-selection-and-clipboard/s22`.
+- Steps: `504-desktop-edit-selection-and-clipboard/s22`, and the same step at Intermediate
+  and Advanced verbosity, `599-desktop-edit-selection-and-clipboard-intermediate/s22` and
+  `609-desktop-edit-selection-and-clipboard-advanced/s22`.
 - Difference: Okur also says the grinning face emoji at the end of the line.
 - Why: Say Bottom Line of Window (Insert+PageDown) in the editor fixture drops the
   non-breaking space and the emoji that end the last line, as its control view does (312).

@@ -319,15 +319,25 @@ pub enum OutputType {
     /// Order radio button" at Beginner and Intermediate, "In Tab Order radio button" at
     /// Advanced [obs, 585/s5, s6]. JAWS's "Control Group Name".
     ControlGroupName,
+    /// "selected" and "unselected" as a selection grows or shrinks: said at Beginner and
+    /// Intermediate, not at Advanced ("=" where Beginner says "= selected" [obs, 609/s16,
+    /// 608/s2]). JAWS's "Select".
+    Select,
+    /// JAWS's own messages about what a key did: "Copied selection to clipboard" at
+    /// Beginner, "Copied" at Intermediate (its short form), nothing at Advanced [obs,
+    /// 599/s3, 609/s3, 608/s9]; "Pasted", "cut", "Undo" likewise. JAWS's "JAWS Message".
+    JawsMessage,
 }
 
 impl OutputType {
-    pub const ALL: [OutputType; 5] = [
+    pub const ALL: [OutputType; 7] = [
         OutputType::AccessKey,
         OutputType::Hint,
         OutputType::ListPosition,
         OutputType::Description,
         OutputType::ControlGroupName,
+        OutputType::Select,
+        OutputType::JawsMessage,
     ];
 
     /// JAWS's key for the type in `DEFAULT.JCF` `[OutputModes]`, where it is known.
@@ -337,18 +347,22 @@ impl OutputType {
             Self::Hint | Self::Description => None,
             Self::ListPosition => Some("ANNOUNCE_POSITION_AND_COUNT"),
             Self::ControlGroupName => Some("CONTROL_GROUP_NAME"),
+            Self::Select => Some("SELECT"),
+            Self::JawsMessage => Some("JAWS_MESSAGE"),
         }
     }
 
     /// The type's modes, Beginner first, where the user's settings name none: JAWS's shipped
     /// `DEFAULT.JCF` (`ANNOUNCE_POSITION_AND_COUNT=1|2|0`, `CONTROL_GROUP_NAME=1|2|0`,
-    /// `TUTOR=1|1|1`, `ACCESS_KEY=1|1|1`).
+    /// `SELECT=1|2|0`, `JAWS_MESSAGE=1|2|0`, `TUTOR=1|1|1`, `ACCESS_KEY=1|1|1`).
     pub fn default_modes(self) -> [OutputMode; 3] {
         match self {
             Self::AccessKey | Self::Hint => [OutputMode::On; 3],
-            Self::ListPosition | Self::Description | Self::ControlGroupName => {
-                [OutputMode::On, OutputMode::On, OutputMode::Off]
-            }
+            Self::ListPosition
+            | Self::Description
+            | Self::ControlGroupName
+            | Self::Select
+            | Self::JawsMessage => [OutputMode::On, OutputMode::On, OutputMode::Off],
         }
     }
 

@@ -60,6 +60,11 @@ impl ScreenReaderEngine {
                 let selected = selected.trim();
                 if selected.is_empty() {
                     msg::selection_none().to_string()
+                } else if self.settings.verbosity.message_length()
+                    == crate::settings::MessageLength::Short
+                {
+                    // Short messages say the selection alone [obs, 599/s2, 609/s2, 608/s4].
+                    selected.to_owned()
                 } else {
                     format!("{}\n{selected}", msg::selection_is())
                 }
@@ -236,6 +241,21 @@ impl ScreenReaderEngine {
         if let Some(actions) = &self.actions {
             actions.copy_text(&text);
         }
-        Some(msg::clipboard_copied_selection().to_string())
+        // Worded for the level: "Copied" when short, nothing at Advanced [obs, 608/s9]; the
+        // key was taken either way.
+        Some(self.copied_message().unwrap_or_default())
+    }
+
+    /// JAWS's "Copied selection to clipboard" as the verbosity level words it: short above
+    /// Beginner, none at Advanced (JAWS Message) [obs, 599/s3, 609/s3].
+    pub(super) fn copied_message(&self) -> Option<String> {
+        let wording = crate::editing::Wording::of(&self.settings.verbosity);
+        if !wording.messages {
+            None
+        } else if wording.short {
+            Some(msg::clipboard_copied_selection_short().to_string())
+        } else {
+            Some(msg::clipboard_copied_selection().to_string())
+        }
     }
 }

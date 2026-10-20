@@ -144,8 +144,14 @@ impl ScreenReaderEngine {
         let before = self.last_text.replace(context.clone());
         let key = self.pending_edit.take()?;
         let field = self.text_field_line();
-        let mut speech =
-            crate::editing::speech_in(key, before.as_ref(), context, &field, self.in_plain_edit())?;
+        let mut speech = crate::editing::speech_in(
+            key,
+            before.as_ref(),
+            context,
+            &field,
+            self.in_plain_edit(),
+            crate::editing::Wording::of(&self.settings.verbosity),
+        )?;
         // An edit combo's line is the item its list selected: said with its position
         // ("Constantia | 39 of 187" [obs, 541/s3]).
         if key == crate::editing::EditKey::Line {

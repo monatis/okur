@@ -837,6 +837,7 @@ impl ScreenReaderEngine {
                             &context,
                             &self.text_field_line(),
                             self.in_plain_edit(),
+                            crate::editing::Wording::of(&self.settings.verbosity),
                         )
                     };
                     match speech {

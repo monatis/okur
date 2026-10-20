@@ -432,6 +432,61 @@ fn or_line_break(text: String) -> String {
     }
 }
 
+/// How the verbosity level words what an edit key did: whether "selected" and "unselected"
+/// are said (JAWS's Select output), whether JAWS's own messages are ("Copied selection to
+/// clipboard", JAWS Message), and whether they take their short forms ("Copied").
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Wording {
+    pub selection: bool,
+    pub messages: bool,
+    pub short: bool,
+}
+
+impl Default for Wording {
+    /// JAWS's Beginner level: everything said, in its long form.
+    fn default() -> Self {
+        Self {
+            selection: true,
+            messages: true,
+            short: false,
+        }
+    }
+}
+
+impl Wording {
+    pub fn of(verbosity: &crate::settings::Verbosity) -> Self {
+        use crate::settings::{MessageLength, OutputType};
+        Self {
+            selection: verbosity.is_on(OutputType::Select),
+            messages: verbosity.is_on(OutputType::JawsMessage),
+            short: verbosity.message_length() == MessageLength::Short,
+        }
+    }
+
+    /// `text` with "selected" or "unselected" (`word`) on a line of its own before or after
+    /// it, where the level says it.
+    fn selection(self, word: impl std::fmt::Display, text: &str, word_first: bool) -> String {
+        if !self.selection {
+            text.to_owned()
+        } else if word_first {
+            format!("{word}\n{text}")
+        } else {
+            format!("{text}\n{word}")
+        }
+    }
+
+    /// JAWS's message `long`, or its `short` form, or nothing where the level says none.
+    fn message(self, long: String, short: String) -> Option<String> {
+        if !self.messages {
+            None
+        } else if self.short {
+            Some(short)
+        } else {
+            Some(long)
+        }
+    }
+}
+
 /// What JAWS speaks after `key`, given the field before and after it. `field` is the
 /// field's name-and-role line, for Say Line. In a field that is not a plain Win32 edit.
 pub fn speech(
@@ -440,17 +495,18 @@ pub fn speech(
     after: &TextContext,
     field: &str,
 ) -> Option<String> {
-    speech_in(key, before, after, field, false)
+    speech_in(key, before, after, field, false, Wording::default())
 }
 
 /// [`speech`] in a field that may be a plain Win32 edit (`plain_edit`), where JAWS reads a
-/// selection's first line only.
+/// selection's first line only, worded for the verbosity level ([`Wording`]).
 pub fn speech_in(
     key: EditKey,
     before: Option<&TextContext>,
     after: &TextContext,
     field: &str,
     plain_edit: bool,
+    wording: Wording,
 ) -> Option<String> {
     Some(match key {
         EditKey::Silent => return None,
@@ -473,9 +529,11 @@ pub fn speech_in(
             // The text, then the word: "Hello, selected", "world. Unselected" [obs, 529/s12,
             // s14]; a character taken out is read as a word is.
             match selection_change(before, after) {
-                (added, _) if !added.is_empty() => format!("{added}\n{}", msg::selection_added()),
+                (added, _) if !added.is_empty() => {
+                    wording.selection(msg::selection_added(), &added, false)
+                }
                 (_, removed) if !removed.is_empty() => {
-                    format!("{removed}\n{}", msg::selection_removed_lines())
+                    wording.selection(msg::selection_removed_lines(), &removed, false)
                 }
                 _ => return None,
             }
@@ -490,11 +548,12 @@ pub fn speech_in(
                 _ => return None,
             };
             let lines = selection_lines(&text, plain_edit);
-            if lines.is_empty() {
-                format!("{word}\n{text}")
+            let text = if lines.is_empty() {
+                text
             } else {
-                format!("{word}\n{}", lines.join("\n"))
-            }
+                lines.join("\n")
+            };
+            wording.selection(word, &text, true)
         }
         EditKey::TopOfFile => {
             let line = line_at(after);
@@ -531,22 +590,35 @@ pub fn speech_in(
             if lines.is_empty() {
                 return None;
             }
-            format!("{}\n{}", msg::selection_added(), lines.join("\n"))
+            wording.selection(msg::selection_added(), &lines.join("\n"), true)
         }
+        // JAWS's messages: short above Beginner ("Copied", "cut", "Pasted" [obs, 599/s3, s19,
+        // s6]), none at Advanced [obs, 609/s3, s6, s7, s19, s20].
         EditKey::Copy => {
             if selected_text(after).is_empty() {
                 return None;
             }
-            msg::clipboard_copied_selection().to_string()
+            wording.message(
+                msg::clipboard_copied_selection().to_string(),
+                msg::clipboard_copied_selection_short().to_string(),
+            )?
         }
         EditKey::Cut => {
             if before.is_none_or(|b| selected_text(b).is_empty()) {
                 return None;
             }
-            msg::clipboard_cut_selection().to_string()
+            wording.message(
+                msg::clipboard_cut_selection().to_string(),
+                msg::clipboard_cut_selection_short().to_string(),
+            )?
         }
-        EditKey::Paste => msg::clipboard_pasted().to_string(),
-        EditKey::Undo => msg::edit_undo().to_string(),
+        EditKey::Paste => wording.message(
+            msg::clipboard_pasted().to_string(),
+            msg::clipboard_pasted_short().to_string(),
+        )?,
+        EditKey::Undo => {
+            wording.message(msg::edit_undo().to_string(), msg::edit_undo().to_string())?
+        }
         EditKey::SayLine => {
             let line = line_at(after);
             if line.trim().is_empty() {
@@ -622,7 +694,7 @@ mod tests {
         );
         let all = ctx(text, 13, Some((0, 13)));
         assert_eq!(
-            speech_in(EditKey::SelectAll, None, &all, "", true).as_deref(),
+            speech_in(EditKey::SelectAll, None, &all, "", true, Wording::default()).as_deref(),
             Some("selected\none two")
         );
     }
