@@ -307,6 +307,10 @@ pub enum Command {
     SetPunctuationLevel,
     /// The next typing echo, until Okur exits (Insert+2).
     NextTypingEcho,
+
+    // Okur itself.
+    /// Insert+F4 (ShutDownJAWS): Okur exits, after its question when `confirm_exit` is on.
+    ShutDown,
 }
 
 impl Command {
@@ -496,6 +500,7 @@ impl Command {
             "QuickNavigationKeysSuspendOrResume" | "Insert+Shift+Z" => QuickKeysSuspendResume,
             "VirtualPCCursorToggle" | "Insert+Z" => VirtualCursorToggle,
             "RefreshScreen" | "Insert+Escape" => RefreshScreen,
+            "ShutDownJAWS" | "ShutDown" | "Insert+F4" | "JAWSKey+F4" => ShutDown,
             "SayToCursor" | "Insert+Home" => SayToCursor,
             "SayFromCursor" | "Insert+PageUp" => SayFromCursor,
 
@@ -902,6 +907,8 @@ static BINDINGS: &[Binding] = &{
         bind(Key::NumpadSlash, ALONE, LeftMouseClick),
         bind(Key::F(10), JAWS, WindowList),
         bind(Key::F(11), JAWS, SystemTrayList),
+        // Default.JKM: JAWSKey+F4=ShutDownJAWS; "Shut Down JAWS: INSERT+F4" (keystrokes).
+        bind(Key::F(4), JAWS, ShutDown),
         // Help (JAWS 2025 help, Keystrokes for Accessing Help) [obs, 526, 527]. In the laptop
         // layout CapsLock+H is Say Sentence, as there.
         bind(Key::F(1), JAWS, ScreenSensitiveHelp),
@@ -1283,5 +1290,17 @@ mod tests {
             Some(Command::Find("engine".to_owned()))
         );
         assert_eq!(Command::from_name("NoSuchScript"), None);
+    }
+
+    /// Insert+F4 is ShutDownJAWS, by its key and by JAWS's script name; F4 alone and Alt+F4
+    /// stay the application's.
+    #[test]
+    fn the_jaws_key_and_f4_shut_okur_down() {
+        let jaws = with(|m| m.insert = true);
+        assert_eq!(command_for(&key(Key::F(4), jaws)), Some(Command::ShutDown));
+        assert_eq!(command_for(&key(Key::F(4), Modifiers::none())), None);
+        assert_eq!(command_for(&key(Key::F(4), with(|m| m.alt = true))), None);
+        assert_eq!(Command::from_name("ShutDownJAWS"), Some(Command::ShutDown));
+        assert_eq!(Command::from_name("Insert+F4"), Some(Command::ShutDown));
     }
 }

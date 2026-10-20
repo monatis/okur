@@ -228,5 +228,9 @@ impl DialogMirror {
 
 /// Whether the dialog's first focus can land on the control.
 fn is_tab_stop(control: &Control) -> bool {
-    control.enabled && !matches!(control.kind, ControlKind::Text { .. } | ControlKind::Group)
+    control.enabled
+        && !matches!(
+            control.kind,
+            ControlKind::Text { .. } | ControlKind::Group | ControlKind::Message { .. }
+        )
 }

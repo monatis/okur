@@ -26,6 +26,7 @@ impl ScreenReaderEngine {
             Command::QuickKeysSuspendResume => return self.suspend_or_resume_quick_keys(),
             Command::VirtualCursorToggle => return self.toggle_virtual_cursor(),
             Command::RefreshScreen => return self.refresh_screen(),
+            Command::ShutDown => return self.shut_down(),
             Command::SayDefaultButton => return self.say_default_button(),
             Command::SayConfiguration => return self.say_configuration(),
             Command::SayAppVersion => return self.say_app_version(),

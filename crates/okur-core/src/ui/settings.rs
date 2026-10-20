@@ -212,6 +212,13 @@ impl SettingsDialog {
                     },
                 ),
                 control(
+                    "confirm_exit",
+                    msg::settings_confirm_exit(),
+                    ControlKind::CheckBox {
+                        checked: s.confirm_exit,
+                    },
+                ),
+                control(
                     "ok",
                     msg::settings_ok(),
                     ControlKind::Button { default: true },
@@ -318,6 +325,7 @@ impl SettingsDialog {
                     ViewerDisplay::SpeechOnly
                 };
             }
+            ("confirm_exit", Value::Checked(checked)) => s.confirm_exit = checked,
             _ => {}
         }
         Outcome::Nothing
@@ -383,6 +391,11 @@ mod tests {
         );
         assert_eq!(
             find("viewer_on_screen"),
+            Some(ControlKind::CheckBox { checked: true })
+        );
+        // JAWS's default: Insert+F4 asks first.
+        assert_eq!(
+            find("confirm_exit"),
             Some(ControlKind::CheckBox { checked: true })
         );
         // Every label's access key is its own.

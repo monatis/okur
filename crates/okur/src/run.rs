@@ -129,6 +129,8 @@ pub struct RunConfig {
 pub enum ExitReason {
     /// Ctrl+C in the console.
     Interrupted,
+    /// Insert+F4, answered (or not asked, with `confirm_exit` off).
+    Command,
     /// The control pipe's `quit`: the installer, `okur quit`, a copy taking over.
     ControlPipe,
     /// Windows is ending the session: out fast, nothing said.
@@ -488,10 +490,15 @@ pub async fn run(config: RunConfig) {
     // Say System Time (Insert+F12) in the user's locale formats.
     #[cfg(windows)]
     engine.set_clock(Box::new(okur_platform::clock::WindowsClock));
-    let engine = Arc::new(Mutex::new(engine));
-
     // Every way out comes here: the exit path below takes it from the first.
     let (exit_tx, mut exit_rx) = tokio::sync::mpsc::unbounded_channel::<ExitReason>();
+    // Insert+F4: the engine asks; this host ends Okur.
+    let command_exit = exit_tx.clone();
+    engine.set_exit(Box::new(move || {
+        let _ = command_exit.send(ExitReason::Command);
+    }));
+    let engine = Arc::new(Mutex::new(engine));
+
     // The control pipe: `quit` from the installer, `okur quit`, or a copy taking over.
     let session = okur_platform::desktop::session_id().unwrap_or(0);
     let desktop = okur_platform::desktop::thread_desktop().unwrap_or_default();
@@ -826,7 +833,8 @@ pub async fn run(config: RunConfig) {
         if reason == ExitReason::EndSession {
             eng.speech.stop();
         } else {
-            eng.speech.speak("Okur exiting.", true);
+            let words = eng.exit_words();
+            eng.speech.speak(&words, true);
         }
     }
     if reason != ExitReason::EndSession {

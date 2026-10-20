@@ -27,6 +27,7 @@ mod information;
 mod jump;
 mod layer;
 mod page;
+mod quit;
 mod reading;
 mod routing;
 mod say_all;
@@ -253,6 +254,10 @@ pub struct ScreenReaderEngine {
     last_live_text: std::collections::HashMap<String, Vec<String>>,
     /// Live regions being read as they grow, by DOM id (`LiveRegionAppend::Appended`).
     live_streams: std::collections::HashMap<String, page::LiveStream>,
+    /// The question before Okur exits, while it is open (Insert+F4).
+    quit_dialog: Option<crate::ui::quit::QuitDialog>,
+    /// How the engine asks its host to end Okur; None when headless.
+    exit: Option<quit::ExitRequest>,
 }
 
 impl ScreenReaderEngine {
@@ -345,6 +350,8 @@ impl ScreenReaderEngine {
             apps: crate::apps::builtin(),
             last_live_text: std::collections::HashMap::new(),
             live_streams: std::collections::HashMap::new(),
+            quit_dialog: None,
+            exit: None,
         }
     }
 
@@ -1153,6 +1160,7 @@ impl ScreenReaderEngine {
             _ if self.is_window_list_event(message) => self.handle_window_list_event(message),
             _ if self.is_tray_event(message) => self.handle_tray_event(message),
             _ if self.is_jump_event(message) => self.handle_jump_event(message),
+            _ if self.is_quit_event(message) => self.handle_quit_event(message),
             _ => {
                 let outcome = self.settings_dialog.as_mut()?.handle(message);
                 match outcome {

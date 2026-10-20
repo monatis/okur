@@ -78,7 +78,7 @@ fn initial(kind: &ControlKind) -> Option<Value> {
         ControlKind::Text { text }
         | ControlKind::Edit { text }
         | ControlKind::ComboEdit { text, .. } => Some(Value::Text(text.clone())),
-        ControlKind::Group | ControlKind::Button { .. } => None,
+        ControlKind::Group | ControlKind::Button { .. } | ControlKind::Message { .. } => None,
     }
 }
 
@@ -238,7 +238,8 @@ fn fill(window: HWND, index: usize, item: HWND, kind: &ControlKind) {
                 }
                 set(window, index, item, kind, &Value::Text(text.clone()));
             }
-            ControlKind::Group | ControlKind::Button { .. } => {}
+            // Its text is the template's.
+            ControlKind::Group | ControlKind::Button { .. } | ControlKind::Message { .. } => {}
         }
     }
 }

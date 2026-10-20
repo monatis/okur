@@ -452,6 +452,10 @@ pub struct Settings {
     /// the `access_key` output type is on, as JAWS's Access Key output (`[OutputModes]
     /// ACCESS_KEY`, on by default).
     pub verbosity: Verbosity,
+    /// Insert+F4 asks before Okur exits, as JAWS's "Prompt to Confirm When Exiting JAWS"
+    /// (Options > Basics), checked by default: "When cleared, JAWS immediately closes when you
+    /// use any of the commands to exit the program including INSERT+F4" (JAWS 2025 help).
+    pub confirm_exit: bool,
 }
 
 impl Default for Settings {
@@ -464,6 +468,7 @@ impl Default for Settings {
             viewer_display: ViewerDisplay::default(),
             auto_forms_mode: true,
             verbosity: Verbosity::default(),
+            confirm_exit: true,
         }
     }
 }
@@ -519,6 +524,8 @@ impl Settings {
             viewer_display: ViewerDisplay::OnScreen,
             auto_forms_mode: false,
             verbosity,
+            // Not in old-pc's JCF: JAWS's default.
+            confirm_exit: true,
         }
     }
 }

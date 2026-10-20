@@ -39,9 +39,22 @@ settings-verbosity-intermediate = Intermediate
 settings-verbosity-advanced = Advanced
 settings-live-region-whole-text = Read the &Whole Text of a Growing Live Region
 settings-viewer-on-screen = &Show Virtual Viewer on Screen
+# JAWS's "Prompt to Confirm When Exiting JAWS" (Options > Basics): Insert+F4 asks first.
+settings-confirm-exit = Prompt to &Confirm When Exiting Okur
 settings-ok = OK
 settings-cancel = Cancel
 settings-apply = &Apply
+
+## The question before Okur exits (Insert+F4, JAWS's ShutDownJAWS). JAWS's help says only
+## that "a dialog is brought up to confirm whether or not you wish to exit", Enter exits and
+## Escape returns. These words are Okur's own, in plain words, until scenario 571
+## (corpus/pending/571-desktop-quit-question.json) records JAWS's title, question and
+## buttons: then its evidence's words replace them.
+
+quit-title = Exit Okur
+quit-question = Do you want to exit Okur?
+quit-ok = OK
+quit-cancel = Cancel
 
 ## The Links List (Insert+F7), as JAWS's. Its title and its list's name are list-dialog-links
 ## and list-dialog-links-list.

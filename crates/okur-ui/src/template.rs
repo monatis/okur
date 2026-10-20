@@ -45,6 +45,19 @@ const LVS_NOCOLUMNHEADER: u32 = 0x4000;
 const LBS_NOTIFY: u32 = 0x1;
 const LBS_NOINTEGRALHEIGHT: u32 = 0x100;
 const TBS_AUTOTICKS: u32 = 1;
+/// A static control shows "&" as it is, not as an access key's mark.
+const SS_NOPREFIX: u32 = 0x80;
+
+/// The height of a message `width` dialog units wide: lines of about four units a character,
+/// eight units each.
+fn message_height(text: &str, width: i16) -> i16 {
+    let per_line = usize::try_from(width / 4).unwrap_or(1).max(1);
+    let lines: usize = text
+        .lines()
+        .map(|line| line.chars().count().div_ceil(per_line).max(1))
+        .sum();
+    i16::try_from(lines.max(1) * 8).unwrap_or(8)
+}
 
 /// The dialog manager's ids for OK and Cancel: Enter without a default button presses OK,
 /// and Escape and the close box press Cancel.
@@ -374,6 +387,7 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
             | ControlKind::Choice { .. }
             | ControlKind::ComboEdit { .. }
             | ControlKind::Edit { .. }
+            | ControlKind::Message { .. }
             | ControlKind::Slider { .. } => {}
         }
     }
@@ -440,6 +454,21 @@ fn form_layout(dialog: &DialogSpec) -> Layout {
                     text: control.label.clone(),
                 });
                 y += 10 + ROW_GAP;
+            }
+            // A message box's text: static, the dialog wide, as many lines as it needs.
+            ControlKind::Message { text } => {
+                let height = message_height(text, right - left);
+                items.push(Item {
+                    class: Class::Static,
+                    style: WS_CHILD | WS_VISIBLE | SS_NOPREFIX,
+                    x: left,
+                    y,
+                    cx: right - left,
+                    cy: height,
+                    id,
+                    text: text.clone(),
+                });
+                y += height + ROW_GAP;
             }
             ControlKind::Choice { .. }
             | ControlKind::ComboEdit { .. }
@@ -717,6 +746,40 @@ mod tests {
             && ok.style & WS_GROUP != 0
             && cancel.style & WS_GROUP == 0));
         assert!(layout.height > group);
+    }
+
+    /// A question as a message box asks it: its text static, the dialog wide, outside the tab
+    /// order (the focus goes to OK, the default), its "&" shown as it is.
+    #[test]
+    fn a_message_is_static_text_above_the_buttons() {
+        let question = DialogSpec {
+            id: 2,
+            title: "Exit".into(),
+            controls: vec![
+                control(
+                    "question",
+                    "",
+                    ControlKind::Message {
+                        text: "Exit Okur & go?".into(),
+                    },
+                ),
+                control("ok", "OK", ControlKind::Button { default: true }),
+                control("cancel", "Cancel", ControlKind::Button { default: false }),
+            ],
+        };
+        let layout = layout(&question);
+        let message = layout.items.first().cloned();
+        assert!(message.as_ref().is_some_and(|m| m.class == Class::Static
+            && m.text == "Exit Okur & go?"
+            && m.style & WS_TABSTOP == 0
+            && m.style & SS_NOPREFIX != 0
+            && m.cx == WIDTH - 2 * MARGIN));
+        let ok = layout.items.get(1).cloned();
+        assert!(message
+            .zip(ok)
+            .is_some_and(|(m, ok)| ok.y > m.y + m.cy && ok.id == IDOK));
+        assert_eq!(message_height("short", 266), 8);
+        assert_eq!(message_height(&"x".repeat(70), 266), 16);
     }
 
     #[test]

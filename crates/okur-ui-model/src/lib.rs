@@ -106,6 +106,12 @@ pub enum ControlKind {
     Edit {
         text: String,
     },
+    /// The dialog's own text, as a message box shows it: a question it asks (the question
+    /// before Okur exits). Static text, outside the tab order, the whole dialog wide; the
+    /// label is not shown.
+    Message {
+        text: String,
+    },
 }
 
 /// An item of a [`ControlKind::Tree`]: its text and its level, 0 at the top.

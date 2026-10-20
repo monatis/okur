@@ -13,6 +13,9 @@ clipboard-pasted = Pasted from clipboard
 edit-undo = Undo
 # Okur's own settings dialog could not open (there is no window to show it in).
 settings-dialog-unavailable = The settings dialog is not available
+# Okur's last words as it exits. What JAWS says as it exits is to be recorded (the proposal's
+# J2, docs/references/startup-and-secure-screens-proposal.md); until then, Okur's own.
+okur-exiting = Okur exiting.
 # Said before a window's title (Insert+T), on a line of its own; with short messages the title
 # is said alone [obs, 581/s12].
 window-title-is = Title is
