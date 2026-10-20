@@ -1,0 +1,796 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Türkçe Metin - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "155.0.8059.84",
+    "fixture_sha256": "5ee3058dcc516736010abbe605ad519cf7f9203b95c61190e6817e5f69ad4da6",
+    "captured_at_unix_ms": 1792536350188,
+    "node_count": 21,
+    "capture_ms": 173
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Türkçe Metin",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/turkish-text.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "unique_id": -837,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼￼￼￼￼￼￼",
+    "lines": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        7
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "24pt",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "start": 1,
+        "end": 5,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      },
+      {
+        "start": 5,
+        "end": 6,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "18pt",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "start": 6,
+        "end": 7,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1044,
+        "name": "Çağrı ve Işık",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -826,
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "group_position": [
+          1,
+          0,
+          0
+        ],
+        "text": "Çağrı ve Işık",
+        "lines": [
+          [
+            0,
+            13
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 13,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "24pt",
+              "font-weight": "bold"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Çağrı ve Işık",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -827,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Çağrı ve Işık",
+            "lines": [
+              [
+                0,
+                13
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 13,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "24pt",
+                  "font-weight": "bold"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -821,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Şehirde ılık bir öğleden sonra.",
+        "lines": [
+          [
+            0,
+            31
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 31,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Şehirde ılık bir öğleden sonra.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -841,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Şehirde ılık bir öğleden sonra.",
+            "lines": [
+              [
+                0,
+                31
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 31,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -825,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "İstanbul, Ödemiş, Ünye, Ağrı",
+        "lines": [
+          [
+            0,
+            28
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 28,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "İstanbul, Ödemiş, Ünye, Ağrı",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -840,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "İstanbul, Ödemiş, Ünye, Ağrı",
+            "lines": [
+              [
+                0,
+                28
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 28,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 33,
+        "ia2_role": 33,
+        "msaa_states": 64,
+        "ia2_states": 1024,
+        "unique_id": -824,
+        "attributes": {
+          "display": "block",
+          "setsize": "2",
+          "tag": "ul",
+          "text-align": "left"
+        },
+        "group_position": [
+          0,
+          2,
+          0
+        ],
+        "text": "￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 2,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 34,
+            "ia2_role": 34,
+            "msaa_states": 64,
+            "ia2_states": 1024,
+            "unique_id": -842,
+            "attributes": {
+              "display": "list-item",
+              "level": "1",
+              "posinset": "1",
+              "setsize": "2",
+              "tag": "li",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              2,
+              1
+            ],
+            "text": "• çiğ börek",
+            "lines": [
+              [
+                0,
+                11
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 11,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "• ",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -828,
+                "attributes": {
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "::marker",
+                  "text-align": "left"
+                },
+                "text": "• ",
+                "lines": [
+                  [
+                    0,
+                    2
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 2,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "çiğ börek",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -843,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "çiğ börek",
+                "lines": [
+                  [
+                    0,
+                    9
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 9,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 34,
+            "ia2_role": 34,
+            "msaa_states": 64,
+            "ia2_states": 1024,
+            "unique_id": -839,
+            "attributes": {
+              "display": "list-item",
+              "level": "1",
+              "posinset": "2",
+              "setsize": "2",
+              "tag": "li",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              2,
+              2
+            ],
+            "text": "• şeker",
+            "lines": [
+              [
+                0,
+                7
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 7,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "• ",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -832,
+                "attributes": {
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "::marker",
+                  "text-align": "left"
+                },
+                "text": "• ",
+                "lines": [
+                  [
+                    0,
+                    2
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 2,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "şeker",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -820,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "şeker",
+                "lines": [
+                  [
+                    0,
+                    5
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 5,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -834,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "￼",
+        "lines": [
+          [
+            0,
+            1
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,238)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt",
+              "text-underline-style": "solid"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 30,
+            "ia2_role": 30,
+            "name": "Sonraki bölüm",
+            "value": "file:///C:/Users/ailabs/corpus/fixtures/turkish-text.html#son",
+            "msaa_states": 5242880,
+            "ia2_states": 1024,
+            "unique_id": -835,
+            "attributes": {
+              "display": "inline",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "text": "Sonraki bölüm",
+            "lines": [
+              [
+                0,
+                13
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 13,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,238)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Sonraki bölüm",
+                "msaa_states": 4194304,
+                "ia2_states": 1024,
+                "unique_id": -822,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Sonraki bölüm",
+                "lines": [
+                  [
+                    0,
+                    13
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 13,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1044,
+        "name": "Son",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -844,
+        "attributes": {
+          "display": "block",
+          "id": "son",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "group_position": [
+          2,
+          0,
+          0
+        ],
+        "text": "Son",
+        "lines": [
+          [
+            0,
+            3
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 3,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "18pt",
+              "font-weight": "bold"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Son",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -831,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Son",
+            "lines": [
+              [
+                0,
+                3
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 3,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "18pt",
+                  "font-weight": "bold"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -829,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "ÇĞİÖŞÜ çğıöşü",
+        "lines": [
+          [
+            0,
+            13
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 13,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "ÇĞİÖŞÜ çğıöşü",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -833,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "ÇĞİÖŞÜ çğıöşü",
+            "lines": [
+              [
+                0,
+                13
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 13,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
