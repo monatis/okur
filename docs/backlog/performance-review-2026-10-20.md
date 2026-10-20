@@ -42,6 +42,7 @@ before and after each change gave identical output.
 | P2 step 1: the hook installed again after a key of 200 ms or more | done; steps 2-3 (priorities, the O(page) rule) not yet; the re-install not yet seen live | `68bc0ac` | test: the threshold |
 | P8: page parts spliced and built on the blocking pool | done; live check to come (a web application whose page changes) | `54c6cdd` | read: the event loop no longer builds them (135-175 ms at 25,032 nodes in the review) |
 | P4 steps 1 and 3: a failed quick page read goes to the page worker; a hung window's events are not read live | done; live checks to come (a big page, a hung test application) | `2a6e856` | read |
+| P3 step 1: a page control's change patches its node in place and the host builds the page again off the engine (pages of 5,000 nodes or more; a generation refuses a build a later change made stale) | done; replay and tests build at once, as before; live check to come (Space on a check box on a big page, then Down at once) | this commit | a check box toggled at 25,032 nodes: 57.0 → 3.0 ms (`big_page_keys`, "toggle, here" and "toggle, host"); the patch itself about 1 µs |
 
 ## Summary: the five worst
 

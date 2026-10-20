@@ -61,6 +61,89 @@ fn a_page_buttons_expanded_state_is_spoken() {
     assert_eq!(engine.handle_accessibility_event(&changed(false)), None);
 }
 
+/// A check box toggled on a big page: the host builds the page again off the engine
+/// (performance review P3). The change is said as when the page is built at once, and the
+/// node has the new state at once (the same change again says nothing); the lines keep the
+/// old state until the host's build is installed and applied. A build made before a later
+/// change is refused, and a page smaller than the host's threshold is built at once.
+#[test]
+fn a_page_is_built_again_by_the_host_unless_another_change_came() {
+    let page = || {
+        let mut check = AomNode::new(2, Role::CheckBox).with_name("Subscribe");
+        check.states.checked = Some(false);
+        AomNode::new(0, Role::Document)
+            .with_name("Form")
+            .with_children(vec![
+                AomNode::new(1, Role::Paragraph).with_text("Choose."),
+                check,
+            ])
+    };
+    let engine_from = |nodes: Option<usize>| {
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page()));
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+        if let Some(nodes) = nodes {
+            engine.set_page_builds_elsewhere(nodes);
+        }
+        engine
+    };
+    let toggled = |checked: bool| {
+        let mut control = FocusEvent::new(Role::CheckBox)
+            .with_node_id(2)
+            .with_name("Subscribe");
+        control.in_document = true;
+        control.states.checked = Some(checked);
+        AccessibilityEvent::Change {
+            kind: crate::event::ChangeKind::State,
+            control,
+        }
+    };
+    let lines = |engine: &ScreenReaderEngine| {
+        engine
+            .cursor
+            .buffer
+            .lines
+            .iter()
+            .map(|l| l.text.clone())
+            .collect::<Vec<_>>()
+    };
+    let build =
+        |page: std::sync::Arc<AomNode>| VirtualBuffer::from_aom_owned(AomNode::clone(&page));
+
+    let mut here = engine_from(None);
+    let mut elsewhere = engine_from(Some(0));
+    let said = here.handle_accessibility_event(&toggled(true));
+    assert!(said.is_some());
+    assert_eq!(elsewhere.handle_accessibility_event(&toggled(true)), said);
+    assert_eq!(elsewhere.handle_accessibility_event(&toggled(true)), None);
+    assert_ne!(lines(&elsewhere), lines(&here));
+    let wanted = elsewhere.take_page_build();
+    assert!(elsewhere.take_page_build().is_none());
+    assert!(wanted.is_some());
+    let Some((generation, page)) = wanted else {
+        return;
+    };
+    assert!(elsewhere.install_page_build(generation, build(page)));
+    elsewhere.on_idle();
+    assert_eq!(lines(&elsewhere), lines(&here));
+
+    // Unchecked, then checked again before the first build came back: it is refused.
+    elsewhere.handle_accessibility_event(&toggled(false));
+    let wanted = elsewhere.take_page_build();
+    assert!(wanted.is_some());
+    let Some((first, page)) = wanted else {
+        return;
+    };
+    let stale = build(page);
+    elsewhere.handle_accessibility_event(&toggled(true));
+    assert!(!elsewhere.install_page_build(first, stale));
+
+    // A page smaller than the threshold is built at once.
+    let mut small = engine_from(Some(1_000));
+    small.handle_accessibility_event(&toggled(true));
+    assert!(small.take_page_build().is_none());
+    assert_eq!(lines(&small), lines(&here));
+}
+
 /// A page captured again (read quickly first, then in full; or after a live region grew
 /// above the cursor) keeps the virtual cursor on its line, found by its text.
 #[test]

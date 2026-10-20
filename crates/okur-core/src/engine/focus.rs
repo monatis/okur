@@ -524,7 +524,7 @@ impl ScreenReaderEngine {
                         || combo_changed(n)
                 });
                 if stale {
-                    if let Some(rebuilt) = self.cursor.buffer.with_node_changed(id, |n| {
+                    self.change_page_node(id, |n| {
                         if focus.states.checked.is_some() {
                             n.states.checked = focus.states.checked;
                         }
@@ -537,11 +537,7 @@ impl ScreenReaderEngine {
                                 n.name = focus.name.clone();
                             }
                         }
-                    }) {
-                        crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, rebuilt));
-                        // Line numbers changed: a Say All stops following.
-                        self.say_all = None;
-                    }
+                    });
                 }
             }
             if let Some(offset) = previous_focus_offset {

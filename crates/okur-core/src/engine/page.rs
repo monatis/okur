@@ -9,6 +9,23 @@ use crate::messages::msg;
 use crate::settings::LiveRegionAppend;
 use crate::speech::SpeechFormatter;
 
+/// Builds of the page after one of its nodes changed, made by the host off the engine
+/// (performance review P3): building a big page's lines takes 100-160 ms at 25,000 nodes, and
+/// the keyboard hook waits on the engine.
+#[derive(Debug, Default)]
+pub(super) struct PageBuilds {
+    /// Pages of at least this many nodes are built by the host; `None`: every page here.
+    from_nodes: Option<usize>,
+    /// Counts the changes: a build made before the last one is stale.
+    generation: u64,
+    /// A change waits for the host to take the page and build it. The page is not held here:
+    /// shared, the next change would copy all of it to change one node.
+    wanted: bool,
+    /// The page the host last took to build: its build is installed only while the buffer
+    /// still holds it.
+    base: std::sync::Weak<AomNode>,
+}
+
 impl ScreenReaderEngine {
     /// Handles client-side SPA routing transitions: announces new page title and retargets cursor.
     pub fn handle_route_transition(&mut self, new_title: &str, target_id: Option<&str>) -> String {
@@ -241,20 +258,20 @@ impl ScreenReaderEngine {
             }
             _ => return None,
         };
-        // Said first: the rebuild below takes long on a big page (116 ms with 25,000 nodes;
-        // responsiveness review, 2026-10-19), and the change is known already.
+        // Said first: building the page again takes long on a big page (116 ms with 25,000
+        // nodes; responsiveness review, 2026-10-19), and the change is known already.
         self.speech.speak(&speech, true);
-        let rebuilt = self.cursor.buffer.with_node_changed(id, |node| {
+        let changed = self.change_page_node(id, |node| {
             node.states.expanded = control.states.expanded.or(node.states.expanded);
             node.states.checked = control.states.checked;
             node.states.selected = control.states.selected;
             if control.value.is_some() {
                 node.value = control.value.clone();
             }
-        })?;
-        crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, rebuilt));
-        // Line numbers changed: a Say All stops following.
-        self.say_all = None;
+        });
+        if !changed {
+            return None;
+        }
         self.cursor.move_to_node_id(id);
         Some(speech)
     }
@@ -491,6 +508,77 @@ impl ScreenReaderEngine {
         if let Some(old) = self.pending_page.replace(buffer) {
             crate::retire::retire(old);
         }
+        true
+    }
+
+    /// The host builds pages of at least `from_nodes` nodes after one of their nodes changed,
+    /// off the engine ([`Self::take_page_build`]); smaller pages are built here, at once. The
+    /// live screen reader does; replay and tests build every page here.
+    pub fn set_page_builds_elsewhere(&mut self, from_nodes: usize) {
+        self.page_builds.from_nodes = Some(from_nodes);
+    }
+
+    /// Page node `id` changed (a check box toggled, a combo box's value or name): the buffer's
+    /// node takes the change at once, and the page's lines are built again, by the host on a
+    /// big page, where they keep the old state until its build is installed; else here.
+    /// False when the page has no such node.
+    pub(super) fn change_page_node(
+        &mut self,
+        id: usize,
+        change: impl FnOnce(&mut AomNode),
+    ) -> bool {
+        let by_host = self.pending_page.is_none()
+            && self
+                .page_builds
+                .from_nodes
+                .is_some_and(|from| self.cursor.buffer.node_count() >= from);
+        if by_host {
+            let Some(node) = self.cursor.buffer.node_mut(id) else {
+                return false;
+            };
+            change(node);
+            self.page_builds.generation += 1;
+            self.page_builds.wanted = true;
+            return true;
+        }
+        let Some(rebuilt) = self.cursor.buffer.with_node_changed(id, change) else {
+            return false;
+        };
+        crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, rebuilt));
+        // Line numbers changed: a Say All stops following.
+        self.say_all = None;
+        true
+    }
+
+    /// The page a change asked the host to build, with the change's generation, for
+    /// [`Self::install_page_build`]. The host copies the page before it builds, and drops
+    /// it: while it holds it, a change copies the whole page to change one node.
+    pub fn take_page_build(&mut self) -> Option<(u64, std::sync::Arc<AomNode>)> {
+        if !std::mem::take(&mut self.page_builds.wanted) {
+            return None;
+        }
+        let page = self.cursor.buffer.page()?.clone();
+        self.page_builds.base = std::sync::Arc::downgrade(&page);
+        Some((self.page_builds.generation, page))
+    }
+
+    /// Takes `buffer`, built for generation `generation`, as the page waiting to be applied
+    /// (at the next key or quiet moment). False, and `buffer` is dropped, when a later change,
+    /// another page or a page read again came meanwhile.
+    pub fn install_page_build(&mut self, generation: u64, buffer: VirtualBuffer) -> bool {
+        let current = generation == self.page_builds.generation
+            && self.pending_page.is_none()
+            && self
+                .page_builds
+                .base
+                .upgrade()
+                .zip(self.cursor.buffer.page())
+                .is_some_and(|(base, page)| std::sync::Arc::ptr_eq(&base, page));
+        if !current {
+            crate::retire::retire(buffer);
+            return false;
+        }
+        self.pending_page = Some(buffer);
         true
     }
 

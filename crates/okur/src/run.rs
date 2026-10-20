@@ -170,6 +170,11 @@ pub fn load_aom_from_path(path: &Path) -> Result<AomNode, Box<dyn std::error::Er
 /// waits on the engine, and a key that waits 150 ms passes to the application unread.
 const SLOW_ENGINE: std::time::Duration = std::time::Duration::from_millis(20);
 
+/// Pages of at least this many nodes are built again off the engine after a control on them
+/// changed: 5,032 nodes took 15-17 ms to build, 25,032 nodes 114-155 ms (performance review
+/// P3, 2026-10-20).
+const PAGE_BUILDS_ELSEWHERE_FROM: usize = 5_000;
+
 /// Keys waiting for the engine, which the event loop lets go first. A plain mutex takes no
 /// turns: the loop took the engine again within microseconds for each queued event, and the
 /// keyboard hook, trying every millisecond, could miss every gap until its 150 ms were over
@@ -488,6 +493,9 @@ pub async fn run(config: RunConfig) {
         engine.set_ui(Box::new(ui));
     }
     engine.set_settings_layers(layers);
+    // A big page whose control changed is built again off the engine, which the keyboard
+    // hook waits on (performance review P3); a smaller one at once, in a few milliseconds.
+    engine.set_page_builds_elsewhere(PAGE_BUILDS_ELSEWHERE_FROM);
     // The settings dialog keeps what it changes in the settings folder.
     if let Some(folder) = settings_folder {
         engine.set_settings_store(Box::new(folder));
@@ -636,6 +644,10 @@ pub async fn run(config: RunConfig) {
                 Vec<okur_core::AomNode>,
             );
             let (parts_tx, mut parts_rx) = tokio::sync::mpsc::unbounded_channel::<BuiltParts>();
+            // A page built again after one of its controls changed, with the change's
+            // generation: installed unless another change came meanwhile.
+            let (rebuilt_tx, mut rebuilt_rx) =
+                tokio::sync::mpsc::unbounded_channel::<(u64, VirtualBuffer)>();
             loop {
                 let received = tokio::select! {
                     biased;
@@ -653,6 +665,13 @@ pub async fn run(config: RunConfig) {
                             if let Ok(mut eng) = engine_events.lock() {
                                 eng.handle_page_refreshed(&title, buffer);
                             }
+                        }
+                        continue;
+                    }
+                    Some((generation, buffer)) = rebuilt_rx.recv() => {
+                        give_way_to_keys();
+                        if let Ok(mut eng) = engine_events.lock() {
+                            eng.install_page_build(generation, buffer);
                         }
                         continue;
                     }
@@ -777,6 +796,25 @@ pub async fn run(config: RunConfig) {
                             us = held.as_micros(),
                             "event handled"
                         );
+                    }
+                    // A control the event changed: its page is built again off the engine.
+                    // The page is copied first and let go, so that a change meanwhile does
+                    // not copy it under the lock.
+                    if let Some((generation, page)) = eng.take_page_build() {
+                        let rebuilt = rebuilt_tx.clone();
+                        tokio::task::spawn_blocking(move || {
+                            let started = std::time::Instant::now();
+                            let root = okur_core::AomNode::clone(&page);
+                            drop(page);
+                            let buffer = VirtualBuffer::from_aom_owned(root);
+                            tracing::debug!(
+                                generation,
+                                lines = buffer.lines.len(),
+                                ms = started.elapsed().as_millis(),
+                                "page built after a change"
+                            );
+                            let _ = rebuilt.send((generation, buffer));
+                        });
                     }
                     spoken
                 };

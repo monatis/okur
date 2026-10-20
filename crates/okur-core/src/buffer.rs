@@ -734,6 +734,11 @@ impl VirtualBuffer {
         self.text.get(offset..)?.chars().next()
     }
 
+    /// The number of page nodes, hidden ones included.
+    pub fn node_count(&self) -> usize {
+        self.slot_of.len()
+    }
+
     /// Total length in bytes of the buffer text.
     pub fn len(&self) -> usize {
         self.text.len()

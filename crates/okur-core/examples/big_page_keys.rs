@@ -116,4 +116,39 @@ fn main() {
         times.len(),
         rows
     );
+    // A check box toggled (the middle row's): the page built again at once, or left to the
+    // host to build off the engine, as the live screen reader does (performance review P3).
+    for (name, by_host) in [("toggle, here", false), ("toggle, host", true)] {
+        let mut times = Vec::new();
+        for _ in 0..3 {
+            let cursor =
+                VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+            let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+            engine.handle_accessibility_event(&AccessibilityEvent::DocumentLoaded {
+                title: "Big page".to_owned(),
+                root: root.clone(),
+            });
+            if by_host {
+                engine.set_page_builds_elsewhere(0);
+            }
+            let mut control = okur_core::FocusEvent::new(Role::CheckBox)
+                .with_node_id(5 * (rows / 2) + 3)
+                .with_name("Read");
+            control.in_document = true;
+            control.states.checked = Some(true);
+            let started = std::time::Instant::now();
+            engine.handle_accessibility_event(&AccessibilityEvent::Change {
+                kind: okur_core::ChangeKind::State,
+                control,
+            });
+            times.push(started.elapsed());
+        }
+        times.sort();
+        println!(
+            "{name:>14}: {:?} (median of {}, {} rows)",
+            times.get(times.len() / 2).copied().unwrap_or_default(),
+            times.len(),
+            rows
+        );
+    }
 }

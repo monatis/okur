@@ -140,6 +140,8 @@ pub struct ScreenReaderEngine {
     menus: crate::native_focus::Menus,
     /// The page re-read after a change, waiting for the change's events to be handled.
     pending_page: Option<VirtualBuffer>,
+    /// Page builds the host makes off the engine after a page node changed.
+    page_builds: page::PageBuilds,
     /// Forms mode was just turned on by Enter (not by focus moving into a field).
     forms_mode_by_enter: bool,
     /// The focused control's access key, whatever the Access Key output: Say Focus says it.
@@ -307,6 +309,7 @@ impl ScreenReaderEngine {
             forms_mode_by_list: false,
             page_said_for: None,
             pending_page: None,
+            page_builds: page::PageBuilds::default(),
             last_text: None,
             actions: None,
             clock: None,
