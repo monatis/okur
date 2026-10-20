@@ -232,6 +232,44 @@ impl SpeechThread {
             *to = Some(report);
         }
     }
+
+    /// What tells when speech has ended, kept by the host once the engine owns the thread.
+    pub fn idle(&self) -> SpeechIdle {
+        SpeechIdle {
+            tts: Arc::clone(&self.tts),
+            pending: Arc::clone(&self.pending),
+        }
+    }
+}
+
+/// Whether the speech thread has said everything it was asked to: Okur's last words as it
+/// exits are heard before it goes.
+#[derive(Clone)]
+pub struct SpeechIdle {
+    tts: Arc<Mutex<TtsManager>>,
+    pending: Arc<AtomicUsize>,
+}
+
+impl SpeechIdle {
+    /// Waits until nothing is queued and the synthesizer is silent, at most `limit`: true
+    /// when it was.
+    pub fn wait(&self, limit: Duration) -> bool {
+        let until = std::time::Instant::now() + limit;
+        loop {
+            let silent = self.pending.load(Ordering::SeqCst) == 0
+                && self
+                    .tts
+                    .try_lock()
+                    .is_ok_and(|tts| !tts.engine.is_speaking());
+            if silent {
+                return true;
+            }
+            if std::time::Instant::now() >= until {
+                return false;
+            }
+            std::thread::sleep(Duration::from_millis(20));
+        }
+    }
 }
 
 /// Carries out `batch` on the synthesizer, but for what an interruption in it supersedes.

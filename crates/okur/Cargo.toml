@@ -4,6 +4,37 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
+build = "build.rs"
+
+# The screen reader's runtime, shared by its two programs
+# (docs/references/startup-and-secure-screens-proposal.md, §5.2).
+[lib]
+name = "okur"
+path = "src/lib.rs"
+
+# The developer's command line: `okur run`, `parity`, `snapshot`, `doctor`, ... A console
+# program without UI Access, which runs from `target\` and from the lab's folders.
+[[bin]]
+name = "okur"
+path = "src/main.rs"
+
+# The installed screen reader: no console, UI Access in its manifest. Windows starts a UI
+# Access program only when it is signed and installed under Program Files, so it is never run
+# from `target\`, and has no tests of its own (a test program with its manifest would not
+# start either).
+[[bin]]
+name = "okur-sr"
+path = "src/bin/okur-sr.rs"
+test = false
+bench = false
+
+# The same screen reader without UI Access: what the installer puts in place of `okur-sr.exe`
+# where the UI Access build's signature does not verify (NVDA's `nvda_noUIAccess.exe`).
+[[bin]]
+name = "okur-sr-no-uiaccess"
+path = "src/bin/okur-sr-no-uiaccess.rs"
+test = false
+bench = false
 
 [dependencies]
 okur-core = { workspace = true }

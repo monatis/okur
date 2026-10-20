@@ -1,0 +1,44 @@
+//! Embeds each program's application manifest at link time (Windows, MSVC):
+//! - `okur.exe`, the developer's console program: `asInvoker`, no UI Access;
+//! - `okur-sr.exe`, the installed screen reader: `asInvoker` with `uiAccess="true"`;
+//! - `okur-sr-no-uiaccess.exe`: the same screen reader without UI Access.
+//!
+//! Each manifest is whole, its `trustInfo` included, so the linker is told to add no UAC
+//! fragment of its own (`/MANIFESTUAC:NO`) that could collide with it
+//! (`docs/references/startup-and-secure-screens-proposal.md`, §5.2). Check the result with
+//! `mt.exe -inputresource:okur-sr.exe;#1 -out:con`, or `okur doctor`.
+
+use std::path::PathBuf;
+
+/// Each program and its manifest file under `manifests/`.
+const MANIFESTS: [(&str, &str); 3] = [
+    ("okur", "okur.manifest"),
+    ("okur-sr", "okur-sr.manifest"),
+    ("okur-sr-no-uiaccess", "okur-sr-no-uiaccess.manifest"),
+];
+
+fn main() {
+    println!("cargo:rerun-if-changed=build.rs");
+    let Ok(dir) = std::env::var("CARGO_MANIFEST_DIR") else {
+        println!("cargo:warning=no CARGO_MANIFEST_DIR: the programs get no manifest");
+        return;
+    };
+    let manifests = PathBuf::from(dir).join("manifests");
+    for (_, file) in MANIFESTS {
+        println!("cargo:rerun-if-changed={}", manifests.join(file).display());
+    }
+    let windows = std::env::var("CARGO_CFG_TARGET_OS").is_ok_and(|os| os == "windows");
+    let msvc = std::env::var("CARGO_CFG_TARGET_ENV").is_ok_and(|env| env == "msvc");
+    if !(windows && msvc) {
+        return;
+    }
+    for (program, file) in MANIFESTS {
+        let path = manifests.join(file);
+        println!("cargo:rustc-link-arg-bin={program}=/MANIFEST:EMBED");
+        println!(
+            "cargo:rustc-link-arg-bin={program}=/MANIFESTINPUT:{}",
+            path.display()
+        );
+        println!("cargo:rustc-link-arg-bin={program}=/MANIFESTUAC:NO");
+    }
+}

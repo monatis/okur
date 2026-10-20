@@ -1,15 +1,10 @@
 use clap::{Parser, Subcommand};
-use okur_core::{
-    AccessibilityEvent, AomNode, Role, ScreenReaderEngine, VirtualBuffer, VirtualCursor,
-};
-use okur_platform::{
-    create_event_listener, create_keyboard_hook, KeyAction, PlatformBridge, SpeechLog,
-    TtsEngineType, TtsManager,
-};
+use okur::run::load_aom_from_path;
+use okur_core::{AomNode, Role, VirtualBuffer, VirtualCursor};
+use okur_platform::{SpeechLog, TtsEngineType, TtsManager};
 use std::fs;
 use std::path::Path;
 use std::str::FromStr;
-use std::sync::{Arc, Mutex};
 
 #[derive(Parser, Debug)]
 #[command(
@@ -352,13 +347,16 @@ enum Commands {
         #[arg(long, default_value_t = 500)]
         duration_ms: u64,
     },
-}
-
-/// Loads a page from a UIA snapshot (`okur snapshot` output) through the production
-/// UIA-to-AOM mapping.
-fn load_aom_from_path(path: &Path) -> Result<AomNode, Box<dyn std::error::Error>> {
-    let snapshot = okur_platform::uia_snapshot::UiaSnapshot::load(path)?;
-    Ok(okur_platform::uia_snapshot::to_aom(&snapshot.root))
+    /// Print what Windows grants this process, or another: session, desktop, account,
+    /// integrity, UI Access, elevation, the executable's signature and manifest, and Okur's
+    /// Ease of Access registration (read only)
+    Doctor {
+        /// Report on this process instead (its desktop is not shown)
+        #[arg(long)]
+        pid: Option<u32>,
+    },
+    /// Ask the Okur running on this desktop to quit, without its question
+    Quit,
 }
 
 #[cfg(windows)]
@@ -561,244 +559,14 @@ fn print_evidence(evidence: &str, trial: usize, trace: bool) -> Result<(), Strin
     Ok(())
 }
 
-/// The JAWS keyboard settings named on the command line (`--keyboard-layout`, `--jaws-key`).
-/// `okur run`'s options that change a setting for the run.
-struct RunOptions {
-    engine: Option<String>,
-    voice: Option<String>,
-    rate: Option<i32>,
-    volume: Option<u16>,
-    keyboard_layout: Option<String>,
-    jaws_key: Option<String>,
-    live_region_whole_text: bool,
-    typing_echo: Option<String>,
-}
-
-impl RunOptions {
-    /// Changes `settings` as the options ask; an error names an option's bad value.
-    fn apply(self, settings: &mut okur_core::settings::Settings) -> Result<(), String> {
-        use okur_core::settings::{LiveRegionAppend, Synthesizer, TypingEcho};
-        if let Some(engine) = self.engine {
-            settings.voice.synthesizer = match TtsEngineType::from_str(&engine)? {
-                TtsEngineType::Auto => Synthesizer::Auto,
-                TtsEngineType::OneCore => Synthesizer::OneCore,
-                TtsEngineType::Sapi5 => Synthesizer::Sapi5,
-                TtsEngineType::NoSpeech => Synthesizer::NoSpeech,
-            };
-        }
-        if self.voice.is_some() {
-            settings.voice.voice = self.voice;
-        }
-        if let Some(rate) = self.rate {
-            settings.voice.rate = rate.clamp(-10, 10);
-        }
-        if let Some(volume) = self.volume {
-            settings.voice.volume = volume.min(100);
-        }
-        if self.keyboard_layout.is_some() || self.jaws_key.is_some() {
-            let layout = match (&self.keyboard_layout, settings.keyboard.layout) {
-                (Some(layout), _) => layout.clone(),
-                (None, okur_core::settings::KeyboardLayout::Desktop) => "desktop".to_owned(),
-                (None, okur_core::settings::KeyboardLayout::Laptop) => "laptop".to_owned(),
-            };
-            settings.keyboard = keyboard_settings(&layout, self.jaws_key.as_deref())?;
-        }
-        if self.live_region_whole_text {
-            settings.live_region_append = LiveRegionAppend::WholeText;
-        }
-        if let Some(echo) = self.typing_echo {
-            settings.typing_echo = match echo.to_ascii_lowercase().as_str() {
-                "characters" => TypingEcho::Characters,
-                "none" => TypingEcho::None,
-                other => {
-                    return Err(format!(
-                        "--typing-echo must be characters or none, not {other:?}"
-                    ))
-                }
-            };
-        }
-        Ok(())
-    }
-}
-
-fn keyboard_settings(
-    layout: &str,
-    jaws_key: Option<&str>,
-) -> Result<okur_core::settings::KeyboardSettings, String> {
-    use okur_core::settings::{JawsKey, KeyboardLayout, KeyboardSettings};
-    let layout = match layout.to_ascii_lowercase().as_str() {
-        "desktop" => KeyboardLayout::Desktop,
-        "laptop" => KeyboardLayout::Laptop,
-        other => {
-            return Err(format!(
-                "unknown keyboard layout {other:?} (desktop, laptop)"
-            ))
-        }
-    };
-    let mut settings = KeyboardSettings::for_layout(layout);
-    if let Some(key) = jaws_key {
-        settings.jaws_key = match key.to_ascii_lowercase().as_str() {
-            "insert" => JawsKey::Insert,
-            "capslock" => JawsKey::CapsLock,
-            "scrolllock" => JawsKey::ScrollLock,
-            other => {
-                return Err(format!(
-                    "unknown JAWS key {other:?} (insert, capslock, scrolllock)"
-                ))
-            }
-        };
-    }
-    Ok(settings)
-}
-
 /// Logs to stderr at the RUST_LOG level, or, for `run --debug-log <file>`, everything from
 /// the screen reader's crates at debug level to that file.
-/// Engine work longer than this, on a key or an event, is logged as slow: the keyboard hook
-/// waits on the engine, and a key that waits 150 ms passes to the application unread.
-const SLOW_ENGINE: std::time::Duration = std::time::Duration::from_millis(20);
-
-/// Keys waiting for the engine, which the event loop lets go first. A plain mutex takes no
-/// turns: the loop took the engine again within microseconds for each queued event, and the
-/// keyboard hook, trying every millisecond, could miss every gap until its 150 ms were over
-/// and the key went to the application (responsiveness review, 2026-10-19).
-static KEYS_WAITING: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
-
-/// Takes `engine` for a key that arrived at `arrived`: at once, or as soon as the event loop
-/// gives way, within 150 ms; `None` after that, and the key goes to the application.
-fn take_for_key<T>(
-    engine: &std::sync::Mutex<T>,
-    arrived: std::time::Instant,
-) -> Option<std::sync::MutexGuard<'_, T>> {
-    use std::sync::TryLockError;
-    let deadline = arrived + std::time::Duration::from_millis(150);
-    let mut guard = engine.try_lock();
-    if matches!(guard, Err(TryLockError::WouldBlock)) {
-        KEYS_WAITING.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
-        while matches!(guard, Err(TryLockError::WouldBlock)) && std::time::Instant::now() < deadline
-        {
-            // A Windows sleep can last a timer tick (up to 15.6 ms): the first 2 ms only yield.
-            if arrived.elapsed() < std::time::Duration::from_millis(2) {
-                std::thread::yield_now();
-            } else {
-                std::thread::sleep(std::time::Duration::from_millis(1));
-            }
-            guard = engine.try_lock();
-        }
-        KEYS_WAITING.fetch_sub(1, std::sync::atomic::Ordering::SeqCst);
-    }
-    guard.ok()
-}
-
-/// Waits while a key waits for the engine: at most 200 ms, in case a key never takes it.
-fn give_way_to_keys() {
-    let until = std::time::Instant::now() + std::time::Duration::from_millis(200);
-    while KEYS_WAITING.load(std::sync::atomic::Ordering::SeqCst) > 0
-        && std::time::Instant::now() < until
-    {
-        std::thread::yield_now();
-    }
-}
-
-/// A short name for an event, for logs (a page's tree is too big to print).
-fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
-    match event {
-        None => "idle",
-        Some(AccessibilityEvent::Focus(_)) => "focus",
-        Some(AccessibilityEvent::Menu(_)) => "menu",
-        Some(AccessibilityEvent::Change { .. }) => "change",
-        Some(AccessibilityEvent::TextContext(_)) => "text context",
-        Some(AccessibilityEvent::Selected(_)) => "selected",
-        Some(AccessibilityEvent::LiveRegion(_)) => "live region",
-        Some(AccessibilityEvent::ViewerText(_)) => "viewer text",
-        Some(AccessibilityEvent::TopWindows(_)) => "top windows",
-        Some(AccessibilityEvent::TrayIcons(_)) => "tray icons",
-        Some(AccessibilityEvent::PageElements(_)) => "page elements",
-        Some(AccessibilityEvent::DocumentLoaded { .. }) => "document loaded",
-        Some(AccessibilityEvent::Ui(_)) => "okur window",
-        Some(AccessibilityEvent::PageChanged) => "page changed",
-        Some(AccessibilityEvent::PagePartsLoaded(_)) => "page parts loaded",
-        Some(AccessibilityEvent::WindowRenamed(_)) => "window renamed",
-        Some(AccessibilityEvent::MouseMoved { .. }) => "mouse moved",
-    }
-}
-
-/// Prints utterances from a thread of its own: a console paused in QuickEdit selection
-/// blocks writes, and the event loop must not wait on it.
-fn spawn_console() -> std::sync::mpsc::Sender<String> {
-    let (tx, rx) = std::sync::mpsc::channel::<String>();
-    let spawned = std::thread::Builder::new()
-        .name("okur-console".to_owned())
-        .spawn(move || {
-            for line in rx {
-                println!("{line}");
-            }
-        });
-    if let Err(e) = spawned {
-        tracing::warn!("no console thread, utterances are not printed: {e}");
-    }
-    tx
-}
-
-/// Debug-log output, handed to the writer thread ([`spawn_log_writer`]).
-struct LogLines(std::sync::mpsc::Sender<Vec<u8>>);
-
-impl std::io::Write for LogLines {
-    fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
-        let _ = self.0.send(buf.to_vec());
-        Ok(buf.len())
-    }
-
-    fn flush(&mut self) -> std::io::Result<()> {
-        Ok(())
-    }
-}
-
-/// Writes the debug log from a thread of its own: the keyboard hook and the event loop log
-/// on every key and event, and must not wait on the disk.
-fn spawn_log_writer(file: std::fs::File) -> std::sync::mpsc::Sender<Vec<u8>> {
-    let (tx, rx) = std::sync::mpsc::channel::<Vec<u8>>();
-    let spawned = std::thread::Builder::new()
-        .name("okur-debug-log".to_owned())
-        .spawn(move || {
-            use std::io::Write;
-            let mut out = std::io::BufWriter::new(file);
-            while let Ok(first) = rx.recv() {
-                let _ = out.write_all(&first);
-                for more in rx.try_iter() {
-                    let _ = out.write_all(&more);
-                }
-                // Flushed whenever the queue empties, so the log is current on disk.
-                let _ = out.flush();
-            }
-        });
-    if let Err(e) = spawned {
-        eprintln!("No debug-log thread, the debug log stays empty: {e}");
-    }
-    tx
-}
-
 fn init_logging(cli: &Cli) {
-    if let Some(Commands::Run {
-        debug_log: Some(path),
-        ..
-    }) = &cli.command
-    {
-        match std::fs::File::create(path) {
-            Ok(file) => {
-                let lines = spawn_log_writer(file);
-                tracing_subscriber::fmt()
-                    .with_writer(move || LogLines(lines.clone()))
-                    .with_ansi(false)
-                    .with_env_filter(tracing_subscriber::EnvFilter::new(
-                        "okur_core=debug,okur_platform=debug,okur=debug",
-                    ))
-                    .init();
-                return;
-            }
-            Err(e) => eprintln!("Cannot write debug log {path}: {e}"),
-        }
-    }
-    tracing_subscriber::fmt::init();
+    let debug_log = match &cli.command {
+        Some(Commands::Run { debug_log, .. }) => debug_log.as_deref(),
+        _ => None,
+    };
+    okur::run::init_logging(debug_log);
 }
 
 #[tokio::main]
@@ -822,414 +590,36 @@ async fn main() {
             typing_echo,
             settings: settings_folder,
         }) => {
-            // The saved settings, then this run's options over them, for this run only.
-            let settings_folder = match settings_folder {
-                Some(path) => Some(okur_platform::settings_file::SettingsFolder::at(path)),
-                None => okur_platform::settings_file::SettingsFolder::user(),
-            };
-            let mut layers = settings_folder
-                .as_ref()
-                .map(|folder| folder.load())
-                .unwrap_or_default();
-            let saved = layers.resolve(None, None);
-            let mut settings = saved.clone();
-            let options = RunOptions {
-                engine,
-                voice,
-                rate,
-                volume,
-                keyboard_layout,
-                jaws_key,
-                live_region_whole_text,
-                typing_echo,
-            };
-            if let Err(e) = options.apply(&mut settings) {
-                eprintln!("Error: {e}");
-                std::process::exit(1);
-            }
-            layers.change(
-                &okur_core::settings_layers::Scope::Session,
-                &saved,
-                &settings,
-                None,
-            );
-            let engine_type = TtsEngineType::from(settings.voice.synthesizer);
-
-            let mut tts = TtsManager::new(engine_type).unwrap_or_else(|e| {
-                eprintln!("Failed to initialize TTS engine: {}", e);
-                std::process::exit(1);
-            });
-            if let Some(ref path) = speech_log {
-                match SpeechLog::open(path) {
-                    Ok(log) => tts = tts.with_speech_log(log),
-                    Err(e) => {
-                        eprintln!("Failed to open speech log {path:?}: {e}");
-                        std::process::exit(1);
-                    }
-                }
-            }
-
-            okur_core::speech::SpeechOutput::configure(&mut tts, &settings.voice);
-
-            println!("============================================================");
-            println!("  Okur, an open screen reader");
-            println!("  TTS Driver: {}", tts.engine_name());
-            println!("============================================================");
-
-            // Determine active buffer
-            let (buffer, is_fixture) = if let Some(ref f) = fixture {
-                let fixture_path = Path::new(f);
-                match load_aom_from_path(fixture_path) {
-                    Ok(aom) => {
-                        println!("Loaded document fixture from {:?}", fixture_path);
-                        (VirtualBuffer::from_aom(&aom), true)
-                    }
-                    Err(e) => {
-                        eprintln!("Failed to load fixture: {}", e);
-                        std::process::exit(1);
-                    }
-                }
-            } else if cfg!(windows) {
-                // Live, the event listener starts with the focus as it is (a page is loaded
-                // when that focus is in one), as any later focus change.
-                let empty_doc = AomNode::new(0, Role::Document);
-                (VirtualBuffer::from_aom(&empty_doc), false)
-            } else {
-                match PlatformBridge::new().get_active_document(None) {
-                    Ok(aom) => {
-                        println!("Attached to live active foreground document via OS accessibility APIs.");
-                        (VirtualBuffer::from_aom(&aom), true)
-                    }
-                    Err(_) => {
-                        println!("Operating in live native navigation mode.");
-                        let empty_doc = AomNode::new(0, Role::Document);
-                        (VirtualBuffer::from_aom(&empty_doc), false)
-                    }
-                }
-            };
-
-            let mut cursor = VirtualCursor::new(buffer);
-            cursor.move_to_start();
-
-            // OS accessibility events and caret text both reach the engine through this channel.
-            let (event_tx, mut event_rx) = tokio::sync::mpsc::unbounded_channel();
-            // Speech on its own thread: the keyboard hook never waits for a synthesizer.
-            let speech = okur_platform::tts::SpeechThread::start(tts);
-            // Say All's progress: the mark of each part the synthesizer starts comes back to
-            // the event loop, which moves the virtual cursor to its line.
-            let (marks_tx, mut marks_rx) = tokio::sync::mpsc::unbounded_channel::<u64>();
-            speech.report_marks(Box::new(move |mark| {
-                let _ = marks_tx.send(mark);
-            }));
-            let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech));
-            // Enter on an edit focuses it in the page, Enter/Space on a control activates it.
-            #[cfg(windows)]
-            engine.set_actions(Box::new(okur_platform::actions::WindowsActions::start(
-                Some(event_tx.clone()),
-            )));
-            // Okur's own windows (the Virtual Viewer on screen), drawn by okur-ui.
-            if let Some(ui) = okur_platform::ui_host::ProcessUiHost::start(event_tx.clone()) {
-                engine.set_ui(Box::new(ui));
-            }
-            engine.set_settings_layers(layers);
-            // The settings dialog keeps what it changes in the settings folder.
-            if let Some(folder) = settings_folder {
-                engine.set_settings_store(Box::new(folder));
-            }
-            // Say System Time (Insert+F12) in the user's locale formats.
-            #[cfg(windows)]
-            engine.set_clock(Box::new(okur_platform::clock::WindowsClock));
-            let engine = Arc::new(Mutex::new(engine));
-
-            // Announce startup
-            if let Ok(mut eng) = engine.lock() {
-                if is_fixture {
-                    eng.app_mode = okur_core::engine::AppMode::VirtualBuffer;
-                    let doc_name = eng.cursor.buffer.document_title().unwrap_or("Document");
-                    let welcome = format!("{}  \u{001d} Virtual PC Cursor \u{001e}", doc_name);
-                    println!("[Okur] {}", welcome.replace(['\u{001d}', '\u{001e}'], ""));
-                    eng.speech.speak(&welcome, true);
-                } else {
-                    eng.app_mode = okur_core::engine::AppMode::NativeControl;
-                    println!("[Okur] Ready in live native Windows navigation mode.");
-                }
-            }
-            // An application running as administrator shows nothing to an Okur that is not
-            // (Windows Settings' Rename dialog); JAWS runs elevated.
-            if !okur_platform::elevation::is_elevated() {
-                let note = "Okur is not running as administrator: windows of applications \
-                            that are (Settings' \"Rename this PC\", an elevated terminal) cannot \
-                            be read. Start Okur from an administrator terminal to read them.";
-                println!("[Okur] {note}");
-                tracing::warn!("{note}");
-            }
-
-            // Install low-level keyboard hook
-            let mut hook = create_keyboard_hook();
-            let engine_cb = Arc::clone(&engine);
-
-            if let Err(e) = hook.start(Box::new(move |event| {
-                // Windows silently removes a low-level keyboard hook that once exceeds
-                // LowLevelHooksTimeout, so the hook never waits long for the engine: a key
-                // that finds it busy for 150 ms passes to the application.
-                let arrived = std::time::Instant::now();
-                let guard = take_for_key(&engine_cb, arrived);
-                if guard.is_none() {
-                    tracing::warn!(key = ?event.key, "engine busy: key passed through");
-                }
-                if let Some(mut eng) = guard {
-                    let waited = arrived.elapsed();
-                    let started = std::time::Instant::now();
-                    let action = eng.handle_key_event(&event);
-                    let held = started.elapsed();
-                    if waited > SLOW_ENGINE || held > SLOW_ENGINE {
-                        tracing::warn!(
-                            key = ?event.key,
-                            waited_ms = waited.as_millis(),
-                            held_ms = held.as_millis(),
-                            "slow key handling"
-                        );
-                    }
-                    if event.is_down {
-                        tracing::debug!(
-                            key = ?event.key,
-                            text = ?event.text,
-                            ctrl = event.modifiers.ctrl,
-                            shift = event.modifiers.shift,
-                            alt = event.modifiers.alt,
-                            insert = event.modifiers.insert,
-                            ?action,
-                            mode = ?eng.app_mode,
-                            forms = eng.forms_mode,
-                            waited_us = waited.as_micros(),
-                            held_us = held.as_micros(),
-                            "key"
-                        );
-                    }
-                    action
-                } else {
-                    KeyAction::PassThrough
-                }
-            })) {
-                eprintln!("Failed to install keyboard hook: {}", e);
-                std::process::exit(1);
-            }
-
-            // Start OS-level accessibility event listener
-            let mut event_listener = create_event_listener();
-            if let Err(e) = event_listener.start(event_tx) {
-                tracing::warn!("Could not start OS accessibility event listener: {}", e);
-            } else {
-                let engine_events = Arc::clone(&engine);
-                let console = spawn_console();
-                tokio::spawn(async move {
-                    let idle = std::time::Duration::from_millis(150);
-                    // Captures of the page already read are built on threads of their own
-                    // (an IA2 capture after the quick one, a refresh after changes: 69-275 ms
-                    // on a page of 25,000 nodes, during which typing echo and focus events
-                    // waited; responsiveness review, 2026-10-19). They come back numbered, and
-                    // one finished after a newer one is dropped.
-                    let (built_tx, mut built_rx) =
-                        tokio::sync::mpsc::unbounded_channel::<(u64, String, VirtualBuffer)>();
-                    let (mut refreshes_sent, mut refresh_applied) = (0_u64, 0_u64);
-                    // Page parts read again are spliced into the page and built on a thread of
-                    // their own too (135-175 ms on a page of 25,000 nodes, during which every
-                    // event waited; performance review, 2026-10-20, P8). They come back with
-                    // the page they were spliced into, the buffer (none when a part was not
-                    // found in it) and the parts themselves.
-                    type BuiltParts = (
-                        std::sync::Arc<okur_core::AomNode>,
-                        Option<VirtualBuffer>,
-                        Vec<okur_core::AomNode>,
-                    );
-                    let (parts_tx, mut parts_rx) =
-                        tokio::sync::mpsc::unbounded_channel::<BuiltParts>();
-                    loop {
-                        let received = tokio::select! {
-                            biased;
-                            Some(mark) = marks_rx.recv() => {
-                                give_way_to_keys();
-                                if let Ok(mut eng) = engine_events.lock() {
-                                    eng.speech_reached(mark);
-                                }
-                                continue;
-                            }
-                            Some((number, title, buffer)) = built_rx.recv() => {
-                                if number > refresh_applied {
-                                    refresh_applied = number;
-                                    give_way_to_keys();
-                                    if let Ok(mut eng) = engine_events.lock() {
-                                        eng.handle_page_refreshed(&title, buffer);
-                                    }
-                                }
-                                continue;
-                            }
-                            // Installed if the page is still the one they were spliced into;
-                            // else the parts go into the page as it is now, under the lock.
-                            Some((base, buffer, parts)) = parts_rx.recv() => {
-                                give_way_to_keys();
-                                if let Ok(mut eng) = engine_events.lock() {
-                                    let installed =
-                                        buffer.is_some_and(|b| eng.install_page_parts(&base, b));
-                                    if !installed {
-                                        let _ = eng.handle_accessibility_event(
-                                            &AccessibilityEvent::PagePartsLoaded(parts),
-                                        );
-                                    }
-                                }
-                                continue;
-                            }
-                            received = tokio::time::timeout(idle, event_rx.recv()) => received,
-                        };
-                        let event = match received {
-                            Ok(Some(event)) => Some(event),
-                            Ok(None) => break,
-                            // Quiet for a moment: speech JAWS defers until no event supersedes it.
-                            Err(_) => None,
-                        };
-                        // A page's buffer is built before the engine is taken: on a big page
-                        // that takes long, and the keyboard hook waits on the engine. The
-                        // buffer keeps the page the event brought, without a copy.
-                        let mut event = event;
-                        let page = match &mut event {
-                            Some(AccessibilityEvent::DocumentLoaded { title, root }) => {
-                                let url = root.attributes.get("url").cloned();
-                                give_way_to_keys();
-                                let refresh = engine_events
-                                    .lock()
-                                    .ok()
-                                    .is_some_and(|eng| eng.is_page_in_front(title, url.as_deref()));
-                                let root = std::mem::replace(
-                                    root,
-                                    okur_core::AomNode::new(0, okur_core::Role::Document),
-                                );
-                                if refresh {
-                                    refreshes_sent += 1;
-                                    let (number, title) = (refreshes_sent, std::mem::take(title));
-                                    let built = built_tx.clone();
-                                    tokio::task::spawn_blocking(move || {
-                                        let started = std::time::Instant::now();
-                                        let buffer = VirtualBuffer::from_aom_owned(root);
-                                        tracing::debug!(
-                                            lines = buffer.lines.len(),
-                                            ms = started.elapsed().as_millis(),
-                                            "page refresh built"
-                                        );
-                                        let _ = built.send((number, title, buffer));
-                                    });
-                                    continue;
-                                }
-                                let started = std::time::Instant::now();
-                                let buffer = VirtualBuffer::from_aom_owned(root);
-                                tracing::debug!(
-                                    lines = buffer.lines.len(),
-                                    ms = started.elapsed().as_millis(),
-                                    "page buffer built"
-                                );
-                                Some((std::mem::take(title), buffer))
-                            }
-                            _ => None,
-                        };
-                        // Page parts read again are spliced into the page and built on the
-                        // blocking pool, the engine taken only a moment to share its page.
-                        if let Some(AccessibilityEvent::PagePartsLoaded(parts)) = &mut event {
-                            give_way_to_keys();
-                            let base = engine_events
-                                .lock()
-                                .ok()
-                                .and_then(|eng| eng.page_for_parts());
-                            if let Some(base) = base {
-                                let parts = std::mem::take(parts);
-                                let built = parts_tx.clone();
-                                tokio::task::spawn_blocking(move || {
-                                    let started = std::time::Instant::now();
-                                    let buffer = VirtualBuffer::spliced(&base, &parts)
-                                        .map(VirtualBuffer::from_aom_owned);
-                                    tracing::debug!(
-                                        parts = parts.len(),
-                                        lines = buffer.as_ref().map(|b| b.lines.len()),
-                                        ms = started.elapsed().as_millis(),
-                                        "page parts spliced"
-                                    );
-                                    let _ = built.send((base, buffer, parts));
-                                });
-                                continue;
-                            }
-                        }
-                        let spoken = {
-                            give_way_to_keys();
-                            let Ok(mut eng) = engine_events.lock() else {
-                                continue;
-                            };
-                            let started = std::time::Instant::now();
-                            let spoken = match (&event, page) {
-                                (_, Some((title, buffer))) => {
-                                    eng.handle_document_loaded(&title, buffer)
-                                }
-                                (Some(event), None) => eng.handle_accessibility_event(event),
-                                (None, None) => eng.on_idle(),
-                            };
-                            let held = started.elapsed();
-                            if held > SLOW_ENGINE {
-                                tracing::warn!(
-                                    event = event_kind(event.as_ref()),
-                                    ms = held.as_millis(),
-                                    "slow event handling"
-                                );
-                            }
-                            // Idle ticks come every 150 ms of quiet; only events are timed, the
-                            // mouse's many moves aside.
-                            if event.is_some()
-                                && !matches!(event, Some(AccessibilityEvent::MouseMoved { .. }))
-                            {
-                                tracing::debug!(
-                                    event = event_kind(event.as_ref()),
-                                    us = held.as_micros(),
-                                    "event handled"
-                                );
-                            }
-                            spoken
-                        };
-                        if let Some(msg) = spoken {
-                            // One line per utterance, so the debug log stays line-oriented.
-                            let msg = msg
-                                .replace(['\u{001d}', '\u{001e}'], "")
-                                .replace('\n', " | ");
-                            tracing::debug!(%msg, "spoken for event");
-                            let _ = console.send(format!("[Event Spoken] {msg}"));
-                        }
-                    }
-                });
-            }
-
-            println!("\nOkur is running.");
-            println!("Navigation shortcuts active:");
-            println!("  - Arrow keys: Navigate lines / characters");
-            println!("  - Ctrl+Left/Right: Navigate words");
-            println!("  - Ctrl+Home / Ctrl+End: Document start / end");
-            println!("  - H / Shift+H: Next / prior heading");
-            println!("  - 1..6: Next heading by level");
-            println!("  - U / Shift+U: Next / prior link");
-            println!("  - T / Shift+T: Next / prior table");
-            println!("  - Tab / Shift+Tab: Interactive controls");
-            println!("  - Enter: Forms mode on edits");
-            println!("  - Esc: Exit forms mode to Virtual PC Cursor");
-            println!("  - Ctrl: Silence speech");
-            println!("Press Ctrl+C to stop Okur.\n");
-
-            // Handle clean exit via Ctrl+C
-            if let Err(e) = tokio::signal::ctrl_c().await {
-                eprintln!("Error waiting for shutdown signal: {}", e);
-            }
-
-            println!("\nShutting down Okur...");
-            let _ = hook.stop();
-            let _ = event_listener.stop();
-            if let Ok(mut eng) = engine.lock() {
-                eng.speech.speak("Okur exiting.", true);
-            }
-            println!("Okur stopped.");
+            // The live screen reader, as `okur-sr.exe` runs it, with this console.
+            okur::run::run(okur::run::RunConfig {
+                options: okur::run::RunOptions {
+                    engine,
+                    voice,
+                    rate,
+                    volume,
+                    keyboard_layout,
+                    jaws_key,
+                    live_region_whole_text,
+                    typing_echo,
+                },
+                fixture,
+                speech_log,
+                settings: settings_folder,
+                start: okur::startup::StartKind::Manual,
+                console: true,
+            })
+            .await;
         }
+        Some(Commands::Doctor { pid }) => {
+            print!("{}", okur::doctor::render(&okur::doctor::gather(pid)));
+        }
+        Some(Commands::Quit) => match okur::control::quit_this_desktop() {
+            Ok(said) => println!("{said}"),
+            Err(e) => {
+                eprintln!("{e}");
+                std::process::exit(1);
+            }
+        },
         Some(Commands::Speak {
             text,
             engine,
@@ -1929,44 +1319,5 @@ async fn main() {
         None => {
             println!("No command specified. Use `okur --help` for available options.");
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use std::sync::{Arc, Mutex};
-    use std::time::{Duration, Instant};
-
-    /// A key takes the engine quickly while the event loop takes it again and again, as it does
-    /// for a stream of events, each held 1 ms: the loop gives way to a waiting key.
-    #[test]
-    fn a_key_gets_the_engine_between_a_stream_of_events() {
-        let engine = Arc::new(Mutex::new(0_u32));
-        let stop = Arc::new(std::sync::atomic::AtomicBool::new(false));
-        let events = {
-            let (engine, stop) = (Arc::clone(&engine), Arc::clone(&stop));
-            std::thread::spawn(move || {
-                while !stop.load(std::sync::atomic::Ordering::SeqCst) {
-                    give_way_to_keys();
-                    if let Ok(mut count) = engine.lock() {
-                        *count += 1;
-                        std::thread::sleep(Duration::from_millis(1));
-                    }
-                }
-            })
-        };
-        std::thread::sleep(Duration::from_millis(20));
-        let mut longest = Duration::ZERO;
-        for _ in 0..20 {
-            let arrived = Instant::now();
-            let taken = take_for_key(&engine, arrived).is_some();
-            assert!(taken, "the key went to the application");
-            longest = longest.max(arrived.elapsed());
-            std::thread::sleep(Duration::from_millis(5));
-        }
-        stop.store(true, std::sync::atomic::Ordering::SeqCst);
-        let _ = events.join();
-        assert!(longest < Duration::from_millis(100), "{longest:?}");
     }
 }
