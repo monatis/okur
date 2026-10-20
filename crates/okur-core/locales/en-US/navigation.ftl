@@ -23,6 +23,8 @@ quicknav-none-clickable = There are no clickable elements on this page.
 quicknav-none-flows = No more flows found
 # Said after an element with aria-flowto.
 flow-has-flows-to = Has Flows To
+# The element a flow goes to, after its line [obs, 563/s8].
+flow-has-flows-from = Has Flows From
 # Place markers: places on a page the user marked.
 quicknav-none-placemarkers = There are no PlaceMarkers on this page.
 quicknav-none-radio-buttons = There are no radio buttons on this page.

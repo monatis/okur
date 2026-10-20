@@ -1340,9 +1340,18 @@ fn resolve_flows(buffer: &mut VirtualBuffer) {
                 .map(|into| (from, into)),
         );
     }
-    for &(from, _) in &flows {
-        let said = msg::flow_has_flows_to().to_string();
-        if let Some(line) = buffer.lines.iter_mut().find(|l| l.start_offset == from) {
+    // The element a flow comes from ends "Has Flows To" [obs, 292/s9], the one it goes to
+    // "Has Flows From" ("heading level 2 Lists Has Flows From" [obs, 563/s8, s9]).
+    let marks = flows
+        .iter()
+        .map(|&(from, _)| (from, msg::flow_has_flows_to().to_string()))
+        .chain(
+            flows
+                .iter()
+                .map(|&(_, into)| (into, msg::flow_has_flows_from().to_string())),
+        );
+    for (start, said) in marks {
+        if let Some(line) = buffer.lines.iter_mut().find(|l| l.start_offset == start) {
             if !line.speech.ends_with(&said) {
                 line.speech = format!("{}\n{said}", line.speech);
             }
@@ -1752,6 +1761,12 @@ mod tests {
             buffer.lines.first().map(|l| l.speech.as_str()),
             Some("This part\nHas Flows To")
         );
+        // The target ends "Has Flows From" [obs, 563/s8].
+        assert!(buffer
+            .lines
+            .iter()
+            .find(|l| l.text == "Lists")
+            .is_some_and(|l| l.speech.ends_with("Has Flows From")));
     }
 
     /// aria-roledescription on the dev box (JAWS, 2026-10-16): said in place of a button's,
