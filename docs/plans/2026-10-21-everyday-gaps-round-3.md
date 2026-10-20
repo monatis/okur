@@ -16,11 +16,11 @@ The rounds queued at the end of round 2, in order (each behind the one before):
 | live11 | Okur reading 222-260 and 274: its own list dialogs, live (`okur live-parity`) | compare with the replay of the same steps |
 | 54 | 246-274 again, with the elevated tracer and the lab's Chrome | import; most element-list steps should now replay |
 | 55 | 275-299, 19, 20, 29 again | import |
-| 56 | the 3xx desktop scenarios whose traces caught a browser title | import |
+| 56 | the 3xx desktop scenarios whose traces caught a browser title, and 524, 525, 532, 537, 540-546; installs `okur.exe` 06ec2c92, whose tracer adds MSAA keyboard shortcuts and the application's product and version | import; Insert+Tab's access keys (541/s8, 543/s2) and Ctrl+Insert+V (513/s4, in 57) should then replay |
 | 57 | 401-408 and the 5xx scenarios with a browser title in their traces | import |
 | 58 | 548-555 again (53 failed: Say Window outlasted its settle; now 60 s, and a failed run keeps its output in `<id>-run.log`) | build the levels (§1) |
-| 59 | 237 (missed in 52); 556-557 (Shift+Period and Shift+Comma outside lists), 558 (S and D on a plain page), 559 (where Jump to Line goes), 560 (the Word List), 561 (the clipboard keys, the Windows-key scripts by name), 562 (a large selection), 563 (following aria-flowto), 564 (Say Line on form fields) | build each; 562 sets the "N characters up to" rule |
-| snap60 | `virtual-keys.chrome.ia2.json` captured again with IA2 relations (`okur.exe` cd4bb985) | import the snapshot: Has Flows To and Equals replay |
+| 59 | 237 (missed in 52); 556-557 (Shift+Period and Shift+Comma outside lists), 558 (S and D on a plain page), 559 (where Jump to Line goes), 560 (the Word List), 561 (the clipboard keys, the Windows-key scripts by name), 562 (a large selection), 563 (following aria-flowto), 564 (Say Line on form fields), 565 (Say Color on colors.html) | build each; 562 sets the "N characters up to" rule |
+| snap60 | virtual-keys, colors and news-article captured through IA2 again, with relations and text colors (`okur.exe` 36671d07) | import the snapshots: Has Flows To, Equals and Say Color replay |
 
 For each: fetch with `lab-fetch.sh` (a stalled fetch is stopped and started again), grep the
 evidence and traces for links, the lab account's folders and the owner's name, check the
