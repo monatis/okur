@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur -- parity --write-baseline",
-  "matched_steps": 4712,
-  "total_steps": 4888,
+  "matched_steps": 4724,
+  "total_steps": 4901,
   "accepted_divergences": 104,
   "errors": [],
   "steps": {
@@ -5010,6 +5010,19 @@
     "663-web-app-patterns-selections-read-whole/s6": "match",
     "663-web-app-patterns-selections-read-whole/s7": "match",
     "663-web-app-patterns-selections-read-whole/s8": "match",
-    "663-web-app-patterns-selections-read-whole/s9": "match"
+    "663-web-app-patterns-selections-read-whole/s9": "match",
+    "664-desktop-notepad-ctrl-backspace/s1": "match",
+    "664-desktop-notepad-ctrl-backspace/s10": "match",
+    "664-desktop-notepad-ctrl-backspace/s11": "match",
+    "664-desktop-notepad-ctrl-backspace/s12": "match",
+    "664-desktop-notepad-ctrl-backspace/s13": "match",
+    "664-desktop-notepad-ctrl-backspace/s2": "match",
+    "664-desktop-notepad-ctrl-backspace/s3": "match",
+    "664-desktop-notepad-ctrl-backspace/s4": "match",
+    "664-desktop-notepad-ctrl-backspace/s5": "match",
+    "664-desktop-notepad-ctrl-backspace/s6": "match",
+    "664-desktop-notepad-ctrl-backspace/s7": "match",
+    "664-desktop-notepad-ctrl-backspace/s8": "match",
+    "664-desktop-notepad-ctrl-backspace/s9": "mismatch"
   }
 }

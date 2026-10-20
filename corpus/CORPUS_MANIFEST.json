@@ -4736,13 +4736,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "664-desktop-notepad-ctrl-backspace",
+      "fixture": "desktop-notepad.ps1",
+      "evidence": {
+        "sha256": "57588d5a8882612739f6028e56277c5b87400001780406211d98011909b85f42",
+        "capture_script_sha256": "bf89d333b1eca515dc0da6a3e2407056055b80d500d56700db4951d636c177c7",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 327,
-    "scenarios_with_evidence": 327,
-    "total_trials": 1035,
-    "successful_trials": 1035,
-    "deterministic_scenarios": 205
+    "scenarios": 328,
+    "scenarios_with_evidence": 328,
+    "total_trials": 1038,
+    "successful_trials": 1038,
+    "deterministic_scenarios": 206
   }
 }
