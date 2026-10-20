@@ -1111,13 +1111,21 @@ pub(crate) mod capture {
     /// `TrayNotifyWnd` (the chevron to the hidden icons, the icons shown, the input indicator,
     /// the clock, the Action Center: "Notification Chevron", "0% available (plugged in)",
     /// "Touch keyboard", "Tray Input Indicator - Turkish", "System Clock, …", "Action Center,
-    /// …" [obs, 511/s4]). Windows 11 draws its taskbar in XAML, and `TrayNotifyWnd` has no
-    /// buttons: the taskbar's buttons of the `SystemTray.` classes ([hyp], not yet checked on
-    /// a machine; `okur tray --dump` shows the tree).
+    /// …" [obs, 511/s4]). Windows 11 draws its taskbar in XAML: `TrayNotifyWnd` is empty, and
+    /// the icons are the taskbar's buttons of the `SystemTray.` classes ("Show Hidden Icons",
+    /// the icons shown, "Tray Input Indicator …", "Network …", "Volume …", "Power …", "Clock
+    /// …"; `okur tray --dump` on the dev box, 2026-10-20). The Show Desktop button, at the
+    /// end, is not an icon: JAWS's list of six leaves it out. A name of several lines is said
+    /// as one (an application's tooltip of a name and a status line), without direction marks
+    /// (the clock's date).
     pub(crate) fn tray_icons(uia: &IUIAutomation) -> Vec<okur_core::event::TrayIcon> {
         const BUTTON: i32 = 50000;
         const MENU_ITEM: i32 = 50011;
         const SPLIT_BUTTON: i32 = 50031;
+        const SHOW_DESKTOP: [&str; 2] = [
+            "TrayShowDesktopButtonWClass",
+            "SystemTray.ShowDesktopButton",
+        ];
         let Some((taskbar, notify)) = taskbar_windows() else {
             return Vec::new();
         };
@@ -1125,8 +1133,19 @@ pub(crate) mod capture {
             elements
                 .into_iter()
                 .filter(|e| matches!(e.control_type, BUTTON | MENU_ITEM | SPLIT_BUTTON))
+                .filter(|e| {
+                    !e.class_name
+                        .as_deref()
+                        .is_some_and(|c| SHOW_DESKTOP.contains(&c))
+                })
                 .filter(|e| !e.offscreen && fits(e))
-                .filter_map(|e| Some((e.rect?, e.name?)))
+                .filter_map(|e| {
+                    let name = okur_core::viewer_text::without_marks(&e.name?)
+                        .split_whitespace()
+                        .collect::<Vec<_>>()
+                        .join(" ");
+                    Some((e.rect?, name)).filter(|(_, n)| !n.is_empty())
+                })
                 .filter(|(r, _)| r.right > r.left && r.bottom > r.top)
                 .collect::<Vec<_>>()
         };
