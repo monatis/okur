@@ -4,7 +4,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Rust 1.99.0](https://img.shields.io/badge/rust-1.99.0-orange.svg?logo=rust)](rust-toolchain.toml)
 [![Platforms: Windows; macOS in progress](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%28in%20progress%29-lightgrey.svg)](#platforms)
-[![JAWS parity: 818 of 844 recorded steps](https://img.shields.io/badge/JAWS%20parity-818%2F844%20steps-brightgreen.svg)](#where-it-stands)
+[![JAWS parity: 2457 of 2652 recorded steps](https://img.shields.io/badge/JAWS%20parity-2457%2F2652%20steps-brightgreen.svg)](#where-it-stands)
 
 **An open screen reader that keeps your JAWS muscle memory.**
 
@@ -44,22 +44,32 @@ Where to go from here:
 
 ## Where it stands
 
-> **Status (October 2026): a preview on Windows.** Web pages in Chrome, File Explorer,
-> Notepad, Windows Terminal, dialog boxes, the desktop, Alt+Tab and Windows search are read as
-> JAWS reads them, and web apps such as GitHub and VS Code for the web are coming along. It
-> is not yet a replacement for your screen reader. macOS has its accessibility layer; its
-> keyboard and speech come next.
+> **Status (October 2026): a preview on Windows.** Web pages in Chrome (the Virtual PC
+> Cursor, JAWS's lists of links, headings and other elements, tables, selecting and copying),
+> dialog boxes and menus, Notepad, File Explorer, Windows Settings, Windows Terminal, the
+> desktop, Alt+Tab and Windows search are read as JAWS reads them. It is not yet a
+> replacement for your screen reader: the JAWS cursor, the clipboard keys, the verbosity
+> levels and Microsoft Office are among what is still missing (see [Not yet](#not-yet)).
+> Those everyday gaps on Windows are being closed first; macOS, whose accessibility layer is
+> in place, comes after them.
 
 Every figure is tool output, rerun for this README.
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **818 of 844** | `okur parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **171 of 172** | `okur parity --spoken` |
-| Recorded JAWS scenarios, trials | **65, 307** | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **913 passed, 0 failed** | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **2457 of 2652** | `okur parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **2357 of 2600** | `okur parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **63** | `okur parity` |
+| Recorded JAWS scenarios, trials | **217, 705** (704 of the trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1127 passed, 0 failed** (198 ignored: they need a live desktop) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
+
+The 63 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
+accidents, which Okur does not copy: in a data grid, JAWS adds "Column 65535, Row 65535", a
+place it failed to find. Others are JAWS's help texts, which are Freedom Scientific's writing;
+Okur says its help in its own words. Each one is listed, with the reason and who decided it,
+in [accepted divergences](docs/references/accepted-divergences.md).
 
 ---
 
@@ -68,27 +78,83 @@ Every figure is tool output, rerun for this README.
 ### What works today (Windows)
 
 - **Web pages in browse mode** with the Virtual PC Cursor:
-  - quick navigation keys: headings and their levels, links, form fields, buttons, tables,
-    lists, landmarks, and more;
-  - the links, headings and form field lists (Insert+F7, Insert+F6, Insert+F5);
-  - table navigation with Ctrl+Alt+arrows, frames, and single-page apps changing route;
-  - forms mode, entered automatically or with Enter, and left with Escape;
-  - Tab moves on from where you are reading, as with JAWS.
+  - reading by character, word, line, sentence and paragraph; Home, End, PageUp and
+    PageDown; Say All, where Right and Left skip and go back a line, PageUp and PageDown
+    change the rate, and the cursor stays where you stopped it;
+  - quick navigation keys: headings and their levels, links, form fields, edits, buttons,
+    check boxes, radio buttons, combo boxes, lists and list items, tables, graphics, regions,
+    articles, divisions, separators, tabs and mail links; N past a run of links; the first
+    and last heading or form field; Shift+Comma and Shift+Period to the start and end of a
+    list, table or region; Equals to where the page says reading goes next (aria-flowto);
+  - JAWS's lists: links, headings and form fields (Insert+F7, Insert+F6, Insert+F5), Virtual
+    HTML Features (Insert+F3), the element lists on Ctrl+Insert and a letter (buttons, edits,
+    check boxes, radio buttons, combo boxes, graphics, lists, articles, paragraphs, block
+    quotes, tables, divisions and tabs), and Document Regions (Insert+Ctrl+R);
+  - tables: Ctrl+Alt and the arrows, a whole row or column with Windows+Alt and the arrows,
+    and the table layer (Insert+Space, then T);
+  - selecting with Shift and the arrows, Ctrl+A or F8, and copying with Ctrl+C;
+  - JAWS Find (Ctrl+F or Insert+Ctrl+F, then F3 and Shift+F3), its history kept per site;
+  - forms mode, turned on by Tab or the arrows (Auto Forms Mode) or with Enter, and off with
+    Escape or Numpad Plus; Space clicks the control at the cursor, as JAWS does;
+  - routing the cursors (Insert+Delete, Ctrl+Insert+Delete), a click with Numpad Slash, a
+    link's address (Ctrl+Insert+F7), and the virtual cursor and the quick keys turned off and
+    on (Insert+Z, Insert+N);
+  - a page that loads says its title and a summary of its regions, headings and links, then
+    is read from the top, as JAWS does by default;
+  - frames, and single-page apps changing route; Tab moves on from where you are reading.
 - **Web apps:** autocompletes and command palettes read their suggestions ("Apple, 1 of 3");
   regions with role "application" (such as VS Code's) get every key; GitHub's code view reads
-  line by line.
+  line by line; Google Docs (with its braille support turned on) reads as a document, Google
+  Sheets by cell, and WhatsApp Web's chat list and messages as lists.
 - **Live regions** announced as JAWS announces them. A streamed chat reply is read once, as
   it arrives, not again from the start on every update; `--live-region-whole-text` gives
   JAWS's own behavior.
-- **Windows applications:** dialog boxes with their text and buttons; lists, combo boxes,
-  trees and menus; the desktop, the Alt+Tab switcher, Windows search and File Explorer.
-- **Editing** in text fields: characters, words, lines, selections, and Say Font.
-- **The Virtual Viewer** (Insert+Alt+W) for windows, controls and consoles, Windows Terminal
-  included.
+- **Windows applications:**
+  - dialog boxes: Say Window (Insert+B) with their group boxes, the default button (Insert+E),
+    a control's hot key (Shift+Numpad 5), a property sheet's page on Ctrl+Tab;
+  - menus, the menu bar and context menus; lists, list views and their columns (Ctrl+Insert
+    and a number), trees, combo boxes and data grids;
+  - Notepad and its dialogs, WordPad's and Paint's ribbons, File Explorer, Windows Settings,
+    Windows Terminal, the desktop, the Alt+Tab switcher and Windows search;
+  - the Window List (Insert+F10), to switch to another window.
+- **Editing** in text fields: characters, words, lines, sentences and paragraphs; selections
+  said as JAWS says them, and Say Selected Text (Insert+Shift+Down); cut, paste and undo; a
+  field of several lines read as a document; the window's top and bottom line (Insert+End,
+  Insert+PageDown); Say Font.
+- **Help** in Okur's own words: Insert+F1 for the control or the page element you are on,
+  Insert+H for Okur's keys there, Insert+W for Windows' keys.
+- **The Virtual Viewer** (Insert+Alt+W) on screen as JAWS shows it, for windows, controls and
+  consoles, Windows Terminal included; the Speech History (Insert+Space, then H).
+- **Okur's own dialogs** are real Windows dialogs: the lists above, JAWS Find and the Window
+  List, with JAWS's controls and labels, and Okur Settings (Insert+6 or Insert+V).
+- **Speech:** JAWS's punctuation levels and symbol names (Insert+Shift+2); typing echo by
+  characters, words, both or none (Insert+2); a reading key pressed twice quickly spells,
+  with capitals at a higher pitch; the rate on the fly (Ctrl+Alt+PageUp and PageDown); speech
+  off and on (Insert+Space, then S).
 - **Both keyboard layouts,** desktop and laptop, with Insert or CapsLock as the JAWS key.
 - **OneCore and SAPI 5 voices.**
 
 The [reference documentation](docs/references/) describes these behaviors in detail.
+
+### Not yet
+
+The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
+documentation describes and Okur lacks, most important first. Among them:
+- the JAWS cursor and the mouse keys;
+- the clipboard keys: say, view and add to the clipboard;
+- the verbosity levels (Beginner, Intermediate, Advanced): nothing changes the level yet;
+- Speech On Demand, Keyboard Help (Insert+1), quitting with Insert+F4, and the system tray
+  list (Insert+F11);
+- Say All by sentence or paragraph, and skim reading;
+- the S and D quick keys, Jump to Line, visited links, PlaceMarkers, custom labels and
+  Flexible Web;
+- notifications (toasts);
+- settings for one application or one site from the settings dialog, which saves them for
+  every application;
+- Microsoft Word, Outlook and Excel, not yet supported or checked;
+- on macOS, the keyboard and speech.
+
+Braille, OCR and Picture Smart come later.
 
 ### Trying it
 
@@ -99,8 +165,12 @@ There are no ready-made downloads yet: Okur is built from its source code.
 2. In a command prompt in this folder, build it:
 
    ```
-   cargo build --release --bin okur
+   cargo build --release --bin okur --bin okur-ui
    ```
+
+   `okur-ui` draws Okur's dialogs, such as the Links List and the settings. Okur starts it
+   from its own folder, where the build puts both; without it Okur still speaks, but its
+   windows do not show.
 
 3. Run it from the same prompt. Okur speaks as soon as it starts:
 
@@ -125,16 +195,21 @@ Two screen readers speaking at once is hard to follow. Unload your usual screen 
 or if you keep it running, give Okur another JAWS key so the two do not both act on the same
 command: `--jaws-key scrolllock` (then ScrollLock+T says the window title, and so on).
 
-Other options:
+Okur's settings dialog, opened with Insert+6 or Insert+V, sets the voice, its rate and
+volume, the punctuation level, the keyboard layout and JAWS key, typing echo, live regions,
+and whether the Virtual Viewer shows on screen. OK or Apply uses the change at once and saves
+it in `%APPDATA%\Okur\settings.toml`.
+
+Options of `okur run` change a setting for that run only:
 
 | Option | What it does |
 |---|---|
-| `--engine onecore` or `--engine sapi5` | which speech engine to use (OneCore by default) |
+| `--engine onecore`, `sapi5` or `no-speech` | which speech engine to use (by default OneCore, else SAPI 5) |
 | `--voice <name>`, `--rate <-10 to 10>`, `--volume <0 to 100>` | the voice |
 | `--keyboard-layout desktop` or `laptop` | the JAWS keyboard layout |
 | `--jaws-key insert`, `capslock` or `scrolllock` | the JAWS key |
 | `--live-region-whole-text` | read a growing live region whole each time, as JAWS does |
-| `--typing-echo none` | say nothing as you type (JAWS's Typing Echo set to None); `characters`, the default, says each character |
+| `--typing-echo none` | say nothing as you type (JAWS's Typing Echo set to None); `characters`, the default, says each character. Insert+2 goes through all four of JAWS's choices while Okur runs |
 | `--debug-log <file>` | record keys, events and timings, for reporting a problem |
 
 ### Reporting a problem
@@ -158,7 +233,7 @@ installs it on the first build. The screen reader runs on Windows 10 and 11; the
 (`okur-core`) builds and tests on any platform.
 
 ```
-cargo build --release --bin okur
+cargo build --release --bin okur --bin okur-ui
 cargo fmt --all --check
 cargo clippy --workspace --all-targets --all-features -- -D warnings -D clippy::indexing_slicing -D clippy::string_slice
 cargo test --workspace
@@ -211,13 +286,19 @@ key's way to speech is timed in the debug log.
 ### Repository map
 
 - [`crates/okur-core`](crates/okur-core): the engine. The accessibility object model, the
-  virtual buffer, keys, focus, live regions, and speech in JAWS's phrasing. Platform-neutral.
+  virtual buffer, keys, focus, live regions, speech in JAWS's phrasing, settings, and what
+  Okur's dialogs hold. Platform-neutral.
 - [`crates/okur-platform`](crates/okur-platform): Windows bindings (and the future macOS and
-  Linux ones): the event tracer, keyboard hook, speech engines and application actions.
-- [`crates/okur-corpus`](crates/okur-corpus): parity replay, invariants, the corpus manifest
-  and the latency summary.
+  Linux ones): the event tracer, keyboard hook, speech engines, application actions and the
+  settings files.
+- [`crates/okur-corpus`](crates/okur-corpus): parity replay, accepted divergences,
+  invariants, the corpus manifest and the latency summary.
 - [`crates/okur`](crates/okur): the screen reader and the harness commands (`run`, `parity`,
-  `evidence`, `trace`, `snapshot`, `latency`, `keys`, `jaws-history`, and more).
+  `live-parity`, `evidence`, `trace`, `snapshot`, `latency`, `keys`, `jaws-history`, and
+  more).
+- [`crates/okur-ui`](crates/okur-ui): draws Okur's own windows (its dialogs and the Virtual
+  Viewer on screen) natively, in a process of its own.
+- [`crates/okur-ui-model`](crates/okur-ui-model): what Okur and `okur-ui` say to each other.
 - [`crates/okur-speech-recorder`](crates/okur-speech-recorder): the SR Speech Recorder voice,
   which records what JAWS sends its synthesizer.
 - [`crates/xa11y`](crates/xa11y): the cross-platform accessibility layer, vendored from
@@ -268,7 +349,14 @@ JAWS's speech history keeps text before JAWS processes symbols, so it is not qui
 user hears. The **SR Speech Recorder** is a SAPI 5 voice JAWS speaks through on the lab
 machine: it logs every utterance, with pitch changes such as JAWS's higher pitch for capital
 letters, and hands the text on to a real voice. A tracer also records the accessibility events
-Windows raised during each trial, so replay feeds the engine the same events JAWS saw.
+Windows raised during each trial, so replay feeds the engine the same events JAWS saw. The
+tracer runs with administrator rights, as JAWS does, so it sees JAWS's own dialogs whole.
+Web pages open in a signed-out Chrome profile of the lab's own, so no person's name shows in
+window titles or recordings.
+
+Okur can also run live on the lab machine through the same scenarios, and
+`okur live-parity` compares what it said with JAWS, step by step. That measures what replay
+cannot, such as Okur's own dialogs.
 
 ### The loop
 
@@ -280,7 +368,8 @@ Windows raised during each trial, so replay feeds the engine the same events JAW
 3. **Implement** the behavior from scratch, with per-application behavior in named modules,
    as JAWS keeps it in application scripts.
 4. **Test:** replay every recorded scenario through the engine (`okur parity`) and compare
-   each step with JAWS. Results are ratcheted.
+   each step with JAWS. Results are ratcheted. Where JAWS errs by accident, the step is
+   written down as an accepted divergence instead of copied.
 5. **Prove it live:** run the screen reader against real applications with a debug log, and
    measure its responsiveness (`okur latency`).
 
@@ -302,8 +391,8 @@ enforce them:
 
 | Platform | Tier | Status |
 |---|---|---|
-| Windows 10 and 11 | 1 | Runs today: UI Automation, IAccessible2, MSAA and WinEvents; low-level keyboard hook; OneCore and SAPI 5 speech |
-| macOS | 1 | The accessibility layer (AXUIElement) is in place; the keyboard event tap, event listener and speech are next |
+| Windows 10 and 11 | 1 | Runs today: UI Automation, IAccessible2, MSAA and WinEvents; low-level keyboard hook; OneCore and SAPI 5 speech; Okur's own dialogs as native Win32 dialogs |
+| macOS | 1 | The accessibility layer (AXUIElement) is in place; the keyboard event tap, event listener and speech come once the everyday gaps on Windows are closed |
 | Linux | 2 | The accessibility layer (AT-SPI2) is in place; best effort |
 
 Every OS-dependent part is a trait in the core (keyboard hook, speech output, accessibility
