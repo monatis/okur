@@ -27,6 +27,9 @@
 //!   role and state marks (`\u{1d}`, `\u{1e}`): the code that renders speech adds both.
 //! - A message nothing uses fails a test, and so does a word written into Rust code instead
 //!   of the catalog (`tests/catalog.rs`).
+//! - Where JAWS names itself, Okur names itself, JAWS's words kept around the name: "Okur
+//!   Cursor" for "JAWS Cursor" (AGENTS.md §1.5). A message naming JAWS, Freedom Scientific or
+//!   Vispero fails a test; parity reads JAWS's name as Okur's.
 //!
 //! Fluent's bidirectional isolation marks are off: they would reach the synthesizer.
 
