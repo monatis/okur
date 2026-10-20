@@ -76,6 +76,10 @@ pub struct StepParity {
     /// An accepted divergence covers the whole step ([`crate::divergences`]): it is not
     /// counted, on any layer.
     pub accepted: bool,
+    /// Whether the step is compared on the history layer: false where the capture did not
+    /// read JAWS's speech history (`"history": false`, Keyboard Help's steps), which only the
+    /// spoken layer compares.
+    pub history: bool,
     /// The spoken layer, for evidence recorded through the speech recorder voice: what our
     /// synthesizer is given, against what JAWS sent its synthesizer.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -99,17 +103,21 @@ pub struct ParityReport {
 
 impl ParityReport {
     pub fn matched(&self) -> usize {
-        self.steps.iter().filter(|s| s.matched).count()
+        self.steps.iter().filter(|s| s.history && s.matched).count()
     }
 
     /// Steps an accepted divergence leaves out of the counts.
     pub fn accepted(&self) -> usize {
-        self.steps.iter().filter(|s| s.accepted).count()
+        self.steps
+            .iter()
+            .filter(|s| s.history && s.accepted)
+            .count()
     }
 
-    /// Steps compared with JAWS: every step but the accepted divergences.
+    /// Steps compared with JAWS's speech history: every step whose history was read but the
+    /// accepted divergences.
     pub fn compared(&self) -> usize {
-        self.steps.len() - self.accepted()
+        self.steps.iter().filter(|s| s.history).count() - self.accepted()
     }
 
     /// Steps compared on the spoken layer: how many match, of how many.
@@ -228,6 +236,12 @@ fn read_json(path: &Path) -> Result<Value, String> {
     serde_json::from_str(text.trim_start_matches('\u{feff}')).map_err(|e| format!("{path:?}: {e}"))
 }
 
+/// A step whose capture did not read JAWS's speech history (`"history": false`): only its
+/// spoken layer was recorded.
+fn is_spoken_only(step: &Value) -> bool {
+    step.pointer("/observation/history_read") == Some(&Value::Bool(false))
+}
+
 /// Distinct raw transcripts per step id, in first-seen order, from successful trials only.
 pub(crate) fn jaws_variants(evidence: &Value) -> BTreeMap<String, Vec<String>> {
     let mut variants: BTreeMap<String, Vec<String>> = BTreeMap::new();
@@ -245,6 +259,7 @@ pub(crate) fn jaws_variants(evidence: &Value) -> BTreeMap<String, Vec<String>> {
             .and_then(Value::as_array)
             .into_iter()
             .flatten()
+            .filter(|step| !is_spoken_only(step))
         {
             let (Some(id), Some(speech)) = (
                 step.get("step_id").and_then(Value::as_str),
@@ -273,6 +288,20 @@ fn run_scenario(
     let evidence = read_json(&evidence_path)?;
     let variants = jaws_variants(&evidence);
     let spoken_variants = jaws_spoken_variants(&evidence);
+    let spoken_only: std::collections::BTreeSet<String> = evidence
+        .pointer("/trials")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter_map(|t| t.get("step_results").and_then(Value::as_array))
+        .flatten()
+        .filter(|step| is_spoken_only(step))
+        .filter_map(|step| {
+            step.get("step_id")
+                .and_then(Value::as_str)
+                .map(str::to_owned)
+        })
+        .collect();
 
     // Desktop scenarios have no document: the engine starts in native-app mode and its speech
     // comes from the replayed OS events. Browser scenarios load the captured document tree.
@@ -510,7 +539,8 @@ fn run_scenario(
             }
         };
         let jaws = variants.get(&step.id).cloned().unwrap_or_default();
-        if jaws.is_empty() {
+        let history = !jaws.is_empty();
+        if !history && !spoken_only.contains(step.id.as_str()) {
             return Err(format!("no JAWS transcript recorded for step {}", step.id));
         }
         use crate::divergences::{compare, Comparison};
@@ -544,8 +574,9 @@ fn run_scenario(
             command: step.command.clone(),
             engine: engine_speech,
             jaws_variants: jaws,
-            matched: comparison == Comparison::Matched,
-            accepted: comparison == Comparison::Accepted,
+            matched: history && comparison == Comparison::Matched,
+            accepted: history && comparison == Comparison::Accepted,
+            history,
             spoken: spoken_parity,
         });
     }
@@ -621,6 +652,7 @@ pub fn render_baseline(report: &ParityReport) -> Result<String, String> {
             .iter()
             .map(|s| {
                 let status = match (s.matched, s.accepted) {
+                    _ if !s.history => "spoken only",
                     (true, _) => "match",
                     (false, true) => "accepted divergence",
                     (false, false) => "mismatch",
@@ -1181,4 +1213,33 @@ fn with_held(mut modifiers: Modifiers, held: Modifiers) -> Modifiers {
     modifiers.insert |= held.insert;
     modifiers.caps_lock |= held.caps_lock;
     modifiers
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// A step the capture did not read JAWS's history for (`"history": false`, Keyboard Help)
+    /// has no history transcript; the other steps keep theirs.
+    #[test]
+    fn a_step_without_its_history_has_no_history_transcript() {
+        let evidence = serde_json::json!({
+            "trials": [{
+                "trial_success": true,
+                "step_results": [
+                    { "step_id": "s1", "observation": { "speech_raw": "Title is" } },
+                    {
+                        "step_id": "s2",
+                        "observation": { "speech_raw": "", "history_read": false }
+                    }
+                ]
+            }]
+        });
+        let variants = jaws_variants(&evidence);
+        assert_eq!(
+            variants.get("s1").map(Vec::as_slice),
+            Some(["Title is".to_owned()].as_slice())
+        );
+        assert!(!variants.contains_key("s2"));
+    }
 }

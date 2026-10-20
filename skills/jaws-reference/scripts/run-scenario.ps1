@@ -55,6 +55,9 @@ Step types:
   jaws_script  JAWS script name dispatched through FSAPI RunScript.
   jaws_function  JAWS function call through FSAPI RunFunction: TypeKey("Down") for keys inside
                JAWS's own dialogs (Links List, Find), which run elevated and refuse our keys.
+  Any step may say "history": false: JAWS's speech history is neither cleared nor read for it,
+               and the step keeps only the speech recorder's text (steps in Keyboard Help, which
+               describes the history scripts instead of running them).
   key_ui_access  A key sent with UI Access by okur-lab-keys.exe (-LabKeys): it reaches JAWS's
                modal dialogs, which TypeKey closes (559/s2). Needs the signed program under
                Program Files.
@@ -817,7 +820,12 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         # title, between the symbols of a code line read with punctuation Most) and JAWS then
         # speaks on for seconds; 3 s failed steps of 209, 314 and 315 on 2026-10-18.
         $baseline = Wait-Silence -OnsetMs 150 -QuietMs 300 -MaxMs 10000
-        Clear-ReaderHistory
+        # "history": false: JAWS's speech history is neither cleared nor read for the step,
+        # only the speech recorder's text is kept. Clearing and copying it are JAWS scripts, which
+        # Keyboard Help describes instead of running ("Insert+1 | Copy Speech History to
+        # Clipboard.", 509 in round 91).
+        $readsHistory = -not ($step.PSObject.Properties.Name -contains 'history' -and $step.history -eq $false)
+        if ($readsHistory) { Clear-ReaderHistory }
         $spokenStart = Get-SpokenOffset
 
         $tStart = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
@@ -834,7 +842,9 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         # "capture_clipboard": what the step copied (e.g. Ctrl+C in the Virtual Viewer), read
         # before the speech history copy replaces it.
         $clipboard = if ($step.capture_clipboard) { Get-Clipboard -Raw -ErrorAction SilentlyContinue } else { $null }
-        $history = Read-ReaderHistory $spokenStart
+        $history = if ($readsHistory) { Read-ReaderHistory $spokenStart } else {
+            [pscustomobject]@{ text = ''; records = @(Read-SpokenSince $spokenStart); spoken_end = 'silence' }
+        }
         $transcript = $history.text
         $spokenRecords = @($history.records)
         $tEnd = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
@@ -879,6 +889,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
                 contaminated = $contaminated
                 audio_without_text = $audioWithoutText
                 baseline_settled = $baseline.settled
+                history_read = $readsHistory
             }
             step_success = $stepSuccess
         }

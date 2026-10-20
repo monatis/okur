@@ -948,10 +948,11 @@ async fn main() {
                 std::process::exit(2);
             }
             let report = okur_corpus::parity::run_matching(dir, api, &only);
+            // Steps without JAWS's history (Keyboard Help's) are compared on the spoken layer.
             for step in report
                 .steps
                 .iter()
-                .filter(|s| all || !(s.matched || s.accepted))
+                .filter(|s| s.history && (all || !(s.matched || s.accepted)))
             {
                 let tag = match (step.matched, step.accepted) {
                     (true, _) => "MATCH",
