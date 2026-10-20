@@ -32,7 +32,15 @@ more, check `Get-MpThreatDetection` on old-pc.
 
 ## 1. Recorded, to build
 
-- **A large selection (562, 617, 620).** As the previous plan's §1.
+- **A large selection** is built (`246b4b1`): over 1000 characters, "N characters up to" and
+  the last 20; 617 and 620 match every history step. Left:
+  - on pages with inline links Okur's count is a few characters short (562/s13, s17, s20,
+    515/s1: 2030 for JAWS's 2035). JAWS's text keeps a trailing space before a link that
+    starts a line ("© 2026 Riverside Gazette. "), and its selection to the page's end there
+    ends with a line break, though 617's did not. Find what JAWS's text holds at a region's
+    end and around inline links before changing the linearizer;
+  - the spoken "blank" for an empty first line of the last 20 characters, which JAWS's
+    history leaves out (620/s10-s35): a speech-only utterance.
 - **Say Color** is done (`af4fb10`, `3cf36df`): every step of 565, 618 and 619 matches. Left:
   colors outside pages (JAWS reads the screen there), and the Turkish table (`colors.txt` per
   locale).

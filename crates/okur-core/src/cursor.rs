@@ -7,8 +7,9 @@ use crate::speech::SpeechFormatter;
 /// (JAWS 2025 Settings Center help, HTML Options) [obs, 502/s7-s9].
 pub const LINES_PER_PAGE: usize = 24;
 
-/// The longest selection JAWS reads whole, in characters (a line break counts one): 971 was
-/// read and 1052 summarized [obs, 617/s21, s24].
+/// The longest selection JAWS reads whole, in characters (a line break counts one): 999 was
+/// read whole and 1001 summarized [obs, 620/s6, s10; 617/s21, s24]; 1000 itself is not
+/// recorded.
 const SELECTION_READ_WHOLE: usize = 1000;
 
 /// How much of a longer selection's end JAWS says after its size [obs, 617/s24, 515/s1].
