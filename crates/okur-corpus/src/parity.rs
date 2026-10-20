@@ -609,7 +609,7 @@ struct Baseline<'a> {
 pub fn render_baseline(report: &ParityReport) -> Result<String, String> {
     let baseline = Baseline {
         notice:
-            "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
+            "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur -- parity --write-baseline",
         matched_steps: report.matched(),
         total_steps: report.compared(),
         accepted_divergences: report.accepted(),
@@ -655,8 +655,8 @@ pub fn check_baseline(corpus_dir: &Path, report: &ParityReport) -> Result<(), St
     }
     if committed_text.replace("\r\n", "\n") != render_baseline(report)? {
         return Err(format!(
-            "{BASELINE_FILE} is stale (parity changed). Review `cargo run -p okur -- parity`, \
-             then regenerate with: cargo run -p okur -- parity --write-baseline"
+            "{BASELINE_FILE} is stale (parity changed). Review `cargo run --bin okur -- parity`, \
+             then regenerate with: cargo run --bin okur -- parity --write-baseline"
         ));
     }
     Ok(())

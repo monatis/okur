@@ -26,7 +26,7 @@ mod tests {
 
     /// Engine speech vs. recorded JAWS speech, over UIA snapshots captured from Chrome on
     /// the reference machine. Fails on any regression and whenever the generated baseline
-    /// is stale; run `cargo run -p okur -- parity` for the per-step diff.
+    /// is stale; run `cargo run --bin okur -- parity` for the per-step diff.
     #[test]
     fn jaws_parity_matches_baseline() {
         let dir = corpus_dir();

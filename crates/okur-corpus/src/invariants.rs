@@ -254,7 +254,7 @@ pub fn render_baseline(
 ) -> Result<String, String> {
     let total: usize = results.values().map(Vec::len).sum();
     let doc = serde_json::json!({
-        "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- invariants --write-baseline",
+        "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur -- invariants --write-baseline",
         "total_violations": total,
         "violations": results,
     });
@@ -294,7 +294,7 @@ pub fn check_baseline(
     if committed_text.replace("\r\n", "\n") != render_baseline(results)? {
         return Err(format!(
             "{BASELINE_FILE} is stale (violations were fixed). Regenerate with: \
-             cargo run -p okur -- invariants --write-baseline"
+             cargo run --bin okur -- invariants --write-baseline"
         ));
     }
     Ok(())

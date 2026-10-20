@@ -124,6 +124,8 @@ Output types are Okur's ids (`OutputType`), each mapped to JAWS's `DEFAULT.JCF`
 | `list_position` | `ANNOUNCE_POSITION_AND_COUNT` (shipped `1\|2\|0`) | ListPosition | off at Advanced: a list's item, a combo box's open list (548-549, 590) |
 | `description` | not known yet | Description | off at Advanced (552-553) |
 | `control_group_name` | `CONTROL_GROUP_NAME` (shipped `1\|2\|0`) | GroupName | off at Advanced: a dialog control's group box (585) |
+| `select` | `SELECT` (shipped `1\|2\|0`) | (strings, `editing::Wording`) | off at Advanced: "selected" and "unselected" as a selection changes (608, 609) |
+| `okur_message` | `JAWS_MESSAGE` (shipped `1\|2\|0`) | (strings, `editing::Wording`) | short above Beginner ("Copied", "Pasted", "cut"), off at Advanced, Undo too (599, 608, 609) |
 
 JAWS's shipped `Default.JCF` (`C:\ProgramData\Freedom Scientific\JAWS\2025\SETTINGS\enu`)
 lists the other types with their modes per level (0 off, 1 long, 2 short): `CONTROL_NAME`,

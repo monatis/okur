@@ -2,7 +2,7 @@
 
 Observed black-box behavior of JAWS 2025.2505.43.400 on Windows 10 (`old-pc`) in the WinForms
 fixture `corpus/fixtures/desktop-forms.ps1`. Each rule cites `scenario/step`. View a
-transcript with `cargo run -p okur -- evidence <scenario-id>`. Implemented in
+transcript with `cargo run --bin okur -- evidence <scenario-id>`. Implemented in
 `crates/okur-core/src/native_focus.rs`.
 
 Notation is the same as `jaws-virtual-buffer-spec.md`: `‹ ›` stand for JAWS's role markers
