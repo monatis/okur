@@ -17,13 +17,27 @@ use windows::Win32::UI::Input::KeyboardAndMouse::{
 };
 use windows::Win32::UI::WindowsAndMessaging::{
     CallNextHookEx, DispatchMessageW, GetMessageW, PostThreadMessageW, SetWindowsHookExW,
-    TranslateMessage, UnhookWindowsHookEx, KBDLLHOOKSTRUCT, MSG, WH_KEYBOARD_LL, WM_KEYDOWN,
-    WM_KEYUP, WM_QUIT, WM_SYSKEYDOWN, WM_SYSKEYUP,
+    TranslateMessage, UnhookWindowsHookEx, KBDLLHOOKSTRUCT, MSG, WH_KEYBOARD_LL, WM_APP,
+    WM_KEYDOWN, WM_KEYUP, WM_QUIT, WM_SYSKEYDOWN, WM_SYSKEYUP,
 };
 
 static ACTIVE_CALLBACK: Mutex<Option<HookCallback>> = Mutex::new(None);
 static CONSUMED_KEYS: Mutex<Option<HashSet<u32>>> = Mutex::new(None);
 static HOOK_THREAD_ID: AtomicU32 = AtomicU32::new(0);
+
+/// The hook thread's message asking it to install the hook again ([`SLOW_KEY`]).
+const WM_REINSTALL_HOOK: u32 = WM_APP + 1;
+/// A key the screen reader took this long over: Windows removes a low-level hook, without a
+/// word, once a call runs past `LowLevelHooksTimeout` (at most 1 s from Windows 10 1709,
+/// shorter where set), and the screen reader would hear no key again. After such a key the
+/// hook is installed again, which is harmless where Windows kept it (performance review,
+/// 2026-10-20, P2).
+const SLOW_KEY: std::time::Duration = std::time::Duration::from_millis(200);
+
+/// Whether a key handled in `took` leaves the hook to be installed again.
+fn needs_reinstall(took: std::time::Duration) -> bool {
+    took >= SLOW_KEY
+}
 /// Whether the keys that can be the JAWS key (Insert, CapsLock, ScrollLock) are held. Tracked
 /// here because the engine consumes the JAWS key, so the system's asynchronous key state may
 /// not see it.
@@ -147,7 +161,7 @@ impl KeyboardHook for WindowsKeyboardHook {
                 SetWindowsHookExW(WH_KEYBOARD_LL, Some(low_level_keyboard_proc), None, 0)
             };
 
-            let hook_handle = match hook {
+            let mut hook_handle = match hook {
                 Ok(h) => {
                     let tid = unsafe { GetCurrentThreadId() };
                     HOOK_THREAD_ID.store(tid, Ordering::SeqCst);
@@ -167,6 +181,26 @@ impl KeyboardHook for WindowsKeyboardHook {
             unsafe {
                 let mut msg = MSG::default();
                 while GetMessageW(&mut msg, None, 0, 0).as_bool() {
+                    // A key took the screen reader too long: the hook goes in again, the
+                    // old one out first, in case Windows removed it.
+                    if msg.message == WM_REINSTALL_HOOK {
+                        let _ = UnhookWindowsHookEx(hook_handle);
+                        match SetWindowsHookExW(
+                            WH_KEYBOARD_LL,
+                            Some(low_level_keyboard_proc),
+                            None,
+                            0,
+                        ) {
+                            Ok(h) => {
+                                hook_handle = h;
+                                tracing::warn!("keyboard hook installed again after a slow key");
+                            }
+                            Err(e) => {
+                                tracing::error!("keyboard hook not installed again: {e}");
+                            }
+                        }
+                        continue;
+                    }
                     let _ = TranslateMessage(&msg);
                     DispatchMessageW(&msg);
                 }
@@ -347,9 +381,22 @@ unsafe extern "system" fn low_level_keyboard_proc(
     }
 
     let mut action = KeyAction::PassThrough;
+    let started = std::time::Instant::now();
     if let Ok(mut cb_guard) = ACTIVE_CALLBACK.lock() {
         if let Some(ref mut cb) = *cb_guard {
             action = cb(event);
+        }
+    }
+    let took = started.elapsed();
+    if needs_reinstall(took) {
+        tracing::warn!(
+            ms = took.as_millis(),
+            "slow key: the keyboard hook goes in again"
+        );
+        let thread = HOOK_THREAD_ID.load(Ordering::SeqCst);
+        if thread != 0 {
+            // Taken by this thread's message loop once this call has returned.
+            let _ = PostThreadMessageW(thread, WM_REINSTALL_HOOK, WPARAM(0), LPARAM(0));
         }
     }
 
@@ -466,6 +513,17 @@ fn translate_vk_code(vk: u32, scan: u32, extended: bool) -> Key {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// A key that took the screen reader 200 ms or more installs the hook again; a quick one
+    /// does not.
+    #[test]
+    fn a_slow_key_installs_the_hook_again() {
+        use std::time::Duration;
+        assert!(!needs_reinstall(Duration::from_millis(5)));
+        assert!(!needs_reinstall(Duration::from_millis(199)));
+        assert!(needs_reinstall(Duration::from_millis(200)));
+        assert!(needs_reinstall(Duration::from_secs(1)));
+    }
 
     #[test]
     fn modifiers_on_either_side_share_a_bit() {
