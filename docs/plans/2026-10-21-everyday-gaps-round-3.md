@@ -23,6 +23,7 @@ The rounds queued at the end of round 2, in order (each behind the one before):
 | snap60 | virtual-keys, colors and news-article captured through IA2 again, with relations and text colors (`okur.exe` 36671d07) | import the snapshots: Has Flows To, Equals and Say Color replay |
 | live12 | Okur reading live: its list dialogs (222-260, 274) and round 3's features (205, 284, 293, 294, 323, 513, 515, 516, 534), `okur.exe` 87fadfd0 | `okur live-parity` against live11 and the replay |
 | 61 | 568 (JAWS's text analysis on Insert+Tab, a new Notepad fixture), 569 (Route PC to Virtual on elements that cannot take the focus) | build each |
+| 62 | 546 again (its tracer, `okur.exe` b764b99e built at `6a0a7b0`, records an edit's up-down buddy), 570 (the Speech History's Ctrl+H and Shift+H), 571 (Insert+F4's question, last) | import: 546/s8's spin box should replay; build 570 and 571 |
 
 For each: fetch with `lab-fetch.sh` (a stalled fetch is stopped and started again), grep the
 evidence and traces for links, the lab account's folders and the owner's name, check the

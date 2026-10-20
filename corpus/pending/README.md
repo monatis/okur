@@ -32,6 +32,8 @@ To record one:
 | 567 | Spelling errors in a field of several words: Say Line, the words, Say Word, the field read again | `signup-form.html` |
 | 568 | JAWS's text analysis: Insert+Tab and Insert+Up on Notepad lines holding one inconsistency each | `desktop-proofing.ps1` (new) |
 | 569 | Route PC to Virtual on a heading, a paragraph, a list, a list item, a graphic and a table cell | `news-article.html` |
+| 570 | The Speech History's other layer keys (`Default.JKM`): Insert+Space, Ctrl+H copies it to the clipboard, Shift+H clears it, then H shows what was said since | `news-article.html` |
+| 571 | Insert+F4 (ShutDownJAWS) asks before quitting; Tab in its question, Escape answers no, then Insert+Tab in Notepad. Last in its batch | `desktop-notepad.ps1` |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.
