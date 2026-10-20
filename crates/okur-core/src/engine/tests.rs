@@ -630,6 +630,49 @@ fn a_long_selection_is_said_by_its_size_and_end() {
     );
 }
 
+/// A line selected whole is said as the line is, its marks where they fall: a list item that
+/// is only a link, "• same page link Council approves library budget" [obs, 562/s2, s8].
+#[test]
+fn a_selected_list_item_says_its_link() {
+    let link = |id: usize, href: &str, text: &str| {
+        AomNode::new(
+            id,
+            Role::Link {
+                href: Some(href.to_owned()),
+            },
+        )
+        .with_name(text)
+    };
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Related")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Related stories"),
+            AomNode::new(2, Role::List).with_children(vec![
+                AomNode::new(3, Role::ListItem).with_children(vec![
+                    AomNode::new(7, Role::Text).with_text("• "),
+                    link(4, "#budget", "Council approves library budget"),
+                ]),
+                AomNode::new(5, Role::ListItem).with_children(vec![
+                    AomNode::new(8, Role::Text).with_text("• "),
+                    link(6, "#bookfair", "Spring book fair returns"),
+                ]),
+            ]),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.cursor.move_to_start();
+    let said = norm(&engine.execute_command("SelectToBottom").unwrap_or_default());
+    let words = said
+        .replace(['\u{1d}', '\u{1e}'], " ")
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ");
+    assert!(
+        words.contains("• same page link Council approves library budget"),
+        "{said}"
+    );
+}
+
 /// Say Color (Insert+5) names the text's color and its background's from the color table:
 /// "red on white", the link blue "blue2 on white"; the page's title line, which is no text of
 /// the page, is "default on default" [obs, 565/s1, s5, s7].

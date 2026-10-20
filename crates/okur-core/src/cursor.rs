@@ -276,6 +276,11 @@ impl VirtualCursor {
             .iter()
             .filter(|line| line.end_offset > range.0 && line.start_offset < range.1)
             .filter_map(|line| {
+                // A line selected whole is said as its line is, its marks where they fall:
+                // "• same page link Council approves library budget" [obs, 562/s2].
+                if range.0 <= line.start_offset && line.end_offset <= range.1 {
+                    return (!line.text.trim().is_empty()).then(|| line.speech.clone());
+                }
                 let part = self
                     .buffer
                     .text
