@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur -- parity --write-baseline",
-  "matched_steps": 4358,
-  "total_steps": 4566,
+  "matched_steps": 4364,
+  "total_steps": 4576,
   "accepted_divergences": 88,
   "errors": [],
   "steps": {
@@ -4658,6 +4658,16 @@
     "626-web-field-left-and-returned/s6": "mismatch",
     "626-web-field-left-and-returned/s7": "mismatch",
     "626-web-field-left-and-returned/s8": "match",
-    "626-web-field-left-and-returned/s9": "match"
+    "626-web-field-left-and-returned/s9": "match",
+    "629-web-tab-first-then-escape/s1": "mismatch",
+    "629-web-tab-first-then-escape/s2": "match",
+    "629-web-tab-first-then-escape/s3": "match",
+    "629-web-tab-first-then-escape/s4": "match",
+    "630-web-down-then-tab-escape/s1": "match",
+    "630-web-down-then-tab-escape/s2": "mismatch",
+    "630-web-down-then-tab-escape/s3": "mismatch",
+    "631-web-say-line-then-tab-escape/s1": "match",
+    "631-web-say-line-then-tab-escape/s2": "mismatch",
+    "631-web-say-line-then-tab-escape/s3": "match"
   }
 }
