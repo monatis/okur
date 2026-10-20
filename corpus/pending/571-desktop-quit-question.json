@@ -1,16 +1,16 @@
 {
   "id": "571-desktop-quit-question",
-  "name": "Insert+F4 (ShutDownJAWS) asks before JAWS quits; Escape answers no and the focus is back in Notepad, where Insert+Tab reads it; last in its batch, since a trial that quits JAWS ends the batch's recording",
+  "name": "Insert+F4 (ShutDownJAWS) asks before JAWS quits; Tab in its question and Escape, which answers no (JAWS's own TypeKey: its elevated dialog refuses our keys), then Insert+Tab in Notepad; last in its batch, since a trial that quits JAWS ends the batch's recording",
   "category": "desktop",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
   "target_app": "desktop",
   "launch": { "window_title": "sr-notepad-fixture.txt - Notepad" },
   "reset": { "keys": ["Ctrl+Home"] },
   "steps": [
     { "id": "s1", "type": "key", "command": "Insert+F4", "settle_max_ms": 15000 },
-    { "id": "s2", "type": "key", "command": "Tab" },
-    { "id": "s3", "type": "key", "command": "Escape" },
+    { "id": "s2", "type": "jaws_function", "command": "TypeKey(\"Tab\")" },
+    { "id": "s3", "type": "jaws_function", "command": "TypeKey(\"Escape\")" },
     { "id": "s4", "type": "key", "command": "Insert+Tab" }
   ]
 }

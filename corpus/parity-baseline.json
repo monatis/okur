@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 2689,
-  "total_steps": 2888,
+  "matched_steps": 2705,
+  "total_steps": 2904,
   "accepted_divergences": 74,
   "errors": [],
   "steps": {
@@ -2706,7 +2706,7 @@
     "546-desktop-notepad-print-dialog/s5": "match",
     "546-desktop-notepad-print-dialog/s6": "match",
     "546-desktop-notepad-print-dialog/s7": "match",
-    "546-desktop-notepad-print-dialog/s8": "mismatch",
+    "546-desktop-notepad-print-dialog/s8": "match",
     "546-desktop-notepad-print-dialog/s9": "match",
     "547-desktop-notepad-edit-focus/s1": "mismatch",
     "547-desktop-notepad-edit-focus/s10": "match",
@@ -2966,6 +2966,22 @@
     "567-web-misspelled-words/s6": "match",
     "567-web-misspelled-words/s7": "match",
     "567-web-misspelled-words/s8": "mismatch",
-    "567-web-misspelled-words/s9": "match"
+    "567-web-misspelled-words/s9": "match",
+    "569-web-route-pc-to-elements/s1": "match",
+    "569-web-route-pc-to-elements/s10": "match",
+    "569-web-route-pc-to-elements/s11": "match",
+    "569-web-route-pc-to-elements/s12": "match",
+    "569-web-route-pc-to-elements/s13": "match",
+    "569-web-route-pc-to-elements/s14": "match",
+    "569-web-route-pc-to-elements/s15": "match",
+    "569-web-route-pc-to-elements/s16": "match",
+    "569-web-route-pc-to-elements/s2": "match",
+    "569-web-route-pc-to-elements/s3": "match",
+    "569-web-route-pc-to-elements/s4": "match",
+    "569-web-route-pc-to-elements/s5": "match",
+    "569-web-route-pc-to-elements/s6": "match",
+    "569-web-route-pc-to-elements/s7": "match",
+    "569-web-route-pc-to-elements/s8": "mismatch",
+    "569-web-route-pc-to-elements/s9": "match"
   }
 }
