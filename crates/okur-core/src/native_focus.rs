@@ -737,6 +737,12 @@ pub fn say_focus(focus: &FocusEvent) -> String {
     if focus.role == Role::Edit && focus.container_role == Some(Role::ComboBox) {
         lines.extend(focus.file_dialog_address.clone());
     }
+    // A tree item ends with its tree's hint, which the arrows inside the tree leave out:
+    // "Documents closed | 1 of 2 | To move through or expand items use the Arrow keys." [obs,
+    // 548-549/s13, 554/s13].
+    if focus.role == Role::TreeItem {
+        lines.push(msg::hint_tree_arrows().to_string());
+    }
     lines.join("\n")
 }
 
@@ -1845,6 +1851,27 @@ To activate press Enter."
         assert_eq!(
             norm(&focus_speech(&button, None).render()),
             norm("\u{1d} Tool bar \u{1e} Hide Folders \u{1d} Button \u{1e} To activate press spacebar.")
+        );
+    }
+
+    /// Say Focus on a tree item ends with its tree's hint [obs, 548-549/s13, 554/s13].
+    #[test]
+    fn say_focus_on_a_tree_item_says_the_trees_hint() {
+        let mut item = in_container(
+            event(Role::TreeItem, "Documents"),
+            Role::Tree,
+            "",
+            "SysTreeView32",
+        );
+        item.states.expanded = Some(false);
+        item.item_index = Some(1);
+        item.item_count = Some(2);
+        assert_eq!(
+            norm(&say_focus(&item)),
+            norm(
+                "Documents \u{1d}closed\u{1e} \n1 of 2\nTo move through or expand items use the \
+                 Arrow keys."
+            )
         );
     }
 
