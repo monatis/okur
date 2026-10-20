@@ -927,6 +927,27 @@ pub trait SpeechOutput: Send + Sync {
         self.speak(&crate::pronounce::character(text), interrupt);
     }
 
+    /// Speaks a character selected or unselected with Shift and an arrow: the line's marks
+    /// (`before`), the character named and pitched as when read alone, then the selection word
+    /// (`after`): "heading level 1 [pitch +4] T selected" [obs, 501/s2], "space selected"
+    /// [obs, 504/s17].
+    fn speak_selected_character(
+        &mut self,
+        before: &str,
+        character: &str,
+        after: &str,
+        interrupt: bool,
+    ) {
+        let marks = !before.trim().is_empty();
+        if marks {
+            self.speak(before, interrupt);
+        }
+        self.speak_character(character, interrupt && !marks);
+        if !after.trim().is_empty() {
+            self.speak(after, false);
+        }
+    }
+
     /// Speaks a character spelled phonetically (Say Character twice): the history keeps the
     /// character, the synthesizer says its word ([`crate::pronounce::phonetic`]), a capital's
     /// at a raised pitch [obs, 401/s2: "J" in the history, "juliett" at pitch 4 spoken].

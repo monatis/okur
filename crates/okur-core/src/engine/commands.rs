@@ -523,10 +523,46 @@ impl ScreenReaderEngine {
                 command,
                 Command::SayNextCharacter | Command::SayPriorCharacter | Command::SayCharacter
             ) && text.chars().count() == 1;
+            // A character selected or unselected is named as when read alone, between its
+            // line's marks and the selection word: the character ends the first line
+            // [obs, 501/s2, 504/s17].
+            let selected_character = matches!(
+                command,
+                Command::SelectNextCharacter | Command::SelectPriorCharacter
+            )
+            .then(|| {
+                let (first, rest) = text.split_once('\n').unwrap_or((text.as_str(), ""));
+                let character = first.chars().next_back()?;
+                let before = first.get(..first.len() - character.len_utf8())?;
+                Some((before, character.to_string(), rest))
+            })
+            .flatten();
+            // A selection of lines, words or the page is read with every symbol named, as JAWS
+            // reads it: "a clean virtual buffer period" [obs, 501/s12, 617/s3].
+            let selected_text = matches!(
+                command,
+                Command::SelectNextLine
+                    | Command::SelectPriorLine
+                    | Command::SelectNextWord
+                    | Command::SelectPriorWord
+                    | Command::SelectToLineEnd
+                    | Command::SelectToLineStart
+                    | Command::SelectToBottom
+                    | Command::SelectToTop
+                    | Command::SelectNextPage
+                    | Command::SelectPriorPage
+                    | Command::SelectAll
+                    | Command::SelectHtmlElement
+            );
             if command == Command::SayCharacterPhonetic && text.chars().count() == 1 {
                 self.speech.speak_phonetic(text, true);
             } else if character {
                 self.speech.speak_character(text, true);
+            } else if let Some((before, character, after)) = selected_character {
+                self.speech
+                    .speak_selected_character(before, &character, after, true);
+            } else if selected_text && !text.is_empty() {
+                self.speech.speak_symbols(text, true);
             } else if !text.is_empty() {
                 self.speech.speak(text, true);
             }

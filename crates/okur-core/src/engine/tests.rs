@@ -494,6 +494,60 @@ fn test_engine_text_selection_and_font_query() {
     assert_eq!(no_sel, Some("Nothing selected".to_string()));
 }
 
+/// A selection of up to 1000 characters is read whole; a longer one is said by its size and its
+/// last 20 characters, a line break counting one: 13 lines of 80 are 1052, "1032 characters up
+/// to | d of all of it here." [obs, 617/s21, s24].
+#[test]
+fn a_long_selection_is_said_by_its_size_and_end() {
+    let line = |n: usize| {
+        let text = if n == 15 {
+            format!("Paragraph {n:02} of fifteen, eighty characters each: the very end of all of it here.")
+        } else {
+            format!("Paragraph {n:02} of fifteen, eighty characters each: alpha bravo charlie delta echo.")
+        };
+        let padded = format!("{text:<80}");
+        AomNode::new(n, Role::Paragraph).with_text(padded.trim_end())
+    };
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Selection Sizes")
+        .with_children((1..=15).map(line).collect());
+    let engine_at = |line_index: usize| {
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+        engine.cursor.move_to_line(line_index);
+        engine
+    };
+    let length = |engine: &ScreenReaderEngine| {
+        let start = engine.cursor.offset;
+        engine
+            .cursor
+            .buffer
+            .text
+            .get(start..)
+            .map_or(0, |t| t.chars().count())
+    };
+    // From the 4th of 15 lines (the title is line 0): 12 lines.
+    let mut short = engine_at(4);
+    let short_length = length(&short);
+    let said = short.execute_command("SelectToBottom").unwrap_or_default();
+    assert!(short_length <= 1000, "{short_length}");
+    assert!(said.starts_with("selected\nParagraph 04"), "{said}");
+    // From the 3rd: 13 lines, over 1000.
+    let mut long = engine_at(3);
+    let long_length = length(&long);
+    assert!(long_length > 1000, "{long_length}");
+    assert_eq!(
+        long.execute_command("SelectToBottom").as_deref(),
+        Some(
+            format!(
+                "selected\n{} characters up to\nd of all of it here.",
+                long_length - 20
+            )
+            .as_str()
+        )
+    );
+}
+
 /// Say Color (Insert+5) names the text's color and its background's from the color table:
 /// "red on white", the link blue "blue2 on white"; the page's title line, which is no text of
 /// the page, is "default on default" [obs, 565/s1, s5, s7].

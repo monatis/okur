@@ -7,6 +7,13 @@ use crate::speech::SpeechFormatter;
 /// (JAWS 2025 Settings Center help, HTML Options) [obs, 502/s7-s9].
 pub const LINES_PER_PAGE: usize = 24;
 
+/// The longest selection JAWS reads whole, in characters (a line break counts one): 971 was
+/// read and 1052 summarized [obs, 617/s21, s24].
+const SELECTION_READ_WHOLE: usize = 1000;
+
+/// How much of a longer selection's end JAWS says after its size [obs, 617/s24, 515/s1].
+const SELECTION_SUMMARY_END: usize = 20;
+
 /// Active text selection range within the virtual buffer.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct TextSelection {
@@ -246,6 +253,23 @@ impl VirtualCursor {
     /// The lines `range` covers, each as the virtual cursor reads the part of it in `range`:
     /// its marks, then the part [obs, 501/s6, s12].
     fn selected_lines(&self, range: (usize, usize)) -> Vec<String> {
+        // A long selection is said by its size and its last characters, as JAWS says it:
+        // "1032 characters up to | d of all of it here." [obs, 617/s24]. A line break counts as
+        // one character, as in JAWS's count.
+        let text = self.buffer.text.get(range.0..range.1).unwrap_or_default();
+        let count = text.chars().count();
+        if count > SELECTION_READ_WHOLE {
+            let end: String = text
+                .chars()
+                .skip(count - SELECTION_SUMMARY_END)
+                .collect::<String>()
+                .trim_end_matches(['\n', '\r'])
+                .to_owned();
+            return vec![
+                msg::selection_summary(count - SELECTION_SUMMARY_END).to_string(),
+                end,
+            ];
+        }
         self.buffer
             .lines
             .iter()

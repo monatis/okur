@@ -86,6 +86,9 @@ selection-removed-lines = Unselected
 selection-none = Nothing selected
 # Say Selected Text, before the selection [obs, 501/s8, 504/s2].
 selection-is = Selection is
+# A selection too long to read, said by its size and its end: "selected | 1032 characters up
+# to | d of all of it here." The count leaves out the end said after it [obs, 617/s24, 515/s1].
+selection-summary = { $count } characters up to
 
 ## A modal dialog in a page
 
