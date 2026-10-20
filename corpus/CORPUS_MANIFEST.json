@@ -4458,6 +4458,20 @@
       }
     },
     {
+      "scenario_id": "643-web-selection-counts-to-the-top",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "6b0f7b7979b2b29535519f920c579788e2f66ee9d61dbe6d794460d08d2a6e37",
+        "capture_script_sha256": "bf89d333b1eca515dc0da6a3e2407056055b80d500d56700db4951d636c177c7",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "644-web-tab-first-then-escape-intermediate",
       "fixture": "signup-form.html",
       "evidence": {
@@ -4540,13 +4554,83 @@
         "deterministic": false,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "650-web-select-all-reading-settings",
+      "fixture": "reading-settings.html",
+      "evidence": {
+        "sha256": "ee45dd9bb27371e7752bd66aced8cd9a0dc06a345a7fde9f5a2f77130a7b4f71",
+        "capture_script_sha256": "bf89d333b1eca515dc0da6a3e2407056055b80d500d56700db4951d636c177c7",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "651-web-select-all-color-grid",
+      "fixture": "color-grid.html",
+      "evidence": {
+        "sha256": "c59cafa93992a2c95efed05b83c04c35172bc33ca8d06ec462072ac6b6a69834",
+        "capture_script_sha256": "bf89d333b1eca515dc0da6a3e2407056055b80d500d56700db4951d636c177c7",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "652-web-select-all-web-menus",
+      "fixture": "web-menus.html",
+      "evidence": {
+        "sha256": "61f2b1a1f7b90167ebdbc9f86fb395cd271d22b67fff3c16b0196bfa446a6073",
+        "capture_script_sha256": "bf89d333b1eca515dc0da6a3e2407056055b80d500d56700db4951d636c177c7",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "653-web-select-all-web-app-patterns",
+      "fixture": "web-app-patterns.html",
+      "evidence": {
+        "sha256": "2b95f4d926c71eaa6f54927273ac85576ae5eab1cc7a7be7626ea1cadd6f87c3",
+        "capture_script_sha256": "bf89d333b1eca515dc0da6a3e2407056055b80d500d56700db4951d636c177c7",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "654-web-say-line-twice-intervals",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "25dba281a1bee9cb60eff53a857bd67fada5fdb3ed2e5758b30da3b39326b07e",
+        "capture_script_sha256": "bf89d333b1eca515dc0da6a3e2407056055b80d500d56700db4951d636c177c7",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 313,
-    "scenarios_with_evidence": 313,
-    "total_trials": 993,
-    "successful_trials": 993,
-    "deterministic_scenarios": 195
+    "scenarios": 319,
+    "scenarios_with_evidence": 319,
+    "total_trials": 1011,
+    "successful_trials": 1011,
+    "deterministic_scenarios": 199
   }
 }
