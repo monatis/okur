@@ -458,7 +458,7 @@ impl Wording {
         use crate::settings::{MessageLength, OutputType};
         Self {
             selection: verbosity.is_on(OutputType::Select),
-            messages: verbosity.is_on(OutputType::JawsMessage),
+            messages: verbosity.is_on(OutputType::OkurMessage),
             short: verbosity.message_length() == MessageLength::Short,
         }
     }

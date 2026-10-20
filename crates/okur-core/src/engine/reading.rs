@@ -14,7 +14,7 @@ impl ScreenReaderEngine {
         let native = self.app_mode != AppMode::VirtualBuffer;
         // The JAWS cursor reads the screen at the mouse, which Okur has no model of yet: its
         // reading keys say nothing, as JAWS's did in a WinForms dialog [obs, 516/s4, s6].
-        if native && self.active_cursor == super::cursors::ActiveCursor::Jaws {
+        if native && self.active_cursor == super::cursors::ActiveCursor::Okur {
             if let Command::SayLine
             | Command::SayWord
             | Command::SayCharacter

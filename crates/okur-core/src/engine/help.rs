@@ -38,7 +38,7 @@ const WINDOW_KEYS: [(fn() -> StaticMessage, Command); 13] = [
     (msg::help_key_settings_in_use, Command::SayConfiguration),
     (msg::help_key_quick_settings, Command::QuickSettings),
     (msg::help_key_virtualize_window, Command::VirtualizeWindow),
-    (msg::help_key_find, Command::JawsFind),
+    (msg::help_key_find, Command::OkurFind),
 ];
 
 const WINDOWS_KEYS: [fn() -> StaticMessage; 10] = [
@@ -125,7 +125,7 @@ impl ScreenReaderEngine {
         // Find is the page's Ctrl+F, or Insert+Ctrl+F where there is no page.
         let window_keys = WINDOW_KEYS
             .iter()
-            .filter(|(_, command)| !in_page || *command != Command::JawsFind);
+            .filter(|(_, command)| !in_page || *command != Command::OkurFind);
         let mut links = Vec::new();
         for (words, command) in page_keys.chain(window_keys) {
             links.push((lines.len(), command.clone()));

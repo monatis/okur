@@ -17,14 +17,14 @@ pub enum ActiveCursor {
     #[default]
     Pc,
     /// The mouse pointer.
-    Jaws,
+    Okur,
 }
 
 impl ScreenReaderEngine {
     /// Numpad Minus: "Okur Cursor", where JAWS says "JAWS Cursor" [obs, 516/s1].
-    pub(super) fn activate_jaws_cursor(&mut self) -> Option<String> {
-        self.active_cursor = ActiveCursor::Jaws;
-        self.say(msg::cursor_jaws().to_string())
+    pub(super) fn activate_okur_cursor(&mut self) -> Option<String> {
+        self.active_cursor = ActiveCursor::Okur;
+        self.say(msg::cursor_okur().to_string())
     }
 
     /// Numpad Plus with the JAWS cursor active: "PC Cursor" [obs, 516/s7].
@@ -40,14 +40,14 @@ impl ScreenReaderEngine {
 
     /// Insert+Numpad Minus: the mouse goes to the PC cursor, "Route Okur to PC" (JAWS: "Route
     /// JAWS to PC") [obs, 516/s3].
-    pub(super) fn route_jaws_to_pc(&mut self) -> Option<String> {
+    pub(super) fn route_okur_to_pc(&mut self) -> Option<String> {
         if let Some((x, y)) = self.pc_cursor_point() {
             if let Some(actions) = &self.actions {
                 actions.move_mouse(x, y);
             }
             self.mouse = Some((x, y));
         }
-        self.say(msg::cursor_route_jaws_to_pc().to_string())
+        self.say(msg::cursor_route_okur_to_pc().to_string())
     }
 
     /// Alt+Delete: the active cursor and where it is, "PC Cursor active | 1045, 544"; the JAWS
@@ -57,13 +57,13 @@ impl ScreenReaderEngine {
     pub(super) fn say_active_cursor(&mut self) -> Option<String> {
         let (name, at) = match self.active_cursor {
             ActiveCursor::Pc => (msg::cursor_pc_active(), self.pc_cursor_point()),
-            ActiveCursor::Jaws => (msg::cursor_jaws_active(), self.mouse),
+            ActiveCursor::Okur => (msg::cursor_okur_active(), self.mouse),
         };
         let mut said = vec![name.to_string()];
         said.extend(at.map(|(x, y)| {
             msg::cursor_position((x + 1).to_string(), (y + 1).to_string()).to_string()
         }));
-        if self.active_cursor == ActiveCursor::Jaws {
+        if self.active_cursor == ActiveCursor::Okur {
             said.push(msg::cursor_restriction_application().to_string());
         }
         for (i, line) in said.iter().enumerate() {

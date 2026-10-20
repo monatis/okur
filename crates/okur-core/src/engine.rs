@@ -509,15 +509,15 @@ impl ScreenReaderEngine {
             use crate::command::Command;
             use cursors::ActiveCursor;
             if let Some(
-                command @ (Command::JawsCursor
+                command @ (Command::OkurCursor
                 | Command::PcCursor
-                | Command::RouteJawsToPc
+                | Command::RouteOkurToPc
                 | Command::SayActiveCursor),
             ) = crate::command::command_for(event)
             {
                 let in_page = self.app_mode == AppMode::VirtualBuffer;
                 if command != Command::PcCursor
-                    || self.active_cursor == ActiveCursor::Jaws
+                    || self.active_cursor == ActiveCursor::Okur
                     || !in_page
                 {
                     let _ = self.execute(command);
@@ -526,7 +526,7 @@ impl ScreenReaderEngine {
             }
             // With the JAWS cursor active the arrows move it, not the focus: they stay out of
             // the application [obs, 516/s5].
-            if self.active_cursor == ActiveCursor::Jaws
+            if self.active_cursor == ActiveCursor::Okur
                 && self.app_mode != AppMode::VirtualBuffer
                 && event.modifiers.is_empty()
                 && matches!(
@@ -548,7 +548,7 @@ impl ScreenReaderEngine {
 
         // The JAWS key (Insert, or CapsLock in the laptop layout) and every combination with
         // it are JAWS commands: they never reach the application, bound or not, in any mode.
-        if self.settings.keyboard.is_jaws_key(event.key) {
+        if self.settings.keyboard.is_okur_key(event.key) {
             if event.key == Key::CapsLock && !event.is_repeat {
                 return self.caps_lock_press(event);
             }
@@ -598,7 +598,7 @@ impl ScreenReaderEngine {
             }
         }
         if event.modifiers.insert {
-            self.jaws_key_command(event);
+            self.okur_key_command(event);
             return KeyAction::Consume;
         }
         // Numpad 5 is Say Character wherever the focus is, in an application's text field

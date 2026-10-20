@@ -21,10 +21,10 @@ pub enum KeyboardLayout {
     Laptop,
 }
 
-/// The keys that can be the JAWS key (Settings Center: JAWS Key for Current Layout).
+/// The keys that can be the Okur key (JAWS's Settings Center: JAWS Key for Current Layout).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub enum JawsKey {
+pub enum OkurKey {
     Insert,
     CapsLock,
     ScrollLock,
@@ -37,7 +37,7 @@ pub struct KeyboardSettings {
     pub layout: KeyboardLayout,
     /// The JAWS key chosen for `layout`, in Okur's name: the Okur key (AGENTS.md §1.5), as
     /// the settings file and `okur run --okur-key` name it.
-    pub okur_key: JawsKey,
+    pub okur_key: OkurKey,
 }
 
 impl Default for KeyboardSettings {
@@ -50,21 +50,21 @@ impl KeyboardSettings {
     /// A layout with its default JAWS key: Insert for desktop, CapsLock for laptop.
     pub fn for_layout(layout: KeyboardLayout) -> Self {
         let okur_key = match layout {
-            KeyboardLayout::Desktop => JawsKey::Insert,
-            KeyboardLayout::Laptop => JawsKey::CapsLock,
+            KeyboardLayout::Desktop => OkurKey::Insert,
+            KeyboardLayout::Laptop => OkurKey::CapsLock,
         };
         Self { layout, okur_key }
     }
 
-    /// Whether `key` acts as the JAWS key: the chosen one, and Insert in the laptop layout
+    /// Whether `key` acts as the Okur key: the chosen one, and Insert in the laptop layout
     /// [obs, 309: CapsLock+T and Insert+T both speak the title in the laptop layout].
-    pub fn is_jaws_key(&self, key: Key) -> bool {
+    pub fn is_okur_key(&self, key: Key) -> bool {
         match key {
             Key::Insert => {
-                self.okur_key == JawsKey::Insert || self.layout == KeyboardLayout::Laptop
+                self.okur_key == OkurKey::Insert || self.layout == KeyboardLayout::Laptop
             }
-            Key::CapsLock => self.okur_key == JawsKey::CapsLock,
-            Key::ScrollLock => self.okur_key == JawsKey::ScrollLock,
+            Key::CapsLock => self.okur_key == OkurKey::CapsLock,
+            Key::ScrollLock => self.okur_key == OkurKey::ScrollLock,
             _ => false,
         }
     }
@@ -74,13 +74,13 @@ impl KeyboardSettings {
     pub fn resolve(&self, event: &KeyEvent) -> KeyEvent {
         let mut resolved = event.clone();
         let m = &event.modifiers;
-        resolved.modifiers.insert = (m.insert && self.is_jaws_key(Key::Insert))
-            || (m.caps_lock && self.is_jaws_key(Key::CapsLock))
-            || (m.scroll_lock && self.is_jaws_key(Key::ScrollLock));
+        resolved.modifiers.insert = (m.insert && self.is_okur_key(Key::Insert))
+            || (m.caps_lock && self.is_okur_key(Key::CapsLock))
+            || (m.scroll_lock && self.is_okur_key(Key::ScrollLock));
         // Kept when CapsLock is the JAWS key held: the laptop layout's keys are CapsLock's, and
         // Insert keeps the desktop's with them (Insert+N toggles the quick keys where CapsLock+N
         // is the next sentence [obs, 298/s1, 510/s2]).
-        resolved.modifiers.caps_lock = m.caps_lock && self.is_jaws_key(Key::CapsLock);
+        resolved.modifiers.caps_lock = m.caps_lock && self.is_okur_key(Key::CapsLock);
         resolved.modifiers.scroll_lock = false;
         resolved
     }
@@ -329,7 +329,7 @@ pub enum OutputType {
     /// 599/s3, 609/s3, 608/s9]; "Pasted", "cut", "Undo" likewise. JAWS's "JAWS Message",
     /// which the settings file names in Okur's name (AGENTS.md §1.5).
     #[serde(rename = "okur_message")]
-    JawsMessage,
+    OkurMessage,
 }
 
 impl OutputType {
@@ -340,7 +340,7 @@ impl OutputType {
         OutputType::Description,
         OutputType::ControlGroupName,
         OutputType::Select,
-        OutputType::JawsMessage,
+        OutputType::OkurMessage,
     ];
 
     /// JAWS's key for the type in `DEFAULT.JCF` `[OutputModes]`, where it is known.
@@ -351,7 +351,7 @@ impl OutputType {
             Self::ListPosition => Some("ANNOUNCE_POSITION_AND_COUNT"),
             Self::ControlGroupName => Some("CONTROL_GROUP_NAME"),
             Self::Select => Some("SELECT"),
-            Self::JawsMessage => Some("JAWS_MESSAGE"),
+            Self::OkurMessage => Some("JAWS_MESSAGE"),
         }
     }
 
@@ -365,7 +365,7 @@ impl OutputType {
             | Self::Description
             | Self::ControlGroupName
             | Self::Select
-            | Self::JawsMessage => [OutputMode::On, OutputMode::On, OutputMode::Off],
+            | Self::OkurMessage => [OutputMode::On, OutputMode::On, OutputMode::Off],
         }
     }
 
@@ -641,7 +641,7 @@ mod tests {
         settings
             .verbosity
             .output_modes
-            .insert(OutputType::JawsMessage, [OutputMode::On; 3]);
+            .insert(OutputType::OkurMessage, [OutputMode::On; 3]);
         let json = serde_json::to_string(&settings).unwrap_or_default();
         assert!(json.contains(r#""okur_key":"caps_lock""#), "{json}");
         assert!(
@@ -656,8 +656,8 @@ mod tests {
     #[test]
     fn desktop_layout_uses_insert_only() {
         let desktop = KeyboardSettings::default();
-        assert!(desktop.is_jaws_key(Key::Insert));
-        assert!(!desktop.is_jaws_key(Key::CapsLock));
+        assert!(desktop.is_okur_key(Key::Insert));
+        assert!(!desktop.is_okur_key(Key::CapsLock));
         assert!(
             desktop
                 .resolve(&chord(Key::Alpha('T'), true, false))
@@ -675,8 +675,8 @@ mod tests {
     #[test]
     fn laptop_layout_uses_caps_lock_and_insert() {
         let laptop = KeyboardSettings::for_layout(KeyboardLayout::Laptop);
-        assert!(laptop.is_jaws_key(Key::CapsLock));
-        assert!(laptop.is_jaws_key(Key::Insert));
+        assert!(laptop.is_okur_key(Key::CapsLock));
+        assert!(laptop.is_okur_key(Key::Insert));
         let resolved = laptop.resolve(&chord(Key::Alpha('T'), false, true));
         assert!(resolved.modifiers.insert);
         // CapsLock is told apart: the laptop keys are its own.
@@ -693,9 +693,9 @@ mod tests {
     fn caps_lock_can_be_the_desktop_jaws_key() {
         let desktop_caps = KeyboardSettings {
             layout: KeyboardLayout::Desktop,
-            okur_key: JawsKey::CapsLock,
+            okur_key: OkurKey::CapsLock,
         };
-        assert!(!desktop_caps.is_jaws_key(Key::Insert));
+        assert!(!desktop_caps.is_okur_key(Key::Insert));
         assert!(
             desktop_caps
                 .resolve(&chord(Key::F(12), false, true))

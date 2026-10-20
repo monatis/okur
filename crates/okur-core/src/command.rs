@@ -218,12 +218,12 @@ pub enum Command {
     SayConfiguration,
     /// Ctrl+Insert+V: the application's product name and version.
     SayAppVersion,
-    /// The cursors: Numpad Minus (the JAWS cursor), Numpad Plus (the PC cursor),
-    /// Insert+Numpad Minus (route the JAWS cursor to the PC cursor), Alt+Delete (say the
+    /// The cursors: Numpad Minus (the Okur cursor, JAWS's JAWS cursor), Numpad Plus (the PC cursor),
+    /// Insert+Numpad Minus (route the Okur cursor to the PC cursor), Alt+Delete (say the
     /// active cursor).
-    JawsCursor,
+    OkurCursor,
     PcCursor,
-    RouteJawsToPc,
+    RouteOkurToPc,
     SayActiveCursor,
     /// Shift+Numpad5: the focused control's hot key.
     SayHotKey,
@@ -259,8 +259,8 @@ pub enum Command {
     // Finding.
     /// Ctrl+F in a page: JAWS Find, announced as "Virtual Find" [obs, 506/s1].
     VirtualFind,
-    /// Insert+Ctrl+F: JAWS Find, with no announcement [obs, 506/s12].
-    JawsFind,
+    /// Insert+Ctrl+F: Okur Find (JAWS Find), with no announcement [obs, 506/s12].
+    OkurFind,
     FindNext,
     FindPrior,
     /// Finds the text, forward from the cursor.
@@ -478,9 +478,9 @@ impl Command {
             "SayHotKey" | "Shift+Numpad5" => SayHotKey,
             "IndicateLinkSourceURL" | "Ctrl+Insert+F7" => SayLinkAddress,
             "RouteVirtualToPc" | "Insert+Delete" => RouteVirtualToPc,
-            "JAWSCursor" => JawsCursor,
+            "JAWSCursor" => OkurCursor,
             "PCCursor" => PcCursor,
-            "RouteJAWSCursorToPc" => RouteJawsToPc,
+            "RouteJAWSCursorToPc" => RouteOkurToPc,
             "SayActiveCursor" => SayActiveCursor,
             "RoutePCToVirtual" | "Ctrl+Insert+Delete" => RoutePcToVirtual,
             "SelectAFrame" | "Insert+F9" => SelectAFrame,
@@ -505,7 +505,7 @@ impl Command {
             "SayFromCursor" | "Insert+PageUp" => SayFromCursor,
 
             "^f" | "Ctrl+F" | "VirtualFind" => VirtualFind,
-            "JAWSFind" | "Insert+Ctrl+F" | "JAWSKey+Ctrl+F" => JawsFind,
+            "JAWSFind" | "Insert+Ctrl+F" | "JAWSKey+Ctrl+F" => OkurFind,
             "{F3}" | "F3" | "JAWSFindNext" | "FindNext" => FindNext,
             "+{F3}" | "+F3" | "Shift+F3" | "JAWSFindPrior" | "FindPrior" => FindPrior,
 
@@ -670,25 +670,25 @@ const fn bind(key: Key, chord: Chord, command: Command) -> Binding {
 
 use Held::{No, Yes};
 
-/// Only Shift, with or without Windows or the JAWS key: quick navigation's "prior" keys.
+/// Only Shift, with or without Windows or the Okur key: quick navigation's "prior" keys.
 const SHIFT: Chord = ANY.shift(Yes).ctrl(No).alt(No);
-/// The JAWS key alone.
-const JAWS: Chord = ANY.insert(Yes).ctrl(No).alt(No).shift(No);
+/// The Okur key alone.
+const OKUR: Chord = ANY.insert(Yes).ctrl(No).alt(No).shift(No);
 /// Ctrl alone.
 const CTRL: Chord = ANY.ctrl(Yes).shift(No).alt(No).insert(No);
 /// Ctrl and Shift.
 const CTRL_SHIFT: Chord = ANY.ctrl(Yes).shift(Yes).alt(No).insert(No);
-/// The JAWS key with Ctrl.
-const JAWS_CTRL: Chord = ANY.insert(Yes).ctrl(Yes).shift(No).alt(No);
-/// The JAWS key with Shift.
-const JAWS_SHIFT: Chord = ANY.insert(Yes).shift(Yes).ctrl(No).alt(No);
+/// The Okur key with Ctrl.
+const OKUR_CTRL: Chord = ANY.insert(Yes).ctrl(Yes).shift(No).alt(No);
+/// The Okur key with Shift.
+const OKUR_SHIFT: Chord = ANY.insert(Yes).shift(Yes).ctrl(No).alt(No);
 /// Ctrl and Alt, with or without Shift.
 const CTRL_ALT: Chord = ANY.ctrl(Yes).alt(Yes);
-/// Ctrl and the JAWS key: the element lists.
+/// Ctrl and the Okur key: the element lists.
 const CTRL_INSERT: Chord = ANY.ctrl(Yes).insert(Yes).alt(No).shift(No);
 /// Windows and Alt.
 const WIN_ALT: Chord = ANY.win(Yes).alt(Yes).ctrl(No).shift(No).insert(No);
-/// Ctrl, Alt and the JAWS key.
+/// Ctrl, Alt and the Okur key.
 const CTRL_ALT_INSERT: Chord = ANY.ctrl(Yes).alt(Yes).insert(Yes).shift(No);
 
 /// The key map, JAWS's desktop layout: the first binding that matches a key wins.
@@ -703,10 +703,10 @@ static BINDINGS: &[Binding] = &{
         bind(DownArrow, SHIFT.insert(No), SelectNextLine),
         bind(UpArrow, SHIFT.insert(No), SelectPriorLine),
         // Say All and Say Line.
-        bind(DownArrow, JAWS, SayAll),
-        bind(UpArrow, JAWS, SayLine),
-        bind(RightArrow, JAWS, SayNextWord),
-        bind(LeftArrow, JAWS, SayPriorWord),
+        bind(DownArrow, OKUR, SayAll),
+        bind(UpArrow, OKUR, SayLine),
+        bind(RightArrow, OKUR, SayNextWord),
+        bind(LeftArrow, OKUR, SayPriorWord),
         // Say Selected Text: the JAWS key with Shift (Alt+Shift+Down is a JAWS cursor key in
         // Default.JKM, MouseDown).
         bind(
@@ -716,12 +716,12 @@ static BINDINGS: &[Binding] = &{
         ),
         // The quick keys and the virtual cursor off and on, the screen refreshed, the rate for
         // now [obs, 298, 512].
-        bind(Space, JAWS, LayerStart),
-        bind(Alpha('N'), JAWS, NavigationModeToggle),
-        bind(Alpha('Z'), JAWS_SHIFT, QuickKeysSuspendResume),
+        bind(Space, OKUR, LayerStart),
+        bind(Alpha('N'), OKUR, NavigationModeToggle),
+        bind(Alpha('Z'), OKUR_SHIFT, QuickKeysSuspendResume),
         bind(Alpha('N'), CTRL_INSERT, QuickKeysSuspendResume),
-        bind(Alpha('Z'), JAWS, VirtualCursorToggle),
-        bind(Key::Escape, JAWS, RefreshScreen),
+        bind(Alpha('Z'), OKUR, VirtualCursorToggle),
+        bind(Key::Escape, OKUR, RefreshScreen),
         bind(
             Key::PageUp,
             ANY.ctrl(Yes).alt(Yes).shift(No).insert(No),
@@ -733,10 +733,10 @@ static BINDINGS: &[Binding] = &{
             RateSlower,
         ),
         // The window's top line, and the line to and from the cursor.
-        bind(End, JAWS, SayTopLineOfWindow),
-        bind(Key::PageDown, JAWS, SayBottomLineOfWindow),
-        bind(Home, JAWS, SayToCursor),
-        bind(Key::PageUp, JAWS, SayFromCursor),
+        bind(End, OKUR, SayTopLineOfWindow),
+        bind(Key::PageDown, OKUR, SayBottomLineOfWindow),
+        bind(Home, OKUR, SayToCursor),
+        bind(Key::PageUp, OKUR, SayFromCursor),
         // Table rows and columns.
         bind(DownArrow, CTRL_ALT.shift(Yes), MoveToBottomOfColumn),
         bind(UpArrow, CTRL_ALT.shift(Yes), MoveToTopOfColumn),
@@ -800,11 +800,11 @@ static BINDINGS: &[Binding] = &{
         ),
         bind(Numpad5, CTRL, SayParagraph),
         bind(Numpad5, SHIFT, SayHotKey),
-        bind(Numpad5, JAWS, SayWord),
+        bind(Numpad5, OKUR, SayWord),
         bind(Numpad5, ALONE, SayCharacter),
         // The cursors (JAWS 2025 help, Keystrokes for the Cursors) [obs, 516].
-        bind(NumpadMinus, JAWS, RouteJawsToPc),
-        bind(NumpadMinus, ALONE, JawsCursor),
+        bind(NumpadMinus, OKUR, RouteOkurToPc),
+        bind(NumpadMinus, ALONE, OkurCursor),
         bind(NumpadPlus, ALONE, PcCursor),
         bind(
             Key::Delete,
@@ -865,10 +865,10 @@ static BINDINGS: &[Binding] = &{
         bind(Key::Escape, ALONE, Command::Escape),
         bind(Space, ALONE, Activate),
         // Windows and focus.
-        bind(Digit(3), JAWS, PassKeyThrough),
-        bind(Alpha('B'), JAWS, SayWindow),
-        bind(Key::Tab, JAWS, SayCurrentFocus),
-        bind(Alpha('T'), JAWS, SayWindowTitle),
+        bind(Digit(3), OKUR, PassKeyThrough),
+        bind(Alpha('B'), OKUR, SayWindow),
+        bind(Key::Tab, OKUR, SayCurrentFocus),
+        bind(Alpha('T'), OKUR, SayWindowTitle),
         bind(
             F(12),
             ANY.insert(Yes).alt(No).shift(No).ctrl(Yes),
@@ -890,30 +890,30 @@ static BINDINGS: &[Binding] = &{
             ANY.insert(Yes).shift(Yes).ctrl(No).alt(No),
             VirtualizeControl,
         ),
-        bind(Alpha('F'), JAWS, SayFont),
+        bind(Alpha('F'), OKUR, SayFont),
         // Settings.
-        bind(Alpha('V'), JAWS, QuickSettings),
-        bind(Digit(6), JAWS, SettingsCenter),
+        bind(Alpha('V'), OKUR, QuickSettings),
+        bind(Digit(6), OKUR, SettingsCenter),
         // The dialog box's default button, and the settings in use (JAWS 2025 help) [obs, 513].
-        bind(Alpha('E'), JAWS, SayDefaultButton),
-        bind(Alpha('Q'), JAWS, SayConfiguration),
+        bind(Alpha('E'), OKUR, SayDefaultButton),
+        bind(Alpha('Q'), OKUR, SayConfiguration),
         bind(Alpha('V'), CTRL_INSERT, SayAppVersion),
         // A page's link address, routing the cursors, frames, and the prior heading by the
         // Ctrl+Insert+Shift+Enter of the key map (Default.JKM) [obs, 536].
         bind(Key::F(7), CTRL_INSERT, SayLinkAddress),
-        bind(Key::Delete, JAWS, RouteVirtualToPc),
+        bind(Key::Delete, OKUR, RouteVirtualToPc),
         bind(Key::Delete, CTRL_INSERT, RoutePcToVirtual),
-        bind(Key::F(9), JAWS, SelectAFrame),
+        bind(Key::F(9), OKUR, SelectAFrame),
         bind(Key::NumpadSlash, ALONE, LeftMouseClick),
-        bind(Key::F(10), JAWS, WindowList),
-        bind(Key::F(11), JAWS, SystemTrayList),
+        bind(Key::F(10), OKUR, WindowList),
+        bind(Key::F(11), OKUR, SystemTrayList),
         // Default.JKM: JAWSKey+F4=ShutDownJAWS; "Shut Down JAWS: INSERT+F4" (keystrokes).
-        bind(Key::F(4), JAWS, ShutDown),
+        bind(Key::F(4), OKUR, ShutDown),
         // Help (JAWS 2025 help, Keystrokes for Accessing Help) [obs, 526, 527]. In the laptop
         // layout CapsLock+H is Say Sentence, as there.
-        bind(Key::F(1), JAWS, ScreenSensitiveHelp),
-        bind(Alpha('H'), JAWS, HotKeyHelp),
-        bind(Alpha('W'), JAWS, WindowsKeysHelp),
+        bind(Key::F(1), OKUR, ScreenSensitiveHelp),
+        bind(Alpha('H'), OKUR, HotKeyHelp),
+        bind(Alpha('W'), OKUR, WindowsKeysHelp),
         bind(
             Key::Enter,
             ANY.ctrl(Yes).insert(Yes).shift(Yes).alt(No),
@@ -936,9 +936,9 @@ static BINDINGS: &[Binding] = &{
             ANY.insert(Yes).shift(Yes).ctrl(No).alt(No),
             SetPunctuationLevel,
         ),
-        bind(Digit(2), JAWS, NextTypingEcho),
+        bind(Digit(2), OKUR, NextTypingEcho),
         // JAWS Find: Ctrl+F in a page, Insert+Ctrl+F anywhere (Default.JKM: VirtualFind, JAWSFind).
-        bind(Alpha('F'), JAWS_CTRL, JawsFind),
+        bind(Alpha('F'), OKUR_CTRL, OkurFind),
         bind(Alpha('F'), CTRL, VirtualFind),
         bind(
             Alpha('R'),
@@ -997,10 +997,10 @@ static BINDINGS: &[Binding] = &{
         // Find next and prior, and the element lists.
         bind(F(3), SHIFT.insert(No), FindPrior),
         bind(F(3), ALONE, FindNext),
-        bind(F(3), JAWS, VirtualHtmlFeatures),
-        bind(F(5), JAWS, SelectAFormField),
-        bind(F(6), JAWS, SelectAHeading),
-        bind(F(7), JAWS, SelectALink),
+        bind(F(3), OKUR, VirtualHtmlFeatures),
+        bind(F(5), OKUR, SelectAFormField),
+        bind(F(6), OKUR, SelectAHeading),
+        bind(F(7), OKUR, SelectALink),
         // Say Current Cell: Ctrl+Alt+Numpad5, as JAWS documents it (Keystrokes for Working in
         // Tables), and with the number row's 5.
         bind(Numpad5, CTRL_ALT, SayCurrentCell),
@@ -1023,7 +1023,7 @@ static BINDINGS: &[Binding] = &{
             ANY.insert(Yes).shift(Yes).ctrl(No).alt(No),
             PriorNonLinkText,
         ),
-        bind(Key::Enter, JAWS, NextNonLinkText),
+        bind(Key::Enter, OKUR, NextNonLinkText),
         bind(Alpha('T'), SHIFT, MoveToPrior(Table)),
         bind(Alpha('T'), ALONE, MoveToNext(Table)),
         bind(Alpha('K'), SHIFT, MoveToPrior(PlaceMarker)),
@@ -1097,28 +1097,28 @@ static LAPTOP_BINDINGS: &[Binding] = &{
     [
         // CapsLock+Comma, Say Character; CapsLock+Period, Say Next Character (research
         // Item 4).
-        bind(Comma, JAWS, SayCharacter),
-        bind(Period, JAWS, SayNextCharacter),
-        bind(Alpha('I'), JAWS, SayLine),
-        bind(Alpha('K'), JAWS, SayWord),
-        bind(Alpha('O'), JAWS, SayNextLine),
-        bind(Alpha('U'), JAWS, SayPriorLine),
-        bind(Alpha('L'), JAWS, SayNextWord),
-        bind(Alpha('J'), JAWS, SayPriorWord),
-        bind(Alpha('M'), JAWS, SayPriorCharacter),
+        bind(Comma, OKUR, SayCharacter),
+        bind(Period, OKUR, SayNextCharacter),
+        bind(Alpha('I'), OKUR, SayLine),
+        bind(Alpha('K'), OKUR, SayWord),
+        bind(Alpha('O'), OKUR, SayNextLine),
+        bind(Alpha('U'), OKUR, SayPriorLine),
+        bind(Alpha('L'), OKUR, SayNextWord),
+        bind(Alpha('J'), OKUR, SayPriorWord),
+        bind(Alpha('M'), OKUR, SayPriorCharacter),
         // Laptop Keystrokes for Reading Text (JAWS 2025 help).
-        bind(Alpha('A'), JAWS, SayAll),
-        bind(Alpha('H'), JAWS, SaySentence),
-        bind(Alpha('N'), JAWS, SayNextSentence),
-        bind(Alpha('Y'), JAWS, SayPriorSentence),
-        bind(Alpha('I'), JAWS_CTRL, SayParagraph),
-        bind(Alpha('O'), JAWS_CTRL, NextParagraphOrArticles),
-        bind(Alpha('U'), JAWS_CTRL, SayPriorParagraph),
-        bind(Alpha('A'), JAWS_SHIFT, SaySelectedText),
-        bind(Alpha('Y'), JAWS_SHIFT, SayTopLineOfWindow),
-        bind(Alpha('N'), JAWS_SHIFT, SayBottomLineOfWindow),
-        bind(Alpha('J'), JAWS_SHIFT, SayToCursor),
-        bind(Alpha('L'), JAWS_SHIFT, SayFromCursor),
+        bind(Alpha('A'), OKUR, SayAll),
+        bind(Alpha('H'), OKUR, SaySentence),
+        bind(Alpha('N'), OKUR, SayNextSentence),
+        bind(Alpha('Y'), OKUR, SayPriorSentence),
+        bind(Alpha('I'), OKUR_CTRL, SayParagraph),
+        bind(Alpha('O'), OKUR_CTRL, NextParagraphOrArticles),
+        bind(Alpha('U'), OKUR_CTRL, SayPriorParagraph),
+        bind(Alpha('A'), OKUR_SHIFT, SaySelectedText),
+        bind(Alpha('Y'), OKUR_SHIFT, SayTopLineOfWindow),
+        bind(Alpha('N'), OKUR_SHIFT, SayBottomLineOfWindow),
+        bind(Alpha('J'), OKUR_SHIFT, SayToCursor),
+        bind(Alpha('L'), OKUR_SHIFT, SayFromCursor),
     ]
 };
 
@@ -1179,7 +1179,7 @@ mod tests {
             m.alt = true
         });
         let jaws = with(|m| m.insert = true);
-        let jaws_shift = with(|m| {
+        let okur_shift = with(|m| {
             m.insert = true;
             m.shift = true
         });
@@ -1212,7 +1212,7 @@ mod tests {
             (key(Key::Escape, none), Some(Escape)),
             (key(Key::Space, none), Some(Activate)),
             (key(Key::RightArrow, shift), Some(SelectNextCharacter)),
-            (key(Key::DownArrow, jaws_shift), Some(SaySelectedText)),
+            (key(Key::DownArrow, okur_shift), Some(SaySelectedText)),
             (key(Key::Alpha('f'), jaws), Some(SayFont)),
             (key(Key::Alpha('q'), none), Some(MoveToMainRegion)),
             (key(Key::Alpha('q'), shift), Some(MoveToMainRegion)),
@@ -1229,7 +1229,7 @@ mod tests {
     }
 
     #[test]
-    fn the_laptop_layout_reads_with_the_jaws_key_and_letters() {
+    fn the_laptop_layout_reads_with_the_okur_key_and_letters() {
         let laptop = KeyboardSettings::for_layout(KeyboardLayout::Laptop);
         // CapsLock held as the JAWS key, as the keyboard settings resolve it.
         let jaws = with(|m| {
@@ -1250,13 +1250,13 @@ mod tests {
             layout_command_for(&KeyboardSettings::default(), &key(Key::Alpha('o'), jaws)),
             None
         );
-        let jaws_shift = with(|m| {
+        let okur_shift = with(|m| {
             m.insert = true;
             m.caps_lock = true;
             m.shift = true
         });
         assert_eq!(
-            layout_command_for(&laptop, &key(Key::Alpha('o'), jaws_shift)),
+            layout_command_for(&laptop, &key(Key::Alpha('o'), okur_shift)),
             None
         );
         // CapsLock+Comma and CapsLock+Period; the keypad's 5 in the desktop layout.

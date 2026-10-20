@@ -25,10 +25,10 @@ settings-layout-desktop = Desktop
 settings-layout-laptop = Laptop
 # The Okur key, Okur's modifier: JAWS's "&JAWS Key", in Okur's name. Its access key is K:
 # V&olume has O.
-settings-jaws-key = Okur &Key:
-settings-jaws-key-insert = Insert
-settings-jaws-key-caps-lock = Caps Lock
-settings-jaws-key-scroll-lock = Scroll Lock
+settings-okur-key = Okur &Key:
+settings-okur-key-insert = Insert
+settings-okur-key-caps-lock = Caps Lock
+settings-okur-key-scroll-lock = Scroll Lock
 settings-group-reading = Reading
 settings-typing-echo = Typing &Echo:
 settings-typing-echo-off = Off

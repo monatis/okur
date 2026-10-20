@@ -739,7 +739,7 @@ fn test_engine_native_control_key_passthrough_and_focus_announcement() {
 }
 
 #[test]
-fn test_jaws_key_combinations_are_consumed_in_native_apps() {
+fn test_okur_key_combinations_are_consumed_in_native_apps() {
     let empty_doc = AomNode::new(0, Role::Document);
     let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&empty_doc));
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
@@ -833,7 +833,7 @@ fn laptop_reading_keys_in_a_document() {
 /// In the laptop layout CapsLock is the JAWS key and Insert works as well; CapsLock
 /// pressed twice quickly toggles Caps Lock [obs, 309, 310].
 #[test]
-fn test_caps_lock_as_the_jaws_key() {
+fn test_caps_lock_as_the_okur_key() {
     let empty_doc = AomNode::new(0, Role::Document);
     let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&empty_doc));
     let speech = SharedSpeech::default();
@@ -933,7 +933,7 @@ fn test_say_system_time_and_its_double_press() {
 /// In a text field, the JAWS key is consumed too, and Say Line (Insert+Up) reads the
 /// caret's line instead of reaching the field.
 #[test]
-fn test_jaws_key_in_forms_mode_reads_the_caret_line() {
+fn test_okur_key_in_forms_mode_reads_the_caret_line() {
     let mut cursor = VirtualCursor::new(create_test_buffer());
     assert!(cursor.move_to_node_id(3), "the test page has an edit");
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
@@ -4262,7 +4262,7 @@ fn ctrl_insert_v_says_the_applications_version() {
 /// place and the restriction, Insert+Numpad Minus moving the mouse to the middle of the focus,
 /// Numpad Plus "PC Cursor", Alt+Delete with the focus's place [obs, 516, 513/s2].
 #[test]
-fn the_jaws_and_pc_cursors() {
+fn the_okur_and_pc_cursors() {
     let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
     let actions = crate::actions::RecordingActions::default();
@@ -4278,7 +4278,7 @@ fn the_jaws_and_pc_cursors() {
     });
     use crate::command::Command;
     assert_eq!(
-        engine.execute(Command::JawsCursor).as_deref(),
+        engine.execute(Command::OkurCursor).as_deref(),
         Some("Okur Cursor")
     );
     assert_eq!(
@@ -4286,7 +4286,7 @@ fn the_jaws_and_pc_cursors() {
         Some("Okur Cursor active\n1835, 236\nApplication window restriction")
     );
     assert_eq!(
-        engine.execute(Command::RouteJawsToPc).as_deref(),
+        engine.execute(Command::RouteOkurToPc).as_deref(),
         Some("Route Okur to PC")
     );
     assert!(actions

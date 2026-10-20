@@ -21,10 +21,10 @@ cursor-virtual-pc-short = virtual PC
 # The cursors: Numpad Minus, Numpad Plus, Insert+Numpad Minus and Alt+Delete [obs, 516,
 # 513/s2]. The position is the screen's x and y in pixels, "1045, 544". JAWS's words, in
 # Okur's name where JAWS names itself ("JAWS Cursor").
-cursor-jaws = Okur Cursor
+cursor-okur = Okur Cursor
 cursor-pc = PC Cursor
-cursor-route-jaws-to-pc = Route Okur to PC
-cursor-jaws-active = Okur Cursor active
+cursor-route-okur-to-pc = Route Okur to PC
+cursor-okur-active = Okur Cursor active
 cursor-pc-active = PC Cursor active
 cursor-position = { $x }, { $y }
 cursor-restriction-application = Application window restriction

@@ -620,8 +620,9 @@ fn arguments_texts(arguments: &ast::CallArguments<&str>, texts: &mut Vec<String>
     }
 }
 
-/// The messages and terms of a catalog file whose texts hold a trademark: (id, trademark).
-/// Ids, comments and variable names are not texts.
+/// The messages and terms of a catalog file whose id or texts hold a trademark: (id,
+/// trademark). An id names Okur's own message too ("cursor-okur", not "cursor-jaws"); comments
+/// and variable names are not checked.
 fn trademarked_messages(source: &str) -> Vec<(String, &'static str)> {
     // build.rs stops the build on a catalog that does not parse; what parsed is read here.
     let resource = match fluent_syntax::parser::parse(source) {
@@ -639,7 +640,9 @@ fn trademarked_messages(source: &str) -> Vec<(String, &'static str)> {
         for pattern in value.into_iter().chain(attributes.iter().map(|a| &a.value)) {
             pattern_texts(pattern, &mut texts);
         }
-        if let Some(trademark) = texts.iter().find_map(|t| trademark_in(t)) {
+        let named = trademark_in(&id.replace('-', " "))
+            .or_else(|| texts.iter().find_map(|t| trademark_in(t)));
+        if let Some(trademark) = named {
             found.push((id.to_owned(), trademark));
         }
     }
@@ -704,7 +707,8 @@ fn no_literal_names_jaws() {
     assert!(failures.is_empty(), "\n{}\n", failures.join("\n"));
 }
 
-/// The trademark checks see a name in every text a message has, and only there.
+/// The trademark checks see a name in a message's id and in every text it has, and not in
+/// comments, variable names or what it references.
 #[test]
 fn the_trademark_checks_see_jaws_in_texts_only() {
     let catalog = "\
@@ -719,7 +723,7 @@ variant = { $count ->
    *[other] vispero
 }
 literal = { \"Jaws\" }
-referenced = { cursor-jaws } and { $jaws }
+referenced = { cursor-okur } and { $jaws }
 ";
     let found: Vec<String> = trademarked_messages(catalog)
         .into_iter()
@@ -727,7 +731,14 @@ referenced = { cursor-jaws } and { $jaws }
         .collect();
     assert_eq!(
         found,
-        ["plain", "spaced", "attribute", "variant", "literal"]
+        [
+            "cursor-jaws",
+            "plain",
+            "spaced",
+            "attribute",
+            "variant",
+            "literal"
+        ]
     );
     let allowed = vec![(
         "identifiers".to_owned(),

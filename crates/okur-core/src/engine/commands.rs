@@ -30,9 +30,9 @@ impl ScreenReaderEngine {
             Command::SayDefaultButton => return self.say_default_button(),
             Command::SayConfiguration => return self.say_configuration(),
             Command::SayAppVersion => return self.say_app_version(),
-            Command::JawsCursor => return self.activate_jaws_cursor(),
+            Command::OkurCursor => return self.activate_okur_cursor(),
             Command::PcCursor => return self.activate_pc_cursor(),
-            Command::RouteJawsToPc => return self.route_jaws_to_pc(),
+            Command::RouteOkurToPc => return self.route_okur_to_pc(),
             Command::SayActiveCursor => return self.say_active_cursor(),
             Command::SayHotKey => return self.say_hot_key(),
             Command::MoveToNext(crate::command::Element::MailLink) => {
@@ -490,7 +490,7 @@ impl ScreenReaderEngine {
                 }
                 return self.open_find();
             }
-            Command::JawsFind => return self.open_find(),
+            Command::OkurFind => return self.open_find(),
             Command::FindNext => self.cursor.find_next(),
             Command::FindPrior => self.cursor.find_prior(),
 
@@ -802,9 +802,9 @@ impl ScreenReaderEngine {
         self.cursor.current_char()
     }
 
-    /// A JAWS key command (Insert+…). In a text field the reading commands read the field;
+    /// An Okur key command (Insert+…). In a text field the reading commands read the field;
     /// elsewhere they run as virtual cursor or application commands.
-    pub(super) fn jaws_key_command(&mut self, event: &KeyEvent) {
+    pub(super) fn okur_key_command(&mut self, event: &KeyEvent) {
         let layout_command = crate::command::layout_command_for(&self.settings.keyboard, event);
         let say_line = layout_command == Some(Command::SayLine)
             || crate::editing::EditKey::of(event).is_some();

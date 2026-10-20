@@ -84,7 +84,7 @@ fn keyboard_settings(
     layout: &str,
     okur_key: Option<&str>,
 ) -> Result<okur_core::settings::KeyboardSettings, String> {
-    use okur_core::settings::{JawsKey, KeyboardLayout, KeyboardSettings};
+    use okur_core::settings::{KeyboardLayout, KeyboardSettings, OkurKey};
     let layout = match layout.to_ascii_lowercase().as_str() {
         "desktop" => KeyboardLayout::Desktop,
         "laptop" => KeyboardLayout::Laptop,
@@ -97,9 +97,9 @@ fn keyboard_settings(
     let mut settings = KeyboardSettings::for_layout(layout);
     if let Some(key) = okur_key {
         settings.okur_key = match key.to_ascii_lowercase().as_str() {
-            "insert" => JawsKey::Insert,
-            "capslock" => JawsKey::CapsLock,
-            "scrolllock" => JawsKey::ScrollLock,
+            "insert" => OkurKey::Insert,
+            "capslock" => OkurKey::CapsLock,
+            "scrolllock" => OkurKey::ScrollLock,
             other => {
                 return Err(format!(
                     "unknown Okur key {other:?} (insert, capslock, scrolllock)"

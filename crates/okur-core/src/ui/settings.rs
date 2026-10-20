@@ -7,7 +7,7 @@ use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
 
 use crate::messages::{msg, StaticMessage};
 use crate::settings::{
-    JawsKey, KeyboardLayout, KeyboardSettings, LiveRegionAppend, Punctuation, Settings,
+    KeyboardLayout, KeyboardSettings, LiveRegionAppend, OkurKey, Punctuation, Settings,
     Synthesizer, TypingEcho, VerbosityLevel, ViewerDisplay,
 };
 
@@ -24,10 +24,10 @@ const LAYOUTS: [(KeyboardLayout, Label); 2] = [
     (KeyboardLayout::Desktop, msg::settings_layout_desktop),
     (KeyboardLayout::Laptop, msg::settings_layout_laptop),
 ];
-const JAWS_KEYS: [(JawsKey, Label); 3] = [
-    (JawsKey::Insert, msg::settings_jaws_key_insert),
-    (JawsKey::CapsLock, msg::settings_jaws_key_caps_lock),
-    (JawsKey::ScrollLock, msg::settings_jaws_key_scroll_lock),
+const OKUR_KEYS: [(OkurKey, Label); 3] = [
+    (OkurKey::Insert, msg::settings_okur_key_insert),
+    (OkurKey::CapsLock, msg::settings_okur_key_caps_lock),
+    (OkurKey::ScrollLock, msg::settings_okur_key_scroll_lock),
 ];
 /// JAWS's punctuation levels, as Voice Adjustment lists them.
 const PUNCTUATIONS: [(Punctuation, Label); 4] = [
@@ -183,8 +183,8 @@ impl SettingsDialog {
                 ),
                 control(
                     "okur_key",
-                    msg::settings_jaws_key(),
-                    choice(names(&JAWS_KEYS), position(&JAWS_KEYS, s.keyboard.okur_key)),
+                    msg::settings_okur_key(),
+                    choice(names(&OKUR_KEYS), position(&OKUR_KEYS, s.keyboard.okur_key)),
                 ),
                 control("reading", msg::settings_group_reading(), ControlKind::Group),
                 control(
@@ -291,13 +291,13 @@ impl SettingsDialog {
                         return Outcome::Send(vec![ToUi::DialogSet {
                             id: self.id,
                             control: "okur_key".to_owned(),
-                            value: Value::Selected(position(&JAWS_KEYS, s.keyboard.okur_key)),
+                            value: Value::Selected(position(&OKUR_KEYS, s.keyboard.okur_key)),
                         }]);
                     }
                 }
             }
             ("okur_key", Value::Selected(i)) => {
-                if let Some(key) = pick(&JAWS_KEYS, i) {
+                if let Some(key) = pick(&OKUR_KEYS, i) {
                     s.keyboard.okur_key = key;
                 }
             }
@@ -489,7 +489,7 @@ mod tests {
         );
         // Choosing another key afterwards keeps the layout.
         dialog.handle(&changed("okur_key", Value::Selected(2)));
-        assert_eq!(dialog.draft().keyboard.okur_key, JawsKey::ScrollLock);
+        assert_eq!(dialog.draft().keyboard.okur_key, OkurKey::ScrollLock);
         assert_eq!(dialog.draft().keyboard.layout, KeyboardLayout::Laptop);
     }
 }
