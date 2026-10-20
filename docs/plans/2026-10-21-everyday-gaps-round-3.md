@@ -26,6 +26,8 @@ The rounds queued at the end of round 2, in order (each behind the one before):
 | 62 | 516 and 546 again with `okur.exe` 71c6fe60 (built at `d4b5da4`: DPI aware, so positions are real pixels; an edit's up-down buddy; `okur tray`), 570 (the Speech History's Ctrl+H and Shift+H), 571 (Insert+F4's question, last) | import: 516's cursor points and 546/s8's spin box should replay; build 570 and 571; then `okur tray` on old-pc against 511/s4's six icons |
 | 63 | 204 again on a freshly started JAWS (`-FreshJaws`): the verbosity rounds, run on a restarted JAWS, have hints on Tab in page forms ("Type in text.") at every level that 204's long-running JAWS did not say | if 204 then has them, JAWS's state since its start decides the hints: settle which state the corpus should hold |
 
+**Rounds 61-64 failed (2026-10-20, 10:48-11:15):** Windows Defender on old-pc quarantined `sr-harnessbinokur.exe` as `Trojan:Win32/Bearfoos.A!ml` (a machine-learning heuristic; also at 21:44 on 10-19 and 03:06 on 10-20), so every step that ran `okur` failed, and JAWS hung meanwhile (restarted at 11:16). They are queued again once the owner adds a Defender exclusion for `C:SERSILABSSR-HARNESS`: THE SNAPSHOT AND 562, 569, 516, 546, 570; 204 ON A FRESH JAWS; THEN 571 AND 568 LAST, EACH IN A BATCH OF ITS OWN.
+
 For each: fetch with `lab-fetch.sh` (a stalled fetch is stopped and started again), grep the
 evidence and traces for links, the lab account's folders and the owner's name, check the
 capture-script hash, compare parity before and after, and commit the corpus alone. A re-record
