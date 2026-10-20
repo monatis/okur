@@ -94,6 +94,10 @@ pub struct TraceObject {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
     pub states: u32,
+    /// MSAA's keyboard shortcut (`accKeyboardShortcut`): a Win32 dialog's controls give their
+    /// access key here only ("Alt+r" in Notepad's Font dialog) [obs, 541/s8].
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub shortcut: Option<String>,
 }
 
 /// One recorded accessibility event.
@@ -756,6 +760,11 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         top_window,
     )?;
     let focused = event.focus_chain.last()?;
+    // A Win32 dialog's control names its access key through MSAA only: the focus event's
+    // object is the control ("Script: Combo box … Alt+r" [obs, 541/s8]).
+    if focus.access_key.is_none() {
+        focus.access_key = event.object.as_ref().and_then(|o| o.shortcut.clone());
+    }
     // A page's window reports its focus by the object's IA2 uniqueID (negative), the identity
     // its captures give each node: WhatsApp renames a message as it takes the focus.
     if focus.in_document
@@ -1958,6 +1967,11 @@ mod capture {
                     .and_then(|v| i32::try_from(&v).ok())
                     .map(|s| s as u32)
                     .unwrap_or(0),
+                shortcut: acc
+                    .get_accKeyboardShortcut(&child)
+                    .ok()
+                    .map(|b| b.to_string())
+                    .filter(|s| !s.trim().is_empty()),
             })
         }
     }
@@ -3622,12 +3636,38 @@ mod tests {
             name: Some("Help".to_owned()),
             value: None,
             states: 0,
+            shortcut: None,
         });
         event.focus_chain = vec![
             node(UIA_DOCUMENT, "Untitled document - Google Docs", false),
             node(UIA_EDIT, "Document content", true),
         ];
         assert_eq!(focus_event_from_trace(&event), None);
+    }
+
+    /// A Win32 dialog's control has its access key from MSAA when UIA names none [obs,
+    /// 541/s8]; UIA's comes first.
+    #[test]
+    fn an_access_key_comes_from_msaa_when_uia_has_none() {
+        let mut event = focus_event(Vec::new());
+        event.object = Some(TraceObject {
+            role: None,
+            name: Some("Pro".to_owned()),
+            value: None,
+            states: 0,
+            shortcut: Some("Alt+r".to_owned()),
+        });
+        assert_eq!(
+            focus_event_from_trace(&event).and_then(|f| f.access_key),
+            Some("Alt+r".to_owned())
+        );
+        if let Some(pro) = event.focus_chain.last_mut() {
+            pro.access_key = Some("alt+P".to_owned());
+        }
+        assert_eq!(
+            focus_event_from_trace(&event).and_then(|f| f.access_key),
+            Some("alt+P".to_owned())
+        );
     }
 
     /// A focus event from a window already gone (Okur's own list dialog as it closes) reads
@@ -3909,6 +3949,7 @@ mod tests {
                 name: Some(name.to_owned()),
                 value: None,
                 states: 0,
+                shortcut: None,
             })
         };
         let solutions = UiaNode {
@@ -3953,6 +3994,7 @@ mod tests {
                 name: Some("Home branch".to_owned()),
                 value: Some(value.to_owned()),
                 states: 0,
+                shortcut: None,
             })
         };
         let focus = TraceEvent {
