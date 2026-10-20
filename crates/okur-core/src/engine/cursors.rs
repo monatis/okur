@@ -21,7 +21,7 @@ pub enum ActiveCursor {
 }
 
 impl ScreenReaderEngine {
-    /// Numpad Minus: "JAWS Cursor" [obs, 516/s1].
+    /// Numpad Minus: "Okur Cursor", where JAWS says "JAWS Cursor" [obs, 516/s1].
     pub(super) fn activate_jaws_cursor(&mut self) -> Option<String> {
         self.active_cursor = ActiveCursor::Jaws;
         self.say(msg::cursor_jaws().to_string())
@@ -38,7 +38,8 @@ impl ScreenReaderEngine {
         self.say(msg::cursor_pc().to_string())
     }
 
-    /// Insert+Numpad Minus: the mouse goes to the PC cursor, "Route JAWS to PC" [obs, 516/s3].
+    /// Insert+Numpad Minus: the mouse goes to the PC cursor, "Route Okur to PC" (JAWS: "Route
+    /// JAWS to PC") [obs, 516/s3].
     pub(super) fn route_jaws_to_pc(&mut self) -> Option<String> {
         if let Some((x, y)) = self.pc_cursor_point() {
             if let Some(actions) = &self.actions {

@@ -362,7 +362,7 @@ fn a_native_field_says_its_paragraph_formatting() {
         engine.execute_command("SayFontInViewer").as_deref(),
         Some(
             "Font information:\nConsolas 11 point,\nParagraph formatting left justified\n\
-             \u{1d} Link \u{1e} List JAWS Hot Keys\nPress ESCAPE to close this message."
+             \u{1d} Link \u{1e} List Okur Hot Keys\nPress ESCAPE to close this message."
         )
     );
 }
@@ -4258,9 +4258,9 @@ fn ctrl_insert_v_says_the_applications_version() {
     );
 }
 
-/// The cursors: Numpad Minus "JAWS Cursor", Alt+Delete with the mouse's place and the
-/// restriction, Insert+Numpad Minus moving the mouse to the middle of the focus, Numpad Plus
-/// "PC Cursor", Alt+Delete with the focus's place [obs, 516, 513/s2].
+/// The cursors: Numpad Minus "Okur Cursor" (JAWS's "JAWS Cursor"), Alt+Delete with the mouse's
+/// place and the restriction, Insert+Numpad Minus moving the mouse to the middle of the focus,
+/// Numpad Plus "PC Cursor", Alt+Delete with the focus's place [obs, 516, 513/s2].
 #[test]
 fn the_jaws_and_pc_cursors() {
     let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
@@ -4279,15 +4279,15 @@ fn the_jaws_and_pc_cursors() {
     use crate::command::Command;
     assert_eq!(
         engine.execute(Command::JawsCursor).as_deref(),
-        Some("JAWS Cursor")
+        Some("Okur Cursor")
     );
     assert_eq!(
         engine.execute(Command::SayActiveCursor).as_deref(),
-        Some("JAWS Cursor active\n1835, 236\nApplication window restriction")
+        Some("Okur Cursor active\n1835, 236\nApplication window restriction")
     );
     assert_eq!(
         engine.execute(Command::RouteJawsToPc).as_deref(),
-        Some("Route JAWS to PC")
+        Some("Route Okur to PC")
     );
     assert!(actions
         .requests()

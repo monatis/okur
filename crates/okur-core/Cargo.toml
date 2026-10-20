@@ -20,3 +20,7 @@ unicode_names2 = "1"
 [build-dependencies]
 # build.rs reads the catalog's messages and their variables, so every call site is checked.
 fluent-syntax = "0.12"
+
+[dev-dependencies]
+# tests/catalog.rs reads the catalog's texts, to keep JAWS's name out of Okur's words.
+fluent-syntax = "0.12"

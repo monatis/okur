@@ -161,12 +161,12 @@ mod tests {
             other => {
                 assert!(
                     matches!(other, Some(ToUi::DialogShow { .. })),
-                    "JAWS Find did not open: {shown:?}"
+                    "Okur Find did not open: {shown:?}"
                 );
                 return;
             }
         };
-        assert_eq!(dialog.title, "JAWS Find");
+        assert_eq!(dialog.title, "Okur Find");
         let _ = send(
             &mut engine,
             FromUi::DialogChanged {
@@ -197,7 +197,7 @@ mod tests {
             other => {
                 assert!(
                     matches!(other, Some(ToUi::DialogShow { .. })),
-                    "JAWS Find did not open again: {shown:?}"
+                    "Okur Find did not open again: {shown:?}"
                 );
                 return;
             }

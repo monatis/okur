@@ -39,9 +39,9 @@ form-fields-list-none = no form fields were found
 # The Regions list on a page without regions. JAWS ends it without a period.
 regions-list-none = No regions were found on the page
 
-## JAWS Find (Insert+Control+F)
+## Okur Find (Insert+Control+F): JAWS Find, in Okur's name
 
-find-dialog = JAWS Find
+find-dialog = Okur Find
 
 ## The Virtual Viewer
 
@@ -51,8 +51,9 @@ viewer-virtualizing-window = Virtualizing current window
 viewer-virtualizing-control = Virtualizing current control
 viewer-already-virtual = The current location is already in a virtual view
 viewer-font-information = Font information:
-# A link at the bottom of the Virtual Viewer's messages.
-viewer-hot-keys-link = List JAWS Hot Keys
+# A link at the bottom of the Virtual Viewer's messages: JAWS's "List JAWS Hot Keys", in Okur's
+# name.
+viewer-hot-keys-link = List Okur Hot Keys
 viewer-close-hint = Press ESCAPE to close this message.
 
 ## Editing text

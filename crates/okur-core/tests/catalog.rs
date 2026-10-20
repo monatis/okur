@@ -13,6 +13,13 @@
 //!    ([`okur_core::messages::with_pseudo_locale`]), the engine reads a page and native
 //!    controls; what it says holds no word that is neither wrapped nor the page's own. This
 //!    finds words built at run time that the scan cannot tell from identifiers.
+//! 4. **Okur speaks in its own name** (AGENTS.md §1.5). JAWS, Freedom Scientific and Vispero
+//!    are Vispero's trademarks: no message text of any locale (its value, its attributes, its
+//!    variants and string literals) holds one, whatever its id; where JAWS names itself, Okur
+//!    names itself ("Okur Cursor"). Nor does a literal of the scanned crates' non-test code, or
+//!    of the installer's (`okur-setup`), unless it is an identifier, by its shape or under
+//!    `[identifiers]` in `tests/literals.txt`: JAWS's own script and key names, which Okur
+//!    accepts as they are (`ShutDownJAWS`, `JAWSKey+F4`).
 //!
 //! The source scan reads Rust as tokens: comments, attributes (`#[serde(rename = "…")]`),
 //! `tracing` macros and `eprintln!` (developer logs, never spoken) and `#[cfg(test)]` items
@@ -27,6 +34,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 
+use fluent_syntax::ast;
 use okur_core::aom::{AomNode, Role};
 use okur_core::event::FocusEvent;
 use okur_core::messages::{with_pseudo_locale, MessageId};
@@ -352,6 +360,11 @@ fn crates_dir() -> PathBuf {
 
 /// Every `.rs` file under `dir`, sorted.
 fn rust_files(dir: &Path) -> Vec<PathBuf> {
+    files_with(dir, "rs")
+}
+
+/// Every file under `dir` with the extension `extension`, sorted.
+fn files_with(dir: &Path, extension: &str) -> Vec<PathBuf> {
     let mut files = Vec::new();
     let mut pending = vec![dir.to_path_buf()];
     while let Some(dir) = pending.pop() {
@@ -362,7 +375,7 @@ fn rust_files(dir: &Path) -> Vec<PathBuf> {
             let path = entry.path();
             if path.is_dir() {
                 pending.push(path);
-            } else if path.extension().is_some_and(|e| e == "rs") {
+            } else if path.extension().is_some_and(|e| e == extension) {
                 files.push(path);
             }
         }
@@ -537,6 +550,196 @@ fn the_scanner_sees_words_and_leaves_out_what_is_never_said() {
     assert!(!has_words("snake_case", false));
     assert!(!has_words("Option::is_none", false));
     assert!(!has_words("{a}:{b}", false));
+}
+
+/// Vispero's trademarks, in lower case: never Okur's name in Okur's own words.
+const TRADEMARKS: &[&str] = &["jaws", "freedom scientific", "freedomscientific", "vispero"];
+
+/// The crates whose literals are scanned for the trademarks: those of the catalog scan, the
+/// dialogs' model and the installer.
+const NAMED: &[&str] = &["okur-core", "okur-ui", "okur-ui-model", "okur-setup"];
+
+/// The trademark `text` holds, if any, whatever its case and spacing.
+fn trademark_in(text: &str) -> Option<&'static str> {
+    let text = text
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ")
+        .to_lowercase();
+    TRADEMARKS.iter().copied().find(|name| text.contains(name))
+}
+
+/// The texts of a catalog pattern as Okur may say or show them: its text with each placeable
+/// as a space, then its string literals and its select expressions' variants.
+fn pattern_texts(pattern: &ast::Pattern<&str>, texts: &mut Vec<String>) {
+    let mut text = String::new();
+    for element in &pattern.elements {
+        match element {
+            ast::PatternElement::TextElement { value } => text.push_str(value),
+            ast::PatternElement::Placeable { expression } => {
+                text.push(' ');
+                expression_texts(expression, texts);
+            }
+        }
+    }
+    texts.push(text);
+}
+
+fn expression_texts(expression: &ast::Expression<&str>, texts: &mut Vec<String>) {
+    match expression {
+        ast::Expression::Select { variants, .. } => {
+            for variant in variants {
+                pattern_texts(&variant.value, texts);
+            }
+        }
+        ast::Expression::Inline(inline) => inline_texts(inline, texts),
+    }
+}
+
+fn inline_texts(inline: &ast::InlineExpression<&str>, texts: &mut Vec<String>) {
+    match inline {
+        ast::InlineExpression::StringLiteral { value } => texts.push((*value).to_owned()),
+        ast::InlineExpression::Placeable { expression } => expression_texts(expression, texts),
+        ast::InlineExpression::FunctionReference { arguments, .. } => {
+            arguments_texts(arguments, texts);
+        }
+        ast::InlineExpression::TermReference {
+            arguments: Some(arguments),
+            ..
+        } => arguments_texts(arguments, texts),
+        _ => {}
+    }
+}
+
+fn arguments_texts(arguments: &ast::CallArguments<&str>, texts: &mut Vec<String>) {
+    for argument in &arguments.positional {
+        inline_texts(argument, texts);
+    }
+    for argument in &arguments.named {
+        inline_texts(&argument.value, texts);
+    }
+}
+
+/// The messages and terms of a catalog file whose texts hold a trademark: (id, trademark).
+/// Ids, comments and variable names are not texts.
+fn trademarked_messages(source: &str) -> Vec<(String, &'static str)> {
+    // build.rs stops the build on a catalog that does not parse; what parsed is read here.
+    let resource = match fluent_syntax::parser::parse(source) {
+        Ok(resource) => resource,
+        Err((resource, _)) => resource,
+    };
+    let mut found = Vec::new();
+    for entry in &resource.body {
+        let (id, value, attributes) = match entry {
+            ast::Entry::Message(m) => (m.id.name, m.value.as_ref(), &m.attributes),
+            ast::Entry::Term(t) => (t.id.name, Some(&t.value), &t.attributes),
+            _ => continue,
+        };
+        let mut texts = Vec::new();
+        for pattern in value.into_iter().chain(attributes.iter().map(|a| &a.value)) {
+            pattern_texts(pattern, &mut texts);
+        }
+        if let Some(trademark) = texts.iter().find_map(|t| trademark_in(t)) {
+            found.push((id.to_owned(), trademark));
+        }
+    }
+    found
+}
+
+/// The trademark a literal of `file` says or shows, if any: none for an identifier, by its
+/// shape or listed under `[identifiers]`.
+fn said_trademark(
+    allowed: &[(String, String, String)],
+    file: &str,
+    literal: &str,
+    raw: bool,
+) -> Option<&'static str> {
+    let trademark = trademark_in(literal)?;
+    let identifier = !has_words(literal, raw)
+        || allowed.iter().any(|(section, f, l)| {
+            section == "identifiers" && (f == file || f == "*") && (l == literal || l == "*")
+        });
+    (!identifier).then_some(trademark)
+}
+
+/// Okur speaks in its own name (AGENTS.md §1.5): no message of any locale names JAWS, Freedom
+/// Scientific or Vispero. Where JAWS names itself, Okur names itself: "Okur Cursor", "Route
+/// Okur to PC", "Okur Find", "&Okur Key:".
+#[test]
+fn no_message_names_jaws() {
+    let locales = Path::new(env!("CARGO_MANIFEST_DIR")).join("locales");
+    let files = files_with(&locales, "ftl");
+    assert!(!files.is_empty(), "no catalog files under {locales:?}");
+    let mut failures = Vec::new();
+    for file in &files {
+        let source = std::fs::read_to_string(file).unwrap_or_default();
+        for (id, trademark) in trademarked_messages(&source) {
+            failures.push(format!(
+                "{}: {id} names {trademark:?}: Okur's words use Okur's name (AGENTS.md §1.5)",
+                file.display()
+            ));
+        }
+    }
+    assert!(failures.is_empty(), "\n{}\n", failures.join("\n"));
+}
+
+/// The same for the words still written into code: only an identifier names JAWS (JAWS's
+/// script and key names in `command.rs`, a JCF key).
+#[test]
+fn no_literal_names_jaws() {
+    let allowed = allowed();
+    let mut failures = Vec::new();
+    for name in NAMED {
+        for (file, scan) in crate_scans(name) {
+            for (line, literal, raw) in &scan.literals {
+                if let Some(trademark) = said_trademark(&allowed, &file, literal, *raw) {
+                    failures.push(format!(
+                        "{file}:{line}: \"{literal}\" names {trademark:?}: Okur's words use \
+                         Okur's name (AGENTS.md §1.5)"
+                    ));
+                }
+            }
+        }
+    }
+    assert!(failures.is_empty(), "\n{}\n", failures.join("\n"));
+}
+
+/// The trademark checks see a name in every text a message has, and only there.
+#[test]
+fn the_trademark_checks_see_jaws_in_texts_only() {
+    let catalog = "\
+# JAWS's own words: a comment.
+cursor-jaws = Okur Cursor
+plain = JAWS Cursor
+spaced = Freedom   Scientific
+attribute = Okur
+    .short = Route JAWS to PC
+variant = { $count ->
+    [one] one
+   *[other] vispero
+}
+literal = { \"Jaws\" }
+referenced = { cursor-jaws } and { $jaws }
+";
+    let found: Vec<String> = trademarked_messages(catalog)
+        .into_iter()
+        .map(|(id, _)| id)
+        .collect();
+    assert_eq!(
+        found,
+        ["plain", "spaced", "attribute", "variant", "literal"]
+    );
+    let allowed = vec![(
+        "identifiers".to_owned(),
+        "okur-core/src/command.rs".to_owned(),
+        "*".to_owned(),
+    )];
+    let said = |file: &str, literal: &str| said_trademark(&allowed, file, literal, false);
+    assert_eq!(said("okur-core/src/x.rs", "JAWS Cursor"), Some("jaws"));
+    assert_eq!(said("okur-setup/src/x.rs", "by Vispero"), Some("vispero"));
+    assert_eq!(said("okur-core/src/command.rs", "ShutDownJAWS"), None);
+    assert_eq!(said("okur-core/src/settings.rs", "JAWS_MESSAGE"), None);
+    assert_eq!(said("okur-core/src/x.rs", "Okur Cursor"), None);
 }
 
 /// What is left of `said` without the pseudo-locale's wrapped messages and `page_words`, when

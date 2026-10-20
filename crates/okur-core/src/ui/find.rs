@@ -223,7 +223,7 @@ mod tests {
     #[test]
     fn the_dialog_is_jaws_finds() {
         let spec = FindDialog::new(3, &[], FindOptions::default()).spec();
-        assert_eq!(spec.title, "JAWS Find");
+        assert_eq!(spec.title, "Okur Find");
         let labels: Vec<&str> = spec.controls.iter().map(|c| c.label.as_str()).collect();
         assert_eq!(
             labels,

@@ -23,8 +23,9 @@ settings-group-keyboard = Keyboard
 settings-layout = Keyboard &Layout:
 settings-layout-desktop = Desktop
 settings-layout-laptop = Laptop
-# The key that acts as the JAWS key (Okur's modifier).
-settings-jaws-key = &JAWS Key:
+# The Okur key, Okur's modifier: JAWS's "&JAWS Key", in Okur's name. Its access key is K:
+# V&olume has O.
+settings-jaws-key = Okur &Key:
 settings-jaws-key-insert = Insert
 settings-jaws-key-caps-lock = Caps Lock
 settings-jaws-key-scroll-lock = Scroll Lock
