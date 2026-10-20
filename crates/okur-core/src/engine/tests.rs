@@ -630,6 +630,29 @@ fn a_long_selection_is_said_by_its_size_and_end() {
     );
 }
 
+/// End goes past the line's last letter, saying nothing; Left then says that letter, as JAWS
+/// says it after End on a link's line [obs, 635/s20, s21].
+#[test]
+fn end_goes_past_the_last_letter() {
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Ends")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Riverside Gazette"),
+            AomNode::new(2, Role::Paragraph).with_text("News"),
+        ]);
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(speech.clone()),
+    );
+    engine.cursor.move_to_line(1);
+    speech.take();
+    engine.handle_key_event(&key(Key::End));
+    assert_eq!(norm(&speech.take().join(" ")), "");
+    engine.handle_key_event(&key(Key::LeftArrow));
+    assert_eq!(norm(&speech.take().join(" ")), "e");
+}
+
 /// A line selected whole is said as the line is, its marks where they fall: a list item that
 /// is only a link, "• same page link Council approves library budget" [obs, 562/s2, s8].
 #[test]

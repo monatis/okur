@@ -296,6 +296,28 @@ impl<'a> Builder<'a> {
         start
     }
 
+    /// Splits the last span at `at`: what comes before is the list marker's (its own node, if
+    /// it has one), the rest stays the line's. Returns `at`, or the span's start when `at` is
+    /// not inside it.
+    fn split_off_marker(&mut self, at: usize, marker_node: Option<usize>) -> usize {
+        let Some(last) = self.buffer.spans.last_mut() else {
+            return at;
+        };
+        if at <= last.start_offset || at >= last.end_offset {
+            return last.start_offset;
+        }
+        let marker = BufferSpan {
+            start_offset: last.start_offset,
+            end_offset: at,
+            node_id: marker_node.unwrap_or(last.node_id),
+            role: Role::Text,
+        };
+        last.start_offset = at;
+        let index = self.buffer.spans.len() - 1;
+        self.buffer.spans.insert(index, marker);
+        at
+    }
+
     /// Emits the pending inline run, if it has any visible text. A flush is a block
     /// boundary, so punctuation after it never attaches to a preceding link line.
     fn flush(&mut self) {
@@ -317,9 +339,18 @@ impl<'a> Builder<'a> {
             self.last_text_line = Some(squash(&run.text));
             return;
         }
-        let text = squash(&run.text);
+        let mut text = squash(&run.text);
         if text.is_empty() {
             return;
+        }
+        // The space where a link's line break cuts the text stays with it: "© 2026 Riverside
+        // Gazette. " before Contact us, " open in May." after study rooms [obs, 635/s3-s4;
+        // 562/s20: JAWS's count of the page has them].
+        if run.text.starts_with(char::is_whitespace) {
+            text.insert(0, ' ');
+        }
+        if run.text.ends_with(char::is_whitespace) {
+            text.push(' ');
         }
         let node_id = run.node_id.unwrap_or_default();
         let role = run.role.unwrap_or(Role::Text);
@@ -339,8 +370,13 @@ impl<'a> Builder<'a> {
                 let (punct, rest) = text.split_at(split);
                 if !punct.is_empty() {
                     self.append_to_line(idx, punct);
+                    // The space after punctuation the link took is not kept on the next line:
+                    // "Maria Lopez," then "published March 14, 2026" (562/s20: JAWS's count
+                    // of the page is one less with it).
+                    text = rest.trim_start();
+                } else {
+                    text = rest;
                 }
-                text = rest;
             }
         }
         if text.is_empty() {
@@ -697,11 +733,12 @@ impl<'a> Builder<'a> {
     /// §4: a link is its own line. Text already on the line is flushed first, except a
     /// list marker, which prefixes the link line ("•  ‹ same page link › News").
     fn visit_link(&mut self, node: &AomNode) {
-        let prefix = if is_list_marker(&self.run.text) {
-            squash(&std::mem::take(&mut self.run).text)
+        let (prefix, marker_node) = if is_list_marker(&self.run.text) {
+            let run = std::mem::take(&mut self.run);
+            (squash(&run.text), run.node_id)
         } else {
             self.flush();
-            String::new()
+            (String::new(), None)
         };
         // A link named by aria-label says that name, not its text, and then its key
         // shortcuts: "Link commits by monatis Alt+ArrowUp" (JAWS on the dev box, GitHub).
@@ -743,7 +780,15 @@ impl<'a> Builder<'a> {
         let current = node.current_phrase().map(state_marker).unwrap_or_default();
         let speech = format!("{prefix}{}{current}{text}", role_marker(kind));
         let line_text = squash(&format!("{prefix} {text}"));
-        let off = self.emit(node.id, node.role.clone(), &line_text, speech);
+        let line_start = self.emit(node.id, node.role.clone(), &line_text, speech);
+        // A list item's bullet is not the link's: the link starts after it and its space,
+        // where the cursor goes on it [obs, 635/s10-s12: Left from the link's first letter
+        // says nothing (the space), then "•"].
+        let off = if prefix.is_empty() {
+            line_start
+        } else {
+            self.split_off_marker(line_start + prefix.len() + 1, marker_node)
+        };
         self.buffer.links.push(off);
         self.buffer.tab_stops.push(off);
         self.absorb_punctuation_into = Some(self.buffer.lines.len() - 1);
@@ -1515,6 +1560,59 @@ mod tests {
                 .insert("current".to_owned(), current.to_owned());
         }
         node
+    }
+
+    /// The text around inline links as JAWS's holds it [obs, 635; 562/s13, s17, s20]: the space
+    /// where a link's line break cuts the text stays ("Gazette. ", " open in May."), but not
+    /// after punctuation the link took ("Maria Lopez," then "published"); a list item's link
+    /// starts after its bullet and the bullet's space.
+    #[test]
+    fn the_spaces_beside_an_inline_link_are_kept() {
+        let paragraph = |id: usize, children: Vec<AomNode>| {
+            AomNode::new(id, Role::Paragraph).with_children(children)
+        };
+        let text = |id: usize, t: &str| AomNode::new(id, Role::Text).with_text(t);
+        let root = AomNode::new(0, Role::Document).with_children(vec![
+            paragraph(
+                1,
+                vec![
+                    text(2, "By "),
+                    link(3, "#author", "Maria Lopez", None),
+                    text(4, ", published March 14"),
+                ],
+            ),
+            paragraph(
+                5,
+                vec![
+                    text(6, "New "),
+                    link(7, "#rooms", "study rooms", None),
+                    text(8, " open in May."),
+                ],
+            ),
+            AomNode::new(9, Role::List).with_children(vec![AomNode::new(10, Role::ListItem)
+                .with_children(vec![
+                    text(11, "\u{2022} "),
+                    link(12, "#budget", "Council approves library budget", None),
+                ])]),
+        ]);
+        let buffer = crate::buffer::VirtualBuffer::from_aom(&root);
+        let lines: Vec<&str> = buffer.lines.iter().map(|l| l.text.as_str()).collect();
+        for kept in ["By ", "New ", " open in May.", "published March 14"] {
+            assert!(lines.contains(&kept), "{kept:?} in {lines:?}");
+        }
+        assert!(lines.contains(&"Maria Lopez,"), "{lines:?}");
+        let item = buffer
+            .lines
+            .iter()
+            .find(|l| l.text.starts_with('\u{2022}'))
+            .map(|l| l.start_offset);
+        let bullet = "\u{2022} ".len();
+        assert!(
+            item.is_some_and(|start| buffer.links.contains(&(start + bullet))),
+            "{:?} {:?}",
+            buffer.links,
+            item
+        );
     }
 
     fn github_tabs() -> crate::buffer::VirtualBuffer {

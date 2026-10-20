@@ -800,6 +800,22 @@ impl VirtualCursor {
             // element: S from an item I moved to says the item again, its text this time
             // [obs, 558/s6-s9], and D from a list stops on the bullet before the item's link
             // [obs, 290/s7, s8].
+            // A bullet in a span of its own, before the link that starts after it (as JAWS's
+            // does [obs, 635/s9]), is the same element.
+            if kind.is_some()
+                && crate::linearize::is_list_marker(text)
+                && self.in_list_item(span.node_id)
+            {
+                stops.push(ElementStop {
+                    offset: span.start_offset,
+                    node_id: span.node_id,
+                    kind: Some(ElementType::Text),
+                    span_start: span.start_offset,
+                    span_end: span.end_offset,
+                    marker: true,
+                });
+                continue;
+            }
             let marker_end = self.list_marker_end(span.node_id, text);
             if let Some(end) = marker_end.filter(|_| kind.is_some()) {
                 stops.push(ElementStop {
@@ -848,16 +864,19 @@ impl VirtualCursor {
         if content >= text.len() {
             return None;
         }
-        let in_item = self
-            .buffer
+        self.in_list_item(node_id).then_some(content)
+    }
+
+    /// Whether `node_id` is a list item or inside one.
+    fn in_list_item(&self, node_id: usize) -> bool {
+        self.buffer
             .node(node_id)
             .is_some_and(|n| n.role == Role::ListItem)
             || self
                 .buffer
                 .ancestors(node_id)
                 .iter()
-                .any(|a| a.role == Role::ListItem);
-        in_item.then_some(content)
+                .any(|a| a.role == Role::ListItem)
     }
 
     /// What S and D say on the element they land on: a bullet its line, as Down Arrow reads
@@ -1514,13 +1533,15 @@ impl VirtualCursor {
             .collect()
     }
 
-    /// Home or End with the virtual cursor: to the first or last character of the line
+    /// Home or End with the virtual cursor: to the line's first character, or past its last
     /// (JAWSHome, JAWSEnd), saying nothing [obs, 502/s5, s6].
     pub fn move_to_line_edge(&mut self, end: bool) {
         self.selection = None;
+        // End goes past the line's last letter, as JAWS's does: Left then says that letter
+        // [obs, 635/s20, s21].
         if let Some(line) = self.buffer.line_at_offset(self.offset) {
             self.offset = if end {
-                line.end_offset.saturating_sub(1).max(line.start_offset)
+                line.end_offset
             } else {
                 line.start_offset
             };
