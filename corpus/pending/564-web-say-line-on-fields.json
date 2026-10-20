@@ -1,0 +1,31 @@
+{
+  "id": "564-web-say-line-on-fields",
+  "name": "Say Line (Insert+Up) on a form field whose label is a line of its own, reached by its quick key (E, E, C), by the arrows (Up onto the combo box, Down from the top onto the first edit) and with the focus (Tab)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "E" },
+    { "id": "s2", "type": "key", "command": "Insert+Up" },
+    { "id": "s3", "type": "key", "command": "E" },
+    { "id": "s4", "type": "key", "command": "Insert+Up" },
+    { "id": "s5", "type": "key", "command": "C" },
+    { "id": "s6", "type": "key", "command": "Insert+Up" },
+    { "id": "s7", "type": "key", "command": "Down" },
+    { "id": "s8", "type": "key", "command": "Up" },
+    { "id": "s9", "type": "key", "command": "Insert+Up" },
+    { "id": "s10", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s11", "type": "key", "command": "Down" },
+    { "id": "s12", "type": "key", "command": "Down" },
+    { "id": "s13", "type": "key", "command": "Down" },
+    { "id": "s14", "type": "key", "command": "Down" },
+    { "id": "s15", "type": "key", "command": "Down" },
+    { "id": "s16", "type": "key", "command": "Insert+Up" },
+    { "id": "s17", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s18", "type": "key", "command": "Tab" },
+    { "id": "s19", "type": "key", "command": "NumpadPlus" },
+    { "id": "s20", "type": "key", "command": "Insert+Up" }
+  ]
+}

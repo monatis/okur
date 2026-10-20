@@ -26,6 +26,7 @@ To record one:
 | 561 | The clipboard keys: SayClipboard, View Clipboard Text, AppendSelectedTextToClipboard (the Windows-key scripts called by name) | `desktop-editor.ps1` |
 | 562 | Selections of growing size, each copied: where JAWS says "selected N characters up to" instead of the text, and how it counts | `news-article.html` |
 | 563 | aria-flowto: the division that flows to the lists read, then Equals and Shift+Equals along the flow | `virtual-keys.html` |
+| 564 | Say Line on a field whose label is a line of its own: reached by its quick key, by the arrows, and with the focus | `signup-form.html` |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.
