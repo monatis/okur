@@ -97,7 +97,6 @@ divergences! {
         "243-web-list-glance-highlights/s1",
         "244-web-list-divisions/s1",
         "245-web-list-tabs/s1",
-        "246-web-list-radio-buttons-enter/s1",
         "247-web-list-buttons-enter/s1",
         "248-web-list-combo-boxes-enter/s1",
         "249-web-list-edits-enter/s1",

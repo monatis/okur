@@ -70,7 +70,7 @@ A step can be in more than one entry; all of its entries apply.
   `235-web-list-check-boxes/s1`, `236-web-list-graphics/s1`, `239-web-list-paragraphs/s1`,
   `240-web-list-block-quotes/s1`, `241-web-list-regions/s1`, `242-web-list-tables/s1`,
   `243-web-list-glance-highlights/s1`, `244-web-list-divisions/s1`, `245-web-list-tabs/s1`,
-  `246-web-list-radio-buttons-enter/s1`, `247-web-list-buttons-enter/s1`,
+  `247-web-list-buttons-enter/s1`,
   `248-web-list-combo-boxes-enter/s1`, `249-web-list-edits-enter/s1`,
   `250-web-list-check-boxes-enter/s1`, `251-web-list-graphics-enter/s1`,
   `252-web-list-lists-enter/s1`, `254-web-list-paragraphs-enter/s1`,
@@ -87,6 +87,8 @@ A step can be in more than one entry; all of its entries apply.
   Virtual HTML Features. On the spoken layer, where JAWS's speech has no line breaks and no
   role marks, the step is compared from the last place JAWS says what Okur's speech begins
   with, the dialog's title and "dialog".
+- Round 54 (2026-10-20) recorded 246-274 again: JAWS said nothing before Select a Radio Button
+  in 246, so that step left the list.
 - Decided under the owner's ruling on JAWS's version, 2026-10-18.
 
 ### A stray comma in Virtual HTML Features
