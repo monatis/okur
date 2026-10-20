@@ -329,7 +329,12 @@ impl<'a> Builder<'a> {
             let node_id = run.node_id.unwrap_or_default();
             let role = run.role.unwrap_or(Role::Text);
             for line in crate::editing::text_lines(&run.text) {
+                // An empty line of it is a line of JAWS's text, a line break in its count
+                // [obs, 650/s1: the <pre> that starts with one].
                 if line.trim().is_empty() {
+                    if line.is_empty() {
+                        self.emit(node_id, role.clone(), "", String::new());
+                    }
                     continue;
                 }
                 for part in wrap_lines(&line, MAX_LINE_LENGTH) {
@@ -1016,14 +1021,16 @@ impl<'a> Builder<'a> {
         };
         let off = self.emit(node.id, node.role.clone(), &text, speech);
         // A text area's lines after its first are lines of the page, each with the field's
-        // role: " Edit | Mail ada@example.org ..." [obs, 508/s2-s5; 408's Say All].
+        // role: " Edit | Mail ada@example.org ..." [obs, 508/s2-s5; 408's Say All]. Their
+        // text is the field's, its leading spaces and tabs kept: JAWS's count of the page has
+        // them [obs, 650/s1].
         if node.role == Role::Edit {
             let kind = role_marker(msg::role_edit().as_str());
             for line in text_area_lines(node).into_iter().skip(1) {
                 self.emit(
                     node.id,
                     node.role.clone(),
-                    &squash(line),
+                    line.trim_end(),
                     format!("{kind}{line}"),
                 );
             }
@@ -1734,6 +1741,36 @@ mod tests {
             ]
         );
         assert!(buffer.lines.iter().all(|l| l.node_id == 1));
+    }
+
+    /// The text of a text area's lines keeps their leading spaces and tabs, and preformatted
+    /// text its empty lines, as JAWS's count of the page has them [obs, 650/s1].
+    #[test]
+    fn a_fields_and_a_pres_lines_keep_their_spaces() {
+        let mut notes = AomNode::new(1, Role::Edit)
+            .with_name("Notes")
+            .with_value("First line\n    four spaces\n\tone tab");
+        notes
+            .attributes
+            .insert("multiline".to_owned(), "true".to_owned());
+        let mut pre =
+            AomNode::new(2, Role::Paragraph)
+                .with_children(vec![AomNode::new(3, Role::Text).with_text("\n    indented")]);
+        pre.attributes
+            .insert("preformatted".to_owned(), "true".to_owned());
+        let root = AomNode::new(0, Role::Document).with_children(vec![notes, pre]);
+        let buffer = crate::buffer::VirtualBuffer::from_aom(&root);
+        let lines: Vec<&str> = buffer.lines.iter().map(|l| l.text.as_str()).collect();
+        assert!(lines.contains(&"    four spaces"), "{lines:?}");
+        assert!(lines.contains(&"\tone tab"), "{lines:?}");
+        let indented = lines.iter().position(|l| *l == "    indented");
+        assert_eq!(
+            indented
+                .and_then(|i| i.checked_sub(1))
+                .and_then(|i| lines.get(i)),
+            Some(&""),
+            "{lines:?}"
+        );
     }
 
     /// Shift+Period and Shift+Comma move to the end and the start of the innermost element

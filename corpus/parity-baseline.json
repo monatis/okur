@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur -- parity --write-baseline",
-  "matched_steps": 4582,
+  "matched_steps": 4583,
   "total_steps": 4750,
   "accepted_divergences": 104,
   "errors": [],
@@ -4859,7 +4859,7 @@
     "649-web-say-line-then-tab-escape-advanced/s1": "match",
     "649-web-say-line-then-tab-escape-advanced/s2": "match",
     "649-web-say-line-then-tab-escape-advanced/s3": "match",
-    "650-web-select-all-reading-settings/s1": "mismatch",
+    "650-web-select-all-reading-settings/s1": "match",
     "650-web-select-all-reading-settings/s2": "match",
     "651-web-select-all-color-grid/s1": "match",
     "651-web-select-all-color-grid/s2": "match",
