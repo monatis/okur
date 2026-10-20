@@ -482,7 +482,7 @@ mod windows_harness {
     /// `RunScript`); the clipboard's text is put back afterwards. `clear` empties the history
     /// after reading, so the next read holds only what follows.
     pub fn jaws_history(clear: bool) -> Result<String, String> {
-        let saved = clipboard_text();
+        let saved = crate::actions::clipboard_text();
         let sentinel = format!("__sr_history_{}__", std::process::id());
         crate::actions::set_clipboard_text(&sentinel)?;
         let jaws = Fsapi::connect()?;
@@ -491,7 +491,7 @@ mod windows_harness {
         let mut history = None;
         while Instant::now() < deadline {
             std::thread::sleep(Duration::from_millis(25));
-            if let Some(text) = clipboard_text().filter(|t| *t != sentinel) {
+            if let Some(text) = crate::actions::clipboard_text().filter(|t| *t != sentinel) {
                 history = Some(text);
                 break;
             }
@@ -502,37 +502,6 @@ mod windows_harness {
         crate::actions::set_clipboard_text(saved.as_deref().unwrap_or_default())?;
         // JAWS leaves the clipboard alone when its history is empty.
         Ok(history.unwrap_or_default())
-    }
-
-    /// The clipboard's Unicode text, if it holds any.
-    fn clipboard_text() -> Option<String> {
-        use windows::Win32::Foundation::HGLOBAL;
-        use windows::Win32::System::DataExchange::{
-            CloseClipboard, GetClipboardData, OpenClipboard,
-        };
-        use windows::Win32::System::Memory::{GlobalLock, GlobalUnlock};
-        const CF_UNICODETEXT: u32 = 13;
-        // SAFETY: the clipboard is opened and closed here; the data is only read while locked,
-        // up to its terminating zero.
-        unsafe {
-            OpenClipboard(None).ok()?;
-            let text = GetClipboardData(CF_UNICODETEXT).ok().and_then(|data| {
-                let block = HGLOBAL(data.0);
-                let ptr = GlobalLock(block).cast::<u16>();
-                if ptr.is_null() {
-                    return None;
-                }
-                let mut len = 0usize;
-                while *ptr.add(len) != 0 {
-                    len += 1;
-                }
-                let text = String::from_utf16_lossy(std::slice::from_raw_parts(ptr, len));
-                let _ = GlobalUnlock(block);
-                Some(text)
-            });
-            let _ = CloseClipboard();
-            text
-        }
     }
 
     /// JAWS's FSAPI automation object (`FreedomSci.JawsApi`), called through IDispatch.

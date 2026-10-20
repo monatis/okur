@@ -83,6 +83,12 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// The clipboard's text, read now (the clipboard keys). `None` when it holds none or
+    /// when unsupported.
+    fn clipboard_text(&self) -> Option<String> {
+        None
+    }
+
     /// Puts the focused text field's caret at character `offset` of `context`, the field as last
     /// read: the sentence keys move it. The move comes back as the field's caret event. Returns
     /// false when unsupported or not a field it can move.
@@ -133,6 +139,8 @@ pub struct RecordingActions {
     page_elements: bool,
     /// Takes `refresh_page`, as a live platform does; replay leaves it off too.
     pages: bool,
+    /// What the clipboard holds: what `copy_text` put there, or what a replay recorded.
+    clipboard: std::sync::Arc<std::sync::Mutex<Option<String>>>,
 }
 
 impl RecordingActions {
@@ -158,6 +166,14 @@ impl RecordingActions {
         Self {
             pages: true,
             ..Self::default()
+        }
+    }
+
+    /// Puts `text` on the recorded clipboard, as the application's Ctrl+C did in a
+    /// recording (a step's captured clipboard).
+    pub fn set_clipboard(&self, text: &str) {
+        if let Ok(mut clipboard) = self.clipboard.lock() {
+            *clipboard = Some(text.to_owned());
         }
     }
 
@@ -255,7 +271,12 @@ impl ApplicationActions for RecordingActions {
         if let Ok(mut log) = self.log.lock() {
             log.push((format!("copy {text}"), 0));
         }
+        self.set_clipboard(text);
         true
+    }
+
+    fn clipboard_text(&self) -> Option<String> {
+        self.clipboard.lock().ok().and_then(|c| c.clone())
     }
 
     fn move_mouse(&self, x: i32, y: i32) -> bool {

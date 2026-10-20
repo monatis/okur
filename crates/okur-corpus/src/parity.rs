@@ -445,6 +445,11 @@ fn run_scenario(
                         }
                     }
                 }
+                // The clipboard as the recording left it (an application's Ctrl+C), for the
+                // clipboard keys of later steps.
+                if let Some(text) = replay.clipboard_after(&step.id) {
+                    actions.set_clipboard(text);
+                }
                 // An edit key that changed nothing reports the field unchanged, as live.
                 if let Some(speech) = engine.settle_pending_edit() {
                     if spoken.is_empty() {
@@ -1012,6 +1017,9 @@ struct StepEvents {
     setup: Vec<okur_platform::event_trace::TraceEvent>,
     /// When each step began (unix ms), for the replay clock and key times.
     starts: std::collections::HashMap<String, u64>,
+    /// What the clipboard held after each step that captured it (`capture_clipboard`): the
+    /// application's Ctrl+C, which the clipboard keys then read.
+    clipboards: std::collections::HashMap<String, String>,
 }
 
 impl StepEvents {
@@ -1031,6 +1039,7 @@ impl StepEvents {
         let (_, events) = okur_platform::event_trace::read_trace(&trace_path)?;
         let mut by_step = std::collections::HashMap::new();
         let mut starts = std::collections::HashMap::new();
+        let mut clipboards = std::collections::HashMap::new();
         let steps = trial
             .get("step_results")
             .and_then(Value::as_array)
@@ -1080,16 +1089,28 @@ impl StepEvents {
             previous_end = Some(u128::from(end));
             by_step.insert(id.to_owned(), window);
             starts.insert(id.to_owned(), start);
+            if let Some(text) = step
+                .pointer("/observation/clipboard")
+                .and_then(Value::as_str)
+            {
+                clipboards.insert(id.to_owned(), text.to_owned());
+            }
         }
         Ok(Self {
             by_step,
             setup,
             starts,
+            clipboards,
         })
     }
 
     fn for_step(&self, step_id: &str) -> Vec<okur_platform::event_trace::TraceEvent> {
         self.by_step.get(step_id).cloned().unwrap_or_default()
+    }
+
+    /// What the clipboard held after step `step_id`, when the step captured it.
+    fn clipboard_after(&self, step_id: &str) -> Option<&str> {
+        self.clipboards.get(step_id).map(String::as_str)
     }
 }
 

@@ -507,6 +507,10 @@ mod windows_actions {
             self.send(Request::Copy(text.to_owned()))
         }
 
+        fn clipboard_text(&self) -> Option<String> {
+            crate::actions::clipboard_text()
+        }
+
         fn move_mouse(&self, x: i32, y: i32) -> bool {
             use windows::Win32::UI::WindowsAndMessaging::SetCursorPos;
             // SAFETY: plain Win32 call; it only moves the pointer.
@@ -576,6 +580,36 @@ pub fn capture_foreground_page() -> Result<okur_core::AomNode, crate::PlatformEr
             let snapshot = crate::uia_snapshot::capture_foreground_document(None, None)?;
             Ok(crate::uia_snapshot::to_aom(&snapshot.root))
         }
+    }
+}
+
+/// The clipboard's Unicode text (CF_UNICODETEXT), if it holds any.
+#[cfg(windows)]
+pub fn clipboard_text() -> Option<String> {
+    use windows::Win32::Foundation::HGLOBAL;
+    use windows::Win32::System::DataExchange::{CloseClipboard, GetClipboardData, OpenClipboard};
+    use windows::Win32::System::Memory::{GlobalLock, GlobalUnlock};
+    const CF_UNICODETEXT: u32 = 13;
+    // SAFETY: the clipboard is opened and closed here; the data is only read while locked, up
+    // to its terminating zero.
+    unsafe {
+        OpenClipboard(None).ok()?;
+        let text = GetClipboardData(CF_UNICODETEXT).ok().and_then(|data| {
+            let block = HGLOBAL(data.0);
+            let ptr = GlobalLock(block).cast::<u16>();
+            if ptr.is_null() {
+                return None;
+            }
+            let mut len = 0usize;
+            while *ptr.add(len) != 0 {
+                len += 1;
+            }
+            let text = String::from_utf16_lossy(std::slice::from_raw_parts(ptr, len));
+            let _ = GlobalUnlock(block);
+            Some(text)
+        });
+        let _ = CloseClipboard();
+        text
     }
 }
 
