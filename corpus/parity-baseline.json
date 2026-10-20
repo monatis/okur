@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur -- parity --write-baseline",
-  "matched_steps": 4679,
-  "total_steps": 4846,
+  "matched_steps": 4689,
+  "total_steps": 4857,
   "accepted_divergences": 104,
   "errors": [],
   "steps": {
@@ -4968,6 +4968,17 @@
     "659-web-text-colors-advanced/s6": "match",
     "659-web-text-colors-advanced/s7": "match",
     "659-web-text-colors-advanced/s8": "match",
-    "659-web-text-colors-advanced/s9": "match"
+    "659-web-text-colors-advanced/s9": "match",
+    "660-desktop-edit-page-and-word-keys/s1": "match",
+    "660-desktop-edit-page-and-word-keys/s10": "match",
+    "660-desktop-edit-page-and-word-keys/s11": "match",
+    "660-desktop-edit-page-and-word-keys/s2": "match",
+    "660-desktop-edit-page-and-word-keys/s3": "match",
+    "660-desktop-edit-page-and-word-keys/s4": "match",
+    "660-desktop-edit-page-and-word-keys/s5": "match",
+    "660-desktop-edit-page-and-word-keys/s6": "match",
+    "660-desktop-edit-page-and-word-keys/s7": "match",
+    "660-desktop-edit-page-and-word-keys/s8": "mismatch",
+    "660-desktop-edit-page-and-word-keys/s9": "match"
   }
 }

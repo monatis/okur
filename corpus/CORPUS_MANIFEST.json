@@ -4680,13 +4680,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "660-desktop-edit-page-and-word-keys",
+      "fixture": "desktop-editor.ps1",
+      "evidence": {
+        "sha256": "a846507e8168603fc707e34644f3185c4b61e3a6fbee939cd7b39dabf69546f5",
+        "capture_script_sha256": "bf89d333b1eca515dc0da6a3e2407056055b80d500d56700db4951d636c177c7",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 323,
-    "scenarios_with_evidence": 323,
-    "total_trials": 1023,
-    "successful_trials": 1023,
-    "deterministic_scenarios": 201
+    "scenarios": 324,
+    "scenarios_with_evidence": 324,
+    "total_trials": 1026,
+    "successful_trials": 1026,
+    "deterministic_scenarios": 202
   }
 }
