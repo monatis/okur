@@ -1,0 +1,82 @@
+{
+    "id":  "596-web-non-link-text-intermediate",
+    "name":  "N and Shift+N (Move to Next and Prior Non-Link Text), and their other keys Insert+Enter and Insert+Shift+Enter (at JAWS\u0027s Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 289-web-non-link-text)",
+    "category":  "realistic-pages",
+    "version":  "1.0.0",
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/virtual-keys.html",
+    "target_app":  "chrome",
+    "reset":  {
+                  "keys":  [
+                               "Ctrl+Home"
+                           ]
+              },
+    "steps":  [
+                  {
+                      "id":  "s1",
+                      "type":  "key",
+                      "command":  "N"
+                  },
+                  {
+                      "id":  "s2",
+                      "type":  "key",
+                      "command":  "N"
+                  },
+                  {
+                      "id":  "s3",
+                      "type":  "key",
+                      "command":  "N"
+                  },
+                  {
+                      "id":  "s4",
+                      "type":  "key",
+                      "command":  "N"
+                  },
+                  {
+                      "id":  "s5",
+                      "type":  "key",
+                      "command":  "N"
+                  },
+                  {
+                      "id":  "s6",
+                      "type":  "key",
+                      "command":  "N"
+                  },
+                  {
+                      "id":  "s7",
+                      "type":  "key",
+                      "command":  "Shift+N"
+                  },
+                  {
+                      "id":  "s8",
+                      "type":  "key",
+                      "command":  "Shift+N"
+                  },
+                  {
+                      "id":  "s9",
+                      "type":  "key",
+                      "command":  "Shift+N"
+                  },
+                  {
+                      "id":  "s10",
+                      "type":  "key",
+                      "command":  "Insert+Enter"
+                  },
+                  {
+                      "id":  "s11",
+                      "type":  "key",
+                      "command":  "Insert+Enter"
+                  },
+                  {
+                      "id":  "s12",
+                      "type":  "key",
+                      "command":  "Insert+Shift+Enter"
+                  }
+              ],
+    "jaws_settings":  {
+                          "DEFAULT.JCF":  {
+                                              "Options":  {
+                                                              "Verbosity":  "1"
+                                                          }
+                                          }
+                      }
+}

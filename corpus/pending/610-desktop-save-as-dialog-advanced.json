@@ -1,0 +1,87 @@
+{
+    "id":  "610-desktop-save-as-dialog-advanced",
+    "name":  "Windows\u0027 Save As dialog in a folder of its own: opened, Insert+Tab, Insert+T, Tab through its controls and Shift+Tab back, Say Window (Insert+B), and Escape (at JAWS\u0027s Advanced verbosity, DEFAULT.JCF Options Verbosity=2; otherwise as 524-desktop-save-as-dialog)",
+    "category":  "desktop",
+    "version":  "1.0.0",
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/desktop-file-dialogs.ps1",
+    "target_app":  "desktop",
+    "launch":  {
+                   "window_title":  "SR File Dialog Fixture"
+               },
+    "reset":  {
+                  "keys":  [
+
+                           ]
+              },
+    "steps":  [
+                  {
+                      "id":  "s1",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s2",
+                      "type":  "key",
+                      "command":  "Space",
+                      "settle_max_ms":  20000
+                  },
+                  {
+                      "id":  "s3",
+                      "type":  "key",
+                      "command":  "Insert+Tab"
+                  },
+                  {
+                      "id":  "s4",
+                      "type":  "key",
+                      "command":  "Insert+T"
+                  },
+                  {
+                      "id":  "s5",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s6",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s7",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s8",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s9",
+                      "type":  "key",
+                      "command":  "Shift+Tab"
+                  },
+                  {
+                      "id":  "s10",
+                      "type":  "key",
+                      "command":  "Insert+B",
+                      "settle_max_ms":  30000
+                  },
+                  {
+                      "id":  "s11",
+                      "type":  "key",
+                      "command":  "Escape"
+                  },
+                  {
+                      "id":  "s12",
+                      "type":  "key",
+                      "command":  "Insert+Up"
+                  }
+              ],
+    "jaws_settings":  {
+                          "DEFAULT.JCF":  {
+                                              "Options":  {
+                                                              "Verbosity":  "2"
+                                                          }
+                                          }
+                      }
+}

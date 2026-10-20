@@ -1,0 +1,92 @@
+{
+    "id":  "602-desktop-notepad-find-dialog-intermediate",
+    "name":  "Notepad\u0027s Find dialog (Ctrl+F): its default button (Insert+E) and hot keys (Shift+Numpad5) on Find what and after Tab, Say Window (Insert+B), Match case with Alt+C, Direction by Tab and the arrows, and Escape (at JAWS\u0027s Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 540-desktop-notepad-find-dialog)",
+    "category":  "desktop",
+    "version":  "1.0.0",
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+    "target_app":  "desktop",
+    "launch":  {
+                   "window_title":  "sr-notepad-fixture.txt - Notepad"
+               },
+    "reset":  {
+                  "keys":  [
+                               "Ctrl+Home"
+                           ]
+              },
+    "steps":  [
+                  {
+                      "id":  "s1",
+                      "type":  "key",
+                      "command":  "Ctrl+F",
+                      "settle_max_ms":  15000
+                  },
+                  {
+                      "id":  "s2",
+                      "type":  "key",
+                      "command":  "Insert+E"
+                  },
+                  {
+                      "id":  "s3",
+                      "type":  "key",
+                      "command":  "Shift+Numpad5"
+                  },
+                  {
+                      "id":  "s4",
+                      "type":  "key",
+                      "command":  "Insert+B",
+                      "settle_max_ms":  20000
+                  },
+                  {
+                      "id":  "s5",
+                      "type":  "key",
+                      "command":  "Alt+C"
+                  },
+                  {
+                      "id":  "s6",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s7",
+                      "type":  "key",
+                      "command":  "Shift+Numpad5"
+                  },
+                  {
+                      "id":  "s8",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s9",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s10",
+                      "type":  "key",
+                      "command":  "Up"
+                  },
+                  {
+                      "id":  "s11",
+                      "type":  "key",
+                      "command":  "Insert+E"
+                  },
+                  {
+                      "id":  "s12",
+                      "type":  "key",
+                      "command":  "Escape"
+                  },
+                  {
+                      "id":  "s13",
+                      "type":  "key",
+                      "command":  "Insert+Up"
+                  }
+              ],
+    "jaws_settings":  {
+                          "DEFAULT.JCF":  {
+                                              "Options":  {
+                                                              "Verbosity":  "1"
+                                                          }
+                                          }
+                      }
+}

@@ -1,0 +1,140 @@
+{
+    "id":  "601-desktop-screen-sensitive-help-intermediate",
+    "name":  "Screen-sensitive help (Insert+F1) on an edit, a check box, a combo box, a list box and a button, each message closed with Escape (at JAWS\u0027s Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 526-desktop-screen-sensitive-help)",
+    "category":  "desktop",
+    "version":  "1.0.0",
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/desktop-forms.ps1",
+    "target_app":  "desktop",
+    "launch":  {
+                   "window_title":  "SR Desktop Fixture"
+               },
+    "reset":  {
+                  "keys":  [
+
+                           ]
+              },
+    "steps":  [
+                  {
+                      "id":  "s1",
+                      "type":  "key",
+                      "command":  "Insert+F1",
+                      "settle_max_ms":  20000
+                  },
+                  {
+                      "id":  "s2",
+                      "type":  "key",
+                      "command":  "Escape"
+                  },
+                  {
+                      "id":  "s3",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s4",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s5",
+                      "type":  "key",
+                      "command":  "Insert+F1",
+                      "settle_max_ms":  20000
+                  },
+                  {
+                      "id":  "s6",
+                      "type":  "key",
+                      "command":  "Escape"
+                  },
+                  {
+                      "id":  "s7",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s8",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s9",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s10",
+                      "type":  "key",
+                      "command":  "Insert+F1",
+                      "settle_max_ms":  20000
+                  },
+                  {
+                      "id":  "s11",
+                      "type":  "key",
+                      "command":  "Escape"
+                  },
+                  {
+                      "id":  "s12",
+                      "type":  "key",
+                      "command":  "Tab"
+                  },
+                  {
+                      "id":  "s13",
+                      "type":  "key",
+                      "command":  "Insert+F1",
+                      "settle_max_ms":  20000
+                  },
+                  {
+                      "id":  "s14",
+                      "type":  "key",
+                      "command":  "Escape"
+                  },
+                  {
+                      "id":  "s15",
+                      "type":  "key",
+                      "command":  "Shift+Tab"
+                  },
+                  {
+                      "id":  "s16",
+                      "type":  "key",
+                      "command":  "Shift+Tab"
+                  },
+                  {
+                      "id":  "s17",
+                      "type":  "key",
+                      "command":  "Shift+Tab"
+                  },
+                  {
+                      "id":  "s18",
+                      "type":  "key",
+                      "command":  "Shift+Tab"
+                  },
+                  {
+                      "id":  "s19",
+                      "type":  "key",
+                      "command":  "Shift+Tab"
+                  },
+                  {
+                      "id":  "s20",
+                      "type":  "key",
+                      "command":  "Shift+Tab"
+                  },
+                  {
+                      "id":  "s21",
+                      "type":  "key",
+                      "command":  "Insert+F1",
+                      "settle_max_ms":  20000
+                  },
+                  {
+                      "id":  "s22",
+                      "type":  "key",
+                      "command":  "Escape"
+                  }
+              ],
+    "jaws_settings":  {
+                          "DEFAULT.JCF":  {
+                                              "Options":  {
+                                                              "Verbosity":  "1"
+                                                          }
+                                          }
+                      }
+}

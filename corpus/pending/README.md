@@ -21,6 +21,8 @@ To record one:
 | 570 | The Speech History's other layer keys (`Default.JKM`): Insert+Space, Ctrl+H copies it to the clipboard, Shift+H clears it, then H shows what was said since. Round 70 failed only at Ctrl+H, whose own "Copy speech history to clipboard" the harness took for a leaked copy; the step now says it copies the history (`copies_speech_history`, run-scenario.ps1) | `news-article.html` |
 | 571 | Insert+F4 (ShutDownJAWS) asks before quitting; Tab in its question, Escape answers no, then Insert+Tab in Notepad. Round 71 sent Tab and Escape as keys, which JAWS's elevated question never received (no event traced after it opened, Insert+Tab silent); they now go through JAWS's TypeKey. Last in its batch | `desktop-notepad.ps1` |
 | 592 | A table's edges and its start at Intermediate verbosity: which of the table messages JAWS shortens beyond "Last row" (578/s6) and "3 columns and 3 rows" (578/s1) | `news-article.html` |
+| 593-612 | Ten more recorded scenarios at Intermediate (593-602) and Advanced (603-612) verbosity, generated from 216, 228, 283, 289, 302, 501, 504, 524, 526 and 540 with their steps unchanged | as their sources |
+| 613 | A Turkish page (`lang="tr"`, ç ğ ı İ ö ş ü) read by character, word and line, spelled, and with Say All, in JAWS's English voice (old-pc's language detection is off) | `turkish-text.html` (here) |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.

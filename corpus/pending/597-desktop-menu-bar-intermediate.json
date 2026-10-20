@@ -1,0 +1,65 @@
+{
+    "id":  "597-desktop-menu-bar-intermediate",
+    "name":  "Open the menu bar, walk the File menu, and close it (at JAWS\u0027s Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 302-desktop-menu-bar)",
+    "category":  "desktop",
+    "version":  "1.0.0",
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/desktop-forms.ps1",
+    "target_app":  "desktop",
+    "launch":  {
+                   "window_title":  "SR Desktop Fixture"
+               },
+    "reset":  {
+                  "keys":  [
+
+                           ]
+              },
+    "steps":  [
+                  {
+                      "id":  "s1",
+                      "type":  "key",
+                      "command":  "Alt"
+                  },
+                  {
+                      "id":  "s2",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s3",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s4",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s5",
+                      "type":  "key",
+                      "command":  "Right"
+                  },
+                  {
+                      "id":  "s6",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s7",
+                      "type":  "key",
+                      "command":  "Escape"
+                  },
+                  {
+                      "id":  "s8",
+                      "type":  "key",
+                      "command":  "Escape"
+                  }
+              ],
+    "jaws_settings":  {
+                          "DEFAULT.JCF":  {
+                                              "Options":  {
+                                                              "Verbosity":  "1"
+                                                          }
+                                          }
+                      }
+}

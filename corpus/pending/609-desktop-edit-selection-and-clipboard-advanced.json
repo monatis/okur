@@ -1,0 +1,144 @@
+{
+    "id":  "609-desktop-edit-selection-and-clipboard-advanced",
+    "name":  "In a native multiline edit: Say and Spell Selected Text, copy, paste, cut, undo, Ctrl+Delete, Say To and From Cursor, Insert+Right and Left, sentence and paragraph, and the window\u0027s bottom and top line (at JAWS\u0027s Advanced verbosity, DEFAULT.JCF Options Verbosity=2; otherwise as 504-desktop-edit-selection-and-clipboard)",
+    "category":  "desktop",
+    "version":  "1.0.0",
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/desktop-editor.ps1",
+    "target_app":  "desktop",
+    "launch":  {
+                   "window_title":  "SR Editor Fixture"
+               },
+    "reset":  {
+                  "keys":  [
+                               "Ctrl+Home"
+                           ]
+              },
+    "steps":  [
+                  {
+                      "id":  "s1",
+                      "type":  "key",
+                      "command":  "Shift+End"
+                  },
+                  {
+                      "id":  "s2",
+                      "type":  "key",
+                      "command":  "Insert+Shift+Down"
+                  },
+                  {
+                      "id":  "s3",
+                      "type":  "key",
+                      "command":  "Ctrl+C",
+                      "capture_clipboard":  true
+                  },
+                  {
+                      "id":  "s4",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s5",
+                      "type":  "key",
+                      "command":  "Home"
+                  },
+                  {
+                      "id":  "s6",
+                      "type":  "key",
+                      "command":  "Ctrl+V"
+                  },
+                  {
+                      "id":  "s7",
+                      "type":  "key",
+                      "command":  "Ctrl+Z"
+                  },
+                  {
+                      "id":  "s8",
+                      "type":  "key",
+                      "command":  "Ctrl+Right"
+                  },
+                  {
+                      "id":  "s9",
+                      "type":  "key",
+                      "command":  "Insert+Home"
+                  },
+                  {
+                      "id":  "s10",
+                      "type":  "key",
+                      "command":  "Insert+PageUp"
+                  },
+                  {
+                      "id":  "s11",
+                      "type":  "key",
+                      "command":  "Insert+Home",
+                      "repeat":  2
+                  },
+                  {
+                      "id":  "s12",
+                      "type":  "key",
+                      "command":  "Insert+Right"
+                  },
+                  {
+                      "id":  "s13",
+                      "type":  "key",
+                      "command":  "Insert+Left"
+                  },
+                  {
+                      "id":  "s14",
+                      "type":  "key",
+                      "command":  "Alt+Numpad5"
+                  },
+                  {
+                      "id":  "s15",
+                      "type":  "key",
+                      "command":  "Ctrl+Numpad5"
+                  },
+                  {
+                      "id":  "s16",
+                      "type":  "key",
+                      "command":  "Shift+Right"
+                  },
+                  {
+                      "id":  "s17",
+                      "type":  "key",
+                      "command":  "Shift+Right"
+                  },
+                  {
+                      "id":  "s18",
+                      "type":  "key",
+                      "command":  "Insert+Shift+Down",
+                      "repeat":  2
+                  },
+                  {
+                      "id":  "s19",
+                      "type":  "key",
+                      "command":  "Ctrl+X",
+                      "capture_clipboard":  true
+                  },
+                  {
+                      "id":  "s20",
+                      "type":  "key",
+                      "command":  "Ctrl+Z"
+                  },
+                  {
+                      "id":  "s21",
+                      "type":  "key",
+                      "command":  "Ctrl+Delete"
+                  },
+                  {
+                      "id":  "s22",
+                      "type":  "key",
+                      "command":  "Insert+PageDown"
+                  },
+                  {
+                      "id":  "s23",
+                      "type":  "key",
+                      "command":  "Insert+End"
+                  }
+              ],
+    "jaws_settings":  {
+                          "DEFAULT.JCF":  {
+                                              "Options":  {
+                                                              "Verbosity":  "2"
+                                                          }
+                                          }
+                      }
+}

@@ -1,0 +1,95 @@
+{
+    "id":  "598-web-virtual-selection-and-copy-intermediate",
+    "name":  "Selecting with the virtual cursor (Shift+Right, Ctrl+Shift+Right, Shift+End, Shift+Down, Shift+Home, Ctrl+Shift+Home, Ctrl+A), Say and Spell Selected Text (Insert+Shift+Down), and Ctrl+C copying the selection (at JAWS\u0027s Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 501-web-virtual-selection-and-copy)",
+    "category":  "realistic-pages",
+    "version":  "1.0.0",
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+    "target_app":  "chrome",
+    "reset":  {
+                  "keys":  [
+                               "Ctrl+Home"
+                           ]
+              },
+    "steps":  [
+                  {
+                      "id":  "s1",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s2",
+                      "type":  "key",
+                      "command":  "Shift+Right"
+                  },
+                  {
+                      "id":  "s3",
+                      "type":  "key",
+                      "command":  "Shift+Right"
+                  },
+                  {
+                      "id":  "s4",
+                      "type":  "key",
+                      "command":  "Insert+Shift+Down",
+                      "repeat":  2
+                  },
+                  {
+                      "id":  "s5",
+                      "type":  "key",
+                      "command":  "Ctrl+Shift+Right"
+                  },
+                  {
+                      "id":  "s6",
+                      "type":  "key",
+                      "command":  "Shift+End"
+                  },
+                  {
+                      "id":  "s7",
+                      "type":  "key",
+                      "command":  "Shift+Down"
+                  },
+                  {
+                      "id":  "s8",
+                      "type":  "key",
+                      "command":  "Insert+Shift+Down"
+                  },
+                  {
+                      "id":  "s9",
+                      "type":  "key",
+                      "command":  "Ctrl+C",
+                      "capture_clipboard":  true
+                  },
+                  {
+                      "id":  "s10",
+                      "type":  "key",
+                      "command":  "Down"
+                  },
+                  {
+                      "id":  "s11",
+                      "type":  "key",
+                      "command":  "Shift+Home"
+                  },
+                  {
+                      "id":  "s12",
+                      "type":  "key",
+                      "command":  "Ctrl+Shift+Home"
+                  },
+                  {
+                      "id":  "s13",
+                      "type":  "key",
+                      "command":  "Ctrl+A"
+                  },
+                  {
+                      "id":  "s14",
+                      "type":  "key",
+                      "command":  "Ctrl+C",
+                      "capture_clipboard":  true
+                  }
+              ],
+    "jaws_settings":  {
+                          "DEFAULT.JCF":  {
+                                              "Options":  {
+                                                              "Verbosity":  "1"
+                                                          }
+                                          }
+                      }
+}
