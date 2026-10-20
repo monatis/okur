@@ -15,9 +15,6 @@ To record one:
 | 509 | Keyboard Help (Insert+1), Insert+F1, Insert+H, Insert+W. Recorded in round 13 and not imported: in Keyboard Help mode JAWS describes the harness's history copy instead of running it, so those steps time out (their synthesizer text is recorded) | `desktop-dialogs.ps1` |
 | 518 | Reading a Word document | `desktop-word.ps1` (here) |
 | 519 | Word's headings list, spelling errors, revisions | `desktop-word.ps1` (here) |
-| 548, 549, 554 | The forms fixture at Intermediate, Advanced and Beginner verbosity (JAWS's `Verbosity` in DEFAULT.JCF's Options, set for the recording) | `desktop-forms.ps1` |
-| 550, 551 | A message box at Intermediate and Advanced verbosity | `desktop-message-box.ps1` |
-| 552, 553, 555 | The sign-up form at Intermediate, Advanced and Beginner verbosity | `signup-form.html` |
 | 556 | Shift+Period and Shift+Comma across a news article: regions, the article, a nested list (twice at its end), a table cell, a block quote, the footer | `news-article.html` |
 | 557 | The same keys where no element is around the text | `doc-reading.html` |
 | 558 | S and D, with Shift, and Ctrl+Insert+Right, Left and Up from paragraphs, list items, a list, links and headings: what JAWS counts as the same element | `same-element.html` (new) |

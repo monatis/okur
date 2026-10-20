@@ -3176,13 +3176,125 @@
         "deterministic": false,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "548-desktop-forms-verbosity-intermediate",
+      "fixture": "desktop-forms.ps1",
+      "evidence": {
+        "sha256": "834ba7874e87510a232d940cccac3f179ed0ba1127c12b04da70d79d5676c54a",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "549-desktop-forms-verbosity-advanced",
+      "fixture": "desktop-forms.ps1",
+      "evidence": {
+        "sha256": "aeedf7459a215f751d70752312acf1199296a23d0b4338333569ed8237374620",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "550-desktop-message-box-verbosity-intermediate",
+      "fixture": "desktop-message-box.ps1",
+      "evidence": {
+        "sha256": "9b94b28e42b3ccd46f7297c1c12942545c9a92864104749cdec66af0b1adc42d",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "551-desktop-message-box-verbosity-advanced",
+      "fixture": "desktop-message-box.ps1",
+      "evidence": {
+        "sha256": "6cfdc76fa485e7277c2bbd8585ccd9799a3498dcc40fa9321ec4347794b8ff2a",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "552-web-form-verbosity-intermediate",
+      "fixture": "signup-form.html",
+      "evidence": {
+        "sha256": "9f30c064087224a6dee9f4e4cee0e0f4c28b2be633556ce2f4fc6a006a5e7040",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "553-web-form-verbosity-advanced",
+      "fixture": "signup-form.html",
+      "evidence": {
+        "sha256": "e31f776e3982541b76996cdbcbbbf3d9a8fca92c8042a35bd276e078017aed49",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "554-desktop-forms-verbosity-beginner",
+      "fixture": "desktop-forms.ps1",
+      "evidence": {
+        "sha256": "ddfa1ab59a2f505477792f0047072d78d64e31385a917049db26c761374bb68c",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "555-web-form-verbosity-beginner",
+      "fixture": "signup-form.html",
+      "evidence": {
+        "sha256": "fa533808fd73e642ea8d6974d938cbc6c241e556445e578da0230a5ba1ec973f",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 217,
-    "scenarios_with_evidence": 217,
-    "total_trials": 705,
-    "successful_trials": 705,
-    "deterministic_scenarios": 140
+    "scenarios": 225,
+    "scenarios_with_evidence": 225,
+    "total_trials": 729,
+    "successful_trials": 729,
+    "deterministic_scenarios": 148
   }
 }
