@@ -1,0 +1,27 @@
+{
+  "id": "627-desktop-clipboard-say-view-append",
+  "name": "JAWS's clipboard keys in a native edit, each chord in its key map's order (520's Insert+Win+X opened Windows' Win+X menu): a line copied, Say Clipboard (Windows+Insert+X), View Clipboard Text (Insert+Space, then C) and Escape, then the next line selected and appended (Insert+Windows+C), Say Clipboard and View Clipboard Text again",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-editor.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Editor Fixture" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Shift+End" },
+    { "id": "s2", "type": "key", "command": "Ctrl+C" },
+    { "id": "s3", "type": "key", "command": "Win+Insert+X" },
+    { "id": "s4", "type": "key", "command": "Insert+Space" },
+    { "id": "s5", "type": "key", "command": "C", "settle_max_ms": 15000 },
+    { "id": "s6", "type": "key", "command": "Insert+Up" },
+    { "id": "s7", "type": "key", "command": "Escape" },
+    { "id": "s8", "type": "key", "command": "Down" },
+    { "id": "s9", "type": "key", "command": "Shift+End" },
+    { "id": "s10", "type": "key", "command": "Insert+Win+C" },
+    { "id": "s11", "type": "key", "command": "Win+Insert+X" },
+    { "id": "s12", "type": "key", "command": "Insert+Space" },
+    { "id": "s13", "type": "key", "command": "C", "settle_max_ms": 15000 },
+    { "id": "s14", "type": "key", "command": "Escape" },
+    { "id": "s15", "type": "key", "command": "Insert+Up" }
+  ]
+}
