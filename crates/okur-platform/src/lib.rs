@@ -48,12 +48,20 @@ pub fn init() {
     #[cfg(windows)]
     {
         use windows::Win32::UI::HiDpi::{
+            GetAwarenessFromDpiAwarenessContext, GetThreadDpiAwarenessContext,
+        };
+        use windows::Win32::UI::HiDpi::{
             SetProcessDpiAwarenessContext, DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2,
         };
         // SAFETY: a process-wide setting with a constant argument, made at startup; it fails
-        // harmlessly when the awareness is already set.
-        let _ =
+        // harmlessly when the awareness is already set (the programs' manifests set it).
+        let set =
             unsafe { SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2) };
+        // SAFETY: reads of this thread's own awareness; no preconditions.
+        let awareness =
+            unsafe { GetAwarenessFromDpiAwarenessContext(GetThreadDpiAwarenessContext()) };
+        // 2 is per-monitor: positions and sizes are real pixels.
+        tracing::info!(set = set.is_ok(), awareness = awareness.0, "DPI awareness");
     }
     tracing::info!("okur-platform initialized");
 }

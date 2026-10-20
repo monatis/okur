@@ -3142,9 +3142,22 @@ mod capture {
                         .ok()
                         .map(|()| rect)
                     });
+                let from_window = window.is_some();
                 let rect = window.or_else(|| unsafe { element.CurrentBoundingRectangle() }.ok());
                 if let Some(r) = rect {
                     focused.bounds = Some([r.left, r.top, r.right, r.bottom]);
+                    // SAFETY: reads of this thread's awareness; no preconditions.
+                    let awareness = unsafe {
+                        windows::Win32::UI::HiDpi::GetAwarenessFromDpiAwarenessContext(
+                            windows::Win32::UI::HiDpi::GetThreadDpiAwarenessContext(),
+                        )
+                    };
+                    tracing::debug!(
+                        bounds = ?focused.bounds,
+                        from_window,
+                        awareness = awareness.0,
+                        "focus bounds"
+                    );
                 }
             }
             stages.push(("chain", clock.elapsed().as_millis()));
