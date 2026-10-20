@@ -4,7 +4,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Rust 1.99.0](https://img.shields.io/badge/rust-1.99.0-orange.svg?logo=rust)](rust-toolchain.toml)
 [![Platforms: Windows; macOS in progress](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%28in%20progress%29-lightgrey.svg)](#platforms)
-[![JAWS parity: 3391 of 3655 recorded steps](https://img.shields.io/badge/JAWS%20parity-3391%2F3655%20steps-brightgreen.svg)](#where-it-stands)
+[![JAWS parity: 3484 of 3694 recorded steps](https://img.shields.io/badge/JAWS%20parity-3484%2F3694%20steps-brightgreen.svg)](#where-it-stands)
 
 **An open screen reader that keeps your JAWS muscle memory.**
 
@@ -53,19 +53,19 @@ Where to go from here:
 > Those everyday gaps on Windows are being closed first; macOS, whose accessibility layer is
 > in place, comes after them.
 
-Every figure is tool output, rerun for this README at commit `7235929` (2026-10-20).
+Every figure is tool output, rerun for this README at commit `86ec435` (2026-10-20).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **3391 of 3655** | `okur parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **3281 of 3603** | `okur parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **76** | `okur parity` |
-| Recorded JAWS scenarios, trials | **280, 894** (all 894 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1211 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **3484 of 3694** | `okur parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **3365 of 3642** | `okur parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **88** | `okur parity` |
+| Recorded JAWS scenarios, trials | **283, 903** (all 903 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1220 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
-The 76 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
+The 88 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
 accidents, which Okur does not copy: in a data grid, JAWS adds "Column 65535, Row 65535", a
 place it failed to find. Others are JAWS's help texts, which are Freedom Scientific's writing;
 Okur says its help in its own words. Each one is listed, with the reason and who decided it,
