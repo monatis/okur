@@ -1793,6 +1793,7 @@ To activate press Enter."
             selection: None,
             font: None,
             word: None,
+            misspelled: Vec::new(),
         });
         assert_eq!(
             norm(&focus_speech(&notepad, None).render()),
@@ -1812,6 +1813,7 @@ To activate press Enter."
             selection: None,
             font: None,
             word: None,
+            misspelled: Vec::new(),
         });
         assert_eq!(
             norm(&focus_speech(&code, None).render()),

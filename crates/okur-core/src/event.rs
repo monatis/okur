@@ -29,6 +29,10 @@ pub struct TextContext {
     /// where the field reports no word unit (Win32 edits): words then end at whitespace.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub word: Option<(usize, usize)>,
+    /// The words the field marks as misspelled, as `(start, end)` (Chromium's
+    /// `invalid:spelling` text attribute): JAWS says "Misspelled" with them [obs, 284/s6, s9].
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub misspelled: Vec<(usize, usize)>,
 }
 
 /// The font at a text field's caret, as UIA text attributes or a rich edit report it.

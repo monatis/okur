@@ -187,6 +187,16 @@ mod reader {
                 )
             }),
             word: okur_core::editing::web_word_at(&state.text, caret),
+            misspelled: state
+                .misspelled
+                .iter()
+                .map(|&(s, e)| {
+                    (
+                        utf16_to_chars(&state.text, s),
+                        utf16_to_chars(&state.text, e),
+                    )
+                })
+                .collect(),
             text: state.text,
             font: None,
         }
@@ -256,6 +266,7 @@ mod reader {
                 text,
                 font: win32_font(hwnd),
                 word: None,
+                misspelled: Vec::new(),
             })
         }
     }
@@ -316,6 +327,7 @@ mod reader {
                 selection: (start < end).then_some((start, end)),
                 font: uia_font(&selection),
                 word,
+                misspelled: Vec::new(),
             })
         }
     }
@@ -511,6 +523,7 @@ mod tests {
             selection: Some((1, 3)),
             font: None,
             word: None,
+            misspelled: Vec::new(),
         };
         assert_eq!(
             ia2_position(&context),

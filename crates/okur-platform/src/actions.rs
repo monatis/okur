@@ -223,6 +223,7 @@ mod windows_actions {
                                     selection: None,
                                     font: None,
                                     word: None,
+                                    misspelled: Vec::new(),
                                 });
                                 let _ = events.send(AccessibilityEvent::TextContext(context));
                             }
@@ -637,6 +638,7 @@ mod tests {
                 ..Default::default()
             }),
             word: None,
+            misspelled: Vec::new(),
         })
     }
 

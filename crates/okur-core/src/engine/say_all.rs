@@ -364,6 +364,7 @@ mod tests {
             selection: None,
             font: None,
             word: None,
+            misspelled: Vec::new(),
         });
         let _ = engine.start_field_say_all();
         assert_eq!(

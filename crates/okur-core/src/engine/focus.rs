@@ -544,6 +544,33 @@ impl ScreenReaderEngine {
                     Some(speech).filter(|s| !s.trim().is_empty())
                 })
                 .or_else(|| focus.name.clone());
+            // A field holding a spelling error: JAWS's mark before its name and before its
+            // value, "‹Misspelled › Full name Edit Required | ‹Misspelled › ada" [obs, 284/s6,
+            // s8].
+            if let Some(mark) = focus
+                .text
+                .as_ref()
+                .filter(|_| target_role == Some(Role::Edit))
+                .and_then(crate::editing::misspelled_mark)
+            {
+                let value = target_id
+                    .and_then(|id| self.cursor.buffer.node(id))
+                    .and_then(|n| n.value.clone())
+                    .map(|v| v.trim().to_owned());
+                speech = speech.map(|s| {
+                    s.lines()
+                        .enumerate()
+                        .map(|(i, line)| {
+                            if i == 0 || value.as_deref() == Some(line.trim()) {
+                                format!("{mark}{line}")
+                            } else {
+                                line.to_owned()
+                            }
+                        })
+                        .collect::<Vec<_>>()
+                        .join("\n")
+                });
+            }
             // A plain element that takes the focus is said by the name the page gives it then:
             // "Siz okur 1 14:46 Okundu Daha fazla seçenek için sol veya sağ ok tuşuna basarak
             // bağlam menüsüne erişin", WhatsApp's message (JAWS on the dev box, 2026-10-17).

@@ -63,6 +63,8 @@ pub struct Ia2TextState {
     pub text: String,
     pub caret: i32,
     pub selection: Option<(i32, i32)>,
+    /// The runs marked as spelling errors (`invalid:spelling`), in UTF-16 code units.
+    pub misspelled: Vec<(i32, i32)>,
 }
 
 /// Where a text object's caret and first selection are, and its length, in UTF-16 code
@@ -858,11 +860,47 @@ mod com {
                         .ok()
                         .map_err(|e| err("caretOffset", e))?;
                 }
+                let text = all.to_string();
+                let misspelled = self.misspelled(text.encode_utf16().count());
                 Ok(Ia2TextState {
-                    text: all.to_string(),
+                    text,
                     caret: caret.max(0),
                     selection: self.selection(),
+                    misspelled,
                 })
+            }
+
+            /// The runs of its text marked as spelling errors (`invalid:spelling`), in UTF-16
+            /// code units; at most 256 runs are read.
+            fn misspelled(&self, length: usize) -> Vec<(i32, i32)> {
+                const MAX_RUNS: usize = 256;
+                let length = i32::try_from(length).unwrap_or(i32::MAX);
+                let mut ranges = Vec::new();
+                let mut offset = 0i32;
+                for _ in 0..MAX_RUNS {
+                    if offset >= length {
+                        break;
+                    }
+                    let (mut start, mut end) = (0i32, 0i32);
+                    let mut attrs = BSTR::default();
+                    // SAFETY: out-pointers to locals on a valid interface; BSTR ownership
+                    // transfers to `attrs`.
+                    let read = unsafe {
+                        self.0
+                            .get_attributes(offset, &mut start, &mut end, &mut attrs)
+                    };
+                    if read.is_err() || end <= offset {
+                        break;
+                    }
+                    let spelling = parse_attributes(&attrs.to_string())
+                        .get("invalid")
+                        .is_some_and(|kind| kind.split(',').any(|k| k.trim() == "spelling"));
+                    if spelling {
+                        ranges.push((start, end));
+                    }
+                    offset = end;
+                }
+                ranges
             }
 
             fn selection(&self) -> Option<(i32, i32)> {

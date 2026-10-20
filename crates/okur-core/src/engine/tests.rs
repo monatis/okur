@@ -280,6 +280,7 @@ fn a_native_field_says_its_paragraph_formatting() {
             ..Default::default()
         }),
         word: None,
+        misspelled: Vec::new(),
     });
     engine.handle_focus_event(&focus);
     assert_eq!(
@@ -506,6 +507,7 @@ fn a_selected_result_replaces_the_fields_read() {
         selection: None,
         font: None,
         word: None,
+        misspelled: Vec::new(),
     });
     assert_eq!(engine.handle_accessibility_event(&read), None);
 }
@@ -710,6 +712,7 @@ fn laptop_reading_keys_in_a_document() {
         selection: None,
         font: None,
         word: None,
+        misspelled: Vec::new(),
     });
     engine.handle_focus_event(&notepad);
     speech.take();
@@ -873,6 +876,7 @@ fn test_jaws_key_in_forms_mode_reads_the_caret_line() {
             selection: None,
             font: None,
             word: None,
+            misspelled: Vec::new(),
         },
     ));
     assert_eq!(
@@ -1253,6 +1257,7 @@ fn a_forms_field_is_virtualized_with_its_window() {
         selection: None,
         font: None,
         word: None,
+        misspelled: Vec::new(),
     });
     engine.handle_focus_event(&name);
     assert_eq!(engine.execute_command("VirtualizeWindow"), None);
@@ -1287,6 +1292,7 @@ fn a_text_editor_is_virtualized_from_its_text() {
         selection: None,
         font: None,
         word: None,
+        misspelled: Vec::new(),
     };
     engine.handle_accessibility_event(&AccessibilityEvent::TextContext(context));
     assert_eq!(
@@ -1331,6 +1337,7 @@ fn a_console_is_virtualized_from_its_text_at_the_prompt() {
         selection: None,
         font: None,
         word: None,
+        misspelled: Vec::new(),
     };
     assert_eq!(
         engine
@@ -2242,6 +2249,7 @@ fn a_pages_multi_line_field_reads_keys_as_a_document() {
             ..Default::default()
         }),
         word: None,
+        misspelled: Vec::new(),
     };
     let mut focus = FocusEvent::new(Role::Edit)
         .with_node_id(2)
@@ -3135,6 +3143,7 @@ fn auto_forms_mode_arrows_into_and_out_of_fields() {
             selection: None,
             font: None,
             word: None,
+            misspelled: Vec::new(),
         });
         focus
     };
@@ -3212,6 +3221,7 @@ fn an_arrow_back_onto_a_field_says_what_was_typed() {
             selection: None,
             font: None,
             word: None,
+            misspelled: Vec::new(),
         },
     ));
     speech.take();
@@ -3612,6 +3622,7 @@ fn numpad_5_says_the_character_its_word_and_its_value() {
         selection: None,
         font: None,
         word: None,
+        misspelled: Vec::new(),
     });
     engine.handle_focus_event(&field);
     speech.take();
@@ -3850,6 +3861,7 @@ fn notepads_edit_and_its_menu_bar() {
         selection: None,
         font: None,
         word: None,
+        misspelled: Vec::new(),
     });
     let arrival = engine.handle_focus_event(&edit).unwrap_or_default();
     assert!(

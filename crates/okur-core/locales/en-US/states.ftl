@@ -16,6 +16,9 @@ state-has-popup = Has Popup
 state-pressed = Pressed
 state-not-pressed = Not pressed
 state-required = Required
+# A word the field marks as a spelling error: said in a mark before its line, and before a
+# field's name and value as the focus lands on it [obs, 284].
+misspelled = Misspelled
 state-selected = selected
 # A menu item that opens another menu.
 state-sub-menu = sub menu

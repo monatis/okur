@@ -147,6 +147,13 @@ pub(crate) fn char_at(context: &TextContext) -> Option<char> {
 /// The line containing the caret, without its line break.
 pub fn line_at(context: &TextContext) -> String {
     let text = chars(&context.text);
+    let (start, end) = line_range(context);
+    text.get(start..end).unwrap_or_default().iter().collect()
+}
+
+/// Where the caret's line starts and ends, in characters, without its line break.
+fn line_range(context: &TextContext) -> (usize, usize) {
+    let text = chars(&context.text);
     let caret = context.caret.min(text.len());
     let start = text
         .get(..caret)
@@ -156,7 +163,18 @@ pub fn line_at(context: &TextContext) -> String {
         .get(caret..)
         .and_then(|after| after.iter().position(|c| is_line_break(*c)))
         .map_or(text.len(), |i| caret + i);
-    text.get(start..end).unwrap_or_default().iter().collect()
+    (start, end)
+}
+
+/// JAWS's mark before a field's line that holds a word the field marks misspelled, "
+/// ‹Misspelled › ada" [obs, 284/s9, s12]; `None` without one.
+pub fn misspelled_mark(context: &TextContext) -> Option<String> {
+    let (start, end) = line_range(context);
+    context
+        .misspelled
+        .iter()
+        .any(|&(s, e)| s < end.max(start + 1) && e > start)
+        .then(|| format!("\u{1d}{} \u{1e} ", msg::misspelled()))
 }
 
 /// The first line of the caret's paragraph, the lines between blank lines: JAWS's paragraph
@@ -432,7 +450,11 @@ pub fn speech_in(
         // A word move that stops at a line's end reads the line break, as a character move onto
         // it does [obs, 320/s7, s11].
         EditKey::Word => or_line_break(word_at(after)),
-        EditKey::Line => or_line_break(line_at(after)),
+        EditKey::Line => format!(
+            "{}{}",
+            misspelled_mark(after).unwrap_or_default(),
+            or_line_break(line_at(after))
+        ),
         EditKey::SelectCharacter | EditKey::SelectWord => {
             // The text, then the word: "Hello, selected", "world. Unselected" [obs, 529/s12,
             // s14]; a character taken out is read as a word is.
@@ -533,7 +555,25 @@ mod tests {
             selection,
             font: None,
             word: None,
+            misspelled: Vec::new(),
         }
+    }
+
+    /// A line holding a word the field marks misspelled is read after JAWS's mark, "‹Misspelled
+    /// › ada"; the line before it, without [obs, 284/s9].
+    #[test]
+    fn a_misspelled_line_is_marked() {
+        let mut field = ctx("Dear ada\nyours", 2, None);
+        field.misspelled = vec![(5, 8)];
+        assert_eq!(
+            speech(EditKey::Line, None, &field, "").as_deref(),
+            Some("\u{1d}Misspelled \u{1e} Dear ada")
+        );
+        field.caret = 10;
+        assert_eq!(
+            speech(EditKey::Line, None, &field, "").as_deref(),
+            Some("yours")
+        );
     }
 
     /// A selection that shrinks says what left it: "Unselected" and the line, the word and
@@ -654,6 +694,7 @@ mod tests {
         let text = "Second line, with";
         let at = |caret: usize, word: (usize, usize)| TextContext {
             word: Some(word),
+            misspelled: Vec::new(),
             ..ctx(text, caret, None)
         };
         assert_eq!(word_at(&at(7, (7, 11))), "line");
@@ -736,6 +777,7 @@ mod tests {
         let word = |text: &str, caret: usize| {
             let at = |c: usize| TextContext {
                 word: web_word_at(text, c),
+                misspelled: Vec::new(),
                 ..ctx(text, c, None)
             };
             word_at(&at(caret))

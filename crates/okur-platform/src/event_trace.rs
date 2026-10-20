@@ -4229,6 +4229,7 @@ mod tests {
                 selection: None,
                 font: None,
                 word: None,
+                misspelled: Vec::new(),
             }),
             ..focus_event(Vec::new())
         };
