@@ -336,8 +336,10 @@ fn serve_control(
     None
 }
 
-/// Takes this desktop for the screen reader, or says why it ends silently (`None`).
-fn take_desktop(start: StartKind) -> Option<okur_platform::instance::InstanceLock> {
+/// Takes this desktop for the screen reader, or says why it ends without a sound.
+fn take_desktop(
+    start: StartKind,
+) -> Result<okur_platform::instance::InstanceLock, startup::SilentExit> {
     let desktop = okur_platform::desktop::thread_desktop().unwrap_or_default();
     let facts = StartFacts {
         kind: start,
@@ -355,13 +357,10 @@ fn take_desktop(start: StartKind) -> Option<okur_platform::instance::InstanceLoc
             &mut crate::control::SystemInstances::for_this_desktop(),
         )
     });
-    match taken {
-        Ok(lock) => Some(lock),
-        Err(why) => {
-            tracing::info!(?start, %desktop, "Okur does not start: {}", why.describe());
-            None
-        }
+    if let Err(why) = &taken {
+        tracing::info!(?start, %desktop, "Okur does not start: {}", why.describe());
     }
+    taken
 }
 
 /// Runs the screen reader until it is asked to stop, then exits the process.
@@ -374,8 +373,14 @@ pub async fn run(config: RunConfig) {
         start,
         console,
     } = config;
-    let Some(instance_lock) = take_desktop(start) else {
-        return;
+    let instance_lock = match take_desktop(start) {
+        Ok(lock) => lock,
+        Err(why) => {
+            if console {
+                eprintln!("Okur does not start: {}.", why.describe());
+            }
+            return;
+        }
     };
     okur_platform::process::shut_down_last();
 

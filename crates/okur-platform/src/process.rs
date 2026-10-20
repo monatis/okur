@@ -44,8 +44,11 @@ impl ScreenReaderFlag {
     /// copy that is killed leaves it on until the next sign-in at most).
     pub fn raise() -> Self {
         let was_on = screen_reader_flag().unwrap_or(false);
+        // Applications are told only of a change.
         #[cfg(windows)]
-        windows_impl::set_flag(true);
+        if !was_on {
+            windows_impl::set_flag(true);
+        }
         Self { was_on }
     }
 }
