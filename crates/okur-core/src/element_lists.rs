@@ -286,10 +286,21 @@ fn tag(node: &AomNode) -> Option<&str> {
 /// pieces keep their own spaces ("• New study rooms open in May."), blocks get none between
 /// them ("9 p.m.• Weekend hours", "You:Good morning"), and an element without text gives
 /// its name (an image's text, an empty span's label) [obs, 237, 238, 244].
+///
+/// The pieces are gathered until they hold more than the list's `ITEM_LENGTH` characters that
+/// are not spaces: the item keeps no more, and more pieces only lengthen the text after them.
+/// A division around the whole page gathered all of its text, once per wrapper (performance
+/// review, 2026-10-20, P1).
 fn block_text(node: &AomNode) -> String {
-    fn pieces(node: &AomNode, out: &mut String) {
+    let mut text = String::new();
+    let mut kept = 0;
+    let mut stack = vec![node];
+    while let Some(node) = stack.pop() {
+        if kept > ITEM_LENGTH {
+            break;
+        }
         if node.states.hidden {
-            return;
+            continue;
         }
         if node.children.is_empty() {
             let piece = node
@@ -298,14 +309,76 @@ fn block_text(node: &AomNode) -> String {
                 .filter(|t| !t.is_empty())
                 .or(node.name.as_deref())
                 .unwrap_or_default();
-            out.push_str(piece);
-            return;
+            text.push_str(piece);
+            kept += piece.chars().filter(|c| !c.is_whitespace()).count();
+            continue;
         }
-        for child in &node.children {
-            pieces(child, out);
+        stack.extend(node.children.iter().rev());
+    }
+    text.split_whitespace().collect::<Vec<_>>().join(" ")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// The whole block's text, as it was gathered before the gathering stopped at the item's
+    /// length: the oracle for [`block_text`].
+    fn whole_block_text(node: &AomNode) -> String {
+        fn pieces(node: &AomNode, out: &mut String) {
+            if node.states.hidden {
+                return;
+            }
+            if node.children.is_empty() {
+                let piece = node
+                    .text
+                    .as_deref()
+                    .filter(|t| !t.is_empty())
+                    .or(node.name.as_deref())
+                    .unwrap_or_default();
+                out.push_str(piece);
+                return;
+            }
+            for child in &node.children {
+                pieces(child, out);
+            }
+        }
+        let mut text = String::new();
+        pieces(node, &mut text);
+        text.split_whitespace().collect::<Vec<_>>().join(" ")
+    }
+
+    /// A block's first `ITEM_LENGTH` characters, all a list item keeps, are the whole text's,
+    /// for short blocks, long ones, spaces between pieces or none, and a hidden piece.
+    #[test]
+    fn a_blocks_text_is_gathered_as_far_as_the_item_keeps() {
+        let mut id = 0;
+        let mut piece = |text: &str| {
+            id += 1;
+            AomNode::new(id, Role::Text).with_text(text)
+        };
+        let mut hidden = piece("Hidden words that are never said");
+        hidden.states.hidden = true;
+        let blocks = [
+            vec![piece("Short"), piece(" text")],
+            (0..200).map(|i| piece(&format!("word{i} "))).collect(),
+            (0..200).map(|i| piece(&format!("w{i}"))).collect(),
+            vec![
+                piece("   "),
+                hidden,
+                piece(&"x".repeat(300)),
+                piece(" tail"),
+            ],
+        ];
+        for children in blocks {
+            let block = AomNode::new(999, Role::Group).with_children(children);
+            let whole = whole_block_text(&block);
+            let gathered = block_text(&block);
+            assert_eq!(
+                gathered.chars().take(ITEM_LENGTH).collect::<String>(),
+                whole.chars().take(ITEM_LENGTH).collect::<String>()
+            );
+            assert_eq!(gathered.trim().is_empty(), whole.trim().is_empty());
         }
     }
-    let mut text = String::new();
-    pieces(node, &mut text);
-    text.split_whitespace().collect::<Vec<_>>().join(" ")
 }

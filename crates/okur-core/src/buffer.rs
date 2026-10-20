@@ -249,6 +249,78 @@ pub struct VirtualBuffer {
     objects: HashMap<String, usize>,
     /// Each DOM id's page node, likewise.
     dom_ids: HashMap<String, usize>,
+    /// Where each page node first shows, built as a list or a lookup first needs it, and
+    /// dropped when the page changes ([`SpanIndex`]).
+    span_index: std::sync::OnceLock<SpanIndex>,
+}
+
+/// Where each page node first shows in the buffer, as indexes into `spans`, the first in the
+/// order the spans were made: a node's own span, and the first span of a node in its subtree.
+/// The element lists and the division keys found these by gathering each element's subtree
+/// and scanning every span, in the keyboard hook: Z took over half a second on a 25,000-node
+/// page (performance review, 2026-10-20, P1). Spans are made once, as the buffer is built;
+/// the page's nodes may change after, and the index is then made again.
+#[derive(Debug, Clone, Default)]
+struct SpanIndex {
+    /// Each node id's own first span.
+    own: HashMap<usize, usize>,
+    /// Each node id's subtree's first span, itself included; `None` where the buffer shows
+    /// nothing of it.
+    subtree: HashMap<usize, Option<usize>>,
+    /// Ids the page repeats with subtrees that start apart: found by walking, as before.
+    repeated: HashSet<usize>,
+}
+
+impl SpanIndex {
+    fn build(page: Option<&AomNode>, spans: &[BufferSpan]) -> Self {
+        let mut index = SpanIndex::default();
+        for (i, span) in spans.iter().enumerate() {
+            index.own.entry(span.node_id).or_insert(i);
+        }
+        let Some(page) = page else {
+            return index;
+        };
+        // After its children, each node takes the first of its own span and theirs. Walked
+        // without recursion: a page can nest deeper than the hook's stack allows.
+        let own = |node: &AomNode, index: &SpanIndex| index.own.get(&node.id).copied();
+        let mut stack: Vec<(&AomNode, usize, Option<usize>)> = vec![(page, 0, own(page, &index))];
+        while let Some(&(node, next, first)) = stack.last() {
+            if let Some(child) = node.children.get(next) {
+                if let Some(top) = stack.last_mut() {
+                    top.1 += 1;
+                }
+                stack.push((child, 0, own(child, &index)));
+                continue;
+            }
+            stack.pop();
+            match index.subtree.entry(node.id) {
+                std::collections::hash_map::Entry::Vacant(entry) => {
+                    entry.insert(first);
+                }
+                std::collections::hash_map::Entry::Occupied(entry) => {
+                    if *entry.get() != first {
+                        index.repeated.insert(node.id);
+                    }
+                }
+            }
+            if let Some(parent) = stack.last_mut() {
+                parent.2 = match (parent.2, first) {
+                    (Some(a), Some(b)) => Some(a.min(b)),
+                    (a, b) => a.or(b),
+                };
+            }
+        }
+        index
+    }
+
+    /// The first span of node `id`'s subtree: `Some(None)` where it shows nothing, `None`
+    /// where the index cannot tell (an id the page repeats, a node not in the page).
+    fn subtree_first(&self, id: usize) -> Option<Option<usize>> {
+        if self.repeated.contains(&id) {
+            return None;
+        }
+        self.subtree.get(&id).copied()
+    }
 }
 
 /// A page node's place: its parent's slot (none for the page itself) and its index among
@@ -363,6 +435,7 @@ impl VirtualBuffer {
         }
         self.index_nodes(&page);
         self.page = Some(std::sync::Arc::new(page));
+        self.span_index = std::sync::OnceLock::new();
     }
 
     /// Fills the object and DOM id indexes: of the nodes the buffer reads, the one [`Self::node`]
@@ -440,37 +513,39 @@ impl VirtualBuffer {
     /// inside it (an element whose lines are its children's: WhatsApp's focused message, its
     /// PDF viewer's content).
     pub fn start_of(&self, id: usize) -> Option<usize> {
-        if let Some(span) = self.spans.iter().find(|s| s.node_id == id) {
-            return Some(span.start_offset);
+        if let Some(&own) = self.span_index().own.get(&id) {
+            return self.spans.get(own).map(|s| s.start_offset);
         }
-        fn subtree(node: &AomNode, ids: &mut HashSet<usize>) {
-            ids.insert(node.id);
-            for child in &node.children {
-                subtree(child, ids);
-            }
-        }
-        let mut ids = HashSet::new();
-        subtree(self.node(id)?, &mut ids);
-        self.spans
-            .iter()
-            .find(|s| ids.contains(&s.node_id))
-            .map(|s| s.start_offset)
+        self.start_of_subtree(self.node(id)?)
     }
 
     /// Whether the buffer has text of the node `id` or of a node inside it.
     pub fn shows(&self, id: usize) -> bool {
-        fn subtree(node: &AomNode, ids: &mut HashSet<usize>) {
-            ids.insert(node.id);
-            for child in &node.children {
-                subtree(child, ids);
-            }
-        }
         let Some(node) = self.node(id) else {
             return false;
         };
+        match self.span_index().subtree_first(node.id) {
+            Some(first) => first.is_some(),
+            None => self.first_span_by_walk(node).is_some(),
+        }
+    }
+
+    /// The page's [`SpanIndex`], made now if the buffer or its page changed since.
+    fn span_index(&self) -> &SpanIndex {
+        self.span_index
+            .get_or_init(|| SpanIndex::build(self.page.as_deref(), &self.spans))
+    }
+
+    /// The first span of `node`'s subtree, found by gathering its ids and scanning every span:
+    /// where the index cannot tell, and as the tests' oracle for it.
+    fn first_span_by_walk(&self, node: &AomNode) -> Option<&BufferSpan> {
         let mut ids = HashSet::new();
-        subtree(node, &mut ids);
-        self.spans.iter().any(|s| ids.contains(&s.node_id))
+        let mut stack = vec![node];
+        while let Some(node) = stack.pop() {
+            ids.insert(node.id);
+            stack.extend(node.children.iter());
+        }
+        self.spans.iter().find(|s| ids.contains(&s.node_id))
     }
 
     /// The page node with DOM id `dom_id` (the first, where a page repeats an id).
@@ -492,19 +567,13 @@ impl VirtualBuffer {
     }
 
     /// Where `node`'s subtree starts in the buffer: the first span of it.
+    /// `node` is one of the page's nodes.
     pub fn start_of_subtree(&self, node: &AomNode) -> Option<usize> {
-        fn subtree(node: &AomNode, ids: &mut HashSet<usize>) {
-            ids.insert(node.id);
-            for child in &node.children {
-                subtree(child, ids);
-            }
-        }
-        let mut ids = HashSet::new();
-        subtree(node, &mut ids);
-        self.spans
-            .iter()
-            .find(|s| ids.contains(&s.node_id))
-            .map(|s| s.start_offset)
+        let span = match self.span_index().subtree_first(node.id) {
+            Some(first) => first.and_then(|i| self.spans.get(i)),
+            None => self.first_span_by_walk(node),
+        };
+        span.map(|s| s.start_offset)
     }
 
     /// The page nodes around node `id`, nearest first: its parent, the parent's parent, up to
@@ -548,6 +617,7 @@ impl VirtualBuffer {
             return None;
         }
         let path = self.path_to(*self.slot_of.get(&id)?)?;
+        self.span_index = std::sync::OnceLock::new();
         let mut node = std::sync::Arc::make_mut(self.page.as_mut()?);
         for index in path {
             node = node.children.get_mut(index)?;
@@ -581,6 +651,7 @@ impl VirtualBuffer {
 
     /// Applies `change` to every page node the buffer reads.
     pub fn for_each_node_mut(&mut self, mut change: impl FnMut(&mut AomNode)) {
+        self.span_index = std::sync::OnceLock::new();
         let readable = &self.readable;
         let mut stack: Vec<&mut AomNode> = self
             .page
@@ -1413,5 +1484,49 @@ mod tests {
             ratio < 2.0,
             "4x deeper wrapping took {ratio:.2}x as long ({shallow:?} -> {deep:?})"
         );
+    }
+
+    /// The span index gives each node's start as gathering its subtree and scanning every
+    /// span did, a node the page repeats included (walked, as before).
+    #[test]
+    fn the_span_index_finds_what_the_walk_found() {
+        let row = |id: usize, text: &str| {
+            AomNode::new(id, Role::Group).with_children(vec![
+                AomNode::new(id + 1, Role::Link { href: None }).with_name("Sender"),
+                AomNode::new(id + 2, Role::Paragraph).with_text(text),
+                AomNode::new(id + 3, Role::Group),
+            ])
+        };
+        // Id 20 twice: a row, and an empty group whose subtree shows nothing.
+        let mut root = AomNode::new(10, Role::Group).with_children(vec![
+            row(20, "First"),
+            row(30, "Second"),
+            AomNode::new(20, Role::Group),
+        ]);
+        for wrapper in 40..60 {
+            root = AomNode::new(wrapper, Role::Group).with_children(vec![root]);
+        }
+        let page = AomNode::new(0, Role::Document)
+            .with_name("Page")
+            .with_children(vec![root]);
+        let buffer = VirtualBuffer::from_aom(&page);
+        for node in buffer.page_nodes() {
+            assert_eq!(
+                buffer.start_of_subtree(node),
+                buffer.first_span_by_walk(node).map(|s| s.start_offset),
+                "node {}",
+                node.id
+            );
+        }
+        assert!(buffer.span_index().repeated.contains(&20));
+        assert_eq!(
+            buffer.start_of(31),
+            buffer
+                .spans
+                .iter()
+                .find(|s| s.node_id == 31)
+                .map(|s| s.start_offset)
+        );
+        assert!(buffer.shows(30) && !buffer.shows(33));
     }
 }

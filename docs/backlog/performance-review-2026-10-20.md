@@ -27,6 +27,16 @@ So a change to what `record_at` reads does not show in parity: such changes are 
 runs only (`state.live`), keep `okur trace` complete, and get the replay-equivalence tests
 described under P5, plus live checks on old-pc.
 
+## Status
+
+Measured with `crates/okur-core/examples/big_page_keys.rs` (this review's synthetic page,
+25,032 nodes, release, median of 3 fresh engines, one press each); `parity-snapshot.sh`
+before and after each change gave identical output.
+
+| Finding | Status | Commit | Measured |
+|---|---|---|---|
+| P1 steps 1-2: span index, `block_text` gathered as far as the item keeps | done; step 3 (offsets alone for Z) not needed yet | this commit | Z 559 → 9.7 ms, Shift+Z 547 → 10.4 ms, Ctrl+Insert+Z 579 → 12.1 ms, P 468 → 8.8 ms, X 450 → 6.6 ms |
+
 ## Summary: the five worst
 
 1. **P1. The Z quick key and JAWS's element lists are quadratic, in the keyboard hook.**

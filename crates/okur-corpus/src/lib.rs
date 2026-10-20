@@ -457,6 +457,57 @@ mod tests {
             .all(|n| okur_platform::actions::unique_id(n).is_some()));
     }
 
+    /// The buffer's index of where each node starts gives what gathering the node's subtree
+    /// and scanning every span gave, for every node of every recorded page (performance
+    /// review, 2026-10-20, P1).
+    #[test]
+    fn every_recorded_pages_nodes_start_where_their_spans_do() {
+        let entries = std::fs::read_dir(corpus_dir().join("snapshots"));
+        assert!(entries.is_ok(), "{entries:?}");
+        let Ok(entries) = entries else {
+            return;
+        };
+        let mut pages = 0;
+        for path in entries.flatten().map(|e| e.path()) {
+            let Ok(loaded) = snapshots::load(&path) else {
+                continue;
+            };
+            pages += 1;
+            let buffer = okur_core::VirtualBuffer::from_aom(&loaded.aom);
+            for node in buffer.page_nodes() {
+                let mut ids = std::collections::HashSet::new();
+                let mut stack = vec![node];
+                while let Some(n) = stack.pop() {
+                    ids.insert(n.id);
+                    stack.extend(n.children.iter());
+                }
+                let walked = buffer
+                    .spans
+                    .iter()
+                    .find(|s| ids.contains(&s.node_id))
+                    .map(|s| s.start_offset);
+                assert_eq!(
+                    buffer.start_of_subtree(node),
+                    walked,
+                    "{}: node {}",
+                    path.display(),
+                    node.id
+                );
+                let own = buffer.spans.iter().find(|s| s.node_id == node.id);
+                if buffer.contains_node(node.id) {
+                    assert_eq!(
+                        buffer.start_of(node.id),
+                        own.map(|s| s.start_offset).or(walked),
+                        "{}: node {}",
+                        path.display(),
+                        node.id
+                    );
+                }
+            }
+        }
+        assert!(pages > 30, "{pages} pages");
+    }
+
     /// Semantics only IA2 carries without localization: block quotes (UIA gives only a
     /// localized control type), inline versus block elements, and the IA2 form states.
     #[test]
