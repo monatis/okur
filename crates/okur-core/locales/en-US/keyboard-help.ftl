@@ -562,6 +562,9 @@ command-say-font-in-viewer = Shows the font at the cursor in the Virtual Viewer.
 # SayColor (Insert+5).
 command-say-color = Says the colors of the text and of its background at the cursor.
 
+# KeyboardHelp (Insert+1).
+command-keyboard-help = Turns Keyboard Help on or off: while it is on, keys say what they do instead of doing it.
+
 ## Okur's settings, and Okur itself
 
 # Insert+V and Insert+6: one dialog for both.

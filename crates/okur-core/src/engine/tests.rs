@@ -494,6 +494,52 @@ fn test_engine_text_selection_and_font_query() {
     assert_eq!(no_sel, Some("Nothing selected".to_string()));
 }
 
+/// Keyboard Help: Insert+1 turns it on; a key is then described, not run: its name, then what
+/// it does; in a dialog Tab goes to the application; Insert+1 turns it off and keys run again
+/// [obs, 509/s1, s2, s4, s6; 634].
+#[test]
+fn keyboard_help_describes_keys_instead_of_running_them() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.app_mode = AppMode::NativeControl;
+    let mut insert = Modifiers::none();
+    insert.insert = true;
+    let press = |engine: &mut ScreenReaderEngine, key: Key, modifiers: Modifiers| {
+        engine.handle_key_event(&KeyEvent::new(key, modifiers, true))
+    };
+    assert_eq!(
+        press(&mut engine, Key::Digit(1), insert),
+        KeyAction::Consume
+    );
+    assert_eq!(speech.take(), ["Keyboard Help on"]);
+    assert_eq!(press(&mut engine, Key::UpArrow, insert), KeyAction::Consume);
+    let said = speech.take().join("\n");
+    assert_eq!(
+        said.lines().next(),
+        Some("Insert+UpArrow"),
+        "the key's name first: {said}"
+    );
+    assert_eq!(
+        said.lines().nth(1),
+        Some(crate::keyboard_help::description(&crate::command::Command::SayLine, false).as_str())
+    );
+    assert_eq!(
+        press(&mut engine, Key::Tab, Modifiers::none()),
+        KeyAction::Consume
+    );
+    assert_eq!(
+        speech.take().join("\n"),
+        format!("Tab\n{}", crate::keyboard_help::passes())
+    );
+    press(&mut engine, Key::Digit(1), insert);
+    assert_eq!(speech.take(), ["Keyboard Help off"]);
+    assert_eq!(
+        press(&mut engine, Key::Tab, Modifiers::none()),
+        KeyAction::PassThrough
+    );
+}
+
 /// Insert+T in a page says, after the title, the region around the virtual cursor, its level
 /// and the heading it is under; at the top, outside every region, the title alone
 /// [obs, 624/s1, s9; 625/s5].

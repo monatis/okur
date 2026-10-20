@@ -25,6 +25,7 @@ mod focus;
 mod help;
 mod information;
 mod jump;
+mod key_help;
 mod layer;
 mod page;
 mod quit;
@@ -43,12 +44,14 @@ mod window_list;
 
 pub use state::AppMode;
 
-/// A key press counted for "pressed twice quickly": a command, or CapsLock alone (which the
-/// laptop layout's JAWS key also is).
+/// A key press counted for "pressed twice quickly": a command, CapsLock alone (which the
+/// laptop layout's Okur key also is), or a key Keyboard Help describes.
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum Press {
     Command(crate::command::Command),
     CapsLock,
+    /// A key described by Keyboard Help, with its modifiers.
+    Described(Key, crate::input::Modifiers),
 }
 
 /// A Virtual Viewer that opens once its text is read; `window` is Virtualize Window, not
@@ -105,6 +108,8 @@ pub struct ScreenReaderEngine {
     /// A key has moved the virtual cursor since the page loaded: without Auto Forms Mode, Tab
     /// onto a field turns forms mode on only then [obs, 629, 630, 631].
     cursor_moved_since_load: bool,
+    /// Keyboard Help (Insert+1) is on: keys are described, not run.
+    keyboard_help: bool,
     /// Key presses so far, to tell the key right after another.
     keys_pressed: u64,
     /// The field an arrow last left in forms mode, the key that left it, and whether it went
@@ -294,6 +299,7 @@ impl ScreenReaderEngine {
             option_said: None,
             arrow_focus: None,
             cursor_moved_since_load: false,
+            keyboard_help: false,
             keys_pressed: 0,
             field_left: None,
             field_texts: std::collections::HashMap::new(),
@@ -437,6 +443,12 @@ impl ScreenReaderEngine {
         }
         let resolved = self.settings.keyboard.resolve(event);
         let event = &resolved;
+        // Keyboard Help: a key is described, not run [obs, 509, 634].
+        if self.keyboard_help {
+            if let Some(action) = self.describe_key(event) {
+                return action;
+            }
+        }
         if self.app_mode == AppMode::VirtualBuffer {
             let m = &event.modifiers;
             let plain = !m.alt && !m.shift && !m.insert && !m.win;

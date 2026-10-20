@@ -181,6 +181,7 @@ impl ScreenReaderEngine {
             Command::SayFont => return self.say_font(false),
             Command::SayFontInViewer => return self.say_font(true),
             Command::SayColor => return self.say_color(),
+            Command::KeyboardHelp => return self.toggle_keyboard_help(),
             _ => {}
         }
         // On the desktop and the taskbar, Windows moves and the focus is read: the page
@@ -1025,7 +1026,7 @@ impl ScreenReaderEngine {
 
     /// Whether `press` repeats the last press quickly enough to be a double press. A double
     /// press is not the first press of another.
-    fn pressed_twice(&mut self, press: Press, time_ms: u64) -> bool {
+    pub(super) fn pressed_twice(&mut self, press: Press, time_ms: u64) -> bool {
         self.presses(press, time_ms, 2) == 2
     }
 

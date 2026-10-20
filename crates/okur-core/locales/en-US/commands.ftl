@@ -23,6 +23,9 @@ okur-exiting = Okur exiting.
 # Said before a window's title (Insert+T), on a line of its own; with short messages the title
 # is said alone [obs, 581/s12].
 window-title-is = Title is
+# Keyboard Help (Insert+1) turned on and off [obs, 509/s1, s6].
+keyboard-help-on = Keyboard Help on
+keyboard-help-off = Keyboard Help off
 # In a page, after the title: the region around the virtual cursor, its nesting level and the
 # heading it is under, "article | level 3 | heading is What changes" [obs, 624, 625].
 title-region-level = level { $level }

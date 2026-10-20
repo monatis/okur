@@ -383,6 +383,7 @@ fn descriptions(command: &Command) -> Descriptions {
         SayFont => two(msg::command_say_font(), msg::command_say_font_long()),
         SayFontInViewer => one(msg::command_say_font_in_viewer()),
         SayColor => one(msg::command_say_color()),
+        KeyboardHelp => one(msg::command_keyboard_help()),
 
         // Okur's settings, and Okur itself.
         QuickSettings | SettingsCenter => one(msg::command_open_settings()),
@@ -732,6 +733,7 @@ mod tests {
             SayFont,
             SayFontInViewer,
             SayColor,
+            KeyboardHelp,
             QuickSettings,
             SettingsCenter,
             SetPunctuationLevel,
