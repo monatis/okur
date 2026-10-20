@@ -3580,6 +3580,7 @@ fn an_arrow_back_onto_a_field_says_what_was_typed() {
     let page = AomNode::new(0, Role::Document)
         .with_name("Web Menus")
         .with_children(vec![
+            AomNode::new(4, Role::Paragraph).with_text("Fields marked required"),
             AomNode::new(1, Role::Paragraph).with_text("Full name"),
             name,
             AomNode::new(3, Role::Paragraph).with_text("Email address"),
@@ -3617,6 +3618,17 @@ fn an_arrow_back_onto_a_field_says_what_was_typed() {
     assert_eq!(norm(&speech.take().join(" ")), "Full name");
     // Down straight back onto the field Up has just left says nothing: forms mode is on again,
     // by JAWS's sound alone [obs, 626/s5, 567/s12].
+    engine.handle_key_event(&key(Key::DownArrow));
+    assert_eq!(norm(&speech.take().join(" ")), "");
+    assert!(engine.forms_mode);
+    // Up leaves it again, and Down back onto it two lines later says nothing either
+    // [obs, 632/s7].
+    engine.handle_key_event(&key(Key::UpArrow));
+    assert_eq!(norm(&speech.take().join(" ")), "Full name");
+    engine.handle_key_event(&key(Key::UpArrow));
+    assert_eq!(norm(&speech.take().join(" ")), "Fields marked required");
+    engine.handle_key_event(&key(Key::DownArrow));
+    assert_eq!(norm(&speech.take().join(" ")), "Full name");
     engine.handle_key_event(&key(Key::DownArrow));
     assert_eq!(norm(&speech.take().join(" ")), "");
     assert!(engine.forms_mode);

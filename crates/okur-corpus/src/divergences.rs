@@ -189,11 +189,17 @@ divergences! {
         "531-web-screen-sensitive-help/s2",
         "531-web-screen-sensitive-help/s5",
         "531-web-screen-sensitive-help/s8",
+        "634-desktop-keyboard-help-spoken/s2",
+        "634-desktop-keyboard-help-spoken/s3",
+        "634-desktop-keyboard-help-spoken/s4",
+        "634-desktop-keyboard-help-spoken/s5",
+        "634-desktop-keyboard-help-spoken/s6",
     ],
-    "JAWS's help texts (Insert+F1, Insert+H, Insert+W) are Freedom Scientific's writing. \
-     Okur's help keys open the Virtual Viewer as JAWS's do, with JAWS's hot keys link and \
-     closing line, and Escape reads the focus as JAWS does; the help itself is in Okur's \
-     own words, and Insert+H lists Okur's keys.",
+    "JAWS's help texts (Insert+F1, Insert+H, Insert+W, and Keyboard Help's descriptions of \
+     keys) are Freedom Scientific's writing. Okur's help keys open the Virtual Viewer as \
+     JAWS's do, with JAWS's hot keys link and closing line, and Escape reads the focus as \
+     JAWS does; the help itself is in Okur's own words, and Insert+H lists Okur's keys. In \
+     Keyboard Help a key is named as JAWS names it, then described in Okur's words.",
     "the clean-room rule (AGENTS.md section 1.4), 2026-10-19";
 
     Difference::JawsAlsoSays("There are 1 Smart Glance Highlights on this page.") => [
@@ -271,7 +277,10 @@ divergences! {
      Okur moves to the article: \"article\", then its heading.",
     "the owner's rule on JAWS's accidents, 2026-10-18";
 
-    Difference::Step => ["280-web-forms-arrows-auto-forms/s7"],
+    Difference::Step => [
+        "280-web-forms-arrows-auto-forms/s7",
+        "632-web-field-returned-later/s10",
+    ],
     "With Auto Forms Mode, Down onto the email field said it \"Required\" in every trial, \
      though nothing makes it required (no required attribute; UIA's IsRequiredForForm and \
      ARIA's required are false in the trace), and JAWS's Tab onto it (204/s2) does not: a \

@@ -438,6 +438,14 @@ impl ScreenReaderEngine {
             // Forms mode follows focus into edits; a combo box keeps the forms mode Enter
             // turned on [obs, 205/s8].
             let is_edit = target_role == Some(Role::Edit) || focus.role == Role::Edit;
+            // The focus moving on from the field the arrows left makes it a field like any
+            // other.
+            if self
+                .field_left
+                .is_some_and(|(field, _)| Some(field) != target_id)
+            {
+                self.field_left = None;
+            }
             self.page_focus_is_field =
                 is_edit || focus.role == Role::ComboBox || target_role == Some(Role::ComboBox);
             // A list's, grid's or tree's item keeps the forms mode the focus brings to it:

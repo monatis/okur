@@ -110,12 +110,10 @@ pub struct ScreenReaderEngine {
     cursor_moved_since_load: bool,
     /// Keyboard Help (Insert+1) is on: keys are described, not run.
     keyboard_help: bool,
-    /// Key presses so far, to tell the key right after another.
-    keys_pressed: u64,
-    /// The field an arrow last left in forms mode, the key that left it, and whether it went
-    /// down: Down straight back onto it after Up turns forms mode on silently
-    /// [obs, 626/s5, s9; 567/s12].
-    field_left: Option<(usize, u64, bool)>,
+    /// The field an arrow last left in forms mode, and whether it went down, while the page's
+    /// focus stays in it: Down back onto it after Up turns forms mode on silently, straight
+    /// back or later [obs, 626/s5, s9; 567/s12; 632/s7].
+    field_left: Option<(usize, bool)>,
     /// The text last known in a page's fields, by node, kept as the focus leaves them: the
     /// buffer keeps the values the page had when it was captured, and an arrow back onto a
     /// field says what was typed in it [obs, 284/s6].
@@ -300,7 +298,6 @@ impl ScreenReaderEngine {
             arrow_focus: None,
             cursor_moved_since_load: false,
             keyboard_help: false,
-            keys_pressed: 0,
             field_left: None,
             field_texts: std::collections::HashMap::new(),
             web_application: None,
@@ -410,9 +407,6 @@ impl ScreenReaderEngine {
     /// Intercepts navigation keys, manages forms mode transitions, silences ongoing speech,
     /// and returns whether the key was consumed or should pass through to the OS.
     pub fn handle_key_event(&mut self, event: &KeyEvent) -> KeyAction {
-        if event.is_down {
-            self.keys_pressed += 1;
-        }
         let offset = self.cursor.offset;
         let action = self.handle_key(event);
         if self.app_mode == AppMode::VirtualBuffer && self.cursor.offset != offset {

@@ -179,7 +179,11 @@ A step can be in more than one entry; all of its entries apply.
   `611-desktop-screen-sensitive-help-advanced/s5`,
   `611-desktop-screen-sensitive-help-advanced/s10`,
   `611-desktop-screen-sensitive-help-advanced/s13`,
-  `611-desktop-screen-sensitive-help-advanced/s21`.
+  `611-desktop-screen-sensitive-help-advanced/s21`; and Keyboard Help's descriptions,
+  `634-desktop-keyboard-help-spoken/s2`, `634-desktop-keyboard-help-spoken/s3`,
+  `634-desktop-keyboard-help-spoken/s4`, `634-desktop-keyboard-help-spoken/s5`,
+  `634-desktop-keyboard-help-spoken/s6` (steps of JAWS's speech alone: Keyboard Help
+  describes the capture's history scripts instead of running them).
 - Difference: the whole step: the help's words.
 - Why: JAWS's help texts (screen-sensitive help, Insert+F1; hot key help, Insert+H; Windows
   keys help, Insert+W) are Freedom Scientific's writing. Okur's help keys open the Virtual
@@ -187,7 +191,9 @@ A step can be in more than one entry; all of its entries apply.
   message.", and Escape reads the focus as JAWS does (526/s6, s11, s14; 527/s2, s4, s6). The
   help is in Okur's own words, and Insert+H lists Okur's own keys, each a link that Enter
   uses. In a page the help is about where the virtual cursor is, as JAWS's is: the page's
-  summary, a link's address, a heading's level (531).
+  summary, a link's address, a heading's level (531). In Keyboard Help (Insert+1) a key is
+  named as JAWS names it ("Insert plus Up Arrow"), then described in Okur's words, a longer
+  description when pressed twice quickly; a key Okur leaves to the application says so (634).
 - Decided under the clean-room rule (AGENTS.md §1.4), 2026-10-19.
 
 ### JAWS places a data grid's cell at column and row 65535
@@ -216,9 +222,10 @@ A step can be in more than one entry; all of its entries apply.
 
 ### "Required" for a field that is not required (Auto Forms Mode)
 
-- Step: `280-web-forms-arrows-auto-forms/s7`.
+- Steps: `280-web-forms-arrows-auto-forms/s7`, `632-web-field-returned-later/s10`.
 - Difference: the whole step. JAWS says "Email address Edit Required | sam@example.com"; Okur
-  says it without "Required".
+  says it without "Required". 632 arrived at the field the same way, Down from its label, and
+  JAWS said "Required" there too, then not on Say Line right after (632/s11).
 - Why: with Auto Forms Mode on, Down onto the sign-up form's email field said "Required" in
   all three trials. Nothing makes that field required: it has no `required` attribute, and the
   trace's focus says UIA's IsRequiredForForm and ARIA's required are both false. JAWS's Tab

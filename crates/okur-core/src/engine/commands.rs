@@ -642,12 +642,12 @@ impl ScreenReaderEngine {
                 typed_in && attribute("readonly") != Some("true")
             })?
             .clone();
-        // Down straight back onto the field Up has just left: JAWS turns forms mode on with
-        // its sound alone, saying nothing, and the next arrow reads the field's line where its
-        // caret was [obs, 626/s5, s6, s9; 567/s12]. Up back onto a field Down left reads it,
-        // at once or later, though the focus stayed in it all along [obs, 284/s7; 283/s13: no
-        // focus event from s8 to s14].
-        if down && self.field_left == Some((node.id, self.keys_pressed.saturating_sub(1), false)) {
+        // Down back onto the field Up left, straight back or a few lines later: JAWS turns forms
+        // mode on with its sound alone, saying nothing, and the next arrow reads the field's
+        // line where its caret was [obs, 626/s5, s6, s9; 567/s12; 632/s7]. Up back onto a
+        // field Down left reads it, at once or later, though the focus stayed in it all along
+        // [obs, 284/s7; 283/s13: no focus event from s8 to s14].
+        if down && self.field_left == Some((node.id, false)) {
             self.forms_mode = true;
             self.cursor.forms_mode_active = true;
             self.page_focus_is_field = true;
@@ -744,7 +744,7 @@ impl ScreenReaderEngine {
         self.remember_field_text();
         self.forms_mode = false;
         let _ = self.cursor.exit_forms_mode();
-        self.field_left = Some((field, self.keys_pressed, down));
+        self.field_left = Some((field, down));
         self.cursor.move_to_node_id(field);
         let speech = if down {
             self.cursor.move_next_line()
