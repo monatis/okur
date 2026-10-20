@@ -186,6 +186,17 @@ A step can be in more than one entry; all of its entries apply.
   onto the same field (204/s2) does not say it. It is a wrong fact.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### Select an Article moves to the page's top
+
+- Steps: `253-web-list-articles-enter/s3`, `253-web-list-articles-enter/s4`,
+  `253-web-list-articles-enter/s5`.
+- Difference: the whole step. JAWS says "banner" on Enter and on Say Line, then Down reads
+  the banner's link; Okur says "article", then the article's heading.
+- Why: Enter on the article chosen in Select an Article (Ctrl+Insert+O) took JAWS to the
+  page's top in every trial, not to the article. The list is for moving to an article, and
+  JAWS's other lists move to what was chosen (252, 254, 255).
+- Decided under the owner's rule on JAWS's accidents, 2026-10-18.
+
 ### Down out of a text area jumps to the page's end (Auto Forms Mode)
 
 - Steps: `280-web-forms-arrows-auto-forms/s21`, `280-web-forms-arrows-auto-forms/s22`,

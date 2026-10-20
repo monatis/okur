@@ -216,6 +216,17 @@ divergences! {
      keys act in the viewer, not the field.",
     "proposed by the parity gap audit, accepted by the owner, 2026-10-19";
 
+    Difference::Step => [
+        "253-web-list-articles-enter/s3",
+        "253-web-list-articles-enter/s4",
+        "253-web-list-articles-enter/s5",
+    ],
+    "Enter on the article chosen in Select an Article took JAWS to the page's top, \"banner\", \
+     in every trial, not to the article; Down then read the banner's link. The list is for \
+     moving to an article, and JAWS's other lists move to what was chosen (252, 254, 255). \
+     Okur moves to the article: \"article\", then its heading.",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
+
     Difference::Step => ["280-web-forms-arrows-auto-forms/s7"],
     "With Auto Forms Mode, Down onto the email field said it \"Required\" in every trial, \
      though nothing makes it required (no required attribute; UIA's IsRequiredForForm and \
