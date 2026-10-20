@@ -18,7 +18,7 @@ To record one:
 | 561 | The clipboard keys: SayClipboard, View Clipboard Text, AppendSelectedTextToClipboard (the Windows-key scripts called by name). Round 59 failed: Escape did not close the "Clipboard Text" window View Clipboard Text opens, which then stayed open across trials, and a second View Clipboard Text asked "Overwrite Clipboard Text Viewer" (Yes, No). Needs another way to close that window before it is recorded again | `desktop-editor.ps1` |
 | 613 | A Turkish page (`lang="tr"`, ç ğ ı İ ö ş ü) read by character, word and line, spelled, and with Say All, in JAWS's English voice (old-pc's language detection is off). Recorded in round 114, its 3 trials passed once run-scenario read the fixture's title as UTF-8 (`f78ec7b`); waits for its page's snapshots (snap116) | `turkish-text.html` (here) |
 | 627 | The clipboard keys in their key map's order. Round 91 was inconclusive: Windows+Insert+X reached Windows' own Win+X menu from the harness's keys; to be recorded with `okur-lab-keys` | `desktop-editor.ps1` |
-| 628 | The layer's help and Command Search. Round 91 was inconclusive on old-pc's Turkish keyboard layout | `desktop-dialogs.ps1` |
+| 628 | The layer's help and Command Search. Round 91 was inconclusive on old-pc's Turkish keyboard layout | `desktop-editor.ps1` |
 | 665 | Say Window in Notepad's Font dialog, waited for long enough to read its 187 fonts (round 115) | `desktop-notepad.ps1` |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
