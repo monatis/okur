@@ -1,0 +1,16 @@
+{
+  "id": "665-desktop-font-dialog-say-window",
+  "name": "Say Window (Insert+B) in Notepad's Font dialog, waited for long enough to read its 187 fonts (541 left it out: it ran past a step's wait): Alt+O, F, Insert+B, Escape",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "sr-notepad-fixture.txt - Notepad" },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Alt+O" },
+    { "id": "s2", "type": "key", "command": "F", "settle_max_ms": 15000 },
+    { "id": "s3", "type": "key", "command": "Insert+B", "settle_max_ms": 240000 },
+    { "id": "s4", "type": "key", "command": "Escape" }
+  ]
+}

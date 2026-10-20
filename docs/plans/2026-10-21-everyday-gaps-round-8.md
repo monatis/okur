@@ -42,11 +42,13 @@ replaced only before it starts pulling (round 105).
 
 ## 2. Performance
 
-- **P6 step 3.** The Font dialog's worst reads still take 673 ms (perf105b, 90th percentile):
-  each of the font list's 187 items costs about 3.6 ms through UI Automation's MSAA proxy.
-  Read only the items on screen (a tree filter with IsOffscreen false), as JAWS's Say Window
-  reads what the window shows; measure with round 113. If that is not enough, read a dialog's
-  tree only when something needs it.
+- **P6 step 3, tried and reverted** (`01d5643`, `b13f5a7`). Reading only a list's items on
+  screen took the Font dialog's worst reads from 673 ms (perf105b, 90th percentile) to 257 ms
+  (perf113), but JAWS's Say Window there reads all 187 fonts (541's description), so it would
+  have cut Say Window short. Instead: on a focus, read a dialog's list items on screen only;
+  for Say Window, ask the platform for the window's whole tree (an action, as Say Font asks a
+  page for its font elements, `pending_font`) and speak it when it comes. Round 115 records
+  JAWS's Say Window in the Font dialog with a long wait (665).
 - The rest as before: P5 steps 4 and 5, P7, P11-P15, P2 steps 2-3, P4 steps 2 and 4-6, P9 step 3;
   the live checks never made (P2, P3, P4, P5, P8, the Window List's switch, the secure-screens
   M2 with Insert+F4).
