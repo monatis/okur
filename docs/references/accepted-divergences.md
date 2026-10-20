@@ -363,7 +363,8 @@ A step can be in more than one entry; all of its entries apply.
 
 ### The Font dialog's font is said before the dialog
 
-- Step: `541-desktop-notepad-font-dialog/s2`.
+- Steps: `541-desktop-notepad-font-dialog/s2`, and the same opening in 665 (rounds 115 and 119),
+  `665-desktop-font-dialog-say-window/s2`.
 - Difference: the whole step. JAWS says "Consolas" between the Notepad edit it leaves and
   "Font dialog", then again in the Font field; Okur says the dialog, then the field with its
   font once.

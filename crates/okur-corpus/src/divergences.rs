@@ -425,7 +425,10 @@ divergences! {
      Okur says the window's title and the button.",
     "the owner's rule on JAWS's accidents, 2026-10-18";
 
-    Difference::Step => ["541-desktop-notepad-font-dialog/s2"],
+    Difference::Step => [
+        "541-desktop-notepad-font-dialog/s2",
+        "665-desktop-font-dialog-say-window/s2",
+    ],
     "Opening Notepad's Font dialog, JAWS says the font, \"Consolas\", before the dialog, then \
      again in the field (in 3 of 3 trials of round 56, 2 of 3 earlier): the dialog fills its \
      font field 400 ms after the field takes the focus, and JAWS reads that text as it arrives, \

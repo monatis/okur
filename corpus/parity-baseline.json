@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur -- parity --write-baseline",
   "matched_steps": 4805,
-  "total_steps": 4979,
-  "accepted_divergences": 104,
+  "total_steps": 4978,
+  "accepted_divergences": 105,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -5051,7 +5051,7 @@
     "664-desktop-notepad-ctrl-backspace/s8": "match",
     "664-desktop-notepad-ctrl-backspace/s9": "match",
     "665-desktop-font-dialog-say-window/s1": "match",
-    "665-desktop-font-dialog-say-window/s2": "mismatch",
+    "665-desktop-font-dialog-say-window/s2": "accepted divergence",
     "665-desktop-font-dialog-say-window/s3": "mismatch",
     "665-desktop-font-dialog-say-window/s4": "match",
     "666-desktop-notepad-ctrl-backspace-intermediate/s1": "match",
