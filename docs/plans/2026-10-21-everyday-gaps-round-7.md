@@ -14,10 +14,13 @@ hours or about thirty commits, not more.
 
 | Round | What | Then |
 |---|---|---|
-| 99 (running) | 636-641: 624, 625 and 632 at Intermediate and Advanced verbosity | import; build what differs by verbosity |
-| 100 | 642: Keyboard Help's second press at growing intervals (Insert+Up, then Insert+Up again 200, 400, 600 and 800 ms later, as a step's `during` keys) | §2: how long JAWS waits |
-| 101 | 629-631 at Intermediate and Advanced (the hints on Tab are verbosity's) | §3 |
-| 102 | 541 and 524 again with `-TraceTimings`, after P6 step 2 | §4 |
+| 99 (done, `f93051f`) | 636-641: 624, 625 and 632 at Intermediate and Advanced | Insert+T's short messages built (`2bc4130`) |
+| 100 (done, `cc97db7`) | 642: Keyboard Help's second press 200 to 1200 ms later | §2 |
+| 101 (done, not imported) | 643: selection counts to the top from six places; its third trial failed | §1: every count to the top agrees with Okur's |
+| 102 (running) | 644-649: 629-631 at Intermediate and Advanced | §3 |
+| 103 | 650-653: Ctrl+A on four pages with different endings; 643 again | §1: which pages get JAWS's one more character |
+| 104 | 654: Say Line pressed twice at 250 to 450 ms | §2: JAWS's double-press window |
+| perf105 | 541, 524, 540 and 323 with `-TraceTimings` and push `a0a31ed9` (P6 step 2); 613 with each read's start logged | §4; 613's hang |
 
 For each: fetch with `lab-fetch.sh`, check every trial passed and the capture script's hash
 against a committed version, check each scenario's hash against the committed file, grep the
@@ -38,36 +41,43 @@ What 635 showed, and what Okur does instead:
   the last letter.
 - The page's text ends with a line break after its last line. Okur's ends without one.
 
-Build each in the linearizer and the cursor, then check 562/s13, s17, s20 and 515/s1 (the large
-selection's count) and 635. Run the whole corpus after each: Say Line, word and character
-navigation, and selections all read these spaces.
+Built (`e6c5670`): the spaces, the bullet and End; 635 matches every step. Left: the page's
+end. Counting a final line break in every selection to the end fixed 562 and 515 but broke 617
+and 620, whose pages end with a paragraph; 643's counts to the top from six places all agree
+with Okur's, so the one character is after the news article's last line, "content information
+end". Round 103 (Ctrl+A on pages ending with a region, a list, paragraphs and web
+applications) says which endings have it; then build that rule.
 
-## 2. Keyboard Help
+## 2. Keyboard Help and twice quickly
 
-- **The wait for a second press** (634/s3). JAWS says nothing for the first press of a key that
-  has a twice-pressed meaning; it says the key and the long description once the second comes,
-  and the short one only when none comes. Okur describes both presses.
-  - This needs a timer: the engine has none. Design one first (the host calls the engine after
-    a delay it asks for), then use it here.
-  - 642 tells how long JAWS waits.
+- **JAWS does not wait for a second press** (642). It says the key at once and its description
+  right after, the key's speaking time later (about 120 ms after "Tab", 420 after "Insert plus
+  Up Arrow"); a second press flushes the first's description from its queue before the speech
+  recorder hears it. Okur's speech is the same, but its spoken record keeps both: accept that
+  as a divergence of the recorder, not of what a user hears.
+- **The double-press window.** 200 ms apart is twice for JAWS, 400 ms is not (642/s3); Okur's
+  is 500 ms (Windows' double-click time). Round 104 (654) narrows it with Say Line; then set
+  `DOUBLE_PRESS_MS` from it, for every twice-quickly key.
 - The rest of Keyboard Help is built and its words are Okur's (accepted divergence).
 
 ## 3. Verbosity
 
-- Import round 99 (Insert+T and the field return at Intermediate and Advanced) and round 101
-  (Tab into forms mode). Build what differs; the hints ("Type in text.") are the likeliest.
+- Round 99 is built: at Intermediate and Advanced Insert+T says "article | 3 | What changes"
+  (`2bc4130`). The field return matches but for JAWS's misspelling mark: the traces have no
+  spelling marks for "abc", which Chrome sets after the tracer read the field (632/s3, s8;
+  640, 641). Record it again with a pause after typing.
+- Import round 102 (Tab into forms mode at Intermediate and Advanced); the hints ("Type in
+  text.") are the likeliest difference.
 - 610/s6, a toolbar at Advanced: as before.
 
 ## 4. Performance
 
-- **P6 step 2.** In the Font dialog each arrow in the font list costs 0.82 to 1.0 s (round 97):
-  the arrow changes the dialog's values, and the whole control tree (244 nodes) is read again.
-  Two ways:
-  - read again only the controls that changed (the event's control and its combo box), keeping
-    the rest of the read;
-  - or read the tree only when something needs it (Say Window, a label, a list's name), not on
-    every focus.
-  Measure with round 102.
+- **P6 step 2.** In the Font dialog each arrow in the font list cost 0.82 to 1.0 s (round 97):
+  the arrow changes the dialog's values, and the whole control tree (244 nodes) is read again,
+  every property of each of the 187 fonts through UI Automation's MSAA proxy. Built
+  (`a7d94d5`): a list's, tree's or grid's items are read a level at a time with the twelve
+  properties their uses need. Measure with perf105; if the arrows are still slow, read again
+  only the controls that changed, or read the tree only when something needs it.
 - The rest as before: P5 steps 4 and 5, P7, P11-P15, P2 steps 2-3, P4 steps 2 and 4-6, P9 step 3;
   the live checks never made (P2, P3, P4, P5, P8, the Window List's switch, the secure-screens
   M2 with Insert+F4).
