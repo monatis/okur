@@ -98,7 +98,7 @@ the Say All command".
 | Ctrl+Shift+K, Ctrl+Win+K | SelectAPlaceMarker, DefineATempPlaceMarker | gap | helper dialogs plan |
 | Ctrl+Insert+Enter | OnMouseOver | gap | |
 | Shift+Insert+F1, Ctrl+Shift+Insert+F1 | DisplayBasicElementInfo / DisplayAdvancedElementInfo | gap | |
-| Ctrl+Insert+F7 | IndicateLinkSourceURL | gap | |
+| Ctrl+Insert+F7 | IndicateLinkSourceURL | built (the link's address) | 536 |
 | F8 | SelectHTMLElement | built (the lines of the element at the cursor) | 515 |
 | Ctrl+Win+Equals | SelectaDropTarget | gap | |
 | Ctrl+Win+Dash | FilterLiveRegionAnnouncements | gap | |
@@ -117,8 +117,8 @@ the Say All command".
 | Insert+PageUp / Insert+Home | SayFromCursor / SayToCursor | built | 291 |
 | Insert+Z | VirtualPCCursorToggle | built | 298 |
 | Insert+Escape | RefreshScreen | built | 298 |
-| Insert+Delete, Ctrl+Insert+Delete | RouteVirtualToPc, RoutePCToVirtual | gap | |
-| Insert+F9 | SelectAFrame | gap | |
+| Insert+Delete, Ctrl+Insert+Delete | RouteVirtualToPc, RoutePCToVirtual | built | 536 |
+| Insert+F9 | SelectAFrame | partial: "No frames found in page"; the frames list is missing | 536 |
 | Ctrl+Insert+Down, Ctrl+Shift+Insert+Down | StartSkimRead, SkimReadDialog | gap | |
 | Insert+5 | SayColor | gap | |
 | Ctrl+Insert+Tab | CreatePrompt | gap | |
