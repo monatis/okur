@@ -2,9 +2,9 @@
     "format_version":  2,
     "scenario_id":  "295-web-first-last-headings-fields",
     "scenario_version":  "1.0.0",
-    "timestamp":  "2026-10-19T15:33:46.0714231+03:00",
+    "timestamp":  "2026-10-20T05:38:52.6418191+03:00",
     "provenance":  {
-                       "capture_script_sha256":  "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+                       "capture_script_sha256":  "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
                        "scenario_sha256":  "0de16b12057db387cee703f8646c832e820f1affe485bb7bbe2427e9b3fe7b09",
                        "fixture_sha256":  "b3567efa1f8f22dfc3fbc0347978c42909d2921a59b1559fdb51dac6120b0fa4",
                        "host":  "DESKTOP-DCNAKQQ",
@@ -14,6 +14,7 @@
                        "culture":  "en-US",
                        "utc_offset_minutes":  180,
                        "chrome_version":  "155.0.8059.84",
+                       "chrome_profile":  "sr-harness",
                        "jaws_version":  "2025.2505.43.400",
                        "jaws_settings":  {
                                              "DEFAULT.JCF":  {
@@ -405,7 +406,9 @@
                                                                            }
                                          },
                        "reader":  "jaws",
-                       "okur_sha256":  null
+                       "okur_sha256":  null,
+                       "trace_elevated":  true,
+                       "other_browsers_closed":  0
                    },
     "environment":  {
                         "os_version":  "Microsoft Windows NT 10.0.19045.0",
@@ -419,14 +422,14 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-19T15:33:48.5604680+03:00",
+                       "timestamp":  "2026-10-20T05:38:55.3439513+03:00",
                        "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792413235804,
-                                                "t_end_ms":  1792413237551,
+                                                "t_start_ms":  1792463942808,
+                                                "t_end_ms":  1792463944534,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Alt+Insert+End",
@@ -440,7 +443,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792413235823,
+                                                                                               "t":  1792463942826,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -475,7 +478,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792413236047,
+                                                                                               "t":  1792463943030,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -515,7 +518,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1226,
+                                                                    "settle_ms":  1224,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -524,8 +527,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792413239216,
-                                                "t_end_ms":  1792413241357,
+                                                "t_start_ms":  1792463946198,
+                                                "t_end_ms":  1792463948340,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Alt+Insert+Home",
@@ -539,7 +542,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792413239240,
+                                                                                               "t":  1792463946226,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -574,7 +577,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792413239454,
+                                                                                               "t":  1792463946441,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -650,7 +653,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1726,
+                                                                    "settle_ms":  1740,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -659,8 +662,8 @@
                                             },
                                             {
                                                 "step_id":  "s3",
-                                                "t_start_ms":  1792413243060,
-                                                "t_end_ms":  1792413244739,
+                                                "t_start_ms":  1792463950060,
+                                                "t_end_ms":  1792463951726,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Ctrl+Alt+Insert+Shift+2",
@@ -673,7 +676,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792413243281,
+                                                                                               "t":  1792463950279,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -713,7 +716,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1080,
+                                                                    "settle_ms":  1082,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -722,8 +725,8 @@
                                             },
                                             {
                                                 "step_id":  "s4",
-                                                "t_start_ms":  1792413246415,
-                                                "t_end_ms":  1792413247971,
+                                                "t_start_ms":  1792463953413,
+                                                "t_end_ms":  1792463954952,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Ctrl+Alt+Insert+2",
@@ -736,7 +739,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792413246587,
+                                                                                               "t":  1792463953584,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -776,7 +779,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1099,
+                                                                    "settle_ms":  1100,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -785,8 +788,8 @@
                                             },
                                             {
                                                 "step_id":  "s5",
-                                                "t_start_ms":  1792413249664,
-                                                "t_end_ms":  1792413252143,
+                                                "t_start_ms":  1792463956664,
+                                                "t_end_ms":  1792463959132,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Ctrl+Alt+Insert+3",
@@ -800,7 +803,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792413249805,
+                                                                                               "t":  1792463956812,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -823,7 +826,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792413250178,
+                                                                                               "t":  1792463957185,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -875,7 +878,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1993,
+                                                                    "settle_ms":  2012,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -884,8 +887,8 @@
                                             },
                                             {
                                                 "step_id":  "s6",
-                                                "t_start_ms":  1792413253832,
-                                                "t_end_ms":  1792413255471,
+                                                "t_start_ms":  1792463960826,
+                                                "t_end_ms":  1792463962453,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Ctrl+Alt+Insert+Shift+3",
@@ -898,553 +901,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792413254009,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "What",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "1",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "readers",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "2",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "said",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "3",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "heading level  3  ",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           }
-                                                                                       ],
-                                                                    "spoken_end":  "confirmation",
-                                                                    "clipboard":  null,
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1060,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            }
-                                        ],
-                       "trial_success":  true,
-                       "trace_file":  "295-web-first-last-headings-fields-trial1.jsonl",
-                       "page_load_settled":  false,
-                       "trace_sha256":  "7a254fac2d4add4d1d9aed4fc127b278ba2bbf4ce630b0d789eabf41981fdefb"
-                   },
-                   {
-                       "trial_index":  2,
-                       "timestamp":  "2026-10-19T15:34:15.5483290+03:00",
-                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
-                       "setup_settled":  true,
-                       "step_results":  [
-                                            {
-                                                "step_id":  "s1",
-                                                "t_start_ms":  1792413262637,
-                                                "t_end_ms":  1792413264321,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Alt+Insert+End",
-                                                               "repeat":  1
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Related stories\n \u001d heading level 2 \u001e",
-                                                                    "spoken":  [
-                                                                                   "Speech history cleared",
-                                                                                   "Related stories heading level  2  "
-                                                                               ],
-                                                                    "spoken_records":  [
-                                                                                           {
-                                                                                               "t":  1792413262662,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "Speech",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "10",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "history",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "11",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "cleared",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           },
-                                                                                           {
-                                                                                               "t":  1792413262878,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "Related",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "1",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "stories",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "2",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "heading level  2  ",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           }
-                                                                                       ],
-                                                                    "spoken_end":  "confirmation",
-                                                                    "clipboard":  null,
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1308,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s2",
-                                                "t_start_ms":  1792413266038,
-                                                "t_end_ms":  1792413268164,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Alt+Insert+Home",
-                                                               "repeat":  1
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
-                                                                    "spoken":  [
-                                                                                   "Speech history cleared",
-                                                                                   "City Library Expands Evening Hours heading level  1  "
-                                                                               ],
-                                                                    "spoken_records":  [
-                                                                                           {
-                                                                                               "t":  1792413266065,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "Speech",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "9",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "history",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "10",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "cleared",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           },
-                                                                                           {
-                                                                                               "t":  1792413266269,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "City",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "1",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "Library",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "2",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "Expands",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "3",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "Evening",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "4",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "Hours",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "5",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "heading level  1  ",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           }
-                                                                                       ],
-                                                                    "spoken_end":  "confirmation",
-                                                                    "clipboard":  null,
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1723,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s3",
-                                                "t_start_ms":  1792413269876,
-                                                "t_end_ms":  1792413271537,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Ctrl+Alt+Insert+Shift+2",
-                                                               "repeat":  1
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Related stories\n \u001d heading level 2 \u001e",
-                                                                    "spoken":  [
-                                                                                   "Related stories heading level  2  "
-                                                                               ],
-                                                                    "spoken_records":  [
-                                                                                           {
-                                                                                               "t":  1792413270090,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "Related",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "1",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "stories",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "2",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "heading level  2  ",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           }
-                                                                                       ],
-                                                                    "spoken_end":  "confirmation",
-                                                                    "clipboard":  null,
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1098,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s4",
-                                                "t_start_ms":  1792413273228,
-                                                "t_end_ms":  1792413274776,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Ctrl+Alt+Insert+2",
-                                                               "repeat":  1
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "What changes\n \u001d heading level 2 \u001e",
-                                                                    "spoken":  [
-                                                                                   "What changes heading level  2  "
-                                                                               ],
-                                                                    "spoken_records":  [
-                                                                                           {
-                                                                                               "t":  1792413273397,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "What",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "1",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "changes",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "2",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "heading level  2  ",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           }
-                                                                                       ],
-                                                                    "spoken_end":  "confirmation",
-                                                                    "clipboard":  null,
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1103,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s5",
-                                                "t_start_ms":  1792413276493,
-                                                "t_end_ms":  1792413278970,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Ctrl+Alt+Insert+3",
-                                                               "repeat":  1
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "Opening schedule \u001d heading level 2 \u001e \nWhat readers said\n \u001d heading level 3 \u001e",
-                                                                    "spoken":  [
-                                                                                   "Opening schedule  heading level  2  ",
-                                                                                   "What readers said heading level  3  "
-                                                                               ],
-                                                                    "spoken_records":  [
-                                                                                           {
-                                                                                               "t":  1792413276646,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "Opening",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "1",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "schedule  heading level  2  ",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           },
-                                                                                           {
-                                                                                               "t":  1792413277028,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "What",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "2",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "readers",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "3",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "said",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "4",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "heading level  3  ",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           }
-                                                                                       ],
-                                                                    "spoken_end":  "confirmation",
-                                                                    "clipboard":  null,
-                                                                    "dispatch_ok":  true,
-                                                                    "settled":  true,
-                                                                    "heard_audio":  true,
-                                                                    "settle_ms":  1976,
-                                                                    "contaminated":  false,
-                                                                    "audio_without_text":  false,
-                                                                    "baseline_settled":  true
-                                                                },
-                                                "step_success":  true
-                                            },
-                                            {
-                                                "step_id":  "s6",
-                                                "t_start_ms":  1792413280661,
-                                                "t_end_ms":  1792413282277,
-                                                "action":  {
-                                                               "type":  "key",
-                                                               "command":  "Ctrl+Alt+Insert+Shift+3",
-                                                               "repeat":  1
-                                                           },
-                                                "observation":  {
-                                                                    "speech_raw":  "What readers said\n \u001d heading level 3 \u001e",
-                                                                    "spoken":  [
-                                                                                   "What readers said heading level  3  "
-                                                                               ],
-                                                                    "spoken_records":  [
-                                                                                           {
-                                                                                               "t":  1792413280860,
+                                                                                               "t":  1792463961018,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1505,20 +962,20 @@
                                             }
                                         ],
                        "trial_success":  true,
-                       "trace_file":  "295-web-first-last-headings-fields-trial2.jsonl",
+                       "trace_file":  "295-web-first-last-headings-fields-trial1.jsonl",
                        "page_load_settled":  false,
-                       "trace_sha256":  "fec4f8a3d7fb06be023ebde16da27a016e71a23ead8f63ca6a38f987ef9786bb"
+                       "trace_sha256":  "ba9cda7ed9e4cdbe40d0ccc52eb60c7d10a537fbec29d05ae35b63ba82a418a8"
                    },
                    {
-                       "trial_index":  3,
-                       "timestamp":  "2026-10-19T15:34:42.3602167+03:00",
+                       "trial_index":  2,
+                       "timestamp":  "2026-10-20T05:39:22.5251252+03:00",
                        "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792413289440,
-                                                "t_end_ms":  1792413291147,
+                                                "t_start_ms":  1792463969804,
+                                                "t_end_ms":  1792463971480,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Alt+Insert+End",
@@ -1532,7 +989,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792413289467,
+                                                                                               "t":  1792463969829,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1567,7 +1024,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792413289690,
+                                                                                               "t":  1792463970044,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1607,7 +1064,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1309,
+                                                                    "settle_ms":  1305,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1616,8 +1073,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792413292843,
-                                                "t_end_ms":  1792413294947,
+                                                "t_start_ms":  1792463973198,
+                                                "t_end_ms":  1792463975329,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Alt+Insert+Home",
@@ -1631,7 +1088,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792413292872,
+                                                                                               "t":  1792463973226,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1666,7 +1123,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792413293084,
+                                                                                               "t":  1792463973429,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1742,7 +1199,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1708,
+                                                                    "settle_ms":  1707,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1751,8 +1208,8 @@
                                             },
                                             {
                                                 "step_id":  "s3",
-                                                "t_start_ms":  1792413296645,
-                                                "t_end_ms":  1792413298306,
+                                                "t_start_ms":  1792463977023,
+                                                "t_end_ms":  1792463978649,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Ctrl+Alt+Insert+Shift+2",
@@ -1765,7 +1222,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792413296871,
+                                                                                               "t":  1792463977225,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1805,7 +1262,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1057,
+                                                                    "settle_ms":  1055,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1814,8 +1271,8 @@
                                             },
                                             {
                                                 "step_id":  "s4",
-                                                "t_start_ms":  1792413299999,
-                                                "t_end_ms":  1792413301581,
+                                                "t_start_ms":  1792463980360,
+                                                "t_end_ms":  1792463981934,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Ctrl+Alt+Insert+2",
@@ -1828,7 +1285,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792413300181,
+                                                                                               "t":  1792463980557,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1868,7 +1325,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1080,
+                                                                    "settle_ms":  1100,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1877,8 +1334,8 @@
                                             },
                                             {
                                                 "step_id":  "s5",
-                                                "t_start_ms":  1792413303258,
-                                                "t_end_ms":  1792413305753,
+                                                "t_start_ms":  1792463983641,
+                                                "t_end_ms":  1792463986090,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Ctrl+Alt+Insert+3",
@@ -1892,7 +1349,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792413303403,
+                                                                                               "t":  1792463983776,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1915,7 +1372,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792413303778,
+                                                                                               "t":  1792463984155,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1967,7 +1424,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1955,
+                                                                    "settle_ms":  1996,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1976,8 +1433,8 @@
                                             },
                                             {
                                                 "step_id":  "s6",
-                                                "t_start_ms":  1792413307424,
-                                                "t_end_ms":  1792413309073,
+                                                "t_start_ms":  1792463987806,
+                                                "t_end_ms":  1792463989463,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Ctrl+Alt+Insert+Shift+3",
@@ -1990,7 +1447,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792413307622,
+                                                                                               "t":  1792463988021,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -2042,7 +1499,553 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1081,
+                                                                    "settle_ms":  1060,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "295-web-first-last-headings-fields-trial2.jsonl",
+                       "page_load_settled":  false,
+                       "trace_sha256":  "7a11f78bc26393040504f987978908a0d8b155568205def1c0818540d9a03cc4"
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-10-20T05:39:49.5314875+03:00",
+                       "foreground_window_start":  "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+                       "setup_settled":  true,
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1792463996794,
+                                                "t_end_ms":  1792463998497,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+Insert+End",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Related stories\n \u001d heading level 2 \u001e",
+                                                                    "spoken":  [
+                                                                                   "Speech history cleared",
+                                                                                   "Related stories heading level  2  "
+                                                                               ],
+                                                                    "spoken_records":  [
+                                                                                           {
+                                                                                               "t":  1792463996819,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Speech",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "10",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "history",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "11",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "cleared",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792463997049,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Related",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "1",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "stories",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "2",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "heading level  2  ",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1312,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1792464000189,
+                                                "t_end_ms":  1792464002335,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Alt+Insert+Home",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+                                                                    "spoken":  [
+                                                                                   "Speech history cleared",
+                                                                                   "City Library Expands Evening Hours heading level  1  "
+                                                                               ],
+                                                                    "spoken_records":  [
+                                                                                           {
+                                                                                               "t":  1792464000217,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Speech",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "9",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "history",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "10",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "cleared",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792464000425,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "City",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "1",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Library",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "2",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Expands",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "3",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Evening",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "4",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Hours",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "5",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "heading level  1  ",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1769,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s3",
+                                                "t_start_ms":  1792464004032,
+                                                "t_end_ms":  1792464005708,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Insert+Shift+2",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Related stories\n \u001d heading level 2 \u001e",
+                                                                    "spoken":  [
+                                                                                   "Related stories heading level  2  "
+                                                                               ],
+                                                                    "spoken_records":  [
+                                                                                           {
+                                                                                               "t":  1792464004246,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Related",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "1",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "stories",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "2",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "heading level  2  ",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1059,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s4",
+                                                "t_start_ms":  1792464007401,
+                                                "t_end_ms":  1792464008946,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Insert+2",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "What changes\n \u001d heading level 2 \u001e",
+                                                                    "spoken":  [
+                                                                                   "What changes heading level  2  "
+                                                                               ],
+                                                                    "spoken_records":  [
+                                                                                           {
+                                                                                               "t":  1792464007583,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "What",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "1",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "changes",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "2",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "heading level  2  ",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1101,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s5",
+                                                "t_start_ms":  1792464010656,
+                                                "t_end_ms":  1792464013108,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Insert+3",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Opening schedule \u001d heading level 2 \u001e \nWhat readers said\n \u001d heading level 3 \u001e",
+                                                                    "spoken":  [
+                                                                                   "Opening schedule  heading level  2  ",
+                                                                                   "What readers said heading level  3  "
+                                                                               ],
+                                                                    "spoken_records":  [
+                                                                                           {
+                                                                                               "t":  1792464010808,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Opening",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "1",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "schedule  heading level  2  ",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792464011184,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "What",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "2",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "readers",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "3",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "said",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "4",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "heading level  3  ",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1954,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s6",
+                                                "t_start_ms":  1792464014819,
+                                                "t_end_ms":  1792464016450,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Ctrl+Alt+Insert+Shift+3",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "What readers said\n \u001d heading level 3 \u001e",
+                                                                    "spoken":  [
+                                                                                   "What readers said heading level  3  "
+                                                                               ],
+                                                                    "spoken_records":  [
+                                                                                           {
+                                                                                               "t":  1792464015015,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "What",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "1",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "readers",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "2",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "said",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "3",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "heading level  3  ",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1056,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -2053,8 +2056,8 @@
                        "trial_success":  true,
                        "trace_file":  "295-web-first-last-headings-fields-trial3.jsonl",
                        "page_load_settled":  false,
-                       "trace_sha256":  "12b869edd370d7966ee6f46b6ff07bd73e649e466437e8e723cf747242395c1d"
+                       "trace_sha256":  "9afa25d9c6348ca5ee836db553aae907c89c889ef05685bb6a81178630dba058"
                    }
                ],
-    "total_elapsed_ms":  83872
+    "total_elapsed_ms":  84720
 }

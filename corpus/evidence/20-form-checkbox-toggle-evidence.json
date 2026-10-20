@@ -2,9 +2,9 @@
     "format_version":  2,
     "scenario_id":  "20-form-checkbox-toggle",
     "scenario_version":  "2.0.0",
-    "timestamp":  "2026-10-19T12:24:03.9963788+03:00",
+    "timestamp":  "2026-10-20T04:12:20.1032616+03:00",
     "provenance":  {
-                       "capture_script_sha256":  "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+                       "capture_script_sha256":  "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
                        "scenario_sha256":  "d86c93b89d7c3d0d229af32114d453a03405d77cc7205d4bdf6e51d9206bbde3",
                        "fixture_sha256":  "18fce31741084133ec7f31cd746e51f3cf00a36df7d5b92a1d5af35410748d5f",
                        "host":  "DESKTOP-DCNAKQQ",
@@ -14,6 +14,7 @@
                        "culture":  "en-US",
                        "utc_offset_minutes":  180,
                        "chrome_version":  "155.0.8059.84",
+                       "chrome_profile":  "sr-harness",
                        "jaws_version":  "2025.2505.43.400",
                        "jaws_settings":  {
                                              "DEFAULT.JCF":  {
@@ -405,7 +406,9 @@
                                                                            }
                                          },
                        "reader":  "jaws",
-                       "okur_sha256":  null
+                       "okur_sha256":  null,
+                       "trace_elevated":  true,
+                       "other_browsers_closed":  0
                    },
     "environment":  {
                         "os_version":  "Microsoft Windows NT 10.0.19045.0",
@@ -419,14 +422,14 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-19T12:24:06.4904976+03:00",
+                       "timestamp":  "2026-10-20T04:12:22.8133426+03:00",
                        "foreground_window_start":  "Forms and Interaction Reference Fixture - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792401853319,
-                                                "t_end_ms":  1792401855368,
+                                                "t_start_ms":  1792458749808,
+                                                "t_end_ms":  1792458751760,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "X",
@@ -435,47 +438,11 @@
                                                 "observation":  {
                                                                     "speech_raw":  " I accept terms and conditions  \u001d check box \u001e   \u001dnot checked\u001e",
                                                                     "spoken":  [
-                                                                                   "Speech history cleared",
                                                                                    "I accept terms and conditions check box   not checked "
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792401853340,
-                                                                                               "frags":  [
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "Speech",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "7",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "history",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "bookmark",
-                                                                                                                 "text":  "8",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "cleared",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             }
-                                                                                                         ]
-                                                                                           },
-                                                                                           {
-                                                                                               "t":  1792401853540,
+                                                                                               "t":  1792458749872,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -563,7 +530,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1718,
+                                                                    "settle_ms":  1622,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -572,25 +539,27 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792401857032,
-                                                "t_end_ms":  1792401861580,
+                                                "t_start_ms":  1792458753432,
+                                                "t_end_ms":  1792458758308,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Space",
                                                                "repeat":  1
                                                            },
                                                 "observation":  {
-                                                                    "speech_raw":  "Forms and Interaction Reference Fixture \n \u001d FormRegion \u001e \nI accept terms and conditions  \u001d check box \u001e   \u001dchecked\u001e  \nTo clear checkmark press Spacebar.",
+                                                                    "speech_raw":  "Forms and Interaction Reference Fixture \n \u001d FormRegion \u001e \nI accept terms and conditions  \u001d check box \u001e   \u001dnot checked\u001e  \nTo check press Spacebar.\n \u001dchecked\u001e",
                                                                     "spoken":  [
                                                                                    "Forms and Interaction Reference Fixture",
                                                                                    "Form Region  ",
                                                                                    "",
-                                                                                   "I accept terms and conditions check box   checked ",
-                                                                                   "To clear checkmark press Space Bar. "
+                                                                                   "I accept terms and conditions check box   not checked ",
+                                                                                   "To check press Space Bar. ",
+                                                                                   "checked ",
+                                                                                   ""
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792401857148,
+                                                                                               "t":  1792458753529,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -649,7 +618,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792401857672,
+                                                                                               "t":  1792458754062,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -660,7 +629,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792401858222,
+                                                                                               "t":  1792458754612,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
@@ -671,7 +640,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792401858421,
+                                                                                               "t":  1792458754821,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -747,14 +716,14 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "checked ",
+                                                                                                                 "text":  "not checked ",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              }
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792401859573,
+                                                                                               "t":  1792458756072,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -770,7 +739,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "clear",
+                                                                                                                 "text":  "check",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -782,7 +751,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "checkmark",
+                                                                                                                 "text":  "press",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -794,19 +763,29 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "press",
+                                                                                                                 "text":  "Space Bar. ",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
-                                                                                                             },
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792458756771,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "checked ",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792458757221,
+                                                                                               "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
                                                                                                                  "text":  "15",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "Space Bar. ",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              }
@@ -818,7 +797,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  4276,
+                                                                    "settle_ms":  4603,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -829,18 +808,18 @@
                        "trial_success":  true,
                        "trace_file":  "20-form-checkbox-toggle-trial1.jsonl",
                        "page_load_settled":  false,
-                       "trace_sha256":  "92b1083de424b07441842bfcf60c7c7cf5a7aea24a8285592214745f9d8f1bef"
+                       "trace_sha256":  "ed4685f2ccfcff24b006557774b30f08f06f69e735f32b88914119e43cde4795"
                    },
                    {
                        "trial_index":  2,
-                       "timestamp":  "2026-10-19T12:24:21.6562722+03:00",
+                       "timestamp":  "2026-10-20T04:12:38.3862757+03:00",
                        "foreground_window_start":  "Forms and Interaction Reference Fixture - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792401868319,
-                                                "t_end_ms":  1792401870150,
+                                                "t_start_ms":  1792458765239,
+                                                "t_end_ms":  1792458767069,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "X",
@@ -853,7 +832,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792401868378,
+                                                                                               "t":  1792458765290,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -941,7 +920,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1596,
+                                                                    "settle_ms":  1605,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -950,8 +929,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792401871866,
-                                                "t_end_ms":  1792401875729,
+                                                "t_start_ms":  1792458768783,
+                                                "t_end_ms":  1792458772583,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Space",
@@ -966,7 +945,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792401872038,
+                                                                                               "t":  1792458768914,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1025,7 +1004,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792401872562,
+                                                                                               "t":  1792458769442,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1108,7 +1087,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792401873722,
+                                                                                               "t":  1792458770592,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1172,7 +1151,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3605,
+                                                                    "settle_ms":  3543,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1183,18 +1162,18 @@
                        "trial_success":  true,
                        "trace_file":  "20-form-checkbox-toggle-trial2.jsonl",
                        "page_load_settled":  false,
-                       "trace_sha256":  "6f0c9d3c3ffbffb6d410d93a31917f8b1afe4c2be2622a35e1c370a0d76e82a2"
+                       "trace_sha256":  "c3145c9532b8820ba053f324ba78e22c26a4d8066765626d1cefdb232c4fe39b"
                    },
                    {
                        "trial_index":  3,
-                       "timestamp":  "2026-10-19T12:24:35.8078025+03:00",
+                       "timestamp":  "2026-10-20T04:12:52.6342391+03:00",
                        "foreground_window_start":  "Forms and Interaction Reference Fixture - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792401882551,
-                                                "t_end_ms":  1792401884391,
+                                                "t_start_ms":  1792458779483,
+                                                "t_end_ms":  1792458781329,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "X",
@@ -1207,7 +1186,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792401882605,
+                                                                                               "t":  1792458779559,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1295,7 +1274,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1598,
+                                                                    "settle_ms":  1602,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1304,23 +1283,25 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792401886104,
-                                                "t_end_ms":  1792401889916,
+                                                "t_start_ms":  1792458783039,
+                                                "t_end_ms":  1792458787155,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Space",
                                                                "repeat":  1
                                                            },
                                                 "observation":  {
-                                                                    "speech_raw":  "Forms and Interaction Reference Fixture\nI accept terms and conditions  \u001d check box \u001e   \u001dchecked\u001e  \nTo clear checkmark press Spacebar.",
+                                                                    "speech_raw":  "Forms and Interaction Reference Fixture\nI accept terms and conditions  \u001d check box \u001e   \u001dnot checked\u001e  \nTo check press Spacebar.\n \u001dchecked\u001e",
                                                                     "spoken":  [
                                                                                    "Forms and Interaction Reference Fixture",
-                                                                                   "I accept terms and conditions check box   checked ",
-                                                                                   "To clear checkmark press Space Bar. "
+                                                                                   "I accept terms and conditions check box   not checked ",
+                                                                                   "To check press Space Bar. ",
+                                                                                   "checked ",
+                                                                                   ""
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792401886228,
+                                                                                               "t":  1792458783140,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1379,7 +1360,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792401886752,
+                                                                                               "t":  1792458783662,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1455,14 +1436,14 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "checked ",
+                                                                                                                 "text":  "not checked ",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              }
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792401887902,
+                                                                                               "t":  1792458784912,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -1478,7 +1459,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "clear",
+                                                                                                                 "text":  "check",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1490,7 +1471,7 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "checkmark",
+                                                                                                                 "text":  "press",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              },
@@ -1502,19 +1483,29 @@
                                                                                                              },
                                                                                                              {
                                                                                                                  "action":  "speak",
-                                                                                                                 "text":  "press",
+                                                                                                                 "text":  "Space Bar. ",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
-                                                                                                             },
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792458785662,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "checked ",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1792458786071,
+                                                                                               "frags":  [
                                                                                                              {
                                                                                                                  "action":  "bookmark",
                                                                                                                  "text":  "14",
-                                                                                                                 "rate":  10,
-                                                                                                                 "volume":  100
-                                                                                                             },
-                                                                                                             {
-                                                                                                                 "action":  "speak",
-                                                                                                                 "text":  "Space Bar. ",
                                                                                                                  "rate":  10,
                                                                                                                  "volume":  100
                                                                                                              }
@@ -1526,7 +1517,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  3553,
+                                                                    "settle_ms":  3853,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -1537,8 +1528,8 @@
                        "trial_success":  true,
                        "trace_file":  "20-form-checkbox-toggle-trial3.jsonl",
                        "page_load_settled":  false,
-                       "trace_sha256":  "83fd899443b35e241a1ea0fc9c2692265e1542c28d1d21426d021cdd143db80c"
+                       "trace_sha256":  "b5b92d3c226163cec69f8ea102c52a5e70283880251ab5850b469ca206850ba8"
                    }
                ],
-    "total_elapsed_ms":  46806
+    "total_elapsed_ms":  47963
 }
