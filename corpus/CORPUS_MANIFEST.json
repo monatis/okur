@@ -4456,13 +4456,97 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "644-web-tab-first-then-escape-intermediate",
+      "fixture": "signup-form.html",
+      "evidence": {
+        "sha256": "76071d16ae8512fadfc385bb89f54ee43ff182a641edca38e07f0aee69c72e4d",
+        "capture_script_sha256": "bf89d333b1eca515dc0da6a3e2407056055b80d500d56700db4951d636c177c7",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "645-web-tab-first-then-escape-advanced",
+      "fixture": "signup-form.html",
+      "evidence": {
+        "sha256": "41baa9e6621c4d966ef578f7dc8ea5b7f1ec94871bb35e601b4f77108eee0eed",
+        "capture_script_sha256": "bf89d333b1eca515dc0da6a3e2407056055b80d500d56700db4951d636c177c7",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "646-web-down-then-tab-escape-intermediate",
+      "fixture": "signup-form.html",
+      "evidence": {
+        "sha256": "ffc10f748be2b409d07c7708f6dc462ba1403ac99e7910b5c8c40bde7f34cdee",
+        "capture_script_sha256": "bf89d333b1eca515dc0da6a3e2407056055b80d500d56700db4951d636c177c7",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "647-web-down-then-tab-escape-advanced",
+      "fixture": "signup-form.html",
+      "evidence": {
+        "sha256": "7cff06dffe9448bbf44c9cc2967c0019a13e19121b37646de516b4108b7dfa4d",
+        "capture_script_sha256": "bf89d333b1eca515dc0da6a3e2407056055b80d500d56700db4951d636c177c7",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "648-web-say-line-then-tab-escape-intermediate",
+      "fixture": "signup-form.html",
+      "evidence": {
+        "sha256": "155c4e23ac9e7551f8d5779c6a972b4d35889a71d05bf7e1aaaf58d596e90637",
+        "capture_script_sha256": "bf89d333b1eca515dc0da6a3e2407056055b80d500d56700db4951d636c177c7",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "649-web-say-line-then-tab-escape-advanced",
+      "fixture": "signup-form.html",
+      "evidence": {
+        "sha256": "96d6f854c267e000f249526c842552faf890c15a37f0c246e989281fb8d897b5",
+        "capture_script_sha256": "bf89d333b1eca515dc0da6a3e2407056055b80d500d56700db4951d636c177c7",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 307,
-    "scenarios_with_evidence": 307,
-    "total_trials": 975,
-    "successful_trials": 975,
-    "deterministic_scenarios": 193
+    "scenarios": 313,
+    "scenarios_with_evidence": 313,
+    "total_trials": 993,
+    "successful_trials": 993,
+    "deterministic_scenarios": 195
   }
 }
