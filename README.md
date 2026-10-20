@@ -45,13 +45,17 @@ Where to go from here:
 ## Where it stands
 
 > **Status (October 2026): a preview on Windows.** Web pages in Chrome (the Virtual PC
-> Cursor, JAWS's lists of links, headings and other elements, tables, selecting and copying),
+> Cursor, the lists of links, headings and other elements, tables, selecting and copying),
 > dialog boxes and menus, Notepad, File Explorer, Windows Settings, Windows Terminal, the
 > desktop, Alt+Tab and Windows search are read as JAWS reads them. It is not yet a
-> replacement for your screen reader: reading with the Okur cursor (JAWS's JAWS cursor), the
-> clipboard keys and Microsoft Office are among what is still missing (see [Not yet](#not-yet)).
-> Those everyday gaps on Windows are being closed first; macOS, whose accessibility layer is
-> in place, comes after them.
+> replacement for your screen reader: Microsoft Office, reading the screen with the Okur
+> cursor, and the keys that say or show the clipboard are among what is still missing (see
+> [Not yet](#not-yet)). Those everyday gaps on Windows are being closed first; macOS, whose
+> accessibility layer is in place, comes after them.
+>
+> **Okur speaks in its own name.** Where JAWS names itself, Okur says Okur: the Okur key
+> (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
+> know.
 
 Every figure is tool output, rerun for this README at commit `86ec435` (2026-10-20).
 
@@ -88,15 +92,15 @@ in [accepted divergences](docs/references/accepted-divergences.md).
     list, table or region; Equals to where the page says reading goes next (aria-flowto); S
     and D to the next element of the same or of another type (and Ctrl+Insert with Up, Right
     and Left); Jump to Line (J, and Shift+J back);
-  - JAWS's lists: links, headings and form fields (Insert+F7, Insert+F6, Insert+F5), Virtual
+  - the lists of links, headings and form fields (Insert+F7, Insert+F6, Insert+F5), Virtual
     HTML Features (Insert+F3), the element lists on Ctrl+Insert and a letter (buttons, edits,
     check boxes, radio buttons, combo boxes, graphics, lists, articles, paragraphs, block
     quotes, tables, divisions and tabs), and Document Regions (Insert+Ctrl+R);
   - tables: Ctrl+Alt and the arrows, a whole row or column with Windows+Alt and the arrows,
     and the table layer (Insert+Space, then T);
   - selecting with Shift and the arrows, Ctrl+A or F8, and copying with Ctrl+C;
-  - Okur Find, JAWS Find in Okur's name (Ctrl+F or Insert+Ctrl+F, then F3 and Shift+F3), its
-    history kept per site;
+  - Okur Find (Ctrl+F or Insert+Ctrl+F, then F3 and Shift+F3), with its history kept per
+    site, as JAWS Find keeps it;
   - forms mode, turned on by Tab or the arrows (Auto Forms Mode) or with Enter, and off with
     Escape or Numpad Plus; Space clicks the control at the cursor, as JAWS does;
   - routing the cursors (Insert+Delete, Ctrl+Insert+Delete), a click with Numpad Slash, a
@@ -124,25 +128,31 @@ in [accepted divergences](docs/references/accepted-divergences.md).
 - **Editing** in text fields: characters, words, lines, sentences and paragraphs; selections
   said as JAWS says them, and Say Selected Text (Insert+Shift+Down); cut, paste and undo; a
   field of several lines read as a document; the window's top and bottom line (Insert+End,
-  Insert+PageDown); Say Font; misspelled words marked; and JAWS's text analysis on Insert+Tab
-  (runs of spaces, stray or unspaced punctuation, a missing capital, brackets and quotes left
-  open, each with its column).
+  Insert+PageDown); Say Font; misspelled words marked; and text analysis on Insert+Tab, as
+  JAWS does it (runs of spaces, stray or unspaced punctuation, a missing capital, brackets and
+  quotes left open, each with its column).
+- **The cursors:** Numpad Minus to the Okur cursor at the mouse, Numpad Plus back to the PC
+  cursor, Insert+Numpad Minus to bring the mouse to the PC cursor, and Alt+Delete for where
+  the active cursor is.
+- **Information keys:** the time and date (Insert+F12), the settings in use (Insert+Q) and
+  the application's version (Ctrl+Insert+V).
 - **Help** in Okur's own words: Insert+F1 for the control or the page element you are on,
   Insert+H for Okur's keys there, Insert+W for Windows' keys.
 - **The Virtual Viewer** (Insert+Alt+W) on screen as JAWS shows it, for windows, controls and
   consoles, Windows Terminal included; the Speech History (Insert+Space, then H; Ctrl+H
   copies it and Shift+H clears it).
 - **Okur's own dialogs** are real Windows dialogs: the lists above, Okur Find and the Window
-  List, with JAWS's controls and labels, and Okur Settings (Insert+6 or Insert+V).
-- **Speech:** JAWS's punctuation levels and symbol names (Insert+Shift+2); typing echo by
-  characters, words, both or none (Insert+2); a reading key pressed twice quickly spells,
-  with capitals at a higher pitch; the rate on the fly (Ctrl+Alt+PageUp and PageDown); speech
-  off and on (Insert+Space, then S).
+  List, with the same controls and labels as JAWS's, and Okur Settings (Insert+6 or Insert+V),
+  whose changes are for all applications.
+- **Speech:** punctuation levels and symbol names as JAWS has them (Insert+Shift+2); typing
+  echo by characters, words, both or none (Insert+2); a reading key pressed twice quickly
+  spells, with capitals at a higher pitch; the rate on the fly (Ctrl+Alt+PageUp and
+  PageDown); speech off and on (Insert+Space, then S).
 - **Verbosity levels:** Beginner, Intermediate and Advanced, as JAWS has them. Above
-  Beginner Okur says JAWS's short messages ("Last row", "3 columns and 3 rows", "virtual PC");
-  at Advanced it leaves out what JAWS leaves out there, such as a list's positions, a field's
-  description and a group box's name.
-- **Quitting with Insert+F4,** after JAWS's question (Enter quits, Escape stays).
+  Beginner Okur says the short messages JAWS says there ("Last row", "3 columns and 3 rows",
+  "virtual PC"); at Advanced it leaves out what JAWS leaves out, such as a list's positions, a
+  field's description and a group box's name.
+- **Quitting with Insert+F4,** after asking first, as JAWS does (Enter quits, Escape stays).
 - **Both keyboard layouts,** desktop and laptop, with Insert or CapsLock as the Okur key
   (JAWS's JAWS key).
 - **OneCore and SAPI 5 voices.**
@@ -153,19 +163,23 @@ The [reference documentation](docs/references/) describes these behaviors in det
 
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
-- reading at the Okur cursor, and clicking with the mouse keys outside pages (the cursor keys
-  already work: Numpad Minus, Numpad Plus, Insert+Numpad Minus, Alt+Delete);
-- the clipboard keys: say, view and add to the clipboard;
-- the rest of what the verbosity levels change, as further recordings show it;
-- Speech On Demand, Keyboard Help (Insert+1), Say Color's names and the Word List;
-- starting by itself at sign-in and on Windows' sign-in screen: an installer and a build
-  with UI Access are written, and wait for a signed release;
-- Say All by sentence or paragraph, and skim reading;
-- visited links, PlaceMarkers, custom labels and Flexible Web;
-- notifications (toasts);
-- settings for one application or one site from the settings dialog, which saves them for
-  every application;
 - Microsoft Word, Outlook and Excel, not yet supported or checked;
+- reading the screen with the Okur cursor (its reading keys say nothing yet), and the mouse
+  keys outside web pages;
+- the keys JAWS adds for the clipboard: saying it (Insert+Windows+X), viewing it and adding
+  to it (copying, cutting and pasting already work);
+- Keyboard Help (Insert+1), Say Color (Insert+5), the Word List and skim reading;
+- Speech On Demand (Shift+S in the speech layer only says it is not available, as JAWS does
+  in full speech mode);
+- notifications (toasts) and the notification history;
+- Say All by sentence or paragraph;
+- visited links, PlaceMarkers, custom labels and Flexible Web;
+- settings for one application or one site from the dialog: Okur uses them from its
+  settings file, but the dialog saves for all applications;
+- the rest of what the verbosity levels change, as further recordings show it;
+- starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
+  with UI Access are written and are being tested with a development signature on the lab
+  machine, before a signed release;
 - on macOS, the keyboard and speech.
 
 Braille, OCR and Picture Smart come later.
@@ -227,7 +241,7 @@ Options of `okur run` change a setting for that run only:
 | `--keyboard-layout desktop` or `laptop` | the keyboard layout, as JAWS's |
 | `--okur-key insert`, `capslock` or `scrolllock` | the Okur key, Okur's modifier (JAWS's JAWS key) |
 | `--live-region-whole-text` | read a growing live region whole each time, as JAWS does |
-| `--typing-echo none` | say nothing as you type (JAWS's Typing Echo set to None); `characters`, the default, says each character. Insert+2 goes through all four of JAWS's choices while Okur runs |
+| `--typing-echo none` | say nothing as you type (JAWS's Typing Echo set to None); `characters`, the default, says each character. Insert+2 goes through all four choices, as JAWS has them, while Okur runs |
 | `--debug-log <file>` | record keys, events and timings, for reporting a problem |
 
 ### Reporting a problem
@@ -307,8 +321,8 @@ from the [performance review](docs/backlog/performance-review-2026-10-20.md) of 
 ### Repository map
 
 - [`crates/okur-core`](crates/okur-core): the engine. The accessibility object model, the
-  virtual buffer, keys, focus, live regions, speech in JAWS's phrasing, settings, and what
-  Okur's dialogs hold. Platform-neutral.
+  virtual buffer, keys, focus, live regions, speech phrased as JAWS phrases it, settings,
+  and what Okur's dialogs hold. Platform-neutral.
 - [`crates/okur-platform`](crates/okur-platform): Windows bindings (and the future macOS and
   Linux ones): the event tracer, keyboard hook, speech engines, application actions and the
   settings files.
@@ -435,8 +449,10 @@ hears follows JAWS.
   functional methods of operation, an interoperability interface users depend on, and that
   observing a program's behavior to build a compatible one is legitimate.
 
-JAWS is a trademark of Freedom Scientific (Vispero). Okur is independent and is not
-affiliated with or endorsed by them.
+JAWS, Freedom Scientific and Vispero are trademarks of Vispero. Okur is independent and is
+not affiliated with or endorsed by them. Okur never uses these names as its own: its
+messages, dialogs, settings, command-line options and installer say "Okur" where JAWS names
+itself, and name JAWS only to compare with it.
 
 ## License
 
