@@ -241,9 +241,11 @@ A step can be in more than one entry; all of its entries apply.
 
 ### JAWS is left outside the page after the Speech History
 
-- Steps: `517-web-speech-layer-keys/s4`, `517-web-speech-layer-keys/s10`.
+- Steps: `517-web-speech-layer-keys/s4`, `517-web-speech-layer-keys/s10`,
+  `570-web-speech-history-clear-and-copy/s10`.
 - Difference: the whole step. JAWS says nothing (or "blank"); Okur reads the page's line on
-  Escape, and the next line on Down.
+  Escape, and the next line on Down. 570 recorded the same Escape again, silent in every
+  trial.
 - Why: Escape out of the Speech History (Insert+Space, H) left JAWS's virtual cursor outside
   the page: it said "blank" in one trial and nothing in the others, and Down later said
   nothing though speech was on (its synthesizer log holds only the harness's own message).

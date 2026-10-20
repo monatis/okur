@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 3161,
-  "total_steps": 3373,
-  "accepted_divergences": 74,
+  "matched_steps": 3162,
+  "total_steps": 3372,
+  "accepted_divergences": 75,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -3034,9 +3034,9 @@
     "569-web-route-pc-to-elements/s8": "match",
     "569-web-route-pc-to-elements/s9": "match",
     "570-web-speech-history-clear-and-copy/s1": "match",
-    "570-web-speech-history-clear-and-copy/s10": "mismatch",
+    "570-web-speech-history-clear-and-copy/s10": "accepted divergence",
     "570-web-speech-history-clear-and-copy/s2": "match",
-    "570-web-speech-history-clear-and-copy/s3": "mismatch",
+    "570-web-speech-history-clear-and-copy/s3": "match",
     "570-web-speech-history-clear-and-copy/s4": "match",
     "570-web-speech-history-clear-and-copy/s5": "match",
     "570-web-speech-history-clear-and-copy/s6": "match",

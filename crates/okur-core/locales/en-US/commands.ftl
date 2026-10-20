@@ -86,6 +86,8 @@ rate-slower = Slower
 
 # The Speech History viewer (Insert+Space, H), as JAWS names it on opening.
 speech-history-title = Speech History
+# Ctrl+H in the layer put the Speech History on the clipboard [obs, 570/s3].
+speech-history-copied = Copy speech history to clipboard
 
 ## Say Default Button (Insert+E) and the settings in use (Insert+Q) [obs, 513]
 

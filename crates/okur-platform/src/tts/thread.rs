@@ -426,6 +426,10 @@ impl SpeechOutput for SpeechThread {
         self.recent.iter().cloned().collect()
     }
 
+    fn clear_history(&mut self) {
+        self.recent.clear();
+    }
+
     fn speak_symbols(&mut self, text: &str, interrupt: bool) {
         self.record(SpeechLogKind::Speak, text, interrupt);
         self.send(Request::Symbols(text.to_owned(), interrupt));

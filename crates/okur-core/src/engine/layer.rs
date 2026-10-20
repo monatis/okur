@@ -1,6 +1,7 @@
 //! The Insert+Space layer: Insert+Space, released, then one key (JAWS 2025 help, Layered
-//! Keystrokes). H opens the Speech History; S turns speech off and on. Escape, Space, Tab and
-//! Enter leave the layer, as any other key does [obs, 517].
+//! Keystrokes). H opens the Speech History, Shift+H clears it and Ctrl+H copies it; S turns
+//! speech off and on. Escape, Space, Tab and Enter leave the layer, as any other key does
+//! [obs, 517, 570].
 
 use super::{AppMode, ScreenReaderEngine};
 use crate::input::{Key, KeyAction, KeyEvent};
@@ -27,8 +28,19 @@ impl ScreenReaderEngine {
         }
         self.layer_open = false;
         let plain = event.modifiers.is_empty();
+        let shift_only = event.modifiers.shift
+            && !event.modifiers.ctrl
+            && !event.modifiers.alt
+            && !event.modifiers.insert;
+        let ctrl_only = event.modifiers.ctrl
+            && !event.modifiers.shift
+            && !event.modifiers.alt
+            && !event.modifiers.insert;
         match event.key {
             Key::Alpha('H') if plain => self.open_speech_history(),
+            // Shift+H forgets the Speech History, silently [obs, 570/s6].
+            Key::Alpha('H') if shift_only => self.speech.clear_history(),
+            Key::Alpha('H') if ctrl_only => self.copy_speech_history(),
             Key::Alpha('S') if plain => {
                 self.speech_muted = !self.speech_muted;
                 self.speech.set_muted(self.speech_muted);
@@ -102,16 +114,31 @@ impl ScreenReaderEngine {
         Some(KeyAction::Consume)
     }
 
-    /// The Speech History in the Virtual Viewer, on the latest announcement: "Speech History"
-    /// [obs, 517/s3].
-    fn open_speech_history(&mut self) {
-        let lines: Vec<String> = self
-            .speech
+    /// The Speech History's lines, the oldest first.
+    fn speech_history_lines(&self) -> Vec<String> {
+        self.speech
             .history()
             .iter()
             .flat_map(|said| said.lines().map(str::to_owned).collect::<Vec<_>>())
             .filter(|line| !line.trim().is_empty())
-            .collect();
+            .collect()
+    }
+
+    /// Ctrl+H: the Speech History on the clipboard, a line each, then "Copy speech history to
+    /// clipboard" [obs, 570/s3].
+    fn copy_speech_history(&mut self) {
+        let text = self.speech_history_lines().join("\r\n");
+        if let Some(actions) = &self.actions {
+            actions.copy_text(&text);
+        }
+        self.speech
+            .speak(msg::speech_history_copied().as_str(), true);
+    }
+
+    /// The Speech History in the Virtual Viewer, on the latest announcement: "Speech History"
+    /// [obs, 517/s3].
+    fn open_speech_history(&mut self) {
+        let lines = self.speech_history_lines();
         let last = lines.len().saturating_sub(1);
         self.viewer = Some(crate::viewer::VirtualViewer::at_line(lines, last));
         self.show_viewer_window();
@@ -146,6 +173,14 @@ mod tests {
             }
         }
         fn stop(&mut self) {}
+        fn history(&self) -> Vec<String> {
+            self.said.lock().map(|s| s.clone()).unwrap_or_default()
+        }
+        fn clear_history(&mut self) {
+            if let Ok(mut said) = self.said.lock() {
+                said.clear();
+            }
+        }
         fn set_muted(&mut self, muted: bool) {
             if let Ok(mut m) = self.muted.lock() {
                 *m = muted;
@@ -188,5 +223,49 @@ mod tests {
         // Outside the layer, S is a quick key again.
         let _ = press(&mut engine, Key::Alpha('S'), false);
         assert!(!engine.layer_open);
+    }
+
+    /// Ctrl+H puts the Speech History on the clipboard and says so; Shift+H clears it,
+    /// silently [obs, 570/s3, s6].
+    #[test]
+    fn insert_space_then_ctrl_h_copies_the_history_and_shift_h_clears_it() {
+        let page = AomNode::new(0, Role::Document).with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("First"),
+            AomNode::new(2, Role::Paragraph).with_text("Second"),
+        ]);
+        let speech = Speech::default();
+        let mut engine = ScreenReaderEngine::new(
+            VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+            Box::new(speech.clone()),
+        );
+        let actions = crate::actions::RecordingActions::default();
+        engine.set_actions(Box::new(actions.clone()));
+        engine.cursor.move_to_start();
+        let _ = press(&mut engine, Key::DownArrow, false);
+        let ctrl_h = |engine: &mut ScreenReaderEngine, modifiers: Modifiers| {
+            let _ = press(engine, Key::Space, true);
+            engine.handle_key_event(&KeyEvent::new(Key::Alpha('H'), modifiers, true))
+        };
+        let ctrl = {
+            let mut m = Modifiers::none();
+            m.ctrl = true;
+            m
+        };
+        assert_eq!(ctrl_h(&mut engine, ctrl), KeyAction::Consume);
+        assert_eq!(
+            crate::actions::ApplicationActions::clipboard_text(&actions).as_deref(),
+            Some("Second")
+        );
+        assert_eq!(
+            speech.history().last().map(String::as_str),
+            Some("Copy speech history to clipboard")
+        );
+        let shift = {
+            let mut m = Modifiers::none();
+            m.shift = true;
+            m
+        };
+        assert_eq!(ctrl_h(&mut engine, shift), KeyAction::Consume);
+        assert!(speech.history().is_empty());
     }
 }

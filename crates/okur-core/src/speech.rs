@@ -987,6 +987,10 @@ pub trait SpeechOutput: Send + Sync {
     fn history(&self) -> Vec<String> {
         Vec::new()
     }
+
+    /// Forgets what was said (Insert+Space, Shift+H): the Speech History then holds only what
+    /// is said after [obs, 570/s6, s9].
+    fn clear_history(&mut self) {}
 }
 
 /// Mock speech synthesizer output for testing and headless execution.
