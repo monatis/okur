@@ -2,32 +2,38 @@
 //! (Insert+Tab) names after a text field ("Space run at column 4" [obs, 568/s4]).
 //!
 //! The rules are the ones recordings show, each with its column (from 1, in characters):
-//! - a run of spaces inside the line (568/s4);
-//! - a sentence beginning with a small letter, after the full stop, question or exclamation
-//!   mark that ends the one before it, on this line or an earlier one ("no capital at the
-//!   start." after "Two  spaces here." [obs, 568/s7]); the text's first line has none before
-//!   it and is not named ("fn main() {" [obs, 571/s4]);
-//! - a word in inverted case, "tHIS" (568/s25);
-//! - punctuation alone between spaces or the line's ends, "A stray , comma." (568/s10), "fn
-//!   main() {" (571/s4);
+//! - a run of spaces inside the line, not the spaces it starts with (568/s4, 614/s15, s29);
+//! - a small letter after a sentence's end, once for each full stop, question or exclamation
+//!   mark before it ("Wait... what?" names "Missing initial cap w" three times [obs,
+//!   614/s21]), the end on this line or the text before it ("no capital at the start." after
+//!   "Two  spaces here." [obs, 568/s7]); a stop before a letter or digit ("1.5") or after a
+//!   lone letter ("e.g.") ends nothing (614/s13, s25), and the text's first line has nothing
+//!   before it ("fn main() {" [obs, 571/s4]);
+//! - a word in inverted case, "tHIS" (568/s25, 614/s27);
+//! - a comma, full stop, colon, semicolon, question or exclamation mark or a bracket alone
+//!   between spaces or the line's ends, "A stray , comma." (568/s10, 571/s4, 614/s5), but not
+//!   "*" or "=" (614/s11);
 //! - a comma, semicolon, colon, question or exclamation mark with a letter right after it,
-//!   "An unspaced,comma." (568/s13);
-//! - a bracket, brace or double quote the line does not close (568/s22, 571/s4).
-//!
-//! Open questions, which 614 records: whether parentheses are paired at all (568's "(" closed
-//! on the next line is not named), how far pairing reaches, and leading spaces, full stops
-//! inside words and symbols such as `*` and `=`.
+//!   "An unspaced,comma.", "Hello!World" (568/s13, 614/s23);
+//! - a bracket, brace, parenthesis or double quote left open, or a closing one never opened,
+//!   paired over the line and the two lines around it: a parenthesis closed two lines down is
+//!   not named (614/s1, s5), one closed three lines down is (571/s4).
 
 use crate::messages::msg;
 
-/// One inconsistency, in the order JAWS names them at one column: the start's capital, then
-/// the word's case, then punctuation, then pairing ("Stray punctuation { at column 11 |
-/// Unclosed { at column 11" [obs, 571/s4]).
+/// How many lines before and after the caret's line brackets are paired over.
+const PAIRING_LINES: usize = 2;
+
+/// One inconsistency, in the order JAWS names them at one column: the start's capital, the
+/// word's case, a closer never opened, then punctuation, then an opener left open
+/// ("Unopened ] | Stray punctuation ]" [obs, 614/s9]; "Stray punctuation { | Unclosed {"
+/// [obs, 571/s4]).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 enum Kind {
     SpaceRun,
     MissingInitialCap(char),
     InvertedCap(char),
+    Unopened(char),
     StrayPunctuation(char),
     UnspacedPunctuation(char),
     Unclosed(char),
@@ -38,22 +44,41 @@ enum Kind {
 pub fn describe_line(text: &str, caret: usize) -> Vec<String> {
     let chars: Vec<char> = text.chars().collect();
     let caret = caret.min(chars.len());
-    let is_break = |c: &char| *c == '\n' || *c == '\r';
-    let start = chars
-        .get(..caret)
-        .and_then(|before| before.iter().rposition(is_break))
-        .map_or(0, |i| i + 1);
-    let end = chars
-        .get(caret..)
-        .and_then(|after| after.iter().position(is_break))
-        .map_or(chars.len(), |i| caret + i);
-    let line = chars.get(start..end).unwrap_or_default();
-    // What ends the text before the line, past its breaks and spaces.
-    let before = chars
-        .get(..start)
-        .and_then(|before| before.iter().rev().find(|c| !c.is_whitespace()))
-        .copied();
-    let mut found = inconsistencies(line, before);
+    // The text's lines as character ranges, without their breaks.
+    let mut lines: Vec<(usize, usize)> = Vec::new();
+    let mut start = 0;
+    for (i, &c) in chars.iter().enumerate() {
+        if c == '\n' {
+            let end = if i > start && chars.get(i - 1) == Some(&'\r') {
+                i - 1
+            } else {
+                i
+            };
+            lines.push((start, end));
+            start = i + 1;
+        }
+    }
+    lines.push((start, chars.len()));
+    let here = lines
+        .iter()
+        .position(|&(s, e)| s <= caret && caret <= e)
+        .unwrap_or(0);
+    let line_of = |index: usize| -> &[char] {
+        lines
+            .get(index)
+            .and_then(|&(s, e)| chars.get(s..e))
+            .unwrap_or_default()
+    };
+    let line = line_of(here);
+    // What ends the text before the line: its sentence ends, if any.
+    let before_start = lines.get(here).map_or(0, |&(s, _)| s);
+    let before = chars.get(..before_start).unwrap_or_default();
+    let mut found = inconsistencies(line, sentence_ends_at_end(before));
+    // Brackets, braces, parentheses and quotes, paired over the lines around.
+    let first = here.saturating_sub(PAIRING_LINES);
+    let last = (here + PAIRING_LINES).min(lines.len().saturating_sub(1));
+    let window: Vec<(usize, &[char])> = (first..=last).map(|i| (i, line_of(i))).collect();
+    found.extend(pairing(&window, here));
     found.sort_by_key(|&(column, kind)| (column, kind));
     found
         .into_iter()
@@ -69,6 +94,7 @@ fn describe(column: usize, kind: Kind) -> String {
             msg::text_analysis_missing_initial_cap(symbol(c), column).to_string()
         }
         Kind::InvertedCap(c) => msg::text_analysis_inverted_cap(symbol(c), column).to_string(),
+        Kind::Unopened(c) => msg::text_analysis_unopened(symbol(c), column).to_string(),
         Kind::StrayPunctuation(c) => {
             msg::text_analysis_stray_punctuation(symbol(c), column).to_string()
         }
@@ -79,9 +105,52 @@ fn describe(column: usize, kind: Kind) -> String {
     }
 }
 
-/// The line's inconsistencies as `(column, kind)`, columns from 1. `before` is the last
-/// character of the text before the line that is not a space or a line break.
-fn inconsistencies(line: &[char], before: Option<char>) -> Vec<(usize, Kind)> {
+fn is_terminator(c: char) -> bool {
+    matches!(c, '.' | '!' | '?')
+}
+
+/// Whether the terminator at `i` of `text` ends a sentence: not before a letter or digit
+/// ("1.5"), and not after a lone letter ("e.g.").
+fn ends_sentence(text: &[char], i: usize) -> bool {
+    let at = |j: usize| text.get(j).copied();
+    let Some(c) = at(i) else {
+        return false;
+    };
+    if !is_terminator(c) || at(i + 1).is_some_and(char::is_alphanumeric) {
+        return false;
+    }
+    let lone_letter = c == '.'
+        && i.checked_sub(1)
+            .and_then(at)
+            .is_some_and(char::is_alphabetic)
+        && i.checked_sub(2)
+            .and_then(at)
+            .is_none_or(|p| p.is_whitespace() || p == '.');
+    !lone_letter
+}
+
+/// How many sentence ends the text before a line closes with (its last characters past
+/// spaces and line breaks).
+fn sentence_ends_at_end(before: &[char]) -> usize {
+    let end = before
+        .iter()
+        .rposition(|c| !c.is_whitespace())
+        .map_or(0, |i| i + 1);
+    let text = before.get(..end).unwrap_or_default();
+    let mut count = 0;
+    let mut i = end;
+    while i > 0 && text.get(i - 1).copied().is_some_and(is_terminator) {
+        if ends_sentence(text, i - 1) {
+            count += 1;
+        }
+        i -= 1;
+    }
+    count
+}
+
+/// The line's own inconsistencies as `(column, kind)`, columns from 1. `ends_before` is how
+/// many sentence ends the text before the line closes with.
+fn inconsistencies(line: &[char], ends_before: usize) -> Vec<(usize, Kind)> {
     let mut found = Vec::new();
     let at = |i: usize| line.get(i).copied();
     let spaced = |c: Option<char>| c.is_none_or(char::is_whitespace);
@@ -103,18 +172,18 @@ fn inconsistencies(line: &[char], before: Option<char>) -> Vec<(usize, Kind)> {
         }
     }
 
-    // A sentence's first letter, small, after the one before it ended.
-    let mut sentence_ended = before.is_some_and(ends_sentence);
+    // A small letter after sentence ends: once for each.
+    let mut pending = ends_before;
     for (i, &c) in line.iter().enumerate() {
         if c.is_alphabetic() {
-            if sentence_ended && c.is_lowercase() {
-                found.push((i + 1, Kind::MissingInitialCap(c)));
+            if c.is_lowercase() {
+                found.extend((0..pending).map(|_| (i + 1, Kind::MissingInitialCap(c))));
             }
-            sentence_ended = false;
-        } else if ends_sentence(c) {
-            sentence_ended = at(i + 1).is_none_or(char::is_whitespace);
-        } else if !c.is_whitespace() {
-            sentence_ended = false;
+            pending = 0;
+        } else if ends_sentence(line, i) {
+            pending += 1;
+        } else if c.is_ascii_digit() {
+            pending = 0;
         }
     }
 
@@ -140,99 +209,169 @@ fn inconsistencies(line: &[char], before: Option<char>) -> Vec<(usize, Kind)> {
 
     // Punctuation alone, and punctuation a letter follows.
     for (i, &c) in line.iter().enumerate() {
-        if !c.is_ascii_punctuation() {
-            continue;
-        }
         let left = i.checked_sub(1).and_then(at);
         let right = at(i + 1);
-        if spaced(left) && spaced(right) {
+        let clause = matches!(c, ',' | '.' | ';' | ':' | '!' | '?');
+        let bracket = matches!(c, '(' | ')' | '[' | ']' | '{' | '}');
+        if (clause || bracket) && spaced(left) && spaced(right) {
             found.push((i + 1, Kind::StrayPunctuation(c)));
         } else if matches!(c, ',' | ';' | ':' | '!' | '?') && right.is_some_and(char::is_alphabetic)
         {
             found.push((i + 1, Kind::UnspacedPunctuation(c)));
         }
     }
-
-    // Brackets, braces and double quotes the line leaves open.
-    let mut open: Vec<(usize, char)> = Vec::new();
-    for (i, &c) in line.iter().enumerate() {
-        match c {
-            '[' | '{' => open.push((i, c)),
-            ']' | '}' => {
-                let opener = if c == ']' { '[' } else { '{' };
-                if let Some(at) = open.iter().rposition(|&(_, o)| o == opener) {
-                    open.remove(at);
-                }
-            }
-            '"' => match open.iter().rposition(|&(_, o)| o == '"') {
-                Some(at) => {
-                    open.remove(at);
-                }
-                None => open.push((i, c)),
-            },
-            _ => {}
-        }
-    }
-    found.extend(open.into_iter().map(|(i, c)| (i + 1, Kind::Unclosed(c))));
     found
 }
 
-fn ends_sentence(c: char) -> bool {
-    matches!(c, '.' | '!' | '?')
+/// The caret's line's brackets, braces, parentheses and double quotes left open or never
+/// opened, paired over `window`: the lines around it, as `(index, line)`, in order.
+fn pairing(window: &[(usize, &[char])], here: usize) -> Vec<(usize, Kind)> {
+    // Open symbols as (line index, column from 0, symbol).
+    let mut open: Vec<(usize, usize, char)> = Vec::new();
+    let mut found = Vec::new();
+    for &(index, line) in window {
+        for (column, &c) in line.iter().enumerate() {
+            let opener = match c {
+                ')' => Some('('),
+                ']' => Some('['),
+                '}' => Some('{'),
+                _ => None,
+            };
+            match (c, opener) {
+                ('(' | '[' | '{', _) => open.push((index, column, c)),
+                (_, Some(opener)) => match open.iter().rposition(|&(_, _, o)| o == opener) {
+                    Some(at) => {
+                        open.remove(at);
+                    }
+                    None if index == here => found.push((column + 1, Kind::Unopened(c))),
+                    None => {}
+                },
+                ('"', _) => match open.iter().rposition(|&(_, _, o)| o == '"') {
+                    Some(at) => {
+                        open.remove(at);
+                    }
+                    None => open.push((index, column, c)),
+                },
+                _ => {}
+            }
+        }
+    }
+    found.extend(
+        open.into_iter()
+            .filter(|&(index, _, _)| index == here)
+            .map(|(_, column, c)| (column + 1, Kind::Unclosed(c))),
+    );
+    found
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
+    /// Insert+Tab's words on each line of `lines`, a CRLF text as Notepad holds it, against
+    /// `expected`, line by line.
+    fn check(lines: &[&str], expected: &[&[&str]]) {
+        let text = lines.join("\r\n");
+        let said: Vec<Vec<String>> = (0..lines.len())
+            .map(|line| {
+                let caret: usize = lines.iter().take(line).map(|l| l.chars().count() + 2).sum();
+                describe_line(&text, caret)
+            })
+            .collect();
+        let expected: Vec<Vec<String>> = expected
+            .iter()
+            .map(|words| words.iter().map(|w| (*w).to_owned()).collect())
+            .collect();
+        assert_eq!(said, expected);
+    }
+
     /// 568's Notepad fixture, line by line, as JAWS names each line on Insert+Tab
     /// [obs, 568].
     #[test]
     fn the_proofing_lines_say_what_jaws_says() {
-        let lines = [
-            "This line is clean.",
-            "Two  spaces here.",
-            "no capital at the start.",
-            "A stray , comma.",
-            "An unspaced,comma.",
-            "An open (paren.",
-            "A close) paren.",
-            "An open [bracket and a \"quote.",
-            "tHIS IS INVERTED.",
-            "Ends with a space. ",
-        ];
-        let text = lines.join("\r\n");
-        let said = |line: usize| {
-            let caret: usize = lines.iter().take(line).map(|l| l.chars().count() + 2).sum();
-            describe_line(&text, caret)
-        };
-        let none: Vec<String> = Vec::new();
-        assert_eq!(said(0), none);
-        assert_eq!(said(1), ["Space run at column 4"]);
-        assert_eq!(said(2), ["Missing initial cap n at column 1"]);
-        assert_eq!(said(3), ["Stray punctuation , at column 9"]);
-        assert_eq!(said(4), ["Unspaced punctuation , at column 12"]);
-        assert_eq!(said(5), none);
-        assert_eq!(said(6), none);
-        assert_eq!(
-            said(7),
-            ["Unclosed [ at column 9", "Unclosed \" at column 24"]
+        check(
+            &[
+                "This line is clean.",
+                "Two  spaces here.",
+                "no capital at the start.",
+                "A stray , comma.",
+                "An unspaced,comma.",
+                "An open (paren.",
+                "A close) paren.",
+                "An open [bracket and a \"quote.",
+                "tHIS IS INVERTED.",
+                "Ends with a space. ",
+            ],
+            &[
+                &[],
+                &["Space run at column 4"],
+                &["Missing initial cap n at column 1"],
+                &["Stray punctuation , at column 9"],
+                &["Unspaced punctuation , at column 12"],
+                &[],
+                &[],
+                &["Unclosed [ at column 9", "Unclosed \" at column 24"],
+                &[
+                    "Missing initial cap t at column 1",
+                    "Inverted cap t at column 1",
+                ],
+                &[],
+            ],
         );
-        assert_eq!(
-            said(8),
-            [
-                "Missing initial cap t at column 1",
-                "Inverted cap t at column 1"
-            ]
+    }
+
+    /// 614's second fixture: pairing over two lines around, an unopened bracket, symbols that
+    /// are not punctuation, numbers, abbreviations and an ellipsis [obs, 614]. Lines 12 and 14
+    /// leave out JAWS's "Space run" past the line's end, an accepted divergence.
+    #[test]
+    fn the_second_proofing_lines_say_what_jaws_says() {
+        let ellipsis = "Missing initial cap w at column 9";
+        check(
+            &[
+                "One (open paren here.",
+                "Nothing on this line.",
+                "Here ) it closes.",
+                "A lone (paren.",
+                "A lone ] bracket.",
+                "Math 2 * 3 = 6.",
+                "Price 1.5 and 3,000 here.",
+                "Twice  and   thrice.",
+                "Quote \"closed\" here.",
+                "It's fine.",
+                "Wait... what?",
+                "Hello!World",
+                "For e.g. this.",
+                "Mixed Case wORD.",
+                "  Leading spaces.",
+                "A {brace} and <angle> here.",
+            ],
+            &[
+                &[],
+                &[],
+                &["Stray punctuation ) at column 6"],
+                &["Unclosed ( at column 8"],
+                &["Unopened ] at column 8", "Stray punctuation ] at column 8"],
+                &[],
+                &[],
+                &["Space run at column 6", "Space run at column 11"],
+                &[],
+                &[],
+                &[ellipsis, ellipsis, ellipsis],
+                &["Unspaced punctuation ! at column 6"],
+                &[],
+                &["Inverted cap w at column 12"],
+                &[],
+                &[],
+            ],
         );
-        assert_eq!(said(9), none);
     }
 
     /// The first line of a text is no sentence's continuation; a brace alone at its end is
-    /// stray and unclosed, stray first [obs, 571/s4].
+    /// stray, and unclosed when its closer is three lines down [obs, 571/s4].
     #[test]
     fn a_code_line_names_its_open_brace() {
-        let text = "fn main() {\r\n    let total = price * 1.5; // tax\r\n}";
+        let text =
+            "fn main() {\r\n    let total = price * 1.5; // tax\r\n    println!(\"{total}\");\r\n}";
         assert_eq!(
             describe_line(text, 0),
             [

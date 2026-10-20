@@ -125,6 +125,7 @@ menu-named = { $name } menu
 text-analysis-space-run = Space run at column { $column }
 text-analysis-missing-initial-cap = Missing initial cap { $symbol } at column { $column }
 text-analysis-inverted-cap = Inverted cap { $symbol } at column { $column }
+text-analysis-unopened = Unopened { $symbol } at column { $column }
 text-analysis-stray-punctuation = Stray punctuation { $symbol } at column { $column }
 text-analysis-unspaced-punctuation = Unspaced punctuation { $symbol } at column { $column }
 text-analysis-unclosed = Unclosed { $symbol } at column { $column }

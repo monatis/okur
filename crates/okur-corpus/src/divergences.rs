@@ -129,6 +129,16 @@ divergences! {
      list is \"... List\": a typo in JAWS's text, not a name to copy.",
     "the owner's rule on JAWS's accidents, 2026-10-18";
 
+    Difference::JawsAlsoSays("Space run at column 12") => ["614-desktop-text-analysis-rules/s23"],
+    "JAWS's text analysis names a run of spaces one column past the end of \"Hello!World\", \
+     which has no space at all; it names none past the end of the other fourteen lines, \
+     which end alike (614).",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-20";
+
+    Difference::JawsAlsoSays("Space run at column 17") => ["614-desktop-text-analysis-rules/s27"],
+    "The same accident past the end of \"Mixed Case wORD.\" (614/s23's entry).",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-20";
+
     Difference::JawsAlsoSays("Unloading JAWS") => ["571-desktop-quit-question/s1"],
     "Insert+F4 says \"Unloading JAWS\" before it asks whether to quit, and JAWS stays when \
      the question is answered no (571/s3): it is not unloading yet. Okur asks first and says \

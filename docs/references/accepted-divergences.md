@@ -100,6 +100,15 @@ A step can be in more than one entry; all of its entries apply.
   named "... List". It is a typo in JAWS's text; Okur shows "Radio Buttons List".
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### JAWS's text analysis names spaces past a line's end
+
+- Steps: `614-desktop-text-analysis-rules/s23`, `614-desktop-text-analysis-rules/s27`.
+- Difference: JAWS also says "Space run at column 12" after "Hello!World" and "Space run at
+  column 17" after "Mixed Case wORD.", one column past each line's end.
+- Why: neither line has a run of spaces, and JAWS names none past the end of the fourteen
+  other lines of the same fixture, which end the same way. Okur names the runs a line has.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-20.
+
 ### JAWS says it is unloading before it asks
 
 - Step: `571-desktop-quit-question/s1`.
