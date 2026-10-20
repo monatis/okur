@@ -1,0 +1,22 @@
+{
+  "id": "616-web-table-edges-intermediate",
+  "name": "A table's edges by cell and by row and column at JAWS's Intermediate verbosity (DEFAULT.JCF Options Verbosity=1): Ctrl+Alt+Left on the first column, Ctrl+Alt+Up on the first row, Windows+Alt+Up and Left there, Ctrl+Alt+End to the last cell, then Ctrl+Alt+Right, Ctrl+Alt+Down, Windows+Alt+Down and Right past the last",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "T" },
+    { "id": "s2", "type": "key", "command": "Ctrl+Alt+Left" },
+    { "id": "s3", "type": "key", "command": "Ctrl+Alt+Up" },
+    { "id": "s4", "type": "key", "command": "Win+Alt+Up" },
+    { "id": "s5", "type": "key", "command": "Win+Alt+Left" },
+    { "id": "s6", "type": "key", "command": "Ctrl+Alt+End" },
+    { "id": "s7", "type": "key", "command": "Ctrl+Alt+Right" },
+    { "id": "s8", "type": "key", "command": "Ctrl+Alt+Down" },
+    { "id": "s9", "type": "key", "command": "Win+Alt+Down" },
+    { "id": "s10", "type": "key", "command": "Win+Alt+Right" }
+  ],
+  "jaws_settings": { "DEFAULT.JCF": { "Options": { "Verbosity": "1" } } }
+}
