@@ -14,7 +14,7 @@ hours or about thirty commits, not more.
 
 | Round | What | Then |
 |---|---|---|
-| 110 (running) | 613 again, the Turkish fixture not translated | import; build what differs (§4) |
+| 110 (done, failed) | 613 again: failed its window title check (the fixture read in old-pc's code page) | record again after `f78ec7b` is pulled |
 | 111 | 664: Ctrl+Backspace and Ctrl+Delete in Notepad | §3 |
 | 112 | 661 and 662 again with a tracer that reads text colors (§1) | §1 |
 | 113 | 541 and 524 with `-TraceTimings`, after P6 step 3 (§2) | §2 |

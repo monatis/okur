@@ -70,10 +70,12 @@ Defender exclusion, Office) are as the last plan's §6.
 ### Harness
 
 - **The tracer logs each event's read as it starts** (`61fc818`, "reading event"). Its first
-  use found that 613 never hung: the tracer read on to the trial's end. Every 613 trial
-  failed on its page load (`page_load_settled` false in rounds 86, 92 and perf105b), under
-  Chrome's offer to translate the Turkish page. The fixture now tells Chrome not to translate
-  (`dc85a1c`); round 110 records it again.
+  use found that 613 never hung: the tracer read on to the trial's end. (Corrected after this
+  handoff was written: the cause was not Chrome's offer to translate the page, as `dc85a1c`
+  guessed, nor the page load, whose wait is capped at 3 s in a browser. run-scenario read the
+  fixture's title "Türkçe Metin" in old-pc's code page, and the window title check failed every
+  trial, round 110's too. Fixed in `f78ec7b`, `882a89f` and `24c59e6`; the fixture keeps its
+  `notranslate`.)
 - **Round 105 broke and was rerun.** Its first waiter pulled an older build. Stopping that
   waiter stopped the batch during 524, so round 105 never ended and rounds 106 and 107 waited
   on it. With no capture running, the right build was installed, round 105 was ended with a
