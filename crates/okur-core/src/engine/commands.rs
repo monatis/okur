@@ -430,7 +430,7 @@ impl ScreenReaderEngine {
             {
                 Some(msg::blank().to_string())
             }
-            Command::SayLine => Some(self.cursor.current_line()),
+            Command::SayLine => Some(self.line_here()),
             Command::SayWord => Some(self.cursor.current_word()),
             Command::SayCharacter | Command::SayCharacterPhonetic => Some(self.character_here()),
             // Its value in decimal, said digit by digit [obs, 401/s3: "Character 7 4" for J;
@@ -685,6 +685,35 @@ impl ScreenReaderEngine {
         }
         self.speech.speak_spelled(text, true);
         Some(crate::pronounce::spelled(text))
+    }
+
+    /// The line Say Line reads. On the field that has the page's focus, a text field or a
+    /// combo box whose label is a line of its own, it is the field as its quick key says it,
+    /// without "blank" or its description: "Full name Edit Required", "Home branch Combo box
+    /// collapsed Northside" [obs, 507/s7, 248/s4, 249/s4]; Down onto it reads the line alone
+    /// [obs, 201/s5, s17].
+    fn line_here(&self) -> String {
+        use crate::announcement::PartKind;
+        let focused_field = self
+            .cursor
+            .buffer
+            .line_at_offset(self.cursor.offset)
+            .filter(|line| Some(line.node_id) == self.last_page_focus)
+            .and_then(|line| self.cursor.buffer.node(line.node_id))
+            .filter(|node| {
+                matches!(
+                    node.role,
+                    crate::aom::Role::Edit | crate::aom::Role::ComboBox
+                )
+            });
+        let Some(node) = focused_field else {
+            return self.cursor.current_line();
+        };
+        let mut field = SpeechFormatter::control_focus(node, |_| true);
+        field.retain(|kind| kind != PartKind::Description);
+        let blank = msg::blank().to_string();
+        field.lines.retain(|line| line.render().trim() != blank);
+        field.render()
     }
 
     /// The character Say Character reads: the caret's in a text field, the virtual cursor's
