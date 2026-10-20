@@ -274,6 +274,16 @@ divergences! {
     "the owner's rule on JAWS's accidents, 2026-10-18";
 
     Difference::Step => [
+        "517-web-speech-layer-keys/s4",
+        "517-web-speech-layer-keys/s10",
+    ],
+    "Escape out of the Speech History left JAWS outside the page: it said \"blank\" in one trial \
+     and nothing in the others, and Down later said nothing with speech on (its synthesizer \
+     log has only the harness's own message). After its help viewer the same Escape reads the \
+     page's line (531/s3), which Okur does here too.",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
+
+    Difference::Step => [
         "285-web-text-area-arrows-auto-forms/s19",
         "285-web-text-area-arrows-auto-forms/s20",
         "285-web-text-area-arrows-auto-forms/s21",

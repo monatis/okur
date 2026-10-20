@@ -980,6 +980,11 @@ fn replayable(event: &TraceEvent) -> bool {
         .focus_chain
         .iter()
         .any(|n| n.class_name.as_deref() == Some(WIN32_DIALOG));
+    // JAWS's Results Viewer (its Virtual Viewer, a process of its own) stands for Okur's own
+    // viewer, which Okur speaks itself: "Speech History", not JAWS's window [obs, 517/s3].
+    if event.process.as_deref() == Some("ResultsViewer.exe") {
+        return false;
+    }
     // A focus inside the main window itself, not in one of its dialogs (its "JAWS Version"
     // text, 242/s1), is JAWS's alone.
     let in_main_window = event

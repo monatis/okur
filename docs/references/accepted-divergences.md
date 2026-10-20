@@ -229,6 +229,17 @@ A step can be in more than one entry; all of its entries apply.
   area went to the page's first lines and stayed there, skipping the whole form above it.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### JAWS is left outside the page after the Speech History
+
+- Steps: `517-web-speech-layer-keys/s4`, `517-web-speech-layer-keys/s10`.
+- Difference: the whole step. JAWS says nothing (or "blank"); Okur reads the page's line on
+  Escape, and the next line on Down.
+- Why: Escape out of the Speech History (Insert+Space, H) left JAWS's virtual cursor outside
+  the page: it said "blank" in one trial and nothing in the others, and Down later said
+  nothing though speech was on (its synthesizer log holds only the harness's own message).
+  After its help viewer the same Escape reads the page's line (531/s3).
+- Decided under the owner's rule on JAWS's accidents, 2026-10-18.
+
 ### Up out of a text area holding text jumps to the page's top (Auto Forms Mode)
 
 - Steps: `285-web-text-area-arrows-auto-forms/s19` to `/s24` (the full keys:
