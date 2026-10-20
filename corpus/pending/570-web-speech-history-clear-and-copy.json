@@ -9,7 +9,7 @@
   "steps": [
     { "id": "s1", "type": "key", "command": "Down" },
     { "id": "s2", "type": "key", "command": "Insert+Space" },
-    { "id": "s3", "type": "key", "command": "Ctrl+H" },
+    { "id": "s3", "type": "key", "command": "Ctrl+H", "copies_speech_history": true, "capture_clipboard": true },
     { "id": "s4", "type": "key", "command": "Down" },
     { "id": "s5", "type": "key", "command": "Insert+Space" },
     { "id": "s6", "type": "key", "command": "Shift+H" },

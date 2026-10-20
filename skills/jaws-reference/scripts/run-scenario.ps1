@@ -37,6 +37,9 @@ Step types:
                "NumpadPlus"; "Comma", "Period", "Slash" by their US places ($ScanTable).
                An optional "repeat": N presses the chord N times quickly ("twice quickly").
                "capture_clipboard": true stores the clipboard after the step (observation.clipboard).
+               "copies_speech_history": true for a key that copies JAWS's speech history itself
+               (Ctrl+H in the Speech History): its own "Copy speech history to clipboard" is
+               its speech, not a leaked copy confirmation.
                "during": [{"after_ms": 3000, "command": "Ctrl"}] presses chords while the
                step's speech goes on, each after_ms after the one before (Say All stopped or
                moved by Left and Right); the step settles after the last one.
@@ -821,7 +824,11 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         # in 105 v2 trial 1), means the history was contaminated: fail, never trim. A scenario
         # about notifications says so ("expects_notifications": true, 533).
         $strayNotification = $transcript.Contains('New notification from') -and -not $scenario.expects_notifications
-        $contaminated = $transcript.Contains($CopyConfirmation) -or $strayNotification
+        # A step that copies the history itself (Ctrl+H in the Speech History) says the
+        # confirmation once, as its own speech; a second is a leak.
+        $confirmations = [regex]::Matches($transcript, [regex]::Escape($CopyConfirmation)).Count
+        $ownCopies = if ($step.copies_speech_history) { 1 } else { 0 }
+        $contaminated = $confirmations -gt $ownCopies -or $strayNotification
         # Audio with an empty history entry is recorded, not failed: JAWS speaks a space
         # character aloud but logs an empty history entry (verified 2026-10-14, 107). The
         # silent baseline above is what prevents the copy from racing ahead of speech.
