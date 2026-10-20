@@ -1714,18 +1714,32 @@ fn apply_msaa_states(control: &mut okur_core::FocusEvent, states: u32) {
     }
 }
 
+/// Whether an event in the process of a dialog leaves the dialog's controls as they were last
+/// read (performance review P6): the focus moving among them, with the caret and selection put
+/// in the field it reaches, and a push button's state, which changes as the default button
+/// follows the focus (Find Next, twice per Tab onto it [obs, 540]). Any other event (a check
+/// box toggled, a value typed, a list's selection, a text renamed, a control shown or hidden)
+/// may be a change the read does not show.
+#[cfg(any(windows, test))]
+fn keeps_dialog_read(event: &str, push_button: bool) -> bool {
+    matches!(
+        event,
+        "focus" | "uia_focus" | "caret" | "text_selection_change"
+    ) || (event == "state_change" && push_button)
+}
+
 #[cfg(windows)]
 mod capture {
     use super::{
-        event_name, in_dialog_box, reports_position, TraceEvent, TraceHeader, TraceObject,
-        TRACE_FORMAT_VERSION, UIA_FOCUS_WINDOWS, UIA_SELECTION_PROCESSES,
+        event_name, in_dialog_box, keeps_dialog_read, reports_position, TraceEvent, TraceHeader,
+        TraceObject, TRACE_FORMAT_VERSION, UIA_FOCUS_WINDOWS, UIA_SELECTION_PROCESSES,
     };
     use crate::uia_snapshot::capture::{
         automation, column_headers_of, focus_chain_from, focus_context_of, focus_subtree_of,
         focused_element, window_subtree, window_text, with_properties,
     };
     use crate::PlatformError;
-    use std::cell::RefCell;
+    use std::cell::{Cell, RefCell};
     use std::io::Write;
     use windows::core::implement;
     use windows::Win32::Foundation::{CloseHandle, HWND};
@@ -1810,6 +1824,73 @@ mod capture {
         record_page_changes: bool,
         /// Where the mouse pointer was when last looked at.
         last_mouse: Option<[i32; 2]>,
+        /// The controls of the dialog in front as last read, for the next focus in it.
+        dialog_read: Option<DialogRead>,
+    }
+
+    /// A dialog's controls as read for a focus in it: its layout and the control tree of the
+    /// page the focus was on (or of the dialog). The Font dialog's tree took 801 ms to read
+    /// per Tab (median, old-pc, 541; performance review P6); the next focus uses it again
+    /// while no change came from the dialog's process since ([`DIALOG_CHANGES`]).
+    struct DialogRead {
+        dialog: isize,
+        root: isize,
+        changes: u64,
+        layout: crate::screen_lines::DialogLayout,
+        tree: crate::uia_snapshot::UiaNode,
+    }
+
+    thread_local! {
+        /// The process of the dialog whose controls were last read, and how many changes came
+        /// from it. A change is counted here at once, outside the trace state, so none is lost
+        /// while that state is in use.
+        static DIALOG_CHANGES: Cell<(u32, u64)> = const { Cell::new((0, 0)) };
+    }
+
+    /// The process that owns a window, or 0 for none.
+    fn process_id(hwnd: HWND) -> u32 {
+        let mut pid = 0u32;
+        // SAFETY: valid out-pointer; a stale or null hwnd yields pid 0.
+        unsafe { GetWindowThreadProcessId(hwnd, Some(&mut pid)) };
+        pid
+    }
+
+    /// An event of `hwnd` that may have changed a dialog: counted when it comes from the
+    /// process of the dialog last read.
+    fn dialog_changed(hwnd: HWND) {
+        DIALOG_CHANGES.with(|changes| {
+            let (watched, count) = changes.get();
+            if watched != 0 && process_id(hwnd) == watched {
+                changes.set((watched, count + 1));
+            }
+        });
+    }
+
+    /// The changes counted for `dialog`'s process, which is watched from now on (moving the
+    /// watch to another process counts as a change).
+    fn dialog_changes(dialog: HWND) -> u64 {
+        let pid = process_id(dialog);
+        DIALOG_CHANGES.with(|changes| {
+            let (watched, count) = changes.get();
+            if watched == pid {
+                count
+            } else {
+                changes.set((pid, count + 1));
+                count + 1
+            }
+        })
+    }
+
+    /// Whether a window is a Win32 push button (`BS_PUSHBUTTON` or `BS_DEFPUSHBUTTON`).
+    fn is_push_button(hwnd: HWND, class: &str) -> bool {
+        use windows::Win32::UI::WindowsAndMessaging::{GetWindowLongW, GWL_STYLE};
+        const BS_TYPEMASK: i32 = 0xF;
+        const BS_DEFPUSHBUTTON: i32 = 1;
+        class.eq_ignore_ascii_case("Button") && {
+            // SAFETY: a style read of a window; a stale one reads 0.
+            let style = unsafe { GetWindowLongW(hwnd, GWL_STYLE) };
+            style & BS_TYPEMASK <= BS_DEFPUSHBUTTON
+        }
     }
 
     /// The shortest time between two page changes told: a page being built reports its
@@ -2328,7 +2409,13 @@ mod capture {
         use windows::Win32::UI::WindowsAndMessaging::{
             GetAncestor, GetClassNameW, GetForegroundWindow, IsWindowVisible, GA_ROOT,
         };
+        const OBJID_WINDOW: i32 = 0;
         const OBJID_CLIENT: i32 = -4;
+        // A control shown, hidden or moved in a dialog last read (a property sheet's page
+        // switched) changes it; the caret and the mouse pointer shown or hidden do not.
+        if matches!(id_object, OBJID_WINDOW | OBJID_CLIENT) {
+            dialog_changed(hwnd);
+        }
         if id_object != OBJID_CLIENT || id_child >= 0 {
             return;
         }
@@ -2352,6 +2439,10 @@ mod capture {
             let Some(state) = state.as_mut() else {
                 return;
             };
+            // A trace of focus alone takes these events for its dialogs only.
+            if !state.live && !state.record_page_changes {
+                return;
+            }
             if state.record_page_changes {
                 let event = TraceEvent {
                     t_ms: now_ms(),
@@ -3028,6 +3119,10 @@ mod capture {
         } else {
             window_text(hwnd)
         };
+        // A change in the dialog last read makes that read stale (performance review P6).
+        if !keeps_dialog_read(name, name == "state_change" && is_push_button(hwnd, &class)) {
+            dialog_changed(hwnd);
+        }
         STATE.with(|state| {
             let mut state = state.borrow_mut();
             let Some(state) = state.as_mut() else { return };
@@ -3276,15 +3371,38 @@ mod capture {
                     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
                     // SAFETY: plain Win32 call with no preconditions.
                     let window = unsafe { GetForegroundWindow() };
+                    // Say Window's controls: the page the focus is on, or the dialog.
+                    let root = crate::screen_lines::page_window(keyboard_focus_window(), window)
+                        .unwrap_or(window);
+                    let changes = dialog_changes(window);
+                    let reused = state.dialog_read.as_ref().filter(|read| {
+                        read.dialog == window.0 as isize
+                            && read.root == root.0 as isize
+                            && read.changes == changes
+                    });
+                    let (layout, tree) = match reused {
+                        Some(read) => {
+                            tracing::debug!("dialog read reused");
+                            (read.layout.clone(), Some(read.tree.clone()))
+                        }
+                        None => {
+                            let layout = crate::screen_lines::dialog_layout(window);
+                            let tree = state.uia.as_ref().and_then(|uia| {
+                                window_subtree(uia, root).map(super::without_nested_tree_items)
+                            });
+                            state.dialog_read = tree.clone().map(|tree| DialogRead {
+                                dialog: window.0 as isize,
+                                root: root.0 as isize,
+                                changes,
+                                layout: layout.clone(),
+                                tree,
+                            });
+                            (layout, tree)
+                        }
+                    };
                     (
-                        crate::screen_lines::dialog_layout(window),
-                        // Say Window's controls: the page the focus is on, or the dialog.
-                        state.uia.as_ref().and_then(|uia| {
-                            let page =
-                                crate::screen_lines::page_window(keyboard_focus_window(), window);
-                            window_subtree(uia, page.unwrap_or(window))
-                                .map(super::without_nested_tree_items)
-                        }),
+                        layout,
+                        tree,
                         crate::screen_lines::page_of(keyboard_focus_window(), window),
                         crate::screen_lines::group_box_of(keyboard_focus_window(), window),
                         crate::screen_lines::default_button_of(window),
@@ -3497,6 +3615,7 @@ mod capture {
                 last_object_focus: None,
                 last_mouse: None,
                 last_focus_read: None,
+                dialog_read: None,
                 page_changed,
                 page_changed_at: None,
                 page_changes_dropped: 0,
@@ -3510,12 +3629,9 @@ mod capture {
             [
                 SetWinEventHook(0x0002, 0x0011, None, Some(on_event), 0, 0, flags),
                 SetWinEventHook(0x8005, 0x8019, None, Some(on_event), 0, 0, flags),
-                // EVENT_OBJECT_SHOW to EVENT_OBJECT_REORDER.
-                if live || record_page_changes {
-                    SetWinEventHook(0x8002, 0x8004, None, Some(on_page_change), 0, 0, flags)
-                } else {
-                    HWINEVENTHOOK::default()
-                },
+                // EVENT_OBJECT_SHOW to EVENT_OBJECT_REORDER: a page's changes, and a dialog's,
+                // whose controls read are used again until it changes.
+                SetWinEventHook(0x8002, 0x8004, None, Some(on_page_change), 0, 0, flags),
                 // IA2's own events: text changed in place (a React time stamp) raises no show,
                 // hide or reorder, only IA2_EVENT_TEXT_REMOVED and _INSERTED on the block holding
                 // it (old-pc, 2026-10-18). Live takes those two; a trace of page changes takes
@@ -3705,6 +3821,31 @@ mod tests {
             has_keyboard_focus: focused,
             is_enabled: true,
             ..UiaNode::default()
+        }
+    }
+
+    /// A dialog's controls read for one focus are used again for the next while only the
+    /// focus moves among them; any other change in its process reads them anew.
+    #[test]
+    fn a_dialog_is_read_again_only_after_a_change() {
+        for moved in ["focus", "uia_focus", "caret", "text_selection_change"] {
+            assert!(keeps_dialog_read(moved, false), "{moved}");
+        }
+        // The default button follows the focus onto Find Next [obs, 540].
+        assert!(keeps_dialog_read("state_change", true));
+        // A check box toggled.
+        assert!(!keeps_dialog_read("state_change", false));
+        for changed in [
+            "value_change",
+            "selection",
+            "selection_add",
+            "name_change",
+            "description_change",
+            "dialog_start",
+            "foreground",
+        ] {
+            assert!(!keeps_dialog_read(changed, false), "{changed}");
+            assert!(!keeps_dialog_read(changed, true), "{changed}");
         }
     }
 
