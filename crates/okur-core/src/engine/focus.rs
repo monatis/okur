@@ -71,6 +71,15 @@ impl ScreenReaderEngine {
         Some(speech)
     }
 
+    /// What forms mode ending says: "virtual PC Cursor", or above Beginner verbosity JAWS's
+    /// short message, "virtual PC" [obs, 555/s10; 552/s10, 553/s10].
+    pub(super) fn virtual_pc_message(&self) -> String {
+        match self.settings.verbosity.message_length() {
+            crate::settings::MessageLength::Long => msg::cursor_virtual_pc().to_string(),
+            crate::settings::MessageLength::Short => msg::cursor_virtual_pc_short().to_string(),
+        }
+    }
+
     /// `announcement` with the parts verbosity leaves out removed.
     fn said(&self, mut announcement: Announcement) -> Announcement {
         let verbosity = &self.settings.verbosity;

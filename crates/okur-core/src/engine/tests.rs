@@ -186,6 +186,33 @@ fn test_engine_key_event_handling_and_forms_mode() {
     assert_eq!(engine.handle_key_event(&down_event), KeyAction::Consume);
 }
 
+/// Escape out of forms mode says "virtual PC Cursor" at Beginner verbosity, and JAWS's short
+/// message, "virtual PC", above it [obs, 555/s10; 552/s10, 553/s10].
+#[test]
+fn leaving_forms_mode_says_the_cursor_at_the_levels_length() {
+    use crate::settings::VerbosityLevel;
+    for (level, said) in [
+        (VerbosityLevel::Beginner, "virtual PC Cursor"),
+        (VerbosityLevel::Intermediate, "virtual PC"),
+        (VerbosityLevel::Advanced, "virtual PC"),
+    ] {
+        let speech = SharedSpeech::default();
+        let mut engine = ScreenReaderEngine::new(
+            VirtualCursor::new(create_test_buffer()),
+            Box::new(speech.clone()),
+        );
+        let mut settings = engine.settings.clone();
+        settings.verbosity.level = level;
+        engine.set_settings(settings);
+        engine.execute_command("E");
+        engine.handle_key_event(&key(Key::Enter));
+        assert!(engine.forms_mode);
+        speech.take();
+        engine.handle_key_event(&key(Key::Escape));
+        assert_eq!(speech.take(), vec![said.to_owned()], "{level:?}");
+    }
+}
+
 #[test]
 fn test_engine_auto_forms_mode_on_focus_edit() {
     let buffer = create_test_buffer();

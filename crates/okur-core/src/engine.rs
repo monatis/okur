@@ -644,7 +644,8 @@ impl ScreenReaderEngine {
                 self.forms_mode = false;
                 let _ = self.cursor.exit_forms_mode();
                 // [obs, 205/s11]
-                self.speech.speak(msg::cursor_virtual_pc().as_str(), true);
+                let said = self.virtual_pc_message();
+                self.speech.speak(&said, true);
                 return KeyAction::Consume;
             }
             // In forms mode, pass all typing and navigation through to the active control;

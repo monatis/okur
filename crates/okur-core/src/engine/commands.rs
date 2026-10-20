@@ -378,7 +378,10 @@ impl ScreenReaderEngine {
                 if self.cursor.is_combobox_expanded() {
                     self.cursor.collapse_combobox()
                 } else if self.forms_mode {
-                    let res = self.cursor.exit_forms_mode();
+                    let res = self
+                        .cursor
+                        .exit_forms_mode()
+                        .map(|_| self.virtual_pc_message());
                     self.forms_mode = false;
                     res
                 } else if self.cursor.is_in_modal() {

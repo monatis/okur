@@ -16,6 +16,8 @@ frame-end = frame end
 
 # Said when forms mode ends and the virtual cursor reads the page again. JAWS's capitals.
 cursor-virtual-pc = virtual PC Cursor
+# The same, JAWS's short message, above Beginner verbosity [obs, 552/s10, 553/s10].
+cursor-virtual-pc-short = virtual PC
 # The cursors: Numpad Minus, Numpad Plus, Insert+Numpad Minus and Alt+Delete [obs, 516,
 # 513/s2]. The position is the screen's x and y in pixels, "1045, 544".
 cursor-jaws = JAWS Cursor
