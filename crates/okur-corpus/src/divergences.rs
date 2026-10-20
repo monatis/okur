@@ -249,6 +249,18 @@ divergences! {
     "proposed by the parity gap audit, accepted by the owner, 2026-10-19";
 
     Difference::Step => [
+        "513-desktop-dialog-helpers/s2",
+        "513-desktop-dialog-helpers/s8",
+        "516-desktop-jaws-cursor/s8",
+    ],
+    "At 125% (old-pc: 1920 by 1080 pixels, 120 DPI) JAWS gives the PC cursor's place 1.25 times \
+     the screen's pixels: \"1045, 544\" for a button whose middle is at 836, 435, read from its \
+     window by a tracer aware of each monitor's DPI (perf92's log: awareness 2, the window's own \
+     rectangle). Near the screen's right edge JAWS's numbers would lie past it. Okur says the \
+     screen's pixels, where its mouse keys put the pointer.",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
+
+    Difference::Step => [
         "253-web-list-articles-enter/s3",
         "253-web-list-articles-enter/s4",
         "253-web-list-articles-enter/s5",

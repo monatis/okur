@@ -328,6 +328,19 @@ A step can be in more than one entry; all of its entries apply.
   first time out of place.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### JAWS's PC cursor coordinates at 125%
+
+- Steps: `513-desktop-dialog-helpers/s2`, `513-desktop-dialog-helpers/s8`,
+  `516-desktop-jaws-cursor/s8`.
+- Difference: JAWS says "PC Cursor active | 1045, 544"; Okur says "PC Cursor active | 836,
+  435".
+- Why: old-pc's screen is 1920 by 1080 pixels at 120 DPI (125%). The tracer, aware of each
+  monitor's DPI (perf92's log: awareness 2), read the focused button's window rectangle as 723,
+  416 to 948, 454, whose middle is 836, 435; JAWS gives 1.25 times that, a place that near the
+  screen's right edge would lie past it. Okur says the screen's pixels, where its mouse keys
+  put the pointer.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-20.
+
 ### JAWS reads nothing of WordPad's document
 
 - Steps: `522-desktop-wordpad-reading/s1` to `/s14`, `/s16` to `/s18` (the full keys:
