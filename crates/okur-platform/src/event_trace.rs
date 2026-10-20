@@ -3124,11 +3124,26 @@ mod capture {
                 (Some(uia), Some(element)) if reads_focus => focus_chain_from(uia, element),
                 _ => Vec::new(),
             };
-            // Where the focus is on the screen: the PC cursor's place (Alt+Delete).
+            // Where the focus is on the screen: the PC cursor's place (Alt+Delete). A control
+            // that is a window of its own (a Win32 or WinForms control) gives its window's
+            // rectangle, in real pixels for this DPI-aware process whatever the window's own
+            // awareness: UI Automation gave a WinForms button's unscaled at 125% (516/s8).
             if let (Some(element), Some(focused)) = (element.filter(|_| focused), focus.last_mut())
             {
-                // SAFETY: a property read on a valid element.
-                if let Ok(r) = unsafe { element.CurrentBoundingRectangle() } {
+                // SAFETY: property reads on a valid element, then a Win32 read into a RECT.
+                let window = unsafe { element.CurrentNativeWindowHandle() }
+                    .ok()
+                    .filter(|h| !h.is_invalid())
+                    .and_then(|h| {
+                        let mut rect = windows::Win32::Foundation::RECT::default();
+                        unsafe {
+                            windows::Win32::UI::WindowsAndMessaging::GetWindowRect(h, &mut rect)
+                        }
+                        .ok()
+                        .map(|()| rect)
+                    });
+                let rect = window.or_else(|| unsafe { element.CurrentBoundingRectangle() }.ok());
+                if let Some(r) = rect {
                     focused.bounds = Some([r.left, r.top, r.right, r.bottom]);
                 }
             }
