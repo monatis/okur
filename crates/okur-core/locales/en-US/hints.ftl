@@ -25,6 +25,7 @@ hint-move-to-items-arrows = To move to items use the Arrow keys.
 hint-radio-up-down = To change the selection press Up or Down Arrow.
 # A combo box one can type into.
 hint-set-value-arrows-or-type = To set the value use the Arrow keys or type the value.
+hint-set-value-arrows = To set the value use the Arrow keys.
 hint-slider-arrows = To increase or decrease use the Arrow keys.
 # A tab of a native tab control.
 hint-switch-pages = To switch pages, press Control+PageDown.

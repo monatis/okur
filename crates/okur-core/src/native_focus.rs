@@ -221,6 +221,14 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
                 if !text.trim().is_empty() {
                     lines.push(Line::of(PartKind::Value, msg::field_contains_text()).on_arrival());
                 }
+            } else if focus.spin_box {
+                // An edit with arrows that step its value: "Number of copies: edit spin box |
+                // 1 | To set the value use the Arrow keys." [obs, 546/s8].
+                lines.push(Line::new(vec![
+                    name_part(name),
+                    role(msg::role_edit_spin_box().as_str()),
+                ]));
+                lines.extend(value);
             } else {
                 lines.push(Line::new(vec![
                     name_part(name),
@@ -228,7 +236,14 @@ fn control_lines(focus: &FocusEvent, entering: bool) -> Vec<Line> {
                 ]));
                 lines.extend(value);
             }
-            lines.push(Line::of(PartKind::Hint, msg::hint_type_in_text()));
+            lines.push(Line::of(
+                PartKind::Hint,
+                if focus.spin_box {
+                    msg::hint_set_value_arrows()
+                } else {
+                    msg::hint_type_in_text()
+                },
+            ));
             // Its shortcut (UIA AcceleratorKey): Chrome's address bar, "… Type in text. |
             // Ctrl+L" (JAWS on the dev box, 2026-10-17). Buttons' shortcuts are not said (File
             // Explorer's Back, Alt+Left).
@@ -1791,6 +1806,21 @@ To activate press Enter."
         let mut kind = event(Role::ComboBox, "Save as type:");
         kind.file_dialog_address = field.file_dialog_address.clone();
         assert!(!say_focus(&kind).contains("Address"));
+    }
+
+    /// An edit with an up-down control is a spin box [obs, 546/s8].
+    #[test]
+    fn an_edit_with_arrows_is_a_spin_box() {
+        let mut copies = event(Role::Edit, "Number of copies:");
+        copies.value = Some("1".to_owned());
+        copies.spin_box = true;
+        assert_eq!(
+            norm(&focus_speech(&copies, None).render()),
+            norm(
+                "Number of copies:  \u{1d} edit spin box \u{1e} \n1\nTo set the value use the \
+                 Arrow keys."
+            )
+        );
     }
 
     /// A button in an unnamed toolbar, the focus coming from outside it: "Tool bar | Hide

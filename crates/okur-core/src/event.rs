@@ -217,6 +217,10 @@ pub struct FocusEvent {
     /// of a selection over several lines in it [obs, 313/s7, 529/s6, s9, s10].
     #[serde(default)]
     pub plain_edit: bool,
+    /// An edit with an up-down control attached (a spin box): "Number of copies: edit spin
+    /// box" [obs, 546/s8].
+    #[serde(default)]
+    pub spin_box: bool,
     /// The window's menu bar items ("File", "Edit", ...) and its status bar's parts ("Ln 1,
     /// Col 1", "100%", ...): JAWS's view of the window shows them above and below its text
     /// [obs, 314/s10, s11].
@@ -345,6 +349,7 @@ impl FocusEvent {
             read_only: None,
             multi_line: false,
             plain_edit: false,
+            spin_box: false,
             menu_bar: Vec::new(),
             status_bar: Vec::new(),
             app: None,

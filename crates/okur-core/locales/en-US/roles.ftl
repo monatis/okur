@@ -25,6 +25,8 @@ role-edit-password = password edit
 role-edit-read-only = read only edit
 # A combo box one types into (an autocomplete).
 role-edit-combo = edit combo
+# An edit with arrows beside it that step its value (an up-down control).
+role-edit-spin-box = edit spin box
 # A web page, said after its title.
 role-document = document
 # The fallback type of an item in the Form Fields list.

@@ -122,6 +122,10 @@ pub struct TraceEvent {
     pub window_style: Option<u32>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub focus_window_class: Option<String>,
+    /// For a focus: the window with the keyboard focus is an up-down control's buddy (an edit
+    /// with arrows beside it, a spin box).
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub spin_box: bool,
     /// For a focus: its top-level window's menu bar items, as written ("&File"), and its
     /// status bar's parts.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -813,6 +817,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             .as_deref()
             .or(event.window_class.as_deref()),
     );
+    focus.spin_box = event.spin_box && focus.role == okur_core::Role::Edit;
     focus.menu_bar = event
         .menu_bar
         .iter()
@@ -2272,6 +2277,7 @@ mod capture {
                     id_child,
                     window_class: Some(CHROME_PAGE_WINDOW.to_owned()),
                     window_style: None,
+                    spin_box: false,
                     focus_window_class: None,
                     menu_bar: Vec::new(),
                     status_bar: Vec::new(),
@@ -2440,6 +2446,52 @@ mod capture {
                 _ => foreground,
             }
         }
+    }
+
+    /// The window is an up-down control's buddy: an `msctls_updown32` beside it names it as the
+    /// window it steps (`UDM_GETBUDDY`). JAWS says such an edit as an "edit spin box" [obs,
+    /// 546/s8].
+    fn is_spin_buddy(hwnd: HWND) -> bool {
+        use windows::core::w;
+        use windows::Win32::Foundation::{LPARAM, WPARAM};
+        use windows::Win32::UI::WindowsAndMessaging::{
+            FindWindowExW, GetParent, SendMessageTimeoutW, SMTO_ABORTIFHUNG,
+        };
+        const UDM_GETBUDDY: u32 = 0x0400 + 106;
+        // A dialog has a few up-down controls at most; the count bounds a window list that
+        // changes as it is walked.
+        const MAX_UP_DOWNS: usize = 32;
+        // SAFETY: plain Win32 queries on window handles that may be gone (they then fail).
+        let Ok(parent) = (unsafe { GetParent(hwnd) }) else {
+            return false;
+        };
+        let mut after: Option<HWND> = None;
+        for _ in 0..MAX_UP_DOWNS {
+            // SAFETY: as above, with a static class name.
+            let Ok(up_down) =
+                (unsafe { FindWindowExW(Some(parent), after, w!("msctls_updown32"), None) })
+            else {
+                return false;
+            };
+            let mut buddy = 0usize;
+            // SAFETY: a read-only query with a timeout, to a window that may be gone or hung.
+            let sent = unsafe {
+                SendMessageTimeoutW(
+                    up_down,
+                    UDM_GETBUDDY,
+                    WPARAM(0),
+                    LPARAM(0),
+                    SMTO_ABORTIFHUNG,
+                    100,
+                    Some(&mut buddy),
+                )
+            };
+            if sent.0 != 0 && buddy == hwnd.0 as usize {
+                return true;
+            }
+            after = Some(up_down);
+        }
+        false
     }
 
     /// Records the focus UIA reported last, on the tracer thread.
@@ -2641,6 +2693,7 @@ mod capture {
                     id_child: 0,
                     window_class: None,
                     window_style: None,
+                    spin_box: false,
                     focus_window_class: None,
                     menu_bar: Vec::new(),
                     status_bar: Vec::new(),
@@ -2702,6 +2755,7 @@ mod capture {
                 id_child: 0,
                 window_class: None,
                 window_style: None,
+                spin_box: false,
                 focus_window_class: None,
                 menu_bar: Vec::new(),
                 status_bar: Vec::new(),
@@ -2818,6 +2872,7 @@ mod capture {
                     id_child: 0,
                     window_class: None,
                     window_style: None,
+                    spin_box: false,
                     focus_window_class: None,
                     menu_bar: Vec::new(),
                     status_bar: Vec::new(),
@@ -3175,6 +3230,12 @@ mod capture {
             let focus_window_class = focus_window
                 .map(|w| window_text(w).1)
                 .filter(|c| !c.is_empty());
+            let spin_box = focus_window.is_some_and(|w| {
+                focus_window_class
+                    .as_deref()
+                    .is_some_and(|c| c.eq_ignore_ascii_case("Edit"))
+                    && is_spin_buddy(w)
+            });
             let (menu_bar, status_bar) = if focused {
                 crate::screen_lines::window_bars(hwnd)
             } else {
@@ -3196,6 +3257,7 @@ mod capture {
                 window_class: Some(class).filter(|s| !s.is_empty()),
                 window_style,
                 focus_window_class,
+                spin_box,
                 menu_bar,
                 status_bar,
                 window_title: Some(title).filter(|s| !s.is_empty()),
@@ -3998,6 +4060,7 @@ mod tests {
             id_child: 0,
             window_class: None,
             window_style: None,
+            spin_box: false,
             focus_window_class: None,
             menu_bar: Vec::new(),
             status_bar: Vec::new(),
