@@ -99,7 +99,7 @@ the Say All command".
 | Ctrl+Insert+Enter | OnMouseOver | gap | |
 | Shift+Insert+F1, Ctrl+Shift+Insert+F1 | DisplayBasicElementInfo / DisplayAdvancedElementInfo | gap | |
 | Ctrl+Insert+F7 | IndicateLinkSourceURL | gap | |
-| F8 | SelectHTMLElement | gap | |
+| F8 | SelectHTMLElement | built (the lines of the element at the cursor) | 515 |
 | Ctrl+Win+Equals | SelectaDropTarget | gap | |
 | Ctrl+Win+Dash | FilterLiveRegionAnnouncements | gap | |
 | Applications, Shift+F10 | VirtualContextMenu | not checked | |

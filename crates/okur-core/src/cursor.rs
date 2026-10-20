@@ -320,6 +320,31 @@ impl VirtualCursor {
         Some(said.join("\n"))
     }
 
+    /// Selects the element at the virtual cursor (F8, JAWS's SelectHTMLElement): its lines
+    /// around the cursor, said as a selection is: in a table's cell, "selected | Branch"
+    /// [obs, 515/s5].
+    pub fn select_current_element(&mut self) -> Option<String> {
+        let line = self.buffer.line_at_offset(self.offset)?;
+        let (node, index) = (line.node_id, line.line_index);
+        let lines = &self.buffer.lines;
+        let first = lines
+            .get(..=index)?
+            .iter()
+            .rev()
+            .take_while(|l| l.node_id == node)
+            .last()?;
+        let last = lines
+            .get(index..)?
+            .iter()
+            .take_while(|l| l.node_id == node)
+            .last()?;
+        let range = (first.start_offset, last.end_offset);
+        self.selection = Some(TextSelection::new(range.0, range.1));
+        let mut said = vec![msg::selection_added().to_string()];
+        said.extend(self.selected_lines(range));
+        Some(said.join("\n"))
+    }
+
     /// The selection as Ctrl+C puts it on the clipboard: each line's selected part, paragraphs
     /// apart ("...paramount.\r\n\r\nRust provides..." [obs, 501/s14]); empty without one.
     pub fn selection_for_clipboard(&self) -> String {

@@ -168,6 +168,8 @@ pub enum Command {
     SelectPriorPage,
     /// Ctrl+A (SelectAll).
     SelectAll,
+    /// F8: the element at the virtual cursor (SelectHTMLElement).
+    SelectHtmlElement,
     /// Ctrl+C with a selection made with the virtual cursor (CopySelectedTextToClipboard).
     CopySelection,
     SaySelectedText,
@@ -424,6 +426,7 @@ impl Command {
             "SelectNextScreen" => SelectNextPage,
             "SelectPriorScreen" => SelectPriorPage,
             "SelectAll" => SelectAll,
+            "SelectHTMLElement" => SelectHtmlElement,
             "CopySelectedTextToClipboard" => CopySelection,
             "+!{DOWN}" | "SaySelection" | "SaySelectedText" => SaySelectedText,
             "SayTopLineOfWindow" | "Insert+End" => SayTopLineOfWindow,
@@ -780,6 +783,7 @@ static BINDINGS: &[Binding] = &{
         bind(Key::PageDown, SHIFT.insert(No), SelectNextPage),
         bind(Key::PageUp, SHIFT.insert(No), SelectPriorPage),
         bind(Alpha('A'), CTRL, SelectAll),
+        bind(F(8), ALONE, SelectHtmlElement),
         bind(Alpha('C'), CTRL, CopySelection),
         // Top and bottom, of a table or the page.
         bind(Home, CTRL_ALT, TableFirstCell),

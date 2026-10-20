@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 2401,
+  "matched_steps": 2403,
   "total_steps": 2655,
   "accepted_divergences": 60,
   "errors": [],
@@ -2398,8 +2398,8 @@
     "515-web-select-all-skim-and-element-info/s2": "match",
     "515-web-select-all-skim-and-element-info/s3": "match",
     "515-web-select-all-skim-and-element-info/s4": "match",
-    "515-web-select-all-skim-and-element-info/s5": "mismatch",
-    "515-web-select-all-skim-and-element-info/s6": "mismatch",
+    "515-web-select-all-skim-and-element-info/s5": "match",
+    "515-web-select-all-skim-and-element-info/s6": "match",
     "515-web-select-all-skim-and-element-info/s7": "match",
     "515-web-select-all-skim-and-element-info/s8": "mismatch",
     "515-web-select-all-skim-and-element-info/s9": "mismatch",

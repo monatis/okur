@@ -393,6 +393,7 @@ impl ScreenReaderEngine {
             Command::SelectNextPage => self.cursor.select_page(true),
             Command::SelectPriorPage => self.cursor.select_page(false),
             Command::SelectAll => self.cursor.select_all(),
+            Command::SelectHtmlElement => self.cursor.select_current_element(),
             Command::CopySelection => self.copy_selection(),
             Command::SaySelectedText => Some(self.cursor.say_selection()),
 
