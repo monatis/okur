@@ -253,6 +253,26 @@ A step can be in more than one entry; all of its entries apply.
   between.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### The Open dialog's "File name:" is said before the dialog
+
+- Steps: `525-desktop-open-dialog/s1`, `532-desktop-dialog-default-button-and-hot-key/s1`.
+- Difference: what JAWS says before the dialog. JAWS says "File name:", then "Open dialog",
+  then the field ("File name: edit combo …"); Okur starts with the dialog.
+- Why: the file name field's name arrives before the dialog JAWS has not yet announced, in every
+  trial of both scenarios (round 56, 2026-10-20); the Save As dialog opens without it (524/s2).
+  The name is said twice, the first time out of place.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-18.
+
+### "Unavailable" on returning from a file dialog
+
+- Steps: `524-desktop-save-as-dialog/s11`, `532-desktop-dialog-default-button-and-hot-key/s9`.
+- Difference: the whole step. JAWS says "Unavailable | Save As... Button | To activate press
+  spacebar." without the window's title; Okur says the window's title, then the button.
+- Why: Escape out of a common file dialog (Save As, Open) leaves the owner window disabled by
+  the modal dialog for a moment, and JAWS reads the focus then, in every trial: the button is
+  enabled. Other dialogs return with the window's title (306/s3, 537/s10).
+- Decided under the owner's rule on JAWS's accidents, 2026-10-18.
+
 ### The Font dialog's font is said before the dialog
 
 - Step: `541-desktop-notepad-font-dialog/s2`.

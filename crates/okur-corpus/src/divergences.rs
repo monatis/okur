@@ -297,6 +297,27 @@ divergences! {
      field (its label, \"Text\") and up through the page.",
     "the owner's rule on JAWS's accidents, 2026-10-18";
 
+    Difference::JawsSaysBeforeItsDialog => [
+        "525-desktop-open-dialog/s1",
+        "532-desktop-dialog-default-button-and-hot-key/s1",
+    ],
+    "Opening the Open dialog, JAWS says the file name field's name, \"File name:\", before the \
+     dialog, then again with the field, in every trial of both scenarios; the Save As dialog \
+     opens without it (524/s2). The field's name arrives before the dialog JAWS has not yet \
+     announced. Okur says the dialog, then the field.",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
+
+    Difference::Step => [
+        "524-desktop-save-as-dialog/s11",
+        "532-desktop-dialog-default-button-and-hot-key/s9",
+    ],
+    "Escape out of a common file dialog (Save As, Open) returns to the button that opened it, \
+     and JAWS says it \"Unavailable\", without its window's title, in every trial: the owner \
+     window is still disabled by the modal dialog as JAWS reads the focus, and the button is \
+     enabled a moment later. Other dialogs return with the window's title (306/s3, 537/s10). \
+     Okur says the window's title and the button.",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
+
     Difference::Step => ["541-desktop-notepad-font-dialog/s2"],
     "Opening Notepad's Font dialog, JAWS says the font, \"Consolas\", before the dialog, then \
      again in the field (in 3 of 3 trials of round 56, 2 of 3 earlier): the dialog fills its \
