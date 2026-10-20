@@ -706,6 +706,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::PageChanged) => "page changed",
         Some(AccessibilityEvent::PagePartsLoaded(_)) => "page parts loaded",
         Some(AccessibilityEvent::WindowRenamed(_)) => "window renamed",
+        Some(AccessibilityEvent::MouseMoved { .. }) => "mouse moved",
     }
 }
 

@@ -29,6 +29,10 @@ impl ScreenReaderEngine {
             Command::SayDefaultButton => return self.say_default_button(),
             Command::SayConfiguration => return self.say_configuration(),
             Command::SayAppVersion => return self.say_app_version(),
+            Command::JawsCursor => return self.activate_jaws_cursor(),
+            Command::PcCursor => return self.activate_pc_cursor(),
+            Command::RouteJawsToPc => return self.route_jaws_to_pc(),
+            Command::SayActiveCursor => return self.say_active_cursor(),
             Command::SayHotKey => return self.say_hot_key(),
             Command::MoveToNext(crate::command::Element::MailLink) => {
                 return self.move_to_mail_link(true)

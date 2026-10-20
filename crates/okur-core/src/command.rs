@@ -209,6 +209,13 @@ pub enum Command {
     SayConfiguration,
     /// Ctrl+Insert+V: the application's product name and version.
     SayAppVersion,
+    /// The cursors: Numpad Minus (the JAWS cursor), Numpad Plus (the PC cursor),
+    /// Insert+Numpad Minus (route the JAWS cursor to the PC cursor), Alt+Delete (say the
+    /// active cursor).
+    JawsCursor,
+    PcCursor,
+    RouteJawsToPc,
+    SayActiveCursor,
     /// Shift+Numpad5: the focused control's hot key.
     SayHotKey,
     /// Ctrl+Insert+1 to 0: a list view item's column (1 to 10), with its header.
@@ -448,6 +455,10 @@ impl Command {
             "SayHotKey" | "Shift+Numpad5" => SayHotKey,
             "IndicateLinkSourceURL" | "Ctrl+Insert+F7" => SayLinkAddress,
             "RouteVirtualToPc" | "Insert+Delete" => RouteVirtualToPc,
+            "JAWSCursor" => JawsCursor,
+            "PCCursor" => PcCursor,
+            "RouteJAWSCursorToPc" => RouteJawsToPc,
+            "SayActiveCursor" => SayActiveCursor,
             "RoutePCToVirtual" | "Ctrl+Insert+Delete" => RoutePcToVirtual,
             "SelectAFrame" | "Insert+F9" => SelectAFrame,
             "LeftMouseButton" | "NumpadSlash" => LeftMouseClick,
@@ -759,6 +770,15 @@ static BINDINGS: &[Binding] = &{
         bind(Numpad5, SHIFT, SayHotKey),
         bind(Numpad5, JAWS, SayWord),
         bind(Numpad5, ALONE, SayCharacter),
+        // The cursors (JAWS 2025 help, Keystrokes for the Cursors) [obs, 516].
+        bind(NumpadMinus, JAWS, RouteJawsToPc),
+        bind(NumpadMinus, ALONE, JawsCursor),
+        bind(NumpadPlus, ALONE, PcCursor),
+        bind(
+            Key::Delete,
+            ANY.alt(Yes).ctrl(No).shift(No).insert(No),
+            SayActiveCursor,
+        ),
         // The first and last heading, of any level and of one, and the first and last form
         // field (Default.JKM's [virtual keys]) [obs, 295, 296]; before the Ctrl and Ctrl+Alt
         // keys that would take them.

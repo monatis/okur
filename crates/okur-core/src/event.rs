@@ -223,6 +223,10 @@ pub struct FocusEvent {
     pub app_product: Option<String>,
     #[serde(default)]
     pub app_version: Option<String>,
+    /// Where the focused element is on the screen, `[left, top, right, bottom]` in pixels:
+    /// the PC cursor's place (Alt+Delete) [obs, 513/s2].
+    #[serde(default)]
+    pub bounds: Option<[i32; 4]>,
     /// What the platform calls the focus's windows and elements, for application modules.
     pub platform: PlatformIds,
 }
@@ -337,6 +341,7 @@ impl FocusEvent {
             app: None,
             app_product: None,
             app_version: None,
+            bounds: None,
             platform: PlatformIds::default(),
         }
     }
@@ -502,6 +507,11 @@ pub enum AccessibilityEvent {
     /// children changed, with its subtree): spliced into the page where the same live objects
     /// are ([`crate::aom::UNIQUE_ID_ATTR`]), all at once.
     PagePartsLoaded(Vec<crate::aom::AomNode>),
+    /// The mouse pointer moved, to `x`, `y` in screen pixels: the JAWS cursor follows it.
+    MouseMoved {
+        x: i32,
+        y: i32,
+    },
     /// The window in front was renamed: a console takes the title what runs in it sets
     /// ("SR Console Fixture" after PowerShell's own, 321).
     WindowRenamed(String),

@@ -127,6 +127,9 @@ impl ScreenReaderEngine {
     }
 
     pub fn handle_focus_event(&mut self, focus: &FocusEvent) -> Option<String> {
+        if focus.bounds.is_some() {
+            self.focus_bounds = focus.bounds;
+        }
         if let (Some(product), Some(version)) = (&focus.app_product, &focus.app_version) {
             self.focus_app_version = Some((product.clone(), version.clone()));
         }

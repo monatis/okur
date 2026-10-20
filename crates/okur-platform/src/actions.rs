@@ -505,6 +505,12 @@ mod windows_actions {
         fn copy_text(&self, text: &str) -> bool {
             self.send(Request::Copy(text.to_owned()))
         }
+
+        fn move_mouse(&self, x: i32, y: i32) -> bool {
+            use windows::Win32::UI::WindowsAndMessaging::SetCursorPos;
+            // SAFETY: plain Win32 call; it only moves the pointer.
+            unsafe { SetCursorPos(x, y) }.is_ok()
+        }
     }
 }
 

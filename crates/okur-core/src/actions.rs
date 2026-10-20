@@ -76,6 +76,13 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Moves the mouse pointer to `x`, `y` in screen pixels (routing the JAWS cursor). Returns
+    /// false when unsupported.
+    fn move_mouse(&self, x: i32, y: i32) -> bool {
+        let _ = (x, y);
+        false
+    }
+
     /// Puts the focused text field's caret at character `offset` of `context`, the field as last
     /// read: the sentence keys move it. The move comes back as the field's caret event. Returns
     /// false when unsupported or not a field it can move.
@@ -247,6 +254,13 @@ impl ApplicationActions for RecordingActions {
     fn copy_text(&self, text: &str) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push((format!("copy {text}"), 0));
+        }
+        true
+    }
+
+    fn move_mouse(&self, x: i32, y: i32) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((format!("mouse to {x}, {y}"), 0));
         }
         true
     }

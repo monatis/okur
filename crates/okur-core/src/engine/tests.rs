@@ -4013,3 +4013,48 @@ fn ctrl_insert_v_says_the_applications_version() {
         Some("Microsoft® Windows® Operating System Version 10.0.19041.1")
     );
 }
+
+/// The cursors: Numpad Minus "JAWS Cursor", Alt+Delete with the mouse's place and the
+/// restriction, Insert+Numpad Minus moving the mouse to the middle of the focus, Numpad Plus
+/// "PC Cursor", Alt+Delete with the focus's place [obs, 516, 513/s2].
+#[test]
+fn the_jaws_and_pc_cursors() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut button = FocusEvent::new(Role::Button)
+        .with_name("Save...")
+        .with_window_title("SR Dialog Fixture");
+    button.bounds = Some([1000, 530, 1090, 558]);
+    engine.handle_focus_event(&button);
+    engine.handle_accessibility_event(&crate::event::AccessibilityEvent::MouseMoved {
+        x: 1834,
+        y: 235,
+    });
+    use crate::command::Command;
+    assert_eq!(
+        engine.execute(Command::JawsCursor).as_deref(),
+        Some("JAWS Cursor")
+    );
+    assert_eq!(
+        engine.execute(Command::SayActiveCursor).as_deref(),
+        Some("JAWS Cursor active\n1834, 235\nApplication window restriction")
+    );
+    assert_eq!(
+        engine.execute(Command::RouteJawsToPc).as_deref(),
+        Some("Route JAWS to PC")
+    );
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(what, _)| what == "mouse to 1045, 544"));
+    assert_eq!(
+        engine.execute(Command::PcCursor).as_deref(),
+        Some("PC Cursor")
+    );
+    assert_eq!(
+        engine.execute(Command::SayActiveCursor).as_deref(),
+        Some("PC Cursor active\n1045, 544")
+    );
+}

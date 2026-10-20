@@ -206,6 +206,10 @@ pub struct TraceEvent {
     /// For a UIA notification from the application in front: what it says.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub notification: Option<TraceNotification>,
+    /// For a `mouse_move`: where the mouse pointer is now, `[x, y]` in screen pixels, which
+    /// the JAWS cursor follows (Alt+Delete, "JAWS Cursor active | 1834, 235" [obs, 516/s2]).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub mouse: Option<[i32; 2]>,
 }
 
 /// A UIA notification (`UiaRaiseNotificationEvent`): Windows Settings' search box says
@@ -920,6 +924,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     focus.app = event.process.clone();
     focus.app_product = event.process_product.clone();
     focus.app_version = event.process_version.clone();
+    focus.bounds = event.focus_chain.last().and_then(|n| n.bounds);
     focus.window_items = event
         .dialog_tree
         .as_ref()
@@ -1110,6 +1115,9 @@ const NOTIFICATION_REPEAT_MS: u128 = 2000;
 impl EventConverter {
     /// The engine events for one captured event, in order (usually one, or none).
     pub fn convert(&mut self, event: &TraceEvent) -> Vec<okur_core::AccessibilityEvent> {
+        if let Some([x, y]) = event.mouse {
+            return vec![okur_core::AccessibilityEvent::MouseMoved { x, y }];
+        }
         if event.event == "live_region_change" {
             return live_region_events(event);
         }
@@ -1459,6 +1467,7 @@ fn menu_bar_return(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     focus.app = event.process.clone();
     focus.app_product = event.process_product.clone();
     focus.app_version = event.process_version.clone();
+    focus.bounds = event.focus_chain.last().and_then(|n| n.bounds);
     // The field the window gives the focus back to, as the trace read it.
     focus.text = event.text_context.clone();
     Some(focus)
@@ -1512,6 +1521,7 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     focus.app = event.process.clone();
     focus.app_product = event.process_product.clone();
     focus.app_version = event.process_version.clone();
+    focus.bounds = event.focus_chain.last().and_then(|n| n.bounds);
     focus.in_ribbon = true;
     Some(focus)
 }
@@ -1634,6 +1644,8 @@ mod capture {
         /// Tracing (not live): every page change is recorded as a `page_change` event, with
         /// its object and nothing read (`okur trace --page-changes`).
         record_page_changes: bool,
+        /// Where the mouse pointer was when last looked at.
+        last_mouse: Option<[i32; 2]>,
     }
 
     /// The shortest time between two page changes told: a page being built reports its
@@ -2199,6 +2211,7 @@ mod capture {
                     default_button: None,
                     dialog_tree: None,
                     notification: None,
+                    mouse: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -2567,11 +2580,72 @@ mod capture {
                     default_button: None,
                     dialog_tree: None,
                     notification: Some(notification),
+                    mouse: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
             });
         }
+    }
+
+    /// Records where the mouse pointer went, when it moved since last looked at: the JAWS
+    /// cursor follows it, and JAWS's routing moves it. Windows raises no event for that.
+    fn record_mouse_move() {
+        use windows::Win32::Foundation::POINT;
+        use windows::Win32::UI::WindowsAndMessaging::GetCursorPos;
+        let mut point = POINT::default();
+        // SAFETY: valid out-pointer.
+        if unsafe { GetCursorPos(&mut point) }.is_err() {
+            return;
+        }
+        let at = [point.x, point.y];
+        STATE.with(|state| {
+            let mut state = state.borrow_mut();
+            let Some(state) = state.as_mut() else { return };
+            if state.last_mouse == Some(at) {
+                return;
+            }
+            state.last_mouse = Some(at);
+            let event = TraceEvent {
+                t_ms: now_ms(),
+                event: "mouse_move".to_owned(),
+                win_event: 0,
+                hwnd: 0,
+                id_object: 0,
+                id_child: 0,
+                window_class: None,
+                window_style: None,
+                focus_window_class: None,
+                menu_bar: Vec::new(),
+                status_bar: Vec::new(),
+                window_title: None,
+                process: None,
+                process_product: None,
+                process_version: None,
+                object: None,
+                focus_chain: Vec::new(),
+                focus_siblings: Vec::new(),
+                focus_subtree: None,
+                list_position: None,
+                column_headers: Vec::new(),
+                text_context: None,
+                region: None,
+                page: None,
+                top_window_title: None,
+                top_window_class: None,
+                virtual_desktop: None,
+                dialog_lines: Vec::new(),
+                dialog_text: Vec::new(),
+                dialog_page: None,
+                group_box: None,
+                default_button: None,
+                dialog_tree: None,
+                notification: None,
+                mouse: Some(at),
+            };
+            (state.sink)(event);
+            state.count += 1;
+        });
     }
 
     /// UIA's notification event id.
@@ -2683,6 +2757,7 @@ mod capture {
                     default_button: None,
                     dialog_tree: None,
                     notification: None,
+                    mouse: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -2860,10 +2935,18 @@ mod capture {
             };
             stages.push(("properties", clock.elapsed().as_millis()));
             let element = element.as_ref();
-            let focus = match (state.uia.as_ref(), element) {
+            let mut focus = match (state.uia.as_ref(), element) {
                 (Some(uia), Some(element)) if reads_focus => focus_chain_from(uia, element),
                 _ => Vec::new(),
             };
+            // Where the focus is on the screen: the PC cursor's place (Alt+Delete).
+            if let (Some(element), Some(focused)) = (element.filter(|_| focused), focus.last_mut())
+            {
+                // SAFETY: a property read on a valid element.
+                if let Ok(r) = unsafe { element.CurrentBoundingRectangle() } {
+                    focused.bounds = Some([r.left, r.top, r.right, r.bottom]);
+                }
+            }
             stages.push(("chain", clock.elapsed().as_millis()));
             let list_position = if focused || changes_focus_context {
                 win32_list_position(hwnd, &class).or_else(|| {
@@ -3051,6 +3134,7 @@ mod capture {
                 default_button,
                 dialog_tree,
                 notification: None,
+                mouse: None,
             };
             (state.sink)(event);
             state.count += 1;
@@ -3127,6 +3211,7 @@ mod capture {
                 count: 0,
                 live,
                 last_object_focus: None,
+                last_mouse: None,
                 last_focus_read: None,
                 page_changed,
                 page_changed_at: None,
@@ -3276,6 +3361,7 @@ mod capture {
                 if uia_live_region_queued {
                     record_uia_live_regions();
                 }
+                record_mouse_move();
             }
         }
         if let (Some(uia), Some(root), true) = (uia.as_ref(), root.as_ref(), uia_live_region_added)
@@ -3851,6 +3937,7 @@ mod tests {
             default_button: None,
             dialog_tree: None,
             notification: None,
+            mouse: None,
         }
     }
 

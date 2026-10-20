@@ -110,6 +110,11 @@ pub struct UiaNode {
     /// names a control after its group box ("Direction Up radio button"; 540/s4).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub group_box: Option<String>,
+    /// For the focused element of a traced focus: its bounding rectangle on the screen,
+    /// `[left, top, right, bottom]` in pixels, where JAWS places the PC cursor (Alt+Delete,
+    /// "PC Cursor active | 1045, 544" [obs, 513/s2]).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub bounds: Option<[i32; 4]>,
     pub is_enabled: bool,
     pub is_offscreen: bool,
     pub is_password: bool,
@@ -553,6 +558,7 @@ pub(crate) mod capture {
             is_dialog: boolean(el, UIA_IsDialogPropertyId).filter(|&v| v),
             label: None,
             group_box: None,
+            bounds: None,
             is_enabled: boolean(el, UIA_IsEnabledPropertyId).unwrap_or(true),
             is_offscreen: boolean(el, UIA_IsOffscreenPropertyId).unwrap_or(false),
             is_password: boolean(el, UIA_IsPasswordPropertyId).unwrap_or(false),

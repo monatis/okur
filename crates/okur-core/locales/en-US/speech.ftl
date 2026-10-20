@@ -16,6 +16,15 @@ frame-end = frame end
 
 # Said when forms mode ends and the virtual cursor reads the page again. JAWS's capitals.
 cursor-virtual-pc = virtual PC Cursor
+# The cursors: Numpad Minus, Numpad Plus, Insert+Numpad Minus and Alt+Delete [obs, 516,
+# 513/s2]. The position is the screen's x and y in pixels, "1045, 544".
+cursor-jaws = JAWS Cursor
+cursor-pc = PC Cursor
+cursor-route-jaws-to-pc = Route JAWS to PC
+cursor-jaws-active = JAWS Cursor active
+cursor-pc-active = PC Cursor active
+cursor-position = { $x }, { $y }
+cursor-restriction-application = Application window restriction
 
 # Said for an empty line, or in place of an empty field's value.
 blank = blank

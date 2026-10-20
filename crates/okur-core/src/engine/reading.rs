@@ -12,6 +12,18 @@ impl ScreenReaderEngine {
     /// cursor and the rest of the engine.
     pub(super) fn read_where_focused(&mut self, command: &Command) -> Option<Option<String>> {
         let native = self.app_mode != AppMode::VirtualBuffer;
+        // The JAWS cursor reads the screen at the mouse, which Okur has no model of yet: its
+        // reading keys say nothing, as JAWS's did in a WinForms dialog [obs, 516/s4, s6].
+        if native && self.active_cursor == super::cursors::ActiveCursor::Jaws {
+            if let Command::SayLine
+            | Command::SayWord
+            | Command::SayCharacter
+            | Command::SayNextWord
+            | Command::SayPriorWord = command
+            {
+                return Some(None);
+            }
+        }
         let speech = match command {
             // On a native control that is not a text field, Say Line, Say Word and the next
             // and prior word read the control as Say Focus does, without its hint: "Subscribe

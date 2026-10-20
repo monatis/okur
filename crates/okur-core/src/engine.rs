@@ -19,6 +19,7 @@ use crate::speech::SpeechOutput;
 const DOUBLE_PRESS_MS: u64 = 500;
 
 mod commands;
+mod cursors;
 mod find;
 mod focus;
 mod help;
@@ -130,6 +131,12 @@ pub struct ScreenReaderEngine {
     /// The focused application's product name and version, as the last focus gave them
     /// (Ctrl+Insert+V).
     focus_app_version: Option<(String, String)>,
+    /// The focused element's place on the screen: the PC cursor's.
+    focus_bounds: Option<[i32; 4]>,
+    /// Where the mouse pointer is, as the platform last reported it: the JAWS cursor's place.
+    mouse: Option<(i32, i32)>,
+    /// The cursor the reading keys act on.
+    active_cursor: cursors::ActiveCursor,
     /// Forms mode was just turned on by one of JAWS's element lists giving a field the focus:
     /// the field's focus is followed by its line, as Say Line reads it [obs, 249/s3].
     forms_mode_by_list: bool,
@@ -257,6 +264,9 @@ impl ScreenReaderEngine {
             forms_mode_by_enter: false,
             focus_access_key: None,
             focus_app_version: None,
+            focus_bounds: None,
+            mouse: None,
+            active_cursor: cursors::ActiveCursor::Pc,
             forms_mode_by_list: false,
             page_said_for: None,
             pending_page: None,
@@ -437,6 +447,40 @@ impl ScreenReaderEngine {
             ) = crate::command::command_for(event)
             {
                 let _ = self.execute(command);
+                return KeyAction::Consume;
+            }
+        }
+        // The cursors, in any application [obs, 516]. Numpad Plus is the PC cursor from the
+        // JAWS cursor or in an application; in a page it is the virtual PC cursor's key.
+        {
+            use crate::command::Command;
+            use cursors::ActiveCursor;
+            if let Some(
+                command @ (Command::JawsCursor
+                | Command::PcCursor
+                | Command::RouteJawsToPc
+                | Command::SayActiveCursor),
+            ) = crate::command::command_for(event)
+            {
+                let in_page = self.app_mode == AppMode::VirtualBuffer;
+                if command != Command::PcCursor
+                    || self.active_cursor == ActiveCursor::Jaws
+                    || !in_page
+                {
+                    let _ = self.execute(command);
+                    return KeyAction::Consume;
+                }
+            }
+            // With the JAWS cursor active the arrows move it, not the focus: they stay out of
+            // the application [obs, 516/s5].
+            if self.active_cursor == ActiveCursor::Jaws
+                && self.app_mode != AppMode::VirtualBuffer
+                && event.modifiers.is_empty()
+                && matches!(
+                    event.key,
+                    Key::UpArrow | Key::DownArrow | Key::LeftArrow | Key::RightArrow
+                )
+            {
                 return KeyAction::Consume;
             }
         }
@@ -883,6 +927,10 @@ impl ScreenReaderEngine {
             }
             AccessibilityEvent::PagePartsLoaded(parts) => {
                 self.page_parts_loaded(parts);
+                None
+            }
+            AccessibilityEvent::MouseMoved { x, y } => {
+                self.mouse = Some((*x, *y));
                 None
             }
             AccessibilityEvent::WindowRenamed(title) => {
