@@ -558,7 +558,8 @@ fn task_switcher_items_after_the_desktop_are_not_desktop_items() {
         .with_item_index(1)
         .with_item_count(3);
     engine.handle_focus_event(&desktop);
-    // Alt+Tab: the switcher's item takes focus through UIA.
+    // Alt+Tab with Alt held: the switcher's item takes focus through UIA.
+    engine.handle_key_event(&key(Key::Alt));
     let mut item = FocusEvent::new(Role::ListItem)
         .with_window_class("ForegroundStaging")
         .with_window_title("Task Switching")
@@ -569,6 +570,12 @@ fn task_switcher_items_after_the_desktop_are_not_desktop_items() {
         engine.handle_focus_event(&item).as_deref(),
         Some("Untitled - Notepad\nTo move to an item press the Arrow keys.")
     );
+    // Alt released: the switcher closes on the window chosen, and a switcher focus read
+    // after that says nothing [obs, 316/s3].
+    engine.handle_key_event(&KeyEvent::new(Key::Alt, Modifiers::none(), false));
+    let mut late = item.clone();
+    late.name = Some("SR Editor Fixture".to_owned());
+    assert_eq!(engine.handle_focus_event(&late), None);
 }
 
 #[test]

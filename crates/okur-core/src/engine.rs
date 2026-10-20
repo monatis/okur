@@ -118,6 +118,9 @@ pub struct ScreenReaderEngine {
     last_key_selects: bool,
     /// The last key was Tab or Shift+Tab: the focus it moves is the user's.
     last_key_tabs: bool,
+    /// The Alt key is down: pressed on its own and not yet released (Alt held through
+    /// Tabs in the task switcher).
+    alt_held: bool,
     /// The next key, with the modifiers held with it, goes to the application as it is
     /// (Pass Key Through).
     pass_next_key: bool,
@@ -263,6 +266,7 @@ impl ScreenReaderEngine {
             edit_read_in_console: false,
             last_key_selects: false,
             last_key_tabs: false,
+            alt_held: false,
             pass_next_key: false,
             menus: crate::native_focus::Menus::default(),
             pending_edit: None,
@@ -357,6 +361,9 @@ impl ScreenReaderEngine {
     }
 
     fn handle_key(&mut self, event: &KeyEvent) -> KeyAction {
+        if event.key == Key::Alt {
+            self.alt_held = event.is_down;
+        }
         if !event.is_down {
             return KeyAction::PassThrough;
         }

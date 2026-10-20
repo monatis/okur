@@ -40,6 +40,8 @@ pub struct AppContext<'a> {
     pub window_kind: &'a mut Option<String>,
     /// The last key extended a selection (Shift with an arrow key, Home, End or a page key).
     pub selecting: bool,
+    /// The Alt key is held down (the task switcher stays up while it is).
+    pub alt_held: bool,
 }
 
 impl AppContext<'_> {
