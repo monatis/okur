@@ -62,6 +62,7 @@ Decisions made on the way, for the owner to confirm or reverse:
 
 - **No copy starts on the secure desktop** (`Winlogon`) until M6's secure mode: one there runs
   as SYSTEM and would have files, dialogs and logs within reach (R3). It exits silently.
+  Confirmed by the owner, 2026-10-20.
 - **`--sign-in` starts Okur as JAWS's default, Always, does,** until M4's resolver reads the
   user's choice. `/hardwarebuttonlaunch` counts as `--ease-of-access`.
 - Ease of Access's start and exit notification (AccessibilityTemp and Win+U) is M4's, and
@@ -96,7 +97,7 @@ Notes, for the owner:
 
 - **The Run key's value is written by default** (§5.4): until M4's choices, every user's
   sign-in then starts Okur, beside JAWS on old-pc. Install with `--no-start-after-sign-in`
-  there.
+  there. Confirmed by the owner, 2026-10-20, with the development certificate (Q1): yes.
 - `secure-settings\` is not seeded (M6). The installer's words are English in its code, not
   in the catalog, until M7's installer dialogs. Publisher in Apps & features: the workspace's
   `authors`.

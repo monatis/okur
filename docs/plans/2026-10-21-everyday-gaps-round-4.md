@@ -80,14 +80,32 @@ of the exclusion (§5).
   On old-pc with `okur live-parity` where a scenario exists. The rest need the owner's
   permission on the dev box.
 
-## 5. Owner questions
+## 5. Owner questions, answered 2026-10-20
 
-- Windows Defender on old-pc quarantines `okur.exe` (10:52 and 14:13 on 2026-10-20). Only the
-  owner can add the exclusion, from an elevated PowerShell there:
-  `Add-MpPreference -ExclusionPath 'C:\Users\ailabs\sr-harness'`.
-- The development certificate (the secure-screens proposal's Q1). With a yes, old-pc's M3
-  checks follow the proposal's Status section.
-- Two defaults of the setup to confirm: install writes the sign-in Run key (use
-  `--no-start-after-sign-in` on old-pc); a copy started on the secure desktop exits silently
-  until secure mode (M6) exists.
-- Office on old-pc still needs activating; 518, 519 and 521 wait for it.
+The owner said yes to each of these and asked that Office be checked last.
+
+- **The Defender exclusion on old-pc**: the owner adds it, from an elevated PowerShell there:
+  `Add-MpPreference -ExclusionPath 'C:\Users\ailabs\sr-harness'`. Until then, check
+  `Get-MpThreatDetection` before each queue (§0).
+- **The development certificate (the secure-screens proposal's Q1).** The steps that change a
+  certificate store or the machine are the owner's; the agent builds, signs and checks:
+  1. The agent:
+     - builds the release programs;
+     - runs M0's E1 and M1's checks on old-pc between batches (no certificate needed);
+     - writes the results into the proposal's Status section.
+  2. The owner, on the dev box: `crates\okur-setup\signing\dev-signing.ps1 -NewCertificate`
+     (`-WhatIf` first), which prints the thumbprint and writes `okur-dev-codesign.cer`.
+  3. The agent signs the release programs with it (`-Sign -Thumbprint <THUMB>`), checks them
+     with `-Verify`, and pushes them and the `.cer` to old-pc.
+  4. The owner, on old-pc:
+     - elevated: `dev-signing.ps1 -TrustOnLab -CertificateFile <the .cer>`;
+     - then, unelevated: `okur-setup.exe install --from <folder> --no-start-after-sign-in`,
+       accepting its UAC prompt.
+  5. The agent runs the read-only checks of the proposal's M3 list (signature, `okur-sr.exe
+     --doctor-exit`, `okur doctor --pid`, `reg query`) and records them.
+  6. The owner: signs out and in, then uninstalls (`okur-setup.exe uninstall`) and undoes
+     (`-UndoLab`) when the checks are done.
+- **The setup's two defaults are confirmed**: install writes the sign-in Run key (old-pc uses
+  `--no-start-after-sign-in`); a copy started on the secure desktop exits silently until
+  secure mode (M6).
+- **Office on old-pc**: the last check, after everything above; 518, 519 and 521 wait for it.
