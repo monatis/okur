@@ -1032,27 +1032,24 @@ pub(crate) mod capture {
         Some(tree)
     }
 
-    /// The taskbar's notification area's icons, as JAWS's system tray list gives them: the
-    /// buttons of `TrayNotifyWnd` (the chevron to the hidden icons, the icons shown, the input
-    /// indicator, the clock, the Action Center), left to right, each with the middle of its
-    /// rectangle for its clicks ("Notification Chevron", "0% available (plugged in)", "Touch
-    /// keyboard", "Tray Input Indicator - Turkish", "System Clock, …", "Action Center, …"
-    /// [obs, 511/s4, Windows 10]). Where the taskbar has no `TrayNotifyWnd`, its whole tree.
-    pub(crate) fn tray_icons(uia: &IUIAutomation) -> Vec<okur_core::event::TrayIcon> {
-        use windows::core::w;
-        use windows::Win32::UI::WindowsAndMessaging::{FindWindowExW, FindWindowW};
-        const BUTTON: i32 = 50000;
-        const MENU_ITEM: i32 = 50011;
-        const SPLIT_BUTTON: i32 = 50031;
-        /// Elements walked, at most: the taskbar's tree is small, a hung shell's is not read.
-        const MAX_TRAY_TREE: usize = 400;
-        // SAFETY: window lookups by static class names.
-        let Ok(taskbar) = (unsafe { FindWindowW(w!("Shell_TrayWnd"), None) }) else {
-            return Vec::new();
-        };
-        // SAFETY: as above.
-        let root = unsafe { FindWindowExW(Some(taskbar), None, w!("TrayNotifyWnd"), None) }
-            .unwrap_or(taskbar);
+    /// An element of the taskbar met by [`taskbar_elements`].
+    pub(crate) struct TaskbarElement {
+        pub depth: usize,
+        pub control_type: i32,
+        pub class_name: Option<String>,
+        pub name: Option<String>,
+        pub rect: Option<windows::Win32::Foundation::RECT>,
+        pub offscreen: bool,
+    }
+
+    /// The control-view tree under window `root`, in order, to depth 8 and 600 elements: the
+    /// taskbar's is small, and a hung shell's is not read on.
+    pub(crate) fn taskbar_elements(
+        uia: &IUIAutomation,
+        root: windows::Win32::Foundation::HWND,
+    ) -> Vec<TaskbarElement> {
+        const MAX_DEPTH: usize = 8;
+        const MAX_ELEMENTS: usize = 600;
         let Some(request) = properties_request(uia, AutomationElementMode_Full) else {
             return Vec::new();
         };
@@ -1062,29 +1059,22 @@ pub(crate) mod capture {
         }) else {
             return Vec::new();
         };
-        let mut found: Vec<(windows::Win32::Foundation::RECT, String)> = Vec::new();
+        let mut out = Vec::new();
         let mut stack = vec![(element, 0usize)];
-        let mut budget = MAX_TRAY_TREE;
         while let Some((element, depth)) = stack.pop() {
-            budget = match budget.checked_sub(1) {
-                Some(left) => left,
-                None => break,
-            };
-            let kind = int(&element, UIA_ControlTypePropertyId).unwrap_or_default();
-            let name = string(&element, UIA_NamePropertyId);
-            let offscreen = boolean(&element, UIA_IsOffscreenPropertyId).unwrap_or(false);
-            if matches!(kind, BUTTON | MENU_ITEM | SPLIT_BUTTON) && !offscreen {
-                // SAFETY: a property read on a valid element.
-                if let (Some(name), Ok(rect)) =
-                    (name, unsafe { element.CurrentBoundingRectangle() })
-                {
-                    if rect.right > rect.left && rect.bottom > rect.top {
-                        found.push((rect, name));
-                    }
-                }
-                continue;
+            if out.len() >= MAX_ELEMENTS {
+                break;
             }
-            if depth >= 6 {
+            out.push(TaskbarElement {
+                depth,
+                control_type: int(&element, UIA_ControlTypePropertyId).unwrap_or_default(),
+                class_name: string(&element, UIA_ClassNamePropertyId),
+                name: string(&element, UIA_NamePropertyId),
+                // SAFETY: a property read on a valid element.
+                rect: unsafe { element.CurrentBoundingRectangle() }.ok(),
+                offscreen: boolean(&element, UIA_IsOffscreenPropertyId).unwrap_or(false),
+            });
+            if depth >= MAX_DEPTH {
                 continue;
             }
             // Children pushed last to first, so they are walked in order.
@@ -1099,19 +1089,63 @@ pub(crate) mod capture {
             }
             stack.extend(children.into_iter().rev());
         }
+        out
+    }
+
+    /// The taskbar's window and its notification area's (`TrayNotifyWnd`, Windows 10).
+    pub(crate) fn taskbar_windows() -> Option<(
+        windows::Win32::Foundation::HWND,
+        Option<windows::Win32::Foundation::HWND>,
+    )> {
+        use windows::core::w;
+        use windows::Win32::UI::WindowsAndMessaging::{FindWindowExW, FindWindowW};
+        // SAFETY: window lookups by static class names.
+        let taskbar = unsafe { FindWindowW(w!("Shell_TrayWnd"), None) }.ok()?;
+        // SAFETY: as above.
+        let notify = unsafe { FindWindowExW(Some(taskbar), None, w!("TrayNotifyWnd"), None) }.ok();
+        Some((taskbar, notify))
+    }
+
+    /// The taskbar's notification area's icons, as JAWS's system tray list gives them, left to
+    /// right, each with the middle of its rectangle for its clicks. Windows 10: the buttons of
+    /// `TrayNotifyWnd` (the chevron to the hidden icons, the icons shown, the input indicator,
+    /// the clock, the Action Center: "Notification Chevron", "0% available (plugged in)",
+    /// "Touch keyboard", "Tray Input Indicator - Turkish", "System Clock, …", "Action Center,
+    /// …" [obs, 511/s4]). Windows 11 draws its taskbar in XAML, and `TrayNotifyWnd` has no
+    /// buttons: the taskbar's buttons of the `SystemTray.` classes ([hyp], not yet checked on
+    /// a machine; `okur tray --dump` shows the tree).
+    pub(crate) fn tray_icons(uia: &IUIAutomation) -> Vec<okur_core::event::TrayIcon> {
+        const BUTTON: i32 = 50000;
+        const MENU_ITEM: i32 = 50011;
+        const SPLIT_BUTTON: i32 = 50031;
+        let Some((taskbar, notify)) = taskbar_windows() else {
+            return Vec::new();
+        };
+        let buttons = |elements: Vec<TaskbarElement>, fits: &dyn Fn(&TaskbarElement) -> bool| {
+            elements
+                .into_iter()
+                .filter(|e| matches!(e.control_type, BUTTON | MENU_ITEM | SPLIT_BUTTON))
+                .filter(|e| !e.offscreen && fits(e))
+                .filter_map(|e| Some((e.rect?, e.name?)))
+                .filter(|(r, _)| r.right > r.left && r.bottom > r.top)
+                .collect::<Vec<_>>()
+        };
+        let mut found = notify
+            .map(|notify| buttons(taskbar_elements(uia, notify), &|_| true))
+            .unwrap_or_default();
+        if found.is_empty() {
+            found = buttons(taskbar_elements(uia, taskbar), &|e| {
+                e.class_name
+                    .as_deref()
+                    .is_some_and(|c| c.starts_with("SystemTray."))
+            });
+        }
         // Left to right on a taskbar along the bottom or top, top to bottom on one at a side.
-        let wide = found
-            .iter()
-            .map(|(r, _)| r.left)
-            .max()
-            .zip(found.iter().map(|(r, _)| r.left).min())
-            .map(|(max, min)| max - min)
-            >= found
-                .iter()
-                .map(|(r, _)| r.top)
-                .max()
-                .zip(found.iter().map(|(r, _)| r.top).min())
-                .map(|(max, min)| max - min);
+        let spread = |at: fn(&windows::Win32::Foundation::RECT) -> i32| {
+            let values = found.iter().map(|(r, _)| at(r));
+            values.clone().max().zip(values.min()).map(|(a, b)| a - b)
+        };
+        let wide = spread(|r| r.left) >= spread(|r| r.top);
         found.sort_by_key(|(r, _)| {
             if wide {
                 (r.left, r.top)

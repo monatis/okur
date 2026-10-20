@@ -134,6 +134,17 @@ fn mark_range() -> Option<(usize, usize)> {
 
 /// Tells Okur what the user did.
 pub(crate) fn tell(message: &FromUi) {
+    // A button pressed or a dialog closed can have Okur bring a window to the front (the
+    // Window List's Switch To): Windows lets only the process in front do that, and this one
+    // is in front, Okur's is not. The right lasts until the user's next input.
+    if matches!(
+        message,
+        FromUi::DialogPressed { .. } | FromUi::DialogClosed { .. }
+    ) {
+        use windows::Win32::UI::WindowsAndMessaging::{AllowSetForegroundWindow, ASFW_ANY};
+        // SAFETY: a plain Win32 call with a constant argument.
+        let _ = unsafe { AllowSetForegroundWindow(ASFW_ANY) };
+    }
     if let Ok(line) = encode(message) {
         let mut out = std::io::stdout().lock();
         let _ = writeln!(out, "{line}");

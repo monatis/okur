@@ -652,6 +652,38 @@ pub fn tray_icons_now() -> Vec<okur_core::event::TrayIcon> {
         .unwrap_or_default()
 }
 
+/// The taskbar's control tree, one element a line (indented by depth: control type, class,
+/// name, rectangle), for finding its notification area on a new Windows (`okur tray --dump`).
+#[cfg(windows)]
+pub fn taskbar_dump_now() -> Vec<String> {
+    use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
+    // SAFETY: COM initialization for this thread.
+    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+    let (Ok(uia), Some((taskbar, _))) = (
+        crate::uia_snapshot::capture::automation(),
+        crate::uia_snapshot::capture::taskbar_windows(),
+    ) else {
+        return Vec::new();
+    };
+    crate::uia_snapshot::capture::taskbar_elements(&uia, taskbar)
+        .into_iter()
+        .map(|e| {
+            let rect = e
+                .rect
+                .map(|r| format!("[{}, {}, {}, {}]", r.left, r.top, r.right, r.bottom))
+                .unwrap_or_default();
+            format!(
+                "{}{} {} {:?} {rect}{}",
+                "  ".repeat(e.depth),
+                e.control_type,
+                e.class_name.unwrap_or_default(),
+                e.name.unwrap_or_default(),
+                if e.offscreen { " offscreen" } else { "" }
+            )
+        })
+        .collect()
+}
+
 /// Clicks the mouse at `x`, `y` (real pixels, the process being DPI aware): the pointer moves
 /// there, then the buttons are pressed and released in one `SendInput` call, twice for a
 /// double click.
