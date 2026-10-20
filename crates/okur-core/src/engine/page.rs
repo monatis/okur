@@ -511,6 +511,21 @@ impl ScreenReaderEngine {
         true
     }
 
+    /// Parts spliced without the engine into `base` were not all in it: the whole page is read
+    /// again, as [`Self::page_parts_loaded`] does, without splicing them here once more. False
+    /// when the page is another by now: the parts may be in that one.
+    pub fn page_parts_not_found(&mut self, base: &std::sync::Arc<AomNode>) -> bool {
+        let same = self
+            .page_for_parts()
+            .is_some_and(|page| std::sync::Arc::ptr_eq(&page, base));
+        if same {
+            if let Some(actions) = &self.actions {
+                actions.page_changed(true);
+            }
+        }
+        same
+    }
+
     /// The host builds pages of at least `from_nodes` nodes after one of their nodes changed,
     /// off the engine ([`Self::take_page_build`]); smaller pages are built here, at once. The
     /// live screen reader does; replay and tests build every page here.

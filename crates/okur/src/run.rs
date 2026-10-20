@@ -175,6 +175,48 @@ const SLOW_ENGINE: std::time::Duration = std::time::Duration::from_millis(20);
 /// P3, 2026-10-20).
 const PAGE_BUILDS_ELSEWHERE_FROM: usize = 5_000;
 
+/// Page parts spliced into a page that changed meanwhile are spliced into the page as it is,
+/// off the engine, this many times in all; after that under it.
+const PARTS_ATTEMPTS: u32 = 3;
+
+/// Page parts spliced and built off the engine.
+struct BuiltParts {
+    /// The page they were spliced into.
+    base: std::sync::Arc<AomNode>,
+    /// The page's buffer with them; `None` when a part was not found in the page.
+    buffer: Option<VirtualBuffer>,
+    parts: Vec<AomNode>,
+    /// Which try this was, from 1.
+    attempt: u32,
+}
+
+/// Splices `parts` into `base` and builds the buffer on the blocking pool, without the
+/// engine, and sends the result to `built`.
+fn splice_off_engine(
+    base: std::sync::Arc<AomNode>,
+    parts: Vec<AomNode>,
+    attempt: u32,
+    built: tokio::sync::mpsc::UnboundedSender<BuiltParts>,
+) {
+    tokio::task::spawn_blocking(move || {
+        let started = std::time::Instant::now();
+        let buffer = VirtualBuffer::spliced(&base, &parts).map(VirtualBuffer::from_aom_owned);
+        tracing::debug!(
+            parts = parts.len(),
+            attempt,
+            lines = buffer.as_ref().map(|b| b.lines.len()),
+            ms = started.elapsed().as_millis(),
+            "page parts spliced"
+        );
+        let _ = built.send(BuiltParts {
+            base,
+            buffer,
+            parts,
+            attempt,
+        });
+    });
+}
+
 /// Keys waiting for the engine, which the event loop lets go first. A plain mutex takes no
 /// turns: the loop took the engine again within microseconds for each queued event, and the
 /// keyboard hook, trying every millisecond, could miss every gap until its 150 ms were over
@@ -635,14 +677,7 @@ pub async fn run(config: RunConfig) {
             let (mut refreshes_sent, mut refresh_applied) = (0_u64, 0_u64);
             // Page parts read again are spliced into the page and built on a thread of
             // their own too (135-175 ms on a page of 25,000 nodes, during which every
-            // event waited; performance review, 2026-10-20, P8). They come back with
-            // the page they were spliced into, the buffer (none when a part was not
-            // found in it) and the parts themselves.
-            type BuiltParts = (
-                std::sync::Arc<okur_core::AomNode>,
-                Option<VirtualBuffer>,
-                Vec<okur_core::AomNode>,
-            );
+            // event waited; performance review, 2026-10-20, P8).
             let (parts_tx, mut parts_rx) = tokio::sync::mpsc::unbounded_channel::<BuiltParts>();
             // A page built again after one of its controls changed, with the change's
             // generation: installed unless another change came meanwhile.
@@ -677,16 +712,31 @@ pub async fn run(config: RunConfig) {
                     }
                     // Installed if the page is still the one they were spliced into;
                     // else the parts go into the page as it is now, under the lock.
-                    Some((base, buffer, parts)) = parts_rx.recv() => {
+                    Some(BuiltParts { base, buffer, parts, attempt }) = parts_rx.recv() => {
                         give_way_to_keys();
-                        if let Ok(mut eng) = engine_events.lock() {
-                            let installed =
-                                buffer.is_some_and(|b| eng.install_page_parts(&base, b));
-                            if !installed {
-                                let _ = eng.handle_accessibility_event(
-                                    &AccessibilityEvent::PagePartsLoaded(parts),
-                                );
-                            }
+                        let Ok(mut eng) = engine_events.lock() else {
+                            continue;
+                        };
+                        let taken = match buffer {
+                            Some(buffer) => eng.install_page_parts(&base, buffer),
+                            None => eng.page_parts_not_found(&base),
+                        };
+                        if taken {
+                            continue;
+                        }
+                        // The page is another by now: the parts go into it as it is, off
+                        // the engine again (performance review P3 step 3); after a few
+                        // tries, under it.
+                        if attempt >= PARTS_ATTEMPTS {
+                            let _ = eng.handle_accessibility_event(
+                                &AccessibilityEvent::PagePartsLoaded(parts),
+                            );
+                            continue;
+                        }
+                        let base = eng.page_for_parts();
+                        drop(eng);
+                        if let Some(base) = base {
+                            splice_off_engine(base, parts, attempt + 1, parts_tx.clone());
                         }
                         continue;
                     }
@@ -750,20 +800,7 @@ pub async fn run(config: RunConfig) {
                         .ok()
                         .and_then(|eng| eng.page_for_parts());
                     if let Some(base) = base {
-                        let parts = std::mem::take(parts);
-                        let built = parts_tx.clone();
-                        tokio::task::spawn_blocking(move || {
-                            let started = std::time::Instant::now();
-                            let buffer = VirtualBuffer::spliced(&base, &parts)
-                                .map(VirtualBuffer::from_aom_owned);
-                            tracing::debug!(
-                                parts = parts.len(),
-                                lines = buffer.as_ref().map(|b| b.lines.len()),
-                                ms = started.elapsed().as_millis(),
-                                "page parts spliced"
-                            );
-                            let _ = built.send((base, buffer, parts));
-                        });
+                        splice_off_engine(base, std::mem::take(parts), 1, parts_tx.clone());
                         continue;
                     }
                 }

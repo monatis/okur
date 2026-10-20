@@ -585,3 +585,28 @@ fn a_part_read_again_is_spliced_into_the_page() {
     engine.handle_accessibility_event(&AccessibilityEvent::PagePartsLoaded(vec![unknown]));
     assert_eq!(page_requests(&actions), ["page changed, now"]);
 }
+
+/// A part spliced without the engine and not found in the page makes the whole page read
+/// again, as one spliced inside it does; once the page is another, nothing is asked, and the
+/// host splices the part into that one.
+#[test]
+fn a_part_not_found_without_the_engine_reads_the_page_again_while_it_is_the_same() {
+    let actions = RecordingActions::refreshing_pages();
+    let mut engine = engine_on(&chat("(7) WhatsApp", messages()), &actions);
+    let unknown = object(AomNode::new(1, Role::Group), -12345);
+    let base = engine.page_for_parts();
+    assert!(base.is_some());
+    let Some(base) = base else { return };
+    assert!(VirtualBuffer::spliced(&base, std::slice::from_ref(&unknown)).is_none());
+    assert!(engine.page_parts_not_found(&base));
+    assert_eq!(page_requests(&actions), ["page changed, now"]);
+
+    let mut list = messages();
+    list.push(message(70, "a new one", "15:00", false));
+    engine.handle_page_refreshed(
+        "(7) WhatsApp",
+        VirtualBuffer::from_aom(&chat("(7) WhatsApp", list)),
+    );
+    assert!(!engine.page_parts_not_found(&base));
+    assert_eq!(page_requests(&actions), ["page changed, now"]);
+}
