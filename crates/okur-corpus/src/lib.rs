@@ -493,6 +493,37 @@ mod tests {
                     path.display(),
                     node.id
                 );
+                // The lookups by offset find the span scanning found (P10).
+                type Find = for<'a> fn(
+                    &'a okur_core::VirtualBuffer,
+                    usize,
+                ) -> Option<&'a okur_core::AomNode>;
+                type Fits = fn(&okur_core::Role) -> bool;
+                let kinds: [(Find, Fits); 4] = [
+                    (okur_core::VirtualBuffer::find_link_node, |r| {
+                        matches!(r, okur_core::Role::Link { .. })
+                    }),
+                    (okur_core::VirtualBuffer::find_heading_node, |r| {
+                        matches!(r, okur_core::Role::Heading { .. })
+                    }),
+                    (okur_core::VirtualBuffer::find_list_item_node, |r| {
+                        *r == okur_core::Role::ListItem
+                    }),
+                    (okur_core::VirtualBuffer::find_checkbox_node, |r| {
+                        *r == okur_core::Role::CheckBox
+                    }),
+                ];
+                if let Some(start) = walked {
+                    for (find, fits) in kinds {
+                        let scanned = buffer
+                            .spans
+                            .iter()
+                            .find(|s| s.start_offset == start && fits(&s.role))
+                            .and_then(|s| buffer.node(s.node_id))
+                            .map(|n| n.id);
+                        assert_eq!(find(&buffer, start).map(|n| n.id), scanned);
+                    }
+                }
                 let own = buffer.spans.iter().find(|s| s.node_id == node.id);
                 if buffer.contains_node(node.id) {
                     assert_eq!(

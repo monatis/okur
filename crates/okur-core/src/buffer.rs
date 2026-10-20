@@ -269,6 +269,11 @@ struct SpanIndex {
     subtree: HashMap<usize, Option<usize>>,
     /// Ids the page repeats with subtrees that start apart: found by walking, as before.
     repeated: HashSet<usize>,
+    /// Every span, by its start offset; spans starting together in the order they were made
+    /// (a container's span comes after its content's). The list dialogs and the keys that
+    /// resolve a node by its offset scanned every span for each (performance review,
+    /// 2026-10-20, P10).
+    by_start: Vec<usize>,
 }
 
 impl SpanIndex {
@@ -277,6 +282,11 @@ impl SpanIndex {
         for (i, span) in spans.iter().enumerate() {
             index.own.entry(span.node_id).or_insert(i);
         }
+        index.by_start = (0..spans.len()).collect();
+        // Stable: spans starting together keep the order they were made in.
+        index
+            .by_start
+            .sort_by_key(|&i| spans.get(i).map(|s| s.start_offset));
         let Some(page) = page else {
             return index;
         };
@@ -528,6 +538,19 @@ impl VirtualBuffer {
             Some(first) => first.is_some(),
             None => self.first_span_by_walk(node).is_some(),
         }
+    }
+
+    /// The first span, in the order spans were made, that starts at `offset` with a role that
+    /// `fits`: what scanning every span for it found.
+    fn span_starting_at(&self, offset: usize, fits: impl Fn(&Role) -> bool) -> Option<&BufferSpan> {
+        let by_start = &self.span_index().by_start;
+        let first = by_start
+            .partition_point(|&i| self.spans.get(i).is_some_and(|s| s.start_offset < offset));
+        by_start
+            .get(first..)?
+            .iter()
+            .map_while(|&i| self.spans.get(i).filter(|s| s.start_offset == offset))
+            .find(|s| fits(&s.role))
     }
 
     /// The page's [`SpanIndex`], made now if the buffer or its page changed since.
@@ -1015,9 +1038,7 @@ impl VirtualBuffer {
 
     /// Resolves the node for a combobox starting at `offset`.
     pub fn find_combobox_node(&self, offset: usize) -> Option<&AomNode> {
-        self.spans
-            .iter()
-            .find(|s| s.start_offset == offset && matches!(s.role, Role::ComboBox))
+        self.span_starting_at(offset, |role| matches!(role, Role::ComboBox))
             .and_then(|s| self.node(s.node_id))
     }
 
@@ -1039,9 +1060,7 @@ impl VirtualBuffer {
 
     /// Resolves the node for a slider starting at `offset`.
     pub fn find_slider_node(&self, offset: usize) -> Option<&AomNode> {
-        self.spans
-            .iter()
-            .find(|s| s.start_offset == offset && matches!(s.role, Role::Slider))
+        self.span_starting_at(offset, |role| matches!(role, Role::Slider))
             .and_then(|s| self.node(s.node_id))
     }
 
@@ -1066,92 +1085,73 @@ impl VirtualBuffer {
 
     /// Resolves the node for a tree item starting at `offset`.
     pub fn find_tree_item_node(&self, offset: usize) -> Option<&AomNode> {
-        self.spans
-            .iter()
-            .find(|s| s.start_offset == offset && matches!(s.role, Role::TreeItem))
+        self.span_starting_at(offset, |role| matches!(role, Role::TreeItem))
             .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for a form control starting at `offset`.
     pub fn find_form_control_node(&self, offset: usize) -> Option<&AomNode> {
-        self.spans
-            .iter()
-            .find(|s| {
-                s.start_offset == offset
-                    && matches!(
-                        s.role,
-                        Role::Edit
-                            | Role::Button
-                            | Role::CheckBox
-                            | Role::ComboBox
-                            | Role::Slider
-                            | Role::ProgressBar
-                    )
-            })
-            .and_then(|s| self.node(s.node_id))
+        self.span_starting_at(offset, |role| {
+            matches!(
+                role,
+                Role::Edit
+                    | Role::Button
+                    | Role::CheckBox
+                    | Role::ComboBox
+                    | Role::Slider
+                    | Role::ProgressBar
+            )
+        })
+        .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for a button starting at `offset`.
     pub fn find_button_node(&self, offset: usize) -> Option<&AomNode> {
-        self.spans
-            .iter()
-            .find(|s| s.start_offset == offset && matches!(s.role, Role::Button | Role::MenuButton))
-            .and_then(|s| self.node(s.node_id))
+        self.span_starting_at(offset, |role| {
+            matches!(role, Role::Button | Role::MenuButton)
+        })
+        .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for an edit box starting at `offset`.
     pub fn find_edit_node(&self, offset: usize) -> Option<&AomNode> {
-        self.spans
-            .iter()
-            .find(|s| s.start_offset == offset && matches!(s.role, Role::Edit))
+        self.span_starting_at(offset, |role| matches!(role, Role::Edit))
             .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for a checkbox starting at `offset`.
     pub fn find_checkbox_node(&self, offset: usize) -> Option<&AomNode> {
-        self.spans
-            .iter()
-            .find(|s| s.start_offset == offset && matches!(s.role, Role::CheckBox))
+        self.span_starting_at(offset, |role| matches!(role, Role::CheckBox))
             .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for a heading starting at `offset`.
     pub fn find_heading_node(&self, offset: usize) -> Option<&AomNode> {
-        self.spans
-            .iter()
-            .find(|s| s.start_offset == offset && matches!(s.role, Role::Heading { .. }))
+        self.span_starting_at(offset, |role| matches!(role, Role::Heading { .. }))
             .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for a link starting at `offset`.
     pub fn find_link_node(&self, offset: usize) -> Option<&AomNode> {
-        self.spans
-            .iter()
-            .find(|s| s.start_offset == offset && matches!(s.role, Role::Link { .. }))
+        self.span_starting_at(offset, |role| matches!(role, Role::Link { .. }))
             .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for a list starting at `offset`.
     pub fn find_list_node(&self, offset: usize) -> Option<&AomNode> {
-        self.spans
-            .iter()
-            .find(|s| s.start_offset == offset && matches!(s.role, Role::List))
+        self.span_starting_at(offset, |role| matches!(role, Role::List))
             .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for a list item starting at `offset`.
     pub fn find_list_item_node(&self, offset: usize) -> Option<&AomNode> {
-        self.spans
-            .iter()
-            .find(|s| s.start_offset == offset && matches!(s.role, Role::ListItem))
+        self.span_starting_at(offset, |role| matches!(role, Role::ListItem))
             .and_then(|s| self.node(s.node_id))
     }
 
     /// Resolves the node for a landmark starting at `offset`.
     pub fn find_landmark_node(&self, offset: usize) -> Option<&AomNode> {
-        self.spans
-            .iter()
-            .find(|s| s.start_offset == offset && matches!(s.role, Role::Landmark { .. }))
+        self.span_starting_at(offset, |role| matches!(role, Role::Landmark { .. }))
             .and_then(|s| self.node(s.node_id))
     }
 
@@ -1180,9 +1180,7 @@ impl VirtualBuffer {
 
     /// Resolves the node for a table starting at `offset`.
     pub fn find_table_node(&self, offset: usize) -> Option<&AomNode> {
-        self.spans
-            .iter()
-            .find(|s| s.start_offset == offset && matches!(s.role, Role::Table))
+        self.span_starting_at(offset, |role| matches!(role, Role::Table))
             .and_then(|s| self.node(s.node_id))
     }
 
@@ -1262,9 +1260,7 @@ impl VirtualBuffer {
 
     /// Resolves the node for a frame starting at `offset`.
     pub fn find_frame_node(&self, offset: usize) -> Option<&AomNode> {
-        self.spans
-            .iter()
-            .find(|s| s.start_offset == offset && matches!(s.role, Role::IFrame))
+        self.span_starting_at(offset, |role| matches!(role, Role::IFrame))
             .and_then(|s| self.node(s.node_id))
     }
 
@@ -1340,22 +1336,19 @@ impl VirtualBuffer {
     /// `form_controls` holds, button menus and radio buttons too [obs, 227].
     pub fn get_form_fields_list(&self) -> Vec<FormFieldListItem> {
         let field = |offset: usize| {
-            self.spans
-                .iter()
-                .find(|s| {
-                    s.start_offset == offset
-                        && matches!(
-                            s.role,
-                            Role::Edit
-                                | Role::Button
-                                | Role::MenuButton
-                                | Role::CheckBox
-                                | Role::RadioButton
-                                | Role::ComboBox
-                                | Role::Slider
-                        )
-                })
-                .and_then(|s| self.node(s.node_id))
+            self.span_starting_at(offset, |role| {
+                matches!(
+                    role,
+                    Role::Edit
+                        | Role::Button
+                        | Role::MenuButton
+                        | Role::CheckBox
+                        | Role::RadioButton
+                        | Role::ComboBox
+                        | Role::Slider
+                )
+            })
+            .and_then(|s| self.node(s.node_id))
         };
         self.form_controls
             .iter()

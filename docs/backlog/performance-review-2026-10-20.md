@@ -37,6 +37,7 @@ before and after each change gave identical output.
 |---|---|---|---|
 | P1 steps 1-2: span index, `block_text` gathered as far as the item keeps | done; step 3 (offsets alone for Z) not needed yet | `e3a1f22` | Z 559 → 9.7 ms, Shift+Z 547 → 10.4 ms, Ctrl+Insert+Z 579 → 12.1 ms, P 468 → 8.8 ms, X 450 → 6.6 ms |
 | P5 step 1: caret and text selection events not read live | done; live check on old-pc (305, 313, 400, 403, 504, 522) to come | `1de67c9` | test: all 3,229 in the traces (`grep -c` over `corpus/traces`) give nothing without their text |
+| P10: spans by start for the lookups by offset | done | this commit | Insert+F7 23 → 8.0 ms, Insert+F5 25 → 7.9 ms (index built on the first press included) |
 
 ## Summary: the five worst
 
