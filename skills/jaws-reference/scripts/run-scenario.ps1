@@ -89,7 +89,7 @@ if (-not (Test-Path $ScenarioFile)) {
     exit 1
 }
 
-$scenario = Get-Content $ScenarioFile -Raw | ConvertFrom-Json
+$scenario = Get-Content $ScenarioFile -Raw -Encoding UTF8 | ConvertFrom-Json
 $scenarioId = if ($scenario.id) { $scenario.id } else { [System.IO.Path]::GetFileNameWithoutExtension($ScenarioFile) }
 $targetProc = if ($TargetProcess) { $TargetProcess } elseif ($scenario.target_app) { $scenario.target_app } else { "chrome" }
 
