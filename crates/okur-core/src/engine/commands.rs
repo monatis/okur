@@ -703,6 +703,25 @@ impl ScreenReaderEngine {
     /// apart yet.)
     fn line_here(&self) -> String {
         use crate::announcement::PartKind;
+        // A focused tab adds its place among its list's tabs: "Advanced Tab 2 of 2" [obs,
+        // 260/s4].
+        let line = self.cursor.buffer.line_at_offset(self.cursor.offset);
+        if let Some(tab) = line
+            .filter(|line| Some(line.node_id) == self.last_page_focus)
+            .and_then(|line| {
+                self.cursor
+                    .buffer
+                    .tabs
+                    .iter()
+                    .find(|t| t.node_id == line.node_id)
+            })
+        {
+            return format!(
+                "{}\n{}",
+                self.cursor.current_line(),
+                msg::position(tab.index.to_string(), tab.total.to_string())
+            );
+        }
         let focused_field = self
             .cursor
             .buffer

@@ -443,6 +443,16 @@ impl<'a> Builder<'a> {
                     end: msg::group_end(name).render(),
                 }
             }
+            // A named tab list is a group to JAWS, with lines at both ends: Down past its tabs
+            // reads "group end Settings", and the focus entering it says "Settings group"
+            // [obs, 260/s3, s5; 29/s2].
+            Role::TabList if node.name.as_deref().is_some_and(|n| !n.trim().is_empty()) => {
+                let name = node.name.as_deref().map(squash).unwrap_or_default();
+                Class::Container {
+                    start: msg::group_start(name.as_str()).render(),
+                    end: msg::group_end(name).render(),
+                }
+            }
             Role::Text if node.text.is_none() && !node.children.is_empty() => {
                 // Inline wrappers Chrome exposes as Text (strong, em, time), except the
                 // caption wrapper directly inside a table, which is its own line.
@@ -554,6 +564,11 @@ impl<'a> Builder<'a> {
                     self.groups
                         .push((node.id, legend.clone().unwrap_or_default()));
                 }
+                // A tab list's name is its tabs' group name, as in a list of its own.
+                let is_tablist = node.role == Role::TabList;
+                if is_tablist {
+                    self.tablists.push(legend.clone().unwrap_or_default());
+                }
                 for child in &node.children {
                     // The legend repeats the fieldset name and is not read again.
                     if node.role == Role::Group
@@ -565,6 +580,9 @@ impl<'a> Builder<'a> {
                 }
                 if is_group {
                     self.groups.pop();
+                }
+                if is_tablist {
+                    self.tablists.pop();
                 }
                 self.flush();
                 self.emit_boundary(node.id, node.role.clone(), &end);

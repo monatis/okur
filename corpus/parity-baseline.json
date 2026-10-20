@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 2464,
+  "matched_steps": 2466,
   "total_steps": 2646,
   "accepted_divergences": 69,
   "errors": [],
@@ -1132,8 +1132,8 @@
     "260-web-list-tabs-enter/s1": "match",
     "260-web-list-tabs-enter/s2": "match",
     "260-web-list-tabs-enter/s3": "mismatch",
-    "260-web-list-tabs-enter/s4": "mismatch",
-    "260-web-list-tabs-enter/s5": "mismatch",
+    "260-web-list-tabs-enter/s4": "match",
+    "260-web-list-tabs-enter/s5": "match",
     "261-web-list-radio-buttons-none/s1": "match",
     "261-web-list-radio-buttons-none/s2": "match",
     "262-web-list-buttons-none/s1": "match",
