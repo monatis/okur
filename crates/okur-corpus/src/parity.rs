@@ -1078,6 +1078,7 @@ fn replayable(event: &TraceEvent) -> bool {
                 | "uia_focus"
                 | "uia_selected"
                 | "foreground"
+                | "dialog_shown"
                 | "caret"
                 | "text_selection_change"
                 | "live_region_change"
