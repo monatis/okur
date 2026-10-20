@@ -379,8 +379,10 @@ fn run_scenario(
         let typed = (step.step_type == "jaws_function")
             .then(|| typed_key(&step.command))
             .flatten();
+        // A key sent with UI Access (into JAWS's modal dialogs) is the user's key too.
         let (step_type, command) = match typed {
             Some(key) => ("key", key),
+            None if step.step_type == "key_ui_access" => ("key", step.command.as_str()),
             None => (step.step_type.as_str(), step.command.as_str()),
         };
         let engine_speech = match step_type {

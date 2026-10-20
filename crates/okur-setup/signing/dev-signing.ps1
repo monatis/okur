@@ -51,8 +51,9 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-# The programs that are signed: okur-sr.exe must be, for UI Access; the others for consistency.
-$Programs = @('okur-sr.exe', 'okur-sr-no-uiaccess.exe', 'okur-ui.exe', 'okur-setup.exe')
+# The programs that are signed: okur-sr.exe must be, for UI Access, and okur-lab-keys.exe, the lab's
+# key sender with UI Access (never installed for users); the others for consistency.
+$Programs = @('okur-sr.exe', 'okur-sr-no-uiaccess.exe', 'okur-ui.exe', 'okur-setup.exe', 'okur-lab-keys.exe')
 
 $steps = @($NewCertificate, $Sign, $Verify, $TrustOnLab, $UndoLab, $UndoDevBox) | Where-Object { $_ }
 if ($steps.Count -ne 1) {

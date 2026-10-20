@@ -27,6 +27,9 @@ param(
     # With -Reader okur: Okur's debug log (keys, engine decisions, OS events, speech), for
     # finding why a live step differs.
     [string]$OkurDebugLog,
+    # The lab's key sender with UI Access (crates/okur/src/bin/okur-lab-keys.rs), signed with the
+    # development certificate and copied here once by the owner: key_ui_access steps use it.
+    [string]$LabKeys = 'C:Program FilesOkur Labokur-lab-keys.exe',
     [switch]$Quiet
 )
 
@@ -52,6 +55,9 @@ Step types:
   jaws_script  JAWS script name dispatched through FSAPI RunScript.
   jaws_function  JAWS function call through FSAPI RunFunction: TypeKey("Down") for keys inside
                JAWS's own dialogs (Links List, Find), which run elevated and refuse our keys.
+  key_ui_access  A key sent with UI Access by okur-lab-keys.exe (-LabKeys): it reaches JAWS's
+               modal dialogs, which TypeKey closes (559/s2). Needs the signed program under
+               Program Files.
   key_down     A key pressed and held across the following steps ("Alt" through several
                Tabs); key_up releases it. Held keys are released when a trial ends.
   keyboard     Legacy .NET SendKeys string (kept so scenarios 01-30 stay reproducible).
@@ -463,6 +469,13 @@ function Invoke-Step($type, [string]$command, [int]$repeat = 1) {
             $k = Resolve-Key $command
             $script:HeldKeys = @($script:HeldKeys | Where-Object { $_[0] -ne $k[0] })
             return [SrKeyInput]::Key([uint16]$k[0], $k[1], $true, [uint16]$k[2])
+        }
+        # Started through ShellExecute (Start-Process), as Windows requires to grant UI Access;
+        # JAWS's dialogs are jfw.exe's, Okur's okur-ui.exe's.
+        'key_ui_access' {
+            if (-not (Test-Path -LiteralPath $LabKeys)) { return $false }
+            $sent = Start-Process -FilePath $LabKeys -ArgumentList @('--allow', 'jfw,okur-ui', "`"$command`"") -WindowStyle Hidden -Wait -PassThru
+            return $sent.ExitCode -eq 0
         }
         'jaws_script' { if (-not $jaws) { return $false }; return [bool]$jaws.RunScript($command) }
         # A JAWS function call through FSAPI RunFunction, e.g. TypeKey("Down"): keys JAWS types
