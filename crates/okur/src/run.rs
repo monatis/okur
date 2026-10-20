@@ -28,7 +28,7 @@ pub struct RunOptions {
     pub rate: Option<i32>,
     pub volume: Option<u16>,
     pub keyboard_layout: Option<String>,
-    pub jaws_key: Option<String>,
+    pub okur_key: Option<String>,
     pub live_region_whole_text: bool,
     pub typing_echo: Option<String>,
 }
@@ -54,13 +54,13 @@ impl RunOptions {
         if let Some(volume) = self.volume {
             settings.voice.volume = volume.min(100);
         }
-        if self.keyboard_layout.is_some() || self.jaws_key.is_some() {
+        if self.keyboard_layout.is_some() || self.okur_key.is_some() {
             let layout = match (&self.keyboard_layout, settings.keyboard.layout) {
                 (Some(layout), _) => layout.clone(),
                 (None, okur_core::settings::KeyboardLayout::Desktop) => "desktop".to_owned(),
                 (None, okur_core::settings::KeyboardLayout::Laptop) => "laptop".to_owned(),
             };
-            settings.keyboard = keyboard_settings(&layout, self.jaws_key.as_deref())?;
+            settings.keyboard = keyboard_settings(&layout, self.okur_key.as_deref())?;
         }
         if self.live_region_whole_text {
             settings.live_region_append = LiveRegionAppend::WholeText;
@@ -82,7 +82,7 @@ impl RunOptions {
 
 fn keyboard_settings(
     layout: &str,
-    jaws_key: Option<&str>,
+    okur_key: Option<&str>,
 ) -> Result<okur_core::settings::KeyboardSettings, String> {
     use okur_core::settings::{JawsKey, KeyboardLayout, KeyboardSettings};
     let layout = match layout.to_ascii_lowercase().as_str() {
@@ -95,14 +95,14 @@ fn keyboard_settings(
         }
     };
     let mut settings = KeyboardSettings::for_layout(layout);
-    if let Some(key) = jaws_key {
-        settings.jaws_key = match key.to_ascii_lowercase().as_str() {
+    if let Some(key) = okur_key {
+        settings.okur_key = match key.to_ascii_lowercase().as_str() {
             "insert" => JawsKey::Insert,
             "capslock" => JawsKey::CapsLock,
             "scrolllock" => JawsKey::ScrollLock,
             other => {
                 return Err(format!(
-                    "unknown JAWS key {other:?} (insert, capslock, scrolllock)"
+                    "unknown Okur key {other:?} (insert, capslock, scrolllock)"
                 ))
             }
         };

@@ -35,8 +35,9 @@ pub enum JawsKey {
 #[serde(default)]
 pub struct KeyboardSettings {
     pub layout: KeyboardLayout,
-    /// The JAWS key chosen for `layout`.
-    pub jaws_key: JawsKey,
+    /// The JAWS key chosen for `layout`, in Okur's name: the Okur key (AGENTS.md §1.5), as
+    /// the settings file and `okur run --okur-key` name it.
+    pub okur_key: JawsKey,
 }
 
 impl Default for KeyboardSettings {
@@ -48,11 +49,11 @@ impl Default for KeyboardSettings {
 impl KeyboardSettings {
     /// A layout with its default JAWS key: Insert for desktop, CapsLock for laptop.
     pub fn for_layout(layout: KeyboardLayout) -> Self {
-        let jaws_key = match layout {
+        let okur_key = match layout {
             KeyboardLayout::Desktop => JawsKey::Insert,
             KeyboardLayout::Laptop => JawsKey::CapsLock,
         };
-        Self { layout, jaws_key }
+        Self { layout, okur_key }
     }
 
     /// Whether `key` acts as the JAWS key: the chosen one, and Insert in the laptop layout
@@ -60,10 +61,10 @@ impl KeyboardSettings {
     pub fn is_jaws_key(&self, key: Key) -> bool {
         match key {
             Key::Insert => {
-                self.jaws_key == JawsKey::Insert || self.layout == KeyboardLayout::Laptop
+                self.okur_key == JawsKey::Insert || self.layout == KeyboardLayout::Laptop
             }
-            Key::CapsLock => self.jaws_key == JawsKey::CapsLock,
-            Key::ScrollLock => self.jaws_key == JawsKey::ScrollLock,
+            Key::CapsLock => self.okur_key == JawsKey::CapsLock,
+            Key::ScrollLock => self.okur_key == JawsKey::ScrollLock,
             _ => false,
         }
     }
@@ -325,7 +326,9 @@ pub enum OutputType {
     Select,
     /// JAWS's own messages about what a key did: "Copied selection to clipboard" at
     /// Beginner, "Copied" at Intermediate (its short form), nothing at Advanced [obs,
-    /// 599/s3, 609/s3, 608/s9]; "Pasted", "cut", "Undo" likewise. JAWS's "JAWS Message".
+    /// 599/s3, 609/s3, 608/s9]; "Pasted", "cut", "Undo" likewise. JAWS's "JAWS Message",
+    /// which the settings file names in Okur's name (AGENTS.md §1.5).
+    #[serde(rename = "okur_message")]
     JawsMessage,
 }
 
@@ -630,6 +633,26 @@ mod tests {
         assert!(back.is_ok_and(|s| s == reference));
     }
 
+    /// The settings file names Okur's settings in Okur's name (AGENTS.md §1.5): the Okur key,
+    /// and JAWS's "JAWS Message" output type as Okur's.
+    #[test]
+    fn the_settings_file_says_okur_where_jaws_names_itself() {
+        let mut settings = Settings::reference_machine();
+        settings
+            .verbosity
+            .output_modes
+            .insert(OutputType::JawsMessage, [OutputMode::On; 3]);
+        let json = serde_json::to_string(&settings).unwrap_or_default();
+        assert!(json.contains(r#""okur_key":"caps_lock""#), "{json}");
+        assert!(
+            json.contains(r#""okur_message":["on","on","on"]"#),
+            "{json}"
+        );
+        assert!(!json.to_lowercase().contains("jaws"), "{json}");
+        let back: Result<Settings, _> = serde_json::from_str(&json);
+        assert!(back.is_ok_and(|s| s == settings));
+    }
+
     #[test]
     fn desktop_layout_uses_insert_only() {
         let desktop = KeyboardSettings::default();
@@ -670,7 +693,7 @@ mod tests {
     fn caps_lock_can_be_the_desktop_jaws_key() {
         let desktop_caps = KeyboardSettings {
             layout: KeyboardLayout::Desktop,
-            jaws_key: JawsKey::CapsLock,
+            okur_key: JawsKey::CapsLock,
         };
         assert!(!desktop_caps.is_jaws_key(Key::Insert));
         assert!(

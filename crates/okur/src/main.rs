@@ -51,15 +51,15 @@ enum Commands {
         #[arg(long)]
         debug_log: Option<String>,
 
-        /// JAWS keyboard layout: desktop (Insert is the JAWS key) or laptop (CapsLock is the
-        /// JAWS key, and Insert works as well)
+        /// Keyboard layout, as JAWS's: desktop (Insert is the Okur key) or laptop (CapsLock is
+        /// the Okur key, and Insert works as well)
         #[arg(long)]
         keyboard_layout: Option<String>,
 
-        /// The JAWS key for the layout: insert, capslock or scrolllock (default: the
-        /// layout's own)
+        /// The Okur key for the layout: insert, capslock or scrolllock (default: the layout's
+        /// own)
         #[arg(long)]
-        jaws_key: Option<String>,
+        okur_key: Option<String>,
 
         /// Read a growing live region's whole text again on every change, as JAWS does
         /// (default: only what was appended, so a streamed chat reply is read once)
@@ -585,7 +585,7 @@ async fn main() {
             speech_log,
             debug_log: _,
             keyboard_layout,
-            jaws_key,
+            okur_key,
             live_region_whole_text,
             typing_echo,
             settings: settings_folder,
@@ -598,7 +598,7 @@ async fn main() {
                     rate,
                     volume,
                     keyboard_layout,
-                    jaws_key,
+                    okur_key,
                     live_region_whole_text,
                     typing_echo,
                 },
@@ -1319,5 +1319,36 @@ async fn main() {
         None => {
             println!("No command specified. Use `okur --help` for available options.");
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use clap::CommandFactory;
+
+    /// `okur run` names Okur's modifier in Okur's name (AGENTS.md §1.5): `--okur-key`, the
+    /// "Okur key" in its help, never "JAWS key".
+    #[test]
+    fn run_names_the_okur_key() {
+        let parsed = Cli::try_parse_from(["okur", "run", "--okur-key", "scrolllock"]);
+        assert!(matches!(
+            parsed,
+            Ok(Cli {
+                command: Some(Commands::Run {
+                    okur_key: Some(key),
+                    ..
+                })
+            }) if key == "scrolllock"
+        ));
+        assert!(Cli::try_parse_from(["okur", "run", "--jaws-key", "scrolllock"]).is_err());
+        let mut cli = Cli::command();
+        let help = cli
+            .find_subcommand_mut("run")
+            .map(|run| run.render_long_help().to_string())
+            .unwrap_or_default();
+        assert!(help.contains("--okur-key"), "{help}");
+        assert!(help.contains("Okur key"), "{help}");
+        assert!(!help.to_lowercase().contains("jaws key"), "{help}");
     }
 }

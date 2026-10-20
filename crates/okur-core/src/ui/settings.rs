@@ -182,9 +182,9 @@ impl SettingsDialog {
                     choice(names(&LAYOUTS), position(&LAYOUTS, s.keyboard.layout)),
                 ),
                 control(
-                    "jaws_key",
+                    "okur_key",
                     msg::settings_jaws_key(),
-                    choice(names(&JAWS_KEYS), position(&JAWS_KEYS, s.keyboard.jaws_key)),
+                    choice(names(&JAWS_KEYS), position(&JAWS_KEYS, s.keyboard.okur_key)),
                 ),
                 control("reading", msg::settings_group_reading(), ControlKind::Group),
                 control(
@@ -290,15 +290,15 @@ impl SettingsDialog {
                         s.keyboard = KeyboardSettings::for_layout(layout);
                         return Outcome::Send(vec![ToUi::DialogSet {
                             id: self.id,
-                            control: "jaws_key".to_owned(),
-                            value: Value::Selected(position(&JAWS_KEYS, s.keyboard.jaws_key)),
+                            control: "okur_key".to_owned(),
+                            value: Value::Selected(position(&JAWS_KEYS, s.keyboard.okur_key)),
                         }]);
                     }
                 }
             }
-            ("jaws_key", Value::Selected(i)) => {
+            ("okur_key", Value::Selected(i)) => {
                 if let Some(key) = pick(&JAWS_KEYS, i) {
-                    s.keyboard.jaws_key = key;
+                    s.keyboard.okur_key = key;
                 }
             }
             ("typing_echo", Value::Selected(i)) => {
@@ -479,7 +479,7 @@ mod tests {
             dialog.handle(&changed("layout", Value::Selected(1))),
             Outcome::Send(vec![ToUi::DialogSet {
                 id: 4,
-                control: "jaws_key".into(),
+                control: "okur_key".into(),
                 value: Value::Selected(1),
             }])
         );
@@ -488,8 +488,8 @@ mod tests {
             KeyboardSettings::for_layout(KeyboardLayout::Laptop)
         );
         // Choosing another key afterwards keeps the layout.
-        dialog.handle(&changed("jaws_key", Value::Selected(2)));
-        assert_eq!(dialog.draft().keyboard.jaws_key, JawsKey::ScrollLock);
+        dialog.handle(&changed("okur_key", Value::Selected(2)));
+        assert_eq!(dialog.draft().keyboard.okur_key, JawsKey::ScrollLock);
         assert_eq!(dialog.draft().keyboard.layout, KeyboardLayout::Laptop);
     }
 }
