@@ -85,9 +85,16 @@ if ($Snapshots.Count -gt 0) {
         $stem = [IO.Path]::GetFileNameWithoutExtension($fixture)
         foreach ($api in 'ia2', 'uia') {
             $out = Join-Path $folder "$stem.chrome.$api.json"
-            $said = & powershell -NoProfile -ExecutionPolicy Bypass -File $capture `
-                -Fixture (Join-Path 'C:\Users\ailabs\corpus\fixtures' $fixture) `
-                -OutputPath $out -Okur $okur -Api $api 2>&1 | Select-Object -Last 1
+            # A failed capture is logged and the batch still runs: with 'Stop', the capture's
+            # error output once ended this script before its batch, and every batch queued
+            # after it waited for a batch.done that never came (round 83, 2026-10-20).
+            try {
+                $said = & powershell -NoProfile -ExecutionPolicy Bypass -File $capture `
+                    -Fixture (Join-Path 'C:\Users\ailabs\corpus\fixtures' $fixture) `
+                    -OutputPath $out -Okur $okur -Api $api 2>&1 | Select-Object -Last 1
+            } catch {
+                $said = "failed: $($_.Exception.Message)"
+            }
             "snapshot ${stem} ${api}: ${said}" | Out-File $log -Append -Encoding utf8
         }
     }
