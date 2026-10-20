@@ -1,0 +1,196 @@
+{
+  "id": "656-web-selection-sizes-intermediate",
+  "name": "Ctrl+Shift+End from paragraphs 15, 13, 11, 9, 7, 6, 5, 4, 3 and 1 of fifteen plain paragraphs of 80 characters each: at which size JAWS stops reading a selection and says \"selected N characters up to\", how it counts N and how much of the end it says (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 617-web-selection-sizes)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/selection-sizes.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down",
+      "repeat": 14
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Ctrl+Shift+End",
+      "settle_max_ms": 90000,
+      "quiet_ms": 1500
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Down",
+      "repeat": 12
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Ctrl+Shift+End",
+      "settle_max_ms": 90000,
+      "quiet_ms": 1500
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down",
+      "repeat": 10
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Ctrl+Shift+End",
+      "settle_max_ms": 90000,
+      "quiet_ms": 1500
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Down",
+      "repeat": 8
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Ctrl+Shift+End",
+      "settle_max_ms": 90000,
+      "quiet_ms": 1500
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Down",
+      "repeat": 6
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Ctrl+Shift+End",
+      "settle_max_ms": 90000,
+      "quiet_ms": 1500
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Down",
+      "repeat": 5
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Ctrl+Shift+End",
+      "settle_max_ms": 90000,
+      "quiet_ms": 1500
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "Down",
+      "repeat": 4
+    },
+    {
+      "id": "s21",
+      "type": "key",
+      "command": "Ctrl+Shift+End",
+      "settle_max_ms": 90000,
+      "quiet_ms": 1500
+    },
+    {
+      "id": "s22",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s23",
+      "type": "key",
+      "command": "Down",
+      "repeat": 3
+    },
+    {
+      "id": "s24",
+      "type": "key",
+      "command": "Ctrl+Shift+End",
+      "settle_max_ms": 90000,
+      "quiet_ms": 1500
+    },
+    {
+      "id": "s25",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s26",
+      "type": "key",
+      "command": "Down",
+      "repeat": 2
+    },
+    {
+      "id": "s27",
+      "type": "key",
+      "command": "Ctrl+Shift+End",
+      "settle_max_ms": 90000,
+      "quiet_ms": 1500
+    },
+    {
+      "id": "s28",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s29",
+      "type": "key",
+      "command": "Ctrl+Shift+End",
+      "settle_max_ms": 90000,
+      "quiet_ms": 1500
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}
