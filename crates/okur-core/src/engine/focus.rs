@@ -80,10 +80,14 @@ impl ScreenReaderEngine {
         }
     }
 
-    /// `announcement` with the parts verbosity leaves out removed.
-    fn said(&self, mut announcement: Announcement) -> Announcement {
+    /// `announcement` with the parts verbosity leaves out removed, and with short messages
+    /// (Intermediate and Advanced) the parts that have a short form said by it.
+    pub(super) fn said(&self, mut announcement: Announcement) -> Announcement {
         let verbosity = &self.settings.verbosity;
         announcement.retain(|kind| verbosity.says(kind));
+        if verbosity.message_length() == crate::settings::MessageLength::Short {
+            announcement.shorten();
+        }
         announcement
     }
 

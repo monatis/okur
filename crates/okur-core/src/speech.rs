@@ -618,7 +618,8 @@ impl SpeechFormatter {
     }
 
     /// Formats a table entry announcement (`T`).
-    /// Format: "table with {cols} columns and {rows} rows\n{caption}\nColumn 1, Row 1\n{FirstCellText}"
+    /// Format: "table with {cols} columns and {rows} rows\n{caption}\nColumn 1, Row 1\n{FirstCellText}";
+    /// with short messages "{cols} columns and {rows} rows" [obs, 578/s1].
     pub fn format_table_entry(
         cols: usize,
         rows: usize,
@@ -626,9 +627,14 @@ impl SpeechFormatter {
         col: usize,
         row: usize,
         cell_text: &str,
+        short: bool,
     ) -> String {
         let mut parts = Vec::new();
-        parts.push(msg::table_entry(cols, rows).render());
+        parts.push(if short {
+            msg::table_entry_short(cols, rows).render()
+        } else {
+            msg::table_entry(cols, rows).render()
+        });
         if let Some(cap) = caption {
             if !cap.is_empty() {
                 parts.push(cap.to_string());

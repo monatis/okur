@@ -125,7 +125,15 @@ impl ScreenReaderEngine {
                         .then(|| self.cursor.buffer.document_title().map(str::to_owned))
                         .flatten()
                 })?;
-                let speech = format!("{}\n{title}", msg::window_title_is());
+                let speech = crate::announcement::Announcement::new(vec![
+                    crate::announcement::Line::of(
+                        crate::announcement::PartKind::Message,
+                        msg::window_title_is(),
+                    )
+                    .short(""),
+                    crate::announcement::Line::of(crate::announcement::PartKind::Name, title),
+                ]);
+                let speech = self.said(speech).render();
                 self.speech.speak(&speech, true);
                 return Some(speech);
             }

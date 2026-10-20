@@ -395,7 +395,9 @@ impl ScreenReaderEngine {
         }
         let control = self.keys_as_output(control);
         let before = self.last_native_focus.replace(control.clone())?;
-        let speech = crate::native_focus::change_speech(&before, &control)?;
+        let speech = self
+            .said(crate::native_focus::change_speech(&before, &control)?)
+            .render_all();
         self.speech.speak(&speech, true);
         Some(speech)
     }

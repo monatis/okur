@@ -2,6 +2,8 @@
 
 # Entering a table (T).
 table-entry = table with { $columns } columns and { $rows } rows
+# With short messages (Intermediate and Advanced verbosity) [obs, 578/s1].
+table-entry-short = { $columns } columns and { $rows } rows
 table-cell = Column { $column }, Row { $row }
 table-column-of = Column { $column } of { $columns }
 table-row-of = Row { $row } of { $rows }
@@ -23,6 +25,8 @@ table-focus-cell = column { $column } row { $row }
 table-layer = Table layer
 # Reading the next or prior row or column whole (Windows+Alt and an arrow) found none further.
 table-on-last-row = You are on the last row in the table.
+# With short messages [obs, 578/s6].
+table-on-last-row-short = Last row
 table-on-first-row = You are on the first row in the table.
 table-on-last-column = You are on the last column in the table.
 table-on-first-column = You are on the first column in the table.

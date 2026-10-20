@@ -109,7 +109,9 @@ tree-items =
     }
 # Arrows in a native tree reached another level.
 tree-level-changed = level { $level }
-# A combo box's list opened (Alt+Down).
+# With short messages (Intermediate and Advanced verbosity), the level alone [obs, 579/s8].
+tree-level-changed-short = { $level }
+# A combo box's list opened (Alt+Down); with short messages nothing [obs, 580/s11].
 combo-box-opened = Open List Box
 # Keys pressed one after another, as an access key "Alt, I" is said: "Alt followed by I".
 key-followed-by = { $keys } followed by { $key }

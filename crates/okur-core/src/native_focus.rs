@@ -553,9 +553,11 @@ impl NativeFocus {
                 // Reports | 1 of 2"]; within one level, no position (303/s6: "Documents
                 // closed"; File Explorer: "OneDrive Closed").
                 if self.tree_level != Some(level) {
-                    speech
-                        .lines
-                        .insert(0, Line::of(PartKind::Level, msg::tree_level_changed(level)));
+                    speech.lines.insert(
+                        0,
+                        Line::of(PartKind::Level, msg::tree_level_changed(level))
+                            .short(msg::tree_level_changed_short(level).to_string()),
+                    );
                 } else if let Some(at) = position(focus).map(|p| p.render()) {
                     speech.lines.retain(|line| line.render() != at);
                 }
@@ -811,22 +813,13 @@ pub fn role_word(role: &Role) -> Option<&'static str> {
     )
 }
 
-/// Lines joined as they are, empty ones included.
-fn joined(lines: Vec<Line>) -> String {
-    lines
-        .iter()
-        .map(Line::render)
-        .collect::<Vec<_>>()
-        .join("\n")
-}
-
 /// Speech for a change of the focused native control, given its state before and after.
 /// `None` when nothing JAWS speaks changed (Windows fires several events per change).
-pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<String> {
+pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<Announcement> {
     let name = named(after.name.as_deref().unwrap_or_default());
     match after.role {
         Role::CheckBox if before.states.checked != after.states.checked => {
-            Some(checked(after).render().trim().to_owned())
+            Some(Announcement::from_text(checked(after).render().trim()))
         }
         // Arrow keys in a radio group uncheck the old radio before focus moves to the new
         // one; JAWS speaks only the radio that becomes checked [obs, 304/s6–s7].
@@ -834,7 +827,7 @@ pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<String> 
             if before.states.checked != after.states.checked
                 && after.states.checked == Some(true) =>
         {
-            Some(checked(after).render().trim().to_owned())
+            Some(Announcement::from_text(checked(after).render().trim()))
         }
         Role::TreeItem if before.states.expanded != after.states.expanded => {
             // [obs, 303/s7, 304/s16–s17]: "Documents | ‹open› | 2 items",
@@ -854,7 +847,7 @@ pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<String> 
                     lines.extend(position(after));
                 }
             }
-            Some(joined(lines))
+            Some(Announcement::new(lines))
         }
         // A combo box reports no expanded state through UIA while collapsed.
         Role::ComboBox
@@ -863,7 +856,9 @@ pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<String> 
         {
             if after.states.expanded == Some(true) {
                 // Alt+Down [obs, 304/s11]: "Open List Box | Germany | 2 of 3".
-                let mut lines = vec![Line::of(PartKind::Message, msg::combo_box_opened())];
+                // With short messages, no "Open List Box" [obs, 580/s11].
+                let mut lines =
+                    vec![Line::of(PartKind::Message, msg::combo_box_opened()).short("")];
                 lines.extend(
                     after
                         .value
@@ -871,10 +866,10 @@ pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<String> 
                         .map(|v| Line::of(PartKind::Value, named(v))),
                 );
                 lines.extend(position(after));
-                Some(joined(lines))
+                Some(Announcement::new(lines))
             } else {
                 // Closing it re-announces the combo box as on focus [obs, 304/s13].
-                Some(focus_speech(after, None).render())
+                Some(Announcement::from_text(&focus_speech(after, None).render()))
             }
         }
         Role::ComboBox if before.value != after.value => {
@@ -884,7 +879,7 @@ pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<String> 
                 .map(|v| Line::of(PartKind::Value, named(v)))
                 .collect();
             lines.extend(position(after));
-            Some(joined(lines))
+            Some(Announcement::new(lines))
         }
         _ => None,
     }

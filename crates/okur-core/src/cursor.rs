@@ -837,6 +837,11 @@ impl VirtualCursor {
         }
     }
 
+    /// JAWS's short messages are said (Intermediate and Advanced verbosity).
+    fn short_messages(&self) -> bool {
+        self.verbosity.message_length() == crate::settings::MessageLength::Short
+    }
+
     /// Speaks current line without moving cursor (`SayLine`).
     pub fn current_line(&self) -> String {
         if let Some(line) = self.buffer.line_at_offset(self.offset) {
@@ -2603,6 +2608,7 @@ impl VirtualCursor {
             1,
             1,
             first_cell_text,
+            self.short_messages(),
         );
         Some(speech)
     }
@@ -2644,6 +2650,7 @@ impl VirtualCursor {
             1,
             1,
             first_cell_text,
+            self.short_messages(),
         );
         Some(speech)
     }
@@ -3010,6 +3017,11 @@ impl VirtualCursor {
         let Some(target) = index.checked_add_signed(step).filter(|&i| i < count) else {
             return Some(
                 match (line, step > 0) {
+                    // With short messages, "Last row" [obs, 578/s6]; the other edges' short
+                    // forms are not recorded yet.
+                    (TableLine::Row, true) if self.short_messages() => {
+                        msg::table_on_last_row_short()
+                    }
                     (TableLine::Row, true) => msg::table_on_last_row(),
                     (TableLine::Row, false) => msg::table_on_first_row(),
                     (TableLine::Column, true) => msg::table_on_last_column(),

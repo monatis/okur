@@ -53,6 +53,9 @@ pub struct Part {
     pub kind: PartKind,
     /// The words, without marks: the application's, or rendered from the catalog.
     pub text: String,
+    /// What JAWS says instead with short messages (Intermediate and Advanced verbosity): "1"
+    /// for "level 1"; empty when the short form says nothing.
+    pub short: Option<String>,
 }
 
 impl Part {
@@ -60,6 +63,7 @@ impl Part {
         Self {
             kind,
             text: text.into(),
+            short: None,
         }
     }
 
@@ -120,6 +124,14 @@ impl Line {
         self
     }
 
+    /// The same line with `short` as its last part's short form ([`Part::short`]).
+    pub fn short(mut self, short: impl Into<String>) -> Self {
+        if let Some(part) = self.parts.last_mut() {
+            part.short = Some(short.into());
+        }
+        self
+    }
+
     pub fn render(&self) -> String {
         self.parts.iter().map(Part::render).collect()
     }
@@ -165,6 +177,21 @@ impl Announcement {
     pub fn retain(&mut self, keep: impl Fn(PartKind) -> bool) {
         for line in &mut self.lines {
             line.parts.retain(|part| keep(part.kind));
+        }
+        self.lines.retain(|line| !line.parts.is_empty());
+    }
+
+    /// Says the parts that have a short form by it ([`Part::short`]); a part whose short form
+    /// is empty goes, and a line left without parts.
+    pub fn shorten(&mut self) {
+        for line in &mut self.lines {
+            line.parts.retain_mut(|part| match part.short.take() {
+                Some(short) => {
+                    part.text = short;
+                    !part.text.is_empty()
+                }
+                None => true,
+            });
         }
         self.lines.retain(|line| !line.parts.is_empty());
     }
@@ -225,5 +252,18 @@ mod tests {
             "Yes \u{1d} Button \u{1e} \nTo activate press spacebar."
         );
         assert_eq!(announcement.lines.len(), 2);
+    }
+
+    #[test]
+    fn short_messages_say_a_parts_short_form_or_leave_it_out() {
+        let mut announcement = Announcement::new(vec![
+            Line::of(PartKind::Message, "Open List Box").short(""),
+            Line::of(PartKind::Level, "level 1").short("1"),
+            Line::text("Reports"),
+        ]);
+        let long = announcement.render();
+        announcement.shorten();
+        assert_eq!(long, "Open List Box\nlevel 1\nReports");
+        assert_eq!(announcement.render(), "1\nReports");
     }
 }

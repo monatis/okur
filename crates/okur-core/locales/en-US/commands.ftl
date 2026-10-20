@@ -13,7 +13,8 @@ clipboard-pasted = Pasted from clipboard
 edit-undo = Undo
 # Okur's own settings dialog could not open (there is no window to show it in).
 settings-dialog-unavailable = The settings dialog is not available
-# Said before a window's title (Insert+T), on a line of its own.
+# Said before a window's title (Insert+T), on a line of its own; with short messages the title
+# is said alone [obs, 581/s12].
 window-title-is = Title is
 # Menus closed: the focus is back where it was.
 menus-left = Leaving menus

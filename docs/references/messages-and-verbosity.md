@@ -103,8 +103,16 @@ Shortcut parts of a native focus says what the focus says without those keys.
 - `level`: Beginner (default), Intermediate or Advanced;
 - `output_modes`: per output type, one mode (Off, On) per level, Beginner first; a type not
   listed is on at every level, JAWS's default;
-- `message_length`: Long or Short per level, Long at Beginner and Short above. Nothing reads
-  it yet: no message has a short form (a `.short` attribute) until JAWS's are learned.
+- `message_length`: Long or Short per level, Long at Beginner and Short above (`SpeechLevel`
+  in JAWS's shipped `Default.JCF` `[OutputModes]`: `1|2|2`). A message's short form is a
+  catalog entry of its own, `<id>-short`, learned from the Intermediate recordings (572-581):
+  "virtual PC" for "virtual PC Cursor", a tree level's number for "level 1", "3 columns and
+  3 rows" for "table with 3 columns and 3 rows", "Last row" for "You are on the last row in
+  the table."; "Open List Box" and Insert+T's "Title is" have none (they are left out). In an
+  announcement a part carries its short form (`Part::short`, `Line::short`), and the engine's
+  verbosity filter says it ([`Announcement::shorten`]); text built outside announcements
+  (the virtual cursor's table keys) asks `message_length` itself. A message without a recorded
+  short form keeps its long one at every level.
 
 Output types are Okur's ids (`OutputType`), each mapped to JAWS's `DEFAULT.JCF`
 `[OutputModes]` key where one is known:
