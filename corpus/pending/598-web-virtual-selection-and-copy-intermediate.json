@@ -76,7 +76,9 @@
                   {
                       "id":  "s13",
                       "type":  "key",
-                      "command":  "Ctrl+A"
+                      "command":  "Ctrl+A",
+                      "settle_max_ms":  90000,
+                      "quiet_ms":  1500
                   },
                   {
                       "id":  "s14",

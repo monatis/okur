@@ -22,7 +22,7 @@
     { "id": "s13", "type": "key", "command": "Down" },
     { "id": "s14", "type": "key", "command": "Down" },
     { "id": "s15", "type": "key", "command": "Insert+Up" },
-    { "id": "s16", "type": "key", "command": "Insert+Up", "repeat": 2 },
+    { "id": "s16", "type": "key", "command": "Insert+Up", "repeat": 2, "settle_max_ms": 60000, "quiet_ms": 1500 },
     { "id": "s17", "type": "key", "command": "Down" },
     { "id": "s18", "type": "key", "command": "Down" },
     { "id": "s19", "type": "key", "command": "Down" },
