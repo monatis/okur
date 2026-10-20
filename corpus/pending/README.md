@@ -20,7 +20,7 @@ To record one:
 | 568 | JAWS's text analysis: Insert+Tab and Insert+Up on Notepad lines holding one inconsistency each | `desktop-proofing.ps1` (new) |
 | 570 | The Speech History's other layer keys (`Default.JKM`): Insert+Space, Ctrl+H copies it to the clipboard, Shift+H clears it, then H shows what was said since. Round 70 failed only at Ctrl+H, whose own "Copy speech history to clipboard" the harness took for a leaked copy; the step now says it copies the history (`copies_speech_history`, run-scenario.ps1) | `news-article.html` |
 | 571 | Insert+F4 (ShutDownJAWS) asks before quitting; Tab in its question, Escape answers no, then Insert+Tab in Notepad. Round 71 sent Tab and Escape as keys, which JAWS's elevated question never received (no event traced after it opened, Insert+Tab silent); they now go through JAWS's TypeKey. Last in its batch | `desktop-notepad.ps1` |
-| 582-591 | Ten recorded scenarios again at JAWS's Advanced verbosity, `Verbosity` in DEFAULT.JCF's Options, generated from 101, 204, 205, 222, 230, 241, 297, 303, 304 and 306 with their steps unchanged (572-581, the same at Intermediate, are recorded) | as their sources |
+| 592 | A table's edges and its start at Intermediate verbosity: which of the table messages JAWS shortens beyond "Last row" (578/s6) and "3 columns and 3 rows" (578/s1) | `news-article.html` |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.
