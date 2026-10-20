@@ -29,6 +29,41 @@ pub fn normalize(speech: &str) -> String {
     speech.split_whitespace().collect::<Vec<_>>().join(" ")
 }
 
+/// JAWS's name for itself, and Okur's name for itself in the same place.
+pub const JAWS_NAME: &str = "JAWS";
+pub const OKUR_NAME: &str = "Okur";
+
+/// What every comparison of Okur with JAWS compares, on both sides: the speech
+/// [`normalize`]d, with JAWS's name for itself read as Okur's ([`in_okurs_name`]).
+pub fn comparable(speech: &str) -> String {
+    in_okurs_name(&normalize(speech))
+}
+
+/// `text` with JAWS's name read as Okur's. Where JAWS names itself, Okur names itself ("JAWS
+/// Cursor" is "Okur Cursor", "Route JAWS to PC" is "Route Okur to PC": AGENTS.md §1.5), so the
+/// two names compare as equal. It is one rule for the whole corpus, not an accepted
+/// divergence. Both sides go through it: a page's own "JAWS", which both read as written, stays
+/// equal. Only the whole word in JAWS's capitals is read so ("JAWS's" too); "JAWSKey" and
+/// "jaws" stay as they are.
+pub fn in_okurs_name(text: &str) -> String {
+    let word = |c: Option<char>| c.is_some_and(|c| c.is_alphanumeric() || c == '_');
+    let mut out = String::with_capacity(text.len());
+    let mut copied = 0;
+    for (at, name) in text.match_indices(JAWS_NAME) {
+        let end = at + name.len();
+        let before = text.get(..at).and_then(|t| t.chars().next_back());
+        let after = text.get(end..).and_then(|t| t.chars().next());
+        if word(before) || word(after) {
+            continue;
+        }
+        out.push_str(text.get(copied..at).unwrap_or_default());
+        out.push_str(OKUR_NAME);
+        copied = end;
+    }
+    out.push_str(text.get(copied..).unwrap_or_default());
+    out
+}
+
 #[derive(Debug, Clone, Serialize)]
 pub struct StepParity {
     /// `<scenario_id>/<step_id>`.

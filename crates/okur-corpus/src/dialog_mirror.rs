@@ -17,13 +17,17 @@ use okur_core::{FocusEvent, Role};
 
 /// A dialog's label without its access key mark ("&Move To Heading": "Move To Heading"), its
 /// spaces single: JAWS's items join their parts with runs of them ("I agree to the terms of
-/// use check box   not checked" [obs, 250/s2]).
+/// use check box   not checked" [obs, 250/s2]). JAWS's name for itself reads as Okur's, as
+/// in every comparison with JAWS ([`crate::parity::in_okurs_name`]): JAWS's "JAWS Find"
+/// dialog stands for Okur's "Okur Find".
 fn plain(label: &str) -> String {
-    label
-        .replace('&', "")
-        .split_whitespace()
-        .collect::<Vec<_>>()
-        .join(" ")
+    crate::parity::in_okurs_name(
+        &label
+            .replace('&', "")
+            .split_whitespace()
+            .collect::<Vec<_>>()
+            .join(" "),
+    )
 }
 
 #[derive(Debug, Default)]
@@ -233,4 +237,32 @@ fn is_tab_stop(control: &Control) -> bool {
             control.kind,
             ControlKind::Text { .. } | ControlKind::Group | ControlKind::Message { .. }
         )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use okur_core::ui::UiHost;
+
+    /// JAWS's dialog, traced, stands for Okur's of the same title in Okur's name: "JAWS Find"
+    /// taking the focus after Okur's "Okur Find" closed is that dialog going away.
+    #[test]
+    fn jaws_dialog_stands_for_okurs_by_its_name() {
+        let host = RecordingUiHost::default();
+        let mut mirror = DialogMirror::default();
+        host.send(ToUi::DialogShow {
+            dialog: DialogSpec {
+                id: 7,
+                title: "Okur Find".to_owned(),
+                controls: Vec::new(),
+            },
+        });
+        host.send(ToUi::DialogClose { id: 7 });
+        mirror.sync(&host);
+        let mut focus = FocusEvent::new(Role::Edit);
+        focus.window_title = Some("JAWS Find".to_owned());
+        assert!(mirror.is_closed_dialog(&focus));
+        focus.window_title = Some("Find".to_owned());
+        assert!(!mirror.is_closed_dialog(&focus));
+    }
 }

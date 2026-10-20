@@ -13,9 +13,10 @@
 //!   that comes to match JAWS fails the check, so a stale entry cannot linger.
 //!
 //! Every comparison of Okur with JAWS (`okur parity` on every layer, `okur live-parity`) goes
-//! through [`compare`].
+//! through [`compare`], which reads both sides as [`comparable`]: whitespace normalized, and
+//! JAWS's name for itself read as Okur's, a rule for the whole corpus rather than a divergence.
 
-use crate::parity::normalize;
+use crate::parity::comparable;
 
 /// What an accepted divergence lets differ.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -45,7 +46,7 @@ fn from_its_dialog(text: &str) -> Option<&str> {
 fn spoken_from_its_dialog(text: &str, ours: &str) -> Option<String> {
     const DIALOG: &str = " dialog";
     let named = ours.get(..ours.find(DIALOG)? + DIALOG.len())?;
-    let text = normalize(text);
+    let text = comparable(text);
     let at = text.rfind(named).filter(|&at| at > 0)?;
     text.get(at..).map(str::to_owned)
 }
@@ -401,7 +402,7 @@ pub enum Comparison {
     Accepted,
 }
 
-/// Compares Okur's speech for `step` with JAWS's transcripts, whitespace normalized, with every
+/// Compares Okur's speech for `step` with JAWS's transcripts, both [`comparable`], with every
 /// accepted divergence of the step applied.
 pub fn compare(step: &str, okur: &str, jaws: &[String]) -> Comparison {
     let differences: Vec<Difference> = for_step(step).map(|d| d.difference).collect();
@@ -422,7 +423,7 @@ pub fn compare(step: &str, okur: &str, jaws: &[String]) -> Comparison {
                     _ => text,
                 }
             });
-        normalize(&removed)
+        comparable(&removed)
     };
     let ours = without(okur, true, "");
     if jaws.iter().any(|v| without(v, false, &ours) == ours) {
@@ -456,7 +457,7 @@ pub fn check(steps: &[(&str, &str, &[String])]) -> Result<(), String> {
                 {
                     stale.push(format!("{key}: JAWS says nothing before its dialog"));
                 }
-                Difference::Step if jaws.iter().any(|v| normalize(v) == normalize(okur)) => {
+                Difference::Step if jaws.iter().any(|v| comparable(v) == comparable(okur)) => {
                     stale.push(format!("{key}: Okur now matches JAWS"));
                 }
                 _ => {}
@@ -517,6 +518,39 @@ mod tests {
         // Elsewhere the phrase counts.
         assert_eq!(
             compare("999-elsewhere/s1", "List1 List view", &recorded),
+            Comparison::Differs
+        );
+    }
+
+    /// Where JAWS names itself, Okur names itself (AGENTS.md §1.5): the names compare as equal,
+    /// on every step, and nothing else does [obs, 516/s1, s3].
+    #[test]
+    fn okurs_name_compares_with_jaws_own() {
+        let step = "516-desktop-jaws-cursor/s1";
+        assert_eq!(
+            compare(step, "Okur Cursor", &jaws(&["JAWS Cursor"])),
+            Comparison::Matched
+        );
+        assert_eq!(
+            compare(step, "Route Okur to PC", &jaws(&["Route JAWS to PC"])),
+            Comparison::Matched
+        );
+        assert_eq!(
+            compare(step, "PC Cursor", &jaws(&["JAWS Cursor"])),
+            Comparison::Differs
+        );
+        // A text's own "JAWS", read as written by both [obs, 405/s23].
+        assert_eq!(
+            compare(step, "JAWS sister-in-law", &jaws(&["JAWS sister-in-law"])),
+            Comparison::Matched
+        );
+        // Only the whole word, in JAWS's capitals.
+        assert_eq!(
+            crate::parity::in_okurs_name("JAWS's JAWSKey+F4 jaws (JAWS) JAWS"),
+            "Okur's JAWSKey+F4 jaws (Okur) Okur"
+        );
+        assert_eq!(
+            compare(step, "Okur Key", &jaws(&["JAWSKey"])),
             Comparison::Differs
         );
     }

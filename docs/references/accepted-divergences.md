@@ -32,6 +32,14 @@ spoken text, the UIA buffer), the parity baseline (whole steps are "accepted div
 `okur live-parity`. Their totals read, for example, "1143/1247 steps match exactly; 8 accepted
 divergences not counted".
 
+One rule holds for the whole corpus and is not a divergence: JAWS's name for itself reads as
+Okur's. Where JAWS names itself, Okur names itself (AGENTS.md §1.5): "JAWS Cursor" is "Okur
+Cursor", "Route JAWS to PC" is "Route Okur to PC", "JAWS Find" is "Okur Find". `comparable` in
+`crates/okur-corpus/src/parity.rs` reads both sides of every comparison so (the whole word "JAWS",
+in JAWS's capitals, as "Okur"), and the replay of JAWS's own dialogs as Okur's
+(`crates/okur-corpus/src/dialog_mirror.rs`) matches their titles the same way. It lists no step,
+and the list below does not change for it.
+
 Guards (`cargo test -p okur-corpus`):
 - `jaws_parity_matches_baseline` fails on a stale entry: a step that no longer exists, a phrase
   JAWS or Okur no longer says, or a whole step that now matches JAWS.
