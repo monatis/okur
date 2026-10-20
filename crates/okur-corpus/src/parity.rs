@@ -968,13 +968,13 @@ fn replayable(event: &TraceEvent) -> bool {
         .focus_chain
         .iter()
         .any(|n| n.class_name.as_deref() == Some(WIN32_DIALOG));
-    if (event.window_class.as_deref() == Some(JAWS_MAIN_WINDOW) && !in_dialog)
-        || event
-            .focus_chain
-            .last()
-            .and_then(|f| f.class_name.as_deref())
-            == Some(JAWS_MAIN_WINDOW)
-    {
+    // A focus inside the main window itself, not in one of its dialogs (its "JAWS Version"
+    // text, 242/s1), is JAWS's alone.
+    let in_main_window = event
+        .focus_chain
+        .iter()
+        .any(|n| n.class_name.as_deref() == Some(JAWS_MAIN_WINDOW));
+    if (event.window_class.as_deref() == Some(JAWS_MAIN_WINDOW) || in_main_window) && !in_dialog {
         return false;
     }
     menu_event_from_trace(event).is_some()
