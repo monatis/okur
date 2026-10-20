@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 2462,
+  "matched_steps": 2464,
   "total_steps": 2646,
   "accepted_divergences": 69,
   "errors": [],
@@ -2588,8 +2588,8 @@
     "535-web-table-layer/s4": "match",
     "535-web-table-layer/s5": "match",
     "535-web-table-layer/s6": "match",
-    "535-web-table-layer/s7": "mismatch",
-    "535-web-table-layer/s8": "mismatch",
+    "535-web-table-layer/s7": "match",
+    "535-web-table-layer/s8": "match",
     "535-web-table-layer/s9": "match",
     "536-web-routing-and-link-source/s1": "match",
     "536-web-routing-and-link-source/s10": "mismatch",

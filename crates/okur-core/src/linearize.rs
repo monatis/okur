@@ -95,7 +95,12 @@ pub fn wrap_lines(text: &str, max: usize) -> Vec<&str> {
 
 /// Collapses runs of whitespace to single spaces and trims.
 fn squash(text: &str) -> String {
-    text.split_whitespace().collect::<Vec<_>>().join(" ")
+    // A control character in a page's text is a space to JAWS: "$3 �{" for "$3\u{2}�{" in a
+    // table's cell [obs, 535/s7].
+    text.split(|c: char| c.is_whitespace() || c.is_control())
+        .filter(|word| !word.is_empty())
+        .collect::<Vec<_>>()
+        .join(" ")
 }
 
 /// An editable text area's lines, as the virtual cursor reads them: its value by line breaks.

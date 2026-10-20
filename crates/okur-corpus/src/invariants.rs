@@ -168,7 +168,15 @@ pub fn check(aom: &AomNode) -> Vec<Violation> {
     }
     let spoken = spoken_lines.join(" ");
     for node in nodes.iter().filter(|n| n.role == Role::Text) {
-        let text = normalize(node.text.as_deref().unwrap_or_default());
+        // Control characters are spaces to JAWS and to the buffer (535: a stray U+0002).
+        let raw: String = node
+            .text
+            .as_deref()
+            .unwrap_or_default()
+            .chars()
+            .map(|c| if c.is_control() { ' ' } else { c })
+            .collect();
+        let text = normalize(&raw);
         if !text.is_empty() && !spoken.contains(&text) {
             violations.push(Violation {
                 invariant: TEXT_REACHABLE,
