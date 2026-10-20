@@ -1144,8 +1144,11 @@ async fn main() {
                                     "slow event handling"
                                 );
                             }
-                            // Idle ticks come every 150 ms of quiet; only events are timed.
-                            if event.is_some() {
+                            // Idle ticks come every 150 ms of quiet; only events are timed, the
+                            // mouse's many moves aside.
+                            if event.is_some()
+                                && !matches!(event, Some(AccessibilityEvent::MouseMoved { .. }))
+                            {
                                 tracing::debug!(
                                     event = event_kind(event.as_ref()),
                                     us = held.as_micros(),

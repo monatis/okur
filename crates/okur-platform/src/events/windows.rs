@@ -413,6 +413,8 @@ fn deliver_one(
                 load_page_if_new(event, page, sender, pages);
             }
         }
+        // The mouse moves many times a second: its moves stay out of the debug log.
+        AccessibilityEvent::MouseMoved { .. } => {}
         other => tracing::debug!(event = ?other, "event"),
     }
     let _ = sender.send(converted);
