@@ -87,4 +87,33 @@ fn main() {
             rows
         );
     }
+    // A page focus the buffer finds by role and name only (no uniqueID or DOM id), as while
+    // the page is the quick UIA read: the last row's check box.
+    let mut times = Vec::new();
+    for _ in 0..3 {
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+        engine.handle_accessibility_event(&AccessibilityEvent::DocumentLoaded {
+            title: "Big page".to_owned(),
+            root: root.clone(),
+        });
+        let mut focus = okur_core::FocusEvent::new(Role::Link { href: None })
+            .with_name(format!("Sender {}", rows.saturating_sub(1)));
+        focus.in_document = true;
+        let started = std::time::Instant::now();
+        engine.handle_accessibility_event(&AccessibilityEvent::Focus(focus.clone()));
+        let first = started.elapsed();
+        focus.name = Some(format!("Sender {}", rows / 2));
+        let started = std::time::Instant::now();
+        engine.handle_accessibility_event(&AccessibilityEvent::Focus(focus));
+        times.push((first, started.elapsed()));
+    }
+    times.sort();
+    println!(
+        "{:>14}: {:?} (first, then the next; median of {}, {} rows)",
+        "page focus",
+        times.get(times.len() / 2).copied().unwrap_or_default(),
+        times.len(),
+        rows
+    );
 }

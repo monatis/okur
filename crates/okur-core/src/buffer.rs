@@ -250,8 +250,13 @@ pub struct VirtualBuffer {
     /// Each DOM id's page node, likewise.
     dom_ids: HashMap<String, usize>,
     /// Where each page node first shows, built as a list or a lookup first needs it, and
-    /// dropped when the page changes ([`SpanIndex`]).
-    span_index: std::sync::OnceLock<SpanIndex>,
+    /// dropped when the page changes ([`PageIndex`]).
+    page_index: std::sync::OnceLock<PageIndex>,
+    /// The nodes the buffer reads by role and name (or text), ASCII letters in lower case: the
+    /// smallest id of each. Built as a page focus the other indexes miss first needs it, and
+    /// dropped with [`PageIndex`]: that focus scanned every node under the engine's lock
+    /// (performance review, 2026-10-20, P9).
+    name_index: std::sync::OnceLock<HashMap<(Role, String), usize>>,
 }
 
 /// Where each page node first shows in the buffer, as indexes into `spans`, the first in the
@@ -261,7 +266,7 @@ pub struct VirtualBuffer {
 /// page (performance review, 2026-10-20, P1). Spans are made once, as the buffer is built;
 /// the page's nodes may change after, and the index is then made again.
 #[derive(Debug, Clone, Default)]
-struct SpanIndex {
+struct PageIndex {
     /// Each node id's own first span.
     own: HashMap<usize, usize>,
     /// Each node id's subtree's first span, itself included; `None` where the buffer shows
@@ -276,9 +281,9 @@ struct SpanIndex {
     by_start: Vec<usize>,
 }
 
-impl SpanIndex {
+impl PageIndex {
     fn build(page: Option<&AomNode>, spans: &[BufferSpan]) -> Self {
-        let mut index = SpanIndex::default();
+        let mut index = PageIndex::default();
         for (i, span) in spans.iter().enumerate() {
             index.own.entry(span.node_id).or_insert(i);
         }
@@ -292,7 +297,7 @@ impl SpanIndex {
         };
         // After its children, each node takes the first of its own span and theirs. Walked
         // without recursion: a page can nest deeper than the hook's stack allows.
-        let own = |node: &AomNode, index: &SpanIndex| index.own.get(&node.id).copied();
+        let own = |node: &AomNode, index: &PageIndex| index.own.get(&node.id).copied();
         let mut stack: Vec<(&AomNode, usize, Option<usize>)> = vec![(page, 0, own(page, &index))];
         while let Some(&(node, next, first)) = stack.last() {
             if let Some(child) = node.children.get(next) {
@@ -445,7 +450,8 @@ impl VirtualBuffer {
         }
         self.index_nodes(&page);
         self.page = Some(std::sync::Arc::new(page));
-        self.span_index = std::sync::OnceLock::new();
+        self.page_index = std::sync::OnceLock::new();
+        self.name_index = std::sync::OnceLock::new();
     }
 
     /// Fills the object and DOM id indexes: of the nodes the buffer reads, the one [`Self::node`]
@@ -490,6 +496,37 @@ impl VirtualBuffer {
         self.dom_ids.get(dom_id).copied()
     }
 
+    /// The smallest id of the nodes the buffer reads with `role` and named `name` (by their
+    /// name, else their text), ASCII letters in either case: a node as [`Self::node`] finds
+    /// it, so for an id the page repeats, its last node.
+    pub fn node_with_role_and_name(&self, role: &Role, name: &str) -> Option<usize> {
+        self.name_index
+            .get_or_init(|| {
+                let mut last: HashMap<usize, &AomNode> = HashMap::new();
+                let mut walk: Vec<&AomNode> = self.page.as_deref().into_iter().collect();
+                while let Some(node) = walk.pop() {
+                    last.insert(node.id, node);
+                    walk.extend(node.children.iter().rev());
+                }
+                let mut names: HashMap<(Role, String), usize> = HashMap::new();
+                for (id, node) in last {
+                    if !self.readable.contains(&id) {
+                        continue;
+                    }
+                    let Some(named) = node.name.as_deref().or(node.text.as_deref()) else {
+                        continue;
+                    };
+                    names
+                        .entry((node.role.clone(), named.to_ascii_lowercase()))
+                        .and_modify(|smallest| *smallest = (*smallest).min(id))
+                        .or_insert(id);
+                }
+                names
+            })
+            .get(&(role.clone(), name.to_ascii_lowercase()))
+            .copied()
+    }
+
     /// Marks page node `id` as one the buffer reads.
     pub(crate) fn mark_readable(&mut self, id: usize) {
         self.readable.insert(id);
@@ -523,7 +560,7 @@ impl VirtualBuffer {
     /// inside it (an element whose lines are its children's: WhatsApp's focused message, its
     /// PDF viewer's content).
     pub fn start_of(&self, id: usize) -> Option<usize> {
-        if let Some(&own) = self.span_index().own.get(&id) {
+        if let Some(&own) = self.page_index().own.get(&id) {
             return self.spans.get(own).map(|s| s.start_offset);
         }
         self.start_of_subtree(self.node(id)?)
@@ -534,7 +571,7 @@ impl VirtualBuffer {
         let Some(node) = self.node(id) else {
             return false;
         };
-        match self.span_index().subtree_first(node.id) {
+        match self.page_index().subtree_first(node.id) {
             Some(first) => first.is_some(),
             None => self.first_span_by_walk(node).is_some(),
         }
@@ -543,7 +580,7 @@ impl VirtualBuffer {
     /// The first span, in the order spans were made, that starts at `offset` with a role that
     /// `fits`: what scanning every span for it found.
     fn span_starting_at(&self, offset: usize, fits: impl Fn(&Role) -> bool) -> Option<&BufferSpan> {
-        let by_start = &self.span_index().by_start;
+        let by_start = &self.page_index().by_start;
         let first = by_start
             .partition_point(|&i| self.spans.get(i).is_some_and(|s| s.start_offset < offset));
         by_start
@@ -553,10 +590,10 @@ impl VirtualBuffer {
             .find(|s| fits(&s.role))
     }
 
-    /// The page's [`SpanIndex`], made now if the buffer or its page changed since.
-    fn span_index(&self) -> &SpanIndex {
-        self.span_index
-            .get_or_init(|| SpanIndex::build(self.page.as_deref(), &self.spans))
+    /// The page's [`PageIndex`], made now if the buffer or its page changed since.
+    fn page_index(&self) -> &PageIndex {
+        self.page_index
+            .get_or_init(|| PageIndex::build(self.page.as_deref(), &self.spans))
     }
 
     /// The first span of `node`'s subtree, found by gathering its ids and scanning every span:
@@ -592,7 +629,7 @@ impl VirtualBuffer {
     /// Where `node`'s subtree starts in the buffer: the first span of it.
     /// `node` is one of the page's nodes.
     pub fn start_of_subtree(&self, node: &AomNode) -> Option<usize> {
-        let span = match self.span_index().subtree_first(node.id) {
+        let span = match self.page_index().subtree_first(node.id) {
             Some(first) => first.and_then(|i| self.spans.get(i)),
             None => self.first_span_by_walk(node),
         };
@@ -640,7 +677,8 @@ impl VirtualBuffer {
             return None;
         }
         let path = self.path_to(*self.slot_of.get(&id)?)?;
-        self.span_index = std::sync::OnceLock::new();
+        self.page_index = std::sync::OnceLock::new();
+        self.name_index = std::sync::OnceLock::new();
         let mut node = std::sync::Arc::make_mut(self.page.as_mut()?);
         for index in path {
             node = node.children.get_mut(index)?;
@@ -674,7 +712,8 @@ impl VirtualBuffer {
 
     /// Applies `change` to every page node the buffer reads.
     pub fn for_each_node_mut(&mut self, mut change: impl FnMut(&mut AomNode)) {
-        self.span_index = std::sync::OnceLock::new();
+        self.page_index = std::sync::OnceLock::new();
+        self.name_index = std::sync::OnceLock::new();
         let readable = &self.readable;
         let mut stack: Vec<&mut AomNode> = self
             .page
@@ -1482,7 +1521,7 @@ mod tests {
     /// The span index gives each node's start as gathering its subtree and scanning every
     /// span did, a node the page repeats included (walked, as before).
     #[test]
-    fn the_span_index_finds_what_the_walk_found() {
+    fn the_page_index_finds_what_the_walk_found() {
         let row = |id: usize, text: &str| {
             AomNode::new(id, Role::Group).with_children(vec![
                 AomNode::new(id + 1, Role::Link { href: None }).with_name("Sender"),
@@ -1511,7 +1550,7 @@ mod tests {
                 node.id
             );
         }
-        assert!(buffer.span_index().repeated.contains(&20));
+        assert!(buffer.page_index().repeated.contains(&20));
         assert_eq!(
             buffer.start_of(31),
             buffer

@@ -376,18 +376,10 @@ impl ScreenReaderEngine {
             return Some(id);
         }
         let name = focus.name.as_deref()?;
-        let mut ids: Vec<usize> = buffer.node_ids().collect();
-        ids.sort_unstable();
-        let node = |id: &usize| buffer.node(*id);
-        ids.into_iter().find(|id| {
-            node(id).is_some_and(|n| {
-                same_role(&n.role, &focus.role)
-                    && n.name
-                        .as_deref()
-                        .or(n.text.as_deref())
-                        .is_some_and(|nn| nn.eq_ignore_ascii_case(name))
-            })
-        })
+        same_roles(&focus.role)
+            .iter()
+            .filter_map(|role| buffer.node_with_role_and_name(role, name))
+            .min()
     }
 
     /// The focused control changed without focus moving (Space on a check box, a tree item
@@ -852,16 +844,15 @@ impl ScreenReaderEngine {
         {
             return last.clone();
         }
+        // The region by its DOM id, from the buffer's index (the smallest id with it): a
+        // sorted scan of every node did this once per change (performance review, 2026-10-20,
+        // P9).
         let buffer = &self.cursor.buffer;
-        let mut ids: Vec<usize> = buffer.node_ids().collect();
-        ids.sort_unstable();
-        let region = live.region_id.as_deref().and_then(|dom_id| {
-            ids.iter().find_map(|id| {
-                buffer
-                    .node(*id)
-                    .filter(|n| n.attributes.get("id").map(String::as_str) == Some(dom_id))
-            })
-        });
+        let region = live
+            .region_id
+            .as_deref()
+            .and_then(|dom_id| buffer.node_with_dom_id_indexed(dom_id))
+            .and_then(|id| buffer.node(id));
         let mut old = Vec::new();
         if let Some(region) = region {
             texts(region, &mut old);
@@ -907,9 +898,25 @@ pub(super) struct LiveStream {
     quiet: u8,
 }
 
-/// Whether a focus event's role is the page node's: a button opening a menu is a menu button
-/// to MSAA, which focus events follow, and a plain button to UIA, which a page's quick first
-/// capture reads.
+/// The roles a page node of a focus event may have, to find it by role and name: its own; a
+/// button opening a menu is a menu button to MSAA, which focus events follow, and a plain
+/// button to UIA, which a page's quick first capture reads; and the focus on an item's own
+/// focusable content, named after the item (WhatsApp's chat, a grid cell whose inner group
+/// takes the focus; dev box, 2026-10-17), not its row, which has no line of its own.
+fn same_roles(focus: &Role) -> Vec<Role> {
+    let mut roles = vec![focus.clone()];
+    match focus {
+        Role::Button => roles.push(Role::MenuButton),
+        Role::MenuButton => roles.push(Role::Button),
+        Role::Group => roles.extend([Role::TableCell, Role::ListItem, Role::TreeItem]),
+        _ => {}
+    }
+    roles
+}
+
+/// Whether a focus event's role is the page node's, as [`same_roles`] lists them: the test's
+/// oracle for it.
+#[cfg(test)]
 fn same_role(node: &Role, focus: &Role) -> bool {
     node == focus
         || matches!(
@@ -999,4 +1006,80 @@ fn ancestors_of<'a>(node: &'a AomNode, id: usize, out: &mut Vec<&'a AomNode>) ->
     }
     out.pop();
     false
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::aom::AomNode;
+
+    /// The roles [`same_roles`] lists are those [`same_role`] accepts.
+    #[test]
+    fn the_roles_listed_are_the_roles_accepted() {
+        let roles = [
+            Role::Button,
+            Role::MenuButton,
+            Role::Group,
+            Role::TableCell,
+            Role::ListItem,
+            Role::TreeItem,
+            Role::TableRow,
+            Role::CheckBox,
+            Role::Link { href: None },
+        ];
+        for focus in &roles {
+            for node in &roles {
+                assert_eq!(
+                    same_roles(focus).contains(node),
+                    same_role(node, focus),
+                    "{node:?} for {focus:?}"
+                );
+            }
+        }
+    }
+
+    /// A page node found by role and name is the one scanning the nodes found: the smallest
+    /// id, ASCII letters in either case, by name or else by text, of a node the buffer reads.
+    #[test]
+    fn a_node_is_found_by_role_and_name_as_the_scan_found_it() {
+        let page = AomNode::new(0, Role::Document)
+            .with_name("Page")
+            .with_children(vec![
+                AomNode::new(9, Role::Button).with_name("Send"),
+                AomNode::new(3, Role::MenuButton).with_name("SEND"),
+                AomNode::new(5, Role::ListItem).with_text("Chat with Ada"),
+                AomNode::new(7, Role::Group).with_children(vec![
+                    AomNode::new(8, Role::TableCell).with_name("chat with ada"),
+                    AomNode::new(4, Role::Link { href: None }).with_name("Ölçü"),
+                ]),
+            ]);
+        let buffer = VirtualBuffer::from_aom(&page);
+        let scan = |role: &Role, name: &str| {
+            let mut ids: Vec<usize> = buffer.node_ids().collect();
+            ids.sort_unstable();
+            ids.into_iter().find(|id| {
+                buffer.node(*id).is_some_and(|n| {
+                    same_role(&n.role, role)
+                        && n.name
+                            .as_deref()
+                            .or(n.text.as_deref())
+                            .is_some_and(|nn| nn.eq_ignore_ascii_case(name))
+                })
+            })
+        };
+        for (role, name) in [
+            (Role::Button, "send"),
+            (Role::MenuButton, "Send"),
+            (Role::Group, "CHAT WITH ADA"),
+            (Role::Link { href: None }, "ölçü"),
+            (Role::Link { href: None }, "Ölçü"),
+            (Role::CheckBox, "Send"),
+        ] {
+            let found = same_roles(&role)
+                .iter()
+                .filter_map(|r| buffer.node_with_role_and_name(r, name))
+                .min();
+            assert_eq!(found, scan(&role, name), "{role:?} {name}");
+        }
+    }
 }
