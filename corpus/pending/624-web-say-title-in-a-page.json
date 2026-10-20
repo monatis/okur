@@ -1,0 +1,28 @@
+{
+  "id": "624-web-say-title-in-a-page",
+  "name": "Insert+T at places in a page (566/s7 said \"article | level 3 | heading is ...\" after the title on the article's heading; 209/s1 only the title at the top): the top, the article's heading and the paragraph after it, a second-level heading and its paragraph, a table, a third-level heading, the complementary region and the footer",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+T" },
+    { "id": "s2", "type": "key", "command": "H" },
+    { "id": "s3", "type": "key", "command": "Insert+T" },
+    { "id": "s4", "type": "key", "command": "Down" },
+    { "id": "s5", "type": "key", "command": "Insert+T" },
+    { "id": "s6", "type": "key", "command": "H" },
+    { "id": "s7", "type": "key", "command": "Insert+T" },
+    { "id": "s8", "type": "key", "command": "Down" },
+    { "id": "s9", "type": "key", "command": "Insert+T" },
+    { "id": "s10", "type": "key", "command": "T" },
+    { "id": "s11", "type": "key", "command": "Insert+T" },
+    { "id": "s12", "type": "key", "command": "H" },
+    { "id": "s13", "type": "key", "command": "Insert+T" },
+    { "id": "s14", "type": "key", "command": "H" },
+    { "id": "s15", "type": "key", "command": "Insert+T" },
+    { "id": "s16", "type": "key", "command": "Ctrl+End" },
+    { "id": "s17", "type": "key", "command": "Insert+T" }
+  ]
+}
