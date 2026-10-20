@@ -852,43 +852,6 @@ impl SpeechFormatter {
         msg::dialog_left().to_string()
     }
 
-    /// The opening of an element list dialog, as JAWS says it: its title and role, its list's
-    /// name and role, the first item and its position, and the hint.
-    fn format_list_dialog(title: &str, list: &str, first: &str, count: usize) -> String {
-        format!(
-            "{title}  \u{001d} {} \u{001e} \n{list}  \u{001d} {} \u{001e} \n{first}\n{}\n{}",
-            msg::role_dialog(),
-            msg::role_list_view(),
-            msg::position(1, count),
-            msg::hint_move_to_items_arrows()
-        )
-    }
-
-    /// Formats the opening announcement of a Links List dialog matching JAWS.
-    pub fn format_links_list_dialog(items: &[crate::buffer::LinkListItem]) -> String {
-        let first_text = items.first().map(|i| i.text.as_str()).unwrap_or("");
-        Self::format_list_dialog(
-            msg::list_dialog_links().as_str(),
-            msg::list_dialog_links_list().as_str(),
-            first_text,
-            items.len(),
-        )
-    }
-
-    /// Formats the opening announcement of a Headings List dialog matching JAWS.
-    pub fn format_headings_list_dialog(items: &[crate::buffer::HeadingListItem]) -> String {
-        let first_text = items
-            .first()
-            .map(|i| format!("{} : {}", i.text, i.level))
-            .unwrap_or_default();
-        Self::format_list_dialog(
-            msg::list_dialog_headings().as_str(),
-            msg::list_dialog_headings_list().as_str(),
-            &first_text,
-            items.len(),
-        )
-    }
-
     /// A form field as Select a Form Field lists it: its name, its type, then its value or
     /// state ("Wrap check box not checked", "Fruit edit combo", "Notes Edit the lazy dog")
     /// [obs, 227]. A button of any kind is a "Button" ("Outline Button" for a button menu).
@@ -919,20 +882,6 @@ impl SpeechFormatter {
         .filter(|part| !part.is_empty())
         .collect::<Vec<_>>()
         .join(" ")
-    }
-
-    /// Formats the opening announcement of a Form Fields List dialog matching JAWS.
-    pub fn format_form_fields_list_dialog(items: &[crate::buffer::FormFieldListItem]) -> String {
-        let first_text = items
-            .first()
-            .map(Self::form_field_list_entry)
-            .unwrap_or_default();
-        Self::format_list_dialog(
-            msg::list_dialog_form_fields().as_str(),
-            msg::list_dialog_form_fields_list().as_str(),
-            &first_text,
-            items.len(),
-        )
     }
 
     /// Formats negative text search feedback matching JAWS.

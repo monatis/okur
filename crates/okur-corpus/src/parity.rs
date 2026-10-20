@@ -287,6 +287,11 @@ fn run_scenario(
     if let Some((clock, _)) = &clock {
         engine.set_clock(Box::new(clock.clone()));
     }
+    // Okur's own dialogs: the engine shows them through a window host, and JAWS's dialog in
+    // the trace stands for the window (`crate::dialog_mirror`).
+    let ui = okur_core::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let mut mirror = crate::dialog_mirror::DialogMirror::default();
     let replay = StepEvents::load(corpus_dir, &scenario.id, &evidence)?;
     // One converter for the whole run, as live: it tracks the focused object.
     let mut converter = EventConverter::default();
@@ -370,6 +375,18 @@ fn run_scenario(
                                 start + u64::from(press_index) * REPEAT_GAP_MS,
                                 held,
                             )?;
+                            // A key in Okur's dialog: what its window reports.
+                            mirror.sync(&ui);
+                            let pressed = crate::keys::parse_chord(command)?;
+                            for report in mirror.key(&pressed) {
+                                let report = okur_core::AccessibilityEvent::Ui(report);
+                                if let Some(speech) = engine.handle_accessibility_event(&report) {
+                                    if spoken.is_empty() {
+                                        spoken.push(&speech, false);
+                                    }
+                                }
+                            }
+                            mirror.sync(&ui);
                         }
                         // A reload: the platform reads the page again once it changes, as
                         // Okur's page worker does live (the trace records events, not the
@@ -409,6 +426,14 @@ fn run_scenario(
                             if spoken.is_empty() {
                                 spoken.push(&speech, false);
                             }
+                        }
+                        mirror.sync(&ui);
+                        if let okur_core::AccessibilityEvent::Focus(focus) = &converted {
+                            for report in mirror.focus(focus) {
+                                let report = okur_core::AccessibilityEvent::Ui(report);
+                                let _ = engine.handle_accessibility_event(&report);
+                            }
+                            mirror.sync(&ui);
                         }
                     }
                 }
@@ -899,6 +924,20 @@ pub const TICK_MS: u128 = 16;
 /// Events the engine consumes: focus changes (with a UIA chain or an MSAA object) and menu
 /// mode transitions.
 fn replayable(event: &TraceEvent) -> bool {
+    // JAWS's own main window (hidden, class JFWUI2) takes the focus for a moment as JAWS
+    // opens one of its dialogs; the dialog is its child. Okur, never running beside JAWS
+    // live, would see neither, but its own dialog the same as JAWS's; the dialog's events
+    // stay [obs, 224/s1, round 52].
+    const JAWS_MAIN_WINDOW: &str = "JFWUI2";
+    if event.window_class.as_deref() == Some(JAWS_MAIN_WINDOW)
+        || event
+            .focus_chain
+            .last()
+            .and_then(|f| f.class_name.as_deref())
+            == Some(JAWS_MAIN_WINDOW)
+    {
+        return false;
+    }
     menu_event_from_trace(event).is_some()
         || (matches!(
             event.event.as_str(),

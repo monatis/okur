@@ -30,7 +30,7 @@ pub use buffer::{
     LinkListItem, VirtualBuffer,
 };
 pub use cursor::{SearchState, VirtualCursor};
-pub use engine::{ActiveElementList, ScreenReaderEngine};
+pub use engine::ScreenReaderEngine;
 pub use event::{
     AccessibilityEvent, ChangeKind, FocusEvent, FontInfo, GroupEntry, LiveRegionEvent, MenuEvent,
     PlatformIds, Politeness, TextContext, WindowItem,
@@ -811,87 +811,115 @@ mod tests {
         );
     }
 
+    /// An engine with Okur's windows, and the dialog it showed for `command`.
+    fn open_list_dialog(
+        aom: &AomNode,
+        command: &str,
+    ) -> (ScreenReaderEngine, ui::RecordingUiHost, ui::DialogSpec) {
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(aom));
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+        let host = ui::RecordingUiHost::default();
+        engine.set_ui(Box::new(host.clone()));
+        let _ = engine.execute_command(command);
+        let dialog = host.take().into_iter().find_map(|message| match message {
+            ui::ToUi::DialogShow { dialog } => Some(dialog),
+            _ => None,
+        });
+        assert!(dialog.is_some(), "{command} showed no dialog");
+        let dialog = dialog.unwrap_or_else(|| ui::DialogSpec {
+            id: 0,
+            title: String::new(),
+            controls: Vec::new(),
+        });
+        (engine, host, dialog)
+    }
+
+    /// The dialog's list: its id and items.
+    fn list_of(dialog: &ui::DialogSpec) -> (String, Vec<String>) {
+        dialog
+            .controls
+            .iter()
+            .find_map(|c| match &c.kind {
+                ui::ControlKind::List { items, .. } => Some((c.id.clone(), items.clone())),
+                _ => None,
+            })
+            .unwrap_or_default()
+    }
+
+    /// What the dialog's window reports: an item selected, then a button pressed.
+    fn choose(
+        engine: &mut ScreenReaderEngine,
+        dialog: &ui::DialogSpec,
+        item: usize,
+        button: &str,
+    ) -> String {
+        let (list, _) = list_of(dialog);
+        let _ =
+            engine.handle_accessibility_event(&AccessibilityEvent::Ui(ui::FromUi::DialogChanged {
+                id: dialog.id,
+                control: list,
+                value: ui::Value::Selected(item),
+            }));
+        engine
+            .handle_accessibility_event(&AccessibilityEvent::Ui(ui::FromUi::DialogPressed {
+                id: dialog.id,
+                control: button.to_owned(),
+            }))
+            .unwrap_or_default()
+    }
+
     #[test]
     fn test_milestone_11_headings_list_and_jump() {
-        let aom = create_structural_test_tree();
-        let buffer = VirtualBuffer::from_aom(&aom);
-        let cursor = VirtualCursor::new(buffer);
-        let mock_speech = Box::new(MockSpeechOutput::new());
-        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
-
-        // Open Headings List dialog
-        let dialog_speech = engine.execute_command("SelectAHeading").unwrap_or_default();
-        assert!(dialog_speech.contains("Heading List"));
-        assert!(dialog_speech.contains("headings  \u{001d} List view \u{001e}"));
-        assert!(dialog_speech.contains("System Documentation : 1"));
-        assert!(dialog_speech.contains("1 of 5"));
-
-        // Navigate down to item 2 ("Section Overview : 2")
-        let down_speech = engine.execute_command("{DOWN}").unwrap_or_default();
-        assert!(down_speech.contains("Section Overview : 2"));
-        assert!(down_speech.contains("2 of 5"));
-
-        // Press Enter to jump to target heading
-        let landing_speech = engine.execute_command("{ENTER}").unwrap_or_default();
-        assert!(landing_speech.contains("Section Overview"));
-        assert!(landing_speech.contains("heading level 2"));
-
-        assert!(engine.cursor.current_node().is_some());
-        if let Some(current_node) = engine.cursor.current_node() {
-            assert_eq!(current_node.role, Role::Heading { level: 2 });
-        }
+        let (mut engine, _host, dialog) =
+            open_list_dialog(&create_structural_test_tree(), "SelectAHeading");
+        assert_eq!(dialog.title, "Heading List");
+        let (_, items) = list_of(&dialog);
+        assert_eq!(items.len(), 5);
+        assert_eq!(
+            items.first().map(String::as_str),
+            Some("System Documentation : 1")
+        );
+        // Move To Heading on the second: the virtual cursor is on it.
+        let landing = choose(&mut engine, &dialog, 1, "move");
+        assert!(landing.contains("Section Overview"), "{landing:?}");
+        assert!(landing.contains("heading level 2"), "{landing:?}");
+        assert_eq!(
+            engine.cursor.current_node().map(|n| n.role.clone()),
+            Some(Role::Heading { level: 2 })
+        );
     }
 
     #[test]
     fn test_milestone_11_links_list_and_jump() {
-        let aom = create_structural_test_tree();
-        let buffer = VirtualBuffer::from_aom(&aom);
-        let cursor = VirtualCursor::new(buffer);
-        let mock_speech = Box::new(MockSpeechOutput::new());
-        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
-
-        // Open Links List dialog
-        let dialog_speech = engine.execute_command("SelectALink").unwrap_or_default();
-        assert!(dialog_speech.contains("Links List"));
-        assert!(dialog_speech.contains("links  \u{001d} List view \u{001e}"));
-        assert!(dialog_speech.contains("Overview Link"));
-        assert!(dialog_speech.contains("1 of 3"));
-
-        // Navigate down to item 2 ("Architecture Link")
-        let down_speech = engine.execute_command("{DOWN}").unwrap_or_default();
-        assert!(down_speech.contains("Architecture Link"));
-        assert!(down_speech.contains("2 of 3"));
-
-        // Press Enter to jump to link
-        let landing_speech = engine.execute_command("{ENTER}").unwrap_or_default();
-        assert!(landing_speech.contains("Architecture Link"));
-        assert!(landing_speech.contains("same page link"));
-
-        assert!(engine.cursor.current_node().is_some());
-        if let Some(current_node) = engine.cursor.current_node() {
-            assert!(matches!(current_node.role, Role::Link { .. }));
-        }
+        let (mut engine, _host, dialog) =
+            open_list_dialog(&create_structural_test_tree(), "SelectALink");
+        assert_eq!(dialog.title, "Links List");
+        let (_, items) = list_of(&dialog);
+        assert_eq!(items.len(), 3);
+        let landing = choose(&mut engine, &dialog, 1, "move");
+        assert!(landing.contains("Architecture Link"), "{landing:?}");
+        assert!(landing.contains("same page link"), "{landing:?}");
+        assert!(engine
+            .cursor
+            .current_node()
+            .is_some_and(|n| matches!(n.role, Role::Link { .. })));
     }
 
     #[test]
     fn test_milestone_11_form_fields_list_and_escape() {
-        let aom = create_forms_test_tree();
-        let buffer = VirtualBuffer::from_aom(&aom);
-        let cursor = VirtualCursor::new(buffer);
-        let mock_speech = Box::new(MockSpeechOutput::new());
-        let mut engine = ScreenReaderEngine::new(cursor, mock_speech);
-
-        // Open Form Fields List dialog
-        let dialog_speech = engine
-            .execute_command("SelectAFormField")
-            .unwrap_or_default();
-        assert!(dialog_speech.contains("Select a Form Field"));
-        assert!(dialog_speech.contains("List1  \u{001d} List view \u{001e}"));
-        assert!(dialog_speech.contains("Full Name: Edit"));
-
-        // Dismiss dialog via Escape
-        let exit_speech = engine.execute_command("{ESC}").unwrap_or_default();
-        assert_eq!(exit_speech, "virtual PC Cursor");
-        assert!(engine.active_element_list.is_none());
+        let (mut engine, _host, dialog) =
+            open_list_dialog(&create_forms_test_tree(), "SelectAFormField");
+        assert_eq!(dialog.title, "Select a Form Field");
+        let (_, items) = list_of(&dialog);
+        assert!(
+            items.iter().any(|i| i.starts_with("Full Name: Edit")),
+            "{items:?}"
+        );
+        // Escape closes the window; the page comes back.
+        let _ =
+            engine.handle_accessibility_event(&AccessibilityEvent::Ui(ui::FromUi::DialogClosed {
+                id: dialog.id,
+            }));
+        assert_eq!(engine.app_mode, engine::AppMode::VirtualBuffer);
     }
 }

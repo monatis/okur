@@ -1,9 +1,7 @@
 //! Reading commands: the JAWS script names `execute_command` runs, the JAWS-key chords, and
 //! the commands that need more than the buffer (Say Font, Virtualize Window, the clock).
 
-use super::{
-    ActiveElementList, AppMode, PendingViewer, Press, ScreenReaderEngine, DOUBLE_PRESS_MS,
-};
+use super::{AppMode, PendingViewer, Press, ScreenReaderEngine, DOUBLE_PRESS_MS};
 use crate::aom::Role;
 use crate::command::{Command, Element};
 use crate::input::{Key, KeyAction, KeyEvent};
@@ -147,36 +145,6 @@ impl ScreenReaderEngine {
         if matches!(self.app_mode, AppMode::NativeDesktop | AppMode::NativeShell) {
             return None;
         }
-        // An element list (Insert+F6, F7, F5) takes the arrows, Enter and Escape.
-        if let Some(ref mut list) = self.active_element_list {
-            match command {
-                Command::SayNextLine => {
-                    let speech = list.move_next();
-                    self.speech.speak(&speech, true);
-                    return Some(speech);
-                }
-                Command::SayPriorLine => {
-                    let speech = list.move_prior();
-                    self.speech.speak(&speech, true);
-                    return Some(speech);
-                }
-                Command::Enter => {
-                    let target_offset = list.selected_offset();
-                    self.active_element_list = None;
-                    let speech = self.cursor.jump_to_element_offset(target_offset);
-                    self.speech.speak(&speech, true);
-                    return Some(speech);
-                }
-                Command::Escape => {
-                    self.active_element_list = None;
-                    let speech = msg::cursor_virtual_pc().to_string();
-                    self.speech.speak(&speech, true);
-                    return Some(speech);
-                }
-                _ => {}
-            }
-        }
-
         match &command {
             Command::Find(query) => {
                 let speech = self.cursor.find_text(query, false);
@@ -479,78 +447,18 @@ impl ScreenReaderEngine {
             Command::FindNext => self.cursor.find_next(),
             Command::FindPrior => self.cursor.find_prior(),
 
-            // Element list dialogs
-            Command::SelectAHeading if self.ui.is_some() => {
-                return self.open_list(crate::ui::lists::ListKind::Headings)
-            }
-            Command::SelectAHeading => {
-                let items = self.cursor.buffer.get_headings_list();
-                if items.is_empty() {
-                    Some(msg::quicknav_none_headings().to_string())
-                } else {
-                    let speech = SpeechFormatter::format_headings_list_dialog(&items);
-                    self.active_element_list = Some(ActiveElementList::Headings {
-                        items,
-                        selected_index: 0,
-                    });
-                    Some(speech)
-                }
-            }
-            // With Okur's windows, a real Links List; without (replay, headless), the list
-            // is spoken, as before.
-            Command::SelectARegion if self.ui.is_some() => {
-                return self.open_list(crate::ui::lists::ListKind::Regions)
-            }
-            Command::SelectElement(list) if self.ui.is_some() => {
+            // Element list dialogs, in Okur's windows; with nothing to list, said so.
+            Command::SelectAHeading => return self.open_list(crate::ui::lists::ListKind::Headings),
+            Command::SelectARegion => return self.open_list(crate::ui::lists::ListKind::Regions),
+            Command::SelectElement(list) => {
                 return self.open_list(crate::ui::lists::ListKind::Elements(*list))
             }
-            Command::VirtualHtmlFeatures if self.ui.is_some() => {
+            Command::VirtualHtmlFeatures => {
                 return self.open_list(crate::ui::lists::ListKind::Features)
             }
-            Command::SelectALink if self.ui.is_some() => {
-                return self.open_list(crate::ui::lists::ListKind::Links)
-            }
-            Command::SelectALink => {
-                let items = self.cursor.buffer.get_links_list();
-                if items.is_empty() {
-                    // [obs, 221/s1]
-                    Some(msg::links_list_none().to_string())
-                } else {
-                    let speech = SpeechFormatter::format_links_list_dialog(&items);
-                    self.active_element_list = Some(ActiveElementList::Links {
-                        items,
-                        selected_index: 0,
-                    });
-                    Some(speech)
-                }
-            }
-            Command::SelectAFormField if self.ui.is_some() => {
-                return self.open_list(crate::ui::lists::ListKind::FormFields)
-            }
+            Command::SelectALink => return self.open_list(crate::ui::lists::ListKind::Links),
             Command::SelectAFormField => {
-                let items = self.cursor.buffer.get_form_fields_list();
-                if items.is_empty() {
-                    // Then the page, as when the focus comes back to it: "no form fields were
-                    // found | Document Reading Reference Fixture document" [obs, 221/s2].
-                    let page = self.page_on_return().map(|page| format!("\n{page}"));
-                    Some(format!(
-                        "{}{}",
-                        msg::form_fields_list_none(),
-                        page.unwrap_or_default()
-                    ))
-                } else {
-                    let speech = SpeechFormatter::format_form_fields_list_dialog(&items);
-                    self.active_element_list = Some(ActiveElementList::FormFields {
-                        items,
-                        selected_index: 0,
-                    });
-                    Some(speech)
-                }
-            }
-            // The list of a page's regions itself is not built yet; a page without regions
-            // says so [obs, 221/s3].
-            Command::SelectARegion if self.cursor.buffer.landmarks.is_empty() => {
-                Some(msg::regions_list_none().to_string())
+                return self.open_list(crate::ui::lists::ListKind::FormFields)
             }
 
             _ => None,

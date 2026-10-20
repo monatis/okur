@@ -730,9 +730,14 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     // anything else by its top-level window's caption, which for Chrome names the profile the
     // UIA name leaves out [obs, 209/s1: "... - Google Chrome - <profile>"]. Traces from before
     // the caption was recorded (format 7) fall back to the UIA window's name.
+    // A dialog around the focus is the window, whichever window is in front as the event
+    // comes: JAWS's list dialogs take the focus while its hidden main window is still in
+    // front, and the dialog comes to the front a moment later [obs, 224/s1, round 52].
+    let dialog = active_window.filter(|w| w.is_dialog == Some(true));
     let top_window = event
         .virtual_desktop
         .as_deref()
+        .or(dialog.and_then(|w| w.name.as_deref()))
         .or(event.top_window_title.as_deref())
         .or(active_window.and_then(|w| w.name.as_deref()));
     let mut focus = focus_event_from_chain(
@@ -757,9 +762,9 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     focus.platform.top_window_class = if event.virtual_desktop.is_some() {
         Some(DESKTOP_KIND.to_owned())
     } else {
-        event
-            .top_window_class
-            .clone()
+        dialog
+            .and_then(|w| w.class_name.clone())
+            .or_else(|| event.top_window_class.clone())
             .or_else(|| active_window.and_then(|w| w.class_name.clone()))
     };
     focus.in_dialog_box = focus.platform.top_window_class.as_deref() == Some(WIN32_DIALOG_CLASS);

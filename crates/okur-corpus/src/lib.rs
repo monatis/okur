@@ -1,3 +1,4 @@
+pub mod dialog_mirror;
 pub mod divergences;
 pub mod invariants;
 pub mod keys;

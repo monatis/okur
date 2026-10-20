@@ -37,7 +37,7 @@ mod toggles;
 mod web_app_tests;
 mod window_list;
 
-pub use state::{ActiveElementList, AppMode};
+pub use state::AppMode;
 
 /// A key press counted for "pressed twice quickly": a command, or CapsLock alone (which the
 /// laptop layout's JAWS key also is).
@@ -63,7 +63,6 @@ pub struct ScreenReaderEngine {
     pub cursor: VirtualCursor,
     pub speech: Box<dyn SpeechOutput>,
     pub forms_mode: bool,
-    pub active_element_list: Option<ActiveElementList>,
     pub app_mode: AppMode,
     pub last_window_title: Option<String>,
     /// The active window's class, with `last_window_title` identifying the window.
@@ -225,7 +224,6 @@ impl ScreenReaderEngine {
             cursor,
             speech,
             forms_mode: false,
-            active_element_list: None,
             app_mode: AppMode::VirtualBuffer,
             last_window_title: None,
             last_window_kind: None,
@@ -306,7 +304,6 @@ impl ScreenReaderEngine {
         ));
         self.cursor.move_to_start();
         self.forms_mode = false;
-        self.active_element_list = None;
         self.app_mode = AppMode::VirtualBuffer;
         self.say_all = None;
     }
@@ -578,13 +575,8 @@ impl ScreenReaderEngine {
             return KeyAction::PassThrough;
         }
 
-        // 4. Handle Escape when inside an active element list, expanded combobox or modal dialog
+        // 4. Handle Escape when inside an expanded combobox or modal dialog
         if event.key == Key::Escape && event.modifiers.is_empty() {
-            if self.active_element_list.is_some() {
-                self.active_element_list = None;
-                self.speech.speak(msg::cursor_virtual_pc().as_str(), true);
-                return KeyAction::Consume;
-            }
             if self.cursor.is_combobox_expanded() {
                 if let Some(msg) = self.cursor.collapse_combobox() {
                     self.speech.speak(&msg, true);
@@ -1200,6 +1192,9 @@ impl ScreenReaderEngine {
             dialog: dialog.spec(),
         });
         self.list_dialog = Some(dialog);
+        // The keys are the dialog's now, before its window reports the focus: a Down the
+        // window has yet to take must not move the virtual cursor [obs, 242/s2].
+        self.app_mode = AppMode::NativeControl;
         None
     }
 
@@ -1212,6 +1207,7 @@ impl ScreenReaderEngine {
             if let (Some(dialog), Some(ui)) = (engine.list_dialog.take(), &engine.ui) {
                 ui.send(crate::ui::ToUi::DialogClose { id: dialog.id });
             }
+            engine.app_mode = AppMode::VirtualBuffer;
             engine.returning_from_dialog();
         };
         match outcome {
@@ -1348,6 +1344,7 @@ impl ScreenReaderEngine {
             // 227/s11, 223/s3].
             Outcome::Closed => {
                 self.list_dialog = None;
+                self.app_mode = AppMode::VirtualBuffer;
                 self.returning_from_dialog();
                 let page = (kind == ListKind::FormFields)
                     .then(|| self.page_on_return())
