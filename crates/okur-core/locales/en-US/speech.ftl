@@ -74,6 +74,11 @@ dialog-entered = Dialog
 dialog-entered-named = Dialog { $title }
 dialog-left = Leaving Dialog
 
+## A property sheet in a dialog box
+
+# Ctrl+Tab moved the focus onto another page of the sheet [obs, 323/s10, s11].
+property-page-changed = { $page } Page
+
 ## Find (Control+F)
 
 find-not-found = Text not found: { $text }

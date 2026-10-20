@@ -688,6 +688,18 @@ impl ScreenReaderEngine {
             self.native_focus.reset();
         }
         let control = self.native_focus.focus(focus);
+        // The focus moved onto another page of the dialog's property sheet (Ctrl+Tab): the
+        // page is said first, "General Page" [obs, 323/s11].
+        let page_changed = focus.dialog_page.as_deref().filter(|page| {
+            !window_changed
+                && self
+                    .last_native_focus
+                    .as_ref()
+                    .and_then(|last| last.dialog_page.as_deref())
+                    .is_some_and(|last| last != *page)
+        });
+        let page_line = page_changed
+            .map(|page| crate::announcement::Line::text(msg::property_page_changed(page).render()));
         // A repeat of the focus is not said, but it can carry what the first report did not:
         // a grid cell's selected state comes with its MSAA event, after UI Automation's
         // [obs, 545/s1]. Say Focus reads the latest.
@@ -704,6 +716,10 @@ impl ScreenReaderEngine {
         let names_window = app.is_none_or(|app| app.names_window(focus));
         let announcement = if window_changed && names_window {
             self.window_heading(focus, app, control)
+        } else if let Some(page) = page_line {
+            let mut lines = vec![page];
+            lines.extend(control.lines);
+            Announcement::new(lines)
         } else {
             control
         };
