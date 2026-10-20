@@ -67,10 +67,13 @@ viewer-close-hint = Press ESCAPE to close this message.
 
 # Text just selected with Shift and a move: said after a character, before more text.
 selection-added = selected
-# Control+Home in a document.
+# Control+Home in a document; short messages say the short form, Advanced neither [obs, 668/s4,
+# 669/s4].
 text-top-of-file = top of file
+text-top-of-file-short = top
 # Control+End in a document. JAWS's capital.
 text-bottom-of-file = Bottom of file
+text-bottom-of-file-short = Bottom
 
 ## Say System Date (twice: the week)
 

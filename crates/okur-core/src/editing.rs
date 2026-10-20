@@ -487,6 +487,17 @@ impl Wording {
     }
 }
 
+/// A document's top or bottom: its message where the level says one, then the line there.
+fn edge_of_file(message: Option<String>, line: &str) -> Option<String> {
+    let line = line.trim();
+    match (message, line.is_empty()) {
+        (Some(message), true) => Some(message),
+        (Some(message), false) => Some(format!("{message}\n{line}")),
+        (None, false) => Some(line.to_owned()),
+        (None, true) => None,
+    }
+}
+
 /// What JAWS speaks after `key`, given the field before and after it. `field` is the
 /// field's name-and-role line, for Say Line. In a field that is not a plain Win32 edit.
 pub fn speech(
@@ -555,22 +566,22 @@ pub fn speech_in(
             };
             wording.selection(word, &text, true)
         }
-        EditKey::TopOfFile => {
-            let line = line_at(after);
-            if line.trim().is_empty() {
-                msg::text_top_of_file().to_string()
-            } else {
-                format!("{}\n{}", msg::text_top_of_file(), line.trim())
-            }
-        }
-        EditKey::BottomOfFile => {
-            let line = line_at(after);
-            if line.trim().is_empty() {
-                msg::text_bottom_of_file().to_string()
-            } else {
-                format!("{}\n{}", msg::text_bottom_of_file(), line.trim())
-            }
-        }
+        // "top of file", "top" at Intermediate, nothing at Advanced, then the line [obs, 660/s4,
+        // 668/s4, 669/s4].
+        EditKey::TopOfFile => edge_of_file(
+            wording.message(
+                msg::text_top_of_file().to_string(),
+                msg::text_top_of_file_short().to_string(),
+            ),
+            &line_at(after),
+        )?,
+        EditKey::BottomOfFile => edge_of_file(
+            wording.message(
+                msg::text_bottom_of_file().to_string(),
+                msg::text_bottom_of_file_short().to_string(),
+            ),
+            &line_at(after),
+        )?,
         EditKey::DeleteBackward => {
             let deleted = deleted_before_caret(before, after);
             if deleted.is_empty() {
@@ -648,6 +659,25 @@ mod tests {
             word: None,
             misspelled: Vec::new(),
         }
+    }
+
+    /// Ctrl+Home says "top of file" and the line, "top" at Intermediate, the line alone at
+    /// Advanced [obs, 660/s4, 668/s4, 669/s4].
+    #[test]
+    fn the_top_of_a_file_is_said_by_the_level() {
+        let top = ctx("first\nsecond", 0, None);
+        let level = |selection: bool, messages: bool, short: bool| Wording {
+            selection,
+            messages,
+            short,
+        };
+        let said = |wording| speech_in(EditKey::TopOfFile, None, &top, "", true, wording);
+        assert_eq!(
+            said(Wording::default()).as_deref(),
+            Some("top of file\nfirst")
+        );
+        assert_eq!(said(level(true, true, true)).as_deref(), Some("top\nfirst"));
+        assert_eq!(said(level(false, false, true)).as_deref(), Some("first"));
     }
 
     /// A line holding a word the field marks misspelled is read after JAWS's mark, "‹Misspelled
