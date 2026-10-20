@@ -75,6 +75,15 @@ may change a step's status; say which in the commit.
   (523/s6), and its ribbon positions (523/s1-s4).
 - Toasts (533): still unread by the tracer and by Okur; JAWS likely uses Windows' notification
   listener.
+- Rectangles of a DPI-unaware window at 125% (old-pc's AppliedDPI is 120; its screen is
+  1920x1080, 1536x864 to a DPI-unaware process): the round 70 tracer, per-monitor aware, got the
+  dialog fixture's Save button (WinForms) as [723,416,948,454], unscaled, where JAWS put the PC
+  cursor at "1045, 544", its middle scaled by 1.25 (516/s8); 513's older, DPI-unaware tracer
+  got it smaller by 1.25 twice ("668, 388" for JAWS's "1045, 607"). The mouse is right in both
+  (JAWS counts pixels from 1: 835,435 is "836, 436", 516/s2). Probe on old-pc which
+  windows UI Automation reports unscaled (WinForms only, or every DPI-unaware window), and
+  scale those by the window's DPI (`LogicalToPhysicalPointForPerMonitorDPI`) in the platform
+  layer, live and in the tracer; then record 513 and 516 again.
 
 ## 5. Owner questions
 

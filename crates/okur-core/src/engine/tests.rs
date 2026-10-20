@@ -4283,7 +4283,7 @@ fn the_jaws_and_pc_cursors() {
     );
     assert_eq!(
         engine.execute(Command::SayActiveCursor).as_deref(),
-        Some("JAWS Cursor active\n1834, 235\nApplication window restriction")
+        Some("JAWS Cursor active\n1835, 236\nApplication window restriction")
     );
     assert_eq!(
         engine.execute(Command::RouteJawsToPc).as_deref(),
@@ -4292,7 +4292,7 @@ fn the_jaws_and_pc_cursors() {
     assert!(actions
         .requests()
         .iter()
-        .any(|(what, _)| what == "mouse to 1045, 544"));
+        .any(|(what, _)| what == "mouse to 1044, 543"));
     assert_eq!(
         engine.execute(Command::PcCursor).as_deref(),
         Some("PC Cursor")

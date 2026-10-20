@@ -1058,16 +1058,18 @@ impl StepEvents {
             .unwrap_or(0)
             .saturating_sub(TICK_MS);
         // The caret moves too, so a field's text is known with its caret where the reset
-        // keys left it (401: Ctrl+Home and twelve Downs before Say Character).
+        // keys left it (401: Ctrl+Home and twelve Downs before Say Character); and the
+        // mouse, where the JAWS cursor starts (516/s2).
         let setup = events
             .iter()
             .filter(|e| {
-                (is_focus(e)
-                    || e.event == "foreground"
-                    || is_window_renamed(e)
-                    || matches!(e.event.as_str(), "caret" | "text_selection_change"))
-                    && e.t_ms < first_start
-                    && replayable(e)
+                e.t_ms < first_start
+                    && (e.mouse.is_some()
+                        || ((is_focus(e)
+                            || e.event == "foreground"
+                            || is_window_renamed(e)
+                            || matches!(e.event.as_str(), "caret" | "text_selection_change"))
+                            && replayable(e)))
             })
             .cloned()
             .collect();

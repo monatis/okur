@@ -51,16 +51,17 @@ impl ScreenReaderEngine {
 
     /// Alt+Delete: the active cursor and where it is, "PC Cursor active | 1045, 544"; the JAWS
     /// cursor adds its restriction, "Application window restriction" [obs, 513/s2, 516/s2,
-    /// s8].
+    /// s8]. JAWS counts the screen's pixels from 1: the mouse at 835, 435 is "836, 436" [obs,
+    /// 516/s2 and its trace].
     pub(super) fn say_active_cursor(&mut self) -> Option<String> {
         let (name, at) = match self.active_cursor {
             ActiveCursor::Pc => (msg::cursor_pc_active(), self.pc_cursor_point()),
             ActiveCursor::Jaws => (msg::cursor_jaws_active(), self.mouse),
         };
         let mut said = vec![name.to_string()];
-        said.extend(
-            at.map(|(x, y)| msg::cursor_position(x.to_string(), y.to_string()).to_string()),
-        );
+        said.extend(at.map(|(x, y)| {
+            msg::cursor_position((x + 1).to_string(), (y + 1).to_string()).to_string()
+        }));
         if self.active_cursor == ActiveCursor::Jaws {
             said.push(msg::cursor_restriction_application().to_string());
         }
@@ -70,9 +71,11 @@ impl ScreenReaderEngine {
         Some(said.join("\n"))
     }
 
-    /// Where the PC cursor is on the screen: the middle of the focused element.
+    /// Where the PC cursor is on the screen: the middle pixel of the focused element (its
+    /// right and bottom edges are outside it): the mouse Route JAWS to PC put on a button
+    /// 1000 to 1090 wide was at 1044 [obs, 516 traces].
     fn pc_cursor_point(&self) -> Option<(i32, i32)> {
         let [left, top, right, bottom] = self.focus_bounds?;
-        Some((left + (right - left) / 2, top + (bottom - top) / 2))
+        Some(((left + right - 1) / 2, (top + bottom - 1) / 2))
     }
 }

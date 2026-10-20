@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
-  "matched_steps": 2706,
+  "matched_steps": 2707,
   "total_steps": 2904,
   "accepted_divergences": 74,
   "errors": [],
@@ -2404,7 +2404,7 @@
     "515-web-select-all-skim-and-element-info/s8": "mismatch",
     "515-web-select-all-skim-and-element-info/s9": "mismatch",
     "516-desktop-jaws-cursor/s1": "match",
-    "516-desktop-jaws-cursor/s2": "mismatch",
+    "516-desktop-jaws-cursor/s2": "match",
     "516-desktop-jaws-cursor/s3": "match",
     "516-desktop-jaws-cursor/s4": "match",
     "516-desktop-jaws-cursor/s5": "match",
