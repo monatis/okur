@@ -1298,6 +1298,11 @@ impl ScreenReaderEngine {
                         self.cursor.jump_to_element_offset(entry.offset);
                         return None;
                     }
+                    // The controls list moves to a combo box as C does, its label said with it:
+                    // "Home branch Combo box collapsed Northside" [obs, 248/s3].
+                    ListKind::Elements(crate::element_lists::ElementList::Controls) => {
+                        self.cursor.control_speech_here()
+                    }
                     ListKind::Headings
                     | ListKind::FormFields
                     | ListKind::Features

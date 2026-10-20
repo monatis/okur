@@ -1023,6 +1023,24 @@ impl VirtualCursor {
         Some((header, position, whole))
     }
 
+    /// The control at the virtual cursor as its quick key says it, its label with it; the line
+    /// itself where it is not a control.
+    pub fn control_speech_here(&self) -> String {
+        let line = self.buffer.line_at_offset(self.offset);
+        let is_control = line
+            .and_then(|l| self.buffer.node(l.node_id))
+            .is_some_and(|n| {
+                matches!(
+                    n.role,
+                    Role::ComboBox | Role::Edit | Role::CheckBox | Role::RadioButton | Role::Button
+                )
+            });
+        match line {
+            Some(l) if is_control => self.control_focus_speech(l.start_offset, self.offset),
+            _ => self.current_line(),
+        }
+    }
+
     fn control_focus_speech(&self, offset: usize, previous: usize) -> String {
         let Some(node) = self
             .buffer
