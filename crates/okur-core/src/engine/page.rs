@@ -276,6 +276,59 @@ impl ScreenReaderEngine {
         Some(speech)
     }
 
+    /// Where the virtual cursor is, as Say Window Title adds it after the title (Insert+T):
+    /// the innermost region or article around the cursor by its first line ("article",
+    /// "Related stories complementary information"), its level (the page is 1, a region in it
+    /// 2, an article in the main region 3), and the last heading in it up to the cursor,
+    /// "heading is What changes". Tables, lists and sections without a name are not counted;
+    /// outside every region there is nothing [obs, 624, 625].
+    pub(super) fn title_context(&self) -> Vec<String> {
+        let buffer = &self.cursor.buffer;
+        let Some(line) = buffer.line_at_offset(self.cursor.offset) else {
+            return Vec::new();
+        };
+        let Some(root) = buffer.root_id.and_then(|r| buffer.node(r)) else {
+            return Vec::new();
+        };
+        let mut ancestors = Vec::new();
+        if !ancestors_of(root, line.node_id, &mut ancestors) {
+            return Vec::new();
+        }
+        let is_region = |node: &AomNode| {
+            matches!(node.role, Role::Landmark { .. })
+                || (node.role == Role::Group
+                    && node.attributes.get("aria_role").map(String::as_str) == Some("article"))
+        };
+        let mut regions: Vec<usize> = ancestors
+            .iter()
+            .filter(|n| is_region(n))
+            .map(|n| n.id)
+            .collect();
+        if buffer.node(line.node_id).is_some_and(is_region) {
+            regions.push(line.node_id);
+        }
+        let Some(&innermost) = regions.last() else {
+            return Vec::new();
+        };
+        let Some(start) = buffer.start_of(innermost) else {
+            return Vec::new();
+        };
+        let Some(name) = buffer.line_at_offset(start).map(|l| l.text.clone()) else {
+            return Vec::new();
+        };
+        let mut said = vec![name, msg::title_region_level(regions.len() + 1).to_string()];
+        let heading = buffer
+            .headings
+            .iter()
+            .rfind(|&&(at, _)| at >= start && at <= self.cursor.offset)
+            .and_then(|&(at, _)| buffer.line_at_offset(at))
+            .map(|l| l.text.clone());
+        if let Some(heading) = heading {
+            said.push(msg::title_heading_is(heading).to_string());
+        }
+        said
+    }
+
     /// The region markers for the landmarks around a page node, outermost first: `main`
     /// and forms (named or not) [obs, 19/s2; 204/s1].
     /// The lists and landmarks around `to` that are not around `from`, outermost first, each

@@ -143,14 +143,22 @@ impl ScreenReaderEngine {
                         .then(|| self.cursor.buffer.document_title().map(str::to_owned))
                         .flatten()
                 })?;
-                let speech = crate::announcement::Announcement::new(vec![
+                let mut lines = vec![
                     crate::announcement::Line::of(
                         crate::announcement::PartKind::Message,
                         msg::window_title_is(),
                     )
                     .short(""),
                     crate::announcement::Line::of(crate::announcement::PartKind::Name, title),
-                ]);
+                ];
+                // In a page, where the virtual cursor is: its region, level and heading
+                // [obs, 624, 625].
+                if self.app_mode == AppMode::VirtualBuffer && !self.forms_mode {
+                    lines.extend(self.title_context().into_iter().map(|part| {
+                        crate::announcement::Line::of(crate::announcement::PartKind::Message, part)
+                    }));
+                }
+                let speech = crate::announcement::Announcement::new(lines);
                 let speech = self.said(speech).render();
                 self.speech.speak(&speech, true);
                 return Some(speech);

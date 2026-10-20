@@ -23,6 +23,10 @@ okur-exiting = Okur exiting.
 # Said before a window's title (Insert+T), on a line of its own; with short messages the title
 # is said alone [obs, 581/s12].
 window-title-is = Title is
+# In a page, after the title: the region around the virtual cursor, its nesting level and the
+# heading it is under, "article | level 3 | heading is What changes" [obs, 624, 625].
+title-region-level = level { $level }
+title-heading-is = heading is { $heading }
 # Menus closed: the focus is back where it was.
 menus-left = Leaving menus
 # Said as a window's own menu bar is left from the bar itself (Alt, or Escape on the bar).

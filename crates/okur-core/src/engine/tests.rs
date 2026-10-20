@@ -494,6 +494,42 @@ fn test_engine_text_selection_and_font_query() {
     assert_eq!(no_sel, Some("Nothing selected".to_string()));
 }
 
+/// Insert+T in a page says, after the title, the region around the virtual cursor, its level
+/// and the heading it is under; at the top, outside every region, the title alone
+/// [obs, 624/s1, s9; 625/s5].
+#[test]
+fn say_window_title_in_a_page_says_where_the_cursor_is() {
+    let mut article = AomNode::new(2, Role::Group).with_children(vec![
+        AomNode::new(3, Role::Heading { level: 2 }).with_text("What changes"),
+        AomNode::new(4, Role::Paragraph).with_text("Membership costs less."),
+    ]);
+    article
+        .attributes
+        .insert("aria_role".to_owned(), "article".to_owned());
+    let main = AomNode::new(
+        1,
+        Role::Landmark {
+            landmark_type: "main".to_owned(),
+        },
+    )
+    .with_children(vec![article]);
+    let page = AomNode::new(0, Role::Document)
+        .with_name("News")
+        .with_children(vec![main]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.cursor.move_to_start();
+    assert_eq!(
+        engine.execute_command("SayWindowTitle").as_deref(),
+        Some("Title is\nNews")
+    );
+    engine.cursor.move_to_node_id(4);
+    assert_eq!(
+        engine.execute_command("SayWindowTitle").as_deref(),
+        Some("Title is\nNews\narticle\nlevel 3\nheading is What changes")
+    );
+}
+
 /// A selection of up to 1000 characters is read whole; a longer one is said by its size and its
 /// last 20 characters, a line break counting one: 13 lines of 80 are 1052, "1032 characters up
 /// to | d of all of it here." [obs, 617/s21, s24].
