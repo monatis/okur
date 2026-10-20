@@ -703,12 +703,17 @@ pub fn say_window(title: &str, items: &[crate::event::WindowItem]) -> String {
 /// spacebar.", "Text editor edit"; on old-pc "Read-only check box | not checked | To check
 /// press Spacebar. | alt+R" [obs, 323/s1].
 pub fn say_focus(focus: &FocusEvent) -> String {
-    control_lines(focus, false)
+    let mut lines: Vec<String> = control_lines(focus, false)
         .iter()
         .filter(|l| !l.on_arrival)
         .map(Line::render)
-        .collect::<Vec<_>>()
-        .join("\n")
+        .collect();
+    // A file dialog's file name field ends with the folder it saves to or opens from:
+    // "File name: edit combo | sr-dialog-copy.txt | Address: C:\Users\…" [obs, 524/s3].
+    if focus.role == Role::Edit && focus.container_role == Some(Role::ComboBox) {
+        lines.extend(focus.file_dialog_address.clone());
+    }
+    lines.join("\n")
 }
 
 /// The control as the reading keys say it on a native control that is not a text field: Say
@@ -1769,6 +1774,23 @@ To activate press Enter."
             norm(&focus_speech(&apply, None).render()),
             norm("Apply  \u{1d} Button \u{1e} \nTo activate press spacebar.\nalt+A")
         );
+    }
+
+    /// Say Focus in a file dialog's file name field ends with the dialog's folder [obs,
+    /// 524/s3]; another field of the dialog does not.
+    #[test]
+    fn say_focus_in_a_file_name_field_says_the_folder() {
+        let mut field = event(Role::Edit, "File name:");
+        field.container_role = Some(Role::ComboBox);
+        field.value = Some("notes.txt".to_owned());
+        field.file_dialog_address = Some("Address: C:\\Temp".to_owned());
+        assert_eq!(
+            norm(&say_focus(&field)),
+            norm("File name:  \u{1d} edit combo \u{1e} \nnotes.txt\nAddress: C:\\Temp")
+        );
+        let mut kind = event(Role::ComboBox, "Save as type:");
+        kind.file_dialog_address = field.file_dialog_address.clone();
+        assert!(!say_focus(&kind).contains("Address"));
     }
 
     /// A button in an unnamed toolbar, the focus coming from outside it: "Tool bar | Hide

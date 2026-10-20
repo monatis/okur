@@ -932,6 +932,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         .as_ref()
         .map(window_items)
         .unwrap_or_default();
+    focus.file_dialog_address = event.dialog_tree.as_ref().and_then(address_band);
     // An unnamed list or tree in a dialog is named by the text just before it, as MSAA names
     // a control by the label before it: "Regions Tree view" (JAWS's Document Regions
     // [obs, 241/s1, s6]).
@@ -1550,6 +1551,24 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     focus.bounds = event.focus_chain.last().and_then(|n| n.bounds);
     focus.in_ribbon = true;
     Some(focus)
+}
+
+/// A common file dialog's folder: its address bar's toolbar (`ToolbarWindow32`, control id
+/// 1001, in the address band) is named for it, "Address: C:\Users\…" [obs, 524/s3].
+fn address_band(node: &UiaNode) -> Option<String> {
+    let named = node
+        .name
+        .as_deref()
+        .map(str::trim)
+        .filter(|n| !n.is_empty());
+    if node.class_name.as_deref() == Some("ToolbarWindow32")
+        && node.automation_id.as_deref() == Some("1001")
+    {
+        if let Some(name) = named {
+            return Some(name.to_owned());
+        }
+    }
+    node.children.iter().find_map(address_band)
 }
 
 /// A Win32 toolbar's button with the focus: UI Automation's focus stays on the toolbar
@@ -4305,6 +4324,31 @@ mod tests {
             ),
             "the select, expanded"
         );
+    }
+
+    /// A file dialog's folder is its address bar's toolbar's name [obs, 524/s3].
+    #[test]
+    fn a_file_dialogs_folder_is_its_address_bars_name() {
+        let address = UiaNode {
+            class_name: Some("ToolbarWindow32".to_owned()),
+            automation_id: Some("1001".to_owned()),
+            ..node(50021, "Address: C:\\Temp", false)
+        };
+        let navigation = UiaNode {
+            class_name: Some("ToolbarWindow32".to_owned()),
+            automation_id: Some("41477".to_owned()),
+            ..node(50021, "Navigation buttons", false)
+        };
+        let band = UiaNode {
+            children: vec![navigation, address],
+            ..node(50033, "", false)
+        };
+        let dialog = UiaNode {
+            children: vec![band],
+            ..node(UIA_WINDOW, "Save As", false)
+        };
+        assert_eq!(address_band(&dialog).as_deref(), Some("Address: C:\\Temp"));
+        assert_eq!(address_band(&node(UIA_WINDOW, "Find", false)), None);
     }
 
     /// Tab onto a file dialog's toolbar button: UIA's focus stays on the toolbar, the MSAA

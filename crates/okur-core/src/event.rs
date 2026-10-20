@@ -188,6 +188,10 @@ pub struct FocusEvent {
     /// When a dialog box is in front: its controls in reading order, below the dialog itself
     /// (Say Window, Insert+B).
     pub window_items: Vec<WindowItem>,
+    /// A common file dialog's folder, as its address bar names it ("Address: C:\Users\…"):
+    /// Say Focus in its file name field ends with it [obs, 524/s3].
+    #[serde(default)]
+    pub file_dialog_address: Option<String>,
     /// The window in front is a dialog box.
     pub in_dialog_box: bool,
     pub window_title: Option<String>,
@@ -329,6 +333,7 @@ impl FocusEvent {
             dialog_buttons: Vec::new(),
             dialog_lines: Vec::new(),
             window_items: Vec::new(),
+            file_dialog_address: None,
             in_dialog_box: false,
             window_title: None,
             folder_name: None,
