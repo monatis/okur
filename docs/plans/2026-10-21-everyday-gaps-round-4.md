@@ -31,13 +31,29 @@ of the exclusion (§5).
 
 - 562: a large selection. JAWS reads it whole up to a size, then says "selected N characters up
   to" and the selection's last characters (s13: "selected 1032 characters up to ent information
-  end"). Find the size and how the end is cut from s2, s8, s13, s17, s20, and how JAWS counts
-  (link roles inside a list item are read in s8).
-- 565: Say Color's names (10 steps).
-- 560: the Word List (8 steps).
-- 566: Speech On Demand ("Not available in Full Speech mode"), and Insert+T's extra context (3).
-- 567/s8 (Insert+Numpad5 said "Email"), 567/s12.
-- 559 and 299: Jump to Line's targets; replay of its dialog's TypeKey keys.
+  end"). JAWS's counts (1032, 1482, 2035) are about a third above the copied text's (775, 1140,
+  1523) and below Okur's buffer's (1054, 1512, 2072: Okur has about twice JAWS's line breaks
+  there). 617 (round 82: fifteen plain 80-character paragraphs) gives the size, the count and
+  the end's length; build then.
+- 565, Say Color (10 steps): JAWS names a color from a table of its own ("blue2" for #0000ee,
+  "lime green 2" for #008000, "dark slate gray" for #123456, where X11's nearest is midnight
+  blue). Its table files are JAWS program files, not to be read: record a page of many colors
+  (the CSS names and an RGB grid), Insert+5 on each, and build the table from the recording.
+- 560, the Word List (Ctrl+Insert+W, W, Shift+W; 8 steps): JAWS lists the page's words by
+  frequency, apparently leaving common ones out ("m (10)" first of 143). Record its list on a
+  page of known words (its items and order) before building it.
+- 566/s7: Insert+T in a page adds "article | level 3 | heading is City Library Expands Evening
+  Hours" after the title; "level 3" is unexplained. Record Insert+T outside and inside articles
+  and at other depths. (566/s3 and s10 are built: `db8c087`.)
+- 567/s12: Down back onto the field just left by Up is silent in JAWS (audio without text in
+  every trial), but 283/s13 reads the field returned to after other lines. The difference is
+  not understood; a scenario with both orders on one form would tell. (567/s8 is built:
+  `db8c087`.)
+- 559 and 299, Jump to Line: in 559 JAWS's `TypeKey("1")` sent the focus back to the page (s2
+  traces the document's focus), so the first jump never happened (Shift+J says "No previous
+  jump"); the second ("99", Enter) went to the last line, as Okur's does. TypeKey's digits are
+  not a reliable way into JAWS's elevated dialog: find another (JAWS's own `TypeString`
+  function, or the edit's text set through FSAPI), and record 559 again.
 - 552-555: what still differs at each verbosity level on the forms fixture (7 steps each).
 
 ## 2. Verbosity, beyond what is built
