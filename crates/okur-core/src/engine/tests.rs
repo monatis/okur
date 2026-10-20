@@ -2526,6 +2526,50 @@ fn a_result_selected_again_says_its_name_alone() {
     );
 }
 
+/// Down in the Font dialog's font field: its list selects the next font and puts it in the
+/// field, and the dialog's style list follows, selecting its own item. The field's line is
+/// said with its own item's position [obs, 541/s3].
+#[test]
+fn an_edit_combos_line_is_said_with_its_items_position() {
+    let (mut engine, _speech) = engine_with_speech();
+    let text = |t: &str| crate::event::TextContext {
+        text: t.to_owned(),
+        caret: 0,
+        selection: Some((0, t.chars().count())),
+        font: None,
+        word: None,
+        misspelled: Vec::new(),
+    };
+    let mut field = FocusEvent::new(Role::Edit)
+        .with_name("Font:")
+        .with_item_index(38)
+        .with_item_count(187);
+    field.container_role = Some(Role::ComboBox);
+    field.value = Some("Consolas".to_owned());
+    field.text = Some(text("Consolas"));
+    engine.handle_focus_event(&field);
+    engine.handle_key_event(&key(Key::DownArrow));
+    let item = |name: &str, index: usize| {
+        AccessibilityEvent::Selected(
+            FocusEvent::new(Role::ListItem)
+                .with_name(name)
+                .with_item_index(index)
+                .with_item_count(187),
+        )
+    };
+    assert_eq!(
+        engine.handle_accessibility_event(&item("Constantia", 39)),
+        None
+    );
+    assert_eq!(engine.handle_accessibility_event(&item("Regular", 1)), None);
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&AccessibilityEvent::TextContext(text("Constantia")))
+            .as_deref(),
+        Some("Constantia\n39 of 187")
+    );
+}
+
 /// Windows Terminal notifies the console's echo of a typed "ı" (Turkish layout, dev box,
 /// 2026-10-17): typing echo says typed characters, so that notification says nothing; the
 /// output after it is said.

@@ -1191,14 +1191,27 @@ impl EventConverter {
                 return focus_event_from_trace(event).map(AccessibilityEvent::Selected);
             }
             "focus" if is_drop_down_item(event) => {
+                let last = self.last_focus.clone()?;
+                let name = event.object.as_ref().and_then(|o| o.name.clone());
+                let index = usize::try_from(event.id_child).ok().filter(|&i| i > 0);
+                // A combo box whose text field has the focus (the Font dialog's, whose lists
+                // stay open): its list's item is selected while the focus stays in the field.
+                // The dialog's other lists follow it, selecting their own items; the field's
+                // new text tells which item is its own [obs, 541/s3].
+                if last.role == okur_core::Role::Edit
+                    && last.container_role == Some(okur_core::Role::ComboBox)
+                {
+                    let mut item = okur_core::FocusEvent::new(okur_core::Role::ListItem);
+                    item.name = name;
+                    item.item_index = index;
+                    item.item_count = last.item_count;
+                    return Some(AccessibilityEvent::Selected(item));
+                }
                 // Arrow keys in an open combo box move focus into its drop-down list; JAWS
                 // speaks that as the combo box's new value [obs, 304/s12].
-                let mut combo = self
-                    .last_focus
-                    .clone()
-                    .filter(|f| f.role == okur_core::Role::ComboBox)?;
-                combo.value = event.object.as_ref().and_then(|o| o.name.clone());
-                combo.item_index = usize::try_from(event.id_child).ok().filter(|&i| i > 0);
+                let mut combo = Some(last).filter(|f| f.role == okur_core::Role::ComboBox)?;
+                combo.value = name;
+                combo.item_index = index;
                 self.last_focus = Some(combo.clone());
                 return Some(AccessibilityEvent::Change {
                     kind: ChangeKind::Value,
@@ -4247,6 +4260,43 @@ mod tests {
                         && control.states.expanded == Some(true)
             ),
             "the select, expanded"
+        );
+    }
+
+    /// Down in the Font dialog's font field: its open list's item takes the WinEvent focus
+    /// while the focus stays in the field. It is a selection, with its index [obs, 541/s3].
+    #[test]
+    fn an_edit_combos_list_item_is_a_selection() {
+        const COMBO_BOX: i32 = 50003;
+        const EDIT: i32 = 50004;
+        const MSAA_LISTITEM: i32 = 0x22;
+        let field = TraceEvent {
+            focus_chain: vec![node(COMBO_BOX, "Font:", false), node(EDIT, "Font:", true)],
+            ..focus_event(Vec::new())
+        };
+        let item = TraceEvent {
+            window_class: Some("ComboLBox".to_owned()),
+            id_child: 39,
+            object: Some(TraceObject {
+                role: Some(MSAA_LISTITEM),
+                name: Some("Constantia".to_owned()),
+                value: None,
+                states: 0,
+                shortcut: None,
+            }),
+            focus_chain: field.focus_chain.clone(),
+            ..focus_event(Vec::new())
+        };
+        let mut converter = EventConverter::default();
+        assert_eq!(converter.convert(&field).len(), 1);
+        assert!(
+            matches!(
+                converter.convert(&item).as_slice(),
+                [okur_core::AccessibilityEvent::Selected(selected)]
+                    if selected.name.as_deref() == Some("Constantia")
+                        && selected.item_index == Some(39)
+            ),
+            "the font, selected"
         );
     }
 

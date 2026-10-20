@@ -134,8 +134,25 @@ impl ScreenReaderEngine {
         let before = self.last_text.replace(context.clone());
         let key = self.pending_edit.take()?;
         let field = self.text_field_line();
-        let speech =
+        let mut speech =
             crate::editing::speech_in(key, before.as_ref(), context, &field, self.in_plain_edit())?;
+        // An edit combo's line is the item its list selected: said with its position
+        // ("Constantia | 39 of 187" [obs, 541/s3]).
+        if key == crate::editing::EditKey::Line {
+            let count = self
+                .last_native_focus
+                .as_ref()
+                .filter(|f| f.container_role == Some(crate::aom::Role::ComboBox))
+                .and_then(|f| f.item_count);
+            let index = self
+                .combo_items
+                .iter()
+                .find(|(name, _)| name == speech.trim())
+                .map(|(_, index)| *index);
+            if let (Some(index), Some(count)) = (index, count) {
+                speech = format!("{speech}\n{}", msg::position(index, count));
+            }
+        }
         tracing::debug!(?key, %speech, "edit speech");
         self.edit_read_in_console = self
             .last_native_focus

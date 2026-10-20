@@ -111,6 +111,9 @@ pub struct ScreenReaderEngine {
     /// The item a field's list last selected, since the focus last moved: the same one again
     /// says its name alone.
     last_selected: Option<String>,
+    /// Items an edit combo's lists selected since the last key, with their positions: the one
+    /// the field's new text names is its own [obs, 541/s3].
+    combo_items: Vec<(String, usize)>,
     /// The character the last key typed, if it typed one: a console's notification of just
     /// that character is its echo of the key.
     last_typed: Option<char>,
@@ -268,6 +271,7 @@ impl ScreenReaderEngine {
             page_focus_is_field: false,
             last_native_focus: None,
             last_selected: None,
+            combo_items: Vec::new(),
             last_typed: None,
             typed_word: String::new(),
             edit_read_in_console: false,
@@ -426,6 +430,7 @@ impl ScreenReaderEngine {
         self.page_said_for = None;
         self.focus_at_key = self.last_page_focus;
         self.select_opened = false;
+        self.combo_items.clear();
 
         // A Say All key steers the reading instead of ending it.
         if let Some(action) = self.say_all_key(event) {

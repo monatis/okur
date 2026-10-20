@@ -417,11 +417,17 @@ impl ScreenReaderEngine {
         // A selection is read while the focus stays in a text field (a search box's results
         // or suggestions); where the focus moves with the selection (a list), the focus says
         // the item.
-        if !self
-            .last_native_focus
-            .as_ref()
-            .is_some_and(|f| f.role == Role::Edit)
-        {
+        let field = self.last_native_focus.as_ref()?;
+        if field.role != Role::Edit {
+            return None;
+        }
+        // An edit combo's list: Up and Down put the item they select in the field, whose line
+        // is then read with the item's position [obs, 541/s3, s4]. The dialog's other lists
+        // follow it, selecting their own items, which are not the field's text.
+        if field.container_role == Some(Role::ComboBox) {
+            if let (Some(name), Some(index)) = (&item.name, item.item_index) {
+                self.combo_items.push((name.trim().to_owned(), index));
+            }
             return None;
         }
         let name = item
