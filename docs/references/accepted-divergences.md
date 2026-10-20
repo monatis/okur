@@ -299,11 +299,13 @@ A step can be in more than one entry; all of its entries apply.
 
 ### JAWS reads nothing of WordPad's document
 
-- Steps: `522-desktop-wordpad-reading/s1` to `/s6`, `/s8` to `/s14`, `/s16` to `/s18` (the
-  full keys: `522-desktop-wordpad-reading/s1`, `522-desktop-wordpad-reading/s2`,
+- Steps: `522-desktop-wordpad-reading/s1` to `/s14`, `/s16` to `/s18` (the full keys:
+  `522-desktop-wordpad-reading/s1`, `522-desktop-wordpad-reading/s2`,
   `522-desktop-wordpad-reading/s3`, `522-desktop-wordpad-reading/s4`,
   `522-desktop-wordpad-reading/s5`, `522-desktop-wordpad-reading/s6`,
-  `522-desktop-wordpad-reading/s8`, `522-desktop-wordpad-reading/s9`,
+  `522-desktop-wordpad-reading/s7` (Say Word, added 2026-10-20 when Okur's laptop layout began
+  reading a field's word with Insert+Numpad5 as JAWS's does), `522-desktop-wordpad-reading/s8`,
+  `522-desktop-wordpad-reading/s9`,
   `522-desktop-wordpad-reading/s10`, `522-desktop-wordpad-reading/s11`,
   `522-desktop-wordpad-reading/s12`, `522-desktop-wordpad-reading/s13`,
   `522-desktop-wordpad-reading/s14`, `522-desktop-wordpad-reading/s16`,

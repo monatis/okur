@@ -893,19 +893,34 @@ impl ScreenReaderEngine {
             let _ = self.start_field_say_all();
             return;
         }
-        if self.editing_text() && layout_command == Some(Command::SayWord) {
+        // The desktop layout's Say Word (Insert+Numpad5) reads the field in the laptop layout
+        // too, as JAWS's did: "Misspelled teh" [obs, 567/s8].
+        let word_command = layout_command
+            .clone()
+            .or_else(|| crate::command::command_for(event));
+        if self.editing_text() && word_command == Some(Command::SayWord) {
             // Pressed twice quickly, the word is spelled [obs, 406/s2, s5].
             if self.presses(Press::Command(Command::SayWord), event.time_ms, 2) == 2 {
                 let _ = self.spell(false);
                 return;
             }
+            // A misspelled word says so first, as the word keys do [obs, 567/s8].
             let word = self
                 .last_text
                 .as_ref()
-                .map(crate::editing::word_around)
+                .map(|text| {
+                    let mark = crate::editing::misspelled_word_mark(text).unwrap_or_default();
+                    let word = crate::editing::word_around(text);
+                    let word = word.trim();
+                    if word.is_empty() {
+                        String::new()
+                    } else {
+                        format!("{mark}{word}")
+                    }
+                })
                 .unwrap_or_default();
-            if !word.trim().is_empty() {
-                self.speech.speak(word.trim(), true);
+            if !word.is_empty() {
+                self.speech.speak(&word, true);
             }
             return;
         }

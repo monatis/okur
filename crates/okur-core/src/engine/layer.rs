@@ -1,7 +1,7 @@
 //! The Insert+Space layer: Insert+Space, released, then one key (JAWS 2025 help, Layered
 //! Keystrokes). H opens the Speech History, Shift+H clears it and Ctrl+H copies it; S turns
-//! speech off and on. Escape, Space, Tab and Enter leave the layer, as any other key does
-//! [obs, 517, 570].
+//! speech off and on, and Shift+S (Speech On Demand) is not available in full speech. Escape,
+//! Space, Tab and Enter leave the layer, as any other key does [obs, 517, 566, 570].
 
 use super::{AppMode, ScreenReaderEngine};
 use crate::input::{Key, KeyAction, KeyEvent};
@@ -41,6 +41,12 @@ impl ScreenReaderEngine {
             // Shift+H forgets the Speech History, silently [obs, 570/s6].
             Key::Alpha('H') if shift_only => self.speech.clear_history(),
             Key::Alpha('H') if ctrl_only => self.copy_speech_history(),
+            // Shift+S, Speech On Demand: JAWS's other speech mode, which Okur does not have;
+            // in full speech JAWS says it is not available [obs, 566/s3, s10].
+            Key::Alpha('S') if shift_only => {
+                self.speech
+                    .speak(msg::speech_on_demand_unavailable().as_str(), true);
+            }
             Key::Alpha('S') if plain => {
                 self.speech_muted = !self.speech_muted;
                 self.speech.set_muted(self.speech_muted);

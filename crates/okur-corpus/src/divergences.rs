@@ -341,6 +341,7 @@ divergences! {
         "522-desktop-wordpad-reading/s4",
         "522-desktop-wordpad-reading/s5",
         "522-desktop-wordpad-reading/s6",
+        "522-desktop-wordpad-reading/s7",
         "522-desktop-wordpad-reading/s8",
         "522-desktop-wordpad-reading/s9",
         "522-desktop-wordpad-reading/s10",

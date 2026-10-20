@@ -88,6 +88,8 @@ rate-slower = Slower
 speech-history-title = Speech History
 # Ctrl+H in the layer put the Speech History on the clipboard [obs, 570/s3].
 speech-history-copied = Copy speech history to clipboard
+# Shift+S in the layer, Speech On Demand, in full speech [obs, 566/s3, s10].
+speech-on-demand-unavailable = Not available in Full Speech mode
 
 ## Say Default Button (Insert+E) and the settings in use (Insert+Q) [obs, 513]
 
