@@ -123,7 +123,7 @@ mod tests {
     /// The question's id, from what was sent to the window host.
     fn shown(ui: &RecordingUiHost) -> Option<u32> {
         ui.take().into_iter().find_map(|message| match message {
-            ToUi::DialogShow { dialog } if dialog.title == "Exit Okur" => Some(dialog.id),
+            ToUi::DialogShow { dialog } if dialog.title == "Quit Okur" => Some(dialog.id),
             _ => None,
         })
     }

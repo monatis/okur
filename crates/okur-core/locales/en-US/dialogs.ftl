@@ -45,14 +45,12 @@ settings-ok = OK
 settings-cancel = Cancel
 settings-apply = &Apply
 
-## The question before Okur exits (Insert+F4, JAWS's ShutDownJAWS). JAWS's help says only
-## that "a dialog is brought up to confirm whether or not you wish to exit", Enter exits and
-## Escape returns. These words are Okur's own, in plain words, until scenario 571
-## (corpus/pending/571-desktop-quit-question.json) records JAWS's title, question and
-## buttons: then its evidence's words replace them.
+## The question before Okur exits (Insert+F4, JAWS's ShutDownJAWS), JAWS's words with Okur's name:
+## "Quit JAWS dialog | Are you sure you want to quit JAWS?  Press Enter to quit now, or Escape
+## to cancel. | OK Button", and Tab to "Cancel Button" [obs, 571/s1, s2].
 
-quit-title = Exit Okur
-quit-question = Do you want to exit Okur?
+quit-title = Quit Okur
+quit-question = Are you sure you want to quit Okur?  Press Enter to quit now, or Escape to cancel.
 quit-ok = OK
 quit-cancel = Cancel
 

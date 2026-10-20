@@ -126,7 +126,7 @@ cargo build --release -p okur -p okur-ui -p okur-setup
    `Start-Process .\okur-sr-no-uiaccess.exe -ArgumentList '--ease-of-access'` twice: one
    process. Hold both Shift keys while starting it with `--sign-in`: no process. Listen: no
    console window flashes.
-3. **M2.** With `okur.exe run` in front of Notepad: Insert+F4 opens "Exit Okur"; Escape, then
+3. **M2.** With `okur.exe run` in front of Notepad: Insert+F4 opens "Quit Okur"; Escape, then
    Insert+Tab reads Notepad. Insert+F4, Enter: "Okur exiting.", the process is gone, and
    `okur keys`' modifier guard reports no held key. Then import 571 and write J2's scenario.
 4. **M3 and E1 with the certificate** (needs the owner's yes, Q1). On the dev box:

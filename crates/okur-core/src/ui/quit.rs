@@ -80,7 +80,7 @@ mod tests {
     #[test]
     fn the_question_is_static_text_with_ok_the_default() {
         let spec = QuitDialog::new(7).spec();
-        assert_eq!(spec.title, "Exit Okur");
+        assert_eq!(spec.title, "Quit Okur");
         let kinds: Vec<(&str, &ControlKind)> = spec
             .controls
             .iter()
@@ -92,7 +92,8 @@ mod tests {
                 (
                     "question",
                     &ControlKind::Message {
-                        text: "Do you want to exit Okur?".to_owned()
+                        text: "Are you sure you want to quit Okur?  Press Enter to quit now, or Escape to cancel."
+                            .to_owned()
                     }
                 ),
                 ("ok", &ControlKind::Button { default: true }),

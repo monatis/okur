@@ -129,6 +129,12 @@ divergences! {
      list is \"... List\": a typo in JAWS's text, not a name to copy.",
     "the owner's rule on JAWS's accidents, 2026-10-18";
 
+    Difference::JawsAlsoSays("Unloading JAWS") => ["571-desktop-quit-question/s1"],
+    "Insert+F4 says \"Unloading JAWS\" before it asks whether to quit, and JAWS stays when \
+     the question is answered no (571/s3): it is not unloading yet. Okur asks first and says \
+     its exit words only when it exits.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-20";
+
     Difference::OkurAlsoSays("\u{1f600}") => [
         "312-desktop-virtualize-control/s3",
         "312-desktop-virtualize-control/s4",

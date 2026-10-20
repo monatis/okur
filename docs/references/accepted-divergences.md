@@ -100,6 +100,15 @@ A step can be in more than one entry; all of its entries apply.
   named "... List". It is a typo in JAWS's text; Okur shows "Radio Buttons List".
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### JAWS says it is unloading before it asks
+
+- Step: `571-desktop-quit-question/s1`.
+- Difference: JAWS also says "Unloading JAWS" before its question "Quit JAWS dialog | Are you
+  sure you want to quit JAWS?".
+- Why: JAWS has not begun to unload: answered no (Escape), it stays (571/s3). Okur asks
+  first and says its exit words only as it exits.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-20.
+
 ### JAWS's control view drops an emoji
 
 - Steps: `312-desktop-virtualize-control/s3`, `/s4`, `/s9`, `/s14` (the full keys:
