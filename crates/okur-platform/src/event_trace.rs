@@ -22,6 +22,8 @@ const CHROMIUM_TOP_WINDOW: &str = "Chrome_WidgetWin_1";
 /// The window of the Windows 10 taskbar's news and weather widget (its title is the weather).
 const NEWS_AND_WEATHER_CLASS: &str = "DynamicContent2";
 const UIA_TREEITEM: i32 = 50024;
+const UIA_TREE: i32 = 50023;
+const UIA_LIST: i32 = 50008;
 const UIA_TEXT: i32 = 50020;
 const UIA_BUTTON: i32 = 50000;
 const UIA_EDIT: i32 = 50004;
@@ -898,6 +900,27 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         .as_ref()
         .map(window_items)
         .unwrap_or_default();
+    // An unnamed list or tree in a dialog is named by the text just before it, as MSAA names
+    // a control by the label before it: "Regions Tree view" (JAWS's Document Regions
+    // [obs, 241/s1, s6]).
+    if matches!(
+        focus.container_role,
+        Some(okur_core::Role::Tree | okur_core::Role::List)
+    ) && focus
+        .container_name
+        .as_deref()
+        .is_none_or(|n| n.trim().is_empty())
+    {
+        let container = event
+            .focus_chain
+            .iter()
+            .rev()
+            .skip(1)
+            .find(|n| matches!(n.control_type, UIA_TREE | UIA_LIST) && n.runtime_id.is_some());
+        if let (Some(container), Some(tree)) = (container, &event.dialog_tree) {
+            focus.container_name = label_before(tree, container.runtime_id.as_deref());
+        }
+    }
     // JAWS names buttons by their MSAA role: ROLE_SYSTEM_BUTTONMENU is a "button menu"
     // even when UIA reports a plain button [obs, 204/s11–s12].
     if focus.role == okur_core::Role::Button
@@ -1366,6 +1389,29 @@ fn live_region_events(event: &TraceEvent) -> Vec<okur_core::AccessibilityEvent> 
         });
     }
     events
+}
+
+/// The text just before the control with `runtime_id` among its siblings in a dialog's tree:
+/// the label that names it.
+fn label_before(tree: &UiaNode, runtime_id: Option<&[i32]>) -> Option<String> {
+    let runtime_id = runtime_id?;
+    let at = tree
+        .children
+        .iter()
+        .position(|c| c.runtime_id.as_deref() == Some(runtime_id));
+    match at {
+        Some(i) => i
+            .checked_sub(1)
+            .and_then(|before| tree.children.get(before))
+            .filter(|before| before.control_type == UIA_TEXT)
+            .and_then(|before| before.name.clone())
+            .map(|name| crate::screen_lines::without_accelerators(&name))
+            .filter(|name| !name.trim().is_empty()),
+        None => tree
+            .children
+            .iter()
+            .find_map(|child| label_before(child, Some(runtime_id))),
+    }
 }
 
 /// The window a menu bar's focus report gives the focus back to as its menus end (a focus

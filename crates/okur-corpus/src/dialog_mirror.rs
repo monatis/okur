@@ -49,6 +49,29 @@ impl DialogMirror {
         self.dialog.is_some()
     }
 
+    /// The focus as Okur's window would report it where JAWS's dialog differs: Okur's list
+    /// or tree is named by the label above it (okur-ui draws one), where JAWS's Document
+    /// Regions tree has none in its window ("Regions Tree view" [obs, 241/s1]).
+    pub fn as_okur_window(&self, focus: &mut FocusEvent) {
+        let Some(dialog) = &self.dialog else {
+            return;
+        };
+        let unnamed = focus
+            .container_name
+            .as_deref()
+            .is_none_or(|n| n.trim().is_empty());
+        let label = match focus.container_role {
+            Some(Role::Tree) if unnamed => dialog.controls.iter().find_map(|c| match c.kind {
+                ControlKind::Tree { .. } => Some(plain(&c.label)),
+                _ => None,
+            }),
+            _ => None,
+        };
+        if label.is_some() {
+            focus.container_name = label;
+        }
+    }
+
     /// The focus moved in the traced dialog: which control of Okur's it is, and the window's
     /// report of a list item selected or a radio button checked by it.
     pub fn focus(&mut self, focus: &FocusEvent) -> Vec<FromUi> {

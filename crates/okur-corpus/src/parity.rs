@@ -420,7 +420,11 @@ fn run_scenario(
                 // Replay the OS events recorded while JAWS handled this step (e.g. the focus
                 // change that follows Tab), exactly as the live listener would deliver them.
                 for event in replay.for_step(&step.id) {
-                    for converted in converter.convert(&event) {
+                    for mut converted in converter.convert(&event) {
+                        // Where JAWS's dialog differs from Okur's window, the focus is Okur's.
+                        if let okur_core::AccessibilityEvent::Focus(focus) = &mut converted {
+                            mirror.as_okur_window(focus);
+                        }
                         note_text(&mut last_text, &converted);
                         if let Some(speech) = engine.handle_accessibility_event(&converted) {
                             if spoken.is_empty() {
