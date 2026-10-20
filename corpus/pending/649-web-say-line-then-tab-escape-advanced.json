@@ -1,0 +1,37 @@
+{
+  "id": "649-web-say-line-then-tab-escape-advanced",
+  "name": "Say Line (Insert+Up) after the sign-up form loads, which moves nothing, then Tab and Escape: whether any key before Tab, or only a move, brings forms mode and the usage hints (at JAWS's Advanced verbosity, DEFAULT.JCF Options Verbosity=2; otherwise as 631-web-say-line-then-tab-escape)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Escape"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "2"
+      }
+    }
+  }
+}

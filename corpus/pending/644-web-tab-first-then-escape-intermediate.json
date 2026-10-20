@@ -1,0 +1,42 @@
+{
+  "id": "644-web-tab-first-then-escape-intermediate",
+  "name": "Tab as the first key after the sign-up form loads, then Escape: whether forms mode is on (\"virtual PC Cursor\") where 204 and 622 had no usage hints, then Tab again and Escape (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 629-web-tab-first-then-escape)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Escape"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}
