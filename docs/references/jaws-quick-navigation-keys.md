@@ -37,7 +37,7 @@ the Say All command".
 | A | MoveToNextRadioButton | Radio Button | built | |
 | B | MoveToNextButton | Button | built | |
 | C | MoveToNextCombo | Combo Box, List Box, or Tree View | built | |
-| D | MoveToNextDifferentElement | Different Type Element | gap | 290 |
+| D | MoveToNextDifferentElement | Different Type Element | built | 290, 558 |
 | E | MoveToNextEdit | Edit Box | built | |
 | F | FocusToNextField | Form Control | built | |
 | G | MoveToNextGraphic | Graphic | built | |
@@ -52,7 +52,7 @@ the Say All command".
 | P | SayNextParagraph | Paragraph | built | 291 |
 | Q | MoveToMainRegion (Shift+Q too) | Main Region | built | |
 | R | MoveToNextRegion | Region | built | |
-| S | MoveToNextSameElement | Same Type Element | gap | 290 |
+| S | MoveToNextSameElement | Same Type Element | built | 290, 558 |
 | T | MoveToNextTable | Table | built | |
 | U | MoveToNextUnvisitedLink | Unvisited Link | partial: every link counts as unvisited | |
 | V | MoveToNextVisitedLink | Visited Link | gap: needs the visited state (IA2's traversed) | |
@@ -74,8 +74,8 @@ the Say All command".
 | Keys | JAWS command | Okur | Scenario |
 |---|---|---|---|
 | Insert+Enter, Insert+Shift+Enter | MoveToNext/PriorNonLinkText | built | 289 |
-| Ctrl+Insert+Right / Left | MoveToNext/PriorDifferentElement | gap | 290 |
-| Ctrl+Insert+Up | MoveToPriorSameElement | gap | 290 |
+| Ctrl+Insert+Right / Left | MoveToNext/PriorDifferentElement | built | 290, 558 |
+| Ctrl+Insert+Up | MoveToPriorSameElement | built | 290, 558 |
 | Alt+Insert+Home / End | MoveToFirstHeading / moveToLastHeading | built | 295 |
 | Ctrl+Alt+Insert+1..6, with Shift | MoveToFirstHeadingLevelN / MoveToLastHeadingLevelN | built | 295 |
 | Ctrl+Insert+Shift+Enter | moveToPriorHeading | gap | |

@@ -47,3 +47,9 @@ math-viewer-entered = Math Viewer. Press Escape to exit.
 quicknav-none-mail-links = There are no mail links on this page.
 quicknav-none-separators = There are no separators on this page.
 quicknav-none-divisions = There are no divisions on this page.
+
+# S and Shift+S where the cursor is on no element (a list's start) [obs, 558/s11, s12].
+quicknav-none-same-next = No more elements of same type found
+quicknav-none-same-prior = No prior elements of same type found
+# D on a page whose elements are all of one type. JAWS's wording was not recorded.
+quicknav-none-different = No more elements of different type found

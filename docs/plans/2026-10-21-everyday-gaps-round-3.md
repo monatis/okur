@@ -53,8 +53,8 @@ may change a step's status; say which in the commit.
 
 ## 3. Reading and quick keys
 
-- S and D (same and different element), Ctrl+Insert+Right, Left and Up [290]: what JAWS counts
-  as an element's type needs a recording of its own on a simpler page.
+- S and D (same and different element), Ctrl+Insert+Right, Left and Up [290, 558]: done
+  2026-10-20 (text, a link kind, a heading level and a list's bullet are the types).
 - Step past and before an element (Shift+Period, Shift+Comma, Alt+Win+End and Home) [294].
 - Say All in replay: steps stopped by a timed key cannot match without a speech clock; a model
   of JAWS's speaking pace (words per second at old-pc's rate) would let replay stop where JAWS

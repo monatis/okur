@@ -225,6 +225,10 @@ enum Commands {
         /// Only lines whose text contains this
         #[arg(long)]
         grep: Option<String>,
+
+        /// Also print each line's spans: offsets, node, role and text
+        #[arg(long)]
+        spans: bool,
     },
     /// Capture the foreground window's document as a raw UIA snapshot (Windows)
     Snapshot {
@@ -1809,7 +1813,11 @@ async fn main() {
                 }
             }
         }
-        Some(Commands::Lines { snapshot, grep }) => {
+        Some(Commands::Lines {
+            snapshot,
+            grep,
+            spans,
+        }) => {
             let loaded = okur_corpus::snapshots::load(Path::new(&snapshot)).unwrap_or_else(|e| {
                 eprintln!("{e}");
                 std::process::exit(1);
@@ -1828,6 +1836,24 @@ async fn main() {
                     line.text,
                     line.speech
                 );
+                if !spans {
+                    continue;
+                }
+                for span in buffer.spans.iter().filter(|s| {
+                    s.start_offset >= line.start_offset && s.end_offset <= line.end_offset
+                }) {
+                    println!(
+                        "      {:>6}..{:<6} node {:<5} {:<16} {:?}",
+                        span.start_offset,
+                        span.end_offset,
+                        span.node_id,
+                        format!("{:?}", span.role),
+                        buffer
+                            .text
+                            .get(span.start_offset..span.end_offset)
+                            .unwrap_or_default()
+                    );
+                }
             }
         }
         Some(Commands::Invariants {

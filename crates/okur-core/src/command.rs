@@ -96,6 +96,15 @@ pub enum Command {
     NextNonLinkText,
     /// Shift+N and Insert+Shift+Enter: the prior one.
     PriorNonLinkText,
+    /// S: the next element of the type at the cursor (JAWS's MoveToNextSameElement).
+    NextSameElement,
+    /// Shift+S and Ctrl+Insert+Up: the prior one (MoveToPriorSameElement).
+    PriorSameElement,
+    /// D and Ctrl+Insert+Right: the next element of another type
+    /// (MoveToNextDifferentElement).
+    NextDifferentElement,
+    /// Shift+D and Ctrl+Insert+Left: the prior one (MoveToPriorDifferentElement).
+    PriorDifferentElement,
 
     // Tables.
     TableCellRight,
@@ -357,6 +366,10 @@ impl Command {
             "MoveToFlowFrom" => FlowFrom,
             "N" | "n" | "MoveToNextNonLinkText" | "Insert+Enter" => NextNonLinkText,
             "Shift+N" | "MoveToPriorNonLinkText" | "Insert+Shift+Enter" => PriorNonLinkText,
+            "S" | "s" | "MoveToNextSameElement" => NextSameElement,
+            "Shift+S" | "MoveToPriorSameElement" | "Ctrl+Insert+Up" => PriorSameElement,
+            "D" | "d" | "MoveToNextDifferentElement" | "Ctrl+Insert+Right" => NextDifferentElement,
+            "Shift+D" | "MoveToPriorDifferentElement" | "Ctrl+Insert+Left" => PriorDifferentElement,
             "+H" | "+h" | "MoveToPriorHeading" => MoveToPrior(Heading),
             "1" | "MoveToNextHeadingLevelOne" => MoveToNext(HeadingLevel(1)),
             "2" | "MoveToNextHeadingLevelTwo" => MoveToNext(HeadingLevel(2)),
@@ -747,6 +760,11 @@ static BINDINGS: &[Binding] = &{
         // Selecting by word, before the word keys that would take it [obs, 501/s5].
         bind(RightArrow, CTRL_SHIFT, SelectNextWord),
         bind(LeftArrow, CTRL_SHIFT, SelectPriorWord),
+        // Elements by type, before the paragraph and word keys that would take them
+        // (Default.JKM's virtual keys).
+        bind(UpArrow, CTRL_INSERT, PriorSameElement),
+        bind(RightArrow, CTRL_INSERT, NextDifferentElement),
+        bind(LeftArrow, CTRL_INSERT, PriorDifferentElement),
         // Paragraphs and words.
         bind(DownArrow, ANY.ctrl(Yes), SayNextParagraph),
         bind(UpArrow, ANY.ctrl(Yes), SayPriorParagraph),
@@ -987,6 +1005,10 @@ static BINDINGS: &[Binding] = &{
         bind(Alpha('P'), ALONE, SayNextParagraph),
         bind(Alpha('N'), SHIFT, PriorNonLinkText),
         bind(Alpha('N'), ALONE, NextNonLinkText),
+        bind(Alpha('S'), SHIFT, PriorSameElement),
+        bind(Alpha('S'), ALONE, NextSameElement),
+        bind(Alpha('D'), SHIFT, PriorDifferentElement),
+        bind(Alpha('D'), ALONE, NextDifferentElement),
         bind(Alpha('J'), SHIFT, JumpReturnFromLine),
         bind(Alpha('J'), ALONE, JumpToLine),
         bind(

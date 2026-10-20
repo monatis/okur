@@ -61,6 +61,39 @@ impl FocusFrom {
     }
 }
 
+/// An element S and D stop on ([`VirtualCursor::move_by_element_type`]).
+#[derive(Debug, Clone, Copy)]
+struct ElementStop {
+    offset: usize,
+    node_id: usize,
+    /// None for the lines that are no element (a list's or a region's start and end).
+    kind: Option<ElementType>,
+    /// The span the element is in: a list item's bullet and its first element share one.
+    span_start: usize,
+    span_end: usize,
+    /// A list item's bullet.
+    marker: bool,
+}
+
+/// What S and D compare. Text is one type wherever it is (a paragraph, a list item, a
+/// division): D from a paragraph passes the lists after it to the next heading [obs,
+/// 558/s24]. A link's type is the one it is said with: S from a same page link passes a link
+/// to another page [obs, 558/s14, s15]; a heading's includes its level [obs, 558/s19].
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum ElementType {
+    Text,
+    Heading(u32),
+    Link(LinkType),
+    Other(std::mem::Discriminant<Role>),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum LinkType {
+    SamePage,
+    Mail,
+    Plain,
+}
+
 /// The Virtual Cursor providing reading navigation and quick key primitives over a VirtualBuffer.
 #[derive(Debug, Clone)]
 pub struct VirtualCursor {
@@ -607,6 +640,201 @@ impl VirtualCursor {
             }
         }
         targets
+    }
+
+    /// Moves to the next or prior element of the same type as the one at the cursor (`S`,
+    /// `Shift+S`, Ctrl+Insert+Up), or of a different type (`D`, `Shift+D`, Ctrl+Insert+Right
+    /// and Left). An element is a piece of text, a link or a heading as the page shows it
+    /// ([`ElementStop`]); a search past the last goes on from the top ("wrapping to top"),
+    /// and finds the element itself when it is its type's only one [obs, 558/s2-s5]. A line
+    /// that opens or closes a list or a region is no element: S there finds nothing [obs,
+    /// 558/s11, s12; 290/s4-s6], D the next element [obs, 290/s7].
+    pub fn move_by_element_type(&mut self, same: bool, forward: bool) -> String {
+        self.selection = None;
+        let (min, max) = self.active_modal_range().unwrap_or((0, self.buffer.len()));
+        let stops: Vec<ElementStop> = self
+            .element_stops()
+            .into_iter()
+            .filter(|s| s.offset >= min && s.offset <= max)
+            .collect();
+        let here = stops
+            .iter()
+            .rposition(|s| s.offset <= self.offset)
+            .and_then(|i| stops.get(i));
+        let here_type = here.and_then(|s| s.kind);
+        let here_offset = here.map_or(self.offset, |s| s.offset);
+        if same && here_type.is_none() {
+            return if forward {
+                msg::quicknav_none_same_next().to_string()
+            } else {
+                msg::quicknav_none_same_prior().to_string()
+            };
+        }
+        let wanted = |s: &&ElementStop| {
+            s.kind.is_some()
+                && if same {
+                    s.kind == here_type
+                } else {
+                    s.kind != here_type
+                }
+        };
+        let found = if forward {
+            stops
+                .iter()
+                .filter(|s| s.offset > here_offset)
+                .find(wanted)
+                .map(|s| (s, None))
+                .or_else(|| {
+                    stops
+                        .iter()
+                        .find(wanted)
+                        .map(|s| (s, Some(msg::quicknav_wrap_top())))
+                })
+        } else {
+            stops
+                .iter()
+                .filter(|s| s.offset < here_offset)
+                .rfind(wanted)
+                .map(|s| (s, None))
+                .or_else(|| {
+                    stops
+                        .iter()
+                        .rfind(wanted)
+                        .map(|s| (s, Some(msg::quicknav_wrap_bottom())))
+                })
+        };
+        // S finds at least the element itself; D finds nothing on a page of one type.
+        let Some((stop, wrapped)) = found else {
+            return msg::quicknav_none_different().to_string();
+        };
+        let stop = *stop;
+        self.offset = stop.offset;
+        self.current_node_id = Some(stop.node_id);
+        let speech = self.element_stop_speech(&stop);
+        match wrapped {
+            Some(prefix) => format!("{prefix}\n{speech}"),
+            None => speech,
+        }
+    }
+
+    /// The elements S and D move between, in page order.
+    fn element_stops(&self) -> Vec<ElementStop> {
+        let mut stops: Vec<ElementStop> = Vec::new();
+        for span in &self.buffer.spans {
+            let text = self
+                .buffer
+                .text
+                .get(span.start_offset..span.end_offset)
+                .unwrap_or_default();
+            let kind = match &span.role {
+                // The page's own line and the lines that open and close regions, lists and
+                // tables are no element.
+                Role::Document | Role::Landmark { .. } | Role::List | Role::Table => None,
+                Role::Link { href } => {
+                    let link = match self.buffer.node(span.node_id) {
+                        Some(n) if n.attributes.get("same_page").is_some_and(|v| v == "true") => {
+                            LinkType::SamePage
+                        }
+                        _ if href.as_deref().is_some_and(|h| h.starts_with("mailto:")) => {
+                            LinkType::Mail
+                        }
+                        _ => LinkType::Plain,
+                    };
+                    Some(ElementType::Link(link))
+                }
+                Role::Heading { level } => Some(ElementType::Heading(*level)),
+                Role::Text | Role::Paragraph | Role::Generic => Some(ElementType::Text),
+                role => Some(ElementType::Other(std::mem::discriminant(role))),
+            };
+            // A list item's bullet is an element of its own, text, before the item's first
+            // element: S from an item I moved to says the item again, its text this time
+            // [obs, 558/s6-s9], and D from a list stops on the bullet before the item's link
+            // [obs, 290/s7, s8].
+            let marker_end = self.list_marker_end(span.node_id, text);
+            if let Some(end) = marker_end.filter(|_| kind.is_some()) {
+                stops.push(ElementStop {
+                    offset: span.start_offset,
+                    node_id: span.node_id,
+                    kind: Some(ElementType::Text),
+                    span_start: span.start_offset,
+                    span_end: span.end_offset,
+                    marker: true,
+                });
+                stops.push(ElementStop {
+                    offset: span.start_offset + end,
+                    node_id: span.node_id,
+                    kind,
+                    span_start: span.start_offset,
+                    span_end: span.end_offset,
+                    marker: false,
+                });
+            } else {
+                stops.push(ElementStop {
+                    offset: span.start_offset,
+                    node_id: span.node_id,
+                    kind,
+                    span_start: span.start_offset,
+                    span_end: span.end_offset,
+                    marker: false,
+                });
+            }
+        }
+        // Spans starting together are one element, the first made.
+        stops.sort_by_key(|s| s.offset);
+        stops.dedup_by_key(|s| s.offset);
+        stops
+    }
+
+    /// Where the text after a list item's bullet starts in `text`, the text of a span of
+    /// `node_id`, when the span starts with the bullet ("• Apple", "1. Step one").
+    fn list_marker_end(&self, node_id: usize, text: &str) -> Option<usize> {
+        let marker = text.split_whitespace().next()?;
+        if !crate::linearize::is_list_marker(marker) {
+            return None;
+        }
+        let after = text.find(marker)? + marker.len();
+        let rest = text.get(after..)?;
+        let content = after + (rest.len() - rest.trim_start().len());
+        if content >= text.len() {
+            return None;
+        }
+        let in_item = self
+            .buffer
+            .node(node_id)
+            .is_some_and(|n| n.role == Role::ListItem)
+            || self
+                .buffer
+                .ancestors(node_id)
+                .iter()
+                .any(|a| a.role == Role::ListItem);
+        in_item.then_some(content)
+    }
+
+    /// What S and D say on the element they land on: a bullet its line, as Down Arrow reads
+    /// it ("•  ‹ same page link › Paragraphs" [obs, 290/s7]); text its piece of the line,
+    /// with its bullet ("Text with", "• Apple" [obs, 558/s25, s7]); a link and a heading
+    /// their name and then their type ("Paragraphs ‹ same page link ›" [obs, 290/s8; 558/s2]).
+    fn element_stop_speech(&self, stop: &ElementStop) -> String {
+        if stop.marker {
+            return self.line_speech_at(stop.offset);
+        }
+        let text = |from: usize| {
+            self.buffer
+                .text
+                .get(from..stop.span_end)
+                .unwrap_or_default()
+                .trim()
+                .to_owned()
+        };
+        match stop.kind {
+            Some(ElementType::Text) => text(stop.span_start),
+            Some(ElementType::Heading(_)) => self.heading_speech_at(stop.span_start),
+            Some(ElementType::Link(_)) => match self.buffer.node(stop.node_id) {
+                Some(node) => SpeechFormatter::format_link_focus(&text(stop.offset), node),
+                None => text(stop.offset),
+            },
+            _ => self.line_speech_at(stop.offset),
+        }
     }
 
     /// Speaks current line without moving cursor (`SayLine`).
@@ -1600,7 +1828,23 @@ impl VirtualCursor {
 
     /// Moves cursor to prior list container (`Shift+L`).
     pub fn move_prior_list(&mut self) -> Option<String> {
-        let t = self.buffer.lists.clone();
+        // From inside a list its own start is not the prior list: Shift+L from its item
+        // wrapped to the page's last list [obs, 558/s10].
+        let inside = |start: usize| {
+            start < self.offset
+                && self
+                    .buffer
+                    .bounded
+                    .iter()
+                    .any(|&(s, end)| s == start && self.offset <= end)
+        };
+        let t: Vec<usize> = self
+            .buffer
+            .lists
+            .iter()
+            .copied()
+            .filter(|&start| !inside(start))
+            .collect();
         self.line_nav(t, false, msg::quicknav_none_lists().as_str())
     }
 

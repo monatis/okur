@@ -119,7 +119,7 @@ fn text_area_lines(node: &AomNode) -> Vec<&str> {
 }
 
 /// Whether `text` is only a list marker such as `•`, `◦`, `▪` or `3.`.
-fn is_list_marker(text: &str) -> bool {
+pub(crate) fn is_list_marker(text: &str) -> bool {
     let t = text.trim();
     if t.is_empty() {
         return false;
