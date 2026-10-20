@@ -1,0 +1,1052 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Selection Sizes - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "155.0.8059.84",
+    "fixture_sha256": "6410ceb02b6220c87d511509c9ccc573311c7dce1eff21af3f6a497b80cfca61",
+    "captured_at_unix_ms": 1792515479848,
+    "node_count": 31,
+    "capture_ms": 229
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Selection Sizes",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/selection-sizes.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "unique_id": -152214,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼",
+    "lines": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        8
+      ],
+      [
+        8,
+        9
+      ],
+      [
+        9,
+        10
+      ],
+      [
+        10,
+        11
+      ],
+      [
+        11,
+        12
+      ],
+      [
+        12,
+        13
+      ],
+      [
+        13,
+        14
+      ],
+      [
+        14,
+        15
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 15,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -152218,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "lines": [
+          [
+            0,
+            80
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 80,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -152176,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "lines": [
+              [
+                0,
+                80
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 80,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -152181,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Paragraph 02 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "lines": [
+          [
+            0,
+            80
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 80,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Paragraph 02 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -152197,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Paragraph 02 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "lines": [
+              [
+                0,
+                80
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 80,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -152190,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Paragraph 03 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "lines": [
+          [
+            0,
+            80
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 80,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Paragraph 03 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -152209,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Paragraph 03 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "lines": [
+              [
+                0,
+                80
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 80,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -152191,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Paragraph 04 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "lines": [
+          [
+            0,
+            80
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 80,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Paragraph 04 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -152201,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Paragraph 04 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "lines": [
+              [
+                0,
+                80
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 80,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -152210,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Paragraph 05 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "lines": [
+          [
+            0,
+            80
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 80,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Paragraph 05 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -152178,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Paragraph 05 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "lines": [
+              [
+                0,
+                80
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 80,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -152194,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Paragraph 06 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "lines": [
+          [
+            0,
+            80
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 80,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Paragraph 06 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -152183,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Paragraph 06 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "lines": [
+              [
+                0,
+                80
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 80,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -152187,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Paragraph 07 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "lines": [
+          [
+            0,
+            80
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 80,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Paragraph 07 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -152180,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Paragraph 07 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "lines": [
+              [
+                0,
+                80
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 80,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -152175,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Paragraph 08 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "lines": [
+          [
+            0,
+            80
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 80,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Paragraph 08 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -152198,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Paragraph 08 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "lines": [
+              [
+                0,
+                80
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 80,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -152220,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Paragraph 09 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "lines": [
+          [
+            0,
+            80
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 80,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Paragraph 09 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -152208,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Paragraph 09 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "lines": [
+              [
+                0,
+                80
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 80,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -152206,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Paragraph 10 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "lines": [
+          [
+            0,
+            80
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 80,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Paragraph 10 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -152211,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Paragraph 10 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "lines": [
+              [
+                0,
+                80
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 80,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -152207,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Paragraph 11 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "lines": [
+          [
+            0,
+            80
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 80,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Paragraph 11 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -152177,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Paragraph 11 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "lines": [
+              [
+                0,
+                80
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 80,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -152192,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Paragraph 12 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "lines": [
+          [
+            0,
+            80
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 80,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Paragraph 12 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -152186,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Paragraph 12 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "lines": [
+              [
+                0,
+                80
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 80,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -152184,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Paragraph 13 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "lines": [
+          [
+            0,
+            80
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 80,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Paragraph 13 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -152189,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Paragraph 13 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "lines": [
+              [
+                0,
+                80
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 80,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -152222,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Paragraph 14 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "lines": [
+          [
+            0,
+            80
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 80,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Paragraph 14 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -152199,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Paragraph 14 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "lines": [
+              [
+                0,
+                80
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 80,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -152212,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Paragraph 15 of fifteen, eighty characters each: the very end of all of it here.",
+        "lines": [
+          [
+            0,
+            80
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 80,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Paragraph 15 of fifteen, eighty characters each: the very end of all of it here.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -152200,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Paragraph 15 of fifteen, eighty characters each: the very end of all of it here.",
+            "lines": [
+              [
+                0,
+                80
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 80,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
