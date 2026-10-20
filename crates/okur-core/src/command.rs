@@ -234,6 +234,10 @@ pub enum Command {
     WindowList,
     /// Insert+F11 (ListTaskTrayIcons): the notification area's icons, to click one.
     SystemTrayList,
+    /// J in a page (JumpToLine): Jump To Line, a line number to move to.
+    JumpToLine,
+    /// Shift+J in a page (JumpReturnFromLine): back to where the last jump was made.
+    JumpReturnFromLine,
 
     // Help, in the Virtual Viewer, in Okur's own words.
     /// Insert+F1: what the focused control is for, and its keys.
@@ -466,6 +470,8 @@ impl Command {
             "LeftMouseButton" | "NumpadSlash" => LeftMouseClick,
             "WindowList" | "Insert+F10" => WindowList,
             "ListTaskTrayIcons" | "Insert+F11" => SystemTrayList,
+            "JumpToLine" => JumpToLine,
+            "JumpReturnFromLine" => JumpReturnFromLine,
             "ScreenSensitiveHelp" | "Insert+F1" => ScreenSensitiveHelp,
             "HotKeyHelp" | "Insert+H" => HotKeyHelp,
             "WindowKeysHelp" | "WindowsKeysHelp" | "Insert+W" => WindowsKeysHelp,
@@ -981,6 +987,8 @@ static BINDINGS: &[Binding] = &{
         bind(Alpha('P'), ALONE, SayNextParagraph),
         bind(Alpha('N'), SHIFT, PriorNonLinkText),
         bind(Alpha('N'), ALONE, NextNonLinkText),
+        bind(Alpha('J'), SHIFT, JumpReturnFromLine),
+        bind(Alpha('J'), ALONE, JumpToLine),
         bind(
             Key::Enter,
             ANY.insert(Yes).shift(Yes).ctrl(No).alt(No),

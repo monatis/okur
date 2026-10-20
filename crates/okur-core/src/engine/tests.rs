@@ -3925,6 +3925,63 @@ fn the_system_tray_list_clicks_the_icon_chosen() {
         .any(|(a, x)| a == "RightSingle click at 1600, 1060" && *x == 1600));
 }
 
+/// J opens Jump To Line on the cursor's line, with the page's line count; OK puts the cursor
+/// on the line typed; Shift+J returns and reads the line, and says "No previous jump" with
+/// none to return to [obs, 559/s1, s7].
+#[test]
+fn jump_to_line_and_back() {
+    use crate::ui::{ControlKind, FromUi, ToUi, Value};
+    let (mut engine, speech) = engine_with_speech();
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Page")
+        .with_children(
+            (1..=5)
+                .map(|i| AomNode::new(i, Role::Paragraph).with_text(format!("Line {i}")))
+                .collect(),
+        );
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentLoaded {
+        title: "Page".to_owned(),
+        root: page,
+    });
+    let mut shift_j = KeyEvent::new(Key::Alpha('J'), Modifiers::none(), true);
+    shift_j.modifiers.shift = true;
+    speech.take();
+    engine.handle_key_event(&shift_j);
+    assert_eq!(speech.take(), vec!["No previous jump".to_owned()]);
+    engine.handle_key_event(&key(Key::Alpha('J')));
+    let sent = ui.take();
+    let Some(ToUi::DialogShow { dialog }) = sent.first() else {
+        panic_free_fail(&format!("no dialog shown: {sent:?}"));
+        return;
+    };
+    assert_eq!(dialog.title, "Jump To Line");
+    assert_eq!(
+        dialog.controls.first().map(|c| (c.label.as_str(), &c.kind)),
+        Some((
+            "Enter Line Number (1 to 6):",
+            &ControlKind::Edit {
+                text: "1".to_owned()
+            }
+        ))
+    );
+    let id = dialog.id;
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "line".into(),
+        value: Value::Text("4".into()),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "ok".into(),
+    }));
+    assert_eq!(engine.cursor.current_line(), "Line 3");
+    speech.take();
+    engine.handle_key_event(&shift_j);
+    assert_eq!(speech.take(), vec!["Page".to_owned()]);
+}
+
 /// A WinForms data grid [obs, 545]: a cell is said with whether it is selected and its text;
 /// Ctrl+End adds "Bottom of file" and the cell again, Say Focus reads a repeat's state.
 #[test]

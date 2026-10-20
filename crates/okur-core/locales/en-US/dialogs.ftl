@@ -123,3 +123,14 @@ tray-right-click = Right Single Click
 tray-left-click = Left Single Click
 tray-left-double-click = Left Double Click
 tray-cancel = Cancel
+
+## Jump To Line (J in a page): JAWS 2025's dialog [obs, 559/s1]; JAWS's help names the
+## line count and the current line it shows.
+
+jump-title = Jump To Line
+# Its field's label: the page's number of lines.
+jump-line-number = Enter Line Number (1 to { $count }):
+jump-ok = OK
+jump-cancel = Cancel
+# Shift+J before any jump [obs, 559/s7].
+jump-none = No previous jump

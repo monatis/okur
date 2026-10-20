@@ -11,7 +11,7 @@ use windows::Win32::Foundation::{HWND, LPARAM, WPARAM};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::System::Threading::{AttachThreadInput, GetCurrentThreadId};
 use windows::Win32::UI::Controls::{
-    BST_CHECKED, BST_UNCHECKED, HTREEITEM, LVCF_WIDTH, LVCOLUMNW, LVIF_STATE, LVIF_TEXT,
+    BST_CHECKED, BST_UNCHECKED, EM_SETSEL, HTREEITEM, LVCF_WIDTH, LVCOLUMNW, LVIF_STATE, LVIF_TEXT,
     LVIS_FOCUSED, LVIS_SELECTED, LVITEMW, LVM_DELETEALLITEMS, LVM_ENSUREVISIBLE, LVM_INSERTCOLUMNW,
     LVM_INSERTITEMW, LVM_SETEXTENDEDLISTVIEWSTYLE, LVM_SETITEMSTATE, LVN_ITEMCHANGED,
     LVS_EX_FULLROWSELECT, NMHDR, NMLISTVIEW, NMTREEVIEWW, NM_DBLCLK, TBM_SETPAGESIZE, TBM_SETPOS,
@@ -26,8 +26,8 @@ use windows::Win32::UI::WindowsAndMessaging::{
     GetWindowThreadProcessId, IsDialogMessageW, IsWindow, SendMessageW, SetForegroundWindow,
     SetWindowTextW, ShowWindow, BM_GETCHECK, BM_SETCHECK, BN_CLICKED, CBN_EDITCHANGE,
     CBN_SELCHANGE, CB_ADDSTRING, CB_GETCURSEL, CB_GETLBTEXT, CB_GETLBTEXTLEN, CB_RESETCONTENT,
-    CB_SETCURSEL, DLGTEMPLATE, LBN_SELCHANGE, LB_ADDSTRING, LB_GETCURSEL, LB_RESETCONTENT,
-    LB_SETCURSEL, MSG, SW_SHOW, WM_COMMAND, WM_HSCROLL, WM_INITDIALOG, WM_NOTIFY,
+    CB_SETCURSEL, DLGTEMPLATE, EN_CHANGE, LBN_SELCHANGE, LB_ADDSTRING, LB_GETCURSEL,
+    LB_RESETCONTENT, LB_SETCURSEL, MSG, SW_SHOW, WM_COMMAND, WM_HSCROLL, WM_INITDIALOG, WM_NOTIFY,
 };
 
 use crate::template::{self, IDCANCEL};
@@ -75,9 +75,9 @@ fn initial(kind: &ControlKind) -> Option<Value> {
         | ControlKind::Radios { selected, .. } => Some(Value::Selected(*selected)),
         ControlKind::CheckBox { checked } => Some(Value::Checked(*checked)),
         ControlKind::Slider { value, .. } => Some(Value::Number(*value)),
-        ControlKind::Text { text } | ControlKind::ComboEdit { text, .. } => {
-            Some(Value::Text(text.clone()))
-        }
+        ControlKind::Text { text }
+        | ControlKind::Edit { text }
+        | ControlKind::ComboEdit { text, .. } => Some(Value::Text(text.clone())),
         ControlKind::Group | ControlKind::Button { .. } => None,
     }
 }
@@ -220,6 +220,9 @@ fn fill(window: HWND, index: usize, item: HWND, kind: &ControlKind) {
                 set(window, index, item, kind, &Value::Selected(*selected));
             }
             ControlKind::Text { text } => {
+                set(window, index, item, kind, &Value::Text(text.clone()));
+            }
+            ControlKind::Edit { text } => {
                 set(window, index, item, kind, &Value::Text(text.clone()));
             }
             ControlKind::ComboEdit { text, history } => {
@@ -447,6 +450,12 @@ fn set(window: HWND, index: usize, item: HWND, kind: &ControlKind, value: &Value
             (ControlKind::Text { .. }, Value::Text(text)) => {
                 let text = wide(text);
                 let _ = SetWindowTextW(item, windows::core::PCWSTR(text.as_ptr()));
+            }
+            // A text field's text, selected, so that what is typed replaces it.
+            (ControlKind::Edit { .. }, Value::Text(text)) => {
+                let text = wide(text);
+                let _ = SetWindowTextW(item, windows::core::PCWSTR(text.as_ptr()));
+                SendMessageW(item, EM_SETSEL, Some(WPARAM(0)), Some(LPARAM(-1)));
             }
             // An editable combo box's text goes to its edit: set on the combo box, the item that
             // matches it is selected in the list, and the field was read with its position, "board
@@ -702,6 +711,10 @@ unsafe extern "system" fn dialog_proc(
                     let state = unsafe { SendMessageW(item, BM_GETCHECK, None, None) };
                     let checked = state.0 == BST_CHECKED.0 as isize;
                     changed(window, &hit, Value::Checked(checked));
+                }
+                // A text field tells its text as it is typed.
+                (ControlKind::Edit { .. }, _) if code == EN_CHANGE => {
+                    changed(window, &hit, Value::Text(window_text(item)));
                 }
                 // An editable combo box tells its text as it is typed, or chosen from its list.
                 (ControlKind::ComboEdit { .. }, _) if code == CBN_EDITCHANGE => {

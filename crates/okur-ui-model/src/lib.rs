@@ -101,6 +101,11 @@ pub enum ControlKind {
     Text {
         text: String,
     },
+    /// A text field named by its label (JAWS's Jump To Line, "Enter Line Number (1 to 73):
+    /// edit" [obs, 559/s1]). Its value is the text, told as it is typed.
+    Edit {
+        text: String,
+    },
 }
 
 /// An item of a [`ControlKind::Tree`]: its text and its level, 0 at the top.

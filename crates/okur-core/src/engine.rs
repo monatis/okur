@@ -24,6 +24,7 @@ mod find;
 mod focus;
 mod help;
 mod information;
+mod jump;
 mod layer;
 mod page;
 mod reading;
@@ -187,6 +188,9 @@ pub struct ScreenReaderEngine {
     /// The system tray list while it is open, and whether its icons were asked for.
     tray_dialog: Option<crate::ui::tray::TrayDialog>,
     tray_asked: bool,
+    /// Jump To Line while it is open, and where the last jump was made from (Shift+J).
+    jump_dialog: Option<crate::ui::jump::JumpDialog>,
+    jump_return: Option<usize>,
     /// Ctrl+R or F5 was pressed in a page: its next load is a new one, announced, not a
     /// capture of the page again [obs, 507/s1].
     reload_asked: bool,
@@ -309,6 +313,8 @@ impl ScreenReaderEngine {
             window_list_asked: false,
             tray_dialog: None,
             tray_asked: false,
+            jump_dialog: None,
+            jump_return: None,
             reload_asked: false,
             find_options: crate::ui::find::FindOptions::default(),
             find_histories: std::collections::HashMap::new(),
@@ -1142,6 +1148,7 @@ impl ScreenReaderEngine {
             _ if self.is_find_event(message) => self.handle_find_event(message),
             _ if self.is_window_list_event(message) => self.handle_window_list_event(message),
             _ if self.is_tray_event(message) => self.handle_tray_event(message),
+            _ if self.is_jump_event(message) => self.handle_jump_event(message),
             _ => {
                 let outcome = self.settings_dialog.as_mut()?.handle(message);
                 match outcome {

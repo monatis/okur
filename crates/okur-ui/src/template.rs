@@ -373,6 +373,7 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
             ControlKind::Group
             | ControlKind::Choice { .. }
             | ControlKind::ComboEdit { .. }
+            | ControlKind::Edit { .. }
             | ControlKind::Slider { .. } => {}
         }
     }
@@ -442,6 +443,7 @@ fn form_layout(dialog: &DialogSpec) -> Layout {
             }
             ControlKind::Choice { .. }
             | ControlKind::ComboEdit { .. }
+            | ControlKind::Edit { .. }
             | ControlKind::Slider { .. }
             | ControlKind::Text { .. } => {
                 // The label first: in the tab order before its control, it names it and
@@ -492,6 +494,24 @@ fn form_layout(dialog: &DialogSpec) -> Layout {
                             y,
                             cx,
                             cy: 120,
+                            id,
+                            text: String::new(),
+                        });
+                        12
+                    }
+                    ControlKind::Edit { .. } => {
+                        items.push(Item {
+                            class: Class::Edit,
+                            style: WS_CHILD
+                                | WS_VISIBLE
+                                | WS_TABSTOP
+                                | WS_GROUP
+                                | WS_BORDER
+                                | ES_AUTOHSCROLL,
+                            x,
+                            y,
+                            cx,
+                            cy: 12,
                             id,
                             text: String::new(),
                         });
