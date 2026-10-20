@@ -4302,13 +4302,55 @@
         "deterministic": false,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "632-web-field-returned-later",
+      "fixture": "signup-form.html",
+      "evidence": {
+        "sha256": "a303007b2a8041cdce0e3cfda3dd8fc47da8ce88b409294f8c70d7ae56045128",
+        "capture_script_sha256": "6187b33d350b14a01942dc0274615a1d7caebe125bf0e1336d09f1a2732354ed",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "633-web-jaws-find-next-board",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "349ac23f3f77da847ad298a0b97eff6ec462c3d111a9de1e0403ae07b7166ebb",
+        "capture_script_sha256": "6187b33d350b14a01942dc0274615a1d7caebe125bf0e1336d09f1a2732354ed",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "634-desktop-keyboard-help-spoken",
+      "fixture": "desktop-dialogs.ps1",
+      "evidence": {
+        "sha256": "f825214d121cd380b4696574dc536416bc7cfb468d37c16d694f23ea645bbb6c",
+        "capture_script_sha256": "bf89d333b1eca515dc0da6a3e2407056055b80d500d56700db4951d636c177c7",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 296,
-    "scenarios_with_evidence": 296,
-    "total_trials": 942,
-    "successful_trials": 942,
-    "deterministic_scenarios": 185
+    "scenarios": 299,
+    "scenarios_with_evidence": 299,
+    "total_trials": 951,
+    "successful_trials": 951,
+    "deterministic_scenarios": 187
   }
 }
