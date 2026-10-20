@@ -25,6 +25,7 @@ param(
     [switch]$FreshJaws,
     # Fixtures (file names under corpus\fixtures) whose IA2 and UIA snapshots are captured into
     # <OutputDir>\snapshots before the batch: a capture must not run during another batch.
+    # Several are named with commas ("a.html,b.html"): -File passes them as one string.
     [string[]]$Snapshots = @(),
     # Harness scripts (and okur.exe) copied into place once the batch before has finished, so a
     # changed capture script reaches only the batches queued after the change (each batch's
@@ -74,6 +75,7 @@ if ($Before) {
         Select-Object -Last 1
     "before the batch, ${Before}: $said" | Out-File $log -Append -Encoding utf8
 }
+$Snapshots = @($Snapshots | ForEach-Object { $_ -split ',' } | Where-Object { $_ })
 if ($Snapshots.Count -gt 0) {
     $capture = Join-Path $PSScriptRoot 'capture-snapshot.ps1'
     $okur = 'C:\Users\ailabs\sr-harness\bin\okur.exe'
