@@ -17,21 +17,20 @@ table-row-end = end of row
 table-column-top = top of column
 table-column-bottom = bottom of column
 table-not-in-table = Not in a table.
-# A table move found no cell further that way.
-table-edge = edge of table
 # A focus entering a table cell, or moving to another row and column at once.
 table-focus-cell = column { $column } row { $row }
 # With short messages [obs, 593/s11, s12].
 table-focus-cell-short = col { $column } row { $row }
 # The table layer (Insert+Space, T) turned on: the arrows move by cell until Escape.
 table-layer = Table layer
-# Reading the next or prior row or column whole (Windows+Alt and an arrow) found none further.
+# Reading the next or prior row or column whole (Windows+Alt and an arrow) found none further
+# [obs, 297/s6; 615/s4, s5, s10].
 table-on-last-row = You are on the last row in the table.
 # With short messages [obs, 578/s6; 592/s2, s3, s6].
 table-on-last-row-short = Last row
-table-on-first-row = You are on the first row in the table.
+table-on-first-row = You are on the first row of the table.
 table-on-first-row-short = First row
-table-on-last-column = You are on the last column in the table.
+table-on-last-column = You are on the last column in the row.
 table-on-last-column-short = Last column
-table-on-first-column = You are on the first column in the table.
+table-on-first-column = You are on the first column of the row.
 table-on-first-column-short = First column

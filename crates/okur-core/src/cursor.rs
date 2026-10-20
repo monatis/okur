@@ -2750,7 +2750,8 @@ impl VirtualCursor {
                 ));
             }
         }
-        Some(msg::table_edge().to_string())
+        // Before the first column, "beginning of row" [obs, 615/s2, 616/s2].
+        Some(msg::table_row_start().to_string())
     }
 
     /// Moves to cell directly below in the active column (`Ctrl+Alt+DownArrow`).
@@ -2865,7 +2866,7 @@ impl VirtualCursor {
             self.offset = cell.offset;
             self.current_node_id = Some(cell.node_id);
             return Some(SpeechFormatter::format_table_cell_coordinates(
-                &cell.text,
+                &cell.speech,
                 cell.col,
                 cell.row,
                 cell.col_header.as_deref(),

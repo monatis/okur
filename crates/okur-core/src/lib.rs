@@ -711,9 +711,9 @@ mod tests {
         assert_eq!(cursor.current_table_col(), Some(1));
         assert_eq!(cursor.current_table_row(), Some(1));
 
-        // Edge check at col 1
+        // Edge check at col 1: "beginning of row" [obs, 615/s2]
         let edge_left = cursor.move_table_cell_left().unwrap_or_default();
-        assert_eq!(edge_left, "edge of table");
+        assert_eq!(edge_left, "beginning of row");
 
         // 24-table-row-down
         let down_speech = cursor.move_table_cell_down().unwrap_or_default();
