@@ -29,6 +29,7 @@ To record one:
 | 564 | Say Line on a field whose label is a line of its own: reached by its quick key, by the arrows, and with the focus | `signup-form.html` |
 | 565 | Say Color (Insert+5) on text in named, unnamed and default colors, and on backgrounds | `colors.html` (new) |
 | 566 | Speech On Demand on and off, and which keys speak while it is on | `news-article.html` |
+| 567 | Spelling errors in a field of several words: Say Line, the words, Say Word, the field read again | `signup-form.html` |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.

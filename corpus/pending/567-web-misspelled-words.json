@@ -1,0 +1,24 @@
+{
+  "id": "567-web-misspelled-words",
+  "name": "Spelling errors in a field: Tab into the sign-up form's name, type \"teh quick brown fxo\", wait, then Say Line, the words by Ctrl+Left from the end, Say Word, and the field read again by the arrows out and back",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "jaws_settings": { "DEFAULT.JCF": { "FormsMode": { "AutoFormsMode": "1" } } },
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Tab" },
+    { "id": "s2", "type": "text", "command": "teh quick brown fxo" },
+    { "id": "s3", "type": "key", "command": "Insert+Up", "settle_max_ms": 15000 },
+    { "id": "s4", "type": "key", "command": "Ctrl+Left" },
+    { "id": "s5", "type": "key", "command": "Ctrl+Left" },
+    { "id": "s6", "type": "key", "command": "Ctrl+Left" },
+    { "id": "s7", "type": "key", "command": "Ctrl+Left" },
+    { "id": "s8", "type": "key", "command": "Insert+Numpad5" },
+    { "id": "s9", "type": "key", "command": "Down" },
+    { "id": "s10", "type": "key", "command": "Up" },
+    { "id": "s11", "type": "key", "command": "Up" },
+    { "id": "s12", "type": "key", "command": "Down" }
+  ]
+}
