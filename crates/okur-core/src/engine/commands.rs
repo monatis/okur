@@ -784,8 +784,13 @@ impl ScreenReaderEngine {
             return None;
         }
         // The virtual cursor's line is spelled to its end, which JAWS says as a space: "b a n
-        // n e r space" [obs, 654/s2, 408/s8]; a text field's line is not (406/s8).
-        let text = if line && !self.editing_text() {
+        // n e r space" [obs, 654/s2, 408/s8]; a text field's line is not (406/s8), nor a
+        // page's last line where its text ends without a line break [obs, 613/s24].
+        let buffer = &self.cursor.buffer;
+        let last_line = buffer.lines.len().checked_sub(1);
+        let at_page_end =
+            Some(self.cursor.current_line_index()) == last_line && !buffer.ends_with_line_break();
+        let text = if line && !self.editing_text() && !at_page_end {
             format!("{trimmed} ")
         } else {
             trimmed.to_owned()

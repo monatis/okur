@@ -673,6 +673,39 @@ fn say_line_twice_spells_to_the_line_end_within_jaws_window() {
     assert_eq!(Some(engine.cursor.offset), last);
 }
 
+/// Say All to a page's end says its last word again, where reading leaves the cursor
+/// [obs, 613/s26, 408/s10]; Say Line twice on that last line spells it without a space at
+/// its end, the page's text ending there without a line break [obs, 613/s24].
+#[test]
+fn say_all_ends_on_the_pages_last_word() {
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Türkçe Metin")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Son"),
+            AomNode::new(2, Role::Paragraph).with_text("ÇĞ çğ"),
+        ]);
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(speech.clone()),
+    );
+    engine.cursor.move_to_start();
+    let said = engine.execute_command("SayAll").unwrap_or_default();
+    assert!(said.ends_with("ÇĞ çğ\nçğ"), "{said:?}");
+    let say_line = |time_ms: u64| {
+        let mut key = KeyEvent::new(Key::UpArrow, Modifiers::none(), true);
+        key.modifiers.insert = true;
+        key.time_ms = time_ms;
+        key
+    };
+    engine.handle_key_event(&say_line(1000));
+    speech.take();
+    engine.handle_key_event(&say_line(1100));
+    let spelled = norm(&speech.take().join(" "));
+    assert!(spelled.starts_with("Ç Ğ"), "{spelled:?}");
+    assert!(!spelled.ends_with("space"), "{spelled:?}");
+}
+
 /// End goes past the line's last letter, saying nothing; Left then says that letter, as JAWS
 /// says it after End on a link's line [obs, 635/s20, s21].
 #[test]

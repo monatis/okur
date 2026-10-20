@@ -28,6 +28,8 @@ pub(super) struct SayAll {
     /// In a text field, its lines from the caret's on, each with the character offset it
     /// starts at; the line indexes above are into them. `None` in a page.
     field: Option<Vec<(usize, String)>>,
+    /// The page's last word has been handed over after its last line.
+    ended: bool,
 }
 
 impl ScreenReaderEngine {
@@ -67,6 +69,7 @@ impl ScreenReaderEngine {
             next_line: line,
             start_line: line,
             field,
+            ended: false,
         };
         let progress = self.speech.reports_marks();
         let ahead = if progress { AHEAD + 1 } else { usize::MAX };
@@ -164,6 +167,7 @@ impl ScreenReaderEngine {
             next_line: from,
             start_line: old.start_line.min(from),
             field: old.field,
+            ended: false,
         };
         if self.say_all_line(&reading, from).is_none() {
             // Past the last line: reading ends where it was.
@@ -215,6 +219,26 @@ impl ScreenReaderEngine {
         let mut said = Vec::new();
         while reading.queued.len() < keep {
             let Some(text) = self.say_all_line(reading, reading.next_line) else {
+                // At a page's end JAWS says its last word again, where reading leaves the
+                // cursor: "content information end end" [obs, 111/s1, 408/s10, 613/s26].
+                let last = reading.next_line.checked_sub(1);
+                let word = self
+                    .cursor
+                    .buffer
+                    .lines
+                    .last()
+                    .and_then(|l| l.text.split_whitespace().last())
+                    .map(str::to_owned);
+                if let (None, false, Some(word), Some(last)) =
+                    (&reading.field, reading.ended, word, last)
+                {
+                    reading.ended = true;
+                    let mark = self.next_mark;
+                    self.next_mark += 1;
+                    self.speech.speak_marked(&word, mark, false);
+                    reading.queued.push_back((mark, last));
+                    said.push(word);
+                }
                 break;
             };
             let mark = self.next_mark;
@@ -405,9 +429,10 @@ mod tests {
             Box::new(crate::speech::MockSpeechOutput::default()),
         );
         engine.cursor.move_to_start();
+        // The page's last word again at its end, as JAWS says it [obs, 613/s26].
         assert_eq!(
             engine.start_say_all().as_deref(),
-            Some("Line 1\nLine 2\nLine 3\nLine 4\nLine 5")
+            Some("Line 1\nLine 2\nLine 3\nLine 4\nLine 5\n5")
         );
         assert_eq!(engine.cursor.current_line(), "Line 5");
     }

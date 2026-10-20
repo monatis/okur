@@ -734,6 +734,25 @@ impl VirtualBuffer {
         self.text.get(offset..)?.chars().next()
     }
 
+    /// Whether the page's text, as JAWS's holds it, ends with a line break: after a last line
+    /// that closes a region, a list or another container, a selection to the end counts one
+    /// more character [obs, 562/s20, 650/s1]; after a paragraph it does not [obs, 617, 651],
+    /// and spelling that last line says no space at its end [obs, 613/s24].
+    pub fn ends_with_line_break(&self) -> bool {
+        self.lines.last().is_some_and(|line| {
+            matches!(
+                line.role,
+                Role::Landmark { .. }
+                    | Role::List
+                    | Role::Table
+                    | Role::Group
+                    | Role::BlockQuote
+                    | Role::Dialog
+                    | Role::AlertDialog
+            )
+        })
+    }
+
     /// The number of page nodes, hidden ones included.
     pub fn node_count(&self) -> usize {
         self.slot_of.len()

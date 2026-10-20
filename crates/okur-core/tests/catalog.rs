@@ -916,7 +916,17 @@ fn the_pseudo_locale_wraps_every_word_okur_says() {
             "SelectARegion",
             "PassKeyThrough",
         ] {
-            said.extend(engine.execute_command(command));
+            let speech = engine.execute_command(command);
+            // Say All ends by saying the page's last word again [obs, 613/s26]: a word of the
+            // page's text, here cut from its last line's message, "…region end", whose
+            // brackets it leaves behind. The line itself is checked whole.
+            let speech = match command {
+                "SayAll" => {
+                    speech.map(|s| s.rsplit_once('\n').map_or(s.clone(), |(r, _)| r.to_owned()))
+                }
+                _ => speech,
+            };
+            said.extend(speech);
         }
         for focus in native_focuses() {
             said.extend(engine.handle_focus_event(&focus));

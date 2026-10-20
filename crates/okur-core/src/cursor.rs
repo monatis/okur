@@ -267,19 +267,7 @@ impl VirtualCursor {
         // break in JAWS's text, which a selection to the end takes: one more character after
         // "content information end" or "main region end" [obs, 562/s13, s17, s20; 515/s1;
         // 650/s1; 653/s1], none after a paragraph [obs, 617, 620, 651].
-        let closes_container = self.buffer.lines.last().is_some_and(|line| {
-            matches!(
-                line.role,
-                Role::Landmark { .. }
-                    | Role::List
-                    | Role::Table
-                    | Role::Group
-                    | Role::BlockQuote
-                    | Role::Dialog
-                    | Role::AlertDialog
-            )
-        });
-        if range.1 >= self.buffer.text.len() && closes_container {
+        if range.1 >= self.buffer.text.len() && self.buffer.ends_with_line_break() {
             text.push('\n');
         }
         let count = text.chars().count();
