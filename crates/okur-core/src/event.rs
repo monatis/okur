@@ -549,6 +549,10 @@ pub enum AccessibilityEvent {
     /// The window in front was renamed: a console takes the title what runs in it sets
     /// ("SR Console Fixture" after PowerShell's own, 321).
     WindowRenamed(String),
+    /// The dialog in front was shown, and read again: its controls as they are now. The focus
+    /// can arrive while a dialog is still hidden (Notepad's Font dialog), and Say Window reads
+    /// the window as it shows [obs, 665/s3]. Nothing is said.
+    WindowShown(FocusEvent),
     DocumentLoaded {
         title: String,
         root: crate::aom::AomNode,

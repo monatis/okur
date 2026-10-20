@@ -1023,6 +1023,21 @@ impl ScreenReaderEngine {
                 self.window_renamed(title);
                 None
             }
+            AccessibilityEvent::WindowShown(shown) => {
+                // The focus's own window, read again once shown: its controls for Say Window
+                // and the Virtual Viewer.
+                if let Some(focus) = self
+                    .last_native_focus
+                    .as_mut()
+                    .filter(|f| f.window_title == shown.window_title)
+                {
+                    focus.window_items = shown.window_items.clone();
+                    if !shown.dialog_lines.is_empty() {
+                        focus.dialog_lines = shown.dialog_lines.clone();
+                    }
+                }
+                None
+            }
             AccessibilityEvent::DocumentLoaded { title, root } => {
                 self.handle_document_loaded(title, VirtualBuffer::from_aom(root))
             }

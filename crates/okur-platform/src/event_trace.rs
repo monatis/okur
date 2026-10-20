@@ -1266,6 +1266,18 @@ impl EventConverter {
             "uia_selected" => {
                 return focus_event_from_trace(event).map(AccessibilityEvent::Selected);
             }
+            // The dialog in front shown, read again: its controls as they are now, for Say
+            // Window, after a focus read while it was still hidden (the Font dialog [obs,
+            // 665/s3]).
+            "dialog_shown" => {
+                let shown = focus_event_from_trace(event)?;
+                if let Some(last) = self.last_focus.as_mut() {
+                    if last.window_title == shown.window_title {
+                        last.window_items = shown.window_items.clone();
+                    }
+                }
+                return Some(AccessibilityEvent::WindowShown(shown));
+            }
             "focus" if is_drop_down_item(event) => {
                 let last = self.last_focus.clone()?;
                 let name = event.object.as_ref().and_then(|o| o.name.clone());
@@ -2246,8 +2258,9 @@ mod capture {
     /// their text the converter makes nothing of them, though reading their MSAA object cost
     /// the WinEvent thread a cross-process call or six for each, 16% of all events (performance
     /// review, 2026-10-20, P5; `caret_events_without_their_text_give_nothing`).
-    const LIVE_EVENTS: [&str; 12] = [
+    const LIVE_EVENTS: [&str; 13] = [
         "focus",
+        "dialog_shown",
         "uia_focus",
         "uia_selected",
         "foreground",
@@ -2416,6 +2429,35 @@ mod capture {
         // switched) changes it; the caret and the mouse pointer shown or hidden do not.
         if matches!(id_object, OBJID_WINDOW | OBJID_CLIENT) {
             dialog_changed(if win_event == 0x8003 { "hide" } else { "show" }, hwnd);
+        }
+        // The dialog in front shown: its controls are read again, a focus having arrived while
+        // it was still hidden (Notepad's Font dialog), as Say Window reads it shown [obs,
+        // 665/s3].
+        const EVENT_OBJECT_SHOW: u32 = 0x8002;
+        if win_event == EVENT_OBJECT_SHOW && id_object == OBJID_WINDOW && id_child == 0 {
+            let mut class = [0u16; 16];
+            // SAFETY: plain Win32 queries on the event's window, with a valid buffer.
+            let front_dialog = unsafe {
+                GetForegroundWindow() == hwnd && {
+                    let length = GetClassNameW(hwnd, &mut class);
+                    class.get(..length as usize).is_some_and(|c| {
+                        super::WIN32_DIALOG_CLASS
+                            .encode_utf16()
+                            .eq(c.iter().copied())
+                    })
+                }
+            };
+            if front_dialog {
+                record_at(
+                    now_ms(),
+                    "dialog_shown",
+                    win_event,
+                    hwnd,
+                    id_object,
+                    id_child,
+                    None,
+                );
+            }
         }
         if id_object != OBJID_CLIENT || id_child >= 0 {
             return;
@@ -3233,8 +3275,14 @@ mod capture {
             // block for seconds while UIA's focus settled (7 s into Windows 11 Notepad, dev
             // box), and could answer with another element than the chain's.
             let uia_named = matches!(name, "uia_focus" | "uia_selected");
-            let reads_focus =
-                focused || name == "foreground" || changes_focus_context || name == "uia_selected";
+            // The dialog in front shown after its focus was read: read again, as a focus is,
+            // for its controls [obs, 665/s3].
+            let shown = name == "dialog_shown";
+            let reads_focus = focused
+                || shown
+                || name == "foreground"
+                || changes_focus_context
+                || name == "uia_selected";
             let asked = match (element, state.uia.as_ref()) {
                 (None, Some(uia)) if reads_focus => focused_element(uia),
                 _ => None,
@@ -3369,71 +3417,71 @@ mod capture {
             // own window can have lost the foreground meanwhile (the task switcher's last
             // events arrive after the switch back, seen live on the dev box).
             let (top_window_title, top_window_class, virtual_desktop) =
-                if focused || name == "foreground" {
+                if focused || shown || name == "foreground" {
                     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
                     // SAFETY: plain Win32 call with no preconditions.
                     top_window(unsafe { GetForegroundWindow() })
                 } else {
                     (None, None, None)
                 };
-            let (dialog, dialog_tree, dialog_page, group_box, default_button) = if focused
-                && top_window_class.as_deref() == Some("#32770")
-            {
-                use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
-                // SAFETY: plain Win32 call with no preconditions.
-                let window = unsafe { GetForegroundWindow() };
-                // Say Window's controls: the page the focus is on, or the dialog.
-                let root = crate::screen_lines::page_window(keyboard_focus_window(), window)
-                    .unwrap_or(window);
-                let changes = dialog_changes(window);
-                let reused = state.dialog_read.as_ref().filter(|read| {
-                    read.dialog == window.0 as isize
-                        && read.root == root.0 as isize
-                        && read.changes == changes
-                });
-                let (layout, tree) = match reused {
-                    Some(read) => {
-                        tracing::debug!("dialog read reused");
-                        (read.layout.clone(), Some(read.tree.clone()))
-                    }
-                    None => {
-                        let layout = crate::screen_lines::dialog_layout(window);
-                        let tree = state.uia.as_ref().and_then(|uia| {
-                            window_subtree(uia, root).map(super::without_nested_tree_items)
-                        });
-                        // A dialog still hidden as its focus arrives (the Font dialog,
-                        // 541) has no visible controls to lay out yet: read again.
-                        // SAFETY: plain Win32 query on a window handle.
-                        let shown = unsafe {
-                            windows::Win32::UI::WindowsAndMessaging::IsWindowVisible(window)
+            let (dialog, dialog_tree, dialog_page, group_box, default_button) =
+                if (focused || shown) && top_window_class.as_deref() == Some("#32770") {
+                    use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+                    // SAFETY: plain Win32 call with no preconditions.
+                    let window = unsafe { GetForegroundWindow() };
+                    // Say Window's controls: the page the focus is on, or the dialog.
+                    let root = crate::screen_lines::page_window(keyboard_focus_window(), window)
+                        .unwrap_or(window);
+                    let changes = dialog_changes(window);
+                    let reused = state.dialog_read.as_ref().filter(|read| {
+                        read.dialog == window.0 as isize
+                            && read.root == root.0 as isize
+                            && read.changes == changes
+                    });
+                    let (layout, tree) = match reused {
+                        Some(read) => {
+                            tracing::debug!("dialog read reused");
+                            (read.layout.clone(), Some(read.tree.clone()))
                         }
-                        .as_bool();
-                        state.dialog_read = tree.clone().filter(|_| shown).map(|tree| DialogRead {
-                            dialog: window.0 as isize,
-                            root: root.0 as isize,
-                            changes,
-                            layout: layout.clone(),
-                            tree,
-                        });
-                        (layout, tree)
-                    }
+                        None => {
+                            let layout = crate::screen_lines::dialog_layout(window);
+                            let tree = state.uia.as_ref().and_then(|uia| {
+                                window_subtree(uia, root).map(super::without_nested_tree_items)
+                            });
+                            // A dialog still hidden as its focus arrives (the Font dialog,
+                            // 541) has no visible controls to lay out yet: read again.
+                            // SAFETY: plain Win32 query on a window handle.
+                            let shown = unsafe {
+                                windows::Win32::UI::WindowsAndMessaging::IsWindowVisible(window)
+                            }
+                            .as_bool();
+                            state.dialog_read =
+                                tree.clone().filter(|_| shown).map(|tree| DialogRead {
+                                    dialog: window.0 as isize,
+                                    root: root.0 as isize,
+                                    changes,
+                                    layout: layout.clone(),
+                                    tree,
+                                });
+                            (layout, tree)
+                        }
+                    };
+                    (
+                        layout,
+                        tree,
+                        crate::screen_lines::page_of(keyboard_focus_window(), window),
+                        crate::screen_lines::group_box_of(keyboard_focus_window(), window),
+                        crate::screen_lines::default_button_of(window),
+                    )
+                } else {
+                    (
+                        crate::screen_lines::DialogLayout::default(),
+                        None,
+                        None,
+                        None,
+                        None,
+                    )
                 };
-                (
-                    layout,
-                    tree,
-                    crate::screen_lines::page_of(keyboard_focus_window(), window),
-                    crate::screen_lines::group_box_of(keyboard_focus_window(), window),
-                    crate::screen_lines::default_button_of(window),
-                )
-            } else {
-                (
-                    crate::screen_lines::DialogLayout::default(),
-                    None,
-                    None,
-                    None,
-                    None,
-                )
-            };
             stages.push(("window", clock.elapsed().as_millis()));
             let (region, page) = if name == "live_region_change" {
                 // Live, the page after the change is captured by the listener's page worker.

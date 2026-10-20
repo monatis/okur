@@ -673,6 +673,39 @@ fn say_line_twice_spells_to_the_line_end_within_jaws_window() {
     assert_eq!(Some(engine.cursor.offset), last);
 }
 
+/// A dialog focused while still hidden has no controls yet; once it is shown and read again,
+/// Say Window reads them, saying nothing as they arrive [obs, 665/s3].
+#[test]
+fn a_dialog_shown_after_its_focus_gives_say_window_its_controls() {
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(create_test_buffer()),
+        Box::new(speech.clone()),
+    );
+    let mut focus = FocusEvent::new(Role::Edit).with_name("Font:");
+    focus.window_title = Some("Font".to_owned());
+    engine.handle_focus_event(&focus);
+    assert_eq!(engine.execute_command("SayWindow"), None);
+    let mut shown = focus.clone();
+    shown.window_items = vec![crate::event::WindowItem {
+        role: Role::Button,
+        name: "OK".to_owned(),
+        value: None,
+        expanded: None,
+        checked: None,
+        read_only: false,
+        group: None,
+    }];
+    speech.take();
+    assert_eq!(
+        engine.handle_accessibility_event(&AccessibilityEvent::WindowShown(shown)),
+        None
+    );
+    assert!(speech.take().is_empty());
+    let said = engine.execute_command("SayWindow").unwrap_or_default();
+    assert!(said.contains("OK"), "{said:?}");
+}
+
 /// Say All to a page's end says its last word again, where reading leaves the cursor
 /// [obs, 613/s26, 408/s10]; Say Line twice on that last line spells it without a space at
 /// its end, the page's text ending there without a line break [obs, 613/s24].
