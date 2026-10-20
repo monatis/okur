@@ -1,0 +1,13 @@
+{
+  "id": "652-web-select-all-web-menus",
+  "name": "Ctrl+A on a page of web menus (web-menus.html): the size JAWS says for a selection of the whole page. To the news article's end JAWS counts one character more than Okur, after its last line, content information end (562/s20, 515/s1; counts to the top agree, 643); on the plain pages of 617 and 620 it does not",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/web-menus.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Ctrl+A" },
+    { "id": "s2", "type": "key", "command": "Ctrl+Home" }
+  ]
+}
