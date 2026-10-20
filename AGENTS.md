@@ -46,6 +46,12 @@ This is an **autonomous, agent-driven project with a "verification harness in th
    - **Black-Box Functional Observation**: The verification harness observes JAWS strictly as a black box (keystrokes in -> spoken announcements / braille output out) across synthetic fixtures on an external reference machine (`old-pc`).
    - **Interoperability, Fair Use & Decades of Muscle Memory**: Observing software behavior to create an interoperable, compatible implementation is protected fair use. Decades of user muscle memory—keystrokes, shortcuts, announcement messages, speech tokens, and document navigation models—are functional methods of operation and interoperability interfaces that cannot be copyrighted. Our mission is to preserve this familiarity so screen reader users have an accessible, modern, cross-platform alternative.
 
+5. **Okur Speaks in Its Own Name (Trademarks)**:
+   - JAWS, Freedom Scientific and Vispero are trademarks of Vispero. **Okur's own user-facing text never uses them as Okur's name**: its message catalog (`crates/okur-core/locales/`), its dialogs and settings, its command-line options and help, its installer, and anything else Okur says or shows about itself.
+   - Where JAWS names itself, Okur names itself: "JAWS Cursor" is "Okur Cursor", "Route JAWS to PC" is "Route Okur to PC", "JAWS Find" is "Okur Find", the "JAWS key" is the "Okur key" (`--okur-key`). The words around the name stay JAWS's, for the muscle memory.
+   - JAWS is named only to refer to JAWS itself: in comparisons ("as JAWS does"), in documentation and code comments about parity, and in internal identifiers that stand for JAWS's own commands (`ShutDownJAWS`, `JAWSKey+F4` from its key map).
+   - Parity compares Okur's name with JAWS's own as equal, so following this rule costs no parity; a test fails on "JAWS" in a catalog message.
+
 ---
 
 ## 2. Active Session Plan & Session Lifecycle
