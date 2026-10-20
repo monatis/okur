@@ -18,6 +18,9 @@ To record one:
 | 548, 549, 554 | The forms fixture at Intermediate, Advanced and Beginner verbosity (JAWS's `Verbosity` in DEFAULT.JCF's Options, set for the recording) | `desktop-forms.ps1` |
 | 550, 551 | A message box at Intermediate and Advanced verbosity | `desktop-message-box.ps1` |
 | 552, 553, 555 | The sign-up form at Intermediate, Advanced and Beginner verbosity | `signup-form.html` |
+| 556 | Shift+Period and Shift+Comma across a news article: regions, the article, a nested list (twice at its end), a table cell, a block quote, the footer | `news-article.html` |
+| 557 | The same keys where no element is around the text | `doc-reading.html` |
+| 558 | S and D, with Shift, and Ctrl+Insert+Right, Left and Up from paragraphs, list items, a list, links and headings: what JAWS counts as the same element | `same-element.html` (new) |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.

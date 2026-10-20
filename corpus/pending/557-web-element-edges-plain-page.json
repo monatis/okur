@@ -1,0 +1,18 @@
+{
+  "id": "557-web-element-edges-plain-page",
+  "name": "Shift+Period, Shift+Comma, Alt+Win+End and Alt+Win+Home on a page with no list, table or region around its text",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Shift+Period" },
+    { "id": "s2", "type": "key", "command": "Down" },
+    { "id": "s3", "type": "key", "command": "Shift+Period" },
+    { "id": "s4", "type": "key", "command": "Shift+Comma" },
+    { "id": "s5", "type": "key", "command": "Alt+Win+End" },
+    { "id": "s6", "type": "key", "command": "Alt+Win+Home" },
+    { "id": "s7", "type": "key", "command": "Down" }
+  ]
+}
