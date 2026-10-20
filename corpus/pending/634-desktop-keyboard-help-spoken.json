@@ -1,0 +1,20 @@
+{
+  "id": "634-desktop-keyboard-help-spoken",
+  "name": "Keyboard Help (Insert+1) in a dialog, its steps kept from the speech recorder alone (\"history\": false), since Keyboard Help describes the capture's speech history scripts instead of running them (509, round 91): Insert+1 on, Say Line once and twice quickly, Tab, Say Window Title, Say Font, Insert+1 off, then Say Line read again",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-dialogs.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Dialog Fixture" },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+1", "history": false },
+    { "id": "s2", "type": "key", "command": "Insert+Up", "history": false },
+    { "id": "s3", "type": "key", "command": "Insert+Up", "repeat": 2, "history": false },
+    { "id": "s4", "type": "key", "command": "Tab", "history": false },
+    { "id": "s5", "type": "key", "command": "Insert+T", "history": false },
+    { "id": "s6", "type": "key", "command": "Insert+F", "history": false },
+    { "id": "s7", "type": "key", "command": "Insert+1", "history": false },
+    { "id": "s8", "type": "key", "command": "Insert+Up" }
+  ]
+}
