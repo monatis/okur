@@ -561,7 +561,10 @@ if ($Reader -eq 'jaws') {
 
 $expectedTitle = $null
 if ($fixturePath -and (Test-Path $fixturePath)) {
-    $html = Get-Content -Raw $fixturePath
+    # Fixtures are UTF-8 without a byte order mark, which Windows PowerShell 5.1 would read in
+    # the system's code page: "Türkçe Metin" came out garbled and every 613 trial failed its
+    # window title check (rounds 86, 92, perf105b, 110).
+    $html = Get-Content -Raw -Encoding UTF8 $fixturePath
     if ($html -match '(?is)<title>\s*(.*?)\s*</title>') { $expectedTitle = $Matches[1] }
 }
 
