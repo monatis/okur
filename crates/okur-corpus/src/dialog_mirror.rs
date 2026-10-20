@@ -91,6 +91,26 @@ impl DialogMirror {
         if label.is_some() {
             focus.container_name = label;
         }
+        // A list item is Okur's own label where JAWS's differs from it only in punctuation:
+        // JAWS's \"Radio Buttons List,\" is a typo (an accepted divergence) [obs, 230/s18].
+        if focus.role == Role::ListItem {
+            let letters = |text: &str| -> String {
+                text.chars()
+                    .filter(|c| c.is_alphanumeric())
+                    .collect::<String>()
+            };
+            let name = focus.name.as_deref().unwrap_or_default().to_owned();
+            let own = dialog.controls.iter().find_map(|c| match &c.kind {
+                ControlKind::List { items, .. } | ControlKind::ListBox { items, .. } => items
+                    .iter()
+                    .find(|item| letters(item) == letters(&name) && plain(item) != plain(&name))
+                    .map(|item| plain(item)),
+                _ => None,
+            });
+            if own.is_some() {
+                focus.name = own;
+            }
+        }
     }
 
     /// The focus moved in the traced dialog: which control of Okur's it is, and the window's
