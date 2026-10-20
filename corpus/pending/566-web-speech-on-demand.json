@@ -1,0 +1,22 @@
+{
+  "id": "566-web-speech-on-demand",
+  "name": "Speech On Demand (Insert+Space, then Shift+S) on and off: what the toggle says, and which keys speak while it is on (Down, Insert+Up, H, Insert+T, Insert+F12)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Down" },
+    { "id": "s2", "type": "key", "command": "Insert+Space" },
+    { "id": "s3", "type": "key", "command": "Shift+S" },
+    { "id": "s4", "type": "key", "command": "Down" },
+    { "id": "s5", "type": "key", "command": "Insert+Up" },
+    { "id": "s6", "type": "key", "command": "H" },
+    { "id": "s7", "type": "key", "command": "Insert+T" },
+    { "id": "s8", "type": "key", "command": "Insert+F12" },
+    { "id": "s9", "type": "key", "command": "Insert+Space" },
+    { "id": "s10", "type": "key", "command": "Shift+S" },
+    { "id": "s11", "type": "key", "command": "Down" }
+  ]
+}
