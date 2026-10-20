@@ -2,9 +2,9 @@
     "format_version":  2,
     "scenario_id":  "271-web-list-tables-none",
     "scenario_version":  "1.0.0",
-    "timestamp":  "2026-10-19T14:59:29.1322437+03:00",
+    "timestamp":  "2026-10-20T04:06:53.9139717+03:00",
     "provenance":  {
-                       "capture_script_sha256":  "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+                       "capture_script_sha256":  "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
                        "scenario_sha256":  "4cf44e065b64e3a2d9e1b13a1affe96abd834d29559b1fb12a703a289c994fdd",
                        "fixture_sha256":  "7a68ca85fbfbc6deab6e587dc60a7c85a913437047c97fa9a807d3bc9786cbe8",
                        "host":  "DESKTOP-DCNAKQQ",
@@ -14,6 +14,7 @@
                        "culture":  "en-US",
                        "utc_offset_minutes":  180,
                        "chrome_version":  "155.0.8059.84",
+                       "chrome_profile":  "sr-harness",
                        "jaws_version":  "2025.2505.43.400",
                        "jaws_settings":  {
                                              "DEFAULT.JCF":  {
@@ -405,7 +406,9 @@
                                                                            }
                                          },
                        "reader":  "jaws",
-                       "okur_sha256":  null
+                       "okur_sha256":  null,
+                       "trace_elevated":  true,
+                       "other_browsers_closed":  0
                    },
     "environment":  {
                         "os_version":  "Microsoft Windows NT 10.0.19045.0",
@@ -419,14 +422,14 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-19T14:59:31.6258972+03:00",
+                       "timestamp":  "2026-10-20T04:06:56.6278982+03:00",
                        "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792411179024,
-                                                "t_end_ms":  1792411180527,
+                                                "t_start_ms":  1792458424232,
+                                                "t_end_ms":  1792458425711,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Ctrl+Insert+T",
@@ -440,7 +443,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792411179042,
+                                                                                               "t":  1792458424249,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -475,7 +478,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792411179270,
+                                                                                               "t":  1792458424459,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -515,7 +518,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1016,
+                                                                    "settle_ms":  1017,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -524,8 +527,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792411182173,
-                                                "t_end_ms":  1792411184446,
+                                                "t_start_ms":  1792458427359,
+                                                "t_end_ms":  1792458429674,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Escape",
@@ -555,18 +558,18 @@
                        "trial_success":  true,
                        "trace_file":  "271-web-list-tables-none-trial1.jsonl",
                        "page_load_settled":  false,
-                       "trace_sha256":  "393f4ce93a93ac76a5112e2b116b1571bd5f5c96f268141501b3aa331296c9f7"
+                       "trace_sha256":  "cb9f27642eea1b77b5646ceb35af57aceb76d8783adf3b318512260c25d99898"
                    },
                    {
                        "trial_index":  2,
-                       "timestamp":  "2026-10-19T14:59:44.4902167+03:00",
+                       "timestamp":  "2026-10-20T04:07:09.7636787+03:00",
                        "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792411191791,
-                                                "t_end_ms":  1792411193097,
+                                                "t_start_ms":  1792458437192,
+                                                "t_end_ms":  1792458438504,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Ctrl+Insert+T",
@@ -579,7 +582,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792411191906,
+                                                                                               "t":  1792458437299,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -619,7 +622,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  897,
+                                                                    "settle_ms":  911,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -628,8 +631,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792411194789,
-                                                "t_end_ms":  1792411197043,
+                                                "t_start_ms":  1792458440179,
+                                                "t_end_ms":  1792458442446,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Escape",
@@ -648,7 +651,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  false,
-                                                                    "settle_ms":  809,
+                                                                    "settle_ms":  810,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -659,18 +662,18 @@
                        "trial_success":  true,
                        "trace_file":  "271-web-list-tables-none-trial2.jsonl",
                        "page_load_settled":  false,
-                       "trace_sha256":  "6e9a220958e085cf8b87944e35162454b33b899e30628e43d7d9a60023d2ab33"
+                       "trace_sha256":  "080ab4a975695cf7623c20f8c8765f473d248297e7340013ab2203111ba272b4"
                    },
                    {
                        "trial_index":  3,
-                       "timestamp":  "2026-10-19T14:59:57.1131225+03:00",
+                       "timestamp":  "2026-10-20T04:07:22.4821053+03:00",
                        "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792411204350,
-                                                "t_end_ms":  1792411205676,
+                                                "t_start_ms":  1792458449937,
+                                                "t_end_ms":  1792458451244,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Ctrl+Insert+T",
@@ -683,7 +686,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792411204460,
+                                                                                               "t":  1792458450049,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -723,7 +726,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  916,
+                                                                    "settle_ms":  937,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -732,8 +735,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792411207369,
-                                                "t_end_ms":  1792411209668,
+                                                "t_start_ms":  1792458452965,
+                                                "t_end_ms":  1792458455296,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Escape",
@@ -752,7 +755,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  false,
-                                                                    "settle_ms":  812,
+                                                                    "settle_ms":  810,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -763,8 +766,8 @@
                        "trial_success":  true,
                        "trace_file":  "271-web-list-tables-none-trial3.jsonl",
                        "page_load_settled":  false,
-                       "trace_sha256":  "221316641425d891b323bcea6a74c8a69daeaab4344cb42fe4690ea2a4c4ca6a"
+                       "trace_sha256":  "9b7acd0b63404c674c9b7c6d8ff88c7382b02d19903b778a55febb91275509d2"
                    }
                ],
-    "total_elapsed_ms":  41418
+    "total_elapsed_ms":  42290
 }

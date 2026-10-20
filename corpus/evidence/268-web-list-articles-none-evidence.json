@@ -2,9 +2,9 @@
     "format_version":  2,
     "scenario_id":  "268-web-list-articles-none",
     "scenario_version":  "1.0.0",
-    "timestamp":  "2026-10-19T14:57:22.1126817+03:00",
+    "timestamp":  "2026-10-20T04:04:44.5383953+03:00",
     "provenance":  {
-                       "capture_script_sha256":  "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+                       "capture_script_sha256":  "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
                        "scenario_sha256":  "5dc4f54d26ebafcb45dd1a2c8c899fef7c2d0c7ce2b590c6e09ee50b7c1d4e83",
                        "fixture_sha256":  "7a68ca85fbfbc6deab6e587dc60a7c85a913437047c97fa9a807d3bc9786cbe8",
                        "host":  "DESKTOP-DCNAKQQ",
@@ -14,6 +14,7 @@
                        "culture":  "en-US",
                        "utc_offset_minutes":  180,
                        "chrome_version":  "155.0.8059.84",
+                       "chrome_profile":  "sr-harness",
                        "jaws_version":  "2025.2505.43.400",
                        "jaws_settings":  {
                                              "DEFAULT.JCF":  {
@@ -405,7 +406,9 @@
                                                                            }
                                          },
                        "reader":  "jaws",
-                       "okur_sha256":  null
+                       "okur_sha256":  null,
+                       "trace_elevated":  true,
+                       "other_browsers_closed":  0
                    },
     "environment":  {
                         "os_version":  "Microsoft Windows NT 10.0.19045.0",
@@ -419,14 +422,14 @@
     "trials":  [
                    {
                        "trial_index":  1,
-                       "timestamp":  "2026-10-19T14:57:24.6160606+03:00",
+                       "timestamp":  "2026-10-20T04:04:47.2430530+03:00",
                        "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792411052041,
-                                                "t_end_ms":  1792411053603,
+                                                "t_start_ms":  1792458294843,
+                                                "t_end_ms":  1792458296428,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Ctrl+Insert+O",
@@ -440,7 +443,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792411052059,
+                                                                                               "t":  1792458294860,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -475,7 +478,7 @@
                                                                                                          ]
                                                                                            },
                                                                                            {
-                                                                                               "t":  1792411052262,
+                                                                                               "t":  1792458295089,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -527,7 +530,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  1037,
+                                                                    "settle_ms":  1105,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -536,8 +539,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792411055253,
-                                                "t_end_ms":  1792411057551,
+                                                "t_start_ms":  1792458298071,
+                                                "t_end_ms":  1792458300339,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Escape",
@@ -567,18 +570,18 @@
                        "trial_success":  true,
                        "trace_file":  "268-web-list-articles-none-trial1.jsonl",
                        "page_load_settled":  false,
-                       "trace_sha256":  "83324ea9eae404eace7dfcad82507f617402ca86cc9d5ac260158c6c68e03383"
+                       "trace_sha256":  "bc487cb1555b78a04d154be1ef218eec2345d3edb493c8d7226740bc58688ef5"
                    },
                    {
                        "trial_index":  2,
-                       "timestamp":  "2026-10-19T14:57:37.5948303+03:00",
+                       "timestamp":  "2026-10-20T04:05:00.4122277+03:00",
                        "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792411064851,
-                                                "t_end_ms":  1792411066256,
+                                                "t_start_ms":  1792458307853,
+                                                "t_end_ms":  1792458309261,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Ctrl+Insert+O",
@@ -591,7 +594,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792411064959,
+                                                                                               "t":  1792458307962,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -652,8 +655,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792411067949,
-                                                "t_end_ms":  1792411070233,
+                                                "t_start_ms":  1792458310954,
+                                                "t_end_ms":  1792458313242,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Escape",
@@ -672,7 +675,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  false,
-                                                                    "settle_ms":  812,
+                                                                    "settle_ms":  813,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -683,18 +686,18 @@
                        "trial_success":  true,
                        "trace_file":  "268-web-list-articles-none-trial2.jsonl",
                        "page_load_settled":  false,
-                       "trace_sha256":  "bd84e5df90ec01e6302f0d35f59bf4267d5c6dd1bfdb7cde768647eb5886aa67"
+                       "trace_sha256":  "7bc05408ef79fc5f301dacb899f3e62dec9893d62416640072a0ea918c9960d0"
                    },
                    {
                        "trial_index":  3,
-                       "timestamp":  "2026-10-19T14:57:50.2860629+03:00",
+                       "timestamp":  "2026-10-20T04:05:13.3230268+03:00",
                        "foreground_window_start":  "Document Reading Reference Fixture - Google Chrome",
                        "setup_settled":  true,
                        "step_results":  [
                                             {
                                                 "step_id":  "s1",
-                                                "t_start_ms":  1792411077589,
-                                                "t_end_ms":  1792411078931,
+                                                "t_start_ms":  1792458320773,
+                                                "t_end_ms":  1792458322152,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Ctrl+Insert+O",
@@ -707,7 +710,7 @@
                                                                                ],
                                                                     "spoken_records":  [
                                                                                            {
-                                                                                               "t":  1792411077680,
+                                                                                               "t":  1792458320882,
                                                                                                "frags":  [
                                                                                                              {
                                                                                                                  "action":  "speak",
@@ -759,7 +762,7 @@
                                                                     "dispatch_ok":  true,
                                                                     "settled":  true,
                                                                     "heard_audio":  true,
-                                                                    "settle_ms":  978,
+                                                                    "settle_ms":  976,
                                                                     "contaminated":  false,
                                                                     "audio_without_text":  false,
                                                                     "baseline_settled":  true
@@ -768,8 +771,8 @@
                                             },
                                             {
                                                 "step_id":  "s2",
-                                                "t_start_ms":  1792411080643,
-                                                "t_end_ms":  1792411082905,
+                                                "t_start_ms":  1792458323843,
+                                                "t_end_ms":  1792458326103,
                                                 "action":  {
                                                                "type":  "key",
                                                                "command":  "Escape",
@@ -799,8 +802,8 @@
                        "trial_success":  true,
                        "trace_file":  "268-web-list-articles-none-trial3.jsonl",
                        "page_load_settled":  false,
-                       "trace_sha256":  "9e86959ca41ab152510ed82ef2d489693a771df16e5850c3db2e172d2603abe8"
+                       "trace_sha256":  "5450b6e071e5816e8b7bb6ba0147da13d897e35db61a740544e281dcc8e49858"
                    }
                ],
-    "total_elapsed_ms":  41705
+    "total_elapsed_ms":  42505
 }

@@ -1297,13 +1297,13 @@
       "scenario_id": "246-web-list-radio-buttons-enter",
       "fixture": "signup-form.html",
       "evidence": {
-        "sha256": "e558cba2f3026832d646c7536fefade5f6a7cee1eb485b02767f17dfb43646de",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "0640a14359b0511770fd94531817b8e1773aa35df531d4a44188fe97062f8444",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
         "successful_trials": 3,
-        "deterministic": false,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -1311,8 +1311,8 @@
       "scenario_id": "247-web-list-buttons-enter",
       "fixture": "signup-form.html",
       "evidence": {
-        "sha256": "874bfc27cf125d2fc8a4f7829f8bbc9eea4fdaf26505e69e67faeab8875bf44d",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "897a7f8c2d55f234830456955696234a5b5c1c09880695078f1151379c5f5f0e",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1325,8 +1325,8 @@
       "scenario_id": "248-web-list-combo-boxes-enter",
       "fixture": "signup-form.html",
       "evidence": {
-        "sha256": "618123dbd340c5956043168e9f5076bdb29cae9027d6aa1cddaaed2dd5725d17",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "442b687c35838b6cf8c8341979fba0ca8a177688b7333fdedc8daac0d1010742",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1339,8 +1339,8 @@
       "scenario_id": "249-web-list-edits-enter",
       "fixture": "signup-form.html",
       "evidence": {
-        "sha256": "6376a24363e85e17aefbc67ce78292aee8e55f1929068862538f69778cf2b109",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "da801ce08ea7aef181b0df67503dc6a83add2b3e99cb54d351a17661af999b9b",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1367,8 +1367,8 @@
       "scenario_id": "250-web-list-check-boxes-enter",
       "fixture": "signup-form.html",
       "evidence": {
-        "sha256": "de7c476ff35565f25997f81a0206dbc838dc6a2cd42459c5b75ecaa8b384d175",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "9fe152b8b621fbeb1fa992b19c791ecc548bffd995b7d8977ff21872c6b0ec7c",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1381,8 +1381,8 @@
       "scenario_id": "251-web-list-graphics-enter",
       "fixture": "news-article.html",
       "evidence": {
-        "sha256": "364b1811dfe442540b8d33bb5b4e95b445ba66525c4317ff26c54273371b660e",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "940faad36c5b7b801694c55e0dafe58373c37e2eecfcaaeea7dd3974f88fdeec",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1395,8 +1395,8 @@
       "scenario_id": "252-web-list-lists-enter",
       "fixture": "news-article.html",
       "evidence": {
-        "sha256": "57508c146e78e4b01de6b402b1ae4e8238a5259621f9d15bd45994146d8694f8",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "3997d988d91e1018277a0ebc632658fb063a408b63f627f87701ca3480957bd5",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1409,8 +1409,8 @@
       "scenario_id": "253-web-list-articles-enter",
       "fixture": "news-article.html",
       "evidence": {
-        "sha256": "f220d712bbedcbbc0c0762f88b363b87d867a2e73f8cde864152163131ce2cde",
-        "capture_script_sha256": "f5d1967e5d28753c461a5e4d46204491d13379c97c8247794f4b2495f148603e",
+        "sha256": "fbb017d04ec5e5e772282e1ec3bbffcb0c6090e0e37974c88e6570071c12e0b8",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1423,22 +1423,8 @@
       "scenario_id": "254-web-list-paragraphs-enter",
       "fixture": "news-article.html",
       "evidence": {
-        "sha256": "bdcacb9949301a05f75e504c9bb32d72f5fcc428f9792dbc9eae5f4352ccfd1a",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
-        "os_version": "Microsoft Windows NT 10.0.19045.0",
-        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
-        "trials": 3,
-        "successful_trials": 3,
-        "deterministic": false,
-        "summary_consistent": true
-      }
-    },
-    {
-      "scenario_id": "255-web-list-block-quotes-enter",
-      "fixture": "news-article.html",
-      "evidence": {
-        "sha256": "0c75c0e61737d1d5a367294e37a73793b1cb851b4d54c6ebb3bd94e0b7670a2c",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "4e653a65c1103ad02c365cd5546d4e6ee8af791afdf9202c4de4db63e477b253",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1448,11 +1434,25 @@
       }
     },
     {
+      "scenario_id": "255-web-list-block-quotes-enter",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "09397f1716d2284f9914f5301568d3447b43fb95b7ab78e9cc9b3f54778b73b9",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "256-web-list-regions-enter",
       "fixture": "news-article.html",
       "evidence": {
-        "sha256": "a9bdb0ad70a755fbf5b46a0abac27b6def067bb2fee7f4b62bda8178118855aa",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "5ab2c7710b574bc9ba3dd8e009639fac55b4d8cba1108c35ed6ad70e0dcc13ad",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1465,8 +1465,8 @@
       "scenario_id": "257-web-list-tables-enter",
       "fixture": "news-article.html",
       "evidence": {
-        "sha256": "a160907dcc425f5d26cc39e46d127ce31eca14f5d57d77e22c27b959c8d4707c",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "35aaf03c83327c927c4e1add86564a9b6a651386717895164604b7cd9b138ab8",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1479,8 +1479,8 @@
       "scenario_id": "258-web-list-glance-highlights-enter",
       "fixture": "news-article.html",
       "evidence": {
-        "sha256": "c53d96de6ef99602a10a683ab660d88bd2b8aa31298099880852bb069282b59e",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "83ba9f556f44fb9ab90d5f7910c401e53d67552075b16fc94fcc064d33f3bd93",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1493,8 +1493,8 @@
       "scenario_id": "259-web-list-divisions-enter",
       "fixture": "web-chat.html",
       "evidence": {
-        "sha256": "c4b3ca447a9f5c236ec397c86cc1f7c18c386f5ca84a34a60e841be8e29c83ea",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "3f7520faacfae176d0f85b36bbea5c2e058e3dc950d8c13f77ce3d12800fddb6",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1521,8 +1521,8 @@
       "scenario_id": "260-web-list-tabs-enter",
       "fixture": "boundaries-dynamic.html",
       "evidence": {
-        "sha256": "eba2b41dcc4599c120b81ccfc67415856b48c718be9abf9db144101eb5d8a7c6",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "16770c9e8fe5461ebc62810bcf0460527b02fa64160fd2360a2bcffd8aa20c59",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1535,8 +1535,8 @@
       "scenario_id": "261-web-list-radio-buttons-none",
       "fixture": "doc-reading.html",
       "evidence": {
-        "sha256": "0a1d21cc8234173a6c9cf0575bb81cfa3889edf60a55d9bf653a1da751e6a981",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "a9cae06327eae16490c7b62c8af749e0c2e20f3430d1b0d24b041496aada6b25",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1549,8 +1549,8 @@
       "scenario_id": "262-web-list-buttons-none",
       "fixture": "doc-reading.html",
       "evidence": {
-        "sha256": "d50350b52b462386f8cc9986ca02f3775e11cc613145a2eb29814703bdfe8786",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "fe57cd6886d10e86a8ff2a9c9df62c489cc5bd95b6719d535831045819eaa71b",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1563,8 +1563,8 @@
       "scenario_id": "263-web-list-combo-boxes-none",
       "fixture": "doc-reading.html",
       "evidence": {
-        "sha256": "464773c202fd89c1b416fd1a22c03903b26accee2977e3cbcc424490cc66bd02",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "cd428328c49b4ddf18ce5809983b13ecfd1e2cca456f5455ca29d4d8b545b6c6",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1577,8 +1577,8 @@
       "scenario_id": "264-web-list-edits-none",
       "fixture": "doc-reading.html",
       "evidence": {
-        "sha256": "b6d4869609e9bcdbb37e8ebc609e9121893c9b08d3e0961a8c18e763f4e00656",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "d5965d9d28b88768cb6c3ec72fb0fcba5de61cb9caa6d03d59f272deadd3cdbb",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1591,8 +1591,8 @@
       "scenario_id": "265-web-list-check-boxes-none",
       "fixture": "doc-reading.html",
       "evidence": {
-        "sha256": "efbf437b95205ed3d8d621949439f46811b1ef173fcd566edf29a25f1df16dc9",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "0c62b26f5dd81f195e57d99b7b65a0e74208505a44a1ba2883a782d0f4dd6b45",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1605,8 +1605,8 @@
       "scenario_id": "266-web-list-graphics-none",
       "fixture": "doc-reading.html",
       "evidence": {
-        "sha256": "d30a774377b04c403d7ddeeff061f07e92a66eda287f348ef2e8b7e5f77ae7f2",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "0a2f78eeb486cf03b4ed5ef0c2865079b94b6f8f69c4fc2c15cf4df7a34648cb",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1619,8 +1619,8 @@
       "scenario_id": "267-web-list-lists-none",
       "fixture": "doc-reading.html",
       "evidence": {
-        "sha256": "ee317f3b955126934e9ce9ad4017e325932de101bda1d9ea4bfc6158b0be8a95",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "4eaa2cb82e41e2bfd51aaa28347d454c9cc3b46d7900aa05276abd46b0b43c53",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1633,8 +1633,8 @@
       "scenario_id": "268-web-list-articles-none",
       "fixture": "doc-reading.html",
       "evidence": {
-        "sha256": "76dc6ffb453b07984d6b4f3b05e1ac553899006ca2adef81e548749b08182e4b",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "ae3a93221aa2aa54a6804225042fc843a5095680502330cc7c7a924d016c92a8",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1647,8 +1647,8 @@
       "scenario_id": "269-web-list-paragraphs-none",
       "fixture": "tables-navigation.html",
       "evidence": {
-        "sha256": "d795d9bbc2def692dac2da42f0b06893d8d20d50921361487a841df469cb723b",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "9fe021063a8cd13d3d2e5807bf799f440341d0cbb8c0934d5c12983248298bcd",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1675,8 +1675,8 @@
       "scenario_id": "270-web-list-block-quotes-none",
       "fixture": "doc-reading.html",
       "evidence": {
-        "sha256": "9230f0f51c5a0ceac1ab53fb43ce3335f2be8ded198fb4818a678d408f36868d",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "c0a8eac8d0be39d6ee93a149eb2f8e73f07f9249be69a8e34927a2b50e38d0f6",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1689,8 +1689,8 @@
       "scenario_id": "271-web-list-tables-none",
       "fixture": "doc-reading.html",
       "evidence": {
-        "sha256": "addf83a5a61a8cd7062745ab4755c38c8bfdd951a8ea8a85e783a1e1ca6ec11e",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "3585d4a3a1e460cf5f5d8c8a6dddef790fb127ae1ae650099b73327fe3243ee0",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1703,8 +1703,8 @@
       "scenario_id": "272-web-list-divisions-none",
       "fixture": "tables-navigation.html",
       "evidence": {
-        "sha256": "01394d386f183d212517f2dd7531baee7eb9c2758feb456c94559ddf717c29f5",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "d3093e35e74ce20e4154ebc026ab81858e983151efef94b70b57e2bc418668ad",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1717,8 +1717,8 @@
       "scenario_id": "273-web-list-tabs-none",
       "fixture": "doc-reading.html",
       "evidence": {
-        "sha256": "1e735e263a00b9f289c57dd705c839501a2e7c5a3a1713e3ecef380bdcfc96c5",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "b5a75b54ebe32c42a086a8ff2df675688a21fbaca4bc4c248552ade21b4dabc6",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1731,8 +1731,8 @@
       "scenario_id": "274-web-list-regions-items",
       "fixture": "news-article.html",
       "evidence": {
-        "sha256": "e4e99b3a7d1449dc125c4562e821847e9cfa283a32f5fb94c13be3d04c49de9b",
-        "capture_script_sha256": "679966ca7a67f44ffb5413bd1fac5c8d98c71e764fe2b64d5fc7368f1f1baa30",
+        "sha256": "63c4d70849a6ec55d345444e0fd8dfb64ef7a473a4d06cba88918eccfd074772",
+        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -3175,6 +3175,6 @@
     "scenarios_with_evidence": 217,
     "total_trials": 705,
     "successful_trials": 704,
-    "deterministic_scenarios": 134
+    "deterministic_scenarios": 135
   }
 }
