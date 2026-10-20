@@ -21,6 +21,8 @@ param(
     [int]$Repetitions = 5,
     # Record an accessibility event trace per trial into OutputDir/traces.
     [switch]$Trace,
+    # With Trace: the tracer's timings too (run-scenario.ps1 -TraceTimings).
+    [switch]$TraceTimings,
     # Restart JAWS before the first scenario (jaws-process.ps1, elevated; the lab only): JAWS
     # keeps state between scenarios that keys left wrong can spoil. After a day of stuck keys
     # JAWS stopped toggling Caps Lock on CapsLock pressed twice until it was restarted (309,
@@ -90,6 +92,7 @@ foreach ($f in $files) {
     }
     $runnerArgs = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $runner, '-ScenarioFile', $f.FullName, '-Repetitions', $Repetitions, '-OutputPath', $out, '-Quiet')
     if ($Trace) { $runnerArgs += @('-TraceDir', (Join-Path $OutputDir 'traces')) }
+    if ($Trace -and $TraceTimings) { $runnerArgs += '-TraceTimings' }
     # What the run said, kept when it failed: round 53's eight failures told nothing else.
     $said = & powershell @runnerArgs 2>&1
     $code = $LASTEXITCODE

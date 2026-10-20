@@ -9,6 +9,10 @@ param(
     # When set, each trial records an accessibility event trace (okur trace) to
     # <TraceDir>\<scenario-id>-trial<N>.jsonl, aligned with steps by unix-ms timestamps.
     [string]$TraceDir,
+    # With TraceDir: the tracer also logs each event's read, its stages timed, to
+    # <TraceDir><scenario-id>-trial<N>.log (okur trace --debug-log), for the performance
+    # review's measurements. Off by default: logging could shift a trace's timing.
+    [switch]$TraceTimings,
     # The recording SAPI voice's log (install-speech-recorder.ps1). While JAWS speaks through that
     # voice, each step also records what JAWS sent the synthesizer: the text after JAWS's symbol
     # and punctuation processing, which the speech history does not show.
@@ -745,7 +749,9 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         # Elevated, as JAWS is: from normal integrity UI Automation sees JAWS's own dialogs
         # thinly (a list view as a pane, buttons as panes named "&Move To Heading"; 224,
         # round 23). old-pc elevates without asking.
-        $traceProc = Start-Process -FilePath $Okur -ArgumentList @('trace', '--out', $tracePath, '--stop-file', $traceStop) -WindowStyle Hidden -PassThru -Verb RunAs
+        $traceArgs = @('trace', '--out', $tracePath, '--stop-file', $traceStop)
+        if ($TraceTimings) { $traceArgs += @('--debug-log', (Join-Path $TraceDir "$scenarioId-trial$t.log")) }
+        $traceProc = Start-Process -FilePath $Okur -ArgumentList $traceArgs -WindowStyle Hidden -PassThru -Verb RunAs
         Start-Sleep -Milliseconds 400
         $trialResult.trace_file = Split-Path -Leaf $tracePath
     }

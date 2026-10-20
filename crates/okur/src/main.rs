@@ -145,6 +145,11 @@ enum Commands {
         /// object ids (Chromium pages; nothing is read for them)
         #[arg(long)]
         page_changes: bool,
+
+        /// Log each event's read, with its stages' times, to this file (for `okur latency`
+        /// and the performance review's measurements)
+        #[arg(long)]
+        debug_log: Option<String>,
     },
     /// Send key chords to the application in front, each only while it is one of --allow:
     /// for live checks on a machine the user lets the agent drive ("Insert+Alt+W",
@@ -559,11 +564,14 @@ fn print_evidence(evidence: &str, trial: usize, trace: bool) -> Result<(), Strin
     Ok(())
 }
 
-/// Logs to stderr at the RUST_LOG level, or, for `run --debug-log <file>`, everything from
-/// the screen reader's crates at debug level to that file.
+/// Logs to stderr at the RUST_LOG level, or, for `run --debug-log <file>` and
+/// `trace --debug-log <file>`, everything from the screen reader's crates at debug level to
+/// that file.
 fn init_logging(cli: &Cli) {
     let debug_log = match &cli.command {
-        Some(Commands::Run { debug_log, .. }) => debug_log.as_deref(),
+        Some(Commands::Run { debug_log, .. } | Commands::Trace { debug_log, .. }) => {
+            debug_log.as_deref()
+        }
         _ => None,
     };
     okur::run::init_logging(debug_log);
@@ -1095,6 +1103,7 @@ async fn main() {
             stop_file,
             max_ms,
             page_changes,
+            debug_log: _,
         }) => {
             #[cfg(windows)]
             match okur_platform::event_trace::run_trace(

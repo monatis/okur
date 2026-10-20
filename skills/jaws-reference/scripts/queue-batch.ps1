@@ -22,6 +22,7 @@ param(
     [Parameter(Mandatory = $true)][string]$OutputDir,
     [int]$Repetitions = 5,
     [switch]$Trace,
+    [switch]$TraceTimings,
     [switch]$FreshJaws,
     # Fixtures (file names under corpus\fixtures) whose IA2 and UIA snapshots are captured into
     # <OutputDir>\snapshots before the batch: a capture must not run during another batch.
@@ -105,5 +106,6 @@ $batch = @{
     Repetitions  = $Repetitions
 }
 if ($Trace) { $batch.Trace = $true }
+if ($TraceTimings) { $batch.TraceTimings = $true }
 if ($FreshJaws) { $batch.FreshJaws = $true }
 & (Join-Path $PSScriptRoot 'run-batch.ps1') @batch
