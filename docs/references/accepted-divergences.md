@@ -253,6 +253,18 @@ A step can be in more than one entry; all of its entries apply.
   between.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### The Font dialog's font is said before the dialog
+
+- Step: `541-desktop-notepad-font-dialog/s2`.
+- Difference: the whole step. JAWS says "Consolas" between the Notepad edit it leaves and
+  "Font dialog", then again in the Font field; Okur says the dialog, then the field with its
+  font once.
+- Why: the dialog fills its font field about 400 ms after the field takes the focus, and JAWS
+  reads that text as it arrives, ahead of the dialog it has not yet announced: in 3 of 3 trials
+  of round 56 (2026-10-20) and 2 of 3 of the earlier recording. The font is said twice, the
+  first time out of place.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-18.
+
 ### JAWS reads nothing of WordPad's document
 
 - Steps: `522-desktop-wordpad-reading/s1` to `/s6`, `/s8` to `/s14`, `/s16` to `/s18` (the

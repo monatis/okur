@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run -p okur -- parity --write-baseline",
   "matched_steps": 2469,
-  "total_steps": 2644,
-  "accepted_divergences": 71,
+  "total_steps": 2643,
+  "accepted_divergences": 72,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -2639,7 +2639,7 @@
     "541-desktop-notepad-font-dialog/s1": "match",
     "541-desktop-notepad-font-dialog/s10": "match",
     "541-desktop-notepad-font-dialog/s11": "match",
-    "541-desktop-notepad-font-dialog/s2": "mismatch",
+    "541-desktop-notepad-font-dialog/s2": "accepted divergence",
     "541-desktop-notepad-font-dialog/s3": "mismatch",
     "541-desktop-notepad-font-dialog/s4": "mismatch",
     "541-desktop-notepad-font-dialog/s5": "match",
