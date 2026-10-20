@@ -1,0 +1,32 @@
+{
+  "id": "562-web-large-selection",
+  "name": "Ctrl+Shift+End from four places in the news article (the h3, the last h2, the second and the first h2) and from the top, each selection copied: where JAWS stops reading a selection and says \"selected N characters up to\" its end, and how it counts",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "3" },
+    { "id": "s2", "type": "key", "command": "Ctrl+Shift+End" },
+    { "id": "s3", "type": "key", "command": "Ctrl+C", "capture_clipboard": true },
+    { "id": "s4", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s5", "type": "key", "command": "2" },
+    { "id": "s6", "type": "key", "command": "2" },
+    { "id": "s7", "type": "key", "command": "2" },
+    { "id": "s8", "type": "key", "command": "Ctrl+Shift+End" },
+    { "id": "s9", "type": "key", "command": "Ctrl+C", "capture_clipboard": true },
+    { "id": "s10", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s11", "type": "key", "command": "2" },
+    { "id": "s12", "type": "key", "command": "2" },
+    { "id": "s13", "type": "key", "command": "Ctrl+Shift+End" },
+    { "id": "s14", "type": "key", "command": "Ctrl+C", "capture_clipboard": true },
+    { "id": "s15", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s16", "type": "key", "command": "2" },
+    { "id": "s17", "type": "key", "command": "Ctrl+Shift+End" },
+    { "id": "s18", "type": "key", "command": "Ctrl+C", "capture_clipboard": true },
+    { "id": "s19", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s20", "type": "key", "command": "Ctrl+Shift+End" },
+    { "id": "s21", "type": "key", "command": "Ctrl+C", "capture_clipboard": true }
+  ]
+}
