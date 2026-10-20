@@ -1024,6 +1024,18 @@ async fn main() {
                     let (built_tx, mut built_rx) =
                         tokio::sync::mpsc::unbounded_channel::<(u64, String, VirtualBuffer)>();
                     let (mut refreshes_sent, mut refresh_applied) = (0_u64, 0_u64);
+                    // Page parts read again are spliced into the page and built on a thread of
+                    // their own too (135-175 ms on a page of 25,000 nodes, during which every
+                    // event waited; performance review, 2026-10-20, P8). They come back with
+                    // the page they were spliced into, the buffer (none when a part was not
+                    // found in it) and the parts themselves.
+                    type BuiltParts = (
+                        std::sync::Arc<okur_core::AomNode>,
+                        Option<VirtualBuffer>,
+                        Vec<okur_core::AomNode>,
+                    );
+                    let (parts_tx, mut parts_rx) =
+                        tokio::sync::mpsc::unbounded_channel::<BuiltParts>();
                     loop {
                         let received = tokio::select! {
                             biased;
@@ -1040,6 +1052,21 @@ async fn main() {
                                     give_way_to_keys();
                                     if let Ok(mut eng) = engine_events.lock() {
                                         eng.handle_page_refreshed(&title, buffer);
+                                    }
+                                }
+                                continue;
+                            }
+                            // Installed if the page is still the one they were spliced into;
+                            // else the parts go into the page as it is now, under the lock.
+                            Some((base, buffer, parts)) = parts_rx.recv() => {
+                                give_way_to_keys();
+                                if let Ok(mut eng) = engine_events.lock() {
+                                    let installed =
+                                        buffer.is_some_and(|b| eng.install_page_parts(&base, b));
+                                    if !installed {
+                                        let _ = eng.handle_accessibility_event(
+                                            &AccessibilityEvent::PagePartsLoaded(parts),
+                                        );
                                     }
                                 }
                                 continue;
@@ -1095,51 +1122,44 @@ async fn main() {
                             }
                             _ => None,
                         };
-                        // Page parts read again are spliced into the page and built likewise,
-                        // the engine taken only a moment to share its page.
-                        let parts = match &event {
-                            Some(AccessibilityEvent::PagePartsLoaded(parts)) => {
-                                give_way_to_keys();
-                                let base = engine_events
-                                    .lock()
-                                    .ok()
-                                    .and_then(|eng| eng.page_for_parts());
-                                base.and_then(|base| {
+                        // Page parts read again are spliced into the page and built on the
+                        // blocking pool, the engine taken only a moment to share its page.
+                        if let Some(AccessibilityEvent::PagePartsLoaded(parts)) = &mut event {
+                            give_way_to_keys();
+                            let base = engine_events
+                                .lock()
+                                .ok()
+                                .and_then(|eng| eng.page_for_parts());
+                            if let Some(base) = base {
+                                let parts = std::mem::take(parts);
+                                let built = parts_tx.clone();
+                                tokio::task::spawn_blocking(move || {
                                     let started = std::time::Instant::now();
-                                    let page = VirtualBuffer::spliced(&base, parts)?;
-                                    let buffer = VirtualBuffer::from_aom_owned(page);
+                                    let buffer = VirtualBuffer::spliced(&base, &parts)
+                                        .map(VirtualBuffer::from_aom_owned);
                                     tracing::debug!(
                                         parts = parts.len(),
-                                        lines = buffer.lines.len(),
+                                        lines = buffer.as_ref().map(|b| b.lines.len()),
                                         ms = started.elapsed().as_millis(),
                                         "page parts spliced"
                                     );
-                                    Some((base, buffer))
-                                })
+                                    let _ = built.send((base, buffer, parts));
+                                });
+                                continue;
                             }
-                            _ => None,
-                        };
+                        }
                         let spoken = {
                             give_way_to_keys();
                             let Ok(mut eng) = engine_events.lock() else {
                                 continue;
                             };
                             let started = std::time::Instant::now();
-                            let spoken = match (&event, page, parts) {
-                                (_, Some((title, buffer)), _) => {
+                            let spoken = match (&event, page) {
+                                (_, Some((title, buffer))) => {
                                     eng.handle_document_loaded(&title, buffer)
                                 }
-                                // The page changed meanwhile: the parts are spliced into it
-                                // here.
-                                (Some(event), None, Some((base, buffer))) => {
-                                    if eng.install_page_parts(&base, buffer) {
-                                        None
-                                    } else {
-                                        eng.handle_accessibility_event(event)
-                                    }
-                                }
-                                (Some(event), None, None) => eng.handle_accessibility_event(event),
-                                (None, None, _) => eng.on_idle(),
+                                (Some(event), None) => eng.handle_accessibility_event(event),
+                                (None, None) => eng.on_idle(),
                             };
                             let held = started.elapsed();
                             if held > SLOW_ENGINE {

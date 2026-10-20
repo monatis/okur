@@ -40,6 +40,7 @@ before and after each change gave identical output.
 | P10: spans by start for the lookups by offset | done | `4fb4f7d` | Insert+F7 23 → 8.0 ms, Insert+F5 25 → 7.9 ms (index built on the first press included) |
 | P9 steps 1-2: role-and-name index for page focus, the DOM id index for live regions | done; step 3 (ancestors) not yet | `730f73e` | page focus found by name, 25,032 nodes: the first 11.3 → 8.7 ms (index built), the next 4.5 → 0.43 ms |
 | P2 step 1: the hook installed again after a key of 200 ms or more | done; steps 2-3 (priorities, the O(page) rule) not yet; the re-install not yet seen live | this commit | test: the threshold |
+| P8: page parts spliced and built on the blocking pool | done; live check to come (a web application whose page changes) | this commit | read: the event loop no longer builds them (135-175 ms at 25,032 nodes in the review) |
 
 ## Summary: the five worst
 
