@@ -101,7 +101,7 @@ Building evidence collection and verification tooling is the real engineering in
 - `okur snapshot` / `capture-snapshot.ps1`: raw Chrome UIA tree of a fixture on `old-pc`.
 - `run-scenario.ps1` (format 2): scan-coded keys, audio-silence settling (`okur wait-silence`), provenance.
 - `lab-push.ps1` / `lab-pull.ps1`: hash-verified deployment of binaries, scripts, fixtures and scenarios to `old-pc` via Dropbox.
-- `okur parity`, `okur invariants`, `okur corpus-manifest`: generated, ratcheted verification results.
+- `okur parity`, `okur invariants`, `okur corpus-manifest`: generated, ratcheted verification results. `okur parity --only <id prefix>` replays chosen scenarios; with `RUST_LOG=okur_core=debug`, the engine's debug log for them.
 - `okur snapshot --api ia2`: IAccessible2 view of a Chromium document (attributes, states, hypertext, rendered line ranges).
 - `okur trace` / `run-scenario.ps1 -TraceDir`: per-trial accessibility event traces, replayed into the engine by `okur parity`.
 - `okur evidence <scenario-id> [--trace]`: readable view of recorded JAWS transcripts and trial variants; `--trace` lists the accessibility events traced during each step.

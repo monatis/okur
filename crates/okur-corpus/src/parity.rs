@@ -517,11 +517,21 @@ pub fn run(corpus_dir: &Path) -> ParityReport {
 
 /// Runs every scenario against its evidence and the `api` snapshot of its fixture.
 pub fn run_with(corpus_dir: &Path, api: Api) -> ParityReport {
+    run_matching(corpus_dir, api, &[])
+}
+
+/// [`run_with`] for the scenarios whose ids start with one of `only` (every scenario when it
+/// is empty): `okur parity --only 228` replays one scenario, with the engine's debug log.
+pub fn run_matching(corpus_dir: &Path, api: Api, only: &[String]) -> ParityReport {
     let mut report = ParityReport::default();
     let mut files: Vec<PathBuf> = fs::read_dir(corpus_dir.join("scenarios"))
         .map(|rd| rd.filter_map(|e| e.ok().map(|e| e.path())).collect())
         .unwrap_or_default();
     files.retain(|p| p.extension().is_some_and(|e| e == "json"));
+    files.retain(|p| {
+        let id = p.file_stem().and_then(|s| s.to_str()).unwrap_or_default();
+        only.is_empty() || only.iter().any(|prefix| id.starts_with(prefix.as_str()))
+    });
     files.sort();
 
     for path in files {

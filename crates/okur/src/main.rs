@@ -101,6 +101,11 @@ enum Commands {
         /// sent its synthesizer in evidence recorded through the speech recorder voice)
         #[arg(long)]
         spoken: bool,
+
+        /// Replay only the scenarios whose ids start with this (repeatable): with RUST_LOG,
+        /// one scenario's engine debug log. Not with --write-baseline.
+        #[arg(long)]
+        only: Vec<String>,
     },
     /// Act on the foreground browser page like Enter/Space would (Windows): find a control by
     /// name in the page's IA2 capture, request focus or its default action, then report the
@@ -1487,6 +1492,7 @@ async fn main() {
             write_baseline,
             api,
             spoken,
+            only,
         }) => {
             use okur_corpus::snapshots::{Api, PARITY_API};
             let dir = Path::new(&corpus_dir);
@@ -1498,11 +1504,15 @@ async fn main() {
                     std::process::exit(2);
                 }
             };
+            if write_baseline && !only.is_empty() {
+                eprintln!("The baseline covers every scenario; drop --only to write it.");
+                std::process::exit(2);
+            }
             if write_baseline && api != PARITY_API {
                 eprintln!("The baseline ratchets {PARITY_API:?} parity; drop --api to write it.");
                 std::process::exit(2);
             }
-            let report = okur_corpus::parity::run_with(dir, api);
+            let report = okur_corpus::parity::run_matching(dir, api, &only);
             for step in report
                 .steps
                 .iter()
