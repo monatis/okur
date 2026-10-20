@@ -1,0 +1,80 @@
+{
+  "id": "668-desktop-edit-page-and-word-keys-intermediate",
+  "name": "The edit keys of the backlog's row 22 not yet recorded, in a native multiline edit: Shift+PageDown and Shift+PageUp, Ctrl+Shift+End and Ctrl+Shift+Home, Ctrl+Backspace and its undo, Ctrl+A (504 recorded cut, paste, undo and Ctrl+Delete) (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 660-desktop-edit-page-and-word-keys)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-editor.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Editor Fixture"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Shift+PageDown"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Shift+PageUp"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "End"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Ctrl+Shift+Home"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Ctrl+End"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Ctrl+Backspace"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Ctrl+Z"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Ctrl+A"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Ctrl+Home"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}
