@@ -932,8 +932,15 @@ fn replayable(event: &TraceEvent) -> bool {
     // opens one of its dialogs; the dialog is its child. Okur, never running beside JAWS
     // live, would see neither, but its own dialog the same as JAWS's; the dialog's events
     // stay [obs, 224/s1, round 52].
+    // The main window can also report the dialog's first focus, its chain in the dialog: that
+    // event is the dialog's (249/s1, round 54: "focus" from JFWUI2 on "Full name Edit").
     const JAWS_MAIN_WINDOW: &str = "JFWUI2";
-    if event.window_class.as_deref() == Some(JAWS_MAIN_WINDOW)
+    const WIN32_DIALOG: &str = "#32770";
+    let in_dialog = event
+        .focus_chain
+        .iter()
+        .any(|n| n.class_name.as_deref() == Some(WIN32_DIALOG));
+    if (event.window_class.as_deref() == Some(JAWS_MAIN_WINDOW) && !in_dialog)
         || event
             .focus_chain
             .last()
