@@ -876,7 +876,12 @@ mod com {
                 let text = all.to_string();
                 let length = i32::try_from(text.encode_utf16().count()).unwrap_or(i32::MAX);
                 let at = (length > 0).then(|| caret.clamp(0, length - 1));
-                let runs = self.runs(length, at);
+                let mut runs = self.runs(length, at);
+                if length == 0 {
+                    // An empty field has the colors it would type in: JAWS says them in forms
+                    // mode, "black on white" [obs, 676/s8].
+                    (runs.color, runs.background) = self.colors_at(0);
+                }
                 Ok(Ia2TextState {
                     text,
                     caret: caret.max(0),
@@ -923,6 +928,27 @@ mod com {
                     offset = end;
                 }
                 found
+            }
+
+            /// The CSS colors (`color`, `background-color`) the text has at `offset`, read
+            /// even where there is no text.
+            fn colors_at(&self, offset: i32) -> (Option<String>, Option<String>) {
+                let (mut start, mut end) = (0i32, 0i32);
+                let mut attrs = BSTR::default();
+                // SAFETY: out-pointers to locals on a valid interface; BSTR ownership transfers
+                // to `attrs`.
+                let read = unsafe {
+                    self.0
+                        .get_attributes(offset, &mut start, &mut end, &mut attrs)
+                };
+                if read.is_err() {
+                    return (None, None);
+                }
+                let mut attributes = parse_attributes(&attrs.to_string());
+                (
+                    attributes.remove("color"),
+                    attributes.remove("background-color"),
+                )
             }
 
             fn selection(&self) -> Option<(i32, i32)> {

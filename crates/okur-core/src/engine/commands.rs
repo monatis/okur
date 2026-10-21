@@ -1177,28 +1177,32 @@ impl ScreenReaderEngine {
     /// [obs, 565, 618, 530/s2]. Elsewhere a text field's colors, which JAWS reads from the
     /// screen; other controls have none.
     fn say_color(&mut self) -> Option<String> {
-        // A page's focused field, in forms mode or under the virtual cursor, has the colors of
-        // its text at the caret, "black on white", and none while it is empty [obs, 662/s2,
-        // s5, s7].
-        let on_focused_field = self.app_mode == AppMode::VirtualBuffer
-            && (self.forms_mode
-                || self
-                    .cursor
-                    .buffer
-                    .find_edit_node(self.cursor.offset)
-                    .is_some_and(|field| Some(field.id) == self.last_page_focus));
-        // Outside a page, a text field's colors at its caret, "black on white" [obs, 661/s1];
-        // JAWS says "default on default" where it finds none, on a dialog's button [obs,
-        // 513/s3].
-        let formatting = if self.app_mode == AppMode::VirtualBuffer && !on_focused_field {
-            self.cursor
-                .buffer
-                .text_formatting_at_offset(self.cursor.offset)
-        } else {
+        let caret_colors = || {
             self.last_text
                 .as_ref()
                 .and_then(|t| t.font.as_ref())
                 .map(crate::event::FontInfo::formatting)
+        };
+        let formatting = if self.app_mode != AppMode::VirtualBuffer || self.forms_mode {
+            // A text field's colors at its caret, "black on white" [obs, 661/s1], a page's in
+            // forms mode too, an empty one included ("navy on yellow", "black on white"
+            // [obs, 676/s4, s6, s8; 662/s5]); JAWS says "default on default" where it finds
+            // none, on a dialog's button [obs, 513/s3].
+            caret_colors()
+        } else if let Some(field) = self.cursor.buffer.find_edit_node(self.cursor.offset) {
+            // With the virtual cursor a page's field has the colors of its text, and none
+            // while it is empty: the focused field's as typed in, another's as the page shows
+            // them [obs, 662/s2, s7; 676/s2, s10, s12].
+            let focused = Some(field.id) == self.last_page_focus;
+            match self.last_text.as_ref().filter(|_| focused) {
+                Some(typed) if typed.text.is_empty() => None,
+                Some(_) => caret_colors().or_else(|| field.formatting.clone()),
+                None => field.formatting.clone(),
+            }
+        } else {
+            self.cursor
+                .buffer
+                .text_formatting_at_offset(self.cursor.offset)
         };
         let name = |color: Option<crate::color::Rgb>| {
             color

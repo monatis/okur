@@ -963,20 +963,28 @@ fn v_and_u_move_by_visited_and_unvisited_links() {
     );
 }
 
-/// A page's focused field has its text's colors: "default on default" while it is empty,
-/// "black on white" once typed in, in forms mode and again under the virtual cursor after
-/// Escape [obs, 662/s2, s5, s7].
+/// A page's field has its text's colors. With the virtual cursor: another field's as the page
+/// shows them ("navy on yellow"), "default on default" while it is empty, the focused field's
+/// as typed in; in forms mode the colors at the caret, an empty field's too [obs, 662/s2, s5,
+/// s7; 676/s2, s8, s10].
 #[test]
 fn say_color_in_a_page_field_is_its_texts() {
     use crate::color::Rgb;
-    let page = AomNode::new(0, Role::Document)
-        .with_name("Create Your Account")
-        .with_children(vec![
-            AomNode::new(1, Role::Heading { level: 1 }).with_text("Create Your Account"),
-            AomNode::new(2, Role::Edit).with_name("Full name"),
-        ]);
+    let mut navy = crate::aom::TextFormatting::new();
+    navy.color = Some(Rgb::new(0, 0, 128));
+    navy.background = Some(Rgb::new(255, 255, 0));
+    let mut note = AomNode::new(2, Role::Edit).with_name("Note");
+    note.value = Some("Bring a lamp".to_owned());
+    note.formatting = Some(navy);
+    let page = AomNode::new(0, Role::Document).with_children(vec![
+        AomNode::new(1, Role::Heading { level: 1 }).with_text("Event notes"),
+        note,
+        AomNode::new(3, Role::Edit).with_name("Full name"),
+    ]);
     let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    // The reference machine's settings: Auto Forms Mode off, a field entered with Enter.
+    engine.settings = crate::settings::Settings::reference_machine();
     let context = |text: &str, colored: bool| crate::event::TextContext {
         text: text.into(),
         caret: text.chars().count(),
@@ -989,32 +997,34 @@ fn say_color_in_a_page_field_is_its_texts() {
         word: None,
         misspelled: Vec::new(),
     };
+    let say_color = |engine: &mut ScreenReaderEngine| engine.execute_command("SayColor");
+    engine.execute_command("{DOWN}");
+    assert_eq!(say_color(&mut engine).as_deref(), Some("navy on yellow"));
     engine.execute_command("{DOWN}");
     assert_eq!(
-        engine.execute_command("SayColor").as_deref(),
+        say_color(&mut engine).as_deref(),
         Some("default on default")
     );
     let mut focus = FocusEvent::new(Role::Edit)
-        .with_node_id(2)
+        .with_node_id(3)
         .with_name("Full name");
     focus.in_document = true;
-    focus.text = Some(context("", false));
+    focus.text = Some(context("", true));
     engine.handle_accessibility_event(&AccessibilityEvent::Focus(focus));
-    assert_eq!(
-        engine.execute_command("SayColor").as_deref(),
-        Some("default on default")
-    );
-    engine.handle_accessibility_event(&AccessibilityEvent::TextContext(context("ab", true)));
-    assert_eq!(
-        engine.execute_command("SayColor").as_deref(),
-        Some("black on white")
-    );
+    engine.handle_key_event(&KeyEvent::new(Key::Enter, Modifiers::none(), true));
+    assert!(engine.forms_mode);
+    assert_eq!(say_color(&mut engine).as_deref(), Some("black on white"));
     engine.handle_key_event(&KeyEvent::new(Key::Escape, Modifiers::none(), true));
     assert!(!engine.forms_mode);
     assert_eq!(
-        engine.execute_command("SayColor").as_deref(),
-        Some("black on white")
+        say_color(&mut engine).as_deref(),
+        Some("default on default")
     );
+    engine.handle_key_event(&KeyEvent::new(Key::Enter, Modifiers::none(), true));
+    engine.handle_accessibility_event(&AccessibilityEvent::TextContext(context("ab", true)));
+    engine.handle_key_event(&KeyEvent::new(Key::Escape, Modifiers::none(), true));
+    assert!(!engine.forms_mode);
+    assert_eq!(say_color(&mut engine).as_deref(), Some("black on white"));
 }
 
 #[test]
