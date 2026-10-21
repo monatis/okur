@@ -267,6 +267,20 @@ divergences! {
      to find. The cell's name already gives its column and row (\"Quantity Row 1\").",
     "the owner's rule on JAWS's accidents, 2026-10-18";
 
+    Difference::JawsAlsoSays("irections") => [
+        "677-article-say-all-by-sentence/s1",
+    ],
+    "Say All by sentence in the news article: JAWS says the table's two \"Directions\" links as \
+     \"irections\", their first letter lost after the sentence \"to 9 p.m.\" before them, in \
+     every trial. By line it says them whole (111). Okur says \"Directions\" (the next entry).",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
+
+    Difference::OkurAlsoSays("Directions") => [
+        "677-article-say-all-by-sentence/s1",
+    ],
+    "The links JAWS cuts to \"irections\" by sentence, said whole (see the entry before).",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
+
     Difference::JawsAlsoSays("Preview Bottom:") => [
         "544-desktop-notepad-page-setup/s13",
         "674-desktop-notepad-page-setup-intermediate/s13",

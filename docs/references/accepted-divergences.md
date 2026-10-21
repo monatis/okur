@@ -226,6 +226,15 @@ A step can be in more than one entry; all of its entries apply.
   name already gives its column and row ("Quantity Row 1"), and Okur says nothing more.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### JAWS drops a link's first letter in Say All by sentence
+
+- Steps: `677-article-say-all-by-sentence/s1`.
+- Difference: JAWS says "irections" where Okur says "Directions" (the two links of the news
+  article's table).
+- Why: by sentence, JAWS loses the first letter of a link that follows the sentence "to 9
+  p.m.", in every trial; by line it says the links whole (111).
+- Decided under the owner's rule on JAWS's accidents, 2026-10-18.
+
 ### JAWS's Say All by sentence or paragraph in a text box starts elsewhere
 
 - Steps: `684-desktop-say-all-by-sentence/s1`, `684-desktop-say-all-by-sentence/s5`,

@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur -- parity --write-baseline",
-  "matched_steps": 4914,
+  "matched_steps": 4915,
   "total_steps": 5104,
   "accepted_divergences": 110,
   "errors": [],
@@ -5154,7 +5154,7 @@
     "676-web-say-color-in-colored-fields/s7": "match",
     "676-web-say-color-in-colored-fields/s8": "match",
     "676-web-say-color-in-colored-fields/s9": "match",
-    "677-article-say-all-by-sentence/s1": "mismatch",
+    "677-article-say-all-by-sentence/s1": "match",
     "678-article-say-all-by-paragraph/s1": "match",
     "679-article-say-all-line-pauses/s1": "match",
     "680-web-say-all-cursor-by-sentence/s1": "mismatch",
