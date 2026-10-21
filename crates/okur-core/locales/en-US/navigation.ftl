@@ -9,7 +9,8 @@ quicknav-none-edit-fields = There are no edit fields on this page.
 quicknav-none-form-fields = There are no form fields on this page.
 # JAWS ends this one without a period.
 quicknav-none-frames = There are no frames on this page
-quicknav-none-graphics = There are no graphics on this page.
+# JAWS capitalizes the kind here [obs, 727/s1].
+quicknav-none-graphics = There are no Graphics on this page.
 quicknav-none-headings = There are no headings on this page.
 quicknav-none-links = There are no links on this page.
 quicknav-none-visited-links = There are no visited links on this page.

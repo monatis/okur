@@ -638,6 +638,9 @@ pub struct Settings {
     /// A link to a place on its page is a "same page link": JAWS's Identify Same Page Links
     /// (`[HTML] IdentifySamePageLinks`, on by default). Off, it is a "Link" [obs, 724].
     pub identify_same_page_links: bool,
+    /// A page's graphics are read: JAWS's `[HTML] IncludeGraphics` (1 by default). At 0 they are
+    /// left out: G finds none, "There are no Graphics on this page." [obs, 727].
+    pub show_graphics: bool,
     /// A page is read from its top once it loads, after its title and summary: JAWS's
     /// "Document and Web Pages Automatically Read When Loaded" (Settings Center, Web/HTML/PDFs,
     /// Reading; `[HTML] SayAllOnDocumentLoad`), on in JAWS 2025. Off, the title and the
@@ -663,6 +666,7 @@ impl Default for Settings {
             forms_mode: FormsMode::Auto,
             verbosity: Verbosity::default(),
             identify_same_page_links: true,
+            show_graphics: true,
             read_page_on_load: true,
             confirm_exit: true,
         }
@@ -726,6 +730,7 @@ impl Settings {
             verbosity,
             // None is in old-pc's JCF: JAWS's defaults.
             identify_same_page_links: true,
+            show_graphics: true,
             read_page_on_load: true,
             confirm_exit: true,
         }

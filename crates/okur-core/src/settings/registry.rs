@@ -390,6 +390,10 @@ pub static SETTINGS: &[SettingSpec] = &[
         ..spec("identify_same_page_links", Group::Reading, None, CHECK)
     },
     SettingSpec {
+        jaws: default_jcf("HTML", "IncludeGraphics", |v| Value::Bool(v.trim() != "0")),
+        ..spec("show_graphics", Group::Reading, None, CHECK)
+    },
+    SettingSpec {
         jaws: default_jcf("HTML", "SayAllOnDocumentLoad", |v| {
             Value::Bool(v.trim() != "0")
         }),

@@ -434,9 +434,8 @@ impl ScreenReaderEngine {
         self.placemarker_list_seen = None;
     }
 
-    /// The page as the user's reading choices read it: same page links as plain links with
-    /// Identify Same Page Links off [obs, 724], marked on the page so that every buffer built
-    /// from it keeps the choice.
+    /// The page as the user's reading choices read it ([`Self::chosen_page`]), marked on the
+    /// page so that every buffer built from it keeps them.
     fn with_reading_choices(&self, buffer: VirtualBuffer) -> VirtualBuffer {
         let Some(page) = buffer.page().and_then(|page| self.chosen_page(page)) else {
             return buffer;
@@ -445,18 +444,29 @@ impl ScreenReaderEngine {
         VirtualBuffer::from_aom_owned(page)
     }
 
-    /// `page` marked as the reading choices ask, when its mark differs from them.
+    /// `page` marked as the reading choices ask, when its marks differ from them: same page
+    /// links read as plain links, graphics left out [obs, 724, 727].
     fn chosen_page(&self, page: &crate::aom::AomNode) -> Option<crate::aom::AomNode> {
-        let plain = !self.settings.identify_same_page_links;
-        let mark = crate::linearize::PLAIN_SAME_PAGE_LINKS;
-        if page.attributes.contains_key(mark) == plain {
+        let marks = [
+            (
+                crate::linearize::PLAIN_SAME_PAGE_LINKS,
+                !self.settings.identify_same_page_links,
+            ),
+            (crate::linearize::NO_GRAPHICS, !self.settings.show_graphics),
+        ];
+        if marks
+            .iter()
+            .all(|(mark, on)| page.attributes.contains_key(*mark) == *on)
+        {
             return None;
         }
         let mut marked = page.clone();
-        if plain {
-            marked.attributes.insert(mark.to_owned(), "true".to_owned());
-        } else {
-            marked.attributes.remove(mark);
+        for (mark, on) in marks {
+            if on {
+                marked.attributes.insert(mark.to_owned(), "true".to_owned());
+            } else {
+                marked.attributes.remove(mark);
+            }
         }
         Some(marked)
     }
@@ -1202,8 +1212,9 @@ impl ScreenReaderEngine {
             .settings_layers
             .resolve(application.as_deref(), site.as_deref());
         let voice_changed = settings.voice != self.settings.voice;
-        let choices_changed =
-            settings.identify_same_page_links != self.settings.identify_same_page_links;
+        let choices_changed = settings.identify_same_page_links
+            != self.settings.identify_same_page_links
+            || settings.show_graphics != self.settings.show_graphics;
         // The cursor says a page control's focus itself, at the verbosity in force.
         self.cursor.verbosity = settings.verbosity.clone();
         self.settings = settings;

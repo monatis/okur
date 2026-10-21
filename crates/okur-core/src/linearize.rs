@@ -227,12 +227,18 @@ struct Builder<'a> {
     /// A link to a place on the page is a "same page link"; off, a "Link" as any other
     /// ([`PLAIN_SAME_PAGE_LINKS`]).
     same_page_links: bool,
+    /// Graphics are read; off, left out of the page ([`NO_GRAPHICS`]).
+    graphics: bool,
 }
 
 /// The page's attribute that says its same page links are read as plain links: JAWS's
 /// `IdentifySamePageLinks=0` (724/s1: "Link Riverside Gazette"). Okur's reading choice, set
 /// on the page as it loads, so that every buffer built from the page keeps it.
 pub const PLAIN_SAME_PAGE_LINKS: &str = "okur_plain_same_page_links";
+
+/// The page's attribute that says its graphics are left out: JAWS's `IncludeGraphics=0`
+/// (727/s1: "There are no Graphics on this page."). Set as [`PLAIN_SAME_PAGE_LINKS`] is.
+pub const NO_GRAPHICS: &str = "okur_no_graphics";
 
 impl<'a> Builder<'a> {
     fn new(document_url: Option<&'a str>) -> Self {
@@ -249,6 +255,7 @@ impl<'a> Builder<'a> {
             paragraph_ends: Vec::new(),
             annotations: Vec::new(),
             same_page_links: true,
+            graphics: true,
         }
     }
 
@@ -684,6 +691,7 @@ impl<'a> Builder<'a> {
                 self.buffer.headings.push((off, level));
             }
             Class::Link => self.visit_link(node),
+            Class::Graphic if !self.graphics => {}
             Class::Graphic => {
                 self.flush();
                 let alt = node.name.as_deref().map(squash).unwrap_or_default();
@@ -1446,6 +1454,7 @@ fn visit_page(root: &AomNode) -> (VirtualBuffer, Vec<(usize, &'static str, Strin
     let document_url = attr(root, "url");
     let mut builder = Builder::new(document_url);
     builder.same_page_links = attr(root, PLAIN_SAME_PAGE_LINKS).is_none();
+    builder.graphics = attr(root, NO_GRAPHICS).is_none();
     builder.buffer.root_id = Some(root.id);
     builder.buffer.mark_readable(root.id);
 
