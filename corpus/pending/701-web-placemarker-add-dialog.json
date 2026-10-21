@@ -1,0 +1,90 @@
+{
+  "id": "701-web-placemarker-add-dialog",
+  "name": "The PlaceMarker List's Add dialog on the reading room page, cancelled: H, H, Down, Ctrl+Shift+K, Enter (Add, the default button), Tab five times through its controls, Escape out of Add, Escape out of the list, K, Escape, Insert+Up (keys typed by JAWS in its dialogs). Nothing is added",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/placemarkers.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Ctrl+Shift+K"
+    },
+    {
+      "id": "s5",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+    },
+    {
+      "id": "s6",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s7",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s8",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s9",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s10",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s11",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    },
+    {
+      "id": "s12",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "K"
+    },
+    {
+      "id": "s14",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "id": "702-web-placemarker-saved",
+  "name": "A saved PlaceMarker on the reading room page, removed at the end: H, H, Down, Ctrl+Shift+K, Enter (Add), Enter (its proposed name), Escape, Ctrl+Home, K, Insert+Up, K, Shift+K, 7, 8, Ctrl+Home, Shift+7, Insert+Up, Ctrl+Shift+K with the PlaceMarker listed, Tab eight times through its controls, Alt+V (Remove All), Enter (its confirmation), Escape, K, Escape (keys typed by JAWS in its dialogs)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/placemarkers.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Ctrl+Shift+K"
+    },
+    {
+      "id": "s5",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+    },
+    {
+      "id": "s6",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+    },
+    {
+      "id": "s7",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "K"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "K"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Shift+K"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "7"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "8"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Shift+7"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Ctrl+Shift+K"
+    },
+    {
+      "id": "s19",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s20",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s21",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s22",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s23",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s24",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s25",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s26",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s27",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+V\")"
+    },
+    {
+      "id": "s28",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+    },
+    {
+      "id": "s29",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    },
+    {
+      "id": "s30",
+      "type": "key",
+      "command": "K"
+    },
+    {
+      "id": "s31",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    }
+  ]
+}
