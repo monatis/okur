@@ -936,8 +936,16 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     if active_window.and_then(|w| w.class_name.as_deref()) == Some(WIN32_DIALOG_CLASS) {
         // On a property sheet's page, the text beside the focus is the page's labels ("Type:",
         // "Local Disk"): JAWS 2025 opens Local Disk (C:) Properties naming the page instead,
-        // "General page" (dev box, 2026-10-15).
-        focus.dialog_page = event.dialog_page.clone();
+        // "General page" (dev box, 2026-10-15). A wizard shows no tabs and takes its page's
+        // title as its own: its page is not named, and the page's text is the dialog's,
+        // "Flexible Web dialog | What would you like to do?" [obs, 705/s3].
+        let wizard_page = event
+            .dialog_page
+            .clone()
+            .filter(|page| event.top_window_title.as_deref() == Some(page.as_str()));
+        let tabbed_page = event.dialog_page.is_some() && wizard_page.is_none();
+        focus.dialog_page = event.dialog_page.clone().filter(|_| tabbed_page);
+        focus.wizard_page = wizard_page;
         // The dialog boxes in the focus's chain over which the active one opened: owned by
         // them, UI Automation puts it inside them.
         let dialogs: Vec<&UiaNode> = event
@@ -1007,7 +1015,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         let text: Vec<&str> = event
             .focus_siblings
             .iter()
-            .filter(|_| event.dialog_page.is_none())
+            .filter(|_| !tabbed_page)
             .filter(|s| s.control_type == UIA_TEXT)
             .filter_map(|s| s.name.as_deref())
             .filter(|n| !n.trim().is_empty() && !labels.contains(n))
@@ -4882,6 +4890,48 @@ mod tests {
                 "Type in text."
             ],
             "{spoken:?}"
+        );
+    }
+
+    /// A wizard takes its page's title as its own and shows no tabs: its page is not named,
+    /// and the page's text is the dialog's ("Flexible Web dialog | What would you like to do?"
+    /// [obs, 705/s3]), where a tabbed sheet's page is named and its labels are not the
+    /// dialog's text.
+    #[test]
+    fn a_wizards_page_is_its_dialog() {
+        const UIA_RADIOBUTTON: i32 = 50013;
+        let wizard = TraceEvent {
+            focus_chain: vec![
+                dialog_node(UIA_WINDOW, "Flexible Web"),
+                node(UIA_RADIOBUTTON, "Create a new customization", true),
+            ],
+            focus_siblings: vec![
+                node(TEXT, "What would you like to do?", false),
+                node(UIA_RADIOBUTTON, "Create a new customization", true),
+                node(UIA_BUTTON, "Next >", false),
+            ],
+            top_window_title: Some("Flexible Web".to_owned()),
+            top_window_class: Some("#32770".to_owned()),
+            dialog_page: Some("Flexible Web".to_owned()),
+            ..focus_event(Vec::new())
+        };
+        let focus = focus_event_from_trace(&wizard);
+        assert_eq!(
+            focus.as_ref().map(|f| (
+                f.dialog_page.clone(),
+                f.wizard_page.clone(),
+                f.dialog_text.clone()
+            )),
+            Some((
+                None,
+                Some("Flexible Web".to_owned()),
+                Some("What would you like to do?".to_owned())
+            ))
+        );
+        let tabbed = focus_event_from_trace(&property_page_event());
+        assert_eq!(
+            tabbed.map(|f| (f.dialog_page, f.wizard_page)),
+            Some((Some("General".to_owned()), None))
         );
     }
 

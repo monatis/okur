@@ -190,6 +190,11 @@ pub struct FocusEvent {
     /// When the focus is on a property sheet's page in that dialog box: the page's name,
     /// announced as the dialog opens ("General page").
     pub dialog_page: Option<String>,
+    /// When the focus is on a wizard's page (a property sheet showing no tabs, which takes its
+    /// page's title as its own): the page's name. A wizard's page is not named as a page; its
+    /// text is the dialog's [obs, 705/s3].
+    #[serde(default)]
+    pub wizard_page: Option<String>,
     /// The dialog boxes the active one opened over, outermost first: JAWS names them before
     /// it ("PlaceMarker List dialog | Add PlaceMarker dialog | Name: Edit" [obs, 702/s5]).
     #[serde(default)]
@@ -356,6 +361,7 @@ impl FocusEvent {
             text: None,
             dialog_text: None,
             dialog_page: None,
+            wizard_page: None,
             group_box: None,
             default_button: None,
             dialog_buttons: Vec::new(),

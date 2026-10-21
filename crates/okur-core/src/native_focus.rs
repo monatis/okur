@@ -1336,9 +1336,11 @@ impl Menus {
         Some(lines.join("\n"))
     }
 
-    /// Ends menu mode; true when menus were active ("Leaving menus").
+    /// Ends menu mode; true when menus were active ("Leaving menus"). A menu mode that showed
+    /// nothing is left silently: Alt+N in a wizard whose Next is disabled starts and ends its
+    /// system menu at once, and JAWS says nothing [obs, 708/s25].
     pub fn end(&mut self) -> bool {
-        let was_active = self.in_menu_mode();
+        let was_active = self.active || !self.open.is_empty();
         *self = Self::default();
         was_active
     }
@@ -1359,6 +1361,19 @@ impl Menus {
 mod tests {
     use super::*;
     use crate::aom::NodeStates;
+
+    /// A menu mode that showed nothing ends silently: a system menu started and ended at once,
+    /// as Alt+N with Next disabled gives in a wizard [obs, 708/s25]. Once an item was said,
+    /// leaving is said.
+    #[test]
+    fn a_menu_mode_that_showed_nothing_ends_silently() {
+        let mut m = Menus::default();
+        m.start();
+        assert!(!m.end());
+        m.start();
+        let _ = m.focus("File");
+        assert!(m.end());
+    }
 
     /// Alt+F in Notepad: the bar item is not said; its menu is, without "menu" [obs, 544/s1].
     /// Another key before Alt alone brings the bar back.

@@ -869,6 +869,26 @@ impl ScreenReaderEngine {
         });
         let page_line = page_changed
             .map(|page| crate::announcement::Line::text(msg::property_page_changed(page).render()));
+        // The wizard went on to another page (Next, Back): its text is said first, then the
+        // dialog under the page's name with its text again, and the control: "How would you
+        // like to customize the page? | Choose an Action dialog | How would you like to
+        // customize the page? | Hide an element radio button" [obs, 705/s9]. A page whose text
+        // is its list's label has none to say first: "Choose an element dialog | Which of the
+        // following elements would you like to customize? List box" (705/s15). The wizard
+        // keeps its window: its new name has come before the focus, as the page's title.
+        let wizard_turned = !window_changed
+            && focus
+                .wizard_page
+                .as_deref()
+                .is_some_and(|page| self.wizard_page.as_deref().is_some_and(|last| last != page));
+        if window_changed || focus.wizard_page.is_some() {
+            self.wizard_page = focus.wizard_page.clone();
+        }
+        let wizard_text = focus
+            .dialog_text
+            .as_deref()
+            .filter(|text| wizard_turned && !text.is_empty())
+            .map(crate::announcement::Line::text);
         // A repeat of the focus is not said, but it can carry what the first report did not:
         // a grid cell's selected state comes with its MSAA event, after UI Automation's
         // [obs, 545/s1]. Say Focus reads the latest.
@@ -885,6 +905,16 @@ impl ScreenReaderEngine {
         let names_window = app.is_none_or(|app| app.names_window(focus));
         let announcement = if window_changed && names_window {
             self.window_heading(focus, app, control)
+        } else if wizard_turned {
+            // The page's name and "dialog" are plain words here, not a role as when the
+            // wizard opens: "Choose an Action\ndialog" in JAWS's history [obs, 705/s9, s15].
+            let name = focus.window_title.as_deref().unwrap_or_default();
+            let dialog = crate::announcement::Line::text(format!("{name} {}", msg::role_dialog()));
+            let mut lines: Vec<crate::announcement::Line> = wizard_text.iter().cloned().collect();
+            lines.push(dialog);
+            lines.extend(wizard_text);
+            lines.extend(control.lines);
+            Announcement::new(lines)
         } else if let Some(page) = page_line {
             let mut lines = vec![page];
             lines.extend(control.lines);

@@ -130,6 +130,9 @@ pub struct ScreenReaderEngine {
     page_focus_is_field: bool,
     /// The last native focus outside menus, re-announced when menus close.
     last_native_focus: Option<FocusEvent>,
+    /// The page of the wizard in front, kept while the focus is on its buttons, which are
+    /// the sheet's and on no page.
+    wizard_page: Option<String>,
     /// The item a field's list last selected, since the focus last moved: the same one again
     /// says its name alone.
     last_selected: Option<String>,
@@ -333,6 +336,7 @@ impl ScreenReaderEngine {
             web_application: None,
             page_focus_is_field: false,
             last_native_focus: None,
+            wizard_page: None,
             last_selected: None,
             combo_items: Vec::new(),
             last_typed: None,
