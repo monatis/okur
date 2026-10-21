@@ -598,6 +598,8 @@ A step can be in more than one entry; all of its entries apply.
   (760/s14). The summary came in every trial of four recordings (rounds 180, 184, 191 and 192,
   the last three with JAWS's viewers closed before each trial), wherever the focus was, so it
   is JAWS's own doing, not a window left open.
+- Deleting a text rule does it too: Close after Delete Rule opened the summary in 781 (round
+  196, not imported, as it hangs on a rule 778 left saved in JAWS).
 - Decided under the owner's rule on JAWS's accidents, 2026-10-21.
 
 ## Considered and not accepted

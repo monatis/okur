@@ -638,7 +638,7 @@ divergences! {
         "777-web-skim-reading-speak-unit-and-attributes/s28",
         "777-web-skim-reading-speak-unit-and-attributes/s29",
     ],
-    "Closing Skim Reading after its rule type was changed, even back to the first, by Escape      (763, 777) or by Close's Alt+C (776), closes the dialog and opens JAWS's summary in      its Results Viewer, which then says nothing to Say Line: in every trial of four      recordings. With the rule type untouched, Escape only closes the dialog (760/s14).      Okur's Escape and Close close the dialog and give the page back.",
+    "Closing Skim Reading after its rule type was changed, even back to the first, by Escape      (763, 777) or by Close's Alt+C (776), closes the dialog and opens JAWS's summary in      its Results Viewer, which then says nothing to Say Line: in every trial of four      recordings, and Close after Delete Rule did too (781). With nothing changed, Escape      only closes the dialog (760/s14). Okur's Escape and Close close the dialog and give the      page back.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 }
 
