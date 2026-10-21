@@ -227,6 +227,37 @@ pub fn line_around_caret(context: &TextContext) -> (String, String) {
     (part(start, caret), part(caret, end))
 }
 
+/// The sentences from the one the caret is in to the end of the text, each with the
+/// character offset it starts at: what Say All reads in a text field by sentence (Say All
+/// Reads). A sentence ends at a line's end too; a line without a sentence mark is one.
+pub fn sentences_from_caret(context: &TextContext) -> Vec<(usize, String)> {
+    let text = chars(&context.text);
+    let text = &text;
+    let pieces: Vec<(usize, String)> = lines_from_caret(context)
+        .into_iter()
+        .flat_map(|(start, _)| {
+            let end = text
+                .get(start..)
+                .and_then(|rest| rest.iter().position(|c| is_line_break(*c)))
+                .map_or(text.len(), |i| start + i);
+            let line: String = text.get(start..end).unwrap_or_default().iter().collect();
+            sentences(&line)
+                .into_iter()
+                .map(|(s, e)| {
+                    let offset = start + line.get(..s).map_or(0, |b| b.chars().count());
+                    (offset, line.get(s..e).unwrap_or_default().to_owned())
+                })
+                .collect::<Vec<_>>()
+        })
+        .collect();
+    // From the sentence the caret is in.
+    let first = pieces
+        .iter()
+        .rposition(|(offset, _)| *offset <= context.caret)
+        .unwrap_or(0);
+    pieces.into_iter().skip(first).collect()
+}
+
 /// The lines from the caret's line to the end of the text, without empty ones, each with the
 /// character offset it starts at: what Say All reads in a document (JAWS in Google Docs'
 /// document, dev box 2026-10-16: each line from the caret's, to the last), the caret going
@@ -781,6 +812,27 @@ mod tests {
         );
         assert_eq!(lines_from_caret(&ctx(text, 0, None)).len(), 3);
         assert!(lines_from_caret(&ctx("", 0, None)).is_empty());
+    }
+
+    /// By sentence, Say All reads from the caret's sentence, each with its offset; a line
+    /// without a sentence mark is one.
+    #[test]
+    fn say_all_by_sentence_reads_from_the_carets_sentence() {
+        let text = "Intro\nSay All reads this. It has three sentences. The last one ends here.\n";
+        assert_eq!(
+            sentences_from_caret(&ctx(text, 0, None)),
+            vec![
+                (0, "Intro".to_owned()),
+                (6, "Say All reads this.".to_owned()),
+                (26, "It has three sentences.".to_owned()),
+                (50, "The last one ends here.".to_owned()),
+            ]
+        );
+        // The caret in the second sentence: from its start.
+        assert_eq!(
+            sentences_from_caret(&ctx(text, 30, None)).first(),
+            Some(&(26, "It has three sentences.".to_owned()))
+        );
     }
 
     /// Windows 11 Notepad (JAWS on the dev box): Home reads its character, Ctrl+Home and

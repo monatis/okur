@@ -801,9 +801,10 @@ The synthesizer was given:
 - **Okur (2026-10-21):** Say All Reads is a setting (`say_all_unit`: line, sentence,
   paragraph; the settings dialog's "Say All Reads"), and replay takes `SayAllMode`. Say All
   reads a page by the unit, and Right and Left move by it. A sentence is what Alt+Down reads
-  [obs, 291]; a paragraph what Ctrl+Down reads. Still by line: a text field's Say All, and
-  Line with Pauses (`LinePauses`). How JAWS splits the page by sentence and paragraph waits
-  for 677-681 (round 124).
+  [obs, 291]; a paragraph what Ctrl+Down reads. In a text field, by sentence it reads the
+  sentences from the caret's; a field's paragraphs are its lines. Line with Pauses
+  (`LinePauses`) is not built. How JAWS splits a page and a field by each unit waits
+  for 677-681 (round 124) and 684-686 (round 125).
 - **Record:**
   - Say All (CapsLock+A, and Insert+Down) over the Say All paragraph, at each unit. The
     recorder's fragments show where JAWS breaks the speech.

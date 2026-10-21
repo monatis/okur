@@ -51,10 +51,15 @@ impl ScreenReaderEngine {
         self.begin_say_all(index, source, true)
     }
 
-    /// Starts reading a text field from the caret's line to its end, the caret following.
+    /// Starts reading a text field from the caret's line, or its sentence, to its end, the
+    /// caret following. A field's paragraphs are its lines.
     pub(super) fn start_field_say_all(&mut self) -> Option<String> {
-        let lines = crate::editing::lines_from_caret(self.last_text.as_ref()?);
-        self.begin_say_all(0, Source::Field(lines), true)
+        let context = self.last_text.as_ref()?;
+        let pieces = match self.settings.say_all_unit {
+            crate::settings::SayAllUnit::Sentence => crate::editing::sentences_from_caret(context),
+            _ => crate::editing::lines_from_caret(context),
+        };
+        self.begin_say_all(0, Source::Field(pieces), true)
     }
 
     /// A page just loaded is read from its top, behind what was said of it (its title and
