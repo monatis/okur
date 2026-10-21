@@ -57,15 +57,15 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `fc87b50` (2026-10-21).
+Every figure is tool output, rerun for this README at commit `9c47259` (2026-10-21).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **4915 of 5104** | `okur parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **4794 of 5066** | `okur parity` |
+| Steps matching JAWS's speech history, word for word | **4942 of 5132** | `okur parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **4817 of 5094** | `okur parity` |
 | Steps left out on purpose (accepted divergences, each a written decision) | **110** | `okur parity` |
-| Recorded JAWS scenarios, trials | **351, 1107** (all 1107 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1259 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
+| Recorded JAWS scenarios, trials | **353, 1113** (all 1113 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1261 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
@@ -135,7 +135,7 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   quotes left open, each with its column).
 - **The cursors:** Numpad Minus to the Okur cursor at the mouse, Numpad Plus back to the PC
   cursor, Insert+Numpad Minus to bring the mouse to the PC cursor, and Alt+Delete for where
-  the active cursor is.
+  the active cursor is; in a text field the Okur cursor reads line by line.
 - **Information keys:** the time and date (Insert+F12), the settings in use (Insert+Q), the
   application's version (Ctrl+Insert+V), and the colors of a page's text or a text field by the
   names JAWS gives them (Insert+5: "blue2 on white").
@@ -147,7 +147,7 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   copies it and Shift+H clears it).
 - **Okur's own dialogs** are real Windows dialogs: the lists above, Okur Find and the Window
   List, with the same controls and labels as JAWS's, and Okur Settings (Insert+6 or Insert+V),
-  whose changes are for all applications.
+  whose changes are kept for all applications, the application in front or the page's site.
 - **Speech:** punctuation levels and symbol names as JAWS has them (Insert+Shift+2); typing
   echo by characters, words, both or none (Insert+2); a reading key pressed twice quickly
   spells, with capitals at a higher pitch; the rate on the fly (Ctrl+Alt+PageUp and
@@ -168,18 +168,15 @@ The [reference documentation](docs/references/) describes these behaviors in det
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
 - Microsoft Word, Outlook and Excel, not yet supported or checked;
-- reading the screen with the Okur cursor (its reading keys say nothing yet), and the mouse
-  keys outside web pages;
+- reading the screen with the Okur cursor outside text fields (in a text field it reads line by
+  line), and the mouse keys outside web pages;
 - the keys JAWS adds for the clipboard: saying it (Insert+Windows+X), viewing it and adding
   to it (copying, cutting and pasting already work);
 - the Word List and skim reading;
 - Speech On Demand (Shift+S in the speech layer only says it is not available, as JAWS does
   in full speech mode);
 - notifications (toasts) and the notification history;
-- what is said for a visited link, saved PlaceMarkers and the PlaceMarker List, custom labels
-  and Flexible Web;
-- settings for one application or one site from the dialog: Okur uses them from its
-  settings file, but the dialog saves for all applications;
+- saved PlaceMarkers and the PlaceMarker List, custom labels and Flexible Web;
 - the rest of what the verbosity levels change, as further recordings show it;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
