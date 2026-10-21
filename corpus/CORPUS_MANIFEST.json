@@ -6150,13 +6150,41 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "773-desktop-toast-announcement-toggled",
+      "fixture": "desktop-notifications.ps1",
+      "evidence": {
+        "sha256": "7a4b318a7039467660a9f034347000d8ccc92e70093090fd469e4c779525fe88",
+        "capture_script_sha256": "043f2870b1499dacb80869fd8b86f5c8abac741d2a75c2c4ca9f04ab0f4e4e3a",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "774-desktop-notification-history-dialog",
+      "fixture": "desktop-notifications.ps1",
+      "evidence": {
+        "sha256": "10c164d588244784d0fec2bec442fd067f9b2b8ddd0f9f583cb4f6ac10cefacb",
+        "capture_script_sha256": "043f2870b1499dacb80869fd8b86f5c8abac741d2a75c2c4ca9f04ab0f4e4e3a",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 426,
-    "scenarios_with_evidence": 426,
-    "total_trials": 1314,
-    "successful_trials": 1313,
-    "deterministic_scenarios": 275
+    "scenarios": 428,
+    "scenarios_with_evidence": 428,
+    "total_trials": 1320,
+    "successful_trials": 1319,
+    "deterministic_scenarios": 276
   }
 }

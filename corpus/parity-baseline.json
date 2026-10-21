@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6097,
-  "total_steps": 6318,
+  "matched_steps": 6110,
+  "total_steps": 6339,
   "accepted_divergences": 160,
   "errors": [],
   "steps": {
@@ -6496,6 +6496,27 @@
     "771-web-skim-reading-rule-saved/s1": "match",
     "771-web-skim-reading-rule-saved/s2": "match",
     "771-web-skim-reading-rule-saved/s3": "mismatch",
-    "771-web-skim-reading-rule-saved/s4": "mismatch"
+    "771-web-skim-reading-rule-saved/s4": "mismatch",
+    "773-desktop-toast-announcement-toggled/s1": "match",
+    "773-desktop-toast-announcement-toggled/s2": "mismatch",
+    "773-desktop-toast-announcement-toggled/s3": "mismatch",
+    "773-desktop-toast-announcement-toggled/s4": "match",
+    "773-desktop-toast-announcement-toggled/s5": "match",
+    "773-desktop-toast-announcement-toggled/s6": "match",
+    "773-desktop-toast-announcement-toggled/s7": "mismatch",
+    "773-desktop-toast-announcement-toggled/s8": "match",
+    "774-desktop-notification-history-dialog/s1": "match",
+    "774-desktop-notification-history-dialog/s10": "mismatch",
+    "774-desktop-notification-history-dialog/s11": "mismatch",
+    "774-desktop-notification-history-dialog/s12": "mismatch",
+    "774-desktop-notification-history-dialog/s13": "match",
+    "774-desktop-notification-history-dialog/s2": "match",
+    "774-desktop-notification-history-dialog/s3": "mismatch",
+    "774-desktop-notification-history-dialog/s4": "match",
+    "774-desktop-notification-history-dialog/s5": "match",
+    "774-desktop-notification-history-dialog/s6": "match",
+    "774-desktop-notification-history-dialog/s7": "match",
+    "774-desktop-notification-history-dialog/s8": "mismatch",
+    "774-desktop-notification-history-dialog/s9": "match"
   }
 }
