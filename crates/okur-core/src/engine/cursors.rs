@@ -18,9 +18,51 @@ use crate::messages::msg;
 pub enum OkurPlace {
     /// The window's top, Page Up's: its title bar [obs, 752/s15, s16].
     Top,
+    /// The window's bottom, Page Down's, below the text: "blank" [obs, 754/s12, s13].
+    Bottom,
+    /// The empty line above the window's bottom: "blank" too [obs, 754/s14, s15].
+    AboveBottom,
     /// A line, and the character on it; none before the line's first, where Up and Down leave
     /// it [obs, 752/s9, 753/s10].
     Text { line: usize, column: Option<usize> },
+}
+
+/// A character's kind for the Okur cursor's words: letters and digits make words, other marks
+/// make their own, "main" and "()" [obs, 754/s11], spaces part them.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum CharKind {
+    Space,
+    Word,
+    Mark,
+}
+
+fn char_kind(c: char) -> CharKind {
+    if c.is_whitespace() {
+        CharKind::Space
+    } else if c.is_alphanumeric() {
+        CharKind::Word
+    } else {
+        CharKind::Mark
+    }
+}
+
+/// Where the words of `text` start.
+fn word_starts(text: &[char]) -> Vec<usize> {
+    let kind = |i: usize| text.get(i).map_or(CharKind::Space, |c| char_kind(*c));
+    (0..text.len())
+        .filter(|&i| {
+            kind(i) != CharKind::Space && i.checked_sub(1).is_none_or(|p| kind(p) != kind(i))
+        })
+        .collect()
+}
+
+/// The word of `text` starting at `start`.
+fn word_at(text: &[char], start: usize) -> String {
+    let kind = text.get(start).map(|c| char_kind(*c));
+    text.iter()
+        .skip(start)
+        .take_while(|c| Some(char_kind(**c)) == kind)
+        .collect()
 }
 
 /// Whether a page's line is text its screen shows: not the page's title, nor a region's or a
@@ -100,6 +142,9 @@ impl ScreenReaderEngine {
     /// and the region and list announcements ("Weekend events", "Three events open to everyone
     /// this weekend." [obs, 753/s5-s9]); a text field's, indentation and all.
     fn okur_lines(&self) -> Vec<String> {
+        if let Some(rows) = self.okur_dialog_rows() {
+            return rows;
+        }
         if self.app_mode == super::AppMode::VirtualBuffer {
             return self
                 .cursor
@@ -116,9 +161,71 @@ impl ScreenReaderEngine {
             .unwrap_or_default()
     }
 
+    /// A dialog box's rows as the Okur cursor reads them, below its title: each control on its
+    /// own, a field by its text, a label by its words, buttons side by side on one: "Line
+    /// number:", "1", "Go To Button Cancel Button" [obs, 755/s5, s10]. The trace gives the
+    /// controls without their places, so the rows follow the dialog's order.
+    fn okur_dialog_rows(&self) -> Option<Vec<String>> {
+        let focus = self.last_native_focus.as_ref()?;
+        if self.app_mode == super::AppMode::VirtualBuffer
+            || !focus.in_dialog_box
+            || focus.window_items.is_empty()
+        {
+            return None;
+        }
+        use crate::aom::Role;
+        let mut rows: Vec<String> = Vec::new();
+        let mut buttons: Vec<String> = Vec::new();
+        for item in &focus.window_items {
+            if item.role == Role::Button {
+                buttons.push(format!(
+                    "{}  {}",
+                    item.name,
+                    crate::linearize::role_marker(msg::role_button().as_str())
+                ));
+                continue;
+            }
+            if !buttons.is_empty() {
+                rows.push(std::mem::take(&mut buttons).join(" "));
+            }
+            let text = match item.role {
+                Role::Edit => item.value.clone().unwrap_or_default(),
+                _ => item.name.clone(),
+            };
+            if !text.trim().is_empty() {
+                rows.push(text);
+            }
+        }
+        if !buttons.is_empty() {
+            rows.push(buttons.join(" "));
+        }
+        Some(rows)
+    }
+
+    /// The row of the dialog the focus is on: the field's, by its text.
+    fn focused_dialog_row(&self) -> Option<usize> {
+        let focus = self.last_native_focus.as_ref()?;
+        let rows = self.okur_dialog_rows()?;
+        let text = focus
+            .text
+            .as_ref()
+            .map(|t| t.text.clone())
+            .or_else(|| focus.value.clone())
+            .or_else(|| focus.name.clone())?;
+        rows.iter()
+            .position(|row| row == &text || row.starts_with(&text))
+    }
+
     /// Where the Okur cursor goes as it is routed to the PC cursor: the caret's line in a text
-    /// field, the virtual cursor's in a page, before its first character.
+    /// field, the focused control's row in a dialog box, the virtual cursor's line in a page,
+    /// before its first character.
     fn routed_place(&self) -> Option<OkurPlace> {
+        if self.okur_dialog_rows().is_some() {
+            return Some(OkurPlace::Text {
+                line: self.focused_dialog_row().unwrap_or(0),
+                column: None,
+            });
+        }
         let line = if self.app_mode == super::AppMode::VirtualBuffer {
             let at = self.cursor.current_line_index();
             let screen: Vec<usize> = self
@@ -142,20 +249,38 @@ impl ScreenReaderEngine {
     /// The Okur cursor's line, without its indentation; an empty one is "blank". At the
     /// window's top, its title: "sr-notepad-fixture.txt - Notepad" [obs, 752/s16].
     pub(super) fn okur_cursor_line(&self) -> Option<String> {
-        let line = match self.okur_place? {
+        Some(match self.okur_place? {
             OkurPlace::Top => self.okur_top_line()?,
+            OkurPlace::Bottom | OkurPlace::AboveBottom => String::new(),
             OkurPlace::Text { line, .. } => self.okur_lines().get(line)?.trim().to_owned(),
-        };
-        Some(if line.is_empty() {
-            msg::blank().to_string()
-        } else {
-            line
         })
+    }
+
+    /// The Okur cursor's line, said: an empty one is "blank", which JAWS speaks but keeps
+    /// nothing of in its history, as for any empty line [obs, 516/s4, 754/s13-s15; 315/s2].
+    fn say_okur_line(&mut self) -> Option<String> {
+        let line = self.okur_cursor_line()?;
+        if line.is_empty() {
+            self.speech.speak_character(
+                "
+", true,
+            );
+            return Some(msg::blank().to_string());
+        }
+        self.say(line)
     }
 
     /// The window's top as the Okur cursor reads it: a page's first line, as JAWS reads the
     /// screen there ("Riverside Gazette" [obs, 753/s17]); an application's title bar.
     fn okur_top_line(&self) -> Option<String> {
+        // A dialog box's title bar, with its role: "Go To Line dialog" [obs, 755/s9].
+        if self.okur_dialog_rows().is_some() {
+            let title = self.last_window_title.clone()?;
+            return Some(format!(
+                "{title} {}",
+                crate::linearize::role_marker(msg::role_dialog().as_str())
+            ));
+        }
         if self.app_mode == super::AppMode::VirtualBuffer {
             return self.okur_lines().first().map(|l| l.trim().to_owned());
         }
@@ -187,6 +312,17 @@ impl ScreenReaderEngine {
             }
             (Key::Home | Key::End, true, _) => self.okur_line_end(event.key == Key::End),
             (Key::PageUp, true, _) => self.okur_place = Some(OkurPlace::Top),
+            // A page's bottom is its last line; an application's, below its text.
+            (Key::PageDown, true, _) => {
+                self.okur_place = Some(if self.app_mode == super::AppMode::VirtualBuffer {
+                    OkurPlace::Text {
+                        line: self.okur_lines().len().saturating_sub(1),
+                        column: None,
+                    }
+                } else {
+                    OkurPlace::Bottom
+                });
+            }
             _ => return None,
         }
         Some(())
@@ -196,19 +332,31 @@ impl ScreenReaderEngine {
     /// From the window's top, Down goes to the first line.
     fn move_okur_line(&mut self, down: bool) {
         let last = self.okur_lines().len().saturating_sub(1);
-        let next = match self.okur_place {
-            Some(OkurPlace::Top) => 0,
-            Some(OkurPlace::Text { line, .. }) if down => (line + 1).min(last),
-            Some(OkurPlace::Text { line, .. }) => line.saturating_sub(1),
-            None => return,
+        let next = match (self.okur_place, down) {
+            (Some(OkurPlace::Top), true) => OkurPlace::Text {
+                line: 0,
+                column: None,
+            },
+            (Some(OkurPlace::Top), false) => OkurPlace::Top,
+            // From the bottom, Up says the empty line above it, then the text's last line.
+            (Some(OkurPlace::Bottom), false) => OkurPlace::AboveBottom,
+            (Some(OkurPlace::Bottom | OkurPlace::AboveBottom), true) => OkurPlace::Bottom,
+            (Some(OkurPlace::AboveBottom), false) => OkurPlace::Text {
+                line: last,
+                column: None,
+            },
+            (Some(OkurPlace::Text { line, .. }), true) => OkurPlace::Text {
+                line: (line + 1).min(last),
+                column: None,
+            },
+            (Some(OkurPlace::Text { line, .. }), false) => OkurPlace::Text {
+                line: line.saturating_sub(1),
+                column: None,
+            },
+            (None, _) => return,
         };
-        self.okur_place = Some(OkurPlace::Text {
-            line: next,
-            column: None,
-        });
-        if let Some(said) = self.okur_cursor_line() {
-            let _ = self.say(said);
-        }
+        self.okur_place = Some(next);
+        let _ = self.say_okur_line();
     }
 
     /// The line the Okur cursor is on, and the character it is at.
@@ -218,7 +366,7 @@ impl ScreenReaderEngine {
                 let text = self.okur_lines().get(line)?.chars().collect();
                 Some((line, column, text))
             }
-            OkurPlace::Top => None,
+            OkurPlace::Top | OkurPlace::Bottom | OkurPlace::AboveBottom => None,
         }
     }
 
@@ -242,41 +390,52 @@ impl ScreenReaderEngine {
         }
     }
 
-    /// Ctrl+Right or Ctrl+Left: the next or previous word on the line, said ("let" [obs,
-    /// 752/s11]).
+    /// Ctrl+Right or Ctrl+Left: the next or previous word, said, going on to the next or
+    /// previous line: "let", then "{" at the end of the line above [obs, 752/s11, 754/s8, s9].
     fn move_okur_word(&mut self, right: bool) {
-        let Some((line, column, text)) = self.okur_text_place() else {
+        let Some((mut line, column, text)) = self.okur_text_place() else {
             return;
         };
-        let blank = |i: usize| text.get(i).is_none_or(|c| c.is_whitespace());
-        let starts: Vec<usize> = (0..text.len())
-            .filter(|&i| !blank(i) && i.checked_sub(1).is_none_or(blank))
-            .collect();
-        let next = if right {
-            starts
-                .iter()
-                .copied()
-                .find(|&start| column.is_none_or(|c| start > c))
-        } else {
-            starts
-                .iter()
-                .copied()
-                .rev()
-                .find(|&start| column.is_some_and(|c| start < c))
-        };
-        let Some(start) = next else {
+        let lines = self.okur_lines();
+        let mut found = word_starts(&text)
+            .into_iter()
+            .filter(|&start| match (right, column) {
+                (true, None) => true,
+                (true, Some(c)) => start > c,
+                (false, None) => false,
+                (false, Some(c)) => start < c,
+            })
+            .reduce(|a, b| if right { a.min(b) } else { a.max(b) });
+        let mut words_of = text;
+        while found.is_none() {
+            let next = if right {
+                line + 1
+            } else {
+                match line.checked_sub(1) {
+                    Some(up) => up,
+                    None => return,
+                }
+            };
+            let Some(other) = lines.get(next) else {
+                return;
+            };
+            line = next;
+            words_of = other.chars().collect();
+            let starts = word_starts(&words_of);
+            found = if right {
+                starts.first().copied()
+            } else {
+                starts.last().copied()
+            };
+        }
+        let Some(start) = found else {
             return;
         };
         self.okur_place = Some(OkurPlace::Text {
             line,
             column: Some(start),
         });
-        let word: String = text
-            .iter()
-            .skip(start)
-            .take_while(|c| !c.is_whitespace())
-            .collect();
-        let _ = self.say(word);
+        let _ = self.say(word_at(&words_of, start));
     }
 
     /// Home or End: the line's first or last character, quietly [obs, 752/s13, s14].
@@ -311,10 +470,7 @@ impl ScreenReaderEngine {
             return None;
         }
         match command {
-            Command::SayLine => {
-                let said = self.okur_cursor_line();
-                Some(said.and_then(|line| self.say(line)))
-            }
+            Command::SayLine => Some(self.say_okur_line()),
             Command::SayWord => {
                 self.okur_word();
                 Some(None)
@@ -340,17 +496,12 @@ impl ScreenReaderEngine {
             self.okur_character();
             return;
         }
-        let start = (0..=c)
-            .rev()
-            .take_while(|&i| text.get(i).is_some_and(|ch| !ch.is_whitespace()))
-            .last()
+        let start = word_starts(&text)
+            .into_iter()
+            .filter(|&start| start <= c)
+            .max()
             .unwrap_or(c);
-        let word: String = text
-            .iter()
-            .skip(start)
-            .take_while(|ch| !ch.is_whitespace())
-            .collect();
-        let _ = self.say(word);
+        let _ = self.say(word_at(&text, start));
     }
 
     /// The character the Okur cursor is at, said; before the line's first, nothing.

@@ -981,7 +981,7 @@ fn v_and_u_move_by_visited_and_unvisited_links() {
 /// The Okur cursor in a text field, routed to the caret, moves over the field's lines with Up
 /// and Down and reads them without their indentation; Insert+Up reads its line; on a line it
 /// is before the first character, where Left says nothing and Right says the first, a space;
-/// Ctrl+Right says the next word [obs, 690, 752].
+/// Ctrl+Right says the next word, which punctuation ends [obs, 690, 752, 754/s11].
 #[test]
 fn the_okur_cursor_reads_a_text_fields_lines() {
     let speech = SharedSpeech::default();
@@ -1034,7 +1034,7 @@ fn the_okur_cursor_reads_a_text_fields_lines() {
 ",
         )
     };
-    assert_eq!(ctrl_right(&mut engine), r#"println!("{total}");"#);
+    assert_eq!(ctrl_right(&mut engine), "println");
 }
 
 /// The Okur cursor on a page, routed to the virtual cursor, reads the page's lines as its
