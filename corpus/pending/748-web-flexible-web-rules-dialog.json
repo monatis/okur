@@ -1,10 +1,11 @@
 {
-  "id": "744-web-flexible-web-rules-view",
-  "name": "Flexible Web's rules: View or change where rules apply chosen (Insert+Space then X, Alt+V), Tab twice to Finish, Enter; Delete, Alt+Y, Down Arrow, Delete, Alt+Y, Tab four times, Escape twice; F5, Ctrl+Home, R three times; Insert+Space then X, Down Arrow, Escape (keys in the wizard typed by JAWS)",
+  "id": "748-web-flexible-web-rules-dialog",
+  "name": "Flexible Web's View or Change Where Rules are Applied, after 743 saved a rule for the page: Insert+Space then X, Alt+V, Tab twice to Finish, Enter; Tab, Shift+Tab, Down Arrow, Right Arrow, Down Arrow, Tab, Shift+Tab, Up Arrow, Tab, Shift+Tab twice, Tab twice; Delete, Alt+Y; Tab, Enter (Close); Ctrl+Home, R (keys in the dialogs typed by JAWS)",
   "category": "realistic-pages",
   "version": "1.0.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/flexible-web.html",
   "target_app": "chrome",
+  "continues": "743-web-flexible-web-saved-rule-for-page",
   "reset": {
     "keys": [
       "Ctrl+Home"
@@ -45,14 +46,12 @@
     },
     {
       "type": "jaws_function",
-      "command": "TypeKey(\"Delete\")",
-      "settle_max_ms": 30000,
+      "command": "TypeKey(\"Tab\")",
       "id": "s7"
     },
     {
       "type": "jaws_function",
-      "command": "TypeKey(\"Alt+Y\")",
-      "settle_max_ms": 30000,
+      "command": "TypeKey(\"Shift+Tab\")",
       "id": "s8"
     },
     {
@@ -62,14 +61,12 @@
     },
     {
       "type": "jaws_function",
-      "command": "TypeKey(\"Delete\")",
-      "settle_max_ms": 30000,
+      "command": "TypeKey(\"RightArrow\")",
       "id": "s10"
     },
     {
       "type": "jaws_function",
-      "command": "TypeKey(\"Alt+Y\")",
-      "settle_max_ms": 30000,
+      "command": "TypeKey(\"DownArrow\")",
       "id": "s11"
     },
     {
@@ -79,12 +76,12 @@
     },
     {
       "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")",
+      "command": "TypeKey(\"Shift+Tab\")",
       "id": "s13"
     },
     {
       "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")",
+      "command": "TypeKey(\"UpArrow\")",
       "id": "s14"
     },
     {
@@ -94,63 +91,56 @@
     },
     {
       "type": "jaws_function",
-      "command": "TypeKey(\"Escape\")",
-      "settle_max_ms": 30000,
+      "command": "TypeKey(\"Shift+Tab\")",
       "id": "s16"
     },
     {
       "type": "jaws_function",
-      "command": "TypeKey(\"Escape\")",
-      "settle_max_ms": 30000,
+      "command": "TypeKey(\"Shift+Tab\")",
       "id": "s17"
     },
     {
-      "type": "key",
-      "command": "F5",
-      "settle_max_ms": 30000,
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
       "id": "s18"
     },
     {
-      "type": "key",
-      "command": "Ctrl+Home",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
       "id": "s19"
     },
     {
-      "type": "key",
-      "command": "R",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Delete\")",
+      "settle_max_ms": 30000,
       "id": "s20"
     },
     {
-      "type": "key",
-      "command": "R",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+Y\")",
+      "settle_max_ms": 30000,
       "id": "s21"
     },
     {
-      "type": "key",
-      "command": "R",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
       "id": "s22"
     },
     {
-      "type": "key",
-      "command": "Insert+Space",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
       "id": "s23"
     },
     {
       "type": "key",
-      "command": "X",
-      "settle_max_ms": 30000,
+      "command": "Ctrl+Home",
       "id": "s24"
     },
     {
-      "type": "jaws_function",
-      "command": "TypeKey(\"DownArrow\")",
+      "type": "key",
+      "command": "R",
       "id": "s25"
-    },
-    {
-      "type": "jaws_function",
-      "command": "TypeKey(\"Escape\")",
-      "settle_max_ms": 30000,
-      "id": "s26"
     }
   ]
 }
