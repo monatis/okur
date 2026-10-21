@@ -281,6 +281,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::WindowRenamed(_)) => "window renamed",
         Some(AccessibilityEvent::WindowShown(_)) => "window shown",
         Some(AccessibilityEvent::MouseMoved { .. }) => "mouse moved",
+        Some(AccessibilityEvent::Toast(_)) => "toast",
     }
 }
 

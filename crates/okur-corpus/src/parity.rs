@@ -1108,6 +1108,10 @@ fn replayable(event: &TraceEvent) -> bool {
     if (event.window_class.as_deref() == Some(JAWS_MAIN_WINDOW) || in_main_window) && !in_dialog {
         return false;
     }
+    // A shell window that opened, as a toast shows [obs, 770/s1].
+    if event.event == "uia_window_opened" {
+        return event.focus_subtree.is_some();
+    }
     menu_event_from_trace(event).is_some()
         || (matches!(
             event.event.as_str(),

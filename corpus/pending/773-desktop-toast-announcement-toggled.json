@@ -1,0 +1,62 @@
+{
+  "id": "773-desktop-toast-announcement-toggled",
+  "name": "Toast announcements turned off and on (Insert+Space, Ctrl+N) around a toast: Insert+Space, Ctrl+N, Space on Show notification, Insert+Space, Shift+N, Insert+Space, Ctrl+N, Space again",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notifications.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Notification Fixture"
+  },
+  "expects_notifications": true,
+  "reset": {
+    "keys": []
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Ctrl+N",
+      "settle_max_ms": 10000
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Space",
+      "settle_max_ms": 20000
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Shift+N",
+      "settle_max_ms": 10000
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Ctrl+N",
+      "settle_max_ms": 10000
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Space",
+      "settle_max_ms": 20000
+    }
+  ]
+}

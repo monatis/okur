@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6096,
+  "matched_steps": 6097,
   "total_steps": 6318,
   "accepted_divergences": 160,
   "errors": [],
@@ -6489,7 +6489,7 @@
     "770-desktop-toast-traced/s1": "match",
     "770-desktop-toast-traced/s2": "match",
     "770-desktop-toast-traced/s3": "match",
-    "770-desktop-toast-traced/s4": "mismatch",
+    "770-desktop-toast-traced/s4": "match",
     "770-desktop-toast-traced/s5": "match",
     "770-desktop-toast-traced/s6": "mismatch",
     "770-desktop-toast-traced/s7": "match",

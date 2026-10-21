@@ -5945,3 +5945,40 @@ fn skim_reading_by_sentence_reads_list_items_with_their_mark() {
     assert!(lines.contains(&"•"), "{read:?}");
     assert!(!read.contains("Fridays"), "{read:?}");
 }
+
+/// A toast is said as it shows, and Insert+Space, Shift+N says it again; before one, "No
+/// notification" [obs, 770/s1, s4, 533/s3].
+#[test]
+fn a_toast_is_said_and_repeated_on_request() {
+    let (mut engine, speech) = engine_on_a_page();
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    let shift = Modifiers {
+        shift: true,
+        ..Modifiers::none()
+    };
+    let layer_key = |engine: &mut ScreenReaderEngine, key: Key, modifiers: Modifiers| {
+        for down in [true, false] {
+            engine.handle_key_event(&KeyEvent::new(Key::Space, insert, down));
+        }
+        speech.take();
+        for down in [true, false] {
+            engine.handle_key_event(&KeyEvent::new(key, modifiers, down));
+        }
+        speech.take()
+    };
+    assert_eq!(
+        layer_key(&mut engine, Key::Alpha('N'), shift),
+        ["No notification"]
+    );
+    const TOAST: &str = "New notification from Windows PowerShell, SR Fixture, Build finished in 12 seconds. 1 of 1";
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&AccessibilityEvent::Toast(TOAST.to_owned()))
+            .as_deref(),
+        Some(TOAST)
+    );
+    assert_eq!(layer_key(&mut engine, Key::Alpha('N'), shift), [TOAST]);
+}

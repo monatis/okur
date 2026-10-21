@@ -594,6 +594,10 @@ pub enum AccessibilityEvent {
         x: i32,
         y: i32,
     },
+    /// A Windows notification's banner as it shows (a toast), by the name the shell gives it:
+    /// "New notification from Windows PowerShell, SR Fixture, Build finished in 12 seconds. 1
+    /// of 1" [obs, 770/s1].
+    Toast(String),
     /// The window in front was renamed: a console takes the title what runs in it sets
     /// ("SR Console Fixture" after PowerShell's own, 321).
     WindowRenamed(String),

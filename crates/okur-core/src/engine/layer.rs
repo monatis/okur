@@ -56,17 +56,6 @@ impl ScreenReaderEngine {
         Some(KeyAction::Consume)
     }
 
-    /// Insert+Space, Shift+N: the last notification Okur said, again; with none, JAWS's "No
-    /// notification" [obs, 533/s3].
-    fn repeat_last_notification(&mut self) {
-        let said = self
-            .notifications
-            .back()
-            .cloned()
-            .unwrap_or_else(|| msg::notification_none().to_string());
-        self.speech.speak(&said, true);
-    }
-
     /// Insert+Space, T in a page's table: "Table layer", and the arrows move by cell until
     /// Escape [obs, 535/s5].
     fn start_table_layer(&mut self) {

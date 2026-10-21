@@ -31,6 +31,7 @@ mod jump;
 mod key_help;
 mod labels;
 mod layer;
+mod notifications;
 mod page;
 mod placemarkers;
 mod quit;
@@ -1207,6 +1208,7 @@ impl ScreenReaderEngine {
                 self.mouse = Some((*x, *y));
                 None
             }
+            AccessibilityEvent::Toast(text) => self.toast_shown(text),
             AccessibilityEvent::WindowRenamed(title) => {
                 self.window_renamed(title);
                 None

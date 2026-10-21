@@ -1308,6 +1308,9 @@ pub struct EventConverter {
     /// The last native live region text and when it came, said once within
     /// [`NOTIFICATION_REPEAT_MS`] as notifications are.
     last_live_region: Option<(String, u128)>,
+    /// The last toast and when it showed: the shell reports one toast twice, its view and
+    /// the window around it [obs, 770/s1].
+    last_toast: Option<(String, u128)>,
 }
 
 /// The last focus's MSAA identity (`hwnd`, `id_object`, `id_child`) and name, and the focused
@@ -1394,6 +1397,19 @@ impl EventConverter {
             }
             self.last_live_region = Some((live.text.clone(), event.t_ms));
             return vec![okur_core::AccessibilityEvent::LiveRegion(live)];
+        }
+        if event.event == "uia_window_opened" {
+            let Some(text) = event.focus_subtree.as_ref().and_then(toast_text) else {
+                return Vec::new();
+            };
+            let repeat = self.last_toast.as_ref().is_some_and(|(said, at)| {
+                *said == text && event.t_ms.saturating_sub(*at) < NOTIFICATION_REPEAT_MS
+            });
+            if repeat {
+                return Vec::new();
+            }
+            self.last_toast = Some((text.clone(), event.t_ms));
+            return vec![okur_core::AccessibilityEvent::Toast(text)];
         }
         if let Some(notification) = &event.notification {
             let repeat = self.last_notification.as_ref().is_some_and(|(text, at)| {
@@ -1644,6 +1660,21 @@ fn notification_event(notification: &TraceNotification) -> okur_core::Accessibil
 /// shows its page again: " Brightness Change brightness for the built-in display | Show more
 /// settings" (the slider inside is left out; dev box, 2026-10-17). A text region says its
 /// name. A region whose live setting is off says nothing.
+/// A toast's text, in a window of the shell that opened: its view's name (AutomationId
+/// `NormalToastView`, on Windows 10), as JAWS says it [obs, 770/s1].
+fn toast_text(window: &UiaNode) -> Option<String> {
+    const TOAST_VIEW: &str = "NormalToastView";
+    if window.automation_id.as_deref() == Some(TOAST_VIEW) {
+        return window
+            .name
+            .as_deref()
+            .map(str::trim)
+            .filter(|n| !n.is_empty())
+            .map(str::to_owned);
+    }
+    window.children.iter().find_map(toast_text)
+}
+
 fn uia_live_region_event(region: &UiaNode) -> Option<okur_core::LiveRegionEvent> {
     use okur_core::{LiveRegionEvent, Politeness};
     fn texts(node: &UiaNode, out: &mut Vec<String>) {
@@ -4603,6 +4634,37 @@ mod tests {
         );
         status.live_setting = Some(0);
         assert!(uia_live_region_event(&status).is_none());
+    }
+
+    /// A toast, as the shell reports it opening: its view, then the window around it, once
+    /// said [obs, 770/s1].
+    #[test]
+    fn a_toast_is_said_once_by_its_views_name() {
+        const TOAST: &str =
+            "New notification from Windows PowerShell, SR Fixture, Build finished in 12 seconds. 1 of 1";
+        let view = UiaNode {
+            automation_id: Some("NormalToastView".to_owned()),
+            children: vec![UiaNode {
+                automation_id: Some("TitleText".to_owned()),
+                ..node(UIA_TEXT, "SR Fixture", false)
+            }],
+            ..node(UIA_WINDOW, TOAST, false)
+        };
+        let window = UiaNode {
+            children: vec![view.clone()],
+            ..node(UIA_WINDOW, "New notification", false)
+        };
+        let mut converter = EventConverter::default();
+        let mut opened = focus_event(Vec::new());
+        opened.event = "uia_window_opened".to_owned();
+        opened.focus_subtree = Some(view);
+        assert_eq!(
+            converter.convert(&opened),
+            vec![okur_core::AccessibilityEvent::Toast(TOAST.to_owned())]
+        );
+        opened.t_ms += 13;
+        opened.focus_subtree = Some(window);
+        assert!(converter.convert(&opened).is_empty());
     }
 
     /// A closed WinUI combo box holds only its selected item: that is its value, not a
