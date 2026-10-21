@@ -11,8 +11,9 @@ use serde::Serialize;
 use serde_json::{Map, Value};
 
 use super::{
-    FormsMode, KeyboardLayout, KeyboardSettings, LessSpeech, OkurKey, OutputType, Punctuation,
-    SayAllUnit, Settings, SpeechMode, Synthesizer, TypingEcho, Verbosity, VerbosityLevel,
+    FormsMode, HeadingIndication, KeyboardLayout, KeyboardSettings, LessSpeech, OkurKey,
+    OutputType, Punctuation, SayAllUnit, Settings, SpeechMode, Synthesizer, TypingEcho, Verbosity,
+    VerbosityLevel,
 };
 use crate::messages::{msg, StaticMessage};
 use crate::settings_layers::Scope;
@@ -106,6 +107,9 @@ pub enum Kind {
     Range { min: i32, max: i32 },
     /// One of the synthesizer's voices by name, or none for its default.
     Voice,
+    /// One of a few values that have no label yet: set in the settings file and on the command
+    /// line until JAWS's names for them are found (Heading Indication's three).
+    Values(fn() -> Vec<Value>),
     /// A table of values (per output type, per verbosity level), set in the settings file until
     /// its own dialog comes (JAWS's Configure Verbosity Levels).
     Structured,
@@ -394,6 +398,17 @@ pub static SETTINGS: &[SettingSpec] = &[
         ..spec("show_graphics", Group::Reading, None, CHECK)
     },
     SettingSpec {
+        jaws: default_jcf("HTML", "HeadingIndication", |v| {
+            json(HeadingIndication::from_jcf(v))
+        }),
+        ..spec(
+            "heading_indication",
+            Group::Reading,
+            None,
+            Kind::Values(|| HeadingIndication::ALL.iter().map(|h| json(*h)).collect()),
+        )
+    },
+    SettingSpec {
         jaws: default_jcf("HTML", "SayAllOnDocumentLoad", |v| {
             Value::Bool(v.trim() != "0")
         }),
@@ -480,6 +495,14 @@ pub fn parse(spec: &SettingSpec, text: &str) -> Result<Value, String> {
     match spec.kind {
         Kind::Choice(choices) => {
             let values: Vec<Value> = choices().into_iter().map(|c| c.value).collect();
+            values
+                .iter()
+                .find(|v| named(v))
+                .cloned()
+                .ok_or_else(|| offered(&values))
+        }
+        Kind::Values(values) => {
+            let values = values();
             values
                 .iter()
                 .find(|v| named(v))
@@ -744,6 +767,7 @@ mod tests {
         for spec in SETTINGS {
             let values: Vec<Value> = match spec.kind {
                 Kind::Choice(choices) => choices().into_iter().map(|c| c.value).collect(),
+                Kind::Values(values) => values(),
                 Kind::Check { on, off } => vec![on.value(), off.value()],
                 Kind::Range { min, max } => vec![json(min), json(max)],
                 Kind::Voice => vec![json("Microsoft Zira"), Value::Null],

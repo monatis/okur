@@ -447,25 +447,42 @@ impl ScreenReaderEngine {
     /// `page` marked as the reading choices ask, when its marks differ from them: same page
     /// links read as plain links, graphics left out [obs, 724, 727].
     fn chosen_page(&self, page: &crate::aom::AomNode) -> Option<crate::aom::AomNode> {
+        use crate::settings::HeadingIndication;
+        let on = |on: bool| on.then(|| "true".to_owned());
         let marks = [
             (
                 crate::linearize::PLAIN_SAME_PAGE_LINKS,
-                !self.settings.identify_same_page_links,
+                on(!self.settings.identify_same_page_links),
             ),
-            (crate::linearize::NO_GRAPHICS, !self.settings.show_graphics),
+            (
+                crate::linearize::NO_GRAPHICS,
+                on(!self.settings.show_graphics),
+            ),
+            (
+                crate::linearize::HEADING_INDICATION,
+                match self.settings.heading_indication {
+                    HeadingIndication::Level => None,
+                    other => serde_json::to_value(other)
+                        .ok()
+                        .and_then(|v| v.as_str().map(str::to_owned)),
+                },
+            ),
         ];
         if marks
             .iter()
-            .all(|(mark, on)| page.attributes.contains_key(*mark) == *on)
+            .all(|(mark, value)| page.attributes.get(*mark) == value.as_ref())
         {
             return None;
         }
         let mut marked = page.clone();
-        for (mark, on) in marks {
-            if on {
-                marked.attributes.insert(mark.to_owned(), "true".to_owned());
-            } else {
-                marked.attributes.remove(mark);
+        for (mark, value) in marks {
+            match value {
+                Some(value) => {
+                    marked.attributes.insert(mark.to_owned(), value);
+                }
+                None => {
+                    marked.attributes.remove(mark);
+                }
             }
         }
         Some(marked)
@@ -1214,7 +1231,8 @@ impl ScreenReaderEngine {
         let voice_changed = settings.voice != self.settings.voice;
         let choices_changed = settings.identify_same_page_links
             != self.settings.identify_same_page_links
-            || settings.show_graphics != self.settings.show_graphics;
+            || settings.show_graphics != self.settings.show_graphics
+            || settings.heading_indication != self.settings.heading_indication;
         // The cursor says a page control's focus itself, at the verbosity in force.
         self.cursor.verbosity = settings.verbosity.clone();
         self.settings = settings;

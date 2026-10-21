@@ -349,6 +349,13 @@ struct NodeSlot {
 }
 
 impl VirtualBuffer {
+    /// How the page's headings' roles are said ([`crate::linearize::HEADING_INDICATION`]).
+    pub fn heading_indication(&self) -> crate::settings::HeadingIndication {
+        self.page()
+            .map(|page| crate::linearize::heading_indication_of(page))
+            .unwrap_or_default()
+    }
+
     /// Creates a VirtualBuffer from an AOM root node.
     pub fn from_aom(root: &AomNode) -> Self {
         crate::linearize::build(root)

@@ -518,22 +518,31 @@ impl SpeechFormatter {
         }
     }
 
-    /// Formats a heading announcement for quick navigation (`H` / `1`–`6`).
-    pub fn format_heading(level: u32, text: &str) -> String {
-        format!(
-            "{}\n \u{001d} {} \u{001e}",
-            text,
-            msg::role_heading_level(level)
-        )
+    /// Formats a heading announcement for quick navigation (`H` / `1`–`6`), its role as
+    /// `indication` says it [obs, 730, 731].
+    pub fn format_heading(
+        level: u32,
+        text: &str,
+        indication: crate::settings::HeadingIndication,
+    ) -> String {
+        match indication.role(level) {
+            Some(role) => format!("{text}\n \u{001d} {role} \u{001e}"),
+            None => text.to_owned(),
+        }
     }
 
     /// A higher heading a level key passes, said on one line before the heading it reaches:
     /// "Reference ‹ heading level 1 ›" [obs, 275/s3].
-    pub fn format_passed_heading(level: u32, text: &str) -> String {
-        format!(
-            "{text}{}",
-            crate::linearize::role_marker(&msg::role_heading_level(level).render())
-        )
+    pub fn format_passed_heading(
+        level: u32,
+        text: &str,
+        indication: crate::settings::HeadingIndication,
+    ) -> String {
+        let role = indication
+            .role(level)
+            .map(|role| crate::linearize::role_marker(&role))
+            .unwrap_or_default();
+        format!("{text}{role}")
     }
 
     /// A combo box one types in (an autocomplete): "Fruit edit combo collapsed | blank" (JAWS

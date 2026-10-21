@@ -1411,7 +1411,11 @@ impl VirtualCursor {
             .filter(|n| matches!(n.role, Role::Button | Role::MenuButton))
             .map(crate::linearize::button_suffix)
             .unwrap_or_default();
-        format!("{}{button}", SpeechFormatter::format_heading(level, &text))
+        let indication = self.buffer.heading_indication();
+        format!(
+            "{}{button}",
+            SpeechFormatter::format_heading(level, &text, indication)
+        )
     }
 
     /// Moves cursor to next heading across all levels (`H` / `MoveToNextHeading`).
@@ -1544,7 +1548,14 @@ impl VirtualCursor {
                     .line_at_offset(off)
                     .map(|line| line.text.as_str())
                     .unwrap_or_default();
-                format!("{}\n", SpeechFormatter::format_passed_heading(l, text))
+                format!(
+                    "{}\n",
+                    SpeechFormatter::format_passed_heading(
+                        l,
+                        text,
+                        self.buffer.heading_indication(),
+                    )
+                )
             })
             .collect()
     }
@@ -3362,7 +3373,7 @@ impl VirtualCursor {
                 .as_deref()
                 .or(heading.text.as_deref())
                 .unwrap_or("");
-            return SpeechFormatter::format_heading(level, text);
+            return SpeechFormatter::format_heading(level, text, self.buffer.heading_indication());
         }
         if let Some(link) = self.buffer.find_link_node(offset) {
             self.current_node_id = Some(link.id);

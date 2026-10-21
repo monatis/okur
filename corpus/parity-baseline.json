@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 5568,
+  "matched_steps": 5572,
   "total_steps": 5788,
   "accepted_divergences": 129,
   "errors": [],
@@ -5932,9 +5932,9 @@
     "729-web-say-all-indentation/s7": "mismatch",
     "729-web-say-all-indentation/s8": "mismatch",
     "729-web-say-all-indentation/s9": "match",
-    "730-struct-next-heading-indication-0/s1": "mismatch",
-    "730-struct-next-heading-indication-0/s2": "mismatch",
-    "731-struct-next-heading-indication-1/s1": "mismatch",
-    "731-struct-next-heading-indication-1/s2": "mismatch"
+    "730-struct-next-heading-indication-0/s1": "match",
+    "730-struct-next-heading-indication-0/s2": "match",
+    "731-struct-next-heading-indication-1/s1": "match",
+    "731-struct-next-heading-indication-1/s2": "match"
   }
 }

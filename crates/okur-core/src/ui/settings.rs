@@ -184,7 +184,7 @@ impl SettingsDialog {
                     .and_then(|name| self.voices.iter().position(|v| v == name))
                     .map_or(0, |i| i + 1),
             },
-            Kind::Structured => return None,
+            Kind::Values(_) | Kind::Structured => return None,
         };
         Some(Control {
             id: spec.id.to_owned(),

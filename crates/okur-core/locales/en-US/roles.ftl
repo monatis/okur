@@ -35,6 +35,8 @@ role-field = Field
 role-graphic = Graphic
 role-group = group
 role-heading-level = heading level { $level }
+# A heading's role without its level: JAWS's HeadingIndication=1 [obs, 731/s1].
+role-heading = heading
 role-link = Link
 role-link-same-page = same page link
 # The Virtual Viewer's list of a modern application's elements uses lowercase type words.

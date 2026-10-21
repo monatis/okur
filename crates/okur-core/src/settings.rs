@@ -210,6 +210,41 @@ impl FormsMode {
     }
 }
 
+/// How a heading's role is said: JAWS's `[HTML] HeadingIndication` (2 by default): its text
+/// alone at 0, "heading" at 1, "heading level 1" at 2 [obs, 730, 731; 11].
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum HeadingIndication {
+    Text,
+    Heading,
+    #[default]
+    Level,
+}
+
+impl HeadingIndication {
+    pub const ALL: [Self; 3] = [Self::Text, Self::Heading, Self::Level];
+
+    /// The indication a `DEFAULT.JCF` `HeadingIndication` value sets: 0 the text alone, 1
+    /// "heading"; any other value the level, JAWS's default.
+    pub fn from_jcf(value: &str) -> Self {
+        match value.trim() {
+            "0" => Self::Text,
+            "1" => Self::Heading,
+            _ => Self::Level,
+        }
+    }
+
+    /// The role said for a heading of `level`, if any.
+    pub fn role(self, level: u32) -> Option<String> {
+        use crate::messages::msg;
+        match self {
+            Self::Text => None,
+            Self::Heading => Some(msg::role_heading().to_string()),
+            Self::Level => Some(msg::role_heading_level(level).render()),
+        }
+    }
+}
+
 /// What typing a character says (Basic Settings: Typing Echo).
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -641,6 +676,8 @@ pub struct Settings {
     /// A page's graphics are read: JAWS's `[HTML] IncludeGraphics` (1 by default). At 0 they are
     /// left out: G finds none, "There are no Graphics on this page." [obs, 727].
     pub show_graphics: bool,
+    /// How a heading's role is said.
+    pub heading_indication: HeadingIndication,
     /// A page is read from its top once it loads, after its title and summary: JAWS's
     /// "Document and Web Pages Automatically Read When Loaded" (Settings Center, Web/HTML/PDFs,
     /// Reading; `[HTML] SayAllOnDocumentLoad`), on in JAWS 2025. Off, the title and the
@@ -667,6 +704,7 @@ impl Default for Settings {
             verbosity: Verbosity::default(),
             identify_same_page_links: true,
             show_graphics: true,
+            heading_indication: HeadingIndication::Level,
             read_page_on_load: true,
             confirm_exit: true,
         }
@@ -731,6 +769,7 @@ impl Settings {
             // None is in old-pc's JCF: JAWS's defaults.
             identify_same_page_links: true,
             show_graphics: true,
+            heading_indication: HeadingIndication::Level,
             read_page_on_load: true,
             confirm_exit: true,
         }

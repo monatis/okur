@@ -229,6 +229,7 @@ struct Builder<'a> {
     same_page_links: bool,
     /// Graphics are read; off, left out of the page ([`NO_GRAPHICS`]).
     graphics: bool,
+    headings: crate::settings::HeadingIndication,
 }
 
 /// The page's attribute that says its same page links are read as plain links: JAWS's
@@ -239,6 +240,20 @@ pub const PLAIN_SAME_PAGE_LINKS: &str = "okur_plain_same_page_links";
 /// The page's attribute that says its graphics are left out: JAWS's `IncludeGraphics=0`
 /// (727/s1: "There are no Graphics on this page."). Set as [`PLAIN_SAME_PAGE_LINKS`] is.
 pub const NO_GRAPHICS: &str = "okur_no_graphics";
+
+/// The page's attribute that says how its headings' roles are said, when not with their level
+/// ("text" or "heading", [`crate::settings::HeadingIndication`]'s names) [obs, 730, 731].
+pub const HEADING_INDICATION: &str = "okur_heading_indication";
+
+/// The heading indication `page` is marked with.
+pub fn heading_indication_of(page: &AomNode) -> crate::settings::HeadingIndication {
+    use crate::settings::HeadingIndication;
+    match attr(page, HEADING_INDICATION) {
+        Some("text") => HeadingIndication::Text,
+        Some("heading") => HeadingIndication::Heading,
+        _ => HeadingIndication::Level,
+    }
+}
 
 impl<'a> Builder<'a> {
     fn new(document_url: Option<&'a str>) -> Self {
@@ -256,6 +271,7 @@ impl<'a> Builder<'a> {
             annotations: Vec::new(),
             same_page_links: true,
             graphics: true,
+            headings: crate::settings::HeadingIndication::Level,
         }
     }
 
@@ -668,10 +684,12 @@ impl<'a> Builder<'a> {
                 // button, and its line is the button's: Tab, B and Enter reach it.
                 let button = sole_button(node, &text);
                 let suffix = button.map(button_suffix).unwrap_or_default();
-                let speech = format!(
-                    "{}{text}{suffix}",
-                    role_marker(&msg::role_heading_level(level).render())
-                );
+                let role = self
+                    .headings
+                    .role(level)
+                    .map(|role| role_marker(&role))
+                    .unwrap_or_default();
+                let speech = format!("{role}{text}{suffix}");
                 let line_node = button.map_or(node.id, |b| b.id);
                 let off = self.emit(line_node, node.role.clone(), &text, speech);
                 if let Some(button) = button {
@@ -1455,6 +1473,7 @@ fn visit_page(root: &AomNode) -> (VirtualBuffer, Vec<(usize, &'static str, Strin
     let mut builder = Builder::new(document_url);
     builder.same_page_links = attr(root, PLAIN_SAME_PAGE_LINKS).is_none();
     builder.graphics = attr(root, NO_GRAPHICS).is_none();
+    builder.headings = heading_indication_of(root);
     builder.buffer.root_id = Some(root.id);
     builder.buffer.mark_readable(root.id);
 
