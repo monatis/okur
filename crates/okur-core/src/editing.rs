@@ -227,6 +227,33 @@ pub fn line_around_caret(context: &TextContext) -> (String, String) {
     (part(start, caret), part(caret, end))
 }
 
+/// A text's lines, a Windows line break counting once, and the index of the line the caret is
+/// on: what the Okur cursor moves over in a text field.
+pub fn lines_and_caret_line(context: &TextContext) -> (Vec<String>, usize) {
+    let text = chars(&context.text);
+    let mut lines = Vec::new();
+    let mut caret_line = 0;
+    let mut start = 0;
+    let mut i = 0;
+    while i <= text.len() {
+        let at_break = text.get(i).is_some_and(|c| is_line_break(*c));
+        if at_break || i == text.len() {
+            if context.caret >= start {
+                caret_line = lines.len();
+            }
+            lines.push(text.get(start..i).unwrap_or_default().iter().collect());
+            i += 1;
+            if at_break && text.get(i - 1) == Some(&'\r') && text.get(i) == Some(&'\n') {
+                i += 1;
+            }
+            start = i;
+            continue;
+        }
+        i += 1;
+    }
+    (lines, caret_line)
+}
+
 /// The sentences from the one the caret is in to the end of the text, each with the
 /// character offset it starts at: what Say All reads in a text field by sentence (Say All
 /// Reads). A sentence ends at a line's end too; a line without a sentence mark is one.

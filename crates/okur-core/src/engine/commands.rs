@@ -481,6 +481,10 @@ impl ScreenReaderEngine {
             {
                 Some(msg::blank().to_string())
             }
+            // The Okur cursor in a text field: its line; the word key says nothing there
+            // [obs, 690/s6, s10].
+            Command::SayLine if self.okur_line_active() => self.okur_cursor_line(),
+            Command::SayWord if self.okur_line_active() => None,
             Command::SayLine => Some(self.line_here()),
             Command::SayWord => Some(self.cursor.current_word()),
             Command::SayCharacter | Command::SayCharacterPhonetic => Some(self.character_here()),
@@ -888,6 +892,19 @@ impl ScreenReaderEngine {
         let layout_command = crate::command::layout_command_for(&self.settings.keyboard, event);
         let say_line = layout_command == Some(Command::SayLine)
             || crate::editing::EditKey::of(event).is_some();
+        // The Okur cursor in a text field reads its own line, and says nothing for the word
+        // [obs, 690/s6, s10].
+        if self.okur_line_active() {
+            if say_line {
+                if let Some(line) = self.okur_cursor_line() {
+                    let _ = self.say(line);
+                }
+                return;
+            }
+            if layout_command == Some(Command::SayWord) || event.key == Key::Numpad5 {
+                return;
+            }
+        }
         if self.editing_text() && say_line {
             // Pressed twice quickly, the line is spelled [obs, 406/s7].
             if self.presses(Press::Command(Command::SayLine), event.time_ms, 2) == 2 {

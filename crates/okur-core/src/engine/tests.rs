@@ -978,6 +978,50 @@ fn v_and_u_move_by_visited_and_unvisited_links() {
     );
 }
 
+/// The Okur cursor in a text field, routed to the caret, moves over the field's lines with Up
+/// and Down and reads them without their indentation; Insert+Up reads its line, Left and the
+/// word key say nothing, and Numpad Plus goes back to the caret's line [obs, 690].
+#[test]
+fn the_okur_cursor_reads_a_text_fields_lines() {
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document))),
+        Box::new(speech.clone()),
+    );
+    engine.set_settings(crate::settings::Settings::reference_machine());
+    let mut field = FocusEvent::new(Role::Edit).with_name("Text Editor");
+    field.text = Some(crate::event::TextContext {
+        text: "fn main() {\r\n    let total = 1;\r\n    println!(\"{total}\");\r\n}".into(),
+        caret: 0,
+        selection: None,
+        font: None,
+        word: None,
+        misspelled: Vec::new(),
+    });
+    engine.handle_focus_event(&field);
+    let press = |engine: &mut ScreenReaderEngine, key: Key, insert: bool| {
+        let _ = speech.take();
+        let modifiers = Modifiers {
+            insert,
+            ..Modifiers::none()
+        };
+        engine.handle_key_event(&KeyEvent::new(key, modifiers, true));
+        speech.take().join("\n")
+    };
+    press(&mut engine, Key::NumpadMinus, false);
+    press(&mut engine, Key::NumpadMinus, true);
+    assert_eq!(press(&mut engine, Key::DownArrow, false), "let total = 1;");
+    assert_eq!(
+        press(&mut engine, Key::DownArrow, false),
+        "println!(\"{total}\");"
+    );
+    assert_eq!(
+        press(&mut engine, Key::UpArrow, true),
+        "println!(\"{total}\");"
+    );
+    assert_eq!(press(&mut engine, Key::LeftArrow, false), "");
+}
+
 /// Ctrl+Windows+K sets the page's temporary PlaceMarker, "Temporary PlaceMarker set" and the
 /// line; K and Shift+K go back to it and say the element there, again from the marker itself;
 /// before one is set K says there are none [obs, 687/s4-s9, 221/s4].
