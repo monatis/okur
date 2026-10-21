@@ -582,24 +582,24 @@ A step can be in more than one entry; all of its entries apply.
   and only in this mode.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-21.
 
-### Closing Skim Reading after changing its rule type makes JAWS's summary
+### Closing Skim Reading makes JAWS's summary
 
 - Steps: `763-web-skim-reading-rule-types/s23`, `763-web-skim-reading-rule-types/s24`,
   `776-web-skim-reading-text-rules-controls/s19`, `776-web-skim-reading-text-rules-controls/s20`,
   `777-web-skim-reading-speak-unit-and-attributes/s28`,
   `777-web-skim-reading-speak-unit-and-attributes/s29`.
-- Difference: the whole step. After the rule type was changed, even back to the first, Escape
-  (763, 777) or Close's Alt+C (776) closes JAWS's Skim Reading dialog and opens its summary in
+- Difference: the whole step. Escape (763, 777) or Close's Alt+C (776) closes JAWS's Skim
+  Reading dialog and opens its summary in
   the Results Viewer ("1. City Library Expands Evening Hours - Riverside Gazette Link | To
   activate press Enter."), as Create Summary does (762/s2); Say Line then says nothing in the
   viewer. Okur's Escape and Close close the dialog and give the page back.
 - Why: Escape and Close close the dialog "without saving the last changes made" (JAWS 2025
-  help, Skim Reading Dialog), and with the rule type untouched Escape closes it only
-  (760/s14). The summary came in every trial of four recordings (rounds 180, 184, 191 and 192,
-  the last three with JAWS's viewers closed before each trial), wherever the focus was, so it
-  is JAWS's own doing, not a window left open.
-- Deleting a text rule does it too: Close after Delete Rule opened the summary in 781 (round
-  196, not imported, as it hangs on a rule 778 left saved in JAWS).
+  help, Skim Reading Dialog), not make a summary. The summary came in every trial of four
+  recordings (rounds 180, 184, 191 and 192, the last three with JAWS's viewers closed before
+  each trial), wherever the focus was, so it is JAWS's own doing, not a window left open. It
+  came after the rule type was changed, after Delete Rule (781, round 196) and right after
+  the dialog opened (782, round 197; neither imported); only 760's Escape, after Tab through
+  the dialog, closed it alone (760/s14).
 - Decided under the owner's rule on JAWS's accidents, 2026-10-21.
 
 ### JAWS's summary viewer says nothing to Say Line and Escape
