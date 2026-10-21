@@ -6248,13 +6248,27 @@
         "deterministic": false,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "788-desktop-mouse-button-locks-in-notepad",
+      "fixture": "desktop-notepad.ps1",
+      "evidence": {
+        "sha256": "7f47d313ec008450be7bf99eab762f81964bbd1825d2e53a26636505115dd8a6",
+        "capture_script_sha256": "043f2870b1499dacb80869fd8b86f5c8abac741d2a75c2c4ca9f04ab0f4e4e3a",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 433,
-    "scenarios_with_evidence": 433,
-    "total_trials": 1329,
-    "successful_trials": 1328,
-    "deterministic_scenarios": 279
+    "scenarios": 434,
+    "scenarios_with_evidence": 434,
+    "total_trials": 1332,
+    "successful_trials": 1331,
+    "deterministic_scenarios": 280
   }
 }
