@@ -1658,6 +1658,23 @@ impl VirtualCursor {
         units
     }
 
+    /// Sentence `index` of `units` (Say All by sentence's), as skim reading by sentence reads
+    /// a paragraph's first: a list item's mark with the sentence after it on its line, "•
+    /// Weekday hours: 9 a.m.", "1. Board vote in March"; a link's item, the mark alone, "•"
+    /// [obs, 769/s3].
+    pub fn skim_sentence(&self, units: &[(usize, String)], index: usize) -> Option<String> {
+        let (start, text) = units.get(index)?;
+        let joined = self.buffer.line_at_offset(*start).and_then(|line| {
+            let (mark, _, _) = split_list_mark(line);
+            let link = matches!(line.role, Role::Link { .. });
+            let end = line.start_offset + line.text.len();
+            let (next_start, next) = units.get(index + 1)?;
+            (mark == Some(text.as_str()) && !link && *next_start < end)
+                .then(|| format!("{text} {}", next.trim_start()))
+        });
+        Some(joined.unwrap_or_else(|| text.clone()))
+    }
+
     /// Say All's pieces by `unit`, from the page's top: each one's offset and what is said.
     /// `None` by line: Say All reads the page's lines.
     pub fn say_all_units(&self, unit: crate::settings::SayAllUnit) -> Option<Vec<(usize, String)>> {

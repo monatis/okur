@@ -96,7 +96,8 @@ A step can be in more than one entry; all of its entries apply.
   `765-web-word-list-dialog-and-case/s1` and `766-web-word-list-past-the-last/s1` (its list,
   then the browser's title, or its version, said before the dialog; one trial of 560/s4 has
   none of it); and Skim Reading, `760-web-skim-reading-dialog/s1` and
-  `763-web-skim-reading-rule-types/s1` (its rule type said before the dialog).
+  `763-web-skim-reading-rule-types/s1`, `769-web-skim-read-by-sentence/s1` and
+  `771-web-skim-reading-rule-saved/s1` (its rule type said before the dialog).
 - In the recordings of 2026-10-19 (round 9, JAWS freshly started for the batch), JAWS no longer
   said its version or the list's tutor message before the Links List, the Heading List and
   Virtual HTML Features, and said nothing before some dialogs at all: those steps were taken

@@ -145,6 +145,8 @@ divergences! {
         "766-web-word-list-past-the-last/s1",
         "760-web-skim-reading-dialog/s1",
         "763-web-skim-reading-rule-types/s1",
+        "769-web-skim-read-by-sentence/s1",
+        "771-web-skim-reading-rule-saved/s1",
     ],
     "Opening one of its list dialogs, JAWS's speech passes through its own windows before it \
      names the dialog: its main window (its version, a list's tutor message) and the browser's \

@@ -111,28 +111,69 @@ impl ScreenReaderEngine {
         self.begin_say_all(0, Source::PageSkim(read), true)
     }
 
-    /// Skim reading by sentence: from the virtual cursor's paragraph on, each paragraph's
-    /// first sentence.
+    /// Skim reading by sentence: from the virtual cursor's paragraph on, the sentence each
+    /// paragraph starts in, as Say All by sentence parts the page: "• Weekday hours: 9 a.m.",
+    /// "By , published March 14, 2026 The Riverside City Library will stay open until 9 p.m."
+    /// [obs, 769/s3]. A sentence that several paragraphs start in is read once; JAWS reads it
+    /// again for each ("list end Primary navigation region end banner end main region article",
+    /// five times).
     fn start_skim_read_by_sentence(&mut self) -> Option<String> {
         let at = self.cursor.offset;
         let sentences = self
             .cursor
             .say_all_units(crate::settings::SayAllUnit::Sentence)
             .unwrap_or_default();
-        let read: Vec<(usize, String)> = self
-            .cursor
-            .buffer
-            .paragraphs
-            .iter()
-            .filter(|p| p.end_offset > at)
-            .filter_map(|p| {
-                sentences
-                    .iter()
-                    .find(|(start, _)| *start >= p.start_offset && *start < p.end_offset)
-                    .cloned()
+        let buffer = &self.cursor.buffer;
+        let rows = buffer
+            .page()
+            .map(|page| table_rows(page))
+            .unwrap_or_default();
+        let row = |offset: usize| {
+            buffer
+                .line_at_offset(offset)
+                .and_then(|l| rows.get(&l.node_id))
+                .copied()
+        };
+        // A table's row is one paragraph, as by line: its sentence goes on through its cells
+        // to the first that ends one, or to the row's end ("Branch Weekdays Details", "Central
+        // 9 a.m." [obs, 769/s3]).
+        let mut read: Vec<(usize, Option<usize>)> = Vec::new();
+        for paragraph in buffer.paragraphs.iter().filter(|p| p.end_offset > at) {
+            let Some(index) = sentences
+                .iter()
+                .rposition(|(start, _)| *start <= paragraph.start_offset)
+            else {
+                continue;
+            };
+            let in_row = row(paragraph.start_offset);
+            let same_row = in_row.is_some() && read.last().is_some_and(|&(_, r)| r == in_row);
+            if read.last().map(|&(i, _)| i) != Some(index) && !same_row {
+                read.push((index, in_row));
+            }
+        }
+        let ends_sentence = |text: &str| text.trim_end().ends_with(['.', '!', '?']);
+        let units = read
+            .into_iter()
+            .filter_map(|(i, in_row)| {
+                let start = sentences.get(i)?.0;
+                let mut text = self.cursor.skim_sentence(&sentences, i)?;
+                if in_row.is_some() {
+                    let mut next = i + 1;
+                    while !ends_sentence(&text) {
+                        let Some((at, more)) = sentences.get(next) else {
+                            break;
+                        };
+                        if row(*at) != in_row {
+                            break;
+                        }
+                        text = format!("{text} {more}");
+                        next += 1;
+                    }
+                }
+                Some((start, text))
             })
             .collect();
-        self.begin_say_all(0, Source::PageUnits(read), true)
+        self.begin_say_all(0, Source::PageUnits(units), true)
     }
 
     /// A page just loaded is read from its top, behind what was said of it (its title and

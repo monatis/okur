@@ -5894,3 +5894,54 @@ fn skim_reading_reads_by_the_rule_chosen() {
     let again = engine.execute_command("StartSkimRead").unwrap_or_default();
     assert!(!again.contains("Sundays"), "{again:?}");
 }
+
+/// Skimming by sentence reads a list item's mark with its sentence, a link's item by its mark
+/// alone, as JAWS does [obs, 769/s3].
+#[test]
+fn skim_reading_by_sentence_reads_list_items_with_their_mark() {
+    use crate::ui::{FromUi, ToUi, Value};
+    let link = AomNode::new(
+        3,
+        Role::Link {
+            href: Some("#news".into()),
+        },
+    )
+    .with_name("News");
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Hours")
+        .with_children(vec![AomNode::new(1, Role::List).with_children(vec![
+            AomNode::new(2, Role::ListItem)
+                .with_children(vec![AomNode::new(5, Role::Text).with_text("• "), link]),
+            AomNode::new(4, Role::ListItem).with_children(vec![
+                AomNode::new(6, Role::Text).with_text("• "),
+                AomNode::new(7, Role::Text).with_text("Weekday hours: 9 a.m. Late on Fridays."),
+            ]),
+        ])]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.handle_focus_event(&page_document());
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    engine.execute_command("SkimReadDialog");
+    let Some(ToUi::DialogShow { dialog }) = ui.take().first().cloned() else {
+        panic_free_fail("no dialog shown");
+        return;
+    };
+    let id = dialog.id;
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "rule".into(),
+        value: Value::Selected(1),
+    }));
+    let read = engine
+        .handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+            id,
+            control: "start".into(),
+        }))
+        .unwrap_or_default();
+    let lines: Vec<&str> = read.lines().map(str::trim).collect();
+    assert!(lines.contains(&"• Weekday hours: 9 a.m."), "{read:?}");
+    assert!(lines.contains(&"•"), "{read:?}");
+    assert!(!read.contains("Fridays"), "{read:?}");
+}
