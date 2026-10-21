@@ -348,22 +348,6 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                     PartKind::Name,
                     msg::list_item_not_selected(name).render(),
                 ));
-            } else if let (true, Some(checked)) =
-                (focus.container_is_list_view, focus.states.checked)
-            {
-                // A list view's item with a check box says its state after its name, with no
-                // marks: "Hide ComplementaryRegion 1 from the top with text: "Advertisement"
-                // checked" [obs, 742/s18].
-                let state = if checked {
-                    msg::state_checked()
-                } else {
-                    msg::state_not_checked()
-                };
-                lines.push(Line::new(vec![
-                    Part::new(PartKind::Name, name),
-                    Part::text(" "),
-                    Part::text(state.to_string()),
-                ]));
             } else {
                 lines.push(Line::of(PartKind::Name, name));
             }
@@ -373,6 +357,22 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                     .iter()
                     .map(|c| Line::of(PartKind::Value, named(c))),
             );
+            // A list view's item with a check box says its state after its last column, with
+            // no marks: "Hide ComplementaryRegion 1 from the top with text: "Advertisement"
+            // checked" [obs, 742/s18].
+            if let (true, Some(checked), Some(last)) = (
+                focus.container_is_list_view,
+                focus.states.checked,
+                lines.last_mut(),
+            ) {
+                let state = if checked {
+                    msg::state_checked()
+                } else {
+                    msg::state_not_checked()
+                };
+                last.parts.push(Part::text(" "));
+                last.parts.push(Part::text(state.to_string()));
+            }
             // Moving within the list, its place is the list position verbosity switches
             // ("Cherries" at Advanced); entering the list says it at every level [obs, 549/s8,
             // s9].
