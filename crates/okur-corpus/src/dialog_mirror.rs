@@ -121,6 +121,25 @@ impl DialogMirror {
                         c.enabled = enabled;
                     }
                 }
+                ToUi::DialogRows {
+                    id,
+                    control,
+                    rows: new_rows,
+                    checked: new_checked,
+                    selected: new_selected,
+                } => {
+                    if let Some(ControlKind::CheckList {
+                        rows,
+                        checked,
+                        selected,
+                        ..
+                    }) = self.control_of(id, &control).map(|c| &mut c.kind)
+                    {
+                        *rows = new_rows;
+                        *checked = new_checked;
+                        *selected = new_selected;
+                    }
+                }
                 ToUi::DialogDefault { id, control } => {
                     let dialog = self
                         .dialog
@@ -273,6 +292,44 @@ impl DialogMirror {
                         None => (false, None),
                     }
                 }
+                // A check list's row by its first cell, and its check as the window reports it
+                // turned (Space on the row).
+                (
+                    ControlKind::CheckList {
+                        rows,
+                        checked,
+                        selected,
+                        ..
+                    },
+                    Role::ListItem,
+                ) => {
+                    let first =
+                        |i: usize| rows.get(i).and_then(|row| row.first()).map(|c| plain(c));
+                    let at = focus
+                        .item_index
+                        .and_then(|i| i.checked_sub(1))
+                        .filter(|&i| first(i).as_deref() == Some(name.as_str()))
+                        .or_else(|| {
+                            (0..rows.len()).find(|&i| first(i).as_deref() == Some(name.as_str()))
+                        });
+                    match at {
+                        Some(i) => {
+                            let turned = match (focus.states.checked, checked.get_mut(i)) {
+                                (Some(now), Some(was)) if now != *was => {
+                                    *was = now;
+                                    Some(Value::ItemChecked(i, now))
+                                }
+                                _ => None,
+                            };
+                            let chosen = (i != *selected).then(|| {
+                                *selected = i;
+                                Value::Selected(i)
+                            });
+                            (true, turned.or(chosen))
+                        }
+                        None => (false, None),
+                    }
+                }
                 (ControlKind::Tree { items, selected }, Role::TreeItem) => {
                     match items.iter().position(|item| plain(&item.text) == name) {
                         Some(i) if i != *selected => {
@@ -398,6 +455,18 @@ impl DialogMirror {
             Key::Space => focused
                 .filter(|c| matches!(c.kind, ControlKind::Button { .. }))
                 .map(press),
+            // Delete and F2 on a check list's row.
+            Key::Delete | Key::F(2) => focused
+                .filter(|c| matches!(c.kind, ControlKind::CheckList { .. }))
+                .map(|c| FromUi::DialogKey {
+                    id: dialog.id,
+                    control: c.id.clone(),
+                    key: if event.key == Key::Delete {
+                        okur_core::ui::DialogKey::Delete
+                    } else {
+                        okur_core::ui::DialogKey::Rename
+                    },
+                }),
             _ => None,
         };
         if matches!(report, Some(FromUi::DialogClosed { .. })) {

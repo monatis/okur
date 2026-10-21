@@ -17,10 +17,13 @@
 //!
 //! Back, Next and Finish come from the wizard's window; Okur turns its pages.
 
-use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, Value, WizardButtons, WizardSpec};
+use okur_ui_model::{
+    Control, ControlKind, DialogKey, DialogSpec, FromUi, ToUi, TreeItem, Value, WizardButtons,
+    WizardSpec,
+};
 
 use crate::aom::AomNode;
-use crate::flexible_web::{customizations, Action, Customization, Element, Scope};
+use crate::flexible_web::{customizations, Action, Area, Customization, Element, Rules, Scope};
 use crate::messages::msg;
 
 /// The wizard's pages, in order.
@@ -65,6 +68,9 @@ pub enum Outcome {
         scope: Scope,
         customizations: Vec<Customization>,
     },
+    /// Finish with View or change where rules apply chosen: open the rules dialog; the
+    /// wizard closes [obs, 748/s6].
+    View,
     /// Cancel or Escape: the wizard is gone.
     Closed,
 }
@@ -270,7 +276,8 @@ impl FlexibleWebWizard {
                         "customizations",
                         String::new(),
                         ControlKind::CheckList {
-                            items: self.made.iter().map(Customization::label).collect(),
+                            columns: Vec::new(),
+                            rows: self.made.iter().map(|c| vec![c.label()]).collect(),
                             checked: self.checked.clone(),
                             selected: 0,
                         },
@@ -402,6 +409,7 @@ impl FlexibleWebWizard {
                             .map(|(c, _)| c.clone())
                             .collect(),
                     },
+                    ("finish", Page::Start) if self.task == VIEW => Outcome::View,
                     ("finish", Page::Customization) => self
                         .offered
                         .get(self.customization)
@@ -412,6 +420,234 @@ impl FlexibleWebWizard {
             }
             FromUi::DialogClosed { id } if *id == self.id => Outcome::Closed,
             _ => Outcome::Nothing,
+        }
+    }
+}
+
+/// What the engine does after a message from the rules dialog or its question.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum RulesOutcome {
+    Nothing,
+    /// Messages for the dialog's windows.
+    Send(Vec<ToUi>),
+    /// Turn `rule` on or off in `area`.
+    Set {
+        rule: String,
+        area: Area,
+        on: bool,
+    },
+    /// Delete `rule`: the question, `question`, answered Yes.
+    Delete {
+        rule: String,
+        question: u32,
+    },
+    /// Close or Escape: the dialog is gone.
+    Closed,
+}
+
+/// JAWS's View or Change Where Rules are Applied, opened from the wizard's first page [obs,
+/// 748]: its text, a tree of the areas around the page in front (Global, its site, the
+/// page; the site closed at first), and the rules as a list with check boxes under Rule and
+/// Set for: checked where the rule is on in the area chosen, Set for naming the area that
+/// says so. Space turns a rule on or off there; Delete asks, then deletes it everywhere.
+#[derive(Debug, Clone)]
+pub struct RulesDialog {
+    pub id: u32,
+    areas: [Area; 3],
+    area: usize,
+    rule: usize,
+    /// The question before a rule is deleted, while it is open, and the rule.
+    question: Option<(u32, String)>,
+}
+
+impl RulesDialog {
+    /// The dialog for the page at `url`, on Global.
+    pub fn new(id: u32, url: &str) -> Self {
+        Self {
+            id,
+            areas: Area::around(url),
+            area: 0,
+            rule: 0,
+            question: None,
+        }
+    }
+
+    /// Whether `id` is the dialog's or its question's.
+    pub fn owns(&self, id: u32) -> bool {
+        id == self.id || self.question.as_ref().is_some_and(|(q, _)| *q == id)
+    }
+
+    /// The rules list's rows, and their checks, for the area chosen.
+    fn rows(&self, rules: &Rules) -> (Vec<Vec<String>>, Vec<bool>) {
+        rules
+            .rules
+            .iter()
+            .map(|rule| {
+                let (on, set_for) = rules.state(&rule.name, &self.areas, self.area);
+                (vec![rule.name.clone(), set_for.set_for()], on)
+            })
+            .unzip()
+    }
+
+    pub fn spec(&self, rules: &Rules) -> DialogSpec {
+        let (rows, checked) = self.rows(rules);
+        DialogSpec {
+            id: self.id,
+            title: msg::flexible_web_rules_title().to_string(),
+            controls: vec![
+                control(
+                    "areas",
+                    String::new(),
+                    ControlKind::Tree {
+                        items: self
+                            .areas
+                            .iter()
+                            .enumerate()
+                            .map(|(level, area)| TreeItem {
+                                text: area.label(),
+                                level,
+                                // The site closed, as JAWS's opens [obs, 748/s9].
+                                open: level != 1,
+                            })
+                            .collect(),
+                        selected: self.area,
+                    },
+                ),
+                control(
+                    "rules",
+                    String::new(),
+                    ControlKind::CheckList {
+                        columns: vec![
+                            msg::flexible_web_rules_column_rule().to_string(),
+                            msg::flexible_web_rules_column_set_for().to_string(),
+                        ],
+                        rows,
+                        checked,
+                        selected: self.rule,
+                    },
+                ),
+                control(
+                    "close",
+                    msg::flexible_web_rules_close().to_string(),
+                    ControlKind::Button { default: true },
+                ),
+                control(
+                    "text",
+                    msg::flexible_web_rules_title().to_string(),
+                    ControlKind::Note {
+                        text: msg::flexible_web_rules_text().to_string(),
+                    },
+                ),
+            ],
+        }
+    }
+
+    /// The rules list as it stands, for the area chosen.
+    pub fn refreshed(&mut self, rules: &Rules) -> ToUi {
+        self.rule = self.rule.min(rules.rules.len().saturating_sub(1));
+        let (rows, checked) = self.rows(rules);
+        ToUi::DialogRows {
+            id: self.id,
+            control: "rules".to_owned(),
+            rows,
+            checked,
+            selected: self.rule,
+        }
+    }
+
+    /// The question before `rule` is deleted: "You are about to delete rule ..." with Yes and
+    /// No, named as Okur names itself where JAWS's says "JAWS" [obs, 748/s20].
+    fn question(id: u32, rule: &str) -> DialogSpec {
+        DialogSpec {
+            id,
+            title: msg::flexible_web_delete_title().to_string(),
+            controls: vec![
+                control(
+                    "question",
+                    String::new(),
+                    ControlKind::Message {
+                        text: msg::flexible_web_delete_question(rule.to_owned()).to_string(),
+                    },
+                ),
+                control(
+                    "yes",
+                    msg::flexible_web_delete_yes().to_string(),
+                    ControlKind::Button { default: true },
+                ),
+                control(
+                    "no",
+                    msg::flexible_web_delete_no().to_string(),
+                    ControlKind::Button { default: false },
+                ),
+            ],
+        }
+    }
+
+    /// What the user did to the dialog or its question, on `rules`; `next_id` numbers the
+    /// question.
+    pub fn handle(&mut self, event: &FromUi, rules: &Rules, next_id: u32) -> RulesOutcome {
+        if let Some((question, rule)) = self.question.clone() {
+            let answer = match event {
+                FromUi::DialogPressed { id, control } if *id == question => Some(control == "yes"),
+                FromUi::DialogClosed { id } if *id == question => Some(false),
+                _ => None,
+            };
+            if let Some(yes) = answer {
+                self.question = None;
+                return if yes {
+                    RulesOutcome::Delete { rule, question }
+                } else {
+                    RulesOutcome::Send(vec![ToUi::DialogClose { id: question }])
+                };
+            }
+        }
+        match event {
+            FromUi::DialogChanged { id, control, value } if *id == self.id => {
+                match (control.as_str(), value) {
+                    ("areas", Value::Selected(i)) if *i < self.areas.len() && *i != self.area => {
+                        self.area = *i;
+                        RulesOutcome::Send(vec![self.refreshed(rules)])
+                    }
+                    ("rules", Value::Selected(i)) => {
+                        self.rule = *i;
+                        RulesOutcome::Nothing
+                    }
+                    // A check turned: only a change from the rule's state there is the user's.
+                    ("rules", Value::ItemChecked(i, on)) => {
+                        match (rules.rules.get(*i), self.areas.get(self.area)) {
+                            (Some(rule), Some(area))
+                                if rules.state(&rule.name, &self.areas, self.area).0 != *on =>
+                            {
+                                RulesOutcome::Set {
+                                    rule: rule.name.clone(),
+                                    area: area.clone(),
+                                    on: *on,
+                                }
+                            }
+                            _ => RulesOutcome::Nothing,
+                        }
+                    }
+                    _ => RulesOutcome::Nothing,
+                }
+            }
+            FromUi::DialogKey {
+                id,
+                control,
+                key: DialogKey::Delete,
+            } if *id == self.id && control == "rules" => match rules.rules.get(self.rule) {
+                Some(rule) => {
+                    self.question = Some((next_id, rule.name.clone()));
+                    RulesOutcome::Send(vec![ToUi::DialogShow {
+                        dialog: Self::question(next_id, &rule.name),
+                    }])
+                }
+                None => RulesOutcome::Nothing,
+            },
+            FromUi::DialogPressed { id, control } if *id == self.id && control == "close" => {
+                RulesOutcome::Closed
+            }
+            FromUi::DialogClosed { id } if *id == self.id => RulesOutcome::Closed,
+            _ => RulesOutcome::Nothing,
         }
     }
 }
@@ -655,7 +891,8 @@ mod tests {
                     "customizations",
                     "",
                     &ControlKind::CheckList {
-                        items: vec!["Hide MainRegion 1 from the top".into()],
+                        columns: Vec::new(),
+                        rows: vec![vec!["Hide MainRegion 1 from the top".into()]],
                         checked: vec![true],
                         selected: 0,
                     }

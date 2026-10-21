@@ -377,57 +377,155 @@ impl Scope {
     }
 }
 
-/// A rule: customizations saved under a name, applied whenever a page it applies to loads
+/// An area of the web where a rule is turned on or off, as JAWS's rules dialog's tree has
+/// them: everywhere, a site, a page. A smaller area's setting wins over a larger one's: "Any
+/// changes to the settings of the smaller areas override the settings for the larger areas"
+/// (the dialog's text [obs, 748/s6]).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Area {
+    Global,
+    /// A site, by its host; a file's is "localhost" [obs, 748/s9].
+    Site(String),
+    /// A page, by its address without its fragment.
+    Page(String),
+}
+
+impl Area {
+    /// The area of `scope` around the page at `url`.
+    pub fn of(scope: Scope, url: &str) -> Self {
+        match scope {
+            Scope::Everywhere => Area::Global,
+            Scope::Site => Area::Site(
+                crate::settings_layers::site_of(url).unwrap_or_else(|| "localhost".to_owned()),
+            ),
+            Scope::Page => Area::Page(crate::placemarkers::page_of(url)),
+        }
+    }
+
+    /// The areas around the page at `url`, the largest first: everywhere, its site, the page.
+    pub fn around(url: &str) -> [Area; 3] {
+        Scope::ALL.map(|scope| Area::of(scope, url))
+    }
+
+    /// As the rules dialog's tree names it: "Global", "Current Site: localhost", "Current
+    /// Page: C:/Users/ailabs/corpus/fixtures/flexible-web.html", the address without its
+    /// scheme [obs, 748/s6, s9, s11].
+    pub fn label(&self) -> String {
+        match self {
+            Area::Global => msg::flexible_web_area_global().to_string(),
+            Area::Site(site) => msg::flexible_web_area_site(site.clone()).to_string(),
+            Area::Page(page) => {
+                let shown = page
+                    .split_once("://")
+                    .map_or(page.as_str(), |(_, rest)| rest.trim_start_matches('/'));
+                msg::flexible_web_area_page(shown.to_owned()).to_string()
+            }
+        }
+    }
+
+    /// As the rules list's Set for column names it: "Global", "Site", "Page" [obs, 748/s7,
+    /// s12].
+    pub fn set_for(&self) -> String {
+        match self {
+            Area::Global => msg::flexible_web_set_for_global(),
+            Area::Site(_) => msg::flexible_web_set_for_site(),
+            Area::Page(_) => msg::flexible_web_set_for_page(),
+        }
+        .to_string()
+    }
+}
+
+/// A rule: customizations saved under a name, applied whenever a page where it is on loads
 /// (the guide, Surf's Up chapter 16).
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Rule {
     pub name: String,
-    pub scope: Scope,
-    /// The site or the page address it was saved for; none for a rule applied everywhere.
-    /// A page with no site (a file) keeps its rules for the site to itself.
-    #[serde(default)]
-    pub place: Option<String>,
     pub customizations: Vec<Customization>,
 }
 
-impl Rule {
-    /// A rule named `name`, saved on the page at `url`.
-    pub fn new(name: String, scope: Scope, url: &str, customizations: Vec<Customization>) -> Self {
-        Self {
-            name,
-            scope,
-            place: place_for(scope, url),
-            customizations,
-        }
-    }
-
-    /// Whether the rule applies to the page at `url`.
-    pub fn applies_to(&self, url: &str) -> bool {
-        self.scope == Scope::Everywhere || place_for(self.scope, url) == self.place
-    }
+/// A rule turned on or off in an area.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Setting {
+    pub rule: String,
+    pub area: Area,
+    pub on: bool,
 }
 
-/// What a rule with `scope` saved on `url` keeps of the address.
-fn place_for(scope: Scope, url: &str) -> Option<String> {
-    let page = || crate::placemarkers::page_of(url);
-    match scope {
-        Scope::Everywhere => None,
-        Scope::Site => Some(crate::settings_layers::site_of(url).unwrap_or_else(page)),
-        Scope::Page => Some(page()),
-    }
-}
-
-/// Every saved rule, in the order they were saved.
+/// Every saved rule, in the order they were saved, and where each is turned on or off.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Rules {
     #[serde(default)]
     pub rules: Vec<Rule>,
+    #[serde(default)]
+    pub settings: Vec<Setting>,
 }
 
 impl Rules {
-    /// The rules that apply to the page at `url`.
+    /// Saves `rule`, on in `area`: a rule saved To the current page is on for the page and
+    /// off above it, set there by default ("Okur lab rule | Page checked" for the page,
+    /// "Global not checked" for its site [obs, 748/s12, s15]). A rule of the same name is
+    /// replaced.
+    pub fn save(&mut self, rule: Rule, area: Area) {
+        self.remove(&rule.name);
+        self.set(&rule.name, area, true);
+        self.rules.push(rule);
+    }
+
+    /// Turns `rule` on or off in `area`.
+    pub fn set(&mut self, rule: &str, area: Area, on: bool) {
+        match self
+            .settings
+            .iter_mut()
+            .find(|s| s.rule == rule && s.area == area)
+        {
+            Some(setting) => setting.on = on,
+            None => self.settings.push(Setting {
+                rule: rule.to_owned(),
+                area,
+                on,
+            }),
+        }
+    }
+
+    /// Deletes `rule` and its settings everywhere.
+    pub fn remove(&mut self, rule: &str) {
+        self.rules.retain(|r| r.name != rule);
+        self.settings.retain(|s| s.rule != rule);
+    }
+
+    /// Whether `rule` is on in the area `areas[at]` (the areas from the largest), and the
+    /// area that says so: the smallest of it and those around it with a setting; off,
+    /// everywhere, with none.
+    pub fn state(&self, rule: &str, areas: &[Area], at: usize) -> (bool, Area) {
+        areas
+            .iter()
+            .take(at + 1)
+            .rev()
+            .find_map(|area| {
+                self.settings
+                    .iter()
+                    .find(|s| s.rule == rule && &s.area == area)
+                    .map(|s| (s.on, area.clone()))
+            })
+            .unwrap_or((false, Area::Global))
+    }
+
+    /// How many rules are on in the area `areas[at]`: "1 Active" [obs, 748/s13].
+    pub fn active(&self, areas: &[Area], at: usize) -> usize {
+        self.rules
+            .iter()
+            .filter(|rule| self.state(&rule.name, areas, at).0)
+            .count()
+    }
+
+    /// The rules on for the page at `url`.
     pub fn for_page<'a>(&'a self, url: &'a str) -> impl Iterator<Item = &'a Rule> + 'a {
-        self.rules.iter().filter(move |rule| rule.applies_to(url))
+        let areas = Area::around(url);
+        let page = areas.len() - 1;
+        self.rules
+            .iter()
+            .filter(move |rule| self.state(&rule.name, &areas, page).0)
     }
 }
 

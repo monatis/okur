@@ -174,6 +174,8 @@ pub struct ScreenReaderEngine {
     flexible_web_store: Option<Box<dyn crate::flexible_web::RuleStore>>,
     /// Temporary customizations of a page left, while Okur asks whether to save them.
     flexible_web_leaving: Option<flexible_web::Leaving>,
+    /// Flexible Web's rules dialog, while it is open.
+    flexible_web_rules_dialog: Option<crate::ui::flexible_web::RulesDialog>,
     /// The custom labels (Insert+Ctrl+Tab), and where they are kept.
     custom_labels: crate::labels::CustomLabels,
     label_store: Option<Box<dyn crate::labels::LabelStore>>,
@@ -365,6 +367,7 @@ impl ScreenReaderEngine {
             flexible_web_rules: crate::flexible_web::Rules::default(),
             flexible_web_store: None,
             flexible_web_leaving: None,
+            flexible_web_rules_dialog: None,
             custom_labels: crate::labels::CustomLabels::default(),
             label_store: None,
             label_dialog: None,
@@ -1813,6 +1816,7 @@ fn dialog_of(message: &crate::ui::FromUi) -> Option<u32> {
     match message {
         FromUi::DialogChanged { id, .. }
         | FromUi::DialogPressed { id, .. }
+        | FromUi::DialogKey { id, .. }
         | FromUi::DialogClosed { id } => Some(*id),
         FromUi::ViewerDismissed => None,
     }

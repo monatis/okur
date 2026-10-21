@@ -490,7 +490,7 @@ mod tests {
     #[test]
     fn flexible_web_rules_survive_a_save() {
         use okur_core::flexible_web::{
-            Action, Customization, Kind, Place, Rule, RuleStore, Rules, Scope,
+            Action, Area, Customization, Kind, Place, Rule, RuleStore, Rules,
         };
         let root = folder("flexible-web");
         let files = SettingsFolder::at(&root);
@@ -502,20 +502,25 @@ mod tests {
             id: Some("events".into()),
             place: Place::FromTop(1),
         };
-        let rules = Rules {
-            rules: vec![
-                Rule::new(
-                    "Okur lab rule".into(),
-                    Scope::Page,
-                    "file:///C:/corpus/fixtures/flexible-web.html#news",
-                    vec![
-                        hide(Kind::Region("complementary".into()), Some("Advertisement")),
-                        hide(Kind::Heading(1), None),
-                    ],
-                ),
-                Rule::new("Everywhere".into(), Scope::Everywhere, "", vec![]),
-            ],
-        };
+        let mut rules = Rules::default();
+        rules.save(
+            Rule {
+                name: "Okur lab rule".into(),
+                customizations: vec![
+                    hide(Kind::Region("complementary".into()), Some("Advertisement")),
+                    hide(Kind::Heading(1), None),
+                ],
+            },
+            Area::Page("file:///C:/corpus/fixtures/flexible-web.html".into()),
+        );
+        rules.save(
+            Rule {
+                name: "Everywhere".into(),
+                customizations: Vec::new(),
+            },
+            Area::Global,
+        );
+        rules.set("Okur lab rule", Area::Site("localhost".into()), false);
         RuleStore::save(&files, &rules);
         assert!(root.join("flexible-web.toml").exists());
         assert_eq!(files.load_flexible_web_rules(), rules);

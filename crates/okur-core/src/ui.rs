@@ -16,7 +16,8 @@ pub mod tray;
 pub mod windows;
 
 pub use okur_ui_model::{
-    Control, ControlKind, DialogSpec, FromUi, TextSpan, ToUi, Value, WizardButtons, WizardSpec,
+    Control, ControlKind, DialogKey, DialogSpec, FromUi, TextSpan, ToUi, Value, WizardButtons,
+    WizardSpec,
 };
 
 /// Where the engine sends what its windows show. Sending never waits for the window.

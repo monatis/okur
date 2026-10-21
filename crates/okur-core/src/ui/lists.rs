@@ -590,6 +590,7 @@ impl ListDialog {
                                         .level
                                         .and_then(|l| usize::try_from(l).ok())
                                         .unwrap_or(0),
+                                    open: true,
                                 })
                                 .collect(),
                             selected: self.selected,

@@ -33,3 +33,5 @@ hint-toggle-spacebar = To toggle the state press spacebar.
 # A native tree view's items.
 hint-tree-arrows = To move through or expand items use the Arrow keys.
 hint-type-in-text = Type in text.
+# A read-only text field, as JAWS ends it [obs, 748/s17].
+hint-read-only-text = Use your reading keys to read the text.

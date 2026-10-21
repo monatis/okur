@@ -142,6 +142,10 @@ pub struct FocusEvent {
     /// PlaceMarker List without PlaceMarkers [obs, 699/s6].
     #[serde(default)]
     pub list_view: bool,
+    /// The list view lets its items be renamed in place (F2): JAWS ends its hint with "To
+    /// edit the selected item press f2." [obs, 748/s7].
+    #[serde(default)]
+    pub list_edits_labels: bool,
     /// The focused menu item is on a menu bar (a page's ARIA menu bar), not in a menu.
     #[serde(default)]
     pub in_menu_bar: bool,
@@ -345,6 +349,7 @@ impl FocusEvent {
             container_name: None,
             container_is_list_view: false,
             list_view: false,
+            list_edits_labels: false,
             in_menu_bar: false,
             under_menu_bar: false,
             in_menu: false,

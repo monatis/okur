@@ -1093,15 +1093,15 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         if let (Some(container), Some(tree)) = (container, &event.dialog_tree) {
             focus.container_name = label_before(tree, container.runtime_id.as_deref());
         }
-        // With no text before it, the list is named by its dialog: "Select a System Tray Icon
-        // List box" (JAWS's own dialog, its only list unlabelled [obs, 511/s4]); not on a
-        // wizard's page, whose title is the dialog's: " List view" [obs, 742/s18].
+        // With no text before it, a list box is named by its dialog: "Select a System Tray
+        // Icon List box" (JAWS's own dialog, its only list unlabelled [obs, 511/s4]); a list
+        // view is not: " List view" [obs, 742/s18, 748/s7].
         if focus
             .container_name
             .as_deref()
             .is_none_or(|n| n.trim().is_empty())
             && focus.container_role == Some(okur_core::Role::List)
-            && focus.wizard_page.is_none()
+            && !focus.container_is_list_view
         {
             focus.container_name = event
                 .dialog_tree
@@ -1217,6 +1217,16 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             focus.item_count = Some(peers.len());
         }
     }
+    // A list view whose items are renamed in place (LVS_EDITLABELS) [obs, 748/s7].
+    const LVS_EDITLABELS: i64 = 0x200;
+    focus.list_edits_labels = event
+        .window_class
+        .as_deref()
+        .or(event.focus_window_class.as_deref())
+        == Some("SysListView32")
+        && event
+            .window_style
+            .is_some_and(|style| i64::from(style) & LVS_EDITLABELS != 0);
     // A list view with the focus itself, as one without items has it: named by the text
     // before it (its window's), and its count, not its place among its peers: "PlaceMarker
     // List view | 0 items" [obs, 699/s6, 702/s4].

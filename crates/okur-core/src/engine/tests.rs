@@ -1395,7 +1395,7 @@ fn a_placemarker_is_added_and_removed_in_the_list() {
 /// page loads, and Yes opens the wizard on its last page alone [obs, 742/s16-s31].
 #[test]
 fn a_flexible_web_rule_is_saved_and_holds_when_the_page_loads() {
-    use crate::flexible_web::Scope;
+    use crate::flexible_web::Area;
     use crate::ui::{FromUi, ToUi, Value};
     let url = "file:///C:/corpus/fixtures/flexible-web.html";
     let mut advertisement = AomNode::new(
@@ -1483,11 +1483,17 @@ fn a_flexible_web_rule_is_saved_and_holds_when_the_page_loads() {
     )));
     change(&mut engine, id, "scope", Value::Selected(2));
     press(&mut engine, id, "finish");
-    let rules = &engine.flexible_web_rules.rules;
-    assert_eq!(rules.len(), 1);
-    assert!(rules
-        .first()
-        .is_some_and(|r| r.name == "Okur lab rule" && r.scope == Scope::Page));
+    let rules = &engine.flexible_web_rules;
+    assert_eq!(rules.rules.len(), 1);
+    let areas = Area::around(url);
+    assert_eq!(
+        rules.state("Okur lab rule", &areas, 2),
+        (true, Area::Page(url.to_owned()))
+    );
+    assert_eq!(
+        rules.state("Okur lab rule", &areas, 1),
+        (false, Area::Global)
+    );
     assert!(!reads_advertisement(&engine));
 
     // Loaded again: the rule holds, and nothing is left to ask about.

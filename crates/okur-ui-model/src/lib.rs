@@ -78,13 +78,22 @@ pub enum ControlKind {
         items: Vec<String>,
         selected: usize,
     },
-    /// A list of items, each with a check box, one selected. Its label names it and is not
-    /// shown: JAWS's Save Temporary Customizations, " List view | Hide ComplementaryRegion 1
-    /// from the top with text: "Advertisement" checked | 1 of 1" [obs, 742/s18].
+    /// A list of rows, each with a check box, one selected. Its label names it and is not
+    /// shown; under column headers, or one column without them: JAWS's Save Temporary
+    /// Customizations, " List view | Hide ComplementaryRegion 1 from the top with text:
+    /// "Advertisement" checked | 1 of 1" [obs, 742/s18]; its rules list, Rule and Set for,
+    /// "Okur lab rule | Page checked" [obs, 748/s12].
     CheckList {
-        items: Vec<String>,
+        columns: Vec<String>,
+        rows: Vec<Vec<String>>,
         checked: Vec<bool>,
         selected: usize,
+    },
+    /// A read-only text the user can Tab to and read with the reading keys, named by its
+    /// label shown above it: JAWS's rules dialog, "View or Change Where Rules are Applied read
+    /// only edit" [obs, 748/s17].
+    Note {
+        text: String,
     },
     /// A list of rows under column headers, named by its label (not shown), with none
     /// selected until the user picks one: JAWS's PlaceMarker List, "PlaceMarker List view |
@@ -144,6 +153,14 @@ pub enum ControlKind {
 pub struct TreeItem {
     pub text: String,
     pub level: usize,
+    /// Its items shown; a closed item opens with Right Arrow: JAWS's "Current Site:
+    /// localhost Closed" [obs, 748/s9, s10].
+    #[serde(default = "opened")]
+    pub open: bool,
+}
+
+fn opened() -> bool {
+    true
 }
 
 /// A control's value, as the user set it or Okur sets it.
@@ -201,6 +218,15 @@ pub enum ToUi {
         items: Vec<String>,
         selected: usize,
     },
+    /// Replace a check list's rows and their checks, and select one: the rules of the area
+    /// chosen in JAWS's rules dialog [obs, 748/s12, s15].
+    DialogRows {
+        id: u32,
+        control: String,
+        rows: Vec<Vec<String>>,
+        checked: Vec<bool>,
+        selected: usize,
+    },
     /// Make a control available or not, as a button is while the list has no item chosen.
     DialogEnable {
         id: u32,
@@ -255,6 +281,22 @@ pub enum FromUi {
     DialogPressed { id: u32, control: String },
     /// The dialog was cancelled (its Cancel button, Escape, its close box) and is gone.
     DialogClosed { id: u32 },
+    /// A key pressed on a list that does something to its selected item: Delete, F2.
+    DialogKey {
+        id: u32,
+        control: String,
+        key: DialogKey,
+    },
+}
+
+/// A key on a list's item ([`FromUi::DialogKey`]).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DialogKey {
+    /// Delete: remove it.
+    Delete,
+    /// F2: rename it.
+    Rename,
 }
 
 /// One message as a line of JSON, without the line break.

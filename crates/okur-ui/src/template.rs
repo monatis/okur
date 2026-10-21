@@ -35,6 +35,8 @@ const BS_AUTORADIOBUTTON: u32 = 9;
 const WS_BORDER: u32 = 0x0080_0000;
 const ES_AUTOHSCROLL: u32 = 0x80;
 const ES_READONLY: u32 = 0x800;
+const ES_MULTILINE: u32 = 0x4;
+const ES_AUTOVSCROLL: u32 = 0x40;
 const LVS_REPORT: u32 = 0x1;
 const TVS_HASBUTTONS: u32 = 0x1;
 const TVS_HASLINES: u32 = 0x2;
@@ -241,6 +243,40 @@ fn push_plain_radios(
     y + i16::try_from(options.len()).unwrap_or(0) * 12
 }
 
+/// A note: its label above it, then the read-only text the user can Tab to, a few lines high.
+/// Returns where the next control goes.
+fn push_note(items: &mut Vec<Item>, id: u16, label: &str, (x, y, cx): (i16, i16, i16)) -> i16 {
+    items.push(Item {
+        class: Class::Static,
+        style: WS_CHILD | WS_VISIBLE,
+        x,
+        y,
+        cx,
+        cy: 9,
+        id: LABEL_ID,
+        text: label.to_owned(),
+    });
+    items.push(Item {
+        class: Class::Edit,
+        style: WS_CHILD
+            | WS_VISIBLE
+            | WS_TABSTOP
+            | WS_GROUP
+            | WS_BORDER
+            | WS_VSCROLL
+            | ES_MULTILINE
+            | ES_READONLY
+            | ES_AUTOVSCROLL,
+        x,
+        y: y + 10,
+        cx,
+        cy: 36,
+        id,
+        text: String::new(),
+    });
+    y + 10 + 36 + ROW_GAP
+}
+
 fn read_only_text(x: i16, y: i16, cx: i16, id: u16) -> Item {
     Item {
         class: Class::Edit,
@@ -275,15 +311,41 @@ fn button(id: u16, text: &str, default: bool, first: bool, (x, y): (i16, i16)) -
     }
 }
 
+/// Whether `kind` is drawn as one of a list dialog's lists.
+fn is_list(kind: &ControlKind) -> bool {
+    matches!(
+        kind,
+        ControlKind::List { .. }
+            | ControlKind::CheckList { .. }
+            | ControlKind::ListBox { .. }
+            | ControlKind::Tree { .. }
+            | ControlKind::Table { .. }
+    )
+}
+
 fn list_layout(dialog: &DialogSpec) -> Layout {
     let mut items = Vec::new();
     let mut ids = Vec::new();
     let list_width = WIDTH - 2 * MARGIN - BUTTON_WIDTH - 6;
     let button_x = WIDTH - MARGIN - BUTTON_WIDTH;
     let mut button_y = MARGIN;
-    // Below the list: radio groups two to a row, then the rest.
+    // The lists one under the other, sharing the height of one and a half: JAWS's rules
+    // dialog has its tree of areas over its list of rules [obs, 748/s6, s7].
+    let lists = dialog
+        .controls
+        .iter()
+        .filter(|c| is_list(&c.kind))
+        .count()
+        .max(1);
+    let list_height = if lists > 1 {
+        LIST_HEIGHT * 3 / 4
+    } else {
+        LIST_HEIGHT
+    };
+    let mut list_y = MARGIN;
+    // Below the lists: radio groups two to a row, then the rest.
     let column_width = (WIDTH - 2 * MARGIN - 6) / 2;
-    let mut row_top = MARGIN + LIST_HEIGHT + 6;
+    let mut row_top = MARGIN + (list_height + 6) * i16::try_from(lists).unwrap_or(1);
     let mut column = 0;
     let mut row_bottom = row_top;
     let mut y = row_top;
@@ -293,6 +355,12 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
         ids.push(id);
         let first = !after_button;
         after_button = matches!(control.kind, ControlKind::Button { .. });
+        // A list goes at the lists' place, which then moves down.
+        let at = list_y;
+        if is_list(&control.kind) {
+            list_y += list_height + 6;
+        }
+        let list_y = at;
         match &control.kind {
             // A table shows its columns' headers: JAWS's PlaceMarker List, "PlaceMarker" and
             // "Generalized to Domain".
@@ -307,9 +375,28 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
                     | LVS_SINGLESEL
                     | LVS_SHOWSELALWAYS,
                 x: MARGIN,
-                y: MARGIN,
+                y: list_y,
                 cx: list_width,
-                cy: LIST_HEIGHT,
+                cy: list_height,
+                id,
+                text: control.label.clone(),
+            }),
+            // A list of one column shows no header; a check list with columns shows theirs
+            // ("Rule", "Set for" [obs, 748/s7]).
+            ControlKind::CheckList { columns, .. } if !columns.is_empty() => items.push(Item {
+                class: Class::Named("SysListView32"),
+                style: WS_CHILD
+                    | WS_VISIBLE
+                    | WS_BORDER
+                    | WS_TABSTOP
+                    | WS_GROUP
+                    | LVS_REPORT
+                    | LVS_SINGLESEL
+                    | LVS_SHOWSELALWAYS,
+                x: MARGIN,
+                y: list_y,
+                cx: list_width,
+                cy: list_height,
                 id,
                 text: control.label.clone(),
             }),
@@ -325,9 +412,9 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
                     | LVS_SHOWSELALWAYS
                     | LVS_NOCOLUMNHEADER,
                 x: MARGIN,
-                y: MARGIN,
+                y: list_y,
                 cx: list_width,
-                cy: LIST_HEIGHT,
+                cy: list_height,
                 id,
                 // Its name, which JAWS's list dialogs show nowhere ("links").
                 text: control.label.clone(),
@@ -339,7 +426,7 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
                     class: Class::Static,
                     style: WS_CHILD | WS_VISIBLE,
                     x: MARGIN,
-                    y: MARGIN,
+                    y: list_y,
                     cx: list_width,
                     cy: 9,
                     id: LABEL_ID,
@@ -356,9 +443,9 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
                         | LBS_NOTIFY
                         | LBS_NOINTEGRALHEIGHT,
                     x: MARGIN,
-                    y: MARGIN + 10,
+                    y: list_y + 10,
                     cx: list_width,
-                    cy: LIST_HEIGHT - 10,
+                    cy: list_height - 10,
                     id,
                     text: String::new(),
                 });
@@ -370,7 +457,7 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
                     class: Class::Static,
                     style: WS_CHILD | WS_VISIBLE,
                     x: MARGIN,
-                    y: MARGIN,
+                    y: list_y,
                     cx: list_width,
                     cy: 9,
                     id: LABEL_ID,
@@ -388,9 +475,9 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
                         | TVS_LINESATROOT
                         | TVS_SHOWSELALWAYS,
                     x: MARGIN,
-                    y: MARGIN + 10,
+                    y: list_y + 10,
                     cx: list_width,
-                    cy: LIST_HEIGHT - 10,
+                    cy: list_height - 10,
                     id,
                     text: control.label.clone(),
                 });
@@ -438,6 +525,14 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
                 items.push(read_only_text(MARGIN, y, WIDTH - 2 * MARGIN, id));
                 y += 12 + ROW_GAP;
             }
+            ControlKind::Note { .. } => {
+                y = push_note(
+                    &mut items,
+                    id,
+                    &control.label,
+                    (MARGIN, y, WIDTH - 2 * MARGIN),
+                );
+            }
             ControlKind::CheckBox { .. } => {
                 items.push(Item {
                     class: Class::Button,
@@ -460,7 +555,8 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
             | ControlKind::Slider { .. } => {}
         }
     }
-    let height = y.max(button_y).max(MARGIN + LIST_HEIGHT) + MARGIN;
+    // The lists' bottom, without the gap kept under them for what follows.
+    let height = y.max(button_y).max(row_top - 6) + MARGIN;
     Layout {
         width: WIDTH,
         height,
@@ -523,6 +619,9 @@ fn form_layout(dialog: &DialogSpec) -> Layout {
                     text: control.label.clone(),
                 });
                 y += 10 + ROW_GAP;
+            }
+            ControlKind::Note { .. } => {
+                y = push_note(&mut items, id, &control.label, (left, y, right - left));
             }
             // A message box's text: static, the dialog wide, as many lines as it needs.
             ControlKind::Message { text } => {

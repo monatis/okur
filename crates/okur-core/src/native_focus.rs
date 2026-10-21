@@ -209,6 +209,21 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
         // " edit | | Type in text." [obs, 540/s12, 547/s1, s5, s6]. In a dialog box the name
         // is the label the field has there, and said: "Enter a custom label for this item
         // edit | Type in text." [obs, 688/s9].
+        // A read-only one, in a dialog box: named by the dialog when unlabelled, its caret's
+        // line, and how to read it: "View or Change Where Rules are Applied read only edit |
+        // Use the tree view below ... | Use your reading keys to read the text." [obs,
+        // 748/s17].
+        Role::Document
+            if !focus.in_document && focus.plain_edit && focus.read_only == Some(true) =>
+        {
+            let name = if name.is_empty() {
+                named(focus.window_title.as_deref().unwrap_or_default())
+            } else {
+                name
+            };
+            read_only_lines(&mut lines, name, focus);
+            lines.push(Line::of(PartKind::Hint, msg::hint_read_only_text()));
+        }
         Role::Document if !focus.in_document && focus.plain_edit => {
             let name = if focus.in_dialog_box {
                 name
@@ -244,7 +259,9 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
             } else {
                 name
             };
-            if focus.reads_as_document() {
+            if focus.read_only == Some(true) {
+                read_only_lines(&mut lines, name, focus);
+            } else if focus.reads_as_document() {
                 // An edit of several lines is read as a document: its caret's line, and
                 // "Contains text" as it is reached [obs, 316/s3].
                 lines.push(Line::new(vec![
@@ -282,7 +299,9 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
             }
             lines.push(Line::of(
                 PartKind::Hint,
-                if focus.spin_box {
+                if focus.read_only == Some(true) {
+                    msg::hint_read_only_text()
+                } else if focus.spin_box {
                     msg::hint_set_value_arrows()
                 } else {
                     msg::hint_type_in_text()
@@ -392,6 +411,7 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                         msg::hint_move_to_an_item_arrows()
                     },
                 ));
+                lines.extend(rename_hint(focus));
             }
         }
         Role::TreeItem => {
@@ -532,6 +552,7 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                 _ => lines.extend(position(focus)),
             }
             lines.push(Line::of(PartKind::Hint, msg::hint_move_to_items_arrows()).on_arrival());
+            lines.extend(rename_hint(focus).map(Line::on_arrival));
         }
         // A window taking focus is announced by its title alone (the window change).
         Role::Window => {}
@@ -650,6 +671,34 @@ impl NativeFocus {
         self.last = Some(key);
         Some(speech)
     }
+}
+
+/// A read-only text field: its name, "read only edit", and its caret's line, or its first.
+fn read_only_lines(lines: &mut Vec<Line>, name: String, focus: &FocusEvent) {
+    lines.push(Line::new(vec![
+        name_part(name),
+        role(msg::role_edit_read_only().as_str()),
+    ]));
+    let line = match &focus.text {
+        Some(context) => crate::editing::line_at(context),
+        None => focus
+            .value
+            .as_deref()
+            .and_then(|v| v.lines().next())
+            .unwrap_or_default()
+            .to_owned(),
+    };
+    if !line.trim().is_empty() {
+        lines.push(Line::of(PartKind::Value, line.trim()));
+    }
+}
+
+/// The hint of a list view whose items are renamed in place, after its arrows' hint: "To edit
+/// the selected item press f2." [obs, 748/s7, s21].
+fn rename_hint(focus: &FocusEvent) -> Option<Line> {
+    focus
+        .list_edits_labels
+        .then(|| Line::of(PartKind::Hint, msg::hint_desktop_rename()))
 }
 
 /// Speech for focus landing on a native control. `previous` is the container of the

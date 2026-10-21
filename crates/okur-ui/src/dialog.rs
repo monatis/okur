@@ -5,7 +5,7 @@
 
 use std::cell::RefCell;
 
-use okur_ui_model::{ControlKind, DialogSpec, FromUi, TreeItem, Value};
+use okur_ui_model::{ControlKind, DialogKey, DialogSpec, FromUi, TreeItem, Value};
 use windows::core::PWSTR;
 use windows::Win32::Foundation::{HWND, LPARAM, WPARAM};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
@@ -14,13 +14,14 @@ use windows::Win32::UI::Controls::{
     BST_CHECKED, BST_UNCHECKED, EM_SETSEL, HTREEITEM, LVCF_TEXT, LVCF_WIDTH, LVCOLUMNW, LVIF_STATE,
     LVIF_TEXT, LVIS_FOCUSED, LVIS_SELECTED, LVIS_STATEIMAGEMASK, LVITEMW, LVM_DELETEALLITEMS,
     LVM_ENSUREVISIBLE, LVM_INSERTCOLUMNW, LVM_INSERTITEMW, LVM_SETEXTENDEDLISTVIEWSTYLE,
-    LVM_SETITEMSTATE, LVM_SETITEMTEXTW, LVN_ITEMCHANGED, LVS_EX_CHECKBOXES, LVS_EX_FULLROWSELECT,
-    NMHDR, NMLISTVIEW, NMTREEVIEWW, NM_DBLCLK, TBM_SETPAGESIZE, TBM_SETPOS, TBM_SETRANGEMAX,
-    TBM_SETRANGEMIN, TBM_SETTICFREQ, TVE_EXPAND, TVGN_CARET, TVGN_NEXTVISIBLE, TVGN_ROOT,
-    TVIF_TEXT, TVINSERTSTRUCTW, TVINSERTSTRUCTW_0, TVITEMW, TVI_LAST, TVI_ROOT, TVM_EXPAND,
-    TVM_GETNEXTITEM, TVM_INSERTITEMW, TVM_SELECTITEM, TVN_SELCHANGEDW,
+    LVM_SETITEMSTATE, LVM_SETITEMTEXTW, LVN_ITEMCHANGED, LVN_KEYDOWN, LVS_EX_CHECKBOXES,
+    LVS_EX_FULLROWSELECT, NMHDR, NMLISTVIEW, NMLVKEYDOWN, NMTREEVIEWW, NM_DBLCLK, TBM_SETPAGESIZE,
+    TBM_SETPOS, TBM_SETRANGEMAX, TBM_SETRANGEMIN, TBM_SETTICFREQ, TVE_EXPAND, TVGN_CARET,
+    TVGN_CHILD, TVGN_NEXT, TVGN_ROOT, TVIF_TEXT, TVINSERTSTRUCTW, TVINSERTSTRUCTW_0, TVITEMW,
+    TVI_LAST, TVI_ROOT, TVM_EXPAND, TVM_GETNEXTITEM, TVM_INSERTITEMW, TVM_SELECTITEM,
+    TVN_SELCHANGEDW,
 };
-use windows::Win32::UI::Input::KeyboardAndMouse::EnableWindow;
+use windows::Win32::UI::Input::KeyboardAndMouse::{EnableWindow, VIRTUAL_KEY, VK_DELETE, VK_F2};
 use windows::Win32::UI::WindowsAndMessaging::{
     BringWindowToTop, CreateDialogIndirectParamW, DestroyWindow, GetClientRect, GetDlgCtrlID,
     GetDlgItem, GetForegroundWindow, GetWindowTextLengthW, GetWindowTextW,
@@ -90,7 +91,10 @@ fn initial(kind: &ControlKind) -> Option<Value> {
         ControlKind::Text { text }
         | ControlKind::Edit { text }
         | ControlKind::ComboEdit { text, .. } => Some(Value::Text(text.clone())),
-        ControlKind::Group | ControlKind::Button { .. } | ControlKind::Message { .. } => None,
+        ControlKind::Group
+        | ControlKind::Button { .. }
+        | ControlKind::Message { .. }
+        | ControlKind::Note { .. } => None,
     }
 }
 
@@ -255,31 +259,25 @@ fn fill(window: HWND, index: usize, item: HWND, kind: &ControlKind) {
                 set_items(item, items, *selected);
             }
             ControlKind::CheckList {
-                items,
+                columns,
+                rows,
                 checked,
                 selected,
             } => {
-                let styles = LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES;
                 SendMessageW(
                     item,
                     LVM_SETEXTENDEDLISTVIEWSTYLE,
-                    Some(WPARAM(styles as usize)),
-                    Some(LPARAM(styles as isize)),
+                    Some(WPARAM(LVS_EX_CHECKBOXES as usize)),
+                    Some(LPARAM(LVS_EX_CHECKBOXES as isize)),
                 );
-                let mut client = windows::Win32::Foundation::RECT::default();
-                let _ = GetClientRect(item, &mut client);
-                let column = LVCOLUMNW {
-                    mask: LVCF_WIDTH,
-                    cx: client.right - client.left,
-                    ..Default::default()
+                // One column without headers, or its columns under theirs.
+                let one = [String::new()];
+                let columns = if columns.is_empty() {
+                    &one[..]
+                } else {
+                    columns
                 };
-                SendMessageW(
-                    item,
-                    LVM_INSERTCOLUMNW,
-                    Some(WPARAM(0)),
-                    Some(LPARAM(&column as *const LVCOLUMNW as isize)),
-                );
-                set_items(item, items, *selected);
+                fill_table(item, columns, rows, Some(*selected));
                 for (index, checked) in checked.iter().enumerate() {
                     check_item(item, index, *checked);
                 }
@@ -294,8 +292,9 @@ fn fill(window: HWND, index: usize, item: HWND, kind: &ControlKind) {
             ControlKind::Radios { selected, .. } | ControlKind::RadioButtons { selected, .. } => {
                 set(window, index, item, kind, &Value::Selected(*selected));
             }
-            ControlKind::Text { text } => {
-                set(window, index, item, kind, &Value::Text(text.clone()));
+            ControlKind::Text { text } | ControlKind::Note { text } => {
+                let text = wide(text);
+                let _ = SetWindowTextW(item, windows::core::PCWSTR(text.as_ptr()));
             }
             ControlKind::Edit { text } => {
                 set(window, index, item, kind, &Value::Text(text.clone()));
@@ -355,6 +354,15 @@ fn fill_table(list: HWND, columns: &[String], rows: &[Vec<String>], selected: Op
                 Some(LPARAM(&column as *const LVCOLUMNW as isize)),
             );
         }
+    }
+    fill_rows(list, rows, selected);
+}
+
+/// A list view's rows, each cell in its column, `selected` selected (none: the first has the
+/// focus).
+fn fill_rows(list: HWND, rows: &[Vec<String>], selected: Option<usize>) {
+    // SAFETY: messages to our own list view; each string outlives its call.
+    unsafe {
         SendMessageW(list, LVM_DELETEALLITEMS, None, None);
         for (row_index, row) in rows.iter().enumerate() {
             for (cell_index, cell) in row.iter().enumerate() {
@@ -455,8 +463,11 @@ fn fill_tree(tree: HWND, items: &[TreeItem], selected: usize) {
             .0
         });
         parents.push(handle);
-        inserted.push(handle);
+        if item.open {
+            inserted.push(handle);
+        }
     }
+    // The open items shown open; a closed one opens with Right Arrow.
     for handle in inserted {
         // SAFETY: a message to our own tree view about its own item.
         unsafe {
@@ -471,31 +482,30 @@ fn fill_tree(tree: HWND, items: &[TreeItem], selected: usize) {
     select_tree_item(tree, selected);
 }
 
-/// A tree view's items in order: every item is open, so the visible order is the tree's.
+/// A tree view's items in order, an item's items right after it, shown or not.
 fn tree_order(tree: HWND) -> Vec<HTREEITEM> {
-    let mut order = Vec::new();
-    // SAFETY: queries on our own tree view.
-    let mut item = unsafe {
-        SendMessageW(
-            tree,
-            TVM_GETNEXTITEM,
-            Some(WPARAM(TVGN_ROOT as usize)),
-            None,
-        )
-    }
-    .0;
-    while item != 0 {
-        order.push(HTREEITEM(item));
-        // SAFETY: as above, from an item it gave.
-        item = unsafe {
+    let next = |relation: u32, item: isize| {
+        // SAFETY: a query on our own tree view, from an item it gave (or none for its root).
+        unsafe {
             SendMessageW(
                 tree,
                 TVM_GETNEXTITEM,
-                Some(WPARAM(TVGN_NEXTVISIBLE as usize)),
+                Some(WPARAM(relation as usize)),
                 Some(LPARAM(item)),
             )
         }
-        .0;
+        .0
+    };
+    let mut order = Vec::new();
+    // The items still to visit, the next one last.
+    let mut pending = vec![next(TVGN_ROOT, 0)];
+    while let Some(item) = pending.pop() {
+        if item == 0 {
+            continue;
+        }
+        order.push(HTREEITEM(item));
+        pending.push(next(TVGN_NEXT, item));
+        pending.push(next(TVGN_CHILD, item));
     }
     order
 }
@@ -770,6 +780,21 @@ pub fn set_list(id: u32, control: &str, items: &[String], selected: usize) {
                 return;
             }
             set_items(list, items, selected);
+        }
+    }
+}
+
+/// Replaces a check list's rows and their checks, and selects one.
+pub fn set_rows(id: u32, control: &str, rows: &[Vec<String>], checked: &[bool], selected: usize) {
+    let Some((window, window_id, _, ControlKind::CheckList { .. })) = find(id, control) else {
+        return;
+    };
+    // SAFETY: a child of our own dialog.
+    if let Ok(list) = unsafe { GetDlgItem(Some(window), i32::from(window_id)) } {
+        remember(window, window_id, Value::Selected(selected));
+        fill_rows(list, rows, Some(selected));
+        for (index, checked) in checked.iter().enumerate() {
+            check_item(list, index, *checked);
         }
     }
 }
@@ -1081,6 +1106,24 @@ pub(crate) unsafe extern "system" fn dialog_proc(
                     }
                 }
                 NM_DBLCLK => press_default(window),
+                // Delete and F2 on a check list's item: JAWS's rules list deletes or renames
+                // the rule [obs, 748/s20; "To edit the selected item press f2.", 748/s7].
+                LVN_KEYDOWN if matches!(hit.kind, ControlKind::CheckList { .. }) => {
+                    // SAFETY: a list view's key notification sends an NMLVKEYDOWN.
+                    let pressed = unsafe { &*(lparam.0 as *const NMLVKEYDOWN) };
+                    let key = match VIRTUAL_KEY(pressed.wVKey) {
+                        VK_DELETE => Some(DialogKey::Delete),
+                        VK_F2 => Some(DialogKey::Rename),
+                        _ => None,
+                    };
+                    if let Some(key) = key {
+                        crate::win32::tell(&FromUi::DialogKey {
+                            id: hit.dialog,
+                            control: hit.name.clone(),
+                            key,
+                        });
+                    }
+                }
                 _ => return 0,
             }
             1

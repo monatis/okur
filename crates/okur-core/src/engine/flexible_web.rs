@@ -17,9 +17,13 @@
 use super::{AppMode, ScreenReaderEngine};
 use crate::aom::AomNode;
 use crate::buffer::VirtualBuffer;
-use crate::flexible_web::{elements_at, without, Action, Customization, Rule, RuleStore, Rules};
+use crate::flexible_web::{
+    elements_at, without, Action, Area, Customization, Rule, RuleStore, Rules,
+};
 use crate::messages::msg;
-use crate::ui::flexible_web::{FlexibleWebWizard, Outcome, UnsavedQuestion};
+use crate::ui::flexible_web::{
+    FlexibleWebWizard, Outcome, RulesDialog, RulesOutcome, UnsavedQuestion,
+};
 use crate::ui::{FromUi, ToUi};
 
 /// The customizations on the page in front.
@@ -97,6 +101,11 @@ impl ScreenReaderEngine {
         id.is_some()
             && (self.flexible_web.as_ref().map(|w| w.id) == id
                 || self
+                    .flexible_web_rules_dialog
+                    .as_ref()
+                    .zip(id)
+                    .is_some_and(|(d, id)| d.owns(id))
+                || self
                     .flexible_web_leaving
                     .as_ref()
                     .and_then(|l| l.question.as_ref())
@@ -104,8 +113,16 @@ impl ScreenReaderEngine {
                     == id)
     }
 
-    /// What the user did to the wizard, or to the question.
+    /// What the user did to the wizard, the question, or the rules dialog.
     pub(super) fn handle_flexible_web_event(&mut self, message: &FromUi) -> Option<String> {
+        if self
+            .flexible_web_rules_dialog
+            .as_ref()
+            .zip(super::dialog_of(message))
+            .is_some_and(|(d, id)| d.owns(id))
+        {
+            return self.handle_rules_event(message);
+        }
         if let Some(yes) = self
             .flexible_web_leaving
             .as_ref()
@@ -155,7 +172,26 @@ impl ScreenReaderEngine {
                     Some(leaving) => leaving.url,
                     None => self.page_url(),
                 };
-                self.save_rule(Rule::new(name, scope, &url, customizations));
+                self.save_rule(
+                    Rule {
+                        name,
+                        customizations,
+                    },
+                    Area::of(scope, &url),
+                );
+            }
+            Outcome::View => {
+                if let Some(ui) = &self.ui {
+                    ui.send(ToUi::DialogClose { id });
+                }
+                self.dialog_count += 1;
+                let dialog = RulesDialog::new(self.dialog_count, &self.page_url());
+                if let Some(ui) = &self.ui {
+                    ui.send(ToUi::DialogShow {
+                        dialog: dialog.spec(&self.flexible_web_rules),
+                    });
+                }
+                self.flexible_web_rules_dialog = Some(dialog);
             }
             Outcome::Closed => {
                 self.flexible_web_leaving = None;
@@ -163,6 +199,58 @@ impl ScreenReaderEngine {
             }
         }
         None
+    }
+
+    /// What the user did to the rules dialog or its question.
+    fn handle_rules_event(&mut self, message: &FromUi) -> Option<String> {
+        let mut dialog = self.flexible_web_rules_dialog.take()?;
+        let next = self.dialog_count + 1;
+        let outcome = dialog.handle(message, &self.flexible_web_rules, next);
+        let mut send = Vec::new();
+        match outcome {
+            RulesOutcome::Nothing => {}
+            RulesOutcome::Send(messages) => {
+                if messages
+                    .iter()
+                    .any(|m| matches!(m, ToUi::DialogShow { .. }))
+                {
+                    self.dialog_count = next;
+                }
+                send = messages;
+            }
+            RulesOutcome::Set { rule, area, on } => {
+                self.flexible_web_rules.set(&rule, area, on);
+                self.rules_changed();
+                send.push(dialog.refreshed(&self.flexible_web_rules));
+            }
+            RulesOutcome::Delete { rule, question } => {
+                self.flexible_web_rules.remove(&rule);
+                self.rules_changed();
+                send.push(ToUi::DialogClose { id: question });
+                send.push(dialog.refreshed(&self.flexible_web_rules));
+            }
+            // Close says nothing as the page takes the focus back [obs, 748/s23].
+            RulesOutcome::Closed => {
+                if let Some(ui) = &self.ui {
+                    ui.send(ToUi::DialogClose { id: dialog.id });
+                }
+                self.returning_from_dialog();
+                return None;
+            }
+        }
+        if let Some(ui) = &self.ui {
+            send.into_iter().for_each(|m| ui.send(m));
+        }
+        self.flexible_web_rules_dialog = Some(dialog);
+        None
+    }
+
+    /// The rules were changed: kept, and the page in front read with them.
+    fn rules_changed(&mut self) {
+        if let Some(store) = &self.flexible_web_store {
+            store.save(&self.flexible_web_rules);
+        }
+        self.reread_customized();
     }
 
     /// The question answered: Yes opens the wizard on its last page alone, to save them as a
@@ -218,16 +306,14 @@ impl ScreenReaderEngine {
             .to_owned()
     }
 
-    /// Saves `rule`, applied at once: the customizations it keeps are no longer temporary.
-    fn save_rule(&mut self, rule: Rule) {
+    /// Saves `rule`, on in `area`, applied at once: the customizations it keeps are no longer
+    /// temporary.
+    fn save_rule(&mut self, rule: Rule, area: Area) {
         self.page_customizations
             .made
             .retain(|made| !rule.customizations.contains(made));
-        self.flexible_web_rules.rules.push(rule);
-        if let Some(store) = &self.flexible_web_store {
-            store.save(&self.flexible_web_rules);
-        }
-        self.reread_customized();
+        self.flexible_web_rules.save(rule, area);
+        self.rules_changed();
     }
 
     /// Closes the wizard, the focus going back to the page quietly: JAWS says nothing after

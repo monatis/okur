@@ -276,6 +276,24 @@ flexible-web-scope-question = How would you like this rule to apply?
 flexible-web-scope-everywhere = Globally
 flexible-web-scope-site = To the current site
 flexible-web-scope-page = To the current page
+# View or Change Where Rules are Applied, from View or change where rules apply: its text,
+# its tree of areas, its rules list with Set for, and the question before a rule is deleted
+# [obs, 748].
+flexible-web-rules-title = View or Change Where Rules are Applied
+flexible-web-rules-text = Use the tree view below to select the area of the web where you want to make changes. The tree is organized into three areas: global, specific sites, and specific pages. Use the list of rules to choose which rules apply to the area selected in the tree view. Any changes to the settings of the smaller areas override the settings for the larger areas. Use the context menu in the list to view, rename or delete rules.
+flexible-web-area-global = Global
+flexible-web-area-site = Current Site: { $site }
+flexible-web-area-page = Current Page: { $page }
+flexible-web-rules-column-rule = Rule
+flexible-web-rules-column-set-for = Set for
+flexible-web-set-for-global = Global
+flexible-web-set-for-site = Site
+flexible-web-set-for-page = Page
+flexible-web-rules-close = Close
+flexible-web-delete-title = Okur
+flexible-web-delete-question = You are about to delete rule "{ $rule }". If you delete a rule, it will no longer be available for any sites or pages. To disable the rule for the location selected in the tree view, press the spacebar to uncheck the rule. When a rule is disabled, it is still available to run for other sites or pages. Continue?
+flexible-web-delete-yes = &Yes
+flexible-web-delete-no = &No
 # Another page loading while the one before has temporary customizations [obs, 742/s30].
 flexible-web-unsaved-question = You have created temporary Flexible Web customizations. If you continue without saving them, these customizations will be lost. Would you like to save your temporary customizations?
 flexible-web-unsaved-yes = &Yes

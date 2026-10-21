@@ -386,6 +386,13 @@ fn handle(message: ToUi) {
             items,
             selected,
         } => crate::dialog::set_list(id, &control, &items, selected),
+        ToUi::DialogRows {
+            id,
+            control,
+            rows,
+            checked,
+            selected,
+        } => crate::dialog::set_rows(id, &control, &rows, &checked, selected),
     }
 }
 
