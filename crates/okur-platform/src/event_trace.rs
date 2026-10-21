@@ -327,11 +327,20 @@ fn window_items(tree: &UiaNode) -> Vec<okur_core::WindowItem> {
             items.push(edit);
         }
     }
-    fn walk(node: &UiaNode, items: &mut Vec<okur_core::WindowItem>) {
+    fn walk(node: &UiaNode, font_dialog: bool, items: &mut Vec<okur_core::WindowItem>) {
         for child in &node.children {
             match child.control_type {
                 UIA_SCROLLBAR => continue,
                 UIA_TEXT if child.owner_drawn => continue,
+                // The common Font dialog's sample, its text in the chosen font (stc5 and stc6 of
+                // the Windows SDK's dlgs.h, in the Sample box): JAWS reads the box's name alone
+                // [obs, 665/s3].
+                UIA_TEXT
+                    if font_dialog
+                        && matches!(child.automation_id.as_deref(), Some("1092" | "1093")) =>
+                {
+                    continue
+                }
                 UIA_COMBOBOX if child.position_in_set.is_some() => {
                     combo_box(child, items);
                     continue;
@@ -344,17 +353,22 @@ fn window_items(tree: &UiaNode) -> Vec<okur_core::WindowItem> {
                             .iter()
                             .all(|c| c.control_type == UIA_LINK && c.name == child.name) =>
                 {
-                    walk(child, items);
+                    walk(child, font_dialog, items);
                     continue;
                 }
                 _ => {}
             }
             items.extend(item(child));
-            walk(child, items);
+            walk(child, font_dialog, items);
         }
     }
+    // The common Font dialog, known by its font name combo box (cmb1 of dlgs.h).
+    let font_dialog = tree
+        .children
+        .iter()
+        .any(|c| c.control_type == UIA_COMBOBOX && c.automation_id.as_deref() == Some("1136"));
     let mut items = Vec::new();
-    walk(tree, &mut items);
+    walk(tree, font_dialog, &mut items);
     items
 }
 
@@ -3973,7 +3987,7 @@ mod tests {
     }
 
     /// Say Window in Notepad's Font dialog, from its tree as the tracer reads it (a list's
-    /// shown items, a combo box's place, the owner-drawn sample marked): JAWS's words
+    /// shown items, a combo box's place, the sample by its control id): JAWS's words
     /// [obs, 665/s3], but for the Size list's name, which JAWS says and the other lists'
     /// it does not.
     #[test]
@@ -4042,7 +4056,10 @@ mod tests {
             node(50032, "Font", false),
             vec![
                 node(TEXT, "Font:", false),
-                combo("Font:", "Consolas", &fonts, (38, 187)),
+                UiaNode {
+                    automation_id: Some("1136".to_owned()),
+                    ..combo("Font:", "Consolas", &fonts, (38, 187))
+                },
                 node(TEXT, "Font style:", false),
                 combo(
                     "Font style:",
@@ -4052,7 +4069,7 @@ mod tests {
                 ),
                 node(GROUP, "Sample", false),
                 UiaNode {
-                    owner_drawn: true,
+                    automation_id: Some("1093".to_owned()),
                     ..node(TEXT, "AaBbYyZz", false)
                 },
                 node(TEXT, "Script:", false),
