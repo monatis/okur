@@ -1956,7 +1956,7 @@ mod capture {
         IUIAutomationFocusChangedEventHandler, IUIAutomationFocusChangedEventHandler_Impl,
         IUIAutomationNotificationEventHandler, IUIAutomationNotificationEventHandler_Impl,
         NotificationKind, NotificationProcessing, TreeScope_Subtree, UIA_LiveRegionChangedEventId,
-        UIA_SelectionItem_ElementSelectedEventId,
+        UIA_SelectionItem_ElementSelectedEventId, UIA_Window_WindowOpenedEventId,
     };
     use windows::Win32::UI::WindowsAndMessaging::{
         DispatchMessageW, GetWindowThreadProcessId, MsgWaitForMultipleObjects, PeekMessageW,
@@ -3311,6 +3311,116 @@ mod capture {
         }
     }
 
+    const WM_UIA_WINDOW_OPENED: u32 = windows::Win32::UI::WindowsAndMessaging::WM_APP + 5;
+    /// The shell's windows opened and not yet recorded, oldest first, each with its process.
+    static UIA_WINDOWS_OPENED: std::sync::Mutex<std::collections::VecDeque<(MtaElement, u32)>> =
+        std::sync::Mutex::new(std::collections::VecDeque::new());
+    /// UIA's window opened event id.
+    const UIA_WINDOW_OPENED_EVENT: u32 = 20016;
+
+    /// Wakes the tracer thread when one of the shell's windows opens: a toast's banner, a
+    /// Windows.UI.Core.CoreWindow of ShellExperienceHost on Windows 10, which raises only UIA's
+    /// WindowOpened as it shows (`docs/references/notifications-research.md`). The 533 traces
+    /// had no event of the toast JAWS said [obs, 533/s1].
+    #[implement(IUIAutomationEventHandler)]
+    struct UiaWindowOpenedHandler {
+        thread: u32,
+    }
+
+    impl IUIAutomationEventHandler_Impl for UiaWindowOpenedHandler_Impl {
+        fn HandleAutomationEvent(
+            &self,
+            sender: windows::core::Ref<IUIAutomationElement>,
+            _event: windows::Win32::UI::Accessibility::UIA_EVENT_ID,
+        ) -> windows::core::Result<()> {
+            use windows::Win32::Foundation::{LPARAM, WPARAM};
+            use windows::Win32::UI::WindowsAndMessaging::PostThreadMessageW;
+            let Some(element) = sender.as_ref() else {
+                return Ok(());
+            };
+            // SAFETY: a property read on the element UIA passed in.
+            let pid = unsafe { element.CurrentProcessId() }
+                .ok()
+                .and_then(|p| u32::try_from(p).ok())
+                .unwrap_or(0);
+            if pid == 0 || !is_notification_host(pid) {
+                return Ok(());
+            }
+            if let Ok(mut queue) = UIA_WINDOWS_OPENED.lock() {
+                if queue.len() >= MAX_UIA_FOCUSED {
+                    queue.pop_front();
+                }
+                queue.push_back((MtaElement(element.clone()), pid));
+            }
+            // SAFETY: the post targets a thread that pumps messages until the handler is
+            // removed.
+            let _ = unsafe {
+                PostThreadMessageW(self.thread, WM_UIA_WINDOW_OPENED, WPARAM(0), LPARAM(0))
+            };
+            Ok(())
+        }
+    }
+
+    /// Records the shell's windows UIA reported opened, each with what it holds (a toast's
+    /// title and text), on the tracer thread. Research for now: replay takes none of them.
+    fn record_uia_windows_opened() {
+        let opened: Vec<(MtaElement, u32)> = UIA_WINDOWS_OPENED
+            .lock()
+            .map(|mut queue| queue.drain(..).collect())
+            .unwrap_or_default();
+        for (element, pid) in opened {
+            STATE.with(|state| {
+                let mut state = state.borrow_mut();
+                let Some(state) = state.as_mut() else { return };
+                let Some(window) = state.uia.as_ref().and_then(|uia| {
+                    crate::uia_snapshot::capture::element_subtree(uia, &element.0, 4)
+                }) else {
+                    return;
+                };
+                let event = TraceEvent {
+                    t_ms: now_ms(),
+                    event: "uia_window_opened".to_owned(),
+                    win_event: UIA_WINDOW_OPENED_EVENT,
+                    hwnd: 0,
+                    id_object: 0,
+                    id_child: 0,
+                    window_class: None,
+                    window_style: None,
+                    spin_box: false,
+                    focus_window_class: None,
+                    menu_bar: Vec::new(),
+                    status_bar: Vec::new(),
+                    window_title: None,
+                    process: process_name_of(pid),
+                    process_product: None,
+                    process_version: None,
+                    object: None,
+                    focus_chain: Vec::new(),
+                    focus_siblings: Vec::new(),
+                    focus_subtree: Some(window),
+                    list_position: None,
+                    column_headers: Vec::new(),
+                    text_context: None,
+                    region: None,
+                    page: None,
+                    top_window_title: None,
+                    top_window_class: None,
+                    virtual_desktop: None,
+                    dialog_lines: Vec::new(),
+                    dialog_text: Vec::new(),
+                    dialog_page: None,
+                    group_box: None,
+                    default_button: None,
+                    dialog_tree: None,
+                    notification: None,
+                    mouse: None,
+                };
+                (state.sink)(event);
+                state.count += 1;
+            });
+        }
+    }
+
     /// Records one event through the sink, with what the engine needs read now. `element`
     /// is the focused element when the event names it (UIA); otherwise UIA's focus is read.
     fn record(
@@ -3967,6 +4077,22 @@ mod capture {
             .is_ok(),
             _ => false,
         };
+        let uia_window_opened: IUIAutomationEventHandler = UiaWindowOpenedHandler { thread }.into();
+        let uia_window_opened_added = match (uia.as_ref(), root.as_ref()) {
+            // SAFETY: a desktop-wide UIA handler, removed before this thread stops pumping.
+            (Some(uia), Some(root)) => unsafe {
+                uia.AddAutomationEventHandler(
+                    UIA_Window_WindowOpenedEventId,
+                    root,
+                    TreeScope_Subtree,
+                    None,
+                    &uia_window_opened,
+                )
+            }
+            .inspect_err(|e| tracing::warn!("UIA window opened handler not added: {e}"))
+            .is_ok(),
+            _ => false,
+        };
         // Where focus is already, as JAWS reads it when it starts: no event will report it.
         record_current_focus();
 
@@ -3979,6 +4105,7 @@ mod capture {
                 let mut uia_selected_queued = false;
                 let mut uia_notified = false;
                 let mut uia_live_region_queued = false;
+                let mut uia_window_opened_queued = false;
                 while PeekMessageW(&mut msg, None, 0, 0, PM_REMOVE).as_bool() {
                     if msg.hwnd.is_invalid() && msg.message == WM_UIA_FOCUS {
                         // Several focus changes queued meanwhile: the focus now is read once.
@@ -3997,6 +4124,10 @@ mod capture {
                         uia_live_region_queued = true;
                         continue;
                     }
+                    if msg.hwnd.is_invalid() && msg.message == WM_UIA_WINDOW_OPENED {
+                        uia_window_opened_queued = true;
+                        continue;
+                    }
                     let _ = TranslateMessage(&msg);
                     DispatchMessageW(&msg);
                 }
@@ -4012,8 +4143,23 @@ mod capture {
                 if uia_live_region_queued {
                     record_uia_live_regions();
                 }
+                if uia_window_opened_queued {
+                    record_uia_windows_opened();
+                }
                 record_mouse_move();
             }
+        }
+        if let (Some(uia), Some(root), true) =
+            (uia.as_ref(), root.as_ref(), uia_window_opened_added)
+        {
+            // SAFETY: removes the handler added above.
+            let _ = unsafe {
+                uia.RemoveAutomationEventHandler(
+                    UIA_Window_WindowOpenedEventId,
+                    root,
+                    &uia_window_opened,
+                )
+            };
         }
         if let (Some(uia), Some(root), true) = (uia.as_ref(), root.as_ref(), uia_live_region_added)
         {
