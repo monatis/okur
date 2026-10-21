@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 5958,
-  "total_steps": 6177,
+  "matched_steps": 5971,
+  "total_steps": 6194,
   "accepted_divergences": 158,
   "errors": [],
   "steps": {
@@ -6353,6 +6353,23 @@
     "755-desktop-jaws-cursor-in-a-dialog/s6": "match",
     "755-desktop-jaws-cursor-in-a-dialog/s7": "match",
     "755-desktop-jaws-cursor-in-a-dialog/s8": "match",
-    "755-desktop-jaws-cursor-in-a-dialog/s9": "match"
+    "755-desktop-jaws-cursor-in-a-dialog/s9": "match",
+    "756-desktop-mouse-keys-in-notepad/s1": "match",
+    "756-desktop-mouse-keys-in-notepad/s10": "match",
+    "756-desktop-mouse-keys-in-notepad/s11": "match",
+    "756-desktop-mouse-keys-in-notepad/s12": "match",
+    "756-desktop-mouse-keys-in-notepad/s13": "mismatch",
+    "756-desktop-mouse-keys-in-notepad/s14": "match",
+    "756-desktop-mouse-keys-in-notepad/s15": "mismatch",
+    "756-desktop-mouse-keys-in-notepad/s16": "match",
+    "756-desktop-mouse-keys-in-notepad/s17": "match",
+    "756-desktop-mouse-keys-in-notepad/s2": "match",
+    "756-desktop-mouse-keys-in-notepad/s3": "match",
+    "756-desktop-mouse-keys-in-notepad/s4": "match",
+    "756-desktop-mouse-keys-in-notepad/s5": "match",
+    "756-desktop-mouse-keys-in-notepad/s6": "mismatch",
+    "756-desktop-mouse-keys-in-notepad/s7": "match",
+    "756-desktop-mouse-keys-in-notepad/s8": "match",
+    "756-desktop-mouse-keys-in-notepad/s9": "mismatch"
   }
 }
